@@ -2,7 +2,6 @@
 // to be used if necessary
 // will break SSG
 
-import React from "react";
 import {
   ChakraProvider,
   cookieStorageManager,
