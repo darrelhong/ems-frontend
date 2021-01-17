@@ -3,7 +3,6 @@ import NextLink from "next/link";
 import { request, gql } from "graphql-request";
 import {
   Box,
-  Container,
   Flex,
   Grid,
   Heading,
@@ -13,6 +12,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { ColorModeSwitcher } from "../../components/ColorModeSwitcher";
+import PageContainer from "../../components/PageContainer";
 
 export async function getStaticPaths() {
   const { launchesPast } = await request(
@@ -70,7 +70,13 @@ export default function Launch({ launch }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Flex w="100%" p={2} borderBottom="1px" borderColor="gray.200" alignItems="center">
+      <Flex
+        w="100%"
+        p={2}
+        borderBottom="1px"
+        borderColor="gray.200"
+        alignItems="center"
+      >
         <Link as={NextLink} href="/">
           Home
         </Link>
@@ -78,7 +84,7 @@ export default function Launch({ launch }) {
         <ColorModeSwitcher />
       </Flex>
 
-      <Container
+      <PageContainer
         w="100%"
         maxW={["100%", "100%", "60em", "60em", "72em"]}
         minH="100vh"
@@ -96,7 +102,7 @@ export default function Launch({ launch }) {
             <Text>{`Type: ${launch.rocket.rocket_type}`}</Text>
           </Box>
         </Grid>
-      </Container>
+      </PageContainer>
     </>
   );
 }

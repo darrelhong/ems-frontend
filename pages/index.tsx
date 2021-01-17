@@ -8,13 +8,13 @@ import {
   Heading,
   Flex,
   Spacer,
-  Container,
   useColorModeValue,
   Icon,
 } from "@chakra-ui/react";
 import { request, gql } from "graphql-request";
 import { FaExternalLinkAlt } from "react-icons/fa";
 
+import PageContainer from '../components/PageContainer'
 import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
 
 export default function Home({
@@ -46,7 +46,7 @@ export default function Home({
       </Flex>
 
       {/* responsive container */}
-      <Container
+      <PageContainer
         w="100%"
         maxW={["100%", "100%", "60em", "60em", "72em"]}
         minH="100vh"
@@ -71,7 +71,7 @@ export default function Home({
             </Box>
           ))}
         </Grid>
-      </Container>
+      </PageContainer>
     </>
   );
 }
