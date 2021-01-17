@@ -7,15 +7,14 @@ import {
   Grid,
   Heading,
   Flex,
-  Spacer,
   useColorModeValue,
   Icon,
 } from "@chakra-ui/react";
 import { request, gql } from "graphql-request";
 import { FaExternalLinkAlt } from "react-icons/fa";
 
-import PageContainer from '../components/PageContainer'
-import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
+import NavBar from "../components/NavBar";
+import PageContainer from "../components/PageContainer";
 
 export default function Home({
   launchesPast,
@@ -31,27 +30,10 @@ export default function Home({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {/* nav */}
-      <Flex
-        w="100%"
-        p={2}
-        borderBottom="1px"
-        borderColor="gray.200"
-        alignItems="center"
-      >
-        <NextLink href="/">
-          <Link>Home</Link>
-        </NextLink>
-        <Spacer />
-        <ColorModeSwitcher />
-      </Flex>
+      <NavBar />
 
       {/* responsive container */}
-      <PageContainer
-        w="100%"
-        maxW={["100%", "100%", "60em", "60em", "72em"]}
-        minH="100vh"
-        p={3}
-      >
+      <PageContainer fullWidth={false}>
         <Heading textAlign="center" mb={3}>
           SpaceX Land
         </Heading>
