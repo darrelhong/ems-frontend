@@ -1,19 +1,19 @@
 import Head from "next/head";
+import NextLink from "next/link";
 import {
   Box,
   Text,
   Link,
-  VStack,
-  Code,
   Grid,
   Heading,
   Flex,
   Spacer,
   Container,
   useColorModeValue,
+  Icon,
 } from "@chakra-ui/react";
-import { useQuery } from "react-query";
 import { request, gql } from "graphql-request";
+import { FaExternalLinkAlt } from "react-icons/fa";
 
 import { ColorModeSwitcher } from "../components/ColorModeSwitcher";
 
@@ -22,8 +22,6 @@ export default function Home({
 }: {
   launchesPast: Array<Object>;
 }) {
-  console.log(launchesPast);
-
   const boxBg = useColorModeValue("gray.50", "gray.700");
 
   return (
@@ -33,7 +31,16 @@ export default function Home({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {/* nav */}
-      <Flex w="100%" p={2} borderBottom="1px" borderColor="gray.200">
+      <Flex
+        w="100%"
+        p={2}
+        borderBottom="1px"
+        borderColor="gray.200"
+        alignItems="center"
+      >
+        <NextLink href="/">
+          <Link>Home</Link>
+        </NextLink>
         <Spacer />
         <ColorModeSwitcher />
       </Flex>
@@ -52,6 +59,15 @@ export default function Home({
           {launchesPast.map((launch, index) => (
             <Box bg={boxBg} borderRadius="md" key={index} p={2}>
               <Text color="pink.400">{launch.mission_name}</Text>
+              <NextLink href={`/launches/${launch.id}`}>
+                <Link color="blue.400">Info</Link>
+              </NextLink>
+              <br />
+              <Link color="blue.400" href={launch.links.wikipedia} isExternal>
+                <Flex alignItems="center">
+                  Wiki <Icon as={FaExternalLinkAlt} w={3} mx={2} />
+                </Flex>
+              </Link>
             </Box>
           ))}
         </Grid>
@@ -66,38 +82,15 @@ export async function getStaticProps() {
     gql`
       {
         launchesPast(limit: 10) {
+          id
           mission_name
           launch_date_local
           launch_site {
             site_name_long
           }
           links {
-            article_link
+            wikipedia
             video_link
-          }
-          rocket {
-            rocket_name
-            first_stage {
-              cores {
-                flight
-                core {
-                  reuse_count
-                  status
-                }
-              }
-            }
-            second_stage {
-              payloads {
-                payload_type
-                payload_mass_kg
-                payload_mass_lbs
-              }
-            }
-          }
-          ships {
-            name
-            home_port
-            image
           }
         }
       }
