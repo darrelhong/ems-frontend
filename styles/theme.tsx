@@ -5,6 +5,10 @@ const theme = extendTheme({
     heading: "Raleway",
     body: "Raleway",
   },
+  config: {
+    initialColorMode: "light",
+    useSystemColorMode: false,
+  },
 });
 
 export default theme;
