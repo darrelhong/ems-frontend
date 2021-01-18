@@ -66,7 +66,7 @@ export default function Home() {
       </Head>
       <NavBar />
 
-      <PageContainer fullWidth={false}>
+      <PageContainer fullHeight={false}>
         <Heading textAlign="center" mb={3}>
           SpaceX Land
         </Heading>
