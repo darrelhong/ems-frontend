@@ -1,3 +1,13 @@
+Base setup with SpaceX API
+
+## Libraries used
+
+Chakra UI - [https://chakra-ui.com/](https://chakra-ui.com/)
+
+React Query - [https://react-query.tanstack.com/](https://react-query.tanstack.com/)
+
+---
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
