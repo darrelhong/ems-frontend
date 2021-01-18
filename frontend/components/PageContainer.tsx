@@ -1,6 +1,6 @@
 import { Container } from "@chakra-ui/react";
 
-export const pageContainerWidths = ["100%", "100%", "60em", "60em", "72em"];
+export const pageContainerWidths = {xl: "75em"};
 
 export default function PageContainer({
   fullHeight = true,
