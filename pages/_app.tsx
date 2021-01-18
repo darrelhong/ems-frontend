@@ -13,15 +13,17 @@ const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Hydrate state={pageProps.dehydratedState}>
-        <ReactQueryDevtools initialIsOpen={false} />
-        <ChakraProvider resetCSS theme={theme}>
-          <Fonts />
-          <Component {...pageProps} />
-        </ChakraProvider>
-      </Hydrate>
-    </QueryClientProvider>
+    <>
+      <Fonts />
+      <QueryClientProvider client={queryClient}>
+        <Hydrate state={pageProps.dehydratedState}>
+          <ReactQueryDevtools initialIsOpen={false} />
+          <ChakraProvider resetCSS theme={theme}>
+            <Component {...pageProps} />
+          </ChakraProvider>
+        </Hydrate>
+      </QueryClientProvider>
+    </>
   );
 }
 

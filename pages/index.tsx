@@ -39,12 +39,23 @@ const getPastLaunches = async () => {
       }
     `
   );
-  
+
   return launchesPast;
 };
 
+export async function getStaticProps() {
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery("launches", getPastLaunches);
+
+  return {
+    props: { dehydratedState: dehydrate(queryClient) },
+  };
+}
+
 export default function Home() {
-  const { isLoading, data } = useQuery("launches", getPastLaunches);
+  const { isLoading, data } = useQuery("launches", getPastLaunches, {
+    staleTime: 60000,
+  });
   const boxBg = useColorModeValue("gray.50", "gray.700");
 
   return (
@@ -82,13 +93,4 @@ export default function Home() {
       </PageContainer>
     </>
   );
-}
-
-export async function getStaticProps() {
-  const queryClient = new QueryClient();
-  await queryClient.prefetchQuery("launches", getPastLaunches);
-
-  return {
-    props: { dehydratedState: dehydrate(queryClient) },
-  };
 }

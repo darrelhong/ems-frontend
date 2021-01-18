@@ -1,12 +1,8 @@
 import Head from "next/head";
 import { request, gql } from "graphql-request";
-import {
-  Box,
-  Grid,
-  Heading,
-  Image,
-  Text,
-} from "@chakra-ui/react";
+import { QueryClient, useQuery } from "react-query";
+import { dehydrate } from "react-query/hydration";
+import { Box, Grid, Heading, Img, Text } from "@chakra-ui/react";
 import PageContainer from "../../components/PageContainer";
 import NavBar from "../../components/NavBar";
 
@@ -31,12 +27,12 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getStaticProps({ params }) {
+const getLaunch = async (id) => {
   const { launch } = await request(
     "https://api.spacex.land/graphql/",
     gql`
     {
-      launch(id: ${params.id}) {
+      launch(id: ${id}) {
         id
         mission_name
         rocket {
@@ -51,18 +47,31 @@ export async function getStaticProps({ params }) {
     `
   );
 
+  return launch;
+};
+
+export async function getStaticProps({ params }) {
+  const id = params.id;
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery(["launch", id], () => getLaunch(id));
+
   return {
     props: {
-      launch,
+      dehydratedState: dehydrate(queryClient),
+      id,
     },
   };
 }
 
-export default function Launch({ launch }) {
+export default function Launch({ id }) {
+  const { data } = useQuery(["launch", id], getLaunch, {
+    staleTime: 60000,
+  });
+
   return (
     <>
       <Head>
-        <title>{launch.mission_name}</title>
+        <title>{data.mission_name}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -70,15 +79,15 @@ export default function Launch({ launch }) {
 
       <PageContainer>
         <Grid justifyItems="center">
-          <Heading mb={8}>{launch.mission_name}</Heading>
-          <Image
-            src={launch.links.mission_patch_small}
+          <Heading mb={8}>{data.mission_name}</Heading>
+          <Img
+            src={data.links.mission_patch_small}
             alt="mission_patch"
             mb={8}
           />
           <Box>
-            <Text fontSize="xl">{`Rocket: ${launch.rocket.rocket_name}`}</Text>
-            <Text>{`Type: ${launch.rocket.rocket_type}`}</Text>
+            <Text fontSize="xl">{`Rocket: ${data.rocket.rocket_name}`}</Text>
+            <Text>{`Type: ${data.rocket.rocket_type}`}</Text>
           </Box>
         </Grid>
       </PageContainer>
