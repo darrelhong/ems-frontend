@@ -1,8 +1,8 @@
-import NextLink from "next/link";
-import { Flex, Link, Spacer } from "@chakra-ui/react";
+import NextLink from 'next/link';
+import { Flex, Link, Spacer } from '@chakra-ui/react';
 
-import { ColorModeSwitcher } from "./ColorModeSwitcher";
-import { pageContainerWidths } from "./PageContainer";
+import { ColorModeSwitcher } from './ColorModeSwitcher';
+import { pageContainerWidths } from './PageContainer';
 
 export default function NavBar() {
   return (

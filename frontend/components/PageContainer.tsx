@@ -1,6 +1,6 @@
-import { Container } from "@chakra-ui/react";
+import { Container } from '@chakra-ui/react';
 
-export const pageContainerWidths = {xl: "75em"};
+export const pageContainerWidths = { xl: '75em' };
 
 export default function PageContainer({
   fullHeight = true,
@@ -13,7 +13,7 @@ export default function PageContainer({
     <Container
       w="100%"
       maxW={pageContainerWidths}
-      minH={fullHeight ? "80vh" : "initial"}
+      minH={fullHeight ? '80vh' : 'initial'}
       p={3}
     >
       {children}

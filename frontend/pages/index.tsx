@@ -1,5 +1,5 @@
-import Head from "next/head";
-import NextLink from "next/link";
+import Head from 'next/head';
+import NextLink from 'next/link';
 import {
   Box,
   Text,
@@ -10,18 +10,18 @@ import {
   useColorModeValue,
   Icon,
   Skeleton,
-} from "@chakra-ui/react";
-import { QueryClient, useQuery } from "react-query";
-import { dehydrate } from "react-query/hydration";
-import { request, gql } from "graphql-request";
-import { FaExternalLinkAlt } from "react-icons/fa";
+} from '@chakra-ui/react';
+import { QueryClient, useQuery } from 'react-query';
+import { dehydrate } from 'react-query/hydration';
+import { request, gql } from 'graphql-request';
+import { FaExternalLinkAlt } from 'react-icons/fa';
 
-import NavBar from "../components/NavBar";
-import PageContainer from "../components/PageContainer";
+import NavBar from '../components/NavBar';
+import PageContainer from '../components/PageContainer';
 
 const getPastLaunches = async () => {
   const { launchesPast } = await request(
-    "https://api.spacex.land/graphql/",
+    'https://api.spacex.land/graphql/',
     gql`
       {
         launchesPast(limit: 10) {
@@ -45,7 +45,7 @@ const getPastLaunches = async () => {
 
 export async function getStaticProps() {
   const queryClient = new QueryClient();
-  await queryClient.prefetchQuery("launches", getPastLaunches);
+  await queryClient.prefetchQuery('launches', getPastLaunches);
 
   return {
     props: { dehydratedState: dehydrate(queryClient) },
@@ -53,10 +53,10 @@ export async function getStaticProps() {
 }
 
 export default function Home() {
-  const { isLoading, data } = useQuery("launches", getPastLaunches, {
+  const { isLoading, data } = useQuery('launches', getPastLaunches, {
     staleTime: 60000,
   });
-  const boxBg = useColorModeValue("gray.50", "gray.700");
+  const boxBg = useColorModeValue('gray.50', 'gray.700');
 
   return (
     <>
