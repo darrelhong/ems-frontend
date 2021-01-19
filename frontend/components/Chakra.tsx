@@ -9,13 +9,13 @@ import {
 } from '@chakra-ui/react';
 import { GetServerSideProps } from 'next';
 
-export const Chakra = ({
+const Chakra = ({
   cookies,
   children,
 }: {
   cookies: string;
   children: React.ReactNode;
-}) => {
+}): JSX.Element => {
   const colorModeManager =
     typeof cookies === 'string'
       ? cookieStorageManager(cookies)
@@ -26,6 +26,8 @@ export const Chakra = ({
     </ChakraProvider>
   );
 };
+
+export default Chakra;
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => ({
   props: {

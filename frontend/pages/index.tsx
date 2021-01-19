@@ -18,6 +18,7 @@ import { FaExternalLinkAlt } from 'react-icons/fa';
 
 import NavBar from '../components/NavBar';
 import PageContainer from '../components/PageContainer';
+import { GetStaticProps } from 'next';
 
 const getPastLaunches = async () => {
   const { launchesPast } = await request(
@@ -43,16 +44,16 @@ const getPastLaunches = async () => {
   return launchesPast;
 };
 
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps = async () => {
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery('launches', getPastLaunches);
 
   return {
     props: { dehydratedState: dehydrate(queryClient) },
   };
-}
+};
 
-export default function Home() {
+export default function Home(): JSX.Element {
   const { isLoading, data } = useQuery('launches', getPastLaunches, {
     staleTime: 60000,
   });

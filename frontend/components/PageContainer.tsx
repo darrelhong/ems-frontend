@@ -2,13 +2,13 @@ import { Container } from '@chakra-ui/react';
 
 export const pageContainerWidths = { xl: '75em' };
 
-export default function PageContainer({
+const PageContainer = ({
   fullHeight = true,
   children,
 }: {
   fullHeight?: boolean;
   children: React.ReactNode;
-}) {
+}): JSX.Element => {
   return (
     <Container
       w="100%"
@@ -19,4 +19,6 @@ export default function PageContainer({
       {children}
     </Container>
   );
-}
+};
+
+export default PageContainer;

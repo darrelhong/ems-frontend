@@ -1,14 +1,15 @@
-import Head from "next/head";
-import { request, gql } from "graphql-request";
-import { QueryClient, useQuery } from "react-query";
-import { dehydrate } from "react-query/hydration";
-import { Box, Grid, Heading, Img, Text } from "@chakra-ui/react";
-import PageContainer from "../../components/PageContainer";
-import NavBar from "../../components/NavBar";
+import { GetStaticPaths, GetStaticProps } from 'next';
+import Head from 'next/head';
+import { request, gql } from 'graphql-request';
+import { QueryClient, useQuery } from 'react-query';
+import { dehydrate } from 'react-query/hydration';
+import { Box, Grid, Heading, Img, Text } from '@chakra-ui/react';
+import PageContainer from '../../components/PageContainer';
+import NavBar from '../../components/NavBar';
 
-export async function getStaticPaths() {
+export const getStaticPaths: GetStaticPaths = async () => {
   const { launchesPast } = await request(
-    "https://api.spacex.land/graphql/",
+    'https://api.spacex.land/graphql/',
     gql`
       {
         launchesPast(limit: 10) {
@@ -25,11 +26,11 @@ export async function getStaticPaths() {
     paths,
     fallback: false,
   };
-}
+};
 
 const getLaunch = async (id) => {
   const { launch } = await request(
-    "https://api.spacex.land/graphql/",
+    'https://api.spacex.land/graphql/',
     gql`
     {
       launch(id: ${id}) {
@@ -50,10 +51,10 @@ const getLaunch = async (id) => {
   return launch;
 };
 
-export async function getStaticProps({ params }) {
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   const id = params.id;
   const queryClient = new QueryClient();
-  await queryClient.prefetchQuery(["launch", id], () => getLaunch(id));
+  await queryClient.prefetchQuery(['launch', id], () => getLaunch(id));
 
   return {
     props: {
@@ -61,10 +62,10 @@ export async function getStaticProps({ params }) {
       id,
     },
   };
-}
+};
 
-export default function Launch({ id }) {
-  const { data } = useQuery(["launch", id], getLaunch, {
+export default function Launch({ id }: { id: string }): JSX.Element {
+  const { data } = useQuery(['launch', id], getLaunch, {
     staleTime: 60000,
   });
 

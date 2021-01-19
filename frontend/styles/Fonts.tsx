@@ -2,7 +2,7 @@
 
 import { Global } from '@emotion/react';
 
-export const Fonts = () => (
+export const Fonts = (): JSX.Element => (
   <Global
     styles={`
   /* Copied from https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600;700&display=swap */

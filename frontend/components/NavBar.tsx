@@ -4,7 +4,7 @@ import { Flex, Link, Spacer } from '@chakra-ui/react';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
 import { pageContainerWidths } from './PageContainer';
 
-export default function NavBar() {
+export default function NavBar(): JSX.Element {
   return (
     <Flex borderBottom="1px" borderColor="gray.200" justifyContent="center">
       <Flex w="100%" maxW={pageContainerWidths} p={2} alignItems="center">
