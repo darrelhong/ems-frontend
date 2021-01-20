@@ -9,7 +9,6 @@ import {
   Flex,
   useColorModeValue,
   Icon,
-  Skeleton,
 } from '@chakra-ui/react';
 import { QueryClient, useQuery } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
@@ -54,7 +53,7 @@ export const getStaticProps: GetStaticProps = async () => {
 };
 
 export default function Home(): JSX.Element {
-  const { isLoading, data } = useQuery('launches', getPastLaunches, {
+  const { data } = useQuery('launches', getPastLaunches, {
     staleTime: 60000,
   });
   const boxBg = useColorModeValue('gray.50', 'gray.700');
@@ -72,24 +71,20 @@ export default function Home(): JSX.Element {
           SpaceX Land
         </Heading>
         <Grid rowGap={2}>
-          {isLoading ? (
-            <Skeleton />
-          ) : (
-            data.map((launch, index) => (
-              <Box bg={boxBg} borderRadius="md" key={index} p={2}>
-                <Text color="pink.400">{launch.mission_name}</Text>
-                <NextLink href={`/launches/${launch.id}`}>
-                  <Link color="blue.400">Info</Link>
-                </NextLink>
-                <br />
-                <Link color="blue.400" href={launch.links.wikipedia} isExternal>
-                  <Flex alignItems="center">
-                    Wiki <Icon as={FaExternalLinkAlt} w={3} mx={2} />
-                  </Flex>
-                </Link>
-              </Box>
-            ))
-          )}
+          {data?.map((launch, index) => (
+            <Box bg={boxBg} borderRadius="md" key={index} p={2}>
+              <Text color="pink.400">{launch.mission_name}</Text>
+              <NextLink href={`/launches/${launch.id}`}>
+                <Link color="blue.400">Info</Link>
+              </NextLink>
+              <br />
+              <Link color="blue.400" href={launch.links.wikipedia} isExternal>
+                <Flex alignItems="center">
+                  Wiki <Icon as={FaExternalLinkAlt} w={3} mx={2} />
+                </Flex>
+              </Link>
+            </Box>
+          ))}
         </Grid>
       </PageContainer>
     </>
