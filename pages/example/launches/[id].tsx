@@ -4,8 +4,8 @@ import { request, gql } from 'graphql-request';
 import { QueryClient, useQuery } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
 import { Box, Grid, Heading, Img, Text } from '@chakra-ui/react';
-import PageContainer from '../../components/PageContainer';
-import NavBar from '../../components/NavBar';
+import PageContainer from '../../../components/PageContainer';
+import NavBar from '../../../components/NavBar';
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const { launchesPast } = await request(
