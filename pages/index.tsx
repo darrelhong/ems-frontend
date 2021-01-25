@@ -18,7 +18,7 @@ function Card({ children }): JSX.Element {
       w="xs"
       borderRadius="lg"
       p={3}
-      bg={useColorModeValue('gray.100', 'gray.600')}
+      bg={useColorModeValue('white', 'gray.600')}
     >
       {children}
     </Box>
@@ -45,9 +45,9 @@ export default function Home(): JSX.Element {
         >
           <Card>
             <Heading as="h3" size="md" mb={2}>
-              For Event Organisers
+              For Event Organisers ➜
             </Heading>
-            <Text mb={2}>Create/host events and exhibitions</Text>
+            <Text mb={3}>Create/host events and exhibitions</Text>
             <Stack direction="row">
               <Button colorScheme="purple" size="sm">
                 Login
@@ -59,9 +59,9 @@ export default function Home(): JSX.Element {
           </Card>
           <Card>
             <Heading as="h3" size="md" mb={2}>
-              For Business Partners
+              For Business Partners ➜
             </Heading>
-            <Text mb={2}>Register for events</Text>
+            <Text mb={3}>Register for events</Text>
             <Stack direction="row">
               <Button colorScheme="purple" size="sm">
                 Login
