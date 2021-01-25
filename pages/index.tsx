@@ -1,63 +1,31 @@
 import Head from 'next/head';
-import NextLink from 'next/link';
 import {
   Box,
-  Text,
-  Link,
-  Grid,
   Heading,
-  Flex,
+  Button,
+  Stack,
+  Text,
   useColorModeValue,
-  Icon,
+  Grid,
 } from '@chakra-ui/react';
-import { QueryClient, useQuery } from 'react-query';
-import { dehydrate } from 'react-query/hydration';
-import { request, gql } from 'graphql-request';
-import { FaExternalLinkAlt } from 'react-icons/fa';
 
 import NavBar from '../components/NavBar';
 import PageContainer from '../components/PageContainer';
-import { GetStaticProps } from 'next';
 
-const getPastLaunches = async () => {
-  const { launchesPast } = await request(
-    'https://api.spacex.land/graphql/',
-    gql`
-      {
-        launchesPast(limit: 10) {
-          id
-          mission_name
-          launch_date_local
-          launch_site {
-            site_name_long
-          }
-          links {
-            wikipedia
-            video_link
-          }
-        }
-      }
-    `
+function Card({ children }): JSX.Element {
+  return (
+    <Box
+      w="xs"
+      borderRadius="lg"
+      p={3}
+      bg={useColorModeValue('gray.100', 'gray.600')}
+    >
+      {children}
+    </Box>
   );
-
-  return launchesPast;
-};
-
-export const getStaticProps: GetStaticProps = async () => {
-  const queryClient = new QueryClient();
-  await queryClient.prefetchQuery('launches', getPastLaunches);
-
-  return {
-    props: { dehydratedState: dehydrate(queryClient) },
-  };
-};
+}
 
 export default function Home(): JSX.Element {
-  const { data } = useQuery('launches', getPastLaunches, {
-    staleTime: 60000,
-  });
-  const boxBg = useColorModeValue('gray.50', 'gray.700');
-
   return (
     <>
       <Head>
@@ -67,24 +35,42 @@ export default function Home(): JSX.Element {
       <NavBar />
 
       <PageContainer fullHeight={false}>
-        <Heading textAlign="center" mb={3}>
-          SpaceX Land
+        <Heading textAlign="center" mb={10} mt={2}>
+          Event Management System
         </Heading>
-        <Grid rowGap={2}>
-          {data?.map((launch, index) => (
-            <Box bg={boxBg} borderRadius="md" key={index} p={2}>
-              <Text color="pink.400">{launch.mission_name}</Text>
-              <NextLink href={`/launches/${launch.id}`}>
-                <Link color="blue.400">Info</Link>
-              </NextLink>
-              <br />
-              <Link color="blue.400" href={launch.links.wikipedia} isExternal>
-                <Flex alignItems="center">
-                  Wiki <Icon as={FaExternalLinkAlt} w={3} mx={2} />
-                </Flex>
-              </Link>
-            </Box>
-          ))}
+        <Grid
+          gridAutoFlow={['row', 'row', 'column']}
+          gap={4}
+          justifyContent="center"
+        >
+          <Card>
+            <Heading as="h3" size="md" mb={2}>
+              For Event Organisers
+            </Heading>
+            <Text mb={2}>Create/host events and exhibitions</Text>
+            <Stack direction="row">
+              <Button colorScheme="purple" size="sm">
+                Login
+              </Button>
+              <Button colorScheme="purple" variant="outline" size="sm">
+                Sign up
+              </Button>
+            </Stack>
+          </Card>
+          <Card>
+            <Heading as="h3" size="md" mb={2}>
+              For Business Partners
+            </Heading>
+            <Text mb={2}>Register for events</Text>
+            <Stack direction="row">
+              <Button colorScheme="purple" size="sm">
+                Login
+              </Button>
+              <Button colorScheme="purple" variant="outline" size="sm">
+                Sign up
+              </Button>
+            </Stack>
+          </Card>
         </Grid>
       </PageContainer>
     </>
