@@ -17,6 +17,13 @@ const theme = extendTheme({
       },
     }),
   },
+  components: {
+    Button: {
+      defaultProps: {
+        colorScheme: 'purple',
+      },
+    },
+  },
 });
 
 export default theme;

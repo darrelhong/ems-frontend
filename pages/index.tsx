@@ -49,12 +49,8 @@ export default function Home(): JSX.Element {
             </Heading>
             <Text mb={3}>Create/host events and exhibitions</Text>
             <Stack direction="row">
-              <Button colorScheme="purple" size="sm">
-                Login
-              </Button>
-              <Button colorScheme="purple" variant="outline" size="sm">
-                Sign up
-              </Button>
+              <Button>Login</Button>
+              <Button variant="outline">Sign up</Button>
             </Stack>
           </Card>
           <Card>
@@ -63,12 +59,8 @@ export default function Home(): JSX.Element {
             </Heading>
             <Text mb={3}>Register for events</Text>
             <Stack direction="row">
-              <Button colorScheme="purple" size="sm">
-                Login
-              </Button>
-              <Button colorScheme="purple" variant="outline" size="sm">
-                Sign up
-              </Button>
+              <Button>Login</Button>
+              <Button variant="outline">Sign up</Button>
             </Stack>
           </Card>
         </Grid>
