@@ -1,29 +1,9 @@
 import Head from 'next/head';
-import {
-  Box,
-  Heading,
-  Button,
-  Stack,
-  Text,
-  useColorModeValue,
-  Grid,
-} from '@chakra-ui/react';
+import { Heading, Button, Stack, Text, Grid } from '@chakra-ui/react';
 
 import NavBar from '../components/NavBar';
 import PageContainer from '../components/PageContainer';
-
-function Card({ children }): JSX.Element {
-  return (
-    <Box
-      w="xs"
-      borderRadius="lg"
-      p={3}
-      bg={useColorModeValue('white', 'gray.600')}
-    >
-      {children}
-    </Box>
-  );
-}
+import Card from '../components/Card';
 
 export default function Home(): JSX.Element {
   return (
@@ -43,7 +23,7 @@ export default function Home(): JSX.Element {
           gap={4}
           justifyContent="center"
         >
-          <Card>
+          <Card w="xs">
             <Heading as="h3" size="md" mb={2}>
               For Event Organisers ➜
             </Heading>
