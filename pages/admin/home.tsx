@@ -1,24 +1,15 @@
 import { Heading } from '@chakra-ui/react';
 import Head from 'next/head';
-import LoadingScreen from '../../components/LoadingScreen';
 import NavBar from '../../components/NavBar';
 import PageContainer from '../../components/PageContainer';
-import useCheckToken from '../../lib/useCheckToken';
+import withProtectRoute from '../../components/ProtectRouteWrapper';
 
-export default function AdminHome(): JSX.Element {
-  const [isLoggedIn] = useCheckToken({
-    redirectTo: '/admin/login',
-  });
-
-  if (!isLoggedIn) {
-    return <LoadingScreen />;
-  }
+function AdminHome(): JSX.Element {
   return (
     <>
       <Head>
-        <title>Next App</title>
+        <title>Admin Dasboard</title>
       </Head>
-
       <NavBar />
 
       <PageContainer>
@@ -27,3 +18,5 @@ export default function AdminHome(): JSX.Element {
     </>
   );
 }
+
+export default withProtectRoute(AdminHome, { redirectTo: '/admin/login' });
