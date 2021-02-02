@@ -22,6 +22,7 @@ import NavBar from '../../components/NavBar/NavBar';
 import PageContainer from '../../components/PageContainer';
 import { GetServerSideProps } from 'next';
 
+// get query params from URL to dispaly relavant feedback
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   return {
     props: {
