@@ -11,17 +11,19 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   };
 };
 
-type AdminLoginProps = {
+type OrganiserLoginProps = {
   info: string;
 };
 
-export default function AdminLogin({ info }: AdminLoginProps): JSX.Element {
+export default function OrganiserLogin({
+  info,
+}: OrganiserLoginProps): JSX.Element {
   return (
     <LoginPage
       info={info}
-      heading="Admin Login"
-      loginApiUrl={'/api/user/login/admin'}
-      loginSuccessUrl={'/admin/home'}
+      heading="Organiser Login"
+      loginApiUrl={'/api/user/login/evntorg'}
+      loginSuccessUrl={'/organiser/home'}
     />
   );
 }

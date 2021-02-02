@@ -4,6 +4,7 @@ import { Heading, Button, Stack, Text, Grid } from '@chakra-ui/react';
 import NavBar from '../components/NavBar/NavBar';
 import PageContainer from '../components/PageContainer';
 import Card from '../components/Card';
+import Link from 'next/link';
 
 export default function Home(): JSX.Element {
   return (
@@ -29,7 +30,9 @@ export default function Home(): JSX.Element {
             </Heading>
             <Text mb={3}>Create/host events and exhibitions</Text>
             <Stack direction="row">
-              <Button>Login</Button>
+              <Link href="/organiser/login" passHref>
+                <Button>Login</Button>
+              </Link>
               <Button variant="outline">Sign up</Button>
             </Stack>
           </Card>
