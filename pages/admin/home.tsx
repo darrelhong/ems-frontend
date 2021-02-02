@@ -1,5 +1,6 @@
-import { Heading } from '@chakra-ui/react';
 import Head from 'next/head';
+import { Heading } from '@chakra-ui/react';
+
 import NavBar from '../../components/NavBar';
 import PageContainer from '../../components/PageContainer';
 import withProtectRoute from '../../components/ProtectRouteWrapper';
