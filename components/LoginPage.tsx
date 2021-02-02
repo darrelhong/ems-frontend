@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import {
   Alert,
   AlertIcon,
@@ -15,11 +14,10 @@ import {
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 
-import api from '../lib/ApiClient';
-
 import Card from './Card';
 import NavBar from './NavBar/NavBar';
 import PageContainer from './PageContainer';
+import { login } from '../lib/auth';
 
 type AdminLoginProps = {
   info?: string;
@@ -34,20 +32,10 @@ export default function LoginPage({
   loginApiUrl,
   loginSuccessUrl,
 }: AdminLoginProps): JSX.Element {
-  const router = useRouter();
   const { register, handleSubmit, errors, formState } = useForm();
   const [loginError, setLoginError] = useState(null);
   const onSubmit = async (data) => {
-    api
-      .post(loginApiUrl, {
-        email: data.email,
-        password: data.password,
-      })
-      .then((res) => {
-        sessionStorage.setItem('userId', res.data.user.id);
-        router.push(loginSuccessUrl);
-      })
-      .catch(() => setLoginError('An error occured'));
+    login(data, loginApiUrl, loginSuccessUrl, setLoginError);
   };
 
   return (

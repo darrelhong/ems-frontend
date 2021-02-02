@@ -5,12 +5,11 @@ import {
   MenuItem,
   MenuList,
 } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
 import { FaCog } from 'react-icons/fa';
-import Cookies from 'js-cookie';
+
+import { logout } from '../../lib/auth';
 
 export function AdminNavBarMenu(): JSX.Element {
-  const router = useRouter();
   return (
     <Menu>
       <MenuButton
@@ -21,14 +20,7 @@ export function AdminNavBarMenu(): JSX.Element {
         color="current"
       />
       <MenuList>
-        <MenuItem
-          onClick={() => {
-            Cookies.remove('token');
-            router.push('/admin/login');
-          }}
-        >
-          Log out
-        </MenuItem>
+        <MenuItem onClick={logout}>Log out</MenuItem>
       </MenuList>
     </Menu>
   );
