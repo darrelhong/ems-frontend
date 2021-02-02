@@ -18,7 +18,7 @@ import { useForm } from 'react-hook-form';
 import api from '../../lib/ApiClient';
 
 import Card from '../../components/Card';
-import NavBar from '../../components/NavBar';
+import NavBar from '../../components/NavBar/NavBar';
 import PageContainer from '../../components/PageContainer';
 import { GetServerSideProps } from 'next';
 

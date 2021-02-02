@@ -15,7 +15,7 @@ import { dehydrate } from 'react-query/hydration';
 import { request, gql } from 'graphql-request';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 
-import NavBar from '../../components/NavBar';
+import NavBar from '../../components/NavBar/NavBar';
 import PageContainer from '../../components/PageContainer';
 import { GetStaticProps } from 'next';
 

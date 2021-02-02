@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { Heading } from '@chakra-ui/react';
 
-import NavBar from '../../components/NavBar';
+import { AdminNavBar } from '../../components/NavBar/NavBar';
 import PageContainer from '../../components/PageContainer';
 import withProtectRoute from '../../components/ProtectRouteWrapper';
 
@@ -11,7 +11,7 @@ function AdminHome(): JSX.Element {
       <Head>
         <title>Admin Dasboard</title>
       </Head>
-      <NavBar />
+      <AdminNavBar />
 
       <PageContainer>
         <Heading>Admin Home</Heading>

@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { Heading, Button, Stack, Text, Grid } from '@chakra-ui/react';
 
-import NavBar from '../components/NavBar';
+import NavBar from '../components/NavBar/NavBar';
 import PageContainer from '../components/PageContainer';
 import Card from '../components/Card';
 
