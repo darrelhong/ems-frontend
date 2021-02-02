@@ -43,7 +43,8 @@ export default function LoginPage({
         email: data.email,
         password: data.password,
       })
-      .then(() => {
+      .then((res) => {
+        sessionStorage.setItem('userId', res.data.user.id);
         router.push(loginSuccessUrl);
       })
       .catch(() => setLoginError('An error occured'));

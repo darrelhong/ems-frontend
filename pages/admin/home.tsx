@@ -1,11 +1,15 @@
 import Head from 'next/head';
-import { Heading } from '@chakra-ui/react';
+import { Heading, Skeleton, Text } from '@chakra-ui/react';
 
 import { AdminNavBar } from '../../components/NavBar/NavBar';
 import PageContainer from '../../components/PageContainer';
 import withProtectRoute from '../../components/ProtectRouteWrapper';
+import useUser from '../../lib/query/useUser';
 
 function AdminHome(): JSX.Element {
+  const { data: user, isSuccess, isLoading } = useUser(
+    +sessionStorage.getItem('userId')
+  );
   return (
     <>
       <Head>
@@ -15,6 +19,13 @@ function AdminHome(): JSX.Element {
 
       <PageContainer>
         <Heading>Admin Home</Heading>
+        {isLoading && <Skeleton height="40px" />}
+        {isSuccess && (
+          <>
+            <Text>{user?.name}</Text>
+            <Text>User ID: {user?.id}</Text>
+          </>
+        )}
       </PageContainer>
     </>
   );
