@@ -14,7 +14,7 @@ const PageContainer = ({
       w="100%"
       maxW={pageContainerWidths}
       minH={fullHeight ? '80vh' : 'initial'}
-      p={3}
+      p={4}
     >
       {children}
     </Container>

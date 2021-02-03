@@ -23,9 +23,10 @@ function OrganiserSettings(): JSX.Element {
     <OrganiserPageWrapper title="Settings">
       {user ? (
         <Grid
-          gridTemplate="1fr 1fr/ 48px 1fr"
+          gridTemplate="1fr 1fr / 48px 1fr"
           columnGap={3}
           alignItems="center"
+          mb={4}
         >
           <GridItem rowSpan={2}>
             <Avatar />
@@ -40,17 +41,25 @@ function OrganiserSettings(): JSX.Element {
       )}
 
       {/* Settings menu */}
-      <Card my={4}>
-        <Text fontWeight="bold">Account settings</Text>
-        <Divider />
-        <Grid mt={2}>
-          <NextLink href="/organiser/settings" passHref>
-            <Link>Change password</Link>
-          </NextLink>
-        </Grid>
-      </Card>
+      <Grid
+        gridAutoFlow={{ md: 'column' }}
+        gridTemplateColumns={{ md: '3fr 7fr' }}
+        gap={4}
+      >
+        <GridItem>
+          <Card>
+            <Text fontWeight="bold">Account settings</Text>
+            <Divider />
+            <Grid mt={2}>
+              <NextLink href="/organiser/settings" passHref>
+                <Link>Change password</Link>
+              </NextLink>
+            </Grid>
+          </Card>
+        </GridItem>
 
-      <ChangePasswordForm />
+        <ChangePasswordForm />
+      </Grid>
     </OrganiserPageWrapper>
   );
 }
