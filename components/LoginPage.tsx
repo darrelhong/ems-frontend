@@ -61,9 +61,10 @@ export default function LoginPage({
             <Card>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <Grid rowGap={3}>
-                  <FormControl isInvalid={errors.email}>
+                  <FormControl isInvalid={errors.email} isRequired>
                     <FormLabel htmlFor="email">Email address</FormLabel>
                     <Input
+                      placeholder="Enter email"
                       type="email"
                       name="email"
                       id="email"
@@ -73,9 +74,10 @@ export default function LoginPage({
                       {errors.email && 'Email is required'}
                     </FormErrorMessage>
                   </FormControl>
-                  <FormControl isInvalid={errors.password}>
+                  <FormControl isInvalid={errors.password} isRequired>
                     <FormLabel htmlFor="password">Password</FormLabel>
                     <Input
+                      placeholder="Enter password"
                       type="password"
                       name="password"
                       id="password"
