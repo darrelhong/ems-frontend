@@ -6,7 +6,9 @@ import {
   GridItem,
   Link,
   Skeleton,
+  StackDivider,
   Text,
+  VStack,
 } from '@chakra-ui/react';
 
 import useUser from '../../../lib/query/useUser';
@@ -48,13 +50,18 @@ function OrganiserSettings(): JSX.Element {
       >
         <GridItem>
           <Card>
-            <Text fontWeight="bold">Account settings</Text>
-            <Divider />
-            <Grid mt={2}>
+            <Text mb={2} fontWeight="bold">
+              Account settings
+            </Text>
+            <Divider borderColor="gray.400" />
+            <VStack mt={2} align="stretch" divider={<StackDivider />}>
               <NextLink href="/organiser/settings" passHref>
                 <Link>Change password</Link>
               </NextLink>
-            </Grid>
+              <NextLink href="#" passHref>
+                <Link>Update profile</Link>
+              </NextLink>
+            </VStack>
           </Card>
         </GridItem>
 
