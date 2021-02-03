@@ -1,39 +1,117 @@
+import { useState } from 'react';
 import NextLink from 'next/link';
-import { Flex, Link, Spacer } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  IconButton,
+  Link,
+  Spacer,
+  Stack,
+  StackDivider,
+  useBreakpointValue,
+  VStack,
+} from '@chakra-ui/react';
+import { FaBars } from 'react-icons/fa';
 
 import { ColorModeSwitcher } from '../ColorModeSwitcher';
 import { pageContainerWidths } from '../PageContainer';
 import { AdminNavBarMenu, OrganiserNavBarMenu } from './NavBarMenu';
 
+type LinkObject = {
+  label: string;
+  href: string;
+};
+
 type NavBarProps = {
-  homeHref?: string;
   menu?: React.ReactNode;
+  links: Array<LinkObject>;
 };
 
 export default function NavBar({
-  homeHref = '/',
+  links = [
+    {
+      label: 'Home',
+      href: '/',
+    },
+  ],
   menu,
 }: NavBarProps): JSX.Element {
+  const menuType = useBreakpointValue({ base: 'hamburger', md: 'navbar' });
+  const [showMenu, setShowMenu] = useState(false);
+
   return (
-    <Flex borderBottom="1px" borderColor="gray.200" justifyContent="center">
-      <Flex w="100%" maxW={pageContainerWidths} p={2} alignItems="center">
-        <NextLink href={homeHref}>
-          <Link>Home</Link>
-        </NextLink>
-        <Spacer />
-        {menu}
-        <ColorModeSwitcher />
+    <>
+      <Flex borderBottom="1px" borderColor="gray.200" justifyContent="center">
+        <Stack
+          direction="row"
+          w="100%"
+          maxW={pageContainerWidths}
+          p={2}
+          alignItems="center"
+          spacing={3}
+        >
+          <Box display={{ md: 'none' }}>
+            <IconButton
+              icon={<FaBars />}
+              aria-label="Show menu"
+              variant="ghost"
+              color="current"
+              onClick={() => setShowMenu(!showMenu)}
+            />
+          </Box>
+          {menuType == 'navbar' &&
+            links.map(({ href, label }, index) => (
+              <NextLink href={href} passHref key={index}>
+                <Link>{label}</Link>
+              </NextLink>
+            ))}
+          <Spacer />
+          {menu}
+          <ColorModeSwitcher />
+        </Stack>
       </Flex>
-    </Flex>
+
+      {/* hamburger menu */}
+      {menuType === 'hamburger' && showMenu && (
+        <VStack
+          bg="gray.500"
+          divider={<StackDivider />}
+          p={4}
+          alignItems="stretch"
+        >
+          {links.map(({ href, label }, index) => (
+            <NextLink href={href} passHref key={index}>
+              <Link>{label}</Link>
+            </NextLink>
+          ))}
+        </VStack>
+      )}
+    </>
   );
 }
 
 export function AdminNavBar(): JSX.Element {
-  return <NavBar homeHref="/admin/home" menu={<AdminNavBarMenu />}></NavBar>;
+  return (
+    <NavBar
+      menu={<AdminNavBarMenu />}
+      links={[
+        { href: '/admin/home', label: 'Home' },
+        { href: '#', label: 'Link1' },
+        { href: '#', label: 'Link2' },
+      ]}
+    ></NavBar>
+  );
 }
 
 export function OrganiserNavBar(): JSX.Element {
   return (
-    <NavBar homeHref="/organiser/home" menu={<OrganiserNavBarMenu />}></NavBar>
+    <NavBar
+      menu={<OrganiserNavBarMenu />}
+      links={[
+        { href: '/organiser/home', label: 'Home' },
+        { href: '#', label: 'Link1' },
+        { href: '#', label: 'Link2' },
+      ]}
+    ></NavBar>
   );
 }
