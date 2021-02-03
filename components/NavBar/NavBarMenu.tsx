@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import {
   IconButton,
   Menu,
@@ -39,6 +40,9 @@ export function OrganiserNavBarMenu(): JSX.Element {
     <Menu>
       <MenuButtonCog />
       <MenuList>
+        <Link href="/organiser/settings" passHref>
+          <MenuItem>Settings</MenuItem>
+        </Link>
         <MenuItem onClick={() => logout({ redirectTo: '/organiser/login' })}>
           Log out
         </MenuItem>

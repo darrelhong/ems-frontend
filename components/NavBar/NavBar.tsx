@@ -6,7 +6,7 @@ import { pageContainerWidths } from '../PageContainer';
 import { AdminNavBarMenu, OrganiserNavBarMenu } from './NavBarMenu';
 
 type NavBarProps = {
-  homeHref: string;
+  homeHref?: string;
   menu?: React.ReactNode;
 };
 

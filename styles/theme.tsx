@@ -23,6 +23,13 @@ const theme = extendTheme({
         colorScheme: 'purple',
       },
     },
+    Alert: {
+      baseStyle: {
+        container: {
+          borderRadius: 'md',
+        },
+      },
+    },
   },
 });
 
