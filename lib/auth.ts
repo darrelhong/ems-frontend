@@ -2,10 +2,10 @@ import Router from 'next/router';
 import Cookies from 'js-cookie';
 import api from './ApiClient';
 
-export const logout = (): void => {
+export const logout = ({ redirectTo }: { redirectTo: string }): void => {
   Cookies.remove('token');
   localStorage.removeItem('userId');
-  Router.push('/admin/login');
+  Router.push(redirectTo);
 };
 
 type Credentials = {

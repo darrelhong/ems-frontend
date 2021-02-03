@@ -1,10 +1,11 @@
 import Head from 'next/head';
 import { Heading, Skeleton, Text } from '@chakra-ui/react';
 
+import useUser from '../../lib/query/useUser';
+
 import { AdminNavBar } from '../../components/NavBar/NavBar';
 import PageContainer from '../../components/PageContainer';
 import withProtectRoute from '../../components/ProtectRouteWrapper';
-import useUser from '../../lib/query/useUser';
 
 function AdminHome(): JSX.Element {
   const { data: user, isSuccess, isLoading } = useUser(

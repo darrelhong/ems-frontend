@@ -1,10 +1,11 @@
 import Head from 'next/head';
 import { Heading, Skeleton, Text } from '@chakra-ui/react';
 
-import NavBar from '../../components/NavBar/NavBar';
+import useUser from '../../lib/query/useUser';
+
+import { OrganiserNavBar } from '../../components/NavBar/NavBar';
 import PageContainer from '../../components/PageContainer';
 import withProtectRoute from '../../components/ProtectRouteWrapper';
-import useUser from '../../lib/query/useUser';
 
 function OrganiserHome(): JSX.Element {
   const { data: user, isLoading, isSuccess } = useUser(
@@ -16,7 +17,7 @@ function OrganiserHome(): JSX.Element {
         <title>Organiser Dasboard</title>
       </Head>
 
-      <NavBar />
+      <OrganiserNavBar />
 
       <PageContainer>
         <Heading>Organiser Home</Heading>

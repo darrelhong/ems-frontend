@@ -3,16 +3,25 @@ import { Flex, Link, Spacer } from '@chakra-ui/react';
 
 import { ColorModeSwitcher } from '../ColorModeSwitcher';
 import { pageContainerWidths } from '../PageContainer';
-import { AdminNavBarMenu } from './NavBarMenu';
+import { AdminNavBarMenu, OrganiserNavBarMenu } from './NavBarMenu';
 
-export default function NavBar(): JSX.Element {
+type NavBarProps = {
+  homeHref: string;
+  menu?: React.ReactNode;
+};
+
+export default function NavBar({
+  homeHref = '/',
+  menu,
+}: NavBarProps): JSX.Element {
   return (
     <Flex borderBottom="1px" borderColor="gray.200" justifyContent="center">
       <Flex w="100%" maxW={pageContainerWidths} p={2} alignItems="center">
-        <NextLink href="/">
+        <NextLink href={homeHref}>
           <Link>Home</Link>
         </NextLink>
         <Spacer />
+        {menu}
         <ColorModeSwitcher />
       </Flex>
     </Flex>
@@ -20,16 +29,11 @@ export default function NavBar(): JSX.Element {
 }
 
 export function AdminNavBar(): JSX.Element {
+  return <NavBar homeHref="/admin/home" menu={<AdminNavBarMenu />}></NavBar>;
+}
+
+export function OrganiserNavBar(): JSX.Element {
   return (
-    <Flex borderBottom="1px" borderColor="gray.200" justifyContent="center">
-      <Flex w="100%" maxW={pageContainerWidths} p={2} alignItems="center">
-        <NextLink href="/admin/home">
-          <Link>Home</Link>
-        </NextLink>
-        <Spacer />
-        <AdminNavBarMenu />
-        <ColorModeSwitcher />
-      </Flex>
-    </Flex>
+    <NavBar homeHref="/organiser/home" menu={<OrganiserNavBarMenu />}></NavBar>
   );
 }
