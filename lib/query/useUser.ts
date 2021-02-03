@@ -7,7 +7,7 @@ const getUserById = async (id: string) => {
 };
 
 export default function useUser(id: string) {
-  return useQuery('user', () => getUserById(id), {
+  return useQuery(['user', id], () => getUserById(id), {
     staleTime: 900000, // 15 mins
     cacheTime: 3600000, // 1 hr
   });
