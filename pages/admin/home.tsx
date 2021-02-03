@@ -8,7 +8,7 @@ import useUser from '../../lib/query/useUser';
 
 function AdminHome(): JSX.Element {
   const { data: user, isSuccess, isLoading } = useUser(
-    +sessionStorage.getItem('userId')
+    localStorage.getItem('userId')
   );
   return (
     <>
