@@ -1,10 +1,15 @@
-Base setup with SpaceX API
+## Auth
 
-## Libraries used
+Routes are protected simply by checking whether there is a `token` cookie, if not it will redirect to spcified page. Logic can be found in `ProtectRouteWrapper.tsx` HOC. As mentioned in backend README, should find a way to refresh token in the background, if not user will be forcefully logged out after 1 hour.
+
+## Libraries used (good to know)
 
 Chakra UI - [https://chakra-ui.com/](https://chakra-ui.com/)
 
+**IMPT**
 React Query - [https://react-query.tanstack.com/](https://react-query.tanstack.com/)
+
+React Hook Form - [https://react-hook-form.com/](https://react-hook-form.com/)
 
 ---
 
