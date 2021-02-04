@@ -48,7 +48,7 @@ export default function ChangePasswordForm(): JSX.Element {
       </Text>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid rowGap={3}>
-          <FormControl isInvalid={errors.password_current} isRequired>
+          <FormControl isInvalid={errors.password_current}>
             <FormLabel htmlFor="password_current">Current password</FormLabel>
             <PasswordInput
               name="password_current"
@@ -61,7 +61,7 @@ export default function ChangePasswordForm(): JSX.Element {
             </FormErrorMessage>
           </FormControl>
 
-          <FormControl isInvalid={errors.password_new} isRequired>
+          <FormControl isInvalid={errors.password_new}>
             <FormLabel htmlFor="password_new">New password</FormLabel>
             <PasswordInput
               name="password_new"
@@ -80,7 +80,7 @@ export default function ChangePasswordForm(): JSX.Element {
             </FormErrorMessage>
           </FormControl>
 
-          <FormControl isInvalid={errors.password_new_repeat} isRequired>
+          <FormControl isInvalid={errors.password_new_repeat}>
             <FormLabel htmlFor="password_new_repeat">
               Repeat new password
             </FormLabel>
