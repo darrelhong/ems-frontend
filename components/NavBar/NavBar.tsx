@@ -24,7 +24,7 @@ type LinkObject = {
 
 type NavBarProps = {
   menu?: React.ReactNode;
-  links: Array<LinkObject>;
+  links?: Array<LinkObject>;
 };
 
 export default function NavBar({

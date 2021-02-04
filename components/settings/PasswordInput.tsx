@@ -4,22 +4,12 @@ import {
   forwardRef,
   Input,
   InputGroup,
+  InputProps,
   InputRightElement,
 } from '@chakra-ui/react';
 
 const PasswordInput = forwardRef(
-  (
-    {
-      name,
-      id,
-      placeholder,
-    }: {
-      name: string;
-      id: string;
-      placeholder: string;
-    },
-    ref
-  ): JSX.Element => {
+  ({ name, id, placeholder }: InputProps, ref): JSX.Element => {
     const [show, setShow] = useState(false);
     const handleClick = (): void => setShow(!show);
 
