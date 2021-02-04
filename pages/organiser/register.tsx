@@ -21,6 +21,7 @@ import NavBar from '../../components/NavBar/NavBar';
 import PageContainer from '../../components/PageContainer';
 import Card from '../../components/Card';
 import PasswordInput from '../../components/settings/PasswordInput';
+import RoleEnum from '../../models/RoleEnum';
 
 type SignupRequest = {
   name: string;
@@ -35,7 +36,8 @@ export default function OrganiserRegister(): JSX.Element {
   password.current = watch('password', '');
 
   const { mutate, isLoading, isError } = useMutation(
-    (data: SignupRequest) => api.post('/api/user/register/evntorg', data),
+    (data: SignupRequest) =>
+      api.post(`/api/user/register/${RoleEnum.EVNTORG}`, data),
     {
       onSuccess: () => {
         router.push('/register/success');
