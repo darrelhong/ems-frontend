@@ -21,6 +21,7 @@ const theme = extendTheme({
     Button: {
       defaultProps: {
         colorScheme: 'purple',
+        size: 'sm',
       },
     },
     Alert: {
