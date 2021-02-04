@@ -57,7 +57,7 @@ export default function ChangePasswordForm(): JSX.Element {
               placeholder="Enter current passsword"
             />
             <FormErrorMessage>
-              {errors.password_current && errors.password_current}
+              {errors.password_current && errors.password_current.message}
             </FormErrorMessage>
           </FormControl>
 
@@ -98,7 +98,7 @@ export default function ChangePasswordForm(): JSX.Element {
             </FormErrorMessage>
           </FormControl>
 
-          <GridItem justifySelf="start">
+          <GridItem>
             <Button mt={2} type="submit" isLoading={isLoading}>
               Submit
             </Button>
