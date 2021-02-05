@@ -22,7 +22,8 @@ export default function AdminLogin({ info }: AdminLoginProps): JSX.Element {
       info={info}
       heading="Admin Login"
       loginApiUrl={`/api/user/login/${RoleEnum.ADMIN}`}
-      loginSuccessUrl={'/admin/home'}
+      loginSuccessUrl="/admin/home"
+      registerUrl="#"
     />
   );
 }
