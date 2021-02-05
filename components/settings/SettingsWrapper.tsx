@@ -11,7 +11,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import Card from '../Card';
-import OrganiserPageWrapper from '../wrapper/OrganiserPageWrapper';
+import { OrganiserPageWrapper } from '../wrapper/PageWrapper';
 import withProtectRoute from '../ProtectRouteWrapper';
 import useUser from '../../lib/query/useUser';
 

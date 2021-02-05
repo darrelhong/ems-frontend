@@ -50,3 +50,19 @@ export function OrganiserNavBarMenu(): JSX.Element {
     </Menu>
   );
 }
+
+export function PartnerNavBarMenu(): JSX.Element {
+  return (
+    <Menu>
+      <MenuButtonCog />
+      <MenuList>
+        <Link href="/partner/settings" passHref>
+          <MenuItem>Settings</MenuItem>
+        </Link>
+        <MenuItem onClick={() => logout({ redirectTo: '/partner/login' })}>
+          Log out
+        </MenuItem>
+      </MenuList>
+    </Menu>
+  );
+}

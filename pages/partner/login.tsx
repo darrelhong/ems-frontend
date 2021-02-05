@@ -12,19 +12,17 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   };
 };
 
-type OrganiserLoginProps = {
+type PartnerLogin = {
   info: string;
 };
 
-export default function OrganiserLogin({
-  info,
-}: OrganiserLoginProps): JSX.Element {
+export default function PartnerLogin({ info }: PartnerLogin): JSX.Element {
   return (
     <LoginPage
       info={info}
-      heading="Event Organiser Login"
-      loginApiUrl={`/api/user/login/${RoleEnum.EVNTORG}`}
-      loginSuccessUrl={'/organiser/home'}
+      heading="Business Partner Login"
+      loginApiUrl={`/api/user/login/${RoleEnum.BIZPTNR}`}
+      loginSuccessUrl={'/partner/home'}
     />
   );
 }

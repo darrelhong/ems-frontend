@@ -15,7 +15,11 @@ import { FaBars } from 'react-icons/fa';
 
 import { ColorModeSwitcher } from '../ColorModeSwitcher';
 import { pageContainerWidths } from '../PageContainer';
-import { AdminNavBarMenu, OrganiserNavBarMenu } from './NavBarMenu';
+import {
+  AdminNavBarMenu,
+  OrganiserNavBarMenu,
+  PartnerNavBarMenu,
+} from './NavBarMenu';
 
 type LinkObject = {
   label: string;
@@ -109,6 +113,19 @@ export function OrganiserNavBar(): JSX.Element {
       menu={<OrganiserNavBarMenu />}
       links={[
         { href: '/organiser/home', label: 'Home' },
+        { href: '#', label: 'Link1' },
+        { href: '#', label: 'Link2' },
+      ]}
+    ></NavBar>
+  );
+}
+
+export function PartnerNavBar(): JSX.Element {
+  return (
+    <NavBar
+      menu={<PartnerNavBarMenu />}
+      links={[
+        { href: '/partner/home', label: 'Home' },
         { href: '#', label: 'Link1' },
         { href: '#', label: 'Link2' },
       ]}

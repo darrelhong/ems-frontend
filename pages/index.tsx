@@ -44,7 +44,9 @@ export default function Home(): JSX.Element {
             </Heading>
             <Text mb={3}>Register for events</Text>
             <Stack direction="row">
-              <Button>Login</Button>
+              <Link href="/partner/login" passHref>
+                <Button>Login</Button>
+              </Link>
               <Button variant="outline">Sign up</Button>
             </Stack>
           </Card>

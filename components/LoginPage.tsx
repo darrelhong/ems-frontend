@@ -4,6 +4,7 @@ import {
   Alert,
   AlertIcon,
   Button,
+  Container,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -46,10 +47,10 @@ export default function LoginPage({
       <NavBar />
 
       <PageContainer centerContent>
-        <Grid maxW="xs" w="100%" rowGap={2}>
-          <Heading mt={4} textAlign="center" size="lg">
-            {heading}
-          </Heading>
+        <Heading mt={4} mb={2} textAlign="center" size="lg">
+          {heading}
+        </Heading>
+        <Container maxW="xs">
           {info == 'noToken' && (
             <Alert status="error" size="xs">
               <AlertIcon />
@@ -96,7 +97,7 @@ export default function LoginPage({
               </Grid>
             </form>
           </Card>
-        </Grid>
+        </Container>
       </PageContainer>
     </>
   );
