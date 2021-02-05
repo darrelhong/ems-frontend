@@ -38,6 +38,7 @@ module.exports = {
           },
         ],
         'prettier/prettier': ['error', {}, { usePrettierrc: true }],
+        'react/jsx-curly-brace-presence': 'error',
       },
     },
   ],
