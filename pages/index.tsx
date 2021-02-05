@@ -47,7 +47,9 @@ export default function Home(): JSX.Element {
               <Link href="/partner/login" passHref>
                 <Button>Login</Button>
               </Link>
-              <Button variant="outline">Sign up</Button>
+              <Link href="/partner/register" passHref>
+                <Button variant="outline">Sign up</Button>
+              </Link>
             </Stack>
           </Card>
         </Grid>
