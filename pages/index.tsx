@@ -15,16 +15,18 @@ export default function Home(): JSX.Element {
       </Head>
       <NavBar />
 
-      <PageContainer fullHeight={false}>
+      <PageContainer fullHeight={false} centerContent>
         <Heading textAlign="center" mb={10} mt={2}>
           Event Management System
         </Heading>
         <Grid
           gridAutoFlow={['row', 'row', 'column']}
+          gridAutoColumns="1fr"
           gap={4}
           justifyContent="center"
+          maxW="2xl"
         >
-          <Card w="xs">
+          <Card>
             <Heading as="h3" size="md" mb={2}>
               For Event Organisers ➜
             </Heading>
@@ -34,10 +36,11 @@ export default function Home(): JSX.Element {
                 <Button>Login</Button>
               </Link>
               <Link href="/organiser/register" passHref>
-                <Button variant="outline">Sign up</Button>
+                <Button variant="outline">Register</Button>
               </Link>
             </Stack>
           </Card>
+
           <Card>
             <Heading as="h3" size="md" mb={2}>
               For Business Partners ➜
@@ -48,7 +51,7 @@ export default function Home(): JSX.Element {
                 <Button>Login</Button>
               </Link>
               <Link href="/partner/register" passHref>
-                <Button variant="outline">Sign up</Button>
+                <Button variant="outline">Register</Button>
               </Link>
             </Stack>
           </Card>
