@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Head from 'next/head';
+import NextLink from 'next/link';
 import {
   Alert,
   AlertIcon,
@@ -9,8 +10,10 @@ import {
   FormErrorMessage,
   FormLabel,
   Grid,
+  GridItem,
   Heading,
   Input,
+  Link,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 
@@ -24,6 +27,7 @@ type AdminLoginProps = {
   heading: string;
   loginApiUrl: string;
   loginSuccessUrl: string;
+  registerUrl: string;
 };
 
 export default function LoginPage({
@@ -31,6 +35,7 @@ export default function LoginPage({
   heading,
   loginApiUrl,
   loginSuccessUrl,
+  registerUrl,
 }: AdminLoginProps): JSX.Element {
   const { register, handleSubmit, errors, formState } = useForm();
   const [loginError, setLoginError] = useState(null);
@@ -94,6 +99,19 @@ export default function LoginPage({
                 <Button mt={2} type="submit" isLoading={formState.isSubmitting}>
                   Log in
                 </Button>
+
+                <Grid mt={2} fontSize="sm" rowGap={2}>
+                  <GridItem>
+                    <NextLink href={registerUrl} passHref>
+                      <Link>Register</Link>
+                    </NextLink>
+                  </GridItem>
+                  <GridItem>
+                    <NextLink href="/register/forgot-password" passHref>
+                      <Link>Forgot password</Link>
+                    </NextLink>
+                  </GridItem>
+                </Grid>
               </Grid>
             </form>
           </Card>

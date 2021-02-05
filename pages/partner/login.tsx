@@ -22,7 +22,8 @@ export default function PartnerLogin({ info }: PartnerLogin): JSX.Element {
       info={info}
       heading="Business Partner Login"
       loginApiUrl={`/api/user/login/${RoleEnum.BIZPTNR}`}
-      loginSuccessUrl={'/partner/home'}
+      loginSuccessUrl="/partner/home"
+      registerUrl="/partner/register"
     />
   );
 }

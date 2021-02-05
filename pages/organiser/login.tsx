@@ -24,7 +24,8 @@ export default function OrganiserLogin({
       info={info}
       heading="Event Organiser Login"
       loginApiUrl={`/api/user/login/${RoleEnum.EVNTORG}`}
-      loginSuccessUrl={'/organiser/home'}
+      loginSuccessUrl="/organiser/home"
+      registerUrl="/organiser/register"
     />
   );
 }
