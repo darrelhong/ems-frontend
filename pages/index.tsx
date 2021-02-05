@@ -33,7 +33,9 @@ export default function Home(): JSX.Element {
               <Link href="/organiser/login" passHref>
                 <Button>Login</Button>
               </Link>
-              <Button variant="outline">Sign up</Button>
+              <Link href="/organiser/register" passHref>
+                <Button variant="outline">Sign up</Button>
+              </Link>
             </Stack>
           </Card>
           <Card>
