@@ -67,7 +67,7 @@ export default function RegisterPage({
       <NavBar />
 
       <PageContainer centerContent>
-        <Grid maxW="sm" w="100%" h="200px" rowGap={2}>
+        <Grid maxW="sm" w="100%" h="200px" rowGap={3}>
           <Heading textAlign="center" size="lg" mt={4}>
             Create an acccount
           </Heading>

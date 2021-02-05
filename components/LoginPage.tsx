@@ -52,7 +52,7 @@ export default function LoginPage({
       <NavBar />
 
       <PageContainer centerContent>
-        <Heading mt={4} mb={2} textAlign="center" size="lg">
+        <Heading mt={4} mb={3} textAlign="center" size="lg">
           {heading}
         </Heading>
         <Container maxW="xs">
