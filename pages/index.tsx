@@ -5,10 +5,11 @@ import NavBar from '../components/NavBar/NavBar';
 import PageContainer from '../components/PageContainer';
 import Card from '../components/Card';
 import Link from 'next/link';
+import ChakraWrapper from '../components/ChakraWrapper';
 
 export default function Home(): JSX.Element {
   return (
-    <>
+    <ChakraWrapper>
       <Head>
         <title>Next App</title>
         <link rel="icon" href="/favicon.ico" />
@@ -57,6 +58,6 @@ export default function Home(): JSX.Element {
           </Card>
         </Grid>
       </PageContainer>
-    </>
+    </ChakraWrapper>
   );
 }

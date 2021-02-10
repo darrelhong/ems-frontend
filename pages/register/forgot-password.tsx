@@ -18,6 +18,7 @@ import api from '../../lib/ApiClient';
 import NavBar from '../../components/NavBar/NavBar';
 import PageContainer from '../../components/PageContainer';
 import Card from '../../components/Card';
+import ChakraWrapper from '../../components/ChakraWrapper';
 
 type ForgotPasswordRequest = {
   email: string;
@@ -39,7 +40,7 @@ export default function ForgotPassword(): JSX.Element {
   };
 
   return (
-    <>
+    <ChakraWrapper>
       <Head>
         <title>Forgot password</title>
       </Head>
@@ -95,6 +96,6 @@ export default function ForgotPassword(): JSX.Element {
           )}
         </Container>
       </PageContainer>
-    </>
+    </ChakraWrapper>
   );
 }

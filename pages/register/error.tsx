@@ -7,6 +7,7 @@ import PageContainer from '../../components/PageContainer';
 import { GetServerSideProps } from 'next';
 import { useMutation } from 'react-query';
 import api from '../../lib/ApiClient';
+import ChakraWrapper from '../../components/ChakraWrapper';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   return {
@@ -31,7 +32,7 @@ export default function RegisterVerificationError({
   );
 
   return (
-    <>
+    <ChakraWrapper>
       <Head>
         <title>Email verification unsuccesful!</title>
       </Head>
@@ -74,6 +75,6 @@ export default function RegisterVerificationError({
           )}
         </Container>
       </PageContainer>
-    </>
+    </ChakraWrapper>
   );
 }

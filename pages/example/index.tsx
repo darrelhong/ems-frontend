@@ -18,6 +18,7 @@ import { FaExternalLinkAlt } from 'react-icons/fa';
 import NavBar from '../../components/NavBar/NavBar';
 import PageContainer from '../../components/PageContainer';
 import { GetStaticProps } from 'next';
+import ChakraWrapper from '../../components/ChakraWrapper';
 
 const getPastLaunches = async () => {
   const { launchesPast } = await request(
@@ -59,7 +60,7 @@ export default function Home(): JSX.Element {
   const boxBg = useColorModeValue('gray.50', 'gray.700');
 
   return (
-    <>
+    <ChakraWrapper>
       <Head>
         <title>Next App</title>
         <link rel="icon" href="/favicon.ico" />
@@ -87,6 +88,6 @@ export default function Home(): JSX.Element {
           ))}
         </Grid>
       </PageContainer>
-    </>
+    </ChakraWrapper>
   );
 }

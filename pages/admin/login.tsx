@@ -1,6 +1,8 @@
 import { GetServerSideProps } from 'next';
 
 import LoginPage from '../../components/LoginPage';
+import ChakraWrapper from '../../components/ChakraWrapper';
+
 import RoleEnum from '../../models/RoleEnum';
 
 // get query params from URL to dispaly relavant feedback
@@ -18,12 +20,14 @@ type AdminLoginProps = {
 
 export default function AdminLogin({ info }: AdminLoginProps): JSX.Element {
   return (
-    <LoginPage
-      info={info}
-      heading="Admin Login"
-      loginApiUrl={`/api/user/login/${RoleEnum.ADMIN}`}
-      loginSuccessUrl="/admin/home"
-      registerUrl="#"
-    />
+    <ChakraWrapper>
+      <LoginPage
+        info={info}
+        heading="Admin Login"
+        loginApiUrl={`/api/user/login/${RoleEnum.ADMIN}`}
+        loginSuccessUrl="/admin/home"
+        registerUrl="#"
+      />
+    </ChakraWrapper>
   );
 }

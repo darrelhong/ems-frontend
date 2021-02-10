@@ -6,6 +6,7 @@ import { dehydrate } from 'react-query/hydration';
 import { Box, Grid, Heading, Img, Text } from '@chakra-ui/react';
 import PageContainer from '../../../components/PageContainer';
 import NavBar from '../../../components/NavBar/NavBar';
+import ChakraWrapper from '../../../components/ChakraWrapper';
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const { launchesPast } = await request(
@@ -70,7 +71,7 @@ export default function Launch({ id }: { id: string }): JSX.Element {
   });
 
   return (
-    <>
+    <ChakraWrapper>
       <Head>
         <title>{data.mission_name}</title>
         <link rel="icon" href="/favicon.ico" />
@@ -92,6 +93,6 @@ export default function Launch({ id }: { id: string }): JSX.Element {
           </Box>
         </Grid>
       </PageContainer>
-    </>
+    </ChakraWrapper>
   );
 }

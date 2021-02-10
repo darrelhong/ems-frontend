@@ -1,4 +1,5 @@
 import { GetServerSideProps } from 'next';
+import ChakraWrapper from '../../components/ChakraWrapper';
 
 import LoginPage from '../../components/LoginPage';
 import RoleEnum from '../../models/RoleEnum';
@@ -20,12 +21,14 @@ export default function OrganiserLogin({
   info,
 }: OrganiserLoginProps): JSX.Element {
   return (
-    <LoginPage
-      info={info}
-      heading="Event Organiser Login"
-      loginApiUrl={`/api/user/login/${RoleEnum.EVNTORG}`}
-      loginSuccessUrl="/organiser/home"
-      registerUrl="/organiser/register"
-    />
+    <ChakraWrapper>
+      <LoginPage
+        info={info}
+        heading="Event Organiser Login"
+        loginApiUrl={`/api/user/login/${RoleEnum.EVNTORG}`}
+        loginSuccessUrl="/organiser/home"
+        registerUrl="/organiser/register"
+      />
+    </ChakraWrapper>
   );
 }

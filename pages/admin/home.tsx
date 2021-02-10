@@ -6,13 +6,14 @@ import useUser from '../../lib/query/useUser';
 import { AdminNavBar } from '../../components/NavBar/NavBar';
 import PageContainer from '../../components/PageContainer';
 import withProtectRoute from '../../components/ProtectRouteWrapper';
+import ChakraWrapper from '../../components/ChakraWrapper';
 
 function AdminHome(): JSX.Element {
   const { data: user, isSuccess, isLoading } = useUser(
     localStorage.getItem('userId')
   );
   return (
-    <>
+    <ChakraWrapper>
       <Head>
         <title>Admin Dasboard</title>
       </Head>
@@ -28,7 +29,7 @@ function AdminHome(): JSX.Element {
           </>
         )}
       </PageContainer>
-    </>
+    </ChakraWrapper>
   );
 }
 

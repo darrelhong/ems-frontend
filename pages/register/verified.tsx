@@ -4,10 +4,11 @@ import { Button, Grid, Text } from '@chakra-ui/react';
 
 import NavBar from '../../components/NavBar/NavBar';
 import PageContainer from '../../components/PageContainer';
+import ChakraWrapper from '../../components/ChakraWrapper';
 
 export default function RegisterVerified(): JSX.Element {
   return (
-    <>
+    <ChakraWrapper>
       <Head>
         <title>Email verification succesful!</title>
       </Head>
@@ -27,6 +28,6 @@ export default function RegisterVerified(): JSX.Element {
           </Link>
         </Grid>
       </PageContainer>
-    </>
+    </ChakraWrapper>
   );
 }

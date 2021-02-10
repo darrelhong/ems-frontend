@@ -23,6 +23,7 @@ import NavBar from '../../../components/NavBar/NavBar';
 import PageContainer from '../../../components/PageContainer';
 import Card from '../../../components/Card';
 import PasswordInput from '../../../components/settings/PasswordInput';
+import ChakraWrapper from '../../../components/ChakraWrapper';
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   return {
@@ -62,7 +63,7 @@ export default function ResetPassword({
   };
 
   return (
-    <>
+    <ChakraWrapper>
       <Head>
         <title>Password Reset</title>
       </Head>
@@ -149,6 +150,6 @@ export default function ResetPassword({
           )}
         </Container>
       </PageContainer>
-    </>
+    </ChakraWrapper>
   );
 }

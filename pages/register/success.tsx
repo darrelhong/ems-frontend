@@ -4,10 +4,11 @@ import { Button, Text } from '@chakra-ui/react';
 
 import NavBar from '../../components/NavBar/NavBar';
 import PageContainer from '../../components/PageContainer';
+import ChakraWrapper from '../../components/ChakraWrapper';
 
 export default function RegisterSucces(): JSX.Element {
   return (
-    <>
+    <ChakraWrapper>
       <Head>
         <title>Registration succesful!</title>
       </Head>
@@ -23,6 +24,6 @@ export default function RegisterSucces(): JSX.Element {
           <Button mt={4}>Back to home</Button>
         </Link>
       </PageContainer>
-    </>
+    </ChakraWrapper>
   );
 }
