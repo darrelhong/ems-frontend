@@ -1,7 +1,5 @@
 import PropTypes from 'prop-types';
 
-import ChakraWrapper from '../../components/ChakraWrapper';
-
 import LoginPage from '../../components/LoginPage';
 import RoleEnum from '../../models/RoleEnum';
 
@@ -16,15 +14,13 @@ export const getServerSideProps = async ({ query }) => {
 
 export default function PartnerLogin({ info }) {
   return (
-    <ChakraWrapper>
-      <LoginPage
-        info={info}
-        heading="Business Partner Login"
-        loginApiUrl={`/api/user/login/${RoleEnum.BIZPTNR}`}
-        loginSuccessUrl="/partner/home"
-        registerUrl="/partner/register"
-      />
-    </ChakraWrapper>
+    <LoginPage
+      info={info}
+      heading="Business Partner Login"
+      loginApiUrl={`/api/user/login/${RoleEnum.BIZPTNR}`}
+      loginSuccessUrl="/partner/home"
+      registerUrl="/partner/register"
+    />
   );
 }
 
