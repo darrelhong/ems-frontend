@@ -1,12 +1,23 @@
+import { useState } from 'react';
+import Head from 'next/head';
 import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+
 import { LayoutOne } from '../layouts';
 import { BreadcrumbOne } from '../components/Breadcrumb';
 import { Container, Row, Col } from 'react-bootstrap';
 import { FaFacebookF, FaGooglePlusG } from 'react-icons/fa';
+import { login } from '../lib/auth';
 
-const Login = () => {
+export default function Login() {
+  const [loginError, setLoginError] = useState(null);
+  const { register, handleSubmit } = useForm();
+
   return (
     <LayoutOne>
+      <Head>
+        <title>Admin Login</title>
+      </Head>
       {/* breadcrumb */}
       <BreadcrumbOne pageTitle="Login">
         <ol className="breadcrumb justify-content-md-end">
@@ -27,14 +38,24 @@ const Login = () => {
                   <h3>Login</h3>
                 </div>
                 <div>
-                  <form method="post">
+                  <form
+                    onSubmit={handleSubmit((data) => {
+                      login(
+                        data,
+                        '/api/user/login/admin',
+                        '/admin/home',
+                        setLoginError
+                      );
+                    })}
+                  >
                     <div className="form-group">
                       <input
-                        type="text"
+                        type="email"
                         required
                         className="form-control"
                         name="email"
                         placeholder="Your Email"
+                        ref={register()}
                       />
                     </div>
                     <div className="form-group">
@@ -44,6 +65,7 @@ const Login = () => {
                         type="password"
                         name="password"
                         placeholder="Password"
+                        ref={register({ required: true })}
                       />
                     </div>
                     <div className="login-footer form-group">
@@ -66,6 +88,11 @@ const Login = () => {
                       </div>
                       <a href="#">Forgot password?</a>
                     </div>
+                    {loginError && (
+                      <div className="alert alert-danger" role="alert">
+                        {loginError}
+                      </div>
+                    )}
                     <div className="form-group">
                       <button
                         type="submit"
@@ -94,7 +121,7 @@ const Login = () => {
                     </li>
                   </ul>
                   <div className="form-note text-center space-mt--20">
-                    Don't Have an Account?{' '}
+                    {"Don't Have an Account? "}
                     <Link href="/other/register">
                       <a>Sign up now</a>
                     </Link>
@@ -107,6 +134,4 @@ const Login = () => {
       </div>
     </LayoutOne>
   );
-};
-
-export default Login;
+}
