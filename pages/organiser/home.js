@@ -1,26 +1,17 @@
-import Head from 'next/head';
 import Link from 'next/link';
 import { Container } from 'react-bootstrap';
 
 import useUser from '../../lib/query/useUser';
 
-import withProtectRoute from '../../components/ProtectRouteWrapper';
 import { BreadcrumbOne } from '../../components/Breadcrumb';
-import { FooterOne } from '../../components/Footer';
-import OrganiserHeader from '../../components/Header/OrganiserHeader';
+import OrganiserWrapper from '../../components/wrapper/OrganiserWrapper';
 
-function OrganiserHome() {
+export default function OrganiserHome() {
   const { data: user, isLoading, isSuccess } = useUser(
     localStorage.getItem('userId')
   );
   return (
-    <>
-      <Head>
-        <title>Organiser Home</title>
-      </Head>
-
-      <OrganiserHeader />
-
+    <OrganiserWrapper title="Organiser Home">
       <BreadcrumbOne pageTitle="Organiser Home">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
@@ -40,9 +31,7 @@ function OrganiserHome() {
           </>
         )}
       </Container>
-
-      <FooterOne />
-    </>
+    </OrganiserWrapper>
     // <ChakraWrapper>
     //   <OrganiserPageWrapper title="Organiser Dashboard">
     //     <Heading>Organiser Home</Heading>
@@ -57,7 +46,3 @@ function OrganiserHome() {
     // </ChakraWrapper>
   );
 }
-
-export default withProtectRoute(OrganiserHome, {
-  redirectTo: '/organiser/login',
-});

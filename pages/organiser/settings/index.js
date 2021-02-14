@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import Link from 'next/link';
 import { Container, Row, Col } from 'react-bootstrap';
 import Tab from 'react-bootstrap/Tab';
@@ -15,17 +14,11 @@ import {
 } from 'react-icons/io';
 
 import { BreadcrumbOne } from '../../../components/Breadcrumb';
-import { FooterOne } from '../../../components/Footer';
-import OrganiserHeader from '../../../components/Header/OrganiserHeader';
+import OrganiserWrapper from '../../../components/wrapper/OrganiserWrapper';
 
 export default function OrganiserSettings() {
   return (
-    <>
-      <Head>
-        <title>Organiser Home</title>
-      </Head>
-
-      <OrganiserHeader />
+    <OrganiserWrapper title="Organiser Settings">
       <BreadcrumbOne pageTitle="My Account">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
@@ -351,8 +344,7 @@ export default function OrganiserSettings() {
           </Tab.Container>
         </Container>
       </div>
-      <FooterOne />
-    </>
+    </OrganiserWrapper>
     // <ChakraWrapper>
     //   <SettingsWrapper>
     //     <UpdateProfileForm />
