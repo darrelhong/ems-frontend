@@ -15,6 +15,7 @@ import {
 
 import { BreadcrumbOne } from '../../../components/Breadcrumb';
 import OrganiserWrapper from '../../../components/wrapper/OrganiserWrapper';
+import UpdateProfileForm from '../../../components/settings/UpdateProfileFormNew';
 
 export default function OrganiserSettings() {
   return (
@@ -32,7 +33,7 @@ export default function OrganiserSettings() {
 
       <div className="my-account-content space-pt--r100 space-pb--r100">
         <Container>
-          <Tab.Container defaultActiveKey="accountDetails">
+          <Tab.Container defaultActiveKey="updateProfile">
             <Row>
               <Col lg={3} md={4}>
                 <Nav
@@ -40,8 +41,8 @@ export default function OrganiserSettings() {
                   className="flex-column my-account-content__navigation space-mb--r60"
                 >
                   <Nav.Item>
-                    <Nav.Link eventKey="accountDetails">
-                      <IoIosPerson /> Account Details
+                    <Nav.Link eventKey="updateProfile">
+                      <IoIosPerson /> Update Profile
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
@@ -73,6 +74,9 @@ export default function OrganiserSettings() {
               </Col>
               <Col lg={9} md={8}>
                 <Tab.Content>
+                  <Tab.Pane eventKey="updateProfile">
+                    <UpdateProfileForm />
+                  </Tab.Pane>
                   <Tab.Pane eventKey="dashboard">
                     <Card className="my-account-content__content">
                       <Card.Header>
@@ -229,112 +233,6 @@ export default function OrganiserSettings() {
                         <a href="#" className="check-btn sqr-btn ">
                           <FaRegEdit /> Edit Address
                         </a>
-                      </Card.Body>
-                    </Card>
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="accountDetails">
-                    <Card className="my-account-content__content">
-                      <Card.Header>
-                        <h3>Account Details</h3>
-                      </Card.Header>
-                      <Card.Body>
-                        <div className="account-details-form">
-                          <form method="post" name="enq">
-                            <Row>
-                              <Col className="form-group" md={6}>
-                                <label>
-                                  First Name <span className="required">*</span>
-                                </label>
-                                <input
-                                  required
-                                  className="form-control"
-                                  name="name"
-                                  type="text"
-                                />
-                              </Col>
-                              <Col className="form-group" md={6}>
-                                <label>
-                                  Last Name <span className="required">*</span>
-                                </label>
-                                <input
-                                  required
-                                  className="form-control"
-                                  name="phone"
-                                />
-                              </Col>
-                              <Col className="form-group" md={12}>
-                                <label>
-                                  Display Name{' '}
-                                  <span className="required">*</span>
-                                </label>
-                                <input
-                                  required
-                                  className="form-control"
-                                  name="dname"
-                                  type="text"
-                                />
-                              </Col>
-                              <Col className="form-group" md={12}>
-                                <label>
-                                  Email Address{' '}
-                                  <span className="required">*</span>
-                                </label>
-                                <input
-                                  required
-                                  className="form-control"
-                                  name="email"
-                                  type="email"
-                                />
-                              </Col>
-                              <Col className="form-group" md={12}>
-                                <label>
-                                  Current Password{' '}
-                                  <span className="required">*</span>
-                                </label>
-                                <input
-                                  required
-                                  className="form-control"
-                                  name="password"
-                                  type="password"
-                                />
-                              </Col>
-                              <Col className="form-group" md={12}>
-                                <label>
-                                  New Password{' '}
-                                  <span className="required">*</span>
-                                </label>
-                                <input
-                                  required
-                                  className="form-control"
-                                  name="npassword"
-                                  type="password"
-                                />
-                              </Col>
-                              <Col className="form-group" md={12}>
-                                <label>
-                                  Confirm Password{' '}
-                                  <span className="required">*</span>
-                                </label>
-                                <input
-                                  required
-                                  className="form-control"
-                                  name="cpassword"
-                                  type="password"
-                                />
-                              </Col>
-                              <Col md={12}>
-                                <button
-                                  type="submit"
-                                  className="btn btn-fill-out"
-                                  name="submit"
-                                  value="Submit"
-                                >
-                                  Save
-                                </button>
-                              </Col>
-                            </Row>
-                          </form>
-                        </div>
                       </Card.Body>
                     </Card>
                   </Tab.Pane>
