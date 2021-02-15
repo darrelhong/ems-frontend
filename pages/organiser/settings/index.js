@@ -11,11 +11,13 @@ import {
   IoIosCash,
   IoIosCreate,
   IoIosPerson,
+  IoMdLock,
 } from 'react-icons/io';
 
 import { BreadcrumbOne } from '../../../components/Breadcrumb';
 import OrganiserWrapper from '../../../components/wrapper/OrganiserWrapper';
 import UpdateProfileForm from '../../../components/settings/UpdateProfileFormNew';
+import ChangePasswordForm from '../../../components/settings/ChangePasswordFormNew';
 
 export default function OrganiserSettings() {
   return (
@@ -43,6 +45,11 @@ export default function OrganiserSettings() {
                   <Nav.Item>
                     <Nav.Link eventKey="updateProfile">
                       <IoIosPerson /> Update Profile
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey="changePassword">
+                      <IoMdLock /> Change password
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
@@ -76,6 +83,9 @@ export default function OrganiserSettings() {
                 <Tab.Content>
                   <Tab.Pane eventKey="updateProfile">
                     <UpdateProfileForm />
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="changePassword">
+                    <ChangePasswordForm />
                   </Tab.Pane>
                   <Tab.Pane eventKey="dashboard">
                     <Card className="my-account-content__content">
