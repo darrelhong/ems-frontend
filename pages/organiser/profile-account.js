@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useState } from 'react';
 import { LayoutOne } from '../../layouts';
 import { BreadcrumbOne } from '../../components/Breadcrumb';
 import { Container, Row, Col } from 'react-bootstrap';
@@ -15,14 +16,67 @@ import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
-import withProtectRoute from '../../components/ProtectRouteWrapper';
+import { useForm } from 'react-hook-form';
 import useUser from '../../lib/query/useUser';
+import { useMutation, useQueryClient } from 'react-query';
+import api from '../../lib/ApiClient';
 
+const MyAccount = () => {
 
-function EventOrganiserAccount(){
-    const { data: user, isLoading, isSuccess } = useUser(
-      localStorage.getItem('userId')
+  const { data: user } = useUser(
+    localStorage.getItem('userId')
+  );
+
+const queryClient = useQueryClient();
+  const { register, handleSubmit, errors } = useForm({
+    defaultValues: { name: user?.name },
+  });
+
+  
+  const mutateAccDetail = useMutation(
+  
+    (data) => api.post('/api/user/update', data),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['user', user?.id.toString()]);
+      },
+    }
+  );
+  
+
+    const mutatePassword = useMutation(
+      (data) => api.post('/api/user/change-password', data),
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries(['user', user?.id.toString()]);
+        },
+      }
     );
+
+
+const onSubmit = async (data) => {
+    console.log('data acc' + data["name"]);
+  mutateAccDetail.mutate({
+    address:data.address,
+    description:data.description,
+    name:data.name,
+    phonenumber:data.phonenumber,
+    id: user?.id,
+  });
+  console.log(data);
+};
+
+const onSubmitPassword = async (data) => {
+   console.log("call change password" + data["newPassword"]);
+ 
+ mutatePassword.mutate({
+   oldPassword:data.oldPassword,
+   newPassword:data.newPassword,
+
+ });
+  console.log(data);
+};
+
 
   return (
     <LayoutOne>
@@ -39,18 +93,13 @@ function EventOrganiserAccount(){
       </BreadcrumbOne>
       <div className="my-account-content space-pt--r100 space-pb--r100">
         <Container>
-          <Tab.Container defaultActiveKey="dashboard">
+          <Tab.Container defaultActiveKey="accountDetails">
             <Row>
               <Col lg={3} md={4}>
                 <Nav
                   variant="pills"
                   className="flex-column my-account-content__navigation space-mb--r60"
                 >
-                  <Nav.Item>
-                    <Nav.Link eventKey="dashboard">
-                      <IoIosList /> Dashboard
-                    </Nav.Link>
-                  </Nav.Item>
                   <Nav.Item>
                     <Nav.Link eventKey="accountDetails">
                       <IoIosPerson /> Account Details
@@ -70,134 +119,6 @@ function EventOrganiserAccount(){
               </Col>
               <Col lg={9} md={8}>
                 <Tab.Content>
-                  <Tab.Pane eventKey="dashboard">
-                    <Card className="my-account-content__content">
-                      <Card.Header>
-                        <h3>Dashboard</h3>
-                      </Card.Header>
-                      <Card.Body>
-                        <div className="welcome">
-                          <p>
-                            Hello, <strong>{user?.name}</strong> 
-                            <strong>User ID{user?.id}</strong>{' '}
-                            {/*
-                            <Link href="/other/login" as="/other/login">
-                             <a className="logout">Logout</a>
-                            </Link>
-                            */}
-                            )
-
-                          </p>
-                        </div>
-                        <p>
-                          From your account dashboard. you can easily check
-                          &amp; view your recent orders, manage your shipping
-                          and billing addresses and edit your password and
-                          account details.
-                        </p>
-                      </Card.Body>
-                    </Card>
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="orders">
-                    <Card className="my-account-content__content">
-                      <Card.Header>
-                        <h3>Orders</h3>
-                      </Card.Header>
-                      <Card.Body>
-                        <div className="myaccount-table table-responsive text-center">
-                          <table className="table">
-                            <thead>
-                              <tr>
-                                <th>Order</th>
-                                <th>Date</th>
-                                <th>Status</th>
-                                <th>Total</th>
-                                <th>Action</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>1</td>
-                                <td>Aug 22, 2020</td>
-                                <td>Pending</td>
-                                <td>$3000</td>
-                                <td>
-                                  <a href="#" className="check-btn sqr-btn ">
-                                    View
-                                  </a>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>2</td>
-                                <td>July 22, 2020</td>
-                                <td>Approved</td>
-                                <td>$200</td>
-                                <td>
-                                  <a href="#" className="check-btn sqr-btn ">
-                                    View
-                                  </a>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>3</td>
-                                <td>June 12, 2020</td>
-                                <td>On Hold</td>
-                                <td>$990</td>
-                                <td>
-                                  <a href="#" className="check-btn sqr-btn ">
-                                    View
-                                  </a>
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                      </Card.Body>
-                    </Card>
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="download">
-                    <Card className="my-account-content__content">
-                      <Card.Header>
-                        <h3>Downloads</h3>
-                      </Card.Header>
-                      <Card.Body>
-                        <div className="myaccount-table table-responsive text-center">
-                          <table className="table">
-                            <thead>
-                              <tr>
-                                <th>Product</th>
-                                <th>Date</th>
-                                <th>Expire</th>
-                                <th>Download</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>Haven - Free Real Estate PSD Template</td>
-                                <td>Aug 22, 2020</td>
-                                <td>Yes</td>
-                                <td>
-                                  <a href="#" className="check-btn sqr-btn ">
-                                    <FaCloudDownloadAlt /> Download File
-                                  </a>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>HasTech - Portfolio Business Template</td>
-                                <td>Sep 12, 2020</td>
-                                <td>Never</td>
-                                <td>
-                                  <a href="#" className="check-btn sqr-btn ">
-                                    <FaCloudDownloadAlt /> Download File
-                                  </a>
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                      </Card.Body>
-                    </Card>
-                  </Tab.Pane>
                   <Tab.Pane eventKey="payment">
                     <Card className="my-account-content__content">
                       <Card.Header>
@@ -239,57 +160,80 @@ function EventOrganiserAccount(){
                       </Card.Header>
                       <Card.Body>
                         <div className="account-details-form">
-                          <form method="post" name="enq">
+                          <form onSubmit={handleSubmit(onSubmit)}>
                             <Row>
                               <Col className="form-group" md={12}>
                                 <label>
                                   Company Name{' '}
-                                  <span className="required">*</span>
+                                  <span className="required"></span>
                                 </label>
                                 <input
                                   required
                                   className="form-control"
-                                  name="companyName"
+                                  name="name"
                                   type="text"
-                                  value={user?.name}
+                                  defaultValue={user?.name}
+                                  ref={register()}
                                 />
+                              </Col>
+                              <Col className="form-group" md={12}>
+                                <Form.Group controlId="companyDesctextArea">
+                                  <Form.Label>
+                                    Description <span className="required"></span>
+                                  </Form.Label>
+                                  <Form.Control
+                                    name="description"
+                                    as="textarea"
+                                    style={{ height: 120 }}
+                                    defaultValue={user?.description}
+                                    ref={register()}
+                                  />
+                                </Form.Group>
                               </Col>
                               <Col className="form-group" md={12}>
                                 <label>
                                   Email Address{' '}
-                                  <span className="required">*</span>
+                                  <span className="required"></span>
                                 </label>
                                 <input
                                   required
                                   className="form-control"
                                   name="email"
                                   type="email"
+                                  defaultValue={user?.email}
+                                  ref={register()}
+                                  disabled={true}
                                 />
                               </Col>
                               <Col className="form-group" md={12}>
                                 <label>
                                   Phone Number{' '}
-                                  <span className="required">*</span>
+                                  <span className="required"></span>
                                 </label>
                                 <input
                                   required
                                   className="form-control"
-                                  name="phoneNumber"
+                                  name="phonenumber"
                                   type="number"
+                                  defaultValue={user?.phonenumber}
+                                  ref={register()}
                                 />
                               </Col>
                               <Col className="form-group" md={12}>
                                 <Form.Group controlId="addresstextArea">
                                   <Form.Label>
-                                    Address <span className="required">*</span>
+                                    Address <span className="required"></span>
                                   </Form.Label>
                                   <Form.Control
+                                    name="address"
                                     as="textarea"
                                     style={{ height: 120 }}
+                                    defaultValue={user?.address}
+                                    ref={register()}
                                   />
                                 </Form.Group>
                               </Col>
-    
+
                               <Col md={12}>
                                 <button
                                   type="submit"
@@ -313,53 +257,55 @@ function EventOrganiserAccount(){
                       </Card.Header>
                       <Card.Body>
                         <div className="account-details-form">
-                          <form method="post" name="enq">
-                              <Col className="form-group" md={12}>
-                                <label>
-                                  Current Password{' '}
-                                  <span className="required">*</span>
-                                </label>
-                                <input
-                                  required
-                                  className="form-control"
-                                  name="password"
-                                  type="password"
-                                />
-                              </Col>
-                              <Col className="form-group" md={12}>
-                                <label>
-                                  New Password{' '}
-                                  <span className="required">*</span>
-                                </label>
-                                <input
-                                  required
-                                  className="form-control"
-                                  name="npassword"
-                                  type="password"
-                                />
-                              </Col>
-                              <Col className="form-group" md={12}>
-                                <label>
-                                  Confirm Password{' '}
-                                  <span className="required">*</span>
-                                </label>
-                                <input
-                                  required
-                                  className="form-control"
-                                  name="cpassword"
-                                  type="password"
-                                />
-                              </Col>
-                              <Col md={12}>
-                                <button
-                                  type="submit"
-                                  className="btn btn-fill-out"
-                                  name="submit"
-                                  value="Submit"
-                                >
-                                  Save
-                                </button>
-                              </Col>
+                          <form onSubmit={handleSubmit(onSubmitPassword)}>
+                            <Col className="form-group" md={12}>
+                              <label>
+                                Current Password{' '}
+                                <span className="required">*</span>
+                              </label>
+                              <input
+                                required
+                                className="form-control"
+                                name="oldPassword"
+                                type="password"
+                                ref={register()}
+                              />
+                            </Col>
+                            <Col className="form-group" md={12}>
+                              <label>
+                                New Password <span className="required">*</span>
+                              </label>
+                              <input
+                                required
+                                className="form-control"
+                                name="newPassword"
+                                type="password"
+                                ref={register()}
+                              />
+                            </Col>
+                            {/*
+                            <Col className="form-group" md={12}>
+                              <label>
+                                Confirm Password{' '}
+                                <span className="required">*</span>
+                              </label>
+                              <input
+                                required
+                                className="form-control"
+                                type="password"
+                              />
+                            </Col>
+                           */}
+                            <Col md={12}>
+                              <button
+                                type="submit"
+                                className="btn btn-fill-out"
+                                name="submit"
+                                value="Submit"
+                              >
+                                Save
+                              </button>
+                            </Col>
                           </form>
                         </div>
                       </Card.Body>
@@ -375,7 +321,4 @@ function EventOrganiserAccount(){
   );
 };
 
-export default withProtectRoute(EventOrganiserAccount, {
-  redirectTo: '/organiser/login',
-});
-
+export default MyAccount;
