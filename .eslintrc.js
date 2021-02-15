@@ -17,7 +17,7 @@ module.exports = {
   rules: {
     'react/react-in-jsx-scope': 'off',
     'prettier/prettier': ['error', {}, { usePrettierrc: true }],
-    'react/jsx-curly-brace-presence': 'error',
+    'react/jsx-curly-brace-presence': ['error', { children: 'ignore' }],
   },
   overrides: [
     // This configuration will apply only to TypeScript files

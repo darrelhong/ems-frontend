@@ -1,12 +1,13 @@
 import Head from 'next/head';
-import { Heading, Skeleton, Text } from '@chakra-ui/react';
+import Link from 'next/link';
+import { Container } from 'react-bootstrap';
 
 import useUser from '../../lib/query/useUser';
 
-import { AdminNavBar } from '../../components/NavBar/NavBar';
-import PageContainer from '../../components/PageContainer';
 import withProtectRoute from '../../components/ProtectRouteWrapper';
-import ChakraWrapper from '../../components/ChakraWrapper';
+import { BreadcrumbOne } from '../../components/Breadcrumb';
+import { FooterOne } from '../../components/Footer';
+import AdminHeaderTop from '../../components/Header/AdminHeaderTop';
 
 function AdminHome() {
   const { data: user, isSuccess, isLoading } = useUser(
@@ -14,23 +15,52 @@ function AdminHome() {
   );
 
   return (
-    <ChakraWrapper>
+    <>
       <Head>
         <title>Admin Dasboard</title>
       </Head>
-      <AdminNavBar />
 
-      <PageContainer>
-        <Heading>Admin Home</Heading>
-        {isLoading && <Skeleton height="40px" />}
+      <AdminHeaderTop />
+
+      <BreadcrumbOne pageTitle="Admin Home">
+        <ol className="breadcrumb justify-content-md-end">
+          <li className="breadcrumb-item">
+            <Link href="/admin/home">
+              <a>Admin Home</a>
+            </Link>
+          </li>
+        </ol>
+      </BreadcrumbOne>
+
+      <Container>
+        {isLoading && <div className="spinner-grow" role="status" />}
         {isSuccess && (
           <>
-            <Text>{user?.name}</Text>
-            <Text>User ID: {user?.id}</Text>
+            <p>{user?.name}</p>
+            <p>User ID: {user?.id}</p>
           </>
         )}
-      </PageContainer>
-    </ChakraWrapper>
+      </Container>
+
+      <FooterOne />
+    </>
+    // <ChakraWrapper>
+    //   <Head>
+    //     <title>Admin Dasboard</title>
+    //   </Head>
+    //   <AdminNavBar />
+
+    //   <PageContainer>
+    //     <Heading>Admin Home</Heading>
+    //     {isLoading && <Skeleton height="40px" />}
+    //     {isSuccess && (
+    //       <>
+    //         <Text>{user?.name}</Text>
+    //         <Text>User ID: {user?.id}</Text>
+    //       </>
+    //     )}
+    //   </PageContainer>
+    // </ChakraWrapper>
   );
 }
 
