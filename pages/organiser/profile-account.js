@@ -15,9 +15,15 @@ import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
+import withProtectRoute from '../../components/ProtectRouteWrapper';
+import useUser from '../../lib/query/useUser';
 
 
-const MyAccount = () => {
+function EventOrganiserAccount(){
+    const { data: user, isLoading, isSuccess } = useUser(
+      localStorage.getItem('userId')
+    );
+
   return (
     <LayoutOne>
       {/* breadcrumb */}
@@ -72,12 +78,15 @@ const MyAccount = () => {
                       <Card.Body>
                         <div className="welcome">
                           <p>
-                            Hello, <strong>John Doe</strong> (If Not{' '}
-                            <strong>John !</strong>{' '}
+                            Hello, <strong>{user?.name}</strong> 
+                            <strong>User ID{user?.id}</strong>{' '}
+                            {/*
                             <Link href="/other/login" as="/other/login">
-                              <a className="logout">Logout</a>
+                             <a className="logout">Logout</a>
                             </Link>
+                            */}
                             )
+
                           </p>
                         </div>
                         <p>
@@ -240,8 +249,9 @@ const MyAccount = () => {
                                 <input
                                   required
                                   className="form-control"
-                                  name="dname"
+                                  name="companyName"
                                   type="text"
+                                  value={user?.name}
                                 />
                               </Col>
                               <Col className="form-group" md={12}>
@@ -365,4 +375,7 @@ const MyAccount = () => {
   );
 };
 
-export default MyAccount;
+export default withProtectRoute(EventOrganiserAccount, {
+  redirectTo: '/organiser/login',
+});
+
