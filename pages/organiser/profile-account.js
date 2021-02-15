@@ -11,21 +11,61 @@ import {
   IoIosCash,
   IoIosCreate,
   IoIosPerson,
+  IoIosSettings,
+  IoIosRadioButtonOn,
+
+
 } from 'react-icons/io';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 import { useForm } from 'react-hook-form';
 import useUser from '../../lib/query/useUser';
 import { useMutation, useQueryClient } from 'react-query';
 import api from '../../lib/ApiClient';
+import { logout } from '../../lib/auth';
 
 const MyAccount = () => {
 
+    const [show, setShow] = useState(false);
+    const handleClose = () =>setShow(false);
+    const handleShow = () => setShow(true);
+
   const { data: user } = useUser(
     localStorage.getItem('userId')
+       
   );
+   console.log(user);
+
+ const mutateAccStatus = useMutation(
+  
+    (data) => api.post('/api/user/update-account-status', data),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['user', user?.id.toString()]);
+      },
+    }
+  );
+
+const handleDisabled = async (data) => {
+
+  mutateAccStatus.mutate({
+     id: user?.id,
+   
+  });
+  // close the modal once yes click.
+  setShow(false);
+
+  logout({ redirectTo: '/organiser/login' });
+  
+
+ 
+  
+};
+
 
 const queryClient = useQueryClient();
   const { register, handleSubmit, errors } = useForm({
@@ -44,6 +84,7 @@ const queryClient = useQueryClient();
   );
   
 
+
     const mutatePassword = useMutation(
       (data) => api.post('/api/user/change-password', data),
       {
@@ -56,7 +97,7 @@ const queryClient = useQueryClient();
 
 const onSubmit = async (data) => {
     console.log('data acc' + data["name"]);
-  mutateAccDetail.mutate({
+    mutateAccDetail.mutate({
     address:data.address,
     description:data.description,
     name:data.name,
@@ -80,6 +121,20 @@ const onSubmitPassword = async (data) => {
 
   return (
     <LayoutOne>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmation</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to disable your account?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleDisabled}>
+            Yes
+          </Button>
+          <Button className="btn btn-fill-out" onClick={handleClose}>
+            No
+          </Button>
+        </Modal.Footer>
+      </Modal>
       {/* breadcrumb */}
       <BreadcrumbOne pageTitle="My Account">
         <ol className="breadcrumb justify-content-md-end">
@@ -107,7 +162,12 @@ const onSubmitPassword = async (data) => {
                   </Nav.Item>
                   <Nav.Item>
                     <Nav.Link eventKey="changePassword">
-                      <IoIosPerson /> Change Password
+                      <IoIosSettings /> Change Password
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey="accountStatus">
+                      <IoIosRadioButtonOn /> Account Status
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
@@ -163,6 +223,15 @@ const onSubmitPassword = async (data) => {
                           <form onSubmit={handleSubmit(onSubmit)}>
                             <Row>
                               <Col className="form-group" md={12}>
+                                <Form.Group>
+                                  <Form.File
+                                    id="exampleFormControlFile1"
+                                    label="Profile Picture"
+                                    type="file"
+                                  />
+                                </Form.Group>
+                              </Col>
+                              <Col className="form-group" md={12}>
                                 <label>
                                   Company Name{' '}
                                   <span className="required"></span>
@@ -179,7 +248,8 @@ const onSubmitPassword = async (data) => {
                               <Col className="form-group" md={12}>
                                 <Form.Group controlId="companyDesctextArea">
                                   <Form.Label>
-                                    Description <span className="required"></span>
+                                    Description{' '}
+                                    <span className="required"></span>
                                   </Form.Label>
                                   <Form.Control
                                     name="description"
@@ -308,6 +378,33 @@ const onSubmitPassword = async (data) => {
                             </Col>
                           </form>
                         </div>
+                      </Card.Body>
+                    </Card>
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="accountStatus">
+                    <Card className="my-account-content__content">
+                      <Card.Header>
+                        <h3>Account Status</h3>
+                      </Card.Header>
+                      <Card.Body>
+                        <p className="saved-message">
+                          Your account is active now.<br></br>
+                          <b className="noteMsg">Note</b>: Once you disabled
+                          your account, you are unable to login or sign up with
+                          the registered email. If you like to do so, please
+                          contact us at{' '}
+                          <a className="eventstopEmailText">
+                            enquiry@eventstop.com
+                          </a>
+                        </p>
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          onClick={() => setShow(true)}
+                        >
+                          Disabled
+                        </Button>{' '}
+                        <Col md={12}></Col>
                       </Card.Body>
                     </Card>
                   </Tab.Pane>
