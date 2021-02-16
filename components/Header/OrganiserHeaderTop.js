@@ -6,11 +6,11 @@ import { logout } from '../../lib/auth';
 
 const OrganiserHeaderTop = () => {
   return (
-    <div className="top-header d-none d-lg-block">
+    <div className="top-header d-lg-block">
       <Container>
-        <Row className="align-items-end">
+        <Row>
           <Col>
-            <div className="text-center text-md-right">
+            <div className="text-right">
               <ul className="header-list">
                 <li>
                   <Link href="/organiser/settings">
