@@ -4,11 +4,11 @@ import { logout } from '../../lib/auth';
 
 const AdminHeaderTop = () => {
   return (
-    <div className="top-header d-none d-lg-block">
+    <div className="top-header d-lg-block">
       <Container>
         <Row className="align-items-end">
           <Col>
-            <div className="text-center text-md-right">
+            <div className="text-right">
               <ul className="header-list">
                 <li>
                   <a onClick={() => logout({ redirectTo: '/admin/login' })}>

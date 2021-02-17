@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { Container } from 'react-bootstrap';
+import { Card, Col, Container, Row } from 'react-bootstrap';
 
 import useUser from '../../lib/query/useUser';
 
@@ -32,14 +32,26 @@ function AdminHome() {
         </ol>
       </BreadcrumbOne>
 
-      <Container>
+      <Container className="space-pt--30 space-pb--30">
         {isLoading && <div className="spinner-grow" role="status" />}
         {isSuccess && (
-          <>
-            <p>{user?.name}</p>
-            <p>User ID: {user?.id}</p>
-          </>
+          <p>
+            Your are logged in as {user?.name}. ID: {user?.id}
+          </p>
         )}
+        <Row>
+          <Col sm={6} lg={4}>
+            <Card>
+              <Card.Header>Event organisers</Card.Header>
+              <Card.Body>
+                <Card.Text>View event organisers</Card.Text>
+                <Link href="/admin/eventorg">
+                  <button className="btn btn-fill-out btn-sm">View</button>
+                </Link>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
       </Container>
 
       <FooterOne />
