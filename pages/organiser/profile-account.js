@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { LayoutOne } from '../../layouts';
 import { BreadcrumbOne } from '../../components/Breadcrumb';
 import { Container, Row, Col } from 'react-bootstrap';
@@ -19,24 +19,31 @@ import Modal from 'react-bootstrap/Modal';
 import { useForm } from 'react-hook-form';
 import useUser from '../../lib/query/useUser';
 import { useMutation, useQueryClient } from 'react-query';
-import  api  from '../../lib/ApiClient';
+import api from '../../lib/ApiClient';
 import { api2 } from '../../lib/ApiClient';
 import { logout } from '../../lib/auth';
 import Image from 'react-bootstrap/Image';
-
+import Alert from 'react-bootstrap/Alert';
 
 const MyAccount = () => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  // const [showUploadBtn, setShowUploadBtn] = useState(false);
+  const [showSuccessMsg, setShowSuccessMsg] = useState(false);
+  const [showFailedMsg, setShowFailedMsg] = useState(false);
+  //const [updateAccDetailStatus, setUpdateAccDetailStatus, ] = useState(false);
+  //const [uploadSucess, setUploadSucess] = useState(false);
   const [fileUpload, setfileUpload] = useState(false);
+  const [file, setFile] = useState('uploadfile');
 
-  const[file,setFile] = useState("uploadfile");
-  
-  
   const { data: user } = useUser(localStorage.getItem('userId'));
-  const profiepicSrcUrl = user?.profilePic;
+  //const profiepicSrcUrl = user?.profilePic;
+  const [profilepicUrl, setProfilepicUrl] = useState(user?.profilePic);
+  // display the inital profile picture
+  useEffect(() => {
+    setProfilepicUrl(user?.profilePic);
+  }, [user?.profilePic]);
+
   const mutateAccStatus = useMutation(
     (data) => api.post('/api/user/update-account-status', data),
     {
@@ -45,7 +52,6 @@ const MyAccount = () => {
       },
     }
   );
-
 
   const handleDisabled = async (data) => {
     mutateAccStatus.mutate({
@@ -62,13 +68,25 @@ const MyAccount = () => {
     defaultValues: { name: user?.name },
   });
 
-  const mutateAccDetail = useMutation(
-    (data) => api.post('/api/user/update', data),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['user', user?.id.toString()]);
-      },
-    }
+  const mutateAccDetail = useMutation((data) =>
+    api
+      .post('/api/user/update', data, {
+        onSuccess: () => {
+          queryClient.invalidateQueries(['user', user?.id.toString()]);
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        if (response.status == 200) {
+          // show update sucess message
+          setShowSuccessMsg(true);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        // show error message
+        setShowFailedMsg(true);
+      })
   );
 
   const mutatePassword = useMutation(
@@ -96,10 +114,11 @@ const MyAccount = () => {
         phonenumber: data.phonenumber,
         id: user?.id,
       });
-      submitFile();
-      window.location.reload(false);
     }
-
+    if (fileUpload == true) {
+      console.log('fileupload is true');
+      submitFile();
+    }
   };
 
   const onSubmitPassword = async (data) => {
@@ -109,32 +128,39 @@ const MyAccount = () => {
       oldPassword: data.oldPassword,
       newPassword: data.newPassword,
     });
-   // console.log(data);
+    // console.log(data);
   };
 
-
-const handleFileChange = async (e) => {
-  console.log("call handleFileChange");
-  console.log(e);
-  setFile(e.target.files[0]);
-  setfileUpload(true);
-
-};
-const submitFile = async ()  =>{
-  const data = new FormData();
+  const handleFileChange = async (e) => {
+    console.log('call handleFileChange');
+    console.log(e);
+    setFile(e.target.files[0]);
+    setfileUpload(true);
+  };
+  const submitFile = async () => {
+    const data = new FormData();
     //if(file name is not empty..... handle condition when no file is selected)
-    data.append('file',file);
-    api2.post('/api/uploadFile', data, {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['user', user?.id.toString()]);
-      },
-    });
- 
-
-
-}
-
-
+    data.append('file', file);
+    api2
+      .post('/api/uploadFile', data, {
+        onSuccess: () => {
+          queryClient.invalidateQueries(['user', user?.id.toString()]);
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        if (response.status == 200) {
+          console.log('file upload sucessfully');
+          console.log(response);
+          console.log(response.data['fileDownloadUri']);
+          var newlink = response.data['fileDownloadUri'];
+          setProfilepicUrl(newlink);
+        }
+      })
+      .catch((error) => {
+        setShowFailedMsg(true);
+      });
+  };
 
   return (
     <LayoutOne>
@@ -231,6 +257,20 @@ const submitFile = async ()  =>{
                     </Card>
                   </Tab.Pane>
                   <Tab.Pane eventKey="accountDetails">
+                    <div
+                      style={{
+                        display: showSuccessMsg ? 'block' : 'none',
+                      }}
+                    >
+                      <Alert variant="success">Update Sucessfully</Alert>
+                    </div>
+                    <div
+                      style={{
+                        display: showFailedMsg ? 'block' : 'none',
+                      }}
+                    >
+                      <Alert variant="danger">Error Occured</Alert>
+                    </div>
                     <Card className="my-account-content__content">
                       <Card.Header>
                         <h3>Account Details</h3>
@@ -242,7 +282,7 @@ const submitFile = async ()  =>{
                             <Col className="form-group" xs={10} md={6}>
                               <Image
                                 className="profile-image"
-                                src={profiepicSrcUrl}
+                                src={profilepicUrl}
                                 thumbnail
                               />
                             </Col>
@@ -254,11 +294,9 @@ const submitFile = async ()  =>{
                                   <Form.File
                                     id="custom-file"
                                     type="file"
-                                    onChange={handleFileChange}       
-                                  >
-                                             
-                               </Form.File>
-                                 
+                                    onChange={handleFileChange}
+                                  ></Form.File>
+
                                   {/* <br></br>
                                   <div style={{display: (showUploadBtn?'block':'none')}}>
                                   <button
