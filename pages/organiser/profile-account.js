@@ -36,6 +36,8 @@ const MyAccount = () => {
   const [fileUpload, setfileUpload] = useState(false);
   const [file, setFile] = useState('uploadfile');
 
+  const [fileName, setFileName] = useState('Choose image');
+
   const { data: user } = useUser(localStorage.getItem('userId'));
   //const profiepicSrcUrl = user?.profilePic;
   const [profilepicUrl, setProfilepicUrl] = useState(user?.profilePic);
@@ -43,6 +45,9 @@ const MyAccount = () => {
   useEffect(() => {
     setProfilepicUrl(user?.profilePic);
   }, [user?.profilePic]);
+  useEffect(() => {
+    setFileName('Choose image');
+  }, ['Choose image']);
 
   const mutateAccStatus = useMutation(
     (data) => api.post('/api/user/update-account-status', data),
@@ -134,8 +139,10 @@ const MyAccount = () => {
   const handleFileChange = async (e) => {
     console.log('call handleFileChange');
     console.log(e);
+    console.log(e.target.files[0].name);
     setFile(e.target.files[0]);
     setfileUpload(true);
+    setFileName(e.target.files[0].name);
   };
   const submitFile = async () => {
     const data = new FormData();
@@ -295,7 +302,15 @@ const MyAccount = () => {
                                     id="custom-file"
                                     type="file"
                                     onChange={handleFileChange}
-                                  ></Form.File>
+                                    custom
+                                  />
+                                  <Form.Label
+                                    className="form-group custom-file-label"
+                                    md={12}
+                                    for="custom-file"
+                                  >
+                                    {fileName}
+                                  </Form.Label>
 
                                   {/* <br></br>
                                   <div style={{display: (showUploadBtn?'block':'none')}}>
@@ -308,7 +323,9 @@ const MyAccount = () => {
                                   </div> */}
                                 </Form.Group>
                               </Col>
+                            </Row>
 
+                            <Row>
                               <Col className="form-group" md={12}>
                                 <label>
                                   Company Name{' '}
