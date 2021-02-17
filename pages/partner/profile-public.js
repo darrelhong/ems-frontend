@@ -43,7 +43,6 @@ const EventOrgProfile = () => {
             <Row>
               <Col xs={6} md={4}>
                 <Image
-                  className="profile-image"
                   src="https://www.careerup.com/wp-content/uploads/2016/01/internship-opportunity-advertising-saga-events-1.png"
                   roundedCircle
                 />
