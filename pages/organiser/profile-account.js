@@ -3,18 +3,12 @@ import { useState } from 'react';
 import { LayoutOne } from '../../layouts';
 import { BreadcrumbOne } from '../../components/Breadcrumb';
 import { Container, Row, Col } from 'react-bootstrap';
-import { FaCloudDownloadAlt, FaRegEdit } from 'react-icons/fa';
+import { FaRegEdit } from 'react-icons/fa';
 import {
-  IoIosList,
-  IoIosClipboard,
-  IoIosDownload,
   IoIosCash,
-  IoIosCreate,
   IoIosPerson,
   IoIosSettings,
   IoIosRadioButtonOn,
-
-
 } from 'react-icons/io';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
@@ -25,23 +19,25 @@ import Modal from 'react-bootstrap/Modal';
 import { useForm } from 'react-hook-form';
 import useUser from '../../lib/query/useUser';
 import { useMutation, useQueryClient } from 'react-query';
-import api from '../../lib/ApiClient';
+import  api  from '../../lib/ApiClient';
+import { api2 } from '../../lib/ApiClient';
 import { logout } from '../../lib/auth';
+import Image from 'react-bootstrap/Image';
+
 
 const MyAccount = () => {
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  // const [showUploadBtn, setShowUploadBtn] = useState(false);
+  const [fileUpload, setfileUpload] = useState(false);
 
-    const [show, setShow] = useState(false);
-    const handleClose = () =>setShow(false);
-    const handleShow = () => setShow(true);
-
-  const { data: user } = useUser(
-    localStorage.getItem('userId')
-       
-  );
-   console.log(user);
-
- const mutateAccStatus = useMutation(
+  const[file,setFile] = useState("uploadfile");
   
+  
+  const { data: user } = useUser(localStorage.getItem('userId'));
+  const profiepicSrcUrl = user?.profilePic;
+  const mutateAccStatus = useMutation(
     (data) => api.post('/api/user/update-account-status', data),
     {
       onSuccess: () => {
@@ -50,31 +46,23 @@ const MyAccount = () => {
     }
   );
 
-const handleDisabled = async (data) => {
 
-  mutateAccStatus.mutate({
-     id: user?.id,
-   
-  });
-  // close the modal once yes click.
-  setShow(false);
+  const handleDisabled = async (data) => {
+    mutateAccStatus.mutate({
+      id: user?.id,
+    });
+    // close the modal once yes click.
+    setShow(false);
 
-  logout({ redirectTo: '/organiser/login' });
-  
+    logout({ redirectTo: '/organiser/login' });
+  };
 
- 
-  
-};
-
-
-const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
   const { register, handleSubmit, errors } = useForm({
     defaultValues: { name: user?.name },
   });
 
-  
   const mutateAccDetail = useMutation(
-  
     (data) => api.post('/api/user/update', data),
     {
       onSuccess: () => {
@@ -82,41 +70,70 @@ const queryClient = useQueryClient();
       },
     }
   );
-  
+
+  const mutatePassword = useMutation(
+    (data) => api.post('/api/user/change-password', data),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['user', user?.id.toString()]);
+      },
+    }
+  );
+
+  const onSubmit = async (data) => {
+    console.log('data acc' + data['name']);
+    if (
+      user?.address != data.address ||
+      user?.description != data.description ||
+      user?.name != data.name ||
+      user?.phonenumber != data.phonenumber ||
+      fileUpload == true
+    ) {
+      mutateAccDetail.mutate({
+        address: data.address,
+        description: data.description,
+        name: data.name,
+        phonenumber: data.phonenumber,
+        id: user?.id,
+      });
+      submitFile();
+      window.location.reload(false);
+    }
+
+  };
+
+  const onSubmitPassword = async (data) => {
+    console.log('call change password' + data['newPassword']);
+
+    mutatePassword.mutate({
+      oldPassword: data.oldPassword,
+      newPassword: data.newPassword,
+    });
+   // console.log(data);
+  };
 
 
-    const mutatePassword = useMutation(
-      (data) => api.post('/api/user/change-password', data),
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries(['user', user?.id.toString()]);
-        },
-      }
-    );
+const handleFileChange = async (e) => {
+  console.log("call handleFileChange");
+  console.log(e);
+  setFile(e.target.files[0]);
+  setfileUpload(true);
 
-
-const onSubmit = async (data) => {
-    console.log('data acc' + data["name"]);
-    mutateAccDetail.mutate({
-    address:data.address,
-    description:data.description,
-    name:data.name,
-    phonenumber:data.phonenumber,
-    id: user?.id,
-  });
-  console.log(data);
 };
-
-const onSubmitPassword = async (data) => {
-   console.log("call change password" + data["newPassword"]);
+const submitFile = async ()  =>{
+  const data = new FormData();
+    //if(file name is not empty..... handle condition when no file is selected)
+    data.append('file',file);
+    api2.post('/api/uploadFile', data, {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['user', user?.id.toString()]);
+      },
+    });
  
- mutatePassword.mutate({
-   oldPassword:data.oldPassword,
-   newPassword:data.newPassword,
 
- });
-  console.log(data);
-};
+
+}
+
 
 
   return (
@@ -220,17 +237,40 @@ const onSubmitPassword = async (data) => {
                       </Card.Header>
                       <Card.Body>
                         <div className="account-details-form">
+                          <label>Profile Picture</label>
+                          <Row>
+                            <Col className="form-group" xs={10} md={6}>
+                              <Image
+                                className="profile-image"
+                                src={profiepicSrcUrl}
+                                thumbnail
+                              />
+                            </Col>
+                          </Row>
                           <form onSubmit={handleSubmit(onSubmit)}>
                             <Row>
                               <Col className="form-group" md={12}>
                                 <Form.Group>
                                   <Form.File
-                                    id="exampleFormControlFile1"
-                                    label="Profile Picture"
+                                    id="custom-file"
                                     type="file"
-                                  />
+                                    onChange={handleFileChange}       
+                                  >
+                                             
+                               </Form.File>
+                                 
+                                  {/* <br></br>
+                                  <div style={{display: (showUploadBtn?'block':'none')}}>
+                                  <button
+                                    className="btn btn-fill-out"
+                                    onClick={submitFile}
+                                  >
+                                    Upload
+                                  </button>
+                                  </div> */}
                                 </Form.Group>
                               </Col>
+
                               <Col className="form-group" md={12}>
                                 <label>
                                   Company Name{' '}
