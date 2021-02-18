@@ -32,7 +32,7 @@ function AdminHome() {
         </ol>
       </BreadcrumbOne>
 
-      <Container>
+      <Container className="space-pt--30 space-pb--30">
         {isLoading && <div className="spinner-grow" role="status" />}
         {isSuccess && (
           <p>

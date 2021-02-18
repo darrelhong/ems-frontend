@@ -14,7 +14,10 @@ import { ProductTabFour } from '../../components/ProductTab';
 //IoIosPerson,
 //} from "react-icons/io";
 
+<<<<<<< HEAD
 import { IoIosStar, IoIosStarOutline } from 'react-icons/io';
+=======
+>>>>>>> 752682069da4e99910164068e03e7b1ef3abaa8e
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
@@ -43,7 +46,6 @@ const EventOrgProfile = () => {
             <Row>
               <Col xs={6} md={4}>
                 <Image
-                  className="profile-image"
                   src="https://www.careerup.com/wp-content/uploads/2016/01/internship-opportunity-advertising-saga-events-1.png"
                   roundedCircle
                 />
@@ -57,9 +59,13 @@ const EventOrgProfile = () => {
                   </div>
                 </div>
                 <div>
-                <p>Category:
-                 <span> <Badge variant="primary">Technology</Badge>{' '}
-                 </span></p>
+                  <p>
+                    Category:
+                    <span>
+                      {' '}
+                      <Badge variant="primary">Technology</Badge>{' '}
+                    </span>
+                  </p>
                 </div>
 
                 <br></br>

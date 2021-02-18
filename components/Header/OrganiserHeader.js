@@ -47,12 +47,12 @@ const HeaderOne = ({ cartItems, navPositionClass }) => {
               <a className="navbar-brand">
                 <img
                   className="logo-light"
-                  src="/assets/images/logo_light.png"
+                  src="/assets/images/eventStop.png"
                   alt="logo"
                 />
                 <img
                   className="logo-dark"
-                  src="/assets/images/logo_dark.png"
+                  src="/assets/images/eventStop.png"
                   alt="logo"
                 />
               </a>

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 // import { LayoutOne } from '../../layouts';
 import { BreadcrumbOne } from '../../components/Breadcrumb';
 import { Container, Row, Col } from 'react-bootstrap';
@@ -11,8 +11,6 @@ import {
   IoIosPerson,
   IoIosSettings,
   IoIosRadioButtonOn,
-
-
 } from 'react-icons/io';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
@@ -25,9 +23,31 @@ import useUser from '../../lib/query/useUser';
 import { useMutation, useQueryClient } from 'react-query';
 import api from '../../lib/ApiClient';
 import { logout } from '../../lib/auth';
-import Alert from 'react-bootstrap/Alert'
+import Image from 'react-bootstrap/Image';
+import Alert from 'react-bootstrap/Alert';
 
 const MyAccount = () => {
+  // const [show, setShow] = useState(false);
+  // const handleClose = () => setShow(false);
+  const [showSuccessMsg, setShowSuccessMsg] = useState(false);
+  const [showFailedMsg, setShowFailedMsg] = useState(false);
+  //const [updateAccDetailStatus, setUpdateAccDetailStatus, ] = useState(false);
+  //const [uploadSucess, setUploadSucess] = useState(false);
+  const [fileUpload, setfileUpload] = useState(false);
+  const [file, setFile] = useState('uploadfile');
+
+  const [fileName, setFileName] = useState('Choose image');
+
+  const { data: user } = useUser(localStorage.getItem('userId'));
+  //const profiepicSrcUrl = user?.profilePic;
+  const [profilepicUrl, setProfilepicUrl] = useState(user?.profilePic);
+  // display the inital profile picture
+  useEffect(() => {
+    setProfilepicUrl(user?.profilePic);
+  }, [user?.profilePic]);
+  useEffect(() => {
+    setFileName('Choose image');
+  }, ['Choose image']);
 
   //for modal of disabling account
   const [show, setShow] = useState(false);
@@ -48,10 +68,6 @@ const MyAccount = () => {
   //show pw error alert
   const [showPW, setShowPW] = useState(false);
 
-  const { data: user } = useUser(
-    localStorage.getItem('userId')
-
-  );
   
   const mutateAccStatus = useMutation(
 
@@ -63,39 +79,115 @@ const MyAccount = () => {
     }
   );
 
-  const handleDisabled = async (data) => {
+  const handleDisabled = async () => {
     mutateAccStatus.mutate({
       id: user?.id,
     });
     // close the modal once yes click.
     setShow(false);
+
     logout({ redirectTo: '/organiser/login' });
   };
 
-
   const queryClient = useQueryClient();
-  const { register, handleSubmit, errors } = useForm({
+  const { register, handleSubmit } = useForm({
     defaultValues: { name: user?.name },
   });
 
-
-  const mutateAccDetail = useMutation(
-
-    (data) => api.post('/api/user/update', data) 
-    .then(response => {
-      setAccSaved(true);
+  const mutateAccDetail = useMutation((data) =>
+    api.post('/api/user/update', data, {
+        onSuccess: () => {
+          queryClient.invalidateQueries(['user', user?.id.toString()]);
+          setAccSaved(true);
      setAccSuccess(" Account details saved successfully! ");
-    //  document.getElementById("account-details-form").reset();
-
-    }).catch(error =>{
-      console.log(error)
-
-    }
-
-    )
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        if (response.status == 200) {
+          // show update sucess message
+          setShowSuccessMsg(true);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        // show error message
+        setShowFailedMsg(true);
+      })
   );
 
 
+
+
+
+  const onSubmit = async (data) => {
+    console.log('data acc' + data['name']);
+    if (
+      user?.address != data.address ||
+      user?.description != data.description ||
+      user?.name != data.name ||
+      user?.phonenumber != data.phonenumber ||
+      fileUpload == true
+    ) {
+      mutateAccDetail.mutate({
+        address: data.address,
+        description: data.description,
+        name: data.name,
+        phonenumber: data.phonenumber,
+        id: user?.id,
+      });
+    }
+    if (fileUpload == true) {
+      console.log('fileupload is true');
+      submitFile();
+    }
+  };
+
+  // const onSubmitPassword = async (data) => {
+  //   console.log('call change password' + data['newPassword']);
+
+  //   mutatePassword.mutate({
+  //     oldPassword: data.oldPassword,
+  //     newPassword: data.newPassword,
+  //   });
+  //   // console.log(data);
+  // };
+
+  const handleFileChange = async (e) => {
+    console.log('call handleFileChange');
+    console.log(e);
+    console.log(e.target.files[0].name);
+    setFile(e.target.files[0]);
+    setfileUpload(true);
+    setFileName(e.target.files[0].name);
+  };
+  const submitFile = async () => {
+    const data = new FormData();
+    //if(file name is not empty..... handle condition when no file is selected)
+    data.append('file', file);
+    api
+      .post('/api/uploadFile', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        onSuccess: () => {
+          queryClient.invalidateQueries(['user', user?.id.toString()]);
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        if (response.status == 200) {
+          console.log('file upload sucessfully');
+          console.log(response);
+          console.log(response.data['fileDownloadUri']);
+          var newlink = response.data['fileDownloadUri'];
+          setProfilepicUrl(newlink);
+        }
+      })
+      .catch(() => {
+        setShowFailedMsg(true);
+      });
+  };
 
   const mutatePassword = useMutation(
   
@@ -116,17 +208,17 @@ const MyAccount = () => {
   );
 
 
-  const onSubmit = async (data) => {
-    console.log('data acc' + data["name"]);
-    mutateAccDetail.mutate({
-      address: data.address,
-      description: data.description,
-      name: data.name,
-      phonenumber: data.phonenumber,
-      id: user?.id,
-    });    
+  // const onSubmit = async (data) => {
+  //   console.log('data acc' + data["name"]);
+  //   mutateAccDetail.mutate({
+  //     address: data.address,
+  //     description: data.description,
+  //     name: data.name,
+  //     phonenumber: data.phonenumber,
+  //     id: user?.id,
+  //   });    
 
-  };
+  // };
 
   const onSubmitPassword = async (data) => {
     setPWAlert("");
@@ -227,8 +319,8 @@ const MyAccount = () => {
                       </Card.Header>
                       <Card.Body>
                         <p className="saved-message">
-                          You Can't Saved Your Payment Method yet.
-                    </p>
+                          {"You Can't Saved Your Payment Method yet."}
+                        </p>
                       </Card.Body>
                     </Card>
                   </Tab.Pane>
@@ -255,6 +347,20 @@ const MyAccount = () => {
                     </Card>
                   </Tab.Pane>
                   <Tab.Pane eventKey="accountDetails">
+                    <div
+                      style={{
+                        display: showSuccessMsg ? 'block' : 'none',
+                      }}
+                    >
+                      <Alert variant="success">Update Sucessfully</Alert>
+                    </div>
+                    <div
+                      style={{
+                        display: showFailedMsg ? 'block' : 'none',
+                      }}
+                    >
+                      <Alert variant="danger">Error Occured</Alert>
+                    </div>
                     <Card className="my-account-content__content">
                       <Card.Header>
                         <h3>Account Details</h3>
@@ -262,17 +368,49 @@ const MyAccount = () => {
                       <Card.Body>
 
                         <div className="account-details-form">
+                          <label>Profile Picture</label>
+                          <Row>
+                            <Col className="form-group" xs={10} md={6}>
+                              <Image
+                                className="profile-image"
+                                src={profilepicUrl}
+                                thumbnail
+                              />
+                            </Col>
+                          </Row>
+                      
                           <form id="account-details-form" onSubmit={handleSubmit(onSubmit)}>
                             <Row>
                               <Col className="form-group" md={12}>
                                 <Form.Group>
                                   <Form.File
-                                    id="exampleFormControlFile1"
-                                    label="Profile Picture"
+                                    id="custom-file"
                                     type="file"
+                                    onChange={handleFileChange}
+                                    custom
                                   />
+                                  <Form.Label
+                                    className="form-group custom-file-label"
+                                    md={12}
+                                    for="custom-file"
+                                  >
+                                    {fileName}
+                                  </Form.Label>
+
+                                  {/* <br></br>
+                                  <div style={{display: (showUploadBtn?'block':'none')}}>
+                                  <button
+                                    className="btn btn-fill-out"
+                                    onClick={submitFile}
+                                  >
+                                    Upload
+                                  </button>
+                                  </div> */}
                                 </Form.Group>
                               </Col>
+                            </Row>
+
+                            <Row>
                               <Col className="form-group" md={12}>
                                 <label>
                                   Company Name{' '}

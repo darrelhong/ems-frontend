@@ -40,7 +40,7 @@ const HeaderSix = ({ cartItems, wishlistItems, navPositionClass }) => {
   return (
     <header
       className={`header-wrap header-with-topbar ${
-        scroll > headerHeight ? "is-sticky" : ""
+        scroll > headerHeight ? 'is-sticky' : ''
       }`}
     >
       {/* header top */}
@@ -55,12 +55,12 @@ const HeaderSix = ({ cartItems, wishlistItems, navPositionClass }) => {
               <a className="navbar-brand pt-0 pb-0">
                 <img
                   className="logo-light"
-                  src="/assets/images/logo_light.png"
+                  src="/assets/images/eventStop.png"
                   alt="logo"
                 />
                 <img
                   className="logo-dark"
-                  src="/assets/images/logo_dark.png"
+                  src="/assets/images/eventStop.png"
                   alt="logo"
                 />
               </a>
@@ -142,7 +142,7 @@ const HeaderSix = ({ cartItems, wishlistItems, navPositionClass }) => {
                             {wishlistItems.length}
                           </span>
                         ) : (
-                          ""
+                          ''
                         )}
                       </a>
                     </Link>
@@ -155,7 +155,7 @@ const HeaderSix = ({ cartItems, wishlistItems, navPositionClass }) => {
                         {cartItems.length > 0 ? (
                           <span className="cart-count">{cartItems.length}</span>
                         ) : (
-                          ""
+                          ''
                         )}
                       </a>
                     </Link>
@@ -172,7 +172,7 @@ const HeaderSix = ({ cartItems, wishlistItems, navPositionClass }) => {
                             {cartItems.length}
                           </span>
                         ) : (
-                          ""
+                          ''
                         )}
                       </a>
                     </Link>
