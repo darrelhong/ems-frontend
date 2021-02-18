@@ -12,11 +12,11 @@ export const getServerSideProps = async ({ query }) => {
   };
 };
 
-export default function PartnerLogin({ info }) {
+export default function AttendeeLogin({ info }) {
   return (
     <LoginPage
       info={info}
-      heading="User Login"
+      heading="Participant Login"
       loginApiUrl={`/api/user/login/${RoleEnum.ATND}`}
       loginSuccessUrl="/attendee/home"
       registerUrl="/attendee/register"
@@ -24,6 +24,6 @@ export default function PartnerLogin({ info }) {
   );
 }
 
-PartnerLogin.propTypes = {
+AttendeeLogin.propTypes = {
   info: PropTypes.string,
 };
