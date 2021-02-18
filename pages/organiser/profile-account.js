@@ -20,7 +20,6 @@ import { useForm } from 'react-hook-form';
 import useUser from '../../lib/query/useUser';
 import { useMutation, useQueryClient } from 'react-query';
 import api from '../../lib/ApiClient';
-import { api2 } from '../../lib/ApiClient';
 import { logout } from '../../lib/auth';
 import Image from 'react-bootstrap/Image';
 import Alert from 'react-bootstrap/Alert';
@@ -28,7 +27,6 @@ import Alert from 'react-bootstrap/Alert';
 const MyAccount = () => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
   const [showSuccessMsg, setShowSuccessMsg] = useState(false);
   const [showFailedMsg, setShowFailedMsg] = useState(false);
   //const [updateAccDetailStatus, setUpdateAccDetailStatus, ] = useState(false);
@@ -58,7 +56,7 @@ const MyAccount = () => {
     }
   );
 
-  const handleDisabled = async (data) => {
+  const handleDisabled = async () => {
     mutateAccStatus.mutate({
       id: user?.id,
     });
@@ -69,7 +67,7 @@ const MyAccount = () => {
   };
 
   const queryClient = useQueryClient();
-  const { register, handleSubmit, errors } = useForm({
+  const { register, handleSubmit } = useForm({
     defaultValues: { name: user?.name },
   });
 
@@ -148,8 +146,11 @@ const MyAccount = () => {
     const data = new FormData();
     //if(file name is not empty..... handle condition when no file is selected)
     data.append('file', file);
-    api2
+    api
       .post('/api/uploadFile', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
         onSuccess: () => {
           queryClient.invalidateQueries(['user', user?.id.toString()]);
         },
@@ -164,7 +165,7 @@ const MyAccount = () => {
           setProfilepicUrl(newlink);
         }
       })
-      .catch((error) => {
+      .catch(() => {
         setShowFailedMsg(true);
       });
   };
@@ -236,7 +237,7 @@ const MyAccount = () => {
                       </Card.Header>
                       <Card.Body>
                         <p className="saved-message">
-                          You Can't Saved Your Payment Method yet.
+                          {"You Can't Saved Your Payment Method yet."}
                         </p>
                       </Card.Body>
                     </Card>
