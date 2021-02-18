@@ -100,7 +100,7 @@ export default function RegisterEvnOrg({
                   </FormErrorMessage>
                 </FormControl>
                 <FormControl isInvalid={errors.name}>
-                <FormLabel htmlFor="name">Name</FormLabel>
+                <FormLabel htmlFor="name">Company Name</FormLabel>
                       <div className="form-group">
                         <input
                           type="text"
