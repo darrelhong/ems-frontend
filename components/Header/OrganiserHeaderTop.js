@@ -1,6 +1,6 @@
 import { Link } from '@chakra-ui/react';
 import { Container, Row, Col } from 'react-bootstrap';
-import { AiOutlineUser, AiOutlineSetting, AiOutlineLogout } from 'react-icons/ai';
+import { AiOutlineUser, AiOutlineSetting, AiOutlineLogout, AiOutlineNotification } from 'react-icons/ai';
 
 import { logout } from '../../lib/auth';
 
@@ -12,6 +12,14 @@ const OrganiserHeaderTop = () => {
           <Col>
             <div className="text-right">
               <ul className="header-list">
+              <li>
+                  <Link href="/other/wishlist">
+                    <a>
+                    <AiOutlineNotification />
+                      <span>Notification</span>
+                    </a>
+                  </Link>
+                </li>
               <li>
                   <Link href="/other/wishlist">
                     <a>

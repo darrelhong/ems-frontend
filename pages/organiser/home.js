@@ -12,7 +12,7 @@ export default function OrganiserHome() {
   );
   return (
     <OrganiserWrapper title="Organiser Home">
-      <BreadcrumbOne pageTitle="Organiser Home">
+      <BreadcrumbOne pageTitle={"Welcome " + user?.name} >
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/organiser/home">
@@ -26,6 +26,14 @@ export default function OrganiserHome() {
         {isLoading && <div className="spinner-grow" role="status" />}
         {isSuccess && (
           <>
+            <p>{user?.name}</p>
+            <p>User ID: {user?.id}</p>
+            <p>{user?.name}</p>
+            <p>User ID: {user?.id}</p>
+            <p>{user?.name}</p>
+            <p>User ID: {user?.id}</p>
+            <p>{user?.name}</p>
+            <p>User ID: {user?.id}</p>
             <p>{user?.name}</p>
             <p>User ID: {user?.id}</p>
           </>
