@@ -6,7 +6,8 @@ import { useForm } from 'react-hook-form';
 
 import { login } from '../lib/auth';
 
-import { FaFacebookF, FaGooglePlusG } from 'react-icons/fa';
+
+// import { FaFacebookF, FaGooglePlusG } from 'react-icons/fa';
 import { Col, Container, Row } from 'react-bootstrap';
 import { BreadcrumbOne } from './Breadcrumb';
 import { LayoutOne } from '../layouts';
@@ -178,12 +179,12 @@ export default function LoginPage({
                             id="exampleCheckbox1"
                             defaultValue
                           />
-                          <label
+                          {/* <label
                             className="form-check-label"
                             htmlFor="exampleCheckbox1"
                           >
                             <span>Remember me</span>
-                          </label>
+                          </label> */}
                         </div>
                       </div>
                       <a href="#">Forgot password?</a>
@@ -203,10 +204,10 @@ export default function LoginPage({
                       </button>
                     </div>
                   </form>
-                  <div className="different-login">
+                  {/* <div className="different-login">
                     <span> or</span>
-                  </div>
-                  <ul className="btn-login text-center">
+                  </div> */}
+                  {/* <ul className="btn-login text-center">
                     <li>
                       <a href="#" className="btn btn-facebook">
                         <FaFacebookF />
@@ -219,7 +220,7 @@ export default function LoginPage({
                         Google
                       </a>
                     </li>
-                  </ul>
+                  </ul> */}
                   <div className="form-note text-center space-mt--20">
                     {"Don't Have an Account? "}
                     <Link href={registerUrl}>
