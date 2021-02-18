@@ -55,6 +55,7 @@ export default function AdminEventOrg() {
               columns={columns}
               data={data}
               options={{
+                filtering: true,
                 actionsColumnIndex: -1,
               }}
               actions={[
