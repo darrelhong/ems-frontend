@@ -17,6 +17,14 @@ const NavigationEvntOrg = ({ positionClass }) => {
             </a>
           </Link>
         </li>
+
+        <li>
+          <Link href="/organiser/dashboard">
+            <a className="nav-link">
+              DASHBOARD 
+            </a>
+          </Link>
+        </li>
         
         <li>
           <Link href="/">

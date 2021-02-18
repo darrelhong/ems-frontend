@@ -7,7 +7,7 @@ import { IoIosSearch, IoIosMenu } from 'react-icons/io';
 import OrganiserHeaderTop from './OrganiserHeaderTop';
 import Navigation from './elements/NavigationEvntOrg';
 import SearchOverlay from './elements/SearchOverlay';
-import MobileMenu from './elements/MobileMenu';
+import MobileMenuEvntOrg from './elements/MobileMenuEvntOrg';
 
 const HeaderOne = ({ cartItems, navPositionClass }) => {
   const [scroll, setScroll] = useState(0);
@@ -98,7 +98,7 @@ const HeaderOne = ({ cartItems, navPositionClass }) => {
       />
 
       {/* mobile menu */}
-      <MobileMenu
+      <MobileMenuEvntOrg
         activeStatus={offCanvasMobileMenuActive}
         getActiveStatus={setOffCanvasMobileMenuActive}
       />
