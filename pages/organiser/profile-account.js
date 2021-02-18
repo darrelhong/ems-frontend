@@ -20,7 +20,6 @@ import { useForm } from 'react-hook-form';
 import useUser from '../../lib/query/useUser';
 import { useMutation, useQueryClient } from 'react-query';
 import api from '../../lib/ApiClient';
-import { api2 } from '../../lib/ApiClient';
 import { logout } from '../../lib/auth';
 import Image from 'react-bootstrap/Image';
 import Alert from 'react-bootstrap/Alert';
@@ -147,8 +146,11 @@ const MyAccount = () => {
     const data = new FormData();
     //if(file name is not empty..... handle condition when no file is selected)
     data.append('file', file);
-    api2
+    api
       .post('/api/uploadFile', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
         onSuccess: () => {
           queryClient.invalidateQueries(['user', user?.id.toString()]);
         },
