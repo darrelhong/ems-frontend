@@ -1,27 +1,16 @@
+import Link from 'next/link';
 import { useRef } from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import {
-  Alert,
-  AlertIcon,
-  Button,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Grid,
-  Heading,
-  Input,
-} from '@chakra-ui/react';
 import { useMutation } from 'react-query';
 import { useForm } from 'react-hook-form';
 
 import api from '../lib/ApiClient';
 
-import Card from './Card';
-import NavBar from './NavBar/NavBar';
-import PageContainer from './PageContainer';
-import PasswordInput from './settings/PasswordInput';
+import HomeHeaderTop from './Header/HomeHeaderTop';
+import { Col, Container, Row } from 'react-bootstrap';
+import { BreadcrumbOne } from './Breadcrumb';
 
 export default function RegisterPage({ title, registerApiUrl }) {
   const router = useRouter();
@@ -29,7 +18,7 @@ export default function RegisterPage({ title, registerApiUrl }) {
   const password = useRef({});
   password.current = watch('password', '');
 
-  const { mutate, isLoading, isError } = useMutation(
+  const { mutate, isError } = useMutation(
     (data) => api.post(registerApiUrl, data),
     {
       onSuccess: () => {
@@ -45,15 +34,167 @@ export default function RegisterPage({ title, registerApiUrl }) {
       password: data.password,
     });
   };
+
   return (
     <>
       <Head>
         <title>{title}</title>
       </Head>
 
-      <NavBar />
+      <HomeHeaderTop />
 
-      <PageContainer centerContent>
+      <BreadcrumbOne pageTitle="Register">
+        <ol className="breadcrumb justify-content-md-end">
+          <li className="breadcrumb-item">
+            <Link href="/">
+              <a>Home</a>
+            </Link>
+          </li>
+          <li className="breadcrumb-item active">{title}</li>
+        </ol>
+      </BreadcrumbOne>
+
+      <div className="login-content space-pt--r100 space-pb--r100">
+        <Container>
+          <Row className="justify-content-center">
+            <Col xl={6} md={10}>
+              <div className="login-wrap">
+                <div className="heading-s1 space-mb--20">
+                  <h3>Register</h3>
+                </div>
+                <div>
+                  <form noValidate onSubmit={handleSubmit(onSubmit)}>
+                    <div className="form-group">
+                      <label htmlFor="name">
+                        Name <span className="required">*</span>
+                      </label>
+                      <input
+                        className={`form-control ${
+                          errors?.name ? 'is-invalid' : ''
+                        }`}
+                        type="text"
+                        required
+                        name="name"
+                        id="name"
+                        placeholder="Your Name"
+                        ref={register({ required: 'Name is required' })}
+                      />
+                      <div className="invalid-feedback">
+                        {errors?.name?.message}
+                      </div>
+                    </div>
+
+                    <div className="form-group">
+                      <label htmlFor="email">
+                        Email <span className="required">*</span>
+                      </label>
+                      <input
+                        className={`form-control ${
+                          errors?.email ? 'is-invalid' : ''
+                        }`}
+                        type="email"
+                        required
+                        name="email"
+                        id="email"
+                        placeholder="Your Name"
+                        ref={register({ required: 'Email is required' })}
+                      />
+                      <div className="invalid-feedback">
+                        {errors?.email?.message}
+                      </div>
+                    </div>
+
+                    <div className="form-group">
+                      <label htmlFor="password">
+                        Password <span className="required">*</span>
+                      </label>
+                      <input
+                        className={`form-control ${
+                          errors?.password ? 'is-invalid' : ''
+                        }`}
+                        required
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        ref={register({
+                          required: 'Password is required',
+                          minLength: {
+                            value: 8,
+                            message: 'Password must have at least 8 characters',
+                          },
+                        })}
+                      />
+                      <div className="invalid-feedback">
+                        {errors?.password?.message}
+                      </div>
+                    </div>
+
+                    <div className="form-group">
+                      <label htmlFor="password_confirm">
+                        Confirm Password <span className="required">*</span>
+                      </label>
+                      <input
+                        className={`form-control ${
+                          errors?.password_confirm ? 'is-invalid' : ''
+                        }`}
+                        required
+                        type="password"
+                        name="password_confirm"
+                        placeholder="Confirm password"
+                        ref={register({
+                          validate: (value) =>
+                            value === password.current ||
+                            'Passwords do not match',
+                        })}
+                      />
+                      <div className="invalid-feedback">
+                        {errors?.password_confirm?.message}
+                      </div>
+                    </div>
+
+                    <div className="login-footer form-group">
+                      <div className="check-form">
+                        <div className="custom-checkbox">
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            name="checkbox"
+                            id="exampleCheckbox1"
+                            defaultValue
+                          />
+                          <label
+                            className="form-check-label"
+                            htmlFor="exampleCheckbox1"
+                          >
+                            <span>Remember me</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="form-group">
+                      <button
+                        type="submit"
+                        className="btn btn-fill-out btn-block"
+                      >
+                        Register
+                      </button>
+                    </div>
+                  </form>
+
+                  {isError && (
+                    <div className="alert alert-danger mt-4 mb-0" role="alert">
+                      An error has occurred.
+                    </div>
+                  )}
+                </div>
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </div>
+
+      {/* <PageContainer centerContent>
         <Grid maxW="sm" w="100%" h="200px" rowGap={3}>
           <Heading textAlign="center" size="lg" mt={4}>
             Create an acccount
@@ -141,7 +282,7 @@ export default function RegisterPage({ title, registerApiUrl }) {
             </form>
           </Card>
         </Grid>
-      </PageContainer>
+      </PageContainer> */}
     </>
   );
 }
