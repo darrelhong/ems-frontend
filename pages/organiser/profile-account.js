@@ -42,6 +42,7 @@ const MyAccount = () => {
 
   //check if pw and confirm pw is the same before updating pw
   const [confirmPW, setConfirmPW] = useState(false);
+  const [showSuccessPW, setSuccessPW] = useState(false);
   //success/error message for pw update
   const [pwAlert, setPWAlert] = useState("");
   //show pw error alert
@@ -84,7 +85,7 @@ const MyAccount = () => {
     .then(response => {
       setAccSaved(true);
      setAccSuccess(" Account details saved successfully! ");
-     document.getElementById("account-details-form").reset();
+    //  document.getElementById("account-details-form").reset();
 
     }).catch(error =>{
       console.log(error)
@@ -100,8 +101,11 @@ const MyAccount = () => {
   
     (data) => api.post('/api/user/change-password', data)
     .then(response =>{
+     console.log("changed");
+     setSuccessPW(true);
+      setPWAlert("Your password has been updated successfully!"); 
       document.getElementById("change-password-form").reset();
-      setPWAlert("Your password has been updated successfully!");
+
     }).catch(error =>{
       console.log(error)
       setConfirmPW(false);
@@ -126,6 +130,9 @@ const MyAccount = () => {
 
   const onSubmitPassword = async (data) => {
     setPWAlert("");
+    setSuccessPW(false);
+    setConfirmPW(false);
+    setShowPW(false);
     validatePassword(data.oldPassword, data.newPassword, data.confirmPassword);  
     if(confirmPW) { 
       setShowPW(false);
@@ -435,7 +442,7 @@ const MyAccount = () => {
                           <div>
                           &nbsp;
                           </div>
-                          <Alert show={confirmPW} variant="success" onClose={() => setConfirmPW(false)} dismissible>
+                          <Alert show={confirmPW && showSuccessPW} variant="success" onClose={() => setConfirmPW(false) && setSuccessPW(false)} dismissible>
                                {pwAlert}                         
                             </Alert>
                             <Alert show={!confirmPW && showPW} onClose={() => setShowPW(false)} variant="danger" dismissible>
