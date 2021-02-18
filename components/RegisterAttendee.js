@@ -203,7 +203,7 @@ export default function RegisterAttendee({ title, registerApiUrl }) {
 
                   <div className="form-note text-center space-mt--20">
                     {'Already Have an Account? '}
-                    <Link href="/partner/login">
+                    <Link href="/attendee/login">
                       <a>Login now</a>
                     </Link>
                   </div>
