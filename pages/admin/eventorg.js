@@ -54,10 +54,13 @@ export default function AdminEventOrg() {
               title="Event Organisers"
               columns={columns}
               data={data}
+              options={{
+                actionsColumnIndex: -1,
+              }}
               actions={[
                 (rowData) => ({
                   icon: CheckCircleOutline,
-                  tooltip: 'Enable organiser',
+                  tooltip: 'Approve organiser',
                   onClick: (event, rowData) => {
                     api
                       .post(`/api/organiser/approve/${rowData.id}`)
@@ -69,7 +72,7 @@ export default function AdminEventOrg() {
                 }),
                 (rowData) => ({
                   icon: RemoveCircleOutline,
-                  tooltip: 'Disable organiser',
+                  tooltip: 'Reject organiser',
                   onClick: (event, rowData) => {
                     api
                       .post(`/api/organiser/reject/${rowData.id}`, {
