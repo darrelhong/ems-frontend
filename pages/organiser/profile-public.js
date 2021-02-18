@@ -17,7 +17,6 @@ import { ProductTabFour } from '../../components/ProductTab';
 import { IoIosStar, IoIosStarOutline } from 'react-icons/io';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
-import Card from 'react-bootstrap/Card';
 import Image from 'react-bootstrap/Image';
 
 const EventOrgProfile = () => {
@@ -215,7 +214,7 @@ const EventOrgProfile = () => {
                             className="form-control"
                             name="message"
                             rows={4}
-                            defaultValue={''}
+                            defaultValue=""
                           />
                         </div>
                         <div className="form-group col-md-6">

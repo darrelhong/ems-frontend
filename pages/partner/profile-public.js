@@ -14,7 +14,6 @@ import { ProductTabFour } from '../../components/ProductTab';
 //IoIosPerson,
 //} from "react-icons/io";
 
-import { IoIosStar, IoIosStarOutline } from 'react-icons/io';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
@@ -56,9 +55,13 @@ const EventOrgProfile = () => {
                   </div>
                 </div>
                 <div>
-                <p>Category:
-                 <span> <Badge variant="primary">Technology</Badge>{' '}
-                 </span></p>
+                  <p>
+                    Category:
+                    <span>
+                      {' '}
+                      <Badge variant="primary">Technology</Badge>{' '}
+                    </span>
+                  </p>
                 </div>
 
                 <br></br>
