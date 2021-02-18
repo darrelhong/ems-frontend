@@ -53,7 +53,7 @@ const MyAccount = () => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
+  const queryClient = useQueryClient();
   // success message for update account details
   const [accSuccess, setAccSuccess] = useState("");
   //update account details alert 
@@ -89,7 +89,7 @@ const MyAccount = () => {
     logout({ redirectTo: '/organiser/login' });
   };
 
-  const queryClient = useQueryClient();
+
   const { register, handleSubmit } = useForm({
     defaultValues: { name: user?.name },
   });
