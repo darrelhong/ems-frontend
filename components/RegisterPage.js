@@ -122,9 +122,10 @@ export default function RegisterPage({ title, registerApiUrl }) {
                         value === password.current || 'Passwords do not match',
                     })}
                   />
-                  <FormErrorMessage>
+                  <FormErrorMessage style={{color: "red"}}>
                     {errors.password_confirm && errors.password_confirm.message}
                   </FormErrorMessage>
+
                 </FormControl>
 
                 <Button mt={2} type="submit" isLoading={isLoading}>
