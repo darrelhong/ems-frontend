@@ -35,6 +35,7 @@ export default function RegisterEvnOrg({
     const router = useRouter();
     const { register, handleSubmit, errors, watch } = useForm();
     const [show,setShow] = useState(true);
+    const [showSuccess, setShowSuccess] = useState(false);
     const password = useRef({});
     password.current = watch('password', '');
   
@@ -42,7 +43,8 @@ export default function RegisterEvnOrg({
       (data) => api.post(registerApiUrl, data),
       {
         onSuccess: () => {
-          router.push('/register/success');
+          // router.push('/organiser/register-success');
+          setShowSuccess(true);
         },
       }
     );
@@ -115,6 +117,7 @@ export default function RegisterEvnOrg({
                 </FormControl>
                 <FormControl isInvalid={errors.password}>
                   <FormLabel htmlFor="password">Password</FormLabel>
+                  <div className="form-group">
                   <input
                       // <div className="form-group">
                       //   <input
@@ -127,6 +130,7 @@ export default function RegisterEvnOrg({
                           title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
                           ref={register({ required: true })}
                           />
+                          </div>
                           <FormErrorMessage>
                             {errors.password && errors.password.message}
                           </FormErrorMessage>
@@ -135,6 +139,7 @@ export default function RegisterEvnOrg({
                   <FormLabel htmlFor="password_confirm">
                     Confirm Password
                   </FormLabel>
+                  <div className="form-group">
                   <input
                    className="form-control"
                    required
@@ -149,6 +154,7 @@ export default function RegisterEvnOrg({
                         value === password.current || 'Passwords do not match',
                     })}
                   />
+                  </div>
                   <FormErrorMessage>
                     {errors.password_confirm && (<AlertModal show={show} variant="danger" onClose={() => setShow(false)} dismissible> {errors.password_confirm.message} </AlertModal>)}
                   </FormErrorMessage>
@@ -171,19 +177,21 @@ export default function RegisterEvnOrg({
                       </div>
 
                       {isError && (
-                  <Alert status="error">
-                    <AlertIcon />
-                    An error occurred creating your account. Please try again.
-                  </Alert>
+                        <AlertModal show={show} variant="danger" onClose={() => setShow(false)} dismissible> An error occurred creating your account. Please try again. </AlertModal>
+              
                 )}
+
+<AlertModal show={showSuccess} variant="success" onClose={() => setShowSuccess(false)} dismissible> You have succesfully registered. Please check your inbox to verify
+          your email. </AlertModal>
+
                     </form>
-{/* 
+
                     <div className="form-note text-center space-mt--20">
-                      {"Don't Have an Account? "}
-                      <Link href={registerUrl}>
-                        <a>Sign up now</a>
+                      {"Already Have an Account? "}
+                      <Link href="/organiser/login">
+                        <a>Login now</a>
                       </Link>
-                    </div> */}
+                    </div>
                   </div>
                 </div>
               </Col>
