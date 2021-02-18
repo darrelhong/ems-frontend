@@ -59,11 +59,6 @@ const EventOrgProfile = () => {
                   </div>
                 </div>
                 <div>
-<<<<<<< HEAD
-                <p>Category:
-                 <span> <Badge variant="primary">Technology</Badge>{' '}
-                 </span></p>
-=======
                   <p>
                     Category:
                     <span>
@@ -71,7 +66,6 @@ const EventOrgProfile = () => {
                       <Badge variant="primary">Technology</Badge>{' '}
                     </span>
                   </p>
->>>>>>> 752682069da4e99910164068e03e7b1ef3abaa8e
                 </div>
 
                 <br></br>

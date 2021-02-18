@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { LayoutOne } from '../../layouts';
+// import { LayoutOne } from '../../layouts';
 import { BreadcrumbOne } from '../../components/Breadcrumb';
 import { Container, Row, Col } from 'react-bootstrap';
-import { FaCloudDownloadAlt, FaRegEdit } from 'react-icons/fa';
+import {FaRegEdit } from 'react-icons/fa';
 import OrganiserWrapper from '../../components/wrapper/OrganiserWrapper';
 
 import {
@@ -488,6 +488,7 @@ const MyAccount = () => {
                                   ref={register()}
                                   placeholder="xxxxxxxx"
                                   pattern="[0-9]{8}"
+                                  maxlength="8"
                                 />
                               </Col>
                               <Col className="form-group" md={12}>

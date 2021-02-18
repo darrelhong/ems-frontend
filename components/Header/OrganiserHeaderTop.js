@@ -1,9 +1,7 @@
 import { Link } from '@chakra-ui/react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { AiOutlineUser, AiOutlineSetting, AiOutlineLogout } from 'react-icons/ai';
-import {
-  IoIosHeartEmpty
-} from "react-icons/io";
+
 import { logout } from '../../lib/auth';
 
 const OrganiserHeaderTop = () => {
