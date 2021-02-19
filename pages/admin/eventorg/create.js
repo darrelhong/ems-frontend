@@ -11,8 +11,9 @@ import api from '../../../lib/ApiClient';
 import { BreadcrumbOne } from '../../../components/Breadcrumb';
 import { FooterOne } from '../../../components/Footer';
 import AdminHeaderTop from '../../../components/Header/AdminHeaderTop';
+import withProtectRoute from '../../../components/ProtectRouteWrapper';
 
-export default function CreateEventOrganiser() {
+function CreateEventOrganiser() {
   const { register, handleSubmit, errors, watch } = useForm();
   const password = useRef({});
   password.current = watch('password', '');
@@ -165,3 +166,7 @@ export default function CreateEventOrganiser() {
     </>
   );
 }
+
+export default withProtectRoute(CreateEventOrganiser, {
+  redirectTo: '/admin/login',
+});
