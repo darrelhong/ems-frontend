@@ -139,7 +139,7 @@ const MyAccount = () => {
     .then(response => {
       setAccSaved(true);
      setAccSuccess(" Account details saved successfully! ");
-     document.getElementById("account-details-form").reset();
+     //document.getElementById("account-details-form").reset();
 
     }).catch(error =>{
       console.log(error)
