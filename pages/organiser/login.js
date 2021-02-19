@@ -1,8 +1,5 @@
 import PropTypes from 'prop-types';
 
-//import ChakraWrapper from '../../components/ChakraWrapper';
-
-// import NewLoginPage from '../../components/NewLoginPage';
 import LoginPage from '../../components/LoginPage';
 
 // get query params from URL to dispaly relavant feedback

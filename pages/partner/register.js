@@ -10,14 +10,4 @@ export default function OrganiserRegister() {
       registerApiUrl={`/api/${RoleEnum.BIZPTNR}/register/`}
     />
   );
-// export default function OrganiserRegister() {
-//   return (
-
-//       <RegisterPage
-//         title="Join as Business Partner"
-//         registerApiUrl={`/api/user/register/${RoleEnum.BIZPTNR}`}
-//       />
-
-// >>>>>>> upload-profilepic-frontend
-//   );
 }
