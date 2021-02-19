@@ -18,7 +18,7 @@ const getEventOrganisers = async () => {
 
 export default function AdminEventOrg() {
   const queryClient = useQueryClient();
-  const { data } = useQuery('eventOrganisers', getEventOrganisers);
+  const { data, isLoading } = useQuery('eventOrganisers', getEventOrganisers);
 
   const columns = [
     { field: 'id', title: 'ID' },
@@ -48,6 +48,11 @@ export default function AdminEventOrg() {
       </BreadcrumbOne>
 
       <Container className="space-pt--30 space-pb--30">
+        {isLoading && (
+          <div className="spinner-grow" role="status">
+            <span className="sr-only">Loading...</span>
+          </div>
+        )}
         {data && (
           <Row>
             <Col>
