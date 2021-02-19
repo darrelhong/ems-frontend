@@ -2,7 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useQuery, useQueryClient } from 'react-query';
 import MaterialTable from '../../lib/MaterialTable';
-import { Container } from 'react-bootstrap';
+import { Card, Col, Container, Row } from 'react-bootstrap';
 import { CheckCircleOutline, RemoveCircleOutline } from '@material-ui/icons';
 
 import api from '../../lib/ApiClient';
@@ -47,48 +47,63 @@ export default function AdminEventOrg() {
         </ol>
       </BreadcrumbOne>
 
-      <Container>
+      <Container className="space-pt--30 space-pb--30">
         {data && (
-          <div className="table space-pt--30 space-pb--30">
-            <MaterialTable
-              title="Event Organisers"
-              columns={columns}
-              data={data}
-              options={{
-                filtering: true,
-                actionsColumnIndex: -1,
-              }}
-              actions={[
-                (rowData) => ({
-                  icon: CheckCircleOutline,
-                  tooltip: 'Approve organiser',
-                  onClick: (event, rowData) => {
-                    api
-                      .post(`/api/organiser/approve/${rowData.id}`)
-                      .then(() => {
-                        queryClient.invalidateQueries('eventOrganisers');
-                      });
-                  },
-                  disabled: rowData.approved,
-                }),
-                (rowData) => ({
-                  icon: RemoveCircleOutline,
-                  tooltip: 'Reject organiser',
-                  onClick: (event, rowData) => {
-                    api
-                      .post(`/api/organiser/reject/${rowData.id}`, {
-                        message: 'Default message',
-                      })
-                      .then(() => {
-                        queryClient.invalidateQueries('eventOrganisers');
-                      });
-                  },
-                  disabled: !rowData.approved,
-                }),
-              ]}
-            />
-          </div>
+          <Row>
+            <Col>
+              <MaterialTable
+                title="Event Organisers"
+                columns={columns}
+                data={data}
+                options={{
+                  filtering: true,
+                  actionsColumnIndex: -1,
+                }}
+                actions={[
+                  (rowData) => ({
+                    icon: CheckCircleOutline,
+                    tooltip: 'Approve organiser',
+                    onClick: (event, rowData) => {
+                      api
+                        .post(`/api/organiser/approve/${rowData.id}`)
+                        .then(() => {
+                          queryClient.invalidateQueries('eventOrganisers');
+                        });
+                    },
+                    disabled: rowData.approved,
+                  }),
+                  (rowData) => ({
+                    icon: RemoveCircleOutline,
+                    tooltip: 'Reject organiser',
+                    onClick: (event, rowData) => {
+                      api
+                        .post(`/api/organiser/reject/${rowData.id}`, {
+                          message: 'Default message',
+                        })
+                        .then(() => {
+                          queryClient.invalidateQueries('eventOrganisers');
+                        });
+                    },
+                    disabled: !rowData.approved,
+                  }),
+                ]}
+              />
+            </Col>
+          </Row>
         )}
+
+        <Row className="mt-4">
+          <Col md={4}>
+            <Card>
+              <Card.Body>
+                <Card.Text>Create event organiser</Card.Text>
+                <Link href="/admin/eventorg/create">
+                  <button className="btn btn-fill-out btn-sm">Create</button>
+                </Link>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
       </Container>
 
       <FooterOne />
