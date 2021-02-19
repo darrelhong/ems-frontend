@@ -63,7 +63,7 @@ export default function RegisterPage({ title, registerApiUrl }) {
                   <h3>Register</h3>
                 </div>
                 <div>
-                  <form noValidate onSubmit={handleSubmit(onSubmit)}>
+                  <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="form-group">
                       <label htmlFor="name">
                         Name <span className="required">*</span>
@@ -76,7 +76,7 @@ export default function RegisterPage({ title, registerApiUrl }) {
                         required
                         name="name"
                         id="name"
-                        placeholder="Your Name"
+                        placeholder="Your name"
                         ref={register({ required: 'Name is required' })}
                       />
                       <div className="invalid-feedback">
@@ -96,7 +96,7 @@ export default function RegisterPage({ title, registerApiUrl }) {
                         required
                         name="email"
                         id="email"
-                        placeholder="Your Name"
+                        placeholder="Your email"
                         ref={register({ required: 'Email is required' })}
                       />
                       <div className="invalid-feedback">
