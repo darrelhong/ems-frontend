@@ -1,15 +1,15 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { useQuery, useQueryClient } from 'react-query';
-import MaterialTable from '../../lib/MaterialTable';
+import MaterialTable from '../../../lib/MaterialTable';
 import { Card, Col, Container, Row } from 'react-bootstrap';
 import { CheckCircleOutline, RemoveCircleOutline } from '@material-ui/icons';
 
-import api from '../../lib/ApiClient';
+import api from '../../../lib/ApiClient';
 
-import { FooterOne } from '../../components/Footer';
-import AdminHeaderTop from '../../components/Header/AdminHeaderTop';
-import { BreadcrumbOne } from '../../components/Breadcrumb';
+import { FooterOne } from '../../../components/Footer';
+import AdminHeaderTop from '../../../components/Header/AdminHeaderTop';
+import { BreadcrumbOne } from '../../../components/Breadcrumb';
 
 const getEventOrganisers = async () => {
   const { data } = await api.get('/api/organiser/all');
