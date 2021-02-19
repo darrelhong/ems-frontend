@@ -10,13 +10,14 @@ import api from '../../../lib/ApiClient';
 import { FooterOne } from '../../../components/Footer';
 import AdminHeaderTop from '../../../components/Header/AdminHeaderTop';
 import { BreadcrumbOne } from '../../../components/Breadcrumb';
+import withProtectRoute from '../../../components/ProtectRouteWrapper';
 
 const getEventOrganisers = async () => {
   const { data } = await api.get('/api/organiser/all');
   return data;
 };
 
-export default function AdminEventOrg() {
+function AdminEventOrg() {
   const queryClient = useQueryClient();
   const { data, isLoading } = useQuery('eventOrganisers', getEventOrganisers);
 
@@ -115,3 +116,7 @@ export default function AdminEventOrg() {
     </>
   );
 }
+
+export default withProtectRoute(AdminEventOrg, {
+  redirectTo: '/admin/login',
+});
