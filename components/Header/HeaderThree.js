@@ -34,7 +34,7 @@ const HeaderThree = ({ cartItems, navPositionClass }) => {
   return (
     <header
       className={`header-wrap header-wrap--transparent ${
-        scroll > headerHeight ? "is-sticky" : ""
+        scroll > headerHeight ? 'is-sticky' : ''
       }`}
     >
       <div className="bottom-header light-skin light-skin--style-two">
@@ -45,12 +45,12 @@ const HeaderThree = ({ cartItems, navPositionClass }) => {
               <a className="navbar-brand">
                 <img
                   className="logo-light"
-                  src="/assets/images/logo_light.png"
+                  src="/assets/images/eventStop.png"
                   alt="logo"
                 />
                 <img
                   className="logo-dark"
-                  src="/assets/images/logo_dark.png"
+                  src="/assets/images/eventStop.png"
                   alt="logo"
                 />
               </a>
@@ -79,7 +79,7 @@ const HeaderThree = ({ cartItems, navPositionClass }) => {
                     {cartItems.length > 0 ? (
                       <span className="cart-count">{cartItems.length}</span>
                     ) : (
-                      ""
+                      ''
                     )}
                   </a>
                 </Link>
@@ -96,7 +96,7 @@ const HeaderThree = ({ cartItems, navPositionClass }) => {
                         {cartItems.length}
                       </span>
                     ) : (
-                      ""
+                      ''
                     )}
                   </a>
                 </Link>

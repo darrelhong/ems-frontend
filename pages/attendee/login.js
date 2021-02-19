@@ -1,8 +1,5 @@
 import PropTypes from 'prop-types';
 
-//import ChakraWrapper from '../../components/ChakraWrapper';
-
-// import NewLoginPage from '../../components/NewLoginPage';
 import LoginPage from '../../components/LoginPage';
 import RoleEnum from '../../models/RoleEnum';
 
@@ -15,19 +12,18 @@ export const getServerSideProps = async ({ query }) => {
   };
 };
 
-export default function OrganiserLogin({ info }) {
+export default function AttendeeLogin({ info }) {
   return (
-
     <LoginPage
       info={info}
-      heading="Event Organiser Login"
-      loginApiUrl={`/api/user/login/${RoleEnum.EVNTORG}`}
-      loginSuccessUrl="/organiser/home"
-      registerUrl="/organiser/register"
+      heading="Participant Login"
+      loginApiUrl={`/api/user/login/${RoleEnum.ATND}`}
+      loginSuccessUrl="/attendee/home"
+      registerUrl="/attendee/register"
     />
   );
 }
 
-OrganiserLogin.propTypes = {
+AttendeeLogin.propTypes = {
   info: PropTypes.string,
 };

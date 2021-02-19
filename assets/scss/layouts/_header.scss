@@ -320,10 +320,12 @@
 .logo-light,
 .logo-dark {
   display: none;
+  width:150px;
 }
 .dark-skin .logo-dark,
 .light-skin .logo-light {
   display: block;
+  width:150px;
 }
 
 .light-skin {
