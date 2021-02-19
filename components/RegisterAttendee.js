@@ -11,9 +11,6 @@ import { LayoutOne } from '../layouts';
 import AlertModal from 'react-bootstrap/Alert';
 import { FormControl, FormErrorMessage, FormLabel } from '@chakra-ui/react';
 
-import Form from 'react-bootstrap/Form';
-
-import { Select } from '@chakra-ui/select';
 import { useMutation } from 'react-query';
 import api from '../lib/ApiClient';
 
@@ -22,13 +19,15 @@ import NavBar from './NavBar/NavBar';
 import PageContainer from './PageContainer';
 import PasswordInput from './settings/PasswordInput';
 
-export default function RegisterAttendee({ title, registerApiUrl }) {
+
+export default function RegisterAttendee({title, registerApiUrl }) {
   const router = useRouter();
   const { register, handleSubmit, errors, watch } = useForm();
   const [show, setShow] = useState(true);
   const [showSuccess, setShowSuccess] = useState(false);
   const password = useRef({});
   password.current = watch('password', '');
+
 
   const { mutate, isLoading, isError } = useMutation(
     (data) => api.post(registerApiUrl, data),
@@ -37,8 +36,8 @@ export default function RegisterAttendee({ title, registerApiUrl }) {
         // router.push('/organiser/register-success');
         setShowSuccess(true);
       },
-    }
-  );
+    });
+
 
   const onSubmit = async (data) => {
     mutate({
@@ -184,8 +183,7 @@ export default function RegisterAttendee({ title, registerApiUrl }) {
                         dismissible
                       >
                         {' '}
-                        An error occurred creating your account. Please try
-                        again.{' '}
+                        Email has already been exist.{' '}
                       </AlertModal>
                     )}
 
@@ -199,6 +197,7 @@ export default function RegisterAttendee({ title, registerApiUrl }) {
                       You have succesfully registered. Please check your inbox
                       to verify your email.{' '}
                     </AlertModal>
+      
                   </form>
 
                   <div className="form-note text-center space-mt--20">

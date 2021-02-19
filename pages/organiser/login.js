@@ -17,15 +17,7 @@ export const getServerSideProps = async ({ query }) => {
 
 export default function OrganiserLogin({ info }) {
   return (
-    /*
-      <NewLoginPage
-        info={info}
-        heading="Event Organiser Login"
-        loginApiUrl={`/api/user/login/${RoleEnum.EVNTORG}`}
-        loginSuccessUrl="/organiser/profile-account"
-        registerUrl="/organiser/register"
-      />
-*/
+
     <LoginPage
       info={info}
       heading="Event Organiser Login"

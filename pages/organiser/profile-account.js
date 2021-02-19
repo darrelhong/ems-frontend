@@ -40,11 +40,22 @@ const MyAccount = () => {
 
   const { data: user } = useUser(localStorage.getItem('userId'));
   //const profiepicSrcUrl = user?.profilePic;
-  const [profilepicUrl, setProfilepicUrl] = useState(user?.profilePic);
+  const [profilepicUrl, setProfilepicUrl] = useState(
+    '../../public/assets/images/defaultprofilepic.png'
+  );
   // display the inital profile picture
-  useEffect(() => {
-    setProfilepicUrl(user?.profilePic);
-  }, [user?.profilePic]);
+  console.log(user?.profilePic);
+  if (user?.profilePic != null) {
+    useEffect(() => {
+      setProfilepicUrl(user?.profilePic);
+    }, [user?.profilePic]);
+  } else {
+    useEffect(() => {
+      setProfilepicUrl('../../assets/images/defaultprofilepic.png');
+    }, ['../../assets/images/defaultprofilepic.png']);
+  }
+
+
   useEffect(() => {
     setFileName('Choose image');
   }, ['Choose image']);
@@ -88,30 +99,25 @@ const MyAccount = () => {
     logout({ redirectTo: '/organiser/login' });
   };
 
-
-  const { register, handleSubmit } = useForm({
-    defaultValues: { name: user?.name },
-  });
-
-  const mutateAccDetail = useMutation((data) =>
-    api.post('/api/user/update', data, {
-        onSuccess: () => {
-          queryClient.invalidateQueries(['user', user?.id.toString()]);
-        },
-      })
-      .then((response) => {
-        console.log(response);
-        if (response.status == 200) {
-          // show update sucess message
-          setShowSuccessMsg(true);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        // show error message
-        setShowFailedMsg(true);
-      })
-  );
+  // const mutateAccDetail = useMutation((data) =>
+  //   api.post('/api/user/update', data, {
+  //       onSuccess: () => {
+  //         queryClient.invalidateQueries(['user', user?.id.toString()]);
+  //       },
+  //     })
+  //     .then((response) => {
+  //       console.log(response);
+  //       if (response.status == 200) {
+  //         // show update sucess message
+  //         setShowSuccessMsg(true);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       // show error message
+  //       setShowFailedMsg(true);
+  //     })
+  // );
 
   // const mutatePassword = useMutation(
   //   (data) => api.post('/api/user/change-password', data),
@@ -122,8 +128,6 @@ const MyAccount = () => {
   //   logout({ redirectTo: '/organiser/login' });
   // };
 
-
-  const queryClient = useQueryClient();
   const { register, handleSubmit, errors } = useForm({
     defaultValues: { name: user?.name },
   });

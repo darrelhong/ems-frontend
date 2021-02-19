@@ -15,16 +15,13 @@ import {
   FormLabel,
 } from '@chakra-ui/react';
 
-import Form from 'react-bootstrap/Form';
-
-import { Select } from '@chakra-ui/select';
 import { useMutation } from 'react-query';
 import api from '../lib/ApiClient';
 
-import Card from './Card';
-import NavBar from './NavBar/NavBar';
-import PageContainer from './PageContainer';
-import PasswordInput from './settings/PasswordInput';
+// import Card from './Card';
+// import NavBar from './NavBar/NavBar';
+// import PageContainer from './PageContainer';
+// import PasswordInput from './settings/PasswordInput';
 
 export default function RegisterBusinessPartner({ title, registerApiUrl }) {
   const router = useRouter();
