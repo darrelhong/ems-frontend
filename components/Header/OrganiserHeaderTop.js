@@ -16,8 +16,13 @@ const OrganiserHeaderTop = () => {
           <Col>
             <div className="text-right">
               <ul className="header-list">
+<<<<<<< Updated upstream
                 <li>
                   <Link href="/other/wishlist">
+=======
+              <li>
+                  <Link href="/organiser/profile-public">
+>>>>>>> Stashed changes
                     <a>
                       <AiOutlineUser />
                       <span>Profile</span>
