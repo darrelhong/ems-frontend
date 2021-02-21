@@ -3,7 +3,11 @@ import Link from 'next/link';
 import { useQuery, useQueryClient } from 'react-query';
 import MaterialTable from '../../../lib/MaterialTable';
 import { Card, Col, Container, Row } from 'react-bootstrap';
-import { CheckCircleOutline, RemoveCircleOutline } from '@material-ui/icons';
+import {
+  CheckCircleOutline,
+  RemoveCircleOutline,
+  InfoOutlined,
+} from '@material-ui/icons';
 
 import api from '../../../lib/ApiClient';
 
@@ -11,6 +15,7 @@ import { FooterOne } from '../../../components/Footer';
 import AdminHeaderTop from '../../../components/Header/AdminHeaderTop';
 import { BreadcrumbOne } from '../../../components/Breadcrumb';
 import withProtectRoute from '../../../components/ProtectRouteWrapper';
+import { useRouter } from 'next/router';
 
 const getEventOrganisers = async () => {
   const { data } = await api.get('/api/organiser/all');
@@ -18,6 +23,8 @@ const getEventOrganisers = async () => {
 };
 
 function AdminEventOrg() {
+  const router = useRouter();
+
   const queryClient = useQueryClient();
   const { data, isLoading } = useQuery('eventOrganisers', getEventOrganisers);
 
@@ -92,6 +99,13 @@ function AdminEventOrg() {
                     },
                     disabled: !rowData.approved,
                   }),
+                  {
+                    icon: InfoOutlined,
+                    tooltip: 'View event organiser',
+                    onClick: (event, rowData) => {
+                      router.push(`eventorg/${rowData.id}`);
+                    },
+                  },
                 ]}
               />
             </Col>
