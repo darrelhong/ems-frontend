@@ -2,9 +2,24 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 // import { LayoutOne } from '../../layouts';
 import { BreadcrumbOne } from '../../components/Breadcrumb';
-import { Container, Row, Col } from 'react-bootstrap';
+import {
+  Container,
+  Row,
+  Col,
+  OverlayTrigger,
+  Tooltip,
+  Tab,
+  Nav,
+  Card,
+  Form,
+  Button,
+  Modal,
+  Image,
+  Alert
+} from 'react-bootstrap';
 import {FaRegEdit } from 'react-icons/fa';
 import OrganiserWrapper from '../../components/wrapper/OrganiserWrapper';
+import { BsFillInfoCircleFill } from 'react-icons/bs';
 
 import {
   IoIosCash,
@@ -12,19 +27,13 @@ import {
   IoIosSettings,
   IoIosRadioButtonOn,
 } from 'react-icons/io';
-import Tab from 'react-bootstrap/Tab';
-import Nav from 'react-bootstrap/Nav';
-import Card from 'react-bootstrap/Card';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
+
 import { useForm } from 'react-hook-form';
 import useUser from '../../lib/query/useUser';
 import { useMutation, useQueryClient } from 'react-query';
 import api from '../../lib/ApiClient';
 import { logout } from '../../lib/auth';
-import Image from 'react-bootstrap/Image';
-import Alert from 'react-bootstrap/Alert';
+
 
 const MyAccount = () => {
   // const [show, setShow] = useState(false);
@@ -77,8 +86,14 @@ const MyAccount = () => {
   const [pwAlert, setPWAlert] = useState("");
   //show pw error alert
   const [showPW, setShowPW] = useState(false);
-
+ const [showFileSizeError, setShowFileSizeError] = useState(false);
   
+   const renderTooltip = (props) => (
+     <Tooltip id="button-tooltip" {...props}>
+       Support png and jpg image format.
+     </Tooltip>
+   );
+
   const mutateAccStatus = useMutation(
 
     (data) => api.post('/api/user/update-account-status', data),
@@ -186,16 +201,26 @@ const MyAccount = () => {
     console.log('call handleFileChange');
     console.log(e);
     console.log(e.target.files[0].name);
-    setFile(e.target.files[0]);
-    setfileUpload(true);
-    setFileName(e.target.files[0].name);
+    console.log(e.target.files[0].size);
+      console.log(e.target.files[0].size/1000000);
+  
+      if(e.target.files[0].size/1000000 > 1 || e.target.files[0].name == ''){
+            console.log("exceeded");
+            setShowFileSizeError(true);
+            document.getElementById('custom-file').value = '';
+          }else{
+            setShowFileSizeError(false);
+             setFile(e.target.files[0]);
+             setfileUpload(true);
+             setFileName(e.target.files[0].name);
+          }
   };
   const submitFile = async () => {
     const data = new FormData();
     //if(file name is not empty..... handle condition when no file is selected)
     data.append('file', file);
     api
-      .post('/api/uploadFile', data, {
+      .post('/api/uploadProfilePicFile', data, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -389,7 +414,16 @@ const MyAccount = () => {
                       </Card.Header>
                       <Card.Body>
                         <div className="account-details-form">
-                          <label>Profile Picture</label>
+                          <label>
+                            Profile Picture &nbsp;
+                            <OverlayTrigger
+                              placement="right"
+                              delay={{ show: 250, hide: 400 }}
+                              overlay={renderTooltip}
+                            >
+                              <BsFillInfoCircleFill></BsFillInfoCircleFill>
+                            </OverlayTrigger>
+                          </label>
                           <Row>
                             <Col className="form-group" xs={10} md={6}>
                               <Image
@@ -412,6 +446,7 @@ const MyAccount = () => {
                                     type="file"
                                     onChange={handleFileChange}
                                     custom
+                                    accept=".png,.jpg"
                                   />
                                   <Form.Label
                                     className="form-group custom-file-label"
@@ -431,6 +466,28 @@ const MyAccount = () => {
                                   </button>
                                   </div> */}
                                 </Form.Group>
+                         
+                                <div
+                                  style={{
+                                    display: showFileSizeError
+                                      ? 'block'
+                                      : 'none',
+                                  }}
+                                >
+                                  {
+                                    <Alert
+                                      show={showFileSizeError}
+                                      variant="danger"
+                                      onClose={() =>
+                                        setShowFileSizeError(false)
+                                      }
+                                      dismissible
+                                    >
+                                      {' '}
+                                      The image size must be less than 3 mb.{' '}
+                                    </Alert>
+                                  }
+                                </div>
                               </Col>
                             </Row>
 
@@ -521,10 +578,9 @@ const MyAccount = () => {
                                 >
                                   Save
                                 </button>
-
-                        
                               </Col>
                             </Row>
+
                             <div>&nbsp;</div>
                             <Alert
                               show={showAccSaved}
