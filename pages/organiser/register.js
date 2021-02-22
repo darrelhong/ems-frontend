@@ -1,5 +1,5 @@
 import RoleEnum from '../../models/RoleEnum';
-import RegisterPage from '../../components/RegisterEvnOrg';
+import RegisterPage from '../../components/RegisterEventOrganiser';
 
 export default function OrganiserRegister() {
   return (
