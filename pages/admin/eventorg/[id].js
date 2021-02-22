@@ -79,22 +79,52 @@ function EventOrganiserDetails({ id }) {
 
               <dt className="col-sm-3">Address</dt>
               <dd className="col-sm-9">{eo.address || '-'}</dd>
+
+              <dt className="col-sm-3">Status</dt>
+              <dd className="col-sm-9">
+                <ul className="list-unstyled">
+                  <li>
+                    {eo.enabled ? 'Account is enabled' : 'Account is disabled'}
+                  </li>
+                  <li>
+                    {eo.approved
+                      ? 'Account is approved'
+                      : 'Account is not approved'}
+                  </li>
+                </ul>
+              </dd>
             </dl>
 
             <Row>
               <Col md={5} className="mb-4">
-                <button type="button" className="btn btn-success btn-sm">
+                <button
+                  type="button"
+                  className="btn btn-success btn-sm"
+                  disabled={eo.approved}
+                >
                   Approve
                 </button>
-                <button type="button" className="btn btn-danger btn-sm">
+                <button
+                  type="button"
+                  className="btn btn-danger btn-sm"
+                  disabled={!eo.approved}
+                >
                   Reject
                 </button>
               </Col>
               <Col md={5}>
-                <button type="button" className="btn btn-success btn-sm">
+                <button
+                  type="button"
+                  className="btn btn-success btn-sm"
+                  disabled={eo.enabled}
+                >
                   Enable
                 </button>
-                <button type="button" className="btn btn-danger btn-sm">
+                <button
+                  type="button"
+                  className="btn btn-danger btn-sm"
+                  disabled={!eo.enabled}
+                >
                   Disable
                 </button>
               </Col>
