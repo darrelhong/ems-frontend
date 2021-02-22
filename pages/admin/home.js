@@ -51,6 +51,17 @@ function AdminHome() {
               </Card.Body>
             </Card>
           </Col>
+          <Col sm={6} lg={4}>
+            <Card>
+              <Card.Header>Business partners</Card.Header>
+              <Card.Body>
+                <Card.Text>View business partners</Card.Text>
+                <Link href="/admin/bizpartners">
+                  <button className="btn btn-fill-out btn-sm">View</button>
+                </Link>
+              </Card.Body>
+            </Card>
+          </Col>
         </Row>
       </Container>
 
