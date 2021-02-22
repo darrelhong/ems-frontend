@@ -4,8 +4,6 @@ Routes are protected simply by checking whether there is a `token` cookie, if no
 
 ## Libraries used (good to know)
 
-Chakra UI - [https://chakra-ui.com/](https://chakra-ui.com/)
-
 **IMPT**
 React Query - [https://react-query.tanstack.com/](https://react-query.tanstack.com/)
 
