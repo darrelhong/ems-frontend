@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 import api from '../../../lib/ApiClient';
 
@@ -25,9 +25,39 @@ export async function getServerSideProps({ query }) {
 }
 
 function EventOrganiserDetails({ id }) {
+  // onClick handlers
+  const queryClient = useQueryClient();
+  const useMutationInvalidate = (fn, options) =>
+    useMutation(fn, {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['organiser', id]);
+      },
+      ...options,
+    });
+
+  const { mutate: approve } = useMutationInvalidate((id) =>
+    api.post(`/api/organiser/approve/${id}`)
+  );
+
+  const { mutate: reject } = useMutationInvalidate((id) =>
+    api.post(`/api/organiser/reject/${id}`, {
+      message: 'Default message',
+    })
+  );
+
+  const { mutate: enable } = useMutationInvalidate((id) =>
+    api.post(`/api/user/enable/${id}`)
+  );
+
+  const { mutate: disable } = useMutationInvalidate((id) =>
+    api.post(`/api/user/disable/${id}`)
+  );
+
+  // data fetching
   const { data: eo, isLoading } = useQuery(['organiser', id], () =>
     getEventOrganiser(id)
   );
+
   return (
     <>
       <Head>
@@ -101,6 +131,7 @@ function EventOrganiserDetails({ id }) {
                   type="button"
                   className="btn btn-success btn-sm"
                   disabled={eo.approved}
+                  onClick={() => approve(id)}
                 >
                   Approve
                 </button>
@@ -108,6 +139,7 @@ function EventOrganiserDetails({ id }) {
                   type="button"
                   className="btn btn-danger btn-sm"
                   disabled={!eo.approved}
+                  onClick={() => reject(id)}
                 >
                   Reject
                 </button>
@@ -117,6 +149,7 @@ function EventOrganiserDetails({ id }) {
                   type="button"
                   className="btn btn-success btn-sm"
                   disabled={eo.enabled}
+                  onClick={() => enable(id)}
                 >
                   Enable
                 </button>
@@ -124,6 +157,7 @@ function EventOrganiserDetails({ id }) {
                   type="button"
                   className="btn btn-danger btn-sm"
                   disabled={!eo.enabled}
+                  onClick={() => disable(id)}
                 >
                   Disable
                 </button>
