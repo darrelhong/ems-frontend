@@ -4,57 +4,20 @@ import { connect } from "react-redux";
 import { BreadcrumbOne } from '../../../components/Breadcrumb';
 import { Container, Row, Col } from "react-bootstrap";
 import OrganiserWrapper from '../../../components/wrapper/OrganiserWrapper';
-import { getAllEventsByOrganiser } from "../../../lib/query/eventApi";
-import { LayoutOne } from "../../../layouts";
-import { Sidebar, ShopHeader, ShopProducts } from "../../../components/Shop";
-import EventView from "../../../components/Event/EventView";
-import useUser from '../../../lib/query/useUser';
+import api from "../../../lib/ApiClient";
 
 
 function myEvents() {
     const [events, setEvents] = useState([]);
-    //test
-    const { data: user } = useUser(localStorage.getItem('userId'));
-    console.log("user", user);
-    const [sortType, setSortType] = useState("");
-    const [sortValue, setSortValue] = useState("");
-    const [filterSortType, setFilterSortType] = useState("");
-    const [filterSortValue, setFilterSortValue] = useState("");
-    const [shopTopFilterStatus, setShopTopFilterStatus] = useState(false);
-    const [layout, setLayout] = useState("list");
-    const [offset, setOffset] = useState(0);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [currentData, setCurrentData] = useState([]);
-
-    const pageLimit = 12;
-
 
     useEffect(() => {
-        if (user != null) {
-            const getEvents = async () => {
-                const data = await getAllEventsByOrganiser(user.id);
-                setEvents(data);
+        const getEvents = async () => {
+            const { data } = await api.get("/api/event/all");
 
-            }
-            getEvents();
-            setCurrentData(events.slice(offset, offset + pageLimit));
+            setEvents(data);
         }
-
-    }, [offset, user]);
-
-    const getLayout = (layout) => {
-        setLayout(layout);
-    };
-
-    const getSortParams = (sortType, sortValue) => {
-        setSortType(sortType);
-        setSortValue(sortValue);
-    };
-
-    const getFilterSortParams = (sortType, sortValue) => {
-        setFilterSortType(sortType);
-        setFilterSortValue(sortValue);
-    };
+        getEvents();
+    }, []);
 
     return (
         <div>
