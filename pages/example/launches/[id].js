@@ -8,26 +8,26 @@ import PageContainer from '../../../components/PageContainer';
 import NavBar from '../../../components/NavBar/NavBar';
 import ChakraWrapper from '../../../components/ChakraWrapper';
 
-export const getStaticPaths = async () => {
-  const { launchesPast } = await request(
-    'https://api.spacex.land/graphql/',
-    gql`
-      {
-        launchesPast(limit: 10) {
-          id
-        }
-      }
-    `
-  );
-  const paths = launchesPast.map(({ id }) => ({
-    params: { id },
-  }));
+// export const getStaticPaths = async () => {
+//   const { launchesPast } = await request(
+//     'https://api.spacex.land/graphql/',
+//     gql`
+//       {
+//         launchesPast(limit: 10) {
+//           id
+//         }
+//       }
+//     `
+//   );
+//   const paths = launchesPast.map(({ id }) => ({
+//     params: { id },
+//   }));
 
-  return {
-    paths,
-    fallback: false,
-  };
-};
+//   return {
+//     paths,
+//     fallback: false,
+//   };
+// };
 
 const getLaunch = async (id) => {
   const { launch } = await request(
@@ -52,8 +52,8 @@ const getLaunch = async (id) => {
   return launch;
 };
 
-export const getStaticProps = async ({ params }) => {
-  const id = params.id;
+export const getServerSideProps = async ({ query }) => {
+  const id = query.id;
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery(['launch', id], () => getLaunch(id));
 
