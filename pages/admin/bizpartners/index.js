@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 import { InfoOutlined } from '@material-ui/icons';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Card, Col, Container, Row } from 'react-bootstrap';
 
 import api from '../../../lib/ApiClient';
 
@@ -80,6 +80,19 @@ function AdminBusinessParters() {
             </Col>
           </Row>
         )}
+
+        <Row className="mt-4">
+          <Col md={4}>
+            <Card>
+              <Card.Body>
+                <Card.Text>Create business partner</Card.Text>
+                <Link href="/admin/bizpartners/create">
+                  <button className="btn btn-fill-out btn-sm">Create</button>
+                </Link>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
       </Container>
 
       <FooterOne />
