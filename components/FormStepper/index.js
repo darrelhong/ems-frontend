@@ -8,6 +8,8 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { Col } from 'react-bootstrap';
+import Nav from 'react-bootstrap/Nav';
+import { IoIosSearch, IoIosMenu } from 'react-icons/io';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,7 +28,22 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function getSteps() {
-  return ['Select campaign settings', 'Create an ad group', 'Create an ad'];
+  return [
+    {
+      label: 'Event Details',
+      eventKey: 'accountDetails',
+    },
+    {
+      label: 'Online / Physical',
+      eventKey: 'orders',
+    },
+    {
+      label: 'Event Images',
+      eventKey: 'download',
+    },
+  ];
+
+  // return ['Select campaign settings', 'Create an ad group', 'Create an ad'];
 }
 
 function getStepContent(step) {
@@ -64,38 +81,57 @@ export default function VerticalLinearStepper() {
     setActiveStep(0);
   };
 
+  const getStepIconComponent = (index) => {
+    if (index < 1) {
+      return <IoIosMenu />;
+    } else return <IoIosSearch />;
+  };
+
+  const navigateStepper = (index) => {
+    setActiveStep(index);
+  };
+
   return (
     // <div className={classes.root}>
     <Col lg={3} md={4}>
-      <Stepper activeStep={activeStep} orientation="vertical">
-        {steps.map((label, index) => (
-          <Step key={label}>
-            <StepLabel>{label}</StepLabel>
-            <StepContent>
-              <Typography>{getStepContent(index)}</Typography>
-              <div className={classes.actionsContainer}>
-                <div>
-                  <Button
-                    disabled={activeStep === 0}
-                    onClick={handleBack}
-                    className={classes.button}
-                  >
-                    Back
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleNext}
-                    className={classes.button}
-                  >
-                    {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                  </Button>
+      <Nav>
+        <Stepper activeStep={activeStep} orientation="vertical">
+          {steps.map((step, index) => (
+            <Step key={index}>
+              <Nav.Link eventKey={step.eventKey}>
+                <StepLabel
+                  StepIconComponent={() => getStepIconComponent(index)}
+                  onClick={() => navigateStepper(index)}
+                >
+                  {step.label}
+                </StepLabel>
+              </Nav.Link>
+              <StepContent>
+                <Typography>{getStepContent(index)}</Typography>
+                <div className={classes.actionsContainer}>
+                  <div>
+                    <Button
+                      disabled={activeStep === 0}
+                      onClick={handleBack}
+                      className={classes.button}
+                    >
+                      Back
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleNext}
+                      className={classes.button}
+                    >
+                      {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            </StepContent>
-          </Step>
-        ))}
-      </Stepper>
+              </StepContent>
+            </Step>
+          ))}
+        </Stepper>
+      </Nav>
       {activeStep === steps.length && (
         <Paper square elevation={0} className={classes.resetContainer}>
           <Typography>All steps completed - you&apos;re finished</Typography>
