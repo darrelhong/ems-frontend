@@ -316,7 +316,7 @@ export default function CreateEvent() {
                     <TicketingPane register={register} />
                   </Tab.Pane>
                   <Tab.Pane eventKey="onlinePhysical">
-                    <OnlinePhysicalPane register={register} />
+                    <OnlinePhysicalPane register={register} watch={watch} />
                   </Tab.Pane>
                 </Tab.Content>
               </Col>

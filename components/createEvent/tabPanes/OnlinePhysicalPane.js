@@ -2,7 +2,7 @@ import { Row, Col } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import PropTypes from 'prop-types';
 
-const OnlinePhysicalPane = ({ register }) => {
+const OnlinePhysicalPane = ({ register, watch }) => {
   return (
     <Card className="my-account-content__content">
       <Card.Header>
@@ -13,15 +13,34 @@ const OnlinePhysicalPane = ({ register }) => {
           <form method="post" name="enq">
             <Row>
               <Col className="form-group" md={12}>
-                <label>Ticket Price</label>
-                <input
-                  className="form-control"
-                  name="ticketPrice"
-                  type="number"
-                  step="0.1"
-                  ref={register()}
-                />
+                <label>
+                  <input
+                    className="form-control"
+                    name="isPhysical"
+                    type="radio"
+                    ref={register()}
+                    value={true}
+                    style={{ width: '1em' }}
+                  />
+                  Physical
+                </label>
+                <label>
+                  <input
+                    className="form-control"
+                    name="isPhysical"
+                    type="radio"
+                    ref={register()}
+                    value={false}
+                    style={{ width: '1em' }}
+                  />
+                  Online
+                </label>
               </Col>
+              {watch('isPhysical') ? (
+                <h1>{watch('isPhysical')}</h1>
+              ) : (
+                <h1>{watch('isPhysical')}</h1>
+              )}
               <Col className="form-group" md={12}>
                 <label>Ticket Capacity</label>
                 <input
@@ -41,7 +60,7 @@ const OnlinePhysicalPane = ({ register }) => {
 
 OnlinePhysicalPane.propTypes = {
   register: PropTypes.func,
-  getValues: PropTypes.func,
+  watch: PropTypes.func,
 };
 
 export default OnlinePhysicalPane;
