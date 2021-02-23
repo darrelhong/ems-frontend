@@ -42,6 +42,10 @@ function getSteps() {
       eventKey: 'orders',
     },
     {
+      label: 'Ticketing',
+      eventKey: 'ticketing',
+    },
+    {
       label: 'Event Images',
       eventKey: 'download',
     },

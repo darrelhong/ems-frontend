@@ -3,13 +3,20 @@ import { Container, Row, Col } from 'react-bootstrap';
 import Tab from 'react-bootstrap/Tab';
 import Card from 'react-bootstrap/Card';
 import { FaCloudDownloadAlt, FaRegEdit } from 'react-icons/fa';
-
+import { useForm } from 'react-hook-form';
 import { BreadcrumbOne } from '../../../components/Breadcrumb';
 import OrganiserWrapper from '../../../components/wrapper/OrganiserWrapper';
 import VerticalLineStepper from '../../../components/createEvent/VerticalLineStepper';
 import EventDetailsPane from '../../../components/createEvent/tabPanes/EventDetailsPane';
+import TicketingPane from '../../../components/createEvent/tabPanes/TicketingPane';
 
 export default function CreateEvent() {
+  const { control, register, handleSubmit } = useForm();
+
+  const onSubmit = (data) => {
+    console.log(data);
+  };
+
   return (
     <OrganiserWrapper title="Create New Event">
       <BreadcrumbOne pageTitle="Create New Event">
@@ -296,7 +303,20 @@ export default function CreateEvent() {
                     </Card>
                   </Tab.Pane>
                   <Tab.Pane eventKey="eventDetails">
-                    <EventDetailsPane />
+                    <EventDetailsPane
+                      onSubmit={onSubmit}
+                      control={control}
+                      register={register}
+                      handleSubmit={handleSubmit}
+                    />
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="ticketing">
+                    <TicketingPane
+                      onSubmit={onSubmit}
+                      control={control}
+                      register={register}
+                      handleSubmit={handleSubmit}
+                    />
                   </Tab.Pane>
                 </Tab.Content>
               </Col>

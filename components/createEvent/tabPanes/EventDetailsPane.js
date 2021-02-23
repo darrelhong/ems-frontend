@@ -1,17 +1,8 @@
 import { Row, Col } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
-// import Cookies from 'js-cookie';
-import { useForm } from 'react-hook-form';
+import PropTypes from 'prop-types';
 
-// const token = Cookies.get('token');
-
-const EventDetailsPane = () => {
-  const { register, handleSubmit } = useForm();
-
-  const onSubmit = (data) => {
-    console.log(data);
-  };
-
+const EventDetailsPane = ({ register, handleSubmit, onSubmit }) => {
   return (
     <Card className="my-account-content__content">
       <Card.Header>
@@ -66,7 +57,7 @@ const EventDetailsPane = () => {
                   ref={register()}
                 />
               </Col>
-              <Col className="form-group" md={12}>
+              {/* <Col className="form-group" md={12}>
                 <label>Ticket Price</label>
                 <input
                   className="form-control"
@@ -84,7 +75,7 @@ const EventDetailsPane = () => {
                   type="number"
                   ref={register()}
                 />
-              </Col>
+              </Col> */}
               <Col md={12}>
                 <button
                   type="submit"
@@ -101,6 +92,13 @@ const EventDetailsPane = () => {
       </Card.Body>
     </Card>
   );
+};
+
+EventDetailsPane.propTypes = {
+  register: PropTypes.func,
+  handleSubmit: PropTypes.func,
+  onSubmit: PropTypes.func,
+  //onSubmit shouldnt be here actually will shift it out soon
 };
 
 export default EventDetailsPane;
