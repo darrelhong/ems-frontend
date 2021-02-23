@@ -39,7 +39,7 @@ function getSteps() {
     },
     {
       label: 'Online / Physical',
-      eventKey: 'orders',
+      eventKey: 'onlinePhysical',
     },
     {
       label: 'Ticketing',

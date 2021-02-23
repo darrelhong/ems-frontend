@@ -2,7 +2,21 @@ import { Row, Col } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import PropTypes from 'prop-types';
 
-const EventDetailsPane = ({ register, handleSubmit, onSubmit }) => {
+const EventDetailsPane = ({ register, handleSubmit, onSubmit, watch }) => {
+  const renderDateError = () => {
+    if (
+      watch('startDate') &&
+      watch('endDate') &&
+      watch('endDate') < watch('startDate')
+    ) {
+      return (
+        <span style={{ color: 'red' }}>
+          End date must be the same as or after start date!
+        </span>
+      );
+    }
+  };
+
   return (
     <Card className="my-account-content__content">
       <Card.Header>
@@ -26,18 +40,6 @@ const EventDetailsPane = ({ register, handleSubmit, onSubmit }) => {
               </Col>
               <Col className="form-group" md={12}>
                 <label>
-                  Address <span className="required">*</span>
-                </label>
-                <input
-                  required
-                  className="form-control"
-                  name="address"
-                  type="text"
-                  ref={register()}
-                />
-              </Col>
-              <Col className="form-group" md={12}>
-                <label>
                   Event Description <span className="required">*</span>
                 </label>
                 <textarea
@@ -48,6 +50,20 @@ const EventDetailsPane = ({ register, handleSubmit, onSubmit }) => {
                   ref={register()}
                 />
               </Col>
+              {/* probably need some caption saying either online or physical would do, or shift to online/physical */}
+              <Col className="form-group" md={12}>
+                <label>
+                  Address <span className="required">*</span>
+                </label>
+                <input
+                  required
+                  className="form-control"
+                  name="address"
+                  type="text"
+                  ref={register()}
+                />
+              </Col>
+
               <Col className="form-group" md={12}>
                 <label>Event Website (if any)</label>
                 <input
@@ -57,25 +73,27 @@ const EventDetailsPane = ({ register, handleSubmit, onSubmit }) => {
                   ref={register()}
                 />
               </Col>
-              {/* <Col className="form-group" md={12}>
-                <label>Ticket Price</label>
+
+              <Col className="form-group" md={12}>
+                <label>Start Date</label>
                 <input
                   className="form-control"
-                  name="ticketPrice"
-                  type="number"
-                  step="0.1"
+                  name="startDate"
+                  type="date"
                   ref={register()}
                 />
               </Col>
+
               <Col className="form-group" md={12}>
-                <label>Ticket Capacity</label>
+                <label>End Date</label>
                 <input
                   className="form-control"
-                  name="ticketCapacity"
-                  type="number"
+                  name="endDate"
+                  type="date"
                   ref={register()}
                 />
-              </Col> */}
+                {renderDateError()}
+              </Col>
               <Col md={12}>
                 <button
                   type="submit"
@@ -98,6 +116,7 @@ EventDetailsPane.propTypes = {
   register: PropTypes.func,
   handleSubmit: PropTypes.func,
   onSubmit: PropTypes.func,
+  watch: PropTypes.func,
   //onSubmit shouldnt be here actually will shift it out soon
 };
 

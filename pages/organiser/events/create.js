@@ -9,9 +9,10 @@ import OrganiserWrapper from '../../../components/wrapper/OrganiserWrapper';
 import VerticalLineStepper from '../../../components/createEvent/VerticalLineStepper';
 import EventDetailsPane from '../../../components/createEvent/tabPanes/EventDetailsPane';
 import TicketingPane from '../../../components/createEvent/tabPanes/TicketingPane';
+import OnlinePhysicalPane from '../../../components/createEvent/tabPanes/OnlinePhysicalPane';
 
 export default function CreateEvent() {
-  const { control, register, handleSubmit } = useForm();
+  const { control, register, handleSubmit, watch } = useForm();
 
   const onSubmit = (data) => {
     console.log(data);
@@ -308,15 +309,14 @@ export default function CreateEvent() {
                       control={control}
                       register={register}
                       handleSubmit={handleSubmit}
+                      watch={watch}
                     />
                   </Tab.Pane>
                   <Tab.Pane eventKey="ticketing">
-                    <TicketingPane
-                      onSubmit={onSubmit}
-                      control={control}
-                      register={register}
-                      handleSubmit={handleSubmit}
-                    />
+                    <TicketingPane register={register} />
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="onlinePhysical">
+                    <OnlinePhysicalPane register={register} />
                   </Tab.Pane>
                 </Tab.Content>
               </Col>
