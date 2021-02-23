@@ -53,7 +53,7 @@ const MyAccount = () => {
     '../../public/assets/images/defaultprofilepic.png'
   );
   // display the inital profile picture
-  console.log(user?.profilePic);
+  //console.log(user?.profilePic);
   if (user?.profilePic != null) {
     useEffect(() => {
       setProfilepicUrl(user?.profilePic);
@@ -243,57 +243,92 @@ const MyAccount = () => {
       });
   };
 
-  const mutatePassword = useMutation(
+  const mutatePassword = useMutation((data) => {
+ 
+    api.post('/api/user/change-password', data,{
+     
+    }).then(response =>{
+          console.log(response.data['message']);
+      if(response.data["message"] == "Success"){
+        
+        document.getElementById('change-password-form').reset();
+        setPWAlert('Your password has been updated successfully!');
   
-    (data) => api.post('/api/user/change-password', data)
-    .then(response =>{
-      document.getElementById("change-password-form").reset();
-      setPWAlert("Your password has been updated successfully!");
+        setConfirmPW(true);
+        setShowPW(true);
+      
+      }else if(response.data["message"] == "Old password is incorrect."){
+      
+      setPWAlert('Old password is incorrect.');
+      setShowPW(true);
+      }
     }).catch(error =>{
       console.log(error)
-      setConfirmPW(false);
+     
       setPWAlert("An error has occured.");
       setShowPW(true);
     })
     
+  });
+
+  const mutateNotificationSetting = useMutation((data) =>
+    api
+      .post('/api/user/update-notifcation-setting', data)
+      .then((response) => {
+       
+      })
+      .catch((error) => {
+       
+      })
   );
 
 
-  // const onSubmit = async (data) => {
-  //   console.log('data acc' + data["name"]);
-  //   mutateAccDetail.mutate({
-  //     address: data.address,
-  //     description: data.description,
-  //     name: data.name,
-  //     phonenumber: data.phonenumber,
-  //     id: user?.id,
-  //   });    
-
-  // };
-
   const onSubmitPassword = async (data) => {
+    console.log("onsubmit password1")
     setPWAlert("");
-    validatePassword(data.oldPassword, data.newPassword, data.confirmPassword);  
-    if(confirmPW) { 
-      setShowPW(false);
+    setShowPW(false);
+    setConfirmPW(false);
+
+    var result = validatePassword(data.oldPassword, data.newPassword, data.confirmPassword);  
+    console.log("result");
+    console.log(result);
+
+    if(result == "correct") {
+      //setConfirmPW(true);
+      //setShowPW(false);
+      console.log('onsubmit password2');
       mutatePassword.mutate({
         oldPassword: data.oldPassword,
         newPassword: data.newPassword,
       });
-  }
+    }else if(result =="same as current"){
+      setPWAlert("Your current password is the same as the new password.");
+      setShowPW(true);
+      setConfirmPW(false);
+    }else if(result == "incorrect"){
+      setPWAlert("Passwords do not match.");
+      setShowPW(true);
+      setConfirmPW(false);
+    }
   };
+
+  const onSubmitNotification = async (data) =>{
+
+  }
 
   function validatePassword (oldPassword, newPassword, confirmPassword)  {
 
-
-      if(JSON.stringify(newPassword) === JSON.stringify(confirmPassword) && (JSON.stringify(oldPassword) != JSON.stringify(newPassword))){
-        setConfirmPW(true);
-      } else if(JSON.stringify(oldPassword) === JSON.stringify(newPassword)){
-        setPWAlert("Your current password is the same as the new password.");
-        setShowPW(true);
+   if(JSON.stringify(newPassword) === JSON.stringify(confirmPassword) && (JSON.stringify(oldPassword) != JSON.stringify(newPassword))){
+       // setConfirmPW(true);
+       return "correct";
+    } else if(JSON.stringify(oldPassword) === JSON.stringify(newPassword)){
+       return "same as current";
+        // setPWAlert("Your current password is the same as the new password.");
+        //setShowPW(true);
     }else{
-        setPWAlert("Passwords do not match.");
-        setShowPW(true);
+       return "incorrect";
+      //setPWAlert("Passwords do not match.");
+        //setShowPW(true);
       }
   }
 
@@ -343,6 +378,11 @@ const MyAccount = () => {
                   <Nav.Item>
                     <Nav.Link eventKey="changePassword">
                       <IoIosSettings /> Change Password
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey="notification">
+                      <IoIosCash /> Notification
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
@@ -451,7 +491,6 @@ const MyAccount = () => {
                                   <Form.Label
                                     className="form-group custom-file-label"
                                     md={12}
-                                    for="custom-file"
                                   >
                                     {fileName}
                                   </Form.Label>
@@ -466,7 +505,7 @@ const MyAccount = () => {
                                   </button>
                                   </div> */}
                                 </Form.Group>
-                         
+
                                 <div
                                   style={{
                                     display: showFileSizeError
@@ -551,7 +590,7 @@ const MyAccount = () => {
                                   ref={register()}
                                   placeholder="xxxxxxxx"
                                   pattern="[0-9]{8}"
-                                  maxlength="8"
+                                  maxLength="8"
                                 />
                               </Col>
                               <Col className="form-group" md={12}>
@@ -591,6 +630,52 @@ const MyAccount = () => {
                               {accSuccess}
                             </Alert>
                           </form>
+                        </div>
+                      </Card.Body>
+                    </Card>
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="notification">
+                    <Card className="my-account-content__content">
+                      <Card.Header>
+                        <h3>Notification Settings</h3>
+                      </Card.Header>
+                      <Card.Body>
+                        <div className="account-details-form">
+                          {/* <form
+                            id="notifcation-setting-form"
+                            onSubmit={handleSubmit(onSubmitNotification)}
+                          >
+                            <Col className="form-group" md={12}>
+                              <Form>
+                                {['checkbox'].map((type) => (
+                                  <div key={`default-${type}`} className="mb-3">
+                                    <Form.Check
+                                      type={type}
+                                      id={`default-${type}`}
+                                      label={'Receive updates for upcoming events [need discuss eo receive what?]'}
+                                    />
+
+                                    <Form.Check
+                                      type={type}
+                                      id={`default-${type}`}
+                                      label={`default ${type}`}
+                                    />
+                                  </div>
+                                ))}
+                              </Form>
+                            </Col>
+
+                            <Col>
+                              <button
+                                type="submit"
+                                className="btn btn-fill-out"
+                                name="submit"
+                                value="Submit"
+                              >
+                                Save
+                              </button>
+                            </Col>
+                          </form> */}
                         </div>
                       </Card.Body>
                     </Card>
@@ -663,25 +748,25 @@ const MyAccount = () => {
                                 Save
                               </button>
                             </Col>
-                          </form>
 
-                          <div>&nbsp;</div>
-                          <Alert
-                            show={confirmPW}
-                            variant="success"
-                            onClose={() => setConfirmPW(false)}
-                            dismissible
-                          >
-                            {pwAlert}
-                          </Alert>
-                          <Alert
-                            show={!confirmPW && showPW}
-                            onClose={() => setShowPW(false)}
-                            variant="danger"
-                            dismissible
-                          >
-                            {pwAlert}
-                          </Alert>
+                            <div>&nbsp;</div>
+                            <Alert
+                              show={confirmPW}
+                              variant="success"
+                              onClose={() => setConfirmPW(false)}
+                              dismissible
+                            >
+                              {pwAlert}
+                            </Alert>
+                            <Alert
+                              show={!confirmPW && showPW}
+                              onClose={() => setShowPW(false)}
+                              variant="danger"
+                              dismissible
+                            >
+                              {pwAlert}
+                            </Alert>
+                          </form>
                         </div>
                       </Card.Body>
                     </Card>
