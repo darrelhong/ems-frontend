@@ -304,11 +304,9 @@ const MyAccount = () => {
     }else if(result =="same as current"){
       setPWAlert("Your current password is the same as the new password.");
       setShowPW(true);
-      setConfirmPW(false);
     }else if(result == "incorrect"){
       setPWAlert("Passwords do not match.");
       setShowPW(true);
-      setConfirmPW(false);
     }
   };
 

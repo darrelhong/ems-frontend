@@ -18,6 +18,7 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
   const { register, handleSubmit, errors, watch } = useForm();
   const [show, setShow] = useState(true);
   const [showFileSizeError, setShowFileSizeError] = useState(false);
+  const [showUserAlrExistError, setShowUserAlrExistError] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const password = useRef({});
   password.current = watch('password', '');
@@ -92,8 +93,19 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
            .then((response) => {
              console.log(response);
              if (response.status == 200) {
-               setShowSuccess(true);
-               // submitFile();
+
+              document.getElementById('register-form').reset();
+               console.log(response.data["message"]);
+               if (response.data['message'] == 'alreadyExisted') {
+
+                  setShowUserAlrExistError(true);
+                  setShowSuccess(false);
+
+                  
+               } else if(response.data['message'] == 'success') {
+                 setShowSuccess(true);
+                 setShowUserAlrExistError(false);
+               }
              }
            })
            .catch((error) => {
@@ -181,7 +193,7 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
                 <div className="heading-s1 space-mb--20">
                   <h3>{title}</h3>
                 </div>
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form onSubmit={handleSubmit(onSubmit)} id="register-form">
                   <div className="form-group">
                     <label htmlFor="email">Email</label>
                     <input
@@ -310,6 +322,24 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
                         {' '}
                         The zip file size of your business supporting document
                         must be less than 5 mb{' '}
+                      </Alert>
+                    }
+                  </div>
+
+                  <div
+                    style={{
+                      display: showUserAlrExistError ? 'block' : 'none',
+                    }}
+                  >
+                    {
+                      <Alert
+                        show={showUserAlrExistError}
+                        variant="danger"
+                        onClose={() => setShowUserAlrExistError(false)}
+                        dismissible
+                      >
+                        {' '}
+                        Username already exist.{' '}
                       </Alert>
                     }
                   </div>
