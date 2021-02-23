@@ -2,14 +2,14 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
+// import StepLabel from '@material-ui/core/StepLabel';
 import StepContent from '@material-ui/core/StepContent';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { Col } from 'react-bootstrap';
 import Nav from 'react-bootstrap/Nav';
-import { IoIosSearch, IoIosMenu } from 'react-icons/io';
+// import { IoIosSearch, IoIosMenu } from 'react-icons/io';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,8 +30,12 @@ const useStyles = makeStyles((theme) => ({
 function getSteps() {
   return [
     {
-      label: 'Event Details',
+      label: 'Account Details',
       eventKey: 'accountDetails',
+    },
+    {
+      label: 'Event Details',
+      eventKey: 'eventDetails',
     },
     {
       label: 'Online / Physical',
@@ -81,11 +85,11 @@ export default function VerticalLinearStepper() {
     setActiveStep(0);
   };
 
-  const getStepIconComponent = (index) => {
-    if (index < 1) {
-      return <IoIosMenu />;
-    } else return <IoIosSearch />;
-  };
+  //   const getStepIconComponent = (index) => {
+  //     if (index < 1) {
+  //       return <IoIosMenu />;
+  //     } else return <IoIosSearch />;
+  //   };
 
   const navigateStepper = (index) => {
     setActiveStep(index);
@@ -94,18 +98,27 @@ export default function VerticalLinearStepper() {
   return (
     // <div className={classes.root}>
     <Col lg={3} md={4}>
-      <Nav>
+      <Nav
+        variant="pills"
+        className="flex-column my-account-content__navigation space-mb--r60"
+      >
         <Stepper activeStep={activeStep} orientation="vertical">
           {steps.map((step, index) => (
             <Step key={index}>
-              <Nav.Link eventKey={step.eventKey}>
-                <StepLabel
-                  StepIconComponent={() => getStepIconComponent(index)}
+              <Nav.Item>
+                <Nav.Link
+                  eventKey={step.eventKey}
                   onClick={() => navigateStepper(index)}
                 >
-                  {step.label}
-                </StepLabel>
-              </Nav.Link>
+                  {/* <StepLabel
+                    StepIconComponent={() => getStepIconComponent(index)}
+                    onClick={() => navigateStepper(index)}
+                  >
+                    {step.label}
+                  </StepLabel> */}
+                  {index + 1}. {step.label}
+                </Nav.Link>
+              </Nav.Item>
               <StepContent>
                 <Typography>{getStepContent(index)}</Typography>
                 <div className={classes.actionsContainer}>

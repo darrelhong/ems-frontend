@@ -6,8 +6,10 @@ import { FaCloudDownloadAlt, FaRegEdit } from 'react-icons/fa';
 
 import { BreadcrumbOne } from '../../../components/Breadcrumb';
 import OrganiserWrapper from '../../../components/wrapper/OrganiserWrapper';
-import FormStepper from '../../../components/FormStepper';
-export default function OrganiserSettings() {
+import VerticalLineStepper from '../../../components/createEvent/VerticalLineStepper';
+import EventDetailsPane from '../../../components/createEvent/tabPanes/EventDetailsPane';
+
+export default function CreateEvent() {
   return (
     <OrganiserWrapper title="Create New Event">
       <BreadcrumbOne pageTitle="Create New Event">
@@ -25,7 +27,7 @@ export default function OrganiserSettings() {
         <Container>
           <Tab.Container defaultActiveKey="accountDetails">
             <Row>
-              <FormStepper />
+              <VerticalLineStepper />
               <Col lg={9} md={8}>
                 <Tab.Content>
                   <Tab.Pane eventKey="dashboard">
@@ -292,6 +294,9 @@ export default function OrganiserSettings() {
                         </div>
                       </Card.Body>
                     </Card>
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="eventDetails">
+                    <EventDetailsPane />
                   </Tab.Pane>
                 </Tab.Content>
               </Col>
