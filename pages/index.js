@@ -16,7 +16,7 @@ export default function Home() {
         <Container className="space-mt--40 space-mb--40">
           <h2 className="space-mb--40">Event Management System</h2>
 
-          <Row className="justify-content-center mt-10">
+          <Row className="justify-content-center">
             <Col md={5} className="mb-3">
               <Card style={{ maxWidth: '20em' }} className="mx-auto">
                 <Card.Body>

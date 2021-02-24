@@ -27,8 +27,10 @@
 
   background-color: transparent;
   .breadcrumb-item {
+
+    font-size: 14px;
+    
     a {
-      font-size: 14px;
       font-weight: 400;
 
       color: $black--two;
