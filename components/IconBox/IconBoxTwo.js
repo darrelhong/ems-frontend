@@ -1,5 +1,5 @@
-import { Container, Row, Col } from "react-bootstrap";
-import { FaPencilAlt, FaLayerGroup, FaRegEnvelope } from "react-icons/fa";
+import { Container, Row, Col } from 'react-bootstrap';
+import { FaPencilAlt, FaLayerGroup, FaRegEnvelope } from 'react-icons/fa';
 
 const IconBoxTwo = () => {
   return (

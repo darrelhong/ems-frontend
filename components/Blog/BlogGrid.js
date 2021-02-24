@@ -1,6 +1,6 @@
-import Link from "next/link";
-import { Container, Row, Col } from "react-bootstrap";
-import { FaRegComments, FaCalendarAlt } from "react-icons/fa";
+import Link from 'next/link';
+import { Container, Row, Col } from 'react-bootstrap';
+import { FaRegComments, FaCalendarAlt } from 'react-icons/fa';
 
 const BlogGrid = ({ customClass }) => {
   return (
@@ -21,7 +21,7 @@ const BlogGrid = ({ customClass }) => {
           <Col lg={4} md={6}>
             <div
               className={`blog-post blog-post--style-two ${
-                customClass ? customClass : ""
+                customClass ? customClass : ''
               }`}
             >
               <div className="blog-post__image">
@@ -71,7 +71,7 @@ const BlogGrid = ({ customClass }) => {
           <Col lg={4} md={6}>
             <div
               className={`blog-post blog-post--style-two ${
-                customClass ? customClass : ""
+                customClass ? customClass : ''
               }`}
             >
               <div className="blog-post__image">
@@ -121,7 +121,7 @@ const BlogGrid = ({ customClass }) => {
           <Col lg={4} md={6}>
             <div
               className={`blog-post blog-post--style-two ${
-                customClass ? customClass : ""
+                customClass ? customClass : ''
               }`}
             >
               <div className="blog-post__image">

@@ -39,13 +39,13 @@ function AttendeeHome() {
             Your are logged in as {user?.name}. ID: {user?.id}
           </p>
         )}
-   
       </Container>
 
       <FooterOne />
     </>
-
   );
 }
 
-export default withProtectRoute(AttendeeHome, { redirectTo: '/attendee/login',});
+export default withProtectRoute(AttendeeHome, {
+  redirectTo: '/attendee/login',
+});

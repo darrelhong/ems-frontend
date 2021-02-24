@@ -1,14 +1,14 @@
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { Container } from "react-bootstrap";
-import { connect } from "react-redux";
-import { IoIosSearch, IoIosMenu } from "react-icons/io";
-import { AiOutlineShoppingCart } from "react-icons/ai";
-import HeaderTop from "./elements/HeaderTop";
-import Navigation from "./elements/Navigation";
-import SearchOverlay from "./elements/SearchOverlay";
-import MobileMenu from "./elements/MobileMenu";
-import MiniCart from "./elements/MiniCart";
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { Container } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { IoIosSearch, IoIosMenu } from 'react-icons/io';
+import { AiOutlineShoppingCart } from 'react-icons/ai';
+import HeaderTop from './elements/HeaderTop';
+import Navigation from './elements/Navigation';
+import SearchOverlay from './elements/SearchOverlay';
+import MobileMenu from './elements/MobileMenu';
+import MiniCart from './elements/MiniCart';
 
 const HeaderThree = ({ cartItems, navPositionClass }) => {
   const [scroll, setScroll] = useState(0);
@@ -19,11 +19,11 @@ const HeaderThree = ({ cartItems, navPositionClass }) => {
   );
 
   useEffect(() => {
-    const header = document.querySelector(".header-wrap");
+    const header = document.querySelector('.header-wrap');
     setHeaderHeight(header.offsetHeight);
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
@@ -133,7 +133,7 @@ const HeaderThree = ({ cartItems, navPositionClass }) => {
 
 const mapStateToProps = (state) => {
   return {
-    cartItems: state.cartData
+    cartItems: state.cartData,
   };
 };
 

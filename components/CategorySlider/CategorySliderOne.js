@@ -1,7 +1,7 @@
-import { useState } from "react";
-import Link from "next/link";
-import { Container, Row, Col } from "react-bootstrap";
-import Swiper from "react-id-swiper";
+import { useState } from 'react';
+import Link from 'next/link';
+import { Container, Row, Col } from 'react-bootstrap';
+import Swiper from 'react-id-swiper';
 
 const CategorySliderOne = ({ title, text, url, categorySliderData }) => {
   const [swiper, setSwiper] = useState(null);
@@ -25,18 +25,18 @@ const CategorySliderOne = ({ title, text, url, categorySliderData }) => {
     spaceBetween: 30,
     breakpoints: {
       1024: {
-        slidesPerView: 4
+        slidesPerView: 4,
       },
       769: {
-        slidesPerView: 3
+        slidesPerView: 3,
       },
       576: {
-        slidesPerView: 2
+        slidesPerView: 2,
       },
       320: {
-        slidesPerView: 2
-      }
-    }
+        slidesPerView: 2,
+      },
+    },
   };
   return (
     <div className="category-slider-area space-pb--r100">

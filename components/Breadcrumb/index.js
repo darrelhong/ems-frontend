@@ -1,3 +1,3 @@
-import BreadcrumbOne from "./BreadcrumbOne";
+import BreadcrumbOne from './BreadcrumbOne';
 
 export { BreadcrumbOne };

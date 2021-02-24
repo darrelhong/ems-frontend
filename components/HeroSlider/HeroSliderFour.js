@@ -1,7 +1,7 @@
-import Link from "next/link";
-import { Container, Row, Col } from "react-bootstrap";
-import Swiper from "react-id-swiper";
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import Link from 'next/link';
+import { Container, Row, Col } from 'react-bootstrap';
+import Swiper from 'react-id-swiper';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 const HeroSliderFour = ({ heroSliderData }) => {
   const params = {
@@ -9,14 +9,14 @@ const HeroSliderFour = ({ heroSliderData }) => {
     speed: 1000,
     autoplay: {
       delay: 5000,
-      disableOnInteraction: false
+      disableOnInteraction: false,
     },
     watchSlidesVisibility: true,
-    effect: "fade",
+    effect: 'fade',
 
     navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev"
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
     },
     renderPrevButton: () => (
       <button className="swiper-button-prev ht-swiper-button-nav">
@@ -27,7 +27,7 @@ const HeroSliderFour = ({ heroSliderData }) => {
       <button className="swiper-button-next ht-swiper-button-nav">
         <FiChevronRight />
       </button>
-    )
+    ),
   };
   return (
     <div className="hero-slider">
@@ -39,7 +39,7 @@ const HeroSliderFour = ({ heroSliderData }) => {
                 <div
                   className="hero-slider__slide hero-slider__slide--style-three bg-image overlay-bg--40"
                   style={{
-                    backgroundImage: `url(${single.backgroundImage})`
+                    backgroundImage: `url(${single.backgroundImage})`,
                   }}
                   key={key}
                 >

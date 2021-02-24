@@ -1,10 +1,10 @@
-import { Fragment } from "react";
-import { IoIosSearch, IoIosClose } from "react-icons/io";
+import { Fragment } from 'react';
+import { IoIosSearch, IoIosClose } from 'react-icons/io';
 
 const SearchOverlay = ({ activeStatus, getActiveStatus }) => {
   return (
     <Fragment>
-      <div className={`search-wrap ${activeStatus ? "open" : ""}`}>
+      <div className={`search-wrap ${activeStatus ? 'open' : ''}`}>
         <button
           className="close-search"
           onClick={() => {
@@ -25,7 +25,7 @@ const SearchOverlay = ({ activeStatus, getActiveStatus }) => {
           </button>
         </form>
       </div>
-      <div className={`search-overlay  ${activeStatus ? "open" : ""}`} />
+      <div className={`search-overlay  ${activeStatus ? 'open' : ''}`} />
     </Fragment>
   );
 };

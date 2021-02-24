@@ -1,22 +1,22 @@
-import MailchimpSubscribe from "react-mailchimp-subscribe";
+import MailchimpSubscribe from 'react-mailchimp-subscribe';
 
 const CustomForm = ({
   status,
   message,
   onValidated,
   alertColor,
-  btnColorClass
+  btnColorClass,
 }) => {
   let email;
   const submit = () => {
     email &&
-      email.value.indexOf("@") > -1 &&
+      email.value.indexOf('@') > -1 &&
       onValidated({
-        EMAIL: email.value
+        EMAIL: email.value,
       });
 
-    let emailInput = document.getElementById("mc-form-email");
-    emailInput.value = "";
+    let emailInput = document.getElementById('mc-form-email');
+    emailInput.value = '';
   };
 
   return (
@@ -31,43 +31,43 @@ const CustomForm = ({
         />
         <button
           className={`btn btn-send2 ${
-            btnColorClass ? btnColorClass : "btn-dark"
+            btnColorClass ? btnColorClass : 'btn-dark'
           }`}
           onClick={submit}
         >
           <i className="icon-envelope-letter"></i>
         </button>
       </div>
-      {status === "sending" && (
+      {status === 'sending' && (
         <div
           style={{
             color: alertColor,
-            fontSize: "14px",
-            marginTop: "15px",
-            lineHeight: "1.3"
+            fontSize: '14px',
+            marginTop: '15px',
+            lineHeight: '1.3',
           }}
         >
           sending...
         </div>
       )}
-      {status === "error" && (
+      {status === 'error' && (
         <div
           style={{
             color: alertColor,
-            fontSize: "14px",
-            marginTop: "15px",
-            lineHeight: "1.3"
+            fontSize: '14px',
+            marginTop: '15px',
+            lineHeight: '1.3',
           }}
           dangerouslySetInnerHTML={{ __html: message }}
         />
       )}
-      {status === "success" && (
+      {status === 'success' && (
         <div
           style={{
             color: alertColor,
-            fontSize: "14px",
-            marginTop: "15px",
-            lineHeight: "1.3"
+            fontSize: '14px',
+            marginTop: '15px',
+            lineHeight: '1.3',
           }}
           dangerouslySetInnerHTML={{ __html: message }}
         />

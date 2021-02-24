@@ -1,9 +1,9 @@
-import HeroSliderOne from "./HeroSliderOne";
-import HeroSliderTwo from "./HeroSliderTwo";
-import HeroSliderThree from "./HeroSliderThree";
-import HeroSliderFour from "./HeroSliderFour";
-import HeroSliderFive from "./HeroSliderFive";
-import HeroSliderSix from "./HeroSliderSix";
+import HeroSliderOne from './HeroSliderOne';
+import HeroSliderTwo from './HeroSliderTwo';
+import HeroSliderThree from './HeroSliderThree';
+import HeroSliderFour from './HeroSliderFour';
+import HeroSliderFive from './HeroSliderFive';
+import HeroSliderSix from './HeroSliderSix';
 
 export {
   HeroSliderOne,
@@ -11,5 +11,5 @@ export {
   HeroSliderThree,
   HeroSliderFour,
   HeroSliderFive,
-  HeroSliderSix
+  HeroSliderSix,
 };

@@ -1,18 +1,18 @@
-import { Fragment } from "react";
+import { Fragment } from 'react';
 
-import { connect } from "react-redux";
-import { useToasts } from "react-toast-notifications";
-import { getDiscountPrice } from "../../lib/product";
-import { addToCart } from "../../redux/actions/cartActions";
+import { connect } from 'react-redux';
+import { useToasts } from 'react-toast-notifications';
+import { getDiscountPrice } from '../../lib/product';
+import { addToCart } from '../../redux/actions/cartActions';
 import {
   addToWishlist,
-  deleteFromWishlist
-} from "../../redux/actions/wishlistActions";
+  deleteFromWishlist,
+} from '../../redux/actions/wishlistActions';
 import {
   addToCompare,
-  deleteFromCompare
-} from "../../redux/actions/compareActions";
-import ProductGridFour from "./ProductGridFour";
+  deleteFromCompare,
+} from '../../redux/actions/compareActions';
+import ProductGridFour from './ProductGridFour';
 
 const ProductGridWrapperFour = ({
   products,
@@ -25,7 +25,7 @@ const ProductGridWrapperFour = ({
   cartItems,
   wishlistItems,
   compareItems,
-  sliderClass
+  sliderClass,
 }) => {
   const { addToast } = useToasts();
   return (
@@ -76,7 +76,7 @@ const mapStateToProps = (state) => {
   return {
     cartItems: state.cartData,
     wishlistItems: state.wishlistData,
-    compareItems: state.compareData
+    compareItems: state.compareData,
   };
 };
 
@@ -110,7 +110,7 @@ const mapDispatchToProps = (dispatch) => {
     },
     deleteFromCompare: (item, addToast) => {
       dispatch(deleteFromCompare(item, addToast));
-    }
+    },
   };
 };
 

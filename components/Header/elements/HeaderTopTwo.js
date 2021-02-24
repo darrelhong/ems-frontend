@@ -1,5 +1,5 @@
-import { Container, Row, Col, Form } from "react-bootstrap";
-import { FaApple, FaAndroid, FaWindows } from "react-icons/fa";
+import { Container, Row, Col, Form } from 'react-bootstrap';
+import { FaApple, FaAndroid, FaWindows } from 'react-icons/fa';
 
 const HeaderTopTwo = () => {
   return (

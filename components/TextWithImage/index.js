@@ -1,3 +1,3 @@
-import TextWithImageOne from "./TextWithImageOne";
+import TextWithImageOne from './TextWithImageOne';
 
 export { TextWithImageOne };

@@ -1,3 +1,3 @@
-import CountdownOne from "./CountdownOne";
+import CountdownOne from './CountdownOne';
 
 export { CountdownOne };

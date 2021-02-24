@@ -1,14 +1,14 @@
-import Link from "next/link";
-import { Container, Row, Col } from "react-bootstrap";
-import Countdown from "react-countdown";
-import RendererTwo from "./RendererTwo";
+import Link from 'next/link';
+import { Container, Row, Col } from 'react-bootstrap';
+import Countdown from 'react-countdown';
+import RendererTwo from './RendererTwo';
 
 const CountdownOne = ({ title, subtitle, backgroundImage, dateTime, url }) => {
   return (
     <div
       className="countdown-area bg-img space-pt--r100 space-pb--r100 space-mb--r100"
       style={{
-        backgroundImage: `url(${backgroundImage})`
+        backgroundImage: `url(${backgroundImage})`,
       }}
     >
       <Container>

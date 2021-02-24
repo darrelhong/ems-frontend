@@ -1,19 +1,19 @@
-import Link from "next/link";
-import { useState, useEffect, Fragment } from "react";
-import { Modal, Row, Col } from "react-bootstrap";
-import Swiper from "react-id-swiper";
-import { getProductCartQuantity } from "../../../lib/product";
-import { ProductRating } from "../../Product";
-import { BsShield } from "react-icons/bs";
-import { AiOutlineReload } from "react-icons/ai";
-import { GiSwapBag } from "react-icons/gi";
+import Link from 'next/link';
+import { useState, useEffect, Fragment } from 'react';
+import { Modal, Row, Col } from 'react-bootstrap';
+import Swiper from 'react-id-swiper';
+import { getProductCartQuantity } from '../../../lib/product';
+import { ProductRating } from '../../Product';
+import { BsShield } from 'react-icons/bs';
+import { AiOutlineReload } from 'react-icons/ai';
+import { GiSwapBag } from 'react-icons/gi';
 import {
   IoLogoFacebook,
   IoLogoTwitter,
   IoLogoGoogleplus,
   IoLogoYoutube,
-  IoLogoInstagram
-} from "react-icons/io";
+  IoLogoInstagram,
+} from 'react-icons/io';
 
 const ProductModal = (props) => {
   const {
@@ -28,14 +28,14 @@ const ProductModal = (props) => {
     deletefromwishlist,
     addtocompare,
     deletefromcompare,
-    addtoast
+    addtoast,
   } = props;
 
   const [selectedProductColor, setSelectedProductColor] = useState(
-    product.variation ? product.variation[0].color : ""
+    product.variation ? product.variation[0].color : ''
   );
   const [selectedProductSize, setSelectedProductSize] = useState(
-    product.variation ? product.variation[0].size[0].name : ""
+    product.variation ? product.variation[0].size[0].name : ''
   );
   const [productStock, setProductStock] = useState(
     product.variation ? product.variation[0].size[0].stock : product.stock
@@ -71,7 +71,7 @@ const ProductModal = (props) => {
     spaceBetween: 10,
     loopedSlides: 4,
     loop: true,
-    effect: "fade"
+    effect: 'fade',
   };
 
   const thumbnailSwiperParams = {
@@ -82,7 +82,7 @@ const ProductModal = (props) => {
     touchRatio: 0.2,
     freeMode: true,
     loop: true,
-    slideToClickedSlide: true
+    slideToClickedSlide: true,
   };
 
   return (
@@ -150,7 +150,7 @@ const ProductModal = (props) => {
                     </div>
                   </div>
                 ) : (
-                  ""
+                  ''
                 )}
               </div>
               <div className="product-quickview__description space-mb--20">
@@ -186,8 +186,8 @@ const ProductModal = (props) => {
                               id={single.color}
                               checked={
                                 single.color === selectedProductColor
-                                  ? "checked"
-                                  : ""
+                                  ? 'checked'
+                                  : ''
                               }
                               onChange={() => {
                                 setSelectedProductColor(single.color);
@@ -219,8 +219,8 @@ const ProductModal = (props) => {
                                       value={singleSize.name}
                                       checked={
                                         singleSize.name === selectedProductSize
-                                          ? "checked"
-                                          : ""
+                                          ? 'checked'
+                                          : ''
                                       }
                                       id={singleSize.name}
                                       onChange={() => {
@@ -235,13 +235,13 @@ const ProductModal = (props) => {
                                   </Fragment>
                                 );
                               })
-                            : "";
+                            : '';
                         })}
                     </div>
                   </div>
                 </div>
               ) : (
-                ""
+                ''
               )}
               <hr />
               {product.affiliateLink ? (
@@ -318,12 +318,12 @@ const ProductModal = (props) => {
 
                     <button
                       className={`product-quickview__compare ${
-                        compareitem !== undefined ? "active" : ""
+                        compareitem !== undefined ? 'active' : ''
                       }`}
                       title={
                         compareitem !== undefined
-                          ? "Added to compare"
-                          : "Add to compare"
+                          ? 'Added to compare'
+                          : 'Add to compare'
                       }
                       onClick={
                         compareitem !== undefined
@@ -336,12 +336,12 @@ const ProductModal = (props) => {
 
                     <button
                       className={`product-quickview__wishlist ${
-                        wishlistitem !== undefined ? "active" : ""
+                        wishlistitem !== undefined ? 'active' : ''
                       }`}
                       title={
                         wishlistitem !== undefined
-                          ? "Added to wishlist"
-                          : "Add to wishlist"
+                          ? 'Added to wishlist'
+                          : 'Add to wishlist'
                       }
                       onClick={
                         wishlistitem !== undefined
@@ -366,10 +366,10 @@ const ProductModal = (props) => {
                       return (
                         <Link
                           href="/shop/grid-left-sidebar"
-                          as={"/shop/grid-left-sidebar"}
+                          as="/shop/grid-left-sidebar"
                           key={index}
                         >
-                          <a>{item + (index !== arr.length - 1 ? ", " : "")}</a>
+                          <a>{item + (index !== arr.length - 1 ? ', ' : '')}</a>
                         </Link>
                       );
                     })}
@@ -381,10 +381,10 @@ const ProductModal = (props) => {
                       return (
                         <Link
                           href="/shop/grid-left-sidebar"
-                          as={"/shop/grid-left-sidebar"}
+                          as="/shop/grid-left-sidebar"
                           key={index}
                         >
-                          <a>{item + (index !== arr.length - 1 ? ", " : "")}</a>
+                          <a>{item + (index !== arr.length - 1 ? ', ' : '')}</a>
                         </Link>
                       );
                     })}

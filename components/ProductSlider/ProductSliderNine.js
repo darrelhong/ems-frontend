@@ -1,8 +1,8 @@
-import Link from "next/link";
-import { IoIosFlash } from "react-icons/io";
-import { Row, Col } from "react-bootstrap";
-import Swiper from "react-id-swiper";
-import { ProductGridWrapperFive } from "../ProductThumb";
+import Link from 'next/link';
+import { IoIosFlash } from 'react-icons/io';
+import { Row, Col } from 'react-bootstrap';
+import Swiper from 'react-id-swiper';
+import { ProductGridWrapperFive } from '../ProductThumb';
 
 const ProductSliderNine = ({ title, bannerImage, products }) => {
   const params = {
@@ -11,27 +11,27 @@ const ProductSliderNine = ({ title, bannerImage, products }) => {
     slidesPerGroup: 4,
     spaceBetween: 30,
     pagination: {
-      el: ".swiper-pagination",
-      clickable: true
+      el: '.swiper-pagination',
+      clickable: true,
     },
     breakpoints: {
       1024: {
         slidesPerView: 4,
-        slidesPerGroup: 4
+        slidesPerGroup: 4,
       },
       769: {
         slidesPerView: 2,
-        slidesPerGroup: 2
+        slidesPerGroup: 2,
       },
       576: {
         slidesPerView: 2,
-        slidesPerGroup: 2
+        slidesPerGroup: 2,
       },
       320: {
         slidesPerView: 1,
-        slidesPerGroup: 1
-      }
-    }
+        slidesPerGroup: 1,
+      },
+    },
   };
 
   return (
@@ -52,7 +52,7 @@ const ProductSliderNine = ({ title, bannerImage, products }) => {
               <h4>{title}</h4>
               <Link href="/shop/grid-left-sidebar">
                 <a className="text-default">
-                  {" "}
+                  {' '}
                   <IoIosFlash /> View All
                 </a>
               </Link>

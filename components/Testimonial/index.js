@@ -1,3 +1,3 @@
-import TestimonialOne from "./TestimonialOne";
+import TestimonialOne from './TestimonialOne';
 
 export { TestimonialOne };

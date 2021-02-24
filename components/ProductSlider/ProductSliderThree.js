@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { Container, Row, Col } from "react-bootstrap";
-import Swiper from "react-id-swiper";
-import Countdown from "react-countdown";
-import { AiOutlineClockCircle } from "react-icons/ai";
-import { ProductGridWrapperTwo } from "../ProductThumb";
-import Renderer from "../Countdown/Renderer";
+import { useState } from 'react';
+import { Container, Row, Col } from 'react-bootstrap';
+import Swiper from 'react-id-swiper';
+import Countdown from 'react-countdown';
+import { AiOutlineClockCircle } from 'react-icons/ai';
+import { ProductGridWrapperTwo } from '../ProductThumb';
+import Renderer from '../Countdown/Renderer';
 
 const ProductSliderThree = ({ title, products, dateTime }) => {
   const [swiper, setSwiper] = useState(null);
@@ -28,18 +28,18 @@ const ProductSliderThree = ({ title, products, dateTime }) => {
     spaceBetween: 30,
     breakpoints: {
       1024: {
-        slidesPerView: 4
+        slidesPerView: 4,
       },
       769: {
-        slidesPerView: 3
+        slidesPerView: 3,
       },
       576: {
-        slidesPerView: 2
+        slidesPerView: 2,
       },
       320: {
-        slidesPerView: 1
-      }
-    }
+        slidesPerView: 1,
+      },
+    },
   };
 
   return (
@@ -50,7 +50,7 @@ const ProductSliderThree = ({ title, products, dateTime }) => {
             <div className="section-title section-title--style-two space-mb--25 d-flex justify-content-between align-items-center">
               <h2>{title}</h2>
               <div className="countdown">
-                <AiOutlineClockCircle />{" "}
+                <AiOutlineClockCircle />{' '}
                 <Countdown date={new Date(dateTime)} renderer={Renderer} />
               </div>
             </div>

@@ -1,9 +1,9 @@
-import ProductGridWrapperOne from "./ProductGridWrapperOne";
-import ProductGridWrapperTwo from "./ProductGridWrapperTwo";
-import ProductGridWrapperThree from "./ProductGridWrapperThree";
-import ProductGridWrapperFour from "./ProductGridWrapperFour";
-import ProductGridWrapperFive from "./ProductGridWrapperFive";
-import ProductGridListWrapper from "./ProductGridListWrapper";
+import ProductGridWrapperOne from './ProductGridWrapperOne';
+import ProductGridWrapperTwo from './ProductGridWrapperTwo';
+import ProductGridWrapperThree from './ProductGridWrapperThree';
+import ProductGridWrapperFour from './ProductGridWrapperFour';
+import ProductGridWrapperFive from './ProductGridWrapperFive';
+import ProductGridListWrapper from './ProductGridListWrapper';
 
 export {
   ProductGridWrapperOne,
@@ -11,5 +11,5 @@ export {
   ProductGridWrapperThree,
   ProductGridWrapperFour,
   ProductGridWrapperFive,
-  ProductGridListWrapper
+  ProductGridListWrapper,
 };

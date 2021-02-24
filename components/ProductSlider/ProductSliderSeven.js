@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { Container, Row, Col } from "react-bootstrap";
-import Swiper from "react-id-swiper";
-import { ProductGridWrapperThree } from "../ProductThumb";
+import { useState } from 'react';
+import { Container, Row, Col } from 'react-bootstrap';
+import Swiper from 'react-id-swiper';
+import { ProductGridWrapperThree } from '../ProductThumb';
 
 const ProductSliderSeven = ({ title, text, products }) => {
   const [swiper, setSwiper] = useState(null);
@@ -25,18 +25,18 @@ const ProductSliderSeven = ({ title, text, products }) => {
     spaceBetween: 30,
     breakpoints: {
       1024: {
-        slidesPerView: 4
+        slidesPerView: 4,
       },
       769: {
-        slidesPerView: 3
+        slidesPerView: 3,
       },
       576: {
-        slidesPerView: 2
+        slidesPerView: 2,
       },
       320: {
-        slidesPerView: 1
-      }
-    }
+        slidesPerView: 1,
+      },
+    },
   };
 
   return (

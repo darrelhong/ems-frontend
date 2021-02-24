@@ -1,7 +1,7 @@
-import { useState } from "react";
-import Link from "next/link";
-import { SlideDown } from "react-slidedown";
-import { IoIosMenu, IoIosArrowForward } from "react-icons/io";
+import { useState } from 'react';
+import Link from 'next/link';
+import { SlideDown } from 'react-slidedown';
+import { IoIosMenu, IoIosArrowForward } from 'react-icons/io';
 
 const CategoryMenu = () => {
   const [categoryMenuExpandStatus, setCategoryMenuExpandStatus] = useState(
@@ -9,7 +9,7 @@ const CategoryMenu = () => {
   );
   const [
     categoryMenuItemExpandStatus,
-    setCategoryMenuItemExpandStatus
+    setCategoryMenuItemExpandStatus,
   ] = useState(false);
   return (
     <div className="header-categories-wrap">
@@ -25,7 +25,7 @@ const CategoryMenu = () => {
             <li className="has-children-mega">
               <Link href="/shop/grid-left-sidebar">
                 <a className="nav-link">
-                  <i className="flaticon-woman"></i>{" "}
+                  <i className="flaticon-woman"></i>{' '}
                   <span>
                     Woman's <IoIosArrowForward />
                   </span>
@@ -155,7 +155,7 @@ const CategoryMenu = () => {
             <li className="has-children-mega">
               <Link href="/shop/grid-left-sidebar">
                 <a className="nav-link">
-                  <i className="flaticon-boss"></i>{" "}
+                  <i className="flaticon-boss"></i>{' '}
                   <span>
                     Men's <IoIosArrowForward />
                   </span>
@@ -302,7 +302,7 @@ const CategoryMenu = () => {
             <li className="has-children-mega">
               <Link href="/shop/grid-left-sidebar">
                 <a className="nav-link">
-                  <i className="flaticon-friendship"></i>{" "}
+                  <i className="flaticon-friendship"></i>{' '}
                   <span>
                     Kid's <IoIosArrowForward />
                   </span>
@@ -416,7 +416,7 @@ const CategoryMenu = () => {
             <li>
               <Link href="/shop/grid-left-sidebar">
                 <a className="nav-link">
-                  <i className="flaticon-sunglasses"></i>{" "}
+                  <i className="flaticon-sunglasses"></i>{' '}
                   <span>Accessories</span>
                 </a>
               </Link>
@@ -452,7 +452,7 @@ const CategoryMenu = () => {
             <li>
               <Link href="/shop/grid-left-sidebar">
                 <a className="nav-link">
-                  <i className="flaticon-herbal"></i>{" "}
+                  <i className="flaticon-herbal"></i>{' '}
                   <span>Health & Beauty</span>
                 </a>
               </Link>
@@ -475,7 +475,7 @@ const CategoryMenu = () => {
               <li>
                 <Link href="/shop/grid-left-sidebar">
                   <a className="nav-link">
-                    <i className="flaticon-scarf"></i>{" "}
+                    <i className="flaticon-scarf"></i>{' '}
                     <span>Seasonal Wear</span>
                   </a>
                 </Link>
@@ -483,7 +483,7 @@ const CategoryMenu = () => {
               <li>
                 <Link href="/shop/grid-left-sidebar">
                   <a className="nav-link">
-                    <i className="flaticon-vintage"></i>{" "}
+                    <i className="flaticon-vintage"></i>{' '}
                     <span>Ethnic Wear</span>
                   </a>
                 </Link>
@@ -491,7 +491,7 @@ const CategoryMenu = () => {
               <li>
                 <Link href="/shop/grid-left-sidebar">
                   <a className="nav-link">
-                    <i className="flaticon-pregnant"></i>{" "}
+                    <i className="flaticon-pregnant"></i>{' '}
                     <span>Baby Clothing</span>
                   </a>
                 </Link>
@@ -504,7 +504,7 @@ const CategoryMenu = () => {
                   setCategoryMenuItemExpandStatus(!categoryMenuItemExpandStatus)
                 }
               >
-                More Categories <span>+</span>{" "}
+                More Categories <span>+</span>{' '}
               </button>
             </li>
           </ul>

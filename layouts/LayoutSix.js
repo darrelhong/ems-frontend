@@ -1,6 +1,6 @@
-import { Fragment } from "react";
-import { HeaderSix } from "../components/Header";
-import { FooterSix } from "../components/Footer";
+import { Fragment } from 'react';
+import { HeaderSix } from '../components/Header';
+import { FooterSix } from '../components/Footer';
 
 const LayoutSix = ({ children, navPositionClass }) => {
   return (

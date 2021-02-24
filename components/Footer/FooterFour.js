@@ -1,22 +1,22 @@
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { Container, Row, Col } from "react-bootstrap";
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { Container, Row, Col } from 'react-bootstrap';
 import {
   IoIosPhonePortrait,
   IoIosMailOpen,
   IoIosPin,
   IoIosArrowUp,
-  IoLogoInstagram
-} from "react-icons/io";
+  IoLogoInstagram,
+} from 'react-icons/io';
 import {
   FaFacebookF,
   FaTwitter,
   FaGooglePlusG,
   FaYoutube,
-  FaInstagram
-} from "react-icons/fa";
-import { animateScroll } from "react-scroll";
-import { SubscribeEmailThree } from "../Newsletter";
+  FaInstagram,
+} from 'react-icons/fa';
+import { animateScroll } from 'react-scroll';
+import { SubscribeEmailThree } from '../Newsletter';
 
 const FooterFour = () => {
   const [scroll, setScroll] = useState(0);
@@ -24,9 +24,9 @@ const FooterFour = () => {
 
   useEffect(() => {
     setTop(100);
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
@@ -50,7 +50,7 @@ const FooterFour = () => {
                       <h3 className="space-mb--25">Subscribe Our Newsletter</h3>
                       <p>
                         Contrary to popular belief of lorem Ipsm Latin amet ltin
-                        from industry. Phasellus blandit massa enim varius nunc.{" "}
+                        from industry. Phasellus blandit massa enim varius nunc.{' '}
                       </p>
                     </div>
                   </Col>
@@ -280,7 +280,7 @@ const FooterFour = () => {
           <Row>
             <Col md={6}>
               <p className="mb-3 mb-md-0 text-center text-md-left">
-                Copyright &copy; {new Date().getFullYear() + " "} HasThemes |{" "}
+                Copyright &copy; {new Date().getFullYear() + ' '} HasThemes |{' '}
                 <a href="https://www.hasthemes.com">
                   Built with Oility by HasThemes
                 </a>
@@ -328,7 +328,7 @@ const FooterFour = () => {
         </Container>
       </div>
       <button
-        className={`scroll-top ${scroll > top ? "show" : ""}`}
+        className={`scroll-top ${scroll > top ? 'show' : ''}`}
         onClick={() => scrollToTop()}
       >
         <IoIosArrowUp />

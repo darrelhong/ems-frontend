@@ -1,23 +1,23 @@
-import { Fragment, useState, useEffect } from "react";
-import Link from "next/link";
-import { Row, Col } from "react-bootstrap";
-import { animateScroll } from "react-scroll";
-import { SubscribeEmailFour } from "../Newsletter";
+import { Fragment, useState, useEffect } from 'react';
+import Link from 'next/link';
+import { Row, Col } from 'react-bootstrap';
+import { animateScroll } from 'react-scroll';
+import { SubscribeEmailFour } from '../Newsletter';
 import {
   IoLogoInstagram,
   IoIosPhonePortrait,
   IoIosMailOpen,
   IoIosPin,
   IoIosArrowUp,
-  IoIosSend
-} from "react-icons/io";
+  IoIosSend,
+} from 'react-icons/io';
 import {
   FaFacebookF,
   FaTwitter,
   FaGooglePlusG,
   FaYoutube,
-  FaInstagram
-} from "react-icons/fa";
+  FaInstagram,
+} from 'react-icons/fa';
 
 const FooterFive = () => {
   const [scroll, setScroll] = useState(0);
@@ -25,9 +25,9 @@ const FooterFive = () => {
 
   useEffect(() => {
     setTop(100);
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
@@ -320,7 +320,7 @@ const FooterFive = () => {
             <Row className="align-items-center">
               <Col lg={4}>
                 <p className="text-center mb-3 mb-lg-0">
-                  Copyright &copy; {new Date().getFullYear() + " "}
+                  Copyright &copy; {new Date().getFullYear() + ' '}
                   <a href="https://www.hasthemes.com">. Oility by HasThemes</a>
                 </p>
               </Col>
@@ -395,7 +395,7 @@ const FooterFive = () => {
           </div>
         </div>
         <button
-          className={`scroll-top ${scroll > top ? "show" : ""}`}
+          className={`scroll-top ${scroll > top ? 'show' : ''}`}
           onClick={() => scrollToTop()}
         >
           <IoIosArrowUp />

@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { Container, Row, Col } from "react-bootstrap";
-import Swiper from "react-id-swiper";
+import { useState } from 'react';
+import { Container, Row, Col } from 'react-bootstrap';
+import Swiper from 'react-id-swiper';
 
 const BrandLogoOne = ({ title, brandLogoData }) => {
   const [swiper, setSwiper] = useState(null);
@@ -24,18 +24,18 @@ const BrandLogoOne = ({ title, brandLogoData }) => {
     spaceBetween: 30,
     breakpoints: {
       1024: {
-        slidesPerView: 5
+        slidesPerView: 5,
       },
       769: {
-        slidesPerView: 4
+        slidesPerView: 4,
       },
       576: {
-        slidesPerView: 3
+        slidesPerView: 3,
       },
       320: {
-        slidesPerView: 2
-      }
-    }
+        slidesPerView: 2,
+      },
+    },
   };
 
   return (

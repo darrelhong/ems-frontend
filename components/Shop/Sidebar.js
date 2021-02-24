@@ -1,6 +1,6 @@
-import { Fragment } from "react";
-import { IoIosArrowForward } from "react-icons/io";
-import Link from "next/link";
+import { Fragment } from 'react';
+import { IoIosArrowForward } from 'react-icons/io';
+import Link from 'next/link';
 import {
   getIndividualCategories,
   getIndividualTags,
@@ -8,16 +8,16 @@ import {
   getProductsIndividualSizes,
   getProducts,
   getDiscountPrice,
-  setActiveSort
-} from "../../lib/product";
-import { ProductRating } from "../../components/Product";
+  setActiveSort,
+} from '../../lib/product';
+import { ProductRating } from '../../components/Product';
 
 const Sidebar = ({ products, getSortParams }) => {
   const categories = getIndividualCategories(products);
   const colors = getIndividualColors(products);
   const sizes = getProductsIndividualSizes(products);
   const tags = getIndividualTags(products);
-  const popularProducts = getProducts(products, "fashion", "popular", 3);
+  const popularProducts = getProducts(products, 'fashion', 'popular', 3);
 
   return (
     <div className="sidebar">
@@ -31,7 +31,7 @@ const Sidebar = ({ products, getSortParams }) => {
                   <li key={key}>
                     <button
                       onClick={(e) => {
-                        getSortParams("category", category.name);
+                        getSortParams('category', category.name);
                         setActiveSort(e);
                       }}
                     >
@@ -44,7 +44,7 @@ const Sidebar = ({ products, getSortParams }) => {
               })}
           </ul>
         ) : (
-          "No categories found"
+          'No categories found'
         )}
       </div>
 
@@ -55,7 +55,7 @@ const Sidebar = ({ products, getSortParams }) => {
             <li>
               <button
                 onClick={(e) => {
-                  getSortParams("size", "");
+                  getSortParams('size', '');
                   setActiveSort(e);
                 }}
               >
@@ -67,7 +67,7 @@ const Sidebar = ({ products, getSortParams }) => {
                 <li key={i}>
                   <button
                     onClick={(e) => {
-                      getSortParams("size", size);
+                      getSortParams('size', size);
                       setActiveSort(e);
                     }}
                   >
@@ -78,7 +78,7 @@ const Sidebar = ({ products, getSortParams }) => {
             })}
           </ul>
         ) : (
-          "No sizes found"
+          'No sizes found'
         )}
       </div>
 
@@ -91,7 +91,7 @@ const Sidebar = ({ products, getSortParams }) => {
                 <li key={key}>
                   <button
                     onClick={(e) => {
-                      getSortParams("color", color.colorName);
+                      getSortParams('color', color.colorName);
                       setActiveSort(e);
                     }}
                     style={{ backgroundColor: color.colorCode }}
@@ -102,7 +102,7 @@ const Sidebar = ({ products, getSortParams }) => {
             <li>
               <button
                 onClick={(e) => {
-                  getSortParams("color", "");
+                  getSortParams('color', '');
                   setActiveSort(e);
                 }}
               >
@@ -111,7 +111,7 @@ const Sidebar = ({ products, getSortParams }) => {
             </li>
           </ul>
         ) : (
-          "No colors found"
+          'No colors found'
         )}
       </div>
 
@@ -131,7 +131,7 @@ const Sidebar = ({ products, getSortParams }) => {
                     <div className="widget-product-post__image">
                       <Link
                         href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-                        as={"/shop/product-basic/" + product.slug}
+                        as={'/shop/product-basic/' + product.slug}
                       >
                         <a>
                           <img src={product.thumbImage[0]} alt="shop_small1" />
@@ -142,7 +142,7 @@ const Sidebar = ({ products, getSortParams }) => {
                       <h6 className="product-title">
                         <Link
                           href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-                          as={"/shop/product-basic/" + product.slug}
+                          as={'/shop/product-basic/' + product.slug}
                         >
                           <a>{product.name}</a>
                         </Link>
@@ -166,7 +166,7 @@ const Sidebar = ({ products, getSortParams }) => {
               })}
           </ul>
         ) : (
-          "No products found"
+          'No products found'
         )}
       </div>
 
@@ -180,7 +180,7 @@ const Sidebar = ({ products, getSortParams }) => {
                   <button
                     key={key}
                     onClick={(e) => {
-                      getSortParams("tag", tag);
+                      getSortParams('tag', tag);
                       setActiveSort(e);
                     }}
                   >
@@ -190,7 +190,7 @@ const Sidebar = ({ products, getSortParams }) => {
               })}
           </div>
         ) : (
-          "No tags found"
+          'No tags found'
         )}
       </div>
 

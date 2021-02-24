@@ -1,10 +1,10 @@
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4 } from 'uuid';
 import {
   ADD_TO_CART,
   DECREASE_QUANTITY,
   DELETE_FROM_CART,
-  DELETE_ALL_FROM_CART
-} from "../actions/cartActions";
+  DELETE_ALL_FROM_CART,
+} from '../actions/cartActions';
 
 const initState = [];
 
@@ -22,8 +22,8 @@ const cartReducer = (state = initState, action) => {
           {
             ...product,
             quantity: product.quantity ? product.quantity : 1,
-            cartItemId: uuidv4()
-          }
+            cartItemId: uuidv4(),
+          },
         ];
       } else {
         return cartItems.map((item) =>
@@ -32,7 +32,7 @@ const cartReducer = (state = initState, action) => {
                 ...item,
                 quantity: product.quantity
                   ? item.quantity + product.quantity
-                  : item.quantity + 1
+                  : item.quantity + 1,
               }
             : item
         );
@@ -55,8 +55,8 @@ const cartReducer = (state = initState, action) => {
           {
             ...product,
             quantity: product.quantity ? product.quantity : 1,
-            cartItemId: uuidv4()
-          }
+            cartItemId: uuidv4(),
+          },
         ];
       } else if (
         cartItem !== undefined &&
@@ -68,8 +68,8 @@ const cartReducer = (state = initState, action) => {
           {
             ...product,
             quantity: product.quantity ? product.quantity : 1,
-            cartItemId: uuidv4()
-          }
+            cartItemId: uuidv4(),
+          },
         ];
       } else {
         return cartItems.map((item) =>
@@ -80,7 +80,7 @@ const cartReducer = (state = initState, action) => {
                   ? item.quantity + product.quantity
                   : item.quantity + 1,
                 selectedProductColor: product.selectedProductColor,
-                selectedProductSize: product.selectedProductSize
+                selectedProductSize: product.selectedProductSize,
               }
             : item
         );

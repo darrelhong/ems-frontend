@@ -1,10 +1,10 @@
-import Link from "next/link";
-import { Row, Col } from "react-bootstrap";
+import Link from 'next/link';
+import { Row, Col } from 'react-bootstrap';
 
 const BannerFive = ({ containerClass }) => {
   return (
     <div className="banner-area space-pb--r70">
-      <div className={`${containerClass ? containerClass : "container"}`}>
+      <div className={`${containerClass ? containerClass : 'container'}`}>
         <Row>
           <Col md={4}>
             <div className="sale-banner px-0">

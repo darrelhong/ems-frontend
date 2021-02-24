@@ -1,14 +1,14 @@
-import { Container, Row, Col } from "react-bootstrap";
-import Tab from "react-bootstrap/Tab";
-import Nav from "react-bootstrap/Nav";
-import { ProductSliderFive } from "../ProductSlider";
+import { Container, Row, Col } from 'react-bootstrap';
+import Tab from 'react-bootstrap/Tab';
+import Nav from 'react-bootstrap/Nav';
+import { ProductSliderFive } from '../ProductSlider';
 
 const ProductTabTwo = ({
   title,
   newProducts,
   bestSellerProducts,
   featuredProducts,
-  saleProducts
+  saleProducts,
 }) => {
   return (
     <div className="product-tab-area space-pb--r100">

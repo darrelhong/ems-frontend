@@ -1,5 +1,5 @@
-import { Container, Row, Col } from "react-bootstrap";
-import { ProductGridWrapperFour } from "../ProductThumb";
+import { Container, Row, Col } from 'react-bootstrap';
+import { ProductGridWrapperFour } from '../ProductThumb';
 
 const ProductGridTwo = ({ title, text, products }) => {
   return (

@@ -1,5 +1,5 @@
-import { Container, Row, Col } from "react-bootstrap";
-import Link from "next/link";
+import { Container, Row, Col } from 'react-bootstrap';
+import Link from 'next/link';
 
 const BannerFour = () => {
   return (

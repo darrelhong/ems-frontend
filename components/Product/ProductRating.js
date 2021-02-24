@@ -1,5 +1,5 @@
-import { Fragment } from "react";
-import { FaStar, FaRegStar } from "react-icons/fa";
+import { Fragment } from 'react';
+import { FaStar, FaRegStar } from 'react-icons/fa';
 
 const ProductRating = ({ ratingValue }) => {
   let rating = [];

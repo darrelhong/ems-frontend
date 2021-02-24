@@ -1,7 +1,7 @@
-import { Fragment, useState } from "react";
-import Link from "next/link";
-import ProductModal from "./elements/ProductModal";
-import { ProductRating } from "../Product";
+import { Fragment, useState } from 'react';
+import Link from 'next/link';
+import ProductModal from './elements/ProductModal';
+import { ProductRating } from '../Product';
 
 const ProductGridFive = ({
   product,
@@ -18,23 +18,23 @@ const ProductGridFive = ({
   deleteFromCompare,
   addToast,
   cartItems,
-  sliderClass
+  sliderClass,
 }) => {
   const [modalShow, setModalShow] = useState(false);
-  const [colorImage, setColorImage] = useState("");
+  const [colorImage, setColorImage] = useState('');
 
   return (
     <Fragment>
       <div
-        className={`${sliderClass ? sliderClass : ""} ${
-          bottomSpace ? bottomSpace : ""
+        className={`${sliderClass ? sliderClass : ''} ${
+          bottomSpace ? bottomSpace : ''
         }`}
       >
         <div className="product-grid product-grid--style-three">
           <div className="product-grid__image">
             <Link
               href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-              as={"/shop/product-basic/" + product.slug}
+              as={'/shop/product-basic/' + product.slug}
             >
               <a>
                 <img
@@ -49,16 +49,16 @@ const ProductGridFive = ({
               </a>
             </Link>
             <div className="product-grid__badge-wrapper">
-              {product.new ? <span className="pr-flash">NEW</span> : ""}
+              {product.new ? <span className="pr-flash">NEW</span> : ''}
               {product.featured ? (
                 <span className="pr-flash bg-danger">HOT</span>
               ) : (
-                ""
+                ''
               )}
               {product.discount ? (
                 <span className="pr-flash bg-success">SALE</span>
               ) : (
-                ""
+                ''
               )}
             </div>
             <div className="product-grid__action-box">
@@ -71,7 +71,7 @@ const ProductGridFive = ({
                   ) : product.variation && product.variation.length >= 1 ? (
                     <Link
                       href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-                      as={"/shop/product-basic/" + product.slug}
+                      as={'/shop/product-basic/' + product.slug}
                     >
                       <a>
                         <i className="icon-wrench" />
@@ -84,7 +84,7 @@ const ProductGridFive = ({
                         cartItem !== undefined &&
                         cartItem.quantity >= cartItem.stock
                       }
-                      className={cartItem !== undefined ? "active" : ""}
+                      className={cartItem !== undefined ? 'active' : ''}
                     >
                       <i className="icon-basket-loaded" />
                     </button>
@@ -101,7 +101,7 @@ const ProductGridFive = ({
                         ? () => deleteFromCompare(product, addToast)
                         : () => addToCompare(product, addToast)
                     }
-                    className={compareItem !== undefined ? "active" : ""}
+                    className={compareItem !== undefined ? 'active' : ''}
                   >
                     <i className="icon-shuffle" />
                   </button>
@@ -121,7 +121,7 @@ const ProductGridFive = ({
                         ? () => deleteFromWishlist(product, addToast)
                         : () => addToWishlist(product, addToast)
                     }
-                    className={wishlistItem !== undefined ? "active" : ""}
+                    className={wishlistItem !== undefined ? 'active' : ''}
                   >
                     <i className="icon-heart" />
                   </button>
@@ -133,7 +133,7 @@ const ProductGridFive = ({
             <h6 className="product-title">
               <Link
                 href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-                as={"/shop/product-basic/" + product.slug}
+                as={'/shop/product-basic/' + product.slug}
               >
                 <a>{product.name}</a>
               </Link>

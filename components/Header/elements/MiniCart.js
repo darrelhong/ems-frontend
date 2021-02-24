@@ -1,10 +1,10 @@
-import { Fragment } from "react";
-import Link from "next/link";
-import { connect } from "react-redux";
-import { useToasts } from "react-toast-notifications";
-import { IoIosClose } from "react-icons/io";
-import { getDiscountPrice } from "../../../lib/product";
-import { deleteFromCart } from "../../../redux/actions/cartActions";
+import { Fragment } from 'react';
+import Link from 'next/link';
+import { connect } from 'react-redux';
+import { useToasts } from 'react-toast-notifications';
+import { IoIosClose } from 'react-icons/io';
+import { getDiscountPrice } from '../../../lib/product';
+import { deleteFromCart } from '../../../redux/actions/cartActions';
 
 const MiniCart = ({ cartItems, deleteFromCart }) => {
   let cartTotalPrice = 0;
@@ -32,7 +32,7 @@ const MiniCart = ({ cartItems, deleteFromCart }) => {
                     <div className="single-item__image">
                       <Link
                         href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-                        as={"/shop/product-basic/" + product.slug}
+                        as={'/shop/product-basic/' + product.slug}
                       >
                         <a>
                           <img src={product.thumbImage[0]} alt="cart_thumb1" />
@@ -42,15 +42,15 @@ const MiniCart = ({ cartItems, deleteFromCart }) => {
                     <div className="single-item__content">
                       <Link
                         href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-                        as={"/shop/product-basic/" + product.slug}
+                        as={'/shop/product-basic/' + product.slug}
                       >
                         <a>{product.name}</a>
                       </Link>
                       <span className="cart-quantity">
-                        {" "}
-                        {product.quantity} x{" "}
+                        {' '}
+                        {product.quantity} x{' '}
                         <span className="cart-amount">
-                          {" "}
+                          {' '}
                           <span className="price-symbol">$</span>
                         </span>
                         {discountedPrice}
@@ -62,7 +62,7 @@ const MiniCart = ({ cartItems, deleteFromCart }) => {
                           <p>Size: {product.selectedProductSize}</p>
                         </div>
                       ) : (
-                        ""
+                        ''
                       )}
                     </div>
                   </div>
@@ -72,9 +72,9 @@ const MiniCart = ({ cartItems, deleteFromCart }) => {
           </ul>
           <div className="cart-footer">
             <p className="cart-total">
-              <strong>Subtotal:</strong>{" "}
+              <strong>Subtotal:</strong>{' '}
               <span className="cart-price">
-                {" "}
+                {' '}
                 <span className="price-symbol">$</span>
               </span>
               {cartTotalPrice.toFixed(2)}
@@ -90,7 +90,7 @@ const MiniCart = ({ cartItems, deleteFromCart }) => {
           </div>
         </div>
       ) : (
-        ""
+        ''
       )}
     </Fragment>
   );
@@ -100,7 +100,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     deleteFromCart: (item, addToast) => {
       dispatch(deleteFromCart(item, addToast));
-    }
+    },
   };
 };
 

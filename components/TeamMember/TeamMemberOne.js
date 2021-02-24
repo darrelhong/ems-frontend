@@ -1,10 +1,10 @@
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col } from 'react-bootstrap';
 import {
   FaFacebookF,
   FaTwitter,
   FaGooglePlusG,
-  FaInstagram
-} from "react-icons/fa";
+  FaInstagram,
+} from 'react-icons/fa';
 
 const TeamMemberOne = ({ teamMemberData }) => {
   return (

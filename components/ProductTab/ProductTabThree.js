@@ -1,8 +1,8 @@
-import { Row, Col } from "react-bootstrap";
-import Link from "next/link";
-import Tab from "react-bootstrap/Tab";
-import Nav from "react-bootstrap/Nav";
-import { ProductSliderTen } from "../ProductSlider";
+import { Row, Col } from 'react-bootstrap';
+import Link from 'next/link';
+import Tab from 'react-bootstrap/Tab';
+import Nav from 'react-bootstrap/Nav';
+import { ProductSliderTen } from '../ProductSlider';
 
 const ProductTabThree = ({
   title,
@@ -10,7 +10,7 @@ const ProductTabThree = ({
   newProducts,
   bestSellerProducts,
   featuredProducts,
-  saleProducts
+  saleProducts,
 }) => {
   return (
     <div className="product-tab-area space-pb--r100">

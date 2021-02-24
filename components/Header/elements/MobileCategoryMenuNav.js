@@ -1,41 +1,41 @@
-import { useEffect } from "react";
-import Link from "next/link";
+import { useEffect } from 'react';
+import Link from 'next/link';
 
 const MobileCategoryMenuNav = ({ getActiveStatus }) => {
   useEffect(() => {
     const offCanvasNav = document.querySelector(
-      "#offcanvas-mobile-category-menu__navigation"
+      '#offcanvas-mobile-category-menu__navigation'
     );
     const offCanvasNavSubMenu = offCanvasNav.querySelectorAll(
-      ".mobile-sub-menu"
+      '.mobile-sub-menu'
     );
-    const anchorLinks = offCanvasNav.querySelectorAll("a");
+    const anchorLinks = offCanvasNav.querySelectorAll('a');
 
     for (let i = 0; i < offCanvasNavSubMenu.length; i++) {
       offCanvasNavSubMenu[i].insertAdjacentHTML(
-        "beforebegin",
+        'beforebegin',
         "<span class='menu-expand'><i></i></span>"
       );
     }
 
-    const menuExpand = offCanvasNav.querySelectorAll(".menu-expand");
+    const menuExpand = offCanvasNav.querySelectorAll('.menu-expand');
     const numMenuExpand = menuExpand.length;
 
     for (let i = 0; i < numMenuExpand; i++) {
-      menuExpand[i].addEventListener("click", (e) => {
+      menuExpand[i].addEventListener('click', (e) => {
         sideMenuExpand(e);
       });
     }
 
     for (let i = 0; i < anchorLinks.length; i++) {
-      anchorLinks[i].addEventListener("click", () => {
+      anchorLinks[i].addEventListener('click', () => {
         getActiveStatus(false);
       });
     }
   });
 
   const sideMenuExpand = (e) => {
-    e.currentTarget.parentElement.classList.toggle("active");
+    e.currentTarget.parentElement.classList.toggle('active');
   };
   return (
     <nav

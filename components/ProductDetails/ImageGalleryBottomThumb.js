@@ -1,6 +1,6 @@
-import { Fragment, useState, useEffect } from "react";
-import Swiper from "react-id-swiper";
-import { LightgalleryProvider, LightgalleryItem } from "react-lightgallery";
+import { Fragment, useState, useEffect } from 'react';
+import Swiper from 'react-id-swiper';
+import { LightgalleryProvider, LightgalleryItem } from 'react-lightgallery';
 
 const ImageGalleryBottomThumb = ({ product }) => {
   const [gallerySwiper, getGallerySwiper] = useState(null);
@@ -25,7 +25,7 @@ const ImageGalleryBottomThumb = ({ product }) => {
     spaceBetween: 10,
     loopedSlides: 4,
     loop: true,
-    effect: "fade"
+    effect: 'fade',
   };
 
   const thumbnailSwiperParams = {
@@ -36,7 +36,7 @@ const ImageGalleryBottomThumb = ({ product }) => {
     touchRatio: 0.2,
     freeMode: true,
     loop: true,
-    slideToClickedSlide: true
+    slideToClickedSlide: true,
   };
 
   return (

@@ -1,7 +1,7 @@
-import Link from "next/link";
-import { Container, Row, Col } from "react-bootstrap";
-import Swiper from "react-id-swiper";
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import Link from 'next/link';
+import { Container, Row, Col } from 'react-bootstrap';
+import Swiper from 'react-id-swiper';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 const HeroSliderFive = ({ heroSliderData }) => {
   const params = {
@@ -9,14 +9,14 @@ const HeroSliderFive = ({ heroSliderData }) => {
     speed: 1000,
     autoplay: {
       delay: 5000,
-      disableOnInteraction: false
+      disableOnInteraction: false,
     },
     watchSlidesVisibility: true,
-    effect: "fade",
+    effect: 'fade',
     pagination: {
-      el: ".swiper-pagination",
-      clickable: true
-    }
+      el: '.swiper-pagination',
+      clickable: true,
+    },
     // navigation: {
     //   nextEl: ".swiper-button-next",
     //   prevEl: ".swiper-button-prev"
@@ -45,7 +45,7 @@ const HeroSliderFive = ({ heroSliderData }) => {
                       <div
                         className="hero-slider__slide bg-image"
                         style={{
-                          backgroundImage: `url(${single.backgroundImage})`
+                          backgroundImage: `url(${single.backgroundImage})`,
                         }}
                         key={key}
                       >

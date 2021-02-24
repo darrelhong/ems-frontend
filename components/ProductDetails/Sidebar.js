@@ -1,18 +1,18 @@
-import { Fragment } from "react";
-import { IoIosArrowForward } from "react-icons/io";
-import Link from "next/link";
+import { Fragment } from 'react';
+import { IoIosArrowForward } from 'react-icons/io';
+import Link from 'next/link';
 import {
   getIndividualCategories,
   getIndividualTags,
   getProducts,
-  getDiscountPrice
-} from "../../lib/product";
-import { ProductRating } from "../../components/Product";
+  getDiscountPrice,
+} from '../../lib/product';
+import { ProductRating } from '../../components/Product';
 
 const Sidebar = ({ products, category }) => {
   const categories = getIndividualCategories(products);
   const tags = getIndividualTags(products);
-  const popularProducts = getProducts(products, category, "popular", 3);
+  const popularProducts = getProducts(products, category, 'popular', 3);
 
   return (
     <div className="sidebar">
@@ -36,7 +36,7 @@ const Sidebar = ({ products, category }) => {
               })}
           </ul>
         ) : (
-          "No categories found"
+          'No categories found'
         )}
       </div>
 
@@ -56,7 +56,7 @@ const Sidebar = ({ products, category }) => {
                     <div className="widget-product-post__image">
                       <Link
                         href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-                        as={"/shop/product-basic/" + product.slug}
+                        as={'/shop/product-basic/' + product.slug}
                       >
                         <a>
                           <img src={product.thumbImage[0]} alt="shop_small1" />
@@ -67,7 +67,7 @@ const Sidebar = ({ products, category }) => {
                       <h6 className="product-title">
                         <Link
                           href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-                          as={"/shop/product-basic/" + product.slug}
+                          as={'/shop/product-basic/' + product.slug}
                         >
                           <a>{product.name}</a>
                         </Link>
@@ -91,7 +91,7 @@ const Sidebar = ({ products, category }) => {
               })}
           </ul>
         ) : (
-          "No products found"
+          'No products found'
         )}
       </div>
 
@@ -109,7 +109,7 @@ const Sidebar = ({ products, category }) => {
               })}
           </div>
         ) : (
-          "No tags found"
+          'No tags found'
         )}
       </div>
 

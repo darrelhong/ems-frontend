@@ -1,4 +1,4 @@
-import { FETCH_PRODUCTS_SUCCESS } from "../actions/productActions";
+import { FETCH_PRODUCTS_SUCCESS } from '../actions/productActions';
 
 const initState = [];
 

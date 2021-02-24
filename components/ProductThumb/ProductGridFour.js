@@ -1,8 +1,8 @@
-import { Fragment, useState } from "react";
-import Link from "next/link";
-import { Col } from "react-bootstrap";
-import ProductModal from "./elements/ProductModal";
-import { ProductRating } from "../Product";
+import { Fragment, useState } from 'react';
+import Link from 'next/link';
+import { Col } from 'react-bootstrap';
+import ProductModal from './elements/ProductModal';
+import { ProductRating } from '../Product';
 
 const ProductGridFour = ({
   product,
@@ -19,25 +19,25 @@ const ProductGridFour = ({
   deleteFromCompare,
   addToast,
   cartItems,
-  sliderClass
+  sliderClass,
 }) => {
   const [modalShow, setModalShow] = useState(false);
-  const [colorImage, setColorImage] = useState("");
+  const [colorImage, setColorImage] = useState('');
 
   return (
     <Fragment>
       <Col
         lg={3}
         sm={6}
-        className={`${sliderClass ? sliderClass : ""} ${
-          bottomSpace ? bottomSpace : ""
+        className={`${sliderClass ? sliderClass : ''} ${
+          bottomSpace ? bottomSpace : ''
         }`}
       >
         <div className="product-grid product-grid--style-two">
           <div className="product-grid__image">
             <Link
               href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-              as={"/shop/product-basic/" + product.slug}
+              as={'/shop/product-basic/' + product.slug}
             >
               <a>
                 <img
@@ -56,7 +56,7 @@ const ProductGridFour = ({
                         ? () => deleteFromCompare(product, addToast)
                         : () => addToCompare(product, addToast)
                     }
-                    className={compareItem !== undefined ? "active" : ""}
+                    className={compareItem !== undefined ? 'active' : ''}
                   >
                     <i className="icon-shuffle" />
                   </button>
@@ -76,7 +76,7 @@ const ProductGridFour = ({
                         ? () => deleteFromWishlist(product, addToast)
                         : () => addToWishlist(product, addToast)
                     }
-                    className={wishlistItem !== undefined ? "active" : ""}
+                    className={wishlistItem !== undefined ? 'active' : ''}
                   >
                     <i className="icon-heart" />
                   </button>
@@ -88,7 +88,7 @@ const ProductGridFour = ({
             <h6 className="product-title">
               <Link
                 href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-                as={"/shop/product-basic/" + product.slug}
+                as={'/shop/product-basic/' + product.slug}
               >
                 <a>{product.name}</a>
               </Link>
@@ -119,7 +119,7 @@ const ProductGridFour = ({
               ) : product.variation && product.variation.length >= 1 ? (
                 <Link
                   href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-                  as={"/shop/product-basic/" + product.slug}
+                  as={'/shop/product-basic/' + product.slug}
                 >
                   <a className="btn btn-fill-out btn-radius">
                     <i className="icon-wrench" /> Select Options
@@ -133,7 +133,7 @@ const ProductGridFour = ({
                     cartItem.quantity >= cartItem.stock
                   }
                   className={`btn btn-fill-out btn-radius ${
-                    cartItem !== undefined ? "active" : ""
+                    cartItem !== undefined ? 'active' : ''
                   }`}
                 >
                   <i className="icon-basket-loaded" /> Add To Cart

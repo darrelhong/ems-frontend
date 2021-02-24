@@ -5,10 +5,10 @@ import {
   IoLogoFacebook,
   IoLogoInstagram,
   IoLogoPinterest,
-  IoMdPerson
-} from "react-icons/io";
+  IoMdPerson,
+} from 'react-icons/io';
 
-import Link from "next/link";
+import Link from 'next/link';
 
 const MobileMenuWidgets = () => {
   return (

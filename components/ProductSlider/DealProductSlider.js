@@ -1,10 +1,10 @@
-import { useState, Fragment } from "react";
-import Link from "next/link";
-import { Row, Col } from "react-bootstrap";
-import Countdown from "react-countdown";
-import Swiper from "react-id-swiper";
-import { getDiscountPrice } from "../../lib/product";
-import RendererTwo from "../../components/Countdown/RendererTwo";
+import { useState, Fragment } from 'react';
+import Link from 'next/link';
+import { Row, Col } from 'react-bootstrap';
+import Countdown from 'react-countdown';
+import Swiper from 'react-id-swiper';
+import { getDiscountPrice } from '../../lib/product';
+import RendererTwo from '../../components/Countdown/RendererTwo';
 
 const DealProductSlider = ({ title, products }) => {
   const [swiper, setSwiper] = useState(null);
@@ -28,18 +28,18 @@ const DealProductSlider = ({ title, products }) => {
     spaceBetween: 30,
     breakpoints: {
       1024: {
-        slidesPerView: 2
+        slidesPerView: 2,
       },
       768: {
-        slidesPerView: 2
+        slidesPerView: 2,
       },
       576: {
-        slidesPerView: 1
+        slidesPerView: 1,
       },
       320: {
-        slidesPerView: 1
-      }
-    }
+        slidesPerView: 1,
+      },
+    },
   };
   return (
     <div className="deal-product-area  space-pb--r100">
@@ -81,7 +81,7 @@ const DealProductSlider = ({ title, products }) => {
                         <div className="deal-product__image">
                           <Link
                             href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-                            as={"/shop/product-basic/" + product.slug}
+                            as={'/shop/product-basic/' + product.slug}
                           >
                             <a>
                               <img
@@ -95,7 +95,7 @@ const DealProductSlider = ({ title, products }) => {
                           <h5 className="product-title">
                             <Link
                               href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-                              as={"/shop/product-basic/" + product.slug}
+                              as={'/shop/product-basic/' + product.slug}
                             >
                               <a>{product.name}</a>
                             </Link>
