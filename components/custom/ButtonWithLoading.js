@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
-import { Button, Spinner } from 'react-bootstrap';
+import { Spinner } from 'react-bootstrap';
 
 export default function ButtonWithLoading({ isLoading, children, ...props }) {
   return (
-    <Button {...props}>
+    <button {...props}>
       {children}{' '}
       {isLoading && (
         <Spinner
@@ -14,7 +14,7 @@ export default function ButtonWithLoading({ isLoading, children, ...props }) {
           aria-hidden="true"
         />
       )}
-    </Button>
+    </button>
   );
 }
 
