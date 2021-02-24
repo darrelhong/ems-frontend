@@ -3,8 +3,10 @@ import { LayoutOne } from '../../layouts';
 import { BreadcrumbOne } from '../../components/Breadcrumb';
 import { Container, Row, Col } from 'react-bootstrap';
 import { ProductRating } from '../../components/Product';
-import { ProductTabFour } from '../../components/ProductTab';
-
+import  EventsProfile  from '../../components/ProductTab/EventsProfile';
+import PartnerWrapper from '../../components/wrapper/PartnerWrapper';
+import useUser from '../../lib/query/useUser';
+import { useState, useEffect } from 'react';
 //import {
 //IoIosList,
 //IoIosClipboard,
@@ -19,10 +21,41 @@ import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
 import Badge from 'react-bootstrap/Badge';
+import PropTypes from 'prop-types';
+import { withRouter } from 'next/router';
+import getEvents from '../../lib/query/getEvents';
+const PartnerProfile = ({
+  router: { query },
+}) => {
+ 
+  const localuser = JSON.parse(query.localuser);
+  // if user = BP , and view his own profile, there should be an edit button and should have no follow button
+  const [publicView, setPublicView] = useState();
+  const {data : partner} = useUser(localuser.id);
+  const { data: user } = useUser(localStorage.getItem('userId'));
 
-const EventOrgProfile = () => {
-  return (
-    <LayoutOne>
+
+   useEffect(() => { 
+    
+    if(user?.id !== localuser.id){
+    setPublicView(true);
+  }else{
+    setPublicView(false);
+  }
+   
+   })
+
+   const { data: events } = getEvents(
+    localStorage.getItem('userId')
+  );
+
+
+ 
+ 
+  return ( 
+    
+
+    <PartnerWrapper>
       {/* breadcrumb */}
       <BreadcrumbOne pageTitle="Business Partner Profile Details">
         <ol className="breadcrumb justify-content-md-end">
@@ -48,32 +81,33 @@ const EventOrgProfile = () => {
                 />
               </Col>
               <Col xs={6} md={4}>
-                <h2>Sunny Tech</h2>
-                <div className="product-content__rating-wrap">
+                <h2>{partner?.name}</h2>
+                {/* <div className="product-content__rating-wrap">
                   <div className="product-content__rating">
                     <ProductRating ratingValue={3} />
                     <span>({3})</span>
                   </div>
-                </div>
+                </div> */}
                 <div>
                   <p>
                     Category:
                     <span>
                       {' '}
-                      <Badge variant="primary">Technology</Badge>{' '}
+                      <Badge variant="primary">{partner?.businessCategory}</Badge>{' '}
                     </span>
                   </p>
                 </div>
 
                 <br></br>
-                <button
+                {publicView && (<button
                   type="submit"
                   className="btn btn-fill-out"
                   name="submit"
                   value="Submit"
                 >
                   Follow
-                </button>
+                </button>)}
+                
               </Col>
             </Row>
           </Container>
@@ -86,7 +120,7 @@ const EventOrgProfile = () => {
                 className="product-description-tab__navigation"
               >
                 <Nav.Item>
-                  <Nav.Link eventKey="Events">PARTICIPATED EVENTS</Nav.Link>
+                  <Nav.Link eventKey="Events">EVENTS</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
                   <Nav.Link eventKey="Description">DESCRIPTION</Nav.Link>
@@ -102,22 +136,19 @@ const EventOrgProfile = () => {
                       />
                       */}
                     {/* tab product -> refers to eletronic-two*/}
-                    <ProductTabFour
+                    <EventsProfile
 
-                    // newProducts="newProducts"
-                    //bestSellerProducts="bestSellerProducts"
-                    //featuredProducts="featuredProducts"
-                    //saleProducts="saleProducts"
-                    />
+                      current={events}
+                  //   upcoming="bestSellerProducts"
+                  //  past="featuredProducts"
+                   
+                    /> 
                   </div>
                 </Tab.Pane>
                 <Tab.Pane eventKey="Description">
                   <br></br>
                   <div className="product-description-tab__additional-info">
-                    Sunny Tech is Lorem ipsum dolor sit amet consectetur
-                    adipisicing elit. Assumenda tempore doloribus hic. Repellat
-                    aut id, quia aliquid mollitia facilis praesentium, delectus
-                    fugiat ut sunt dolores fuga voluptate non culpa quis.
+                    {partner?.description}
                   </div>
                 </Tab.Pane>
               </Tab.Content>
@@ -125,9 +156,9 @@ const EventOrgProfile = () => {
           </Col>
         </Row>
       </div>
-    </LayoutOne>
+     </PartnerWrapper>
   );
-};
+}
 /*
 const mapStateToProps = (state) => {
   const products = state.productData;
@@ -142,4 +173,7 @@ const mapStateToProps = (state) => {
 };
  */
 
-export default EventOrgProfile;
+// PartnerProfile.propTypes = {
+//   id: PropTypes.long,
+// };
+export default withRouter(PartnerProfile);

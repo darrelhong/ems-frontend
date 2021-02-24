@@ -1,10 +1,16 @@
-import { Link } from '@chakra-ui/react';
+import Link from "next/link";
 import { Container, Row, Col } from 'react-bootstrap';
 import { AiOutlineUser, AiOutlineSetting, AiOutlineLogout, AiOutlineNotification } from 'react-icons/ai';
+import {
 
+  IoIosHeartEmpty
+} from "react-icons/io";
+import useUser from '../../lib/query/useUser';
 import { logout } from '../../lib/auth';
 
-const OrganiserHeaderTop = () => {
+const PartnerHeaderTop = () => {
+  const { data: localuser } = useUser(localStorage.getItem('userId'));
+  console.log(JSON.stringify(localuser) );
   return (
     <div className="top-header d-lg-block">
       <Container>
@@ -21,7 +27,17 @@ const OrganiserHeaderTop = () => {
                   </Link>
                 </li>
               <li>
-                  <Link href="/organiser/profile-public">
+              <li>
+                  <Link href="/other/wishlist">
+                    <a>
+                      <IoIosHeartEmpty />
+                      <span>Wishlist</span>
+                    </a>
+                  </Link>
+                </li>
+                  {/* <Link href={`/partner/profile-public?id=${JSON.stringify(localuser?.id)}`}> */}
+                  
+                  <Link href={{ pathname: "/partner/profile-public", query: { localuser: JSON.stringify(localuser) } }}>
                     <a>
                     <AiOutlineUser />
                       <span>Profile</span>
@@ -29,7 +45,7 @@ const OrganiserHeaderTop = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/organiser/profile-account">
+                  <Link href="/partner/profile-account/">
                     <a>
                       <AiOutlineSetting />
                       <span>Settings</span>
@@ -37,7 +53,7 @@ const OrganiserHeaderTop = () => {
                   </Link>
                 </li>
                 <li>
-                  <a onClick={() => logout({ redirectTo: '/organiser/login' })}>
+                  <a onClick={() => logout({ redirectTo: '/partner/login' })}>
                     <AiOutlineLogout/>
                     <span>Logout</span>
                   </a>
@@ -51,4 +67,4 @@ const OrganiserHeaderTop = () => {
   );
 };
 
-export default OrganiserHeaderTop;
+export default PartnerHeaderTop;

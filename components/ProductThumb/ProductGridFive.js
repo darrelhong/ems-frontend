@@ -5,19 +5,19 @@ import { ProductRating } from "../Product";
 
 const ProductGridFive = ({
   product,
-  discountedPrice,
-  productPrice,
-  cartItem,
-  wishlistItem,
-  compareItem,
+  // discountedPrice,
+  // productPrice,
+  // cartItem,
+  // wishlistItem,
+  // compareItem,
   bottomSpace,
-  addToCart,
-  addToWishlist,
-  deleteFromWishlist,
-  addToCompare,
-  deleteFromCompare,
-  addToast,
-  cartItems,
+  // addToCart,
+  // addToWishlist,
+  // deleteFromWishlist,
+  // addToCompare,
+  // deleteFromCompare,
+  // addToast,
+  // cartItems,
   sliderClass
 }) => {
   const [modalShow, setModalShow] = useState(false);
@@ -31,7 +31,7 @@ const ProductGridFive = ({
         }`}
       >
         <div className="product-grid product-grid--style-three">
-          <div className="product-grid__image">
+          {/* <div className="product-grid__image">
             <Link
               href={`/shop/product-basic/[slug]?slug=${product.slug}`}
               as={"/shop/product-basic/" + product.slug}
@@ -128,17 +128,17 @@ const ProductGridFive = ({
                 </li>
               </ul>
             </div>
-          </div>
+          </div> */} 
           <div className="product-grid__info">
             <h6 className="product-title">
-              <Link
+              {/* <Link
                 href={`/shop/product-basic/[slug]?slug=${product.slug}`}
                 as={"/shop/product-basic/" + product.slug}
-              >
+              > */}
                 <a>{product.name}</a>
-              </Link>
+              {/* </Link> */}
             </h6>
-            <div className="product-price">
+            {/* <div className="product-price">
               {product.discount ? (
                 <Fragment>
                   <span className="price">${discountedPrice}</span>
@@ -148,16 +148,16 @@ const ProductGridFive = ({
               ) : (
                 <span className="price">${productPrice}</span>
               )}
-            </div>
-            <div className="rating-wrap">
+            </div> */}
+            {/* <div className="rating-wrap">
               <ProductRating ratingValue={product.rating} />
               <span className="rating-num">({product.ratingCount})</span>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
       {/* product modal */}
-      <ProductModal
+      {/* <ProductModal
         show={modalShow}
         onHide={() => setModalShow(false)}
         product={product}
@@ -173,7 +173,7 @@ const ProductGridFive = ({
         addtocompare={addToCompare}
         deletefromcompare={deleteFromCompare}
         addtoast={addToast}
-      />
+      /> */}
     </Fragment>
   );
 };
