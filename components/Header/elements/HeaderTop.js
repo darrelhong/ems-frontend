@@ -1,15 +1,15 @@
-import Link from "next/link";
-import { Container, Row, Col, Form } from "react-bootstrap";
+import Link from 'next/link';
+import { Container, Row, Col, Form } from 'react-bootstrap';
 import {
   IoIosPhonePortrait,
   IoIosShuffle,
-  IoIosHeartEmpty
-} from "react-icons/io";
-import { AiOutlineUser } from "react-icons/ai";
+  IoIosHeartEmpty,
+} from 'react-icons/io';
+import { AiOutlineUser } from 'react-icons/ai';
 
 const HeaderTop = () => {
   return (
-    <div className="top-header d-none d-lg-block">
+    <div className="top-header d-lg-block">
       <Container>
         <Row className="align-items-center">
           <Col md={6}>

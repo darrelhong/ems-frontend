@@ -1,29 +1,31 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { Button, Text } from '@chakra-ui/react';
+import { Container, Row } from 'react-bootstrap';
 
-import NavBar from '../../components/NavBar/NavBar';
-import PageContainer from '../../components/PageContainer';
-import ChakraWrapper from '../../components/ChakraWrapper';
+import HomeHeaderTop from '../../components/Header/HomeHeaderTop';
 
 export default function RegisterSucces() {
   return (
-    <ChakraWrapper>
+    <>
       <Head>
         <title>Registration succesful!</title>
       </Head>
 
-      <NavBar />
+      <HomeHeaderTop />
 
-      <PageContainer centerContent>
-        <Text mt={10} fontWeight="bold" textAlign="center">
-          You have succesfully registered. Please check your inbox to verify
-          your email.
-        </Text>
-        <Link href="/" passHref>
-          <Button mt={4}>Back to home</Button>
-        </Link>
-      </PageContainer>
-    </ChakraWrapper>
+      <Container>
+        <Row className="justify-content-center">
+          <p className="mt-5 text-center">
+            <strong>
+              You have succesfully registered. Please check your inbox to verify
+              your email.
+            </strong>
+          </p>
+          <Link href="/" passHref>
+            <button className="btn btn-fill-out mt-2">Back to home</button>
+          </Link>
+        </Row>
+      </Container>
+    </>
   );
 }

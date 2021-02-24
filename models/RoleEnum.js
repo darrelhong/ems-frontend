@@ -1,8 +1,8 @@
 const RoleEnum = {
   ADMIN: 'admin',
-  EVNTORG: 'evntorg',
-  BIZPTNR: 'bizptnr',
-  ATND: 'atnd',
+  EVNTORG: 'organiser',
+  BIZPTNR: 'partner',
+  ATND: 'attendee',
 };
 
 export default RoleEnum;

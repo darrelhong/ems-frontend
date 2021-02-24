@@ -59,14 +59,15 @@
       }
     }
     .custom-file-label {
-      margin-left: 15px;
-      margin-right: 15px;
+      margin-left: 2%;
+      margin-right: 35%;
     }
+  
 
-    // .profile-image{
-    //   border:solid;
-    //   border-color: black;
-    // }
+     .profile-image{
+       max-height:350px;
+       max-width:350px;
+     }
 
     form {
       .form-control {
@@ -74,6 +75,13 @@
       }
     }
   }
+}
+.custom-file-label{
+   margin-left: 3%;
+   margin-right: 2%;
+}
+.uploadFileLabel{
+  margin-left: 3%;
 }
 
 /*=====  End of my account  ======*/

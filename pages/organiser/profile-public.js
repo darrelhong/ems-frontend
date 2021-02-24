@@ -4,23 +4,20 @@ import { BreadcrumbOne } from '../../components/Breadcrumb';
 import { Container, Row, Col } from 'react-bootstrap';
 import { ProductRating } from '../../components/Product';
 import { ProductTabFour } from '../../components/ProductTab';
-
-//import {
-//IoIosList,
-//IoIosClipboard,
-//IoIosDownload,
-//IoIosCash,
-//IoIosCreate,
-//IoIosPerson,
-//} from "react-icons/io";
-
+import useUser from '../../lib/query/useUser';
+import api from '../../lib/ApiClient';
 import { IoIosStar, IoIosStarOutline } from 'react-icons/io';
+import { BsPencilSquare } from 'react-icons/bs';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
-import Card from 'react-bootstrap/Card';
 import Image from 'react-bootstrap/Image';
 
 const EventOrgProfile = () => {
+const { data: user } = useUser(localStorage.getItem('userId'));
+console.log(user);
+
+
+
   return (
     <LayoutOne>
       {/* breadcrumb */}
@@ -40,16 +37,16 @@ const EventOrgProfile = () => {
       <div className="my-account-content space-pt--r100 space-pb--r100">
         <div>
           <Container>
-            <Row>
-              <Col xs={6} md={4}>
+            <Row className="justify-content-md-center">
+              <Col xs={4} md={6}>
                 <Image
                   className="profile-image"
-                  src="https://www.careerup.com/wp-content/uploads/2016/01/internship-opportunity-advertising-saga-events-1.png"
-                  roundedCircle
+                  src={user?.profilePic}
+                  thumbnail
                 />
               </Col>
-              <Col xs={6} md={4}>
-                <h2>SG Events Academy</h2>
+              <Col xs={4} md={6}>
+                <h2>{user?.name}</h2>
                 <div className="product-content__rating-wrap">
                   <div className="product-content__rating">
                     <ProductRating ratingValue={3} />
@@ -58,20 +55,32 @@ const EventOrgProfile = () => {
                 </div>
 
                 <br></br>
-                <button
-                  type="submit"
-                  className="btn btn-fill-out"
-                  name="submit"
-                  value="Submit"
-                >
-                  Follow
-                </button>
+             
+                  {/* <button
+                    className="btn btn-fill-out"
+                    name="follow"
+                    value="follow"
+                  >
+                    Follow
+                  </button> */}
+            
+                <div>
+                  <Link href="/organiser/profile-account">
+                    <button
+                      className="btn btn-fill-out"
+                      name="edit"
+                      value="edit"
+                    >
+                      <BsPencilSquare />
+                    </button>
+                  </Link>
+                </div>
               </Col>
             </Row>
           </Container>
         </div>
         <Row className="justify-content-md-center">
-          <Col md={{ span: 8 }}>
+          <Col xs={6} md={9}>
             <Tab.Container defaultActiveKey="Events">
               <Nav
                 variant="pills"
@@ -86,6 +95,13 @@ const EventOrgProfile = () => {
                 <Nav.Item>
                   <Nav.Link eventKey="reviews">
                     REVIEWS{' '}
+                    {/*product.ratingCount ? `(${product.ratingCount})` : ""*/}
+                  </Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                  {/*show only if the role is organiser*/}
+                  <Nav.Link eventKey="followers">
+                    FOLLOWERS{' '}
                     {/*product.ratingCount ? `(${product.ratingCount})` : ""*/}
                   </Nav.Link>
                 </Nav.Item>
@@ -112,10 +128,7 @@ const EventOrgProfile = () => {
                 <Tab.Pane eventKey="Description">
                   <br></br>
                   <div className="product-description-tab__additional-info">
-                    SG Events Academy is Lorem ipsum dolor sit amet consectetur
-                    adipisicing elit. Assumenda tempore doloribus hic. Repellat
-                    aut id, quia aliquid mollitia facilis praesentium, delectus
-                    fugiat ut sunt dolores fuga voluptate non culpa quis.
+                    {user?.description}
                   </div>
                 </Tab.Pane>
                 <Tab.Pane eventKey="reviews">
@@ -123,6 +136,7 @@ const EventOrgProfile = () => {
                     <div className="comments">
                       <br></br>
                       <h5 className="product-tab-title">
+                        {/*the product name is the event name*/}
                         {5} Review For <span>{'productname'}</span>
                       </h5>
                       <ul className="list-none comment-list mt-4">
@@ -196,6 +210,7 @@ const EventOrgProfile = () => {
                         </li>
                       </ul>
                     </div>
+                    {/*
                     <div className="review-form field-form">
                       <h5>Add a review</h5>
                       <form className="row mt-3">
@@ -248,6 +263,14 @@ const EventOrgProfile = () => {
                         </div>
                       </form>
                     </div>
+                   */}
+                  </div>
+                </Tab.Pane>
+                <Tab.Pane eventKey="followers">
+                  <br></br>
+                  <div className="product-description-tab__additional-info">
+                    {/*put the list of followers here*/}
+                    {''}
                   </div>
                 </Tab.Pane>
               </Tab.Content>

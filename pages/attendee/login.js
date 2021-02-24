@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 
 import LoginPage from '../../components/LoginPage';
-import RoleEnum from '../../models/RoleEnum';
 
 // get query params from URL to dispaly relavant feedback
 export const getServerSideProps = async ({ query }) => {
@@ -17,7 +16,7 @@ export default function AttendeeLogin({ info }) {
     <LoginPage
       info={info}
       heading="Participant Login"
-      loginApiUrl={`/api/user/login/${RoleEnum.ATND}`}
+      loginApiUrl="/api/user/login/atnd"
       loginSuccessUrl="/attendee/home"
       registerUrl="/attendee/register"
     />
