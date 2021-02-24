@@ -5,19 +5,19 @@ import { ProductRating } from "../Product";
 
 const ProductGridFive = ({
   product,
-  discountedPrice,
-  productPrice,
-  cartItem,
-  wishlistItem,
-  compareItem,
-  bottomSpace,
-  addToCart,
-  addToWishlist,
-  deleteFromWishlist,
-  addToCompare,
-  deleteFromCompare,
-  addToast,
-  cartItems,
+  // discountedPrice,
+  // productPrice,
+  // cartItem,
+  // wishlistItem,
+  // compareItem,
+   bottomSpace,
+  // addToCart,
+  // addToWishlist,
+  // deleteFromWishlist,
+  // addToCompare,
+  // deleteFromCompare,
+  // addToast,
+  // cartItems,
   sliderClass
 }) => {
   const [modalShow, setModalShow] = useState(false);
@@ -26,30 +26,33 @@ const ProductGridFive = ({
   return (
     <Fragment>
       <div
-        className={`${sliderClass ? sliderClass : ""} ${
-          bottomSpace ? bottomSpace : ""
+        className={`${sliderClass ? sliderClass : ''} ${
+          bottomSpace ? bottomSpace : ''
         }`}
       >
         <div className="product-grid product-grid--style-three">
           <div className="product-grid__image">
-            <Link
-              href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-              as={"/shop/product-basic/" + product.slug}
-            >
-              <a>
-                <img
-                  src={colorImage ? colorImage : product.thumbImage[0]}
-                  alt="product_img1"
-                />
-                <img
-                  className="product-hover-image"
-                  src={colorImage ? colorImage : product.thumbImage[1]}
-                  alt="product_img1"
-                />
-              </a>
-            </Link>
+            {/* <Link
+            // href={`/shop/product-basic/[slug]?slug=${product.slug}`}
+            // as={"/shop/product-basic/" + product.slug}
+            > */}
+            <a>
+              <img
+                //event images is here
+                // src={colorImage ? colorImage : product.images[0]}
+                src="https://www.creativiva.com/wp-content/uploads/2016/05/decor-blog-1.jpg"
+                alt="product_img1"
+              />
+              <img
+                className="product-hover-image"
+                src="https://i.pinimg.com/originals/b4/c3/8a/b4c38aad1728a7d6bb4bff0b3f88187d.jpg"
+                // src={colorImage ? colorImage : product.images[1]}
+                alt="product_img1"
+              />
+            </a>
+            {/* </Link> */}
             <div className="product-grid__badge-wrapper">
-              {product.new ? <span className="pr-flash">NEW</span> : ""}
+              {/* {product.new ? <span className="pr-flash">NEW</span> : ""}
               {product.featured ? (
                 <span className="pr-flash bg-danger">HOT</span>
               ) : (
@@ -59,10 +62,10 @@ const ProductGridFive = ({
                 <span className="pr-flash bg-success">SALE</span>
               ) : (
                 ""
-              )}
+              )} */}
             </div>
             <div className="product-grid__action-box">
-              <ul>
+              {/* <ul>
                 <li>
                   {product.affiliateLink ? (
                     <a href={product.affiliateLink} target="_blank">
@@ -126,32 +129,32 @@ const ProductGridFive = ({
                     <i className="icon-heart" />
                   </button>
                 </li>
-              </ul>
+              </ul> */}
             </div>
           </div>
           <div className="product-grid__info">
             <h6 className="product-title">
-              <Link
-                href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-                as={"/shop/product-basic/" + product.slug}
-              >
-                <a>{product.name}</a>
-              </Link>
+              {/* <Link
+                // href={`/shop/product-basic/[slug]?slug=${product.slug}`}
+                // as={'/shop/product-basic/' + product.slug}
+              > */}
+              <a>{product.name}</a>
+              {/* </Link> */}
             </h6>
             <div className="product-price">
-              {product.discount ? (
+              {/* {product.ticketPrice ? (
                 <Fragment>
                   <span className="price">${discountedPrice}</span>
-                  <del>${productPrice}</del>
-                  <span className="on-sale">{product.discount}% Off</span>
-                </Fragment>
+                  <del>${productPrice}</del> */}
+              {/* {/* <span className="on-sale">{product.discount}% Off</span> */}
+              {/* </Fragment>
               ) : (
-                <span className="price">${productPrice}</span>
-              )}
+                <span className="price">{product.ticketPrice}</span>
+              )}*/}
             </div>
             <div className="rating-wrap">
               <ProductRating ratingValue={product.rating} />
-              <span className="rating-num">({product.ratingCount})</span>
+              <span className="rating-num">({product.rating})</span>
             </div>
           </div>
         </div>
@@ -161,18 +164,18 @@ const ProductGridFive = ({
         show={modalShow}
         onHide={() => setModalShow(false)}
         product={product}
-        discountedprice={discountedPrice}
-        productprice={productPrice}
-        cartitems={cartItems}
-        cartitem={cartItem}
-        wishlistitem={wishlistItem}
-        compareitem={compareItem}
-        addtocart={addToCart}
-        addtowishlist={addToWishlist}
-        deletefromwishlist={deleteFromWishlist}
-        addtocompare={addToCompare}
-        deletefromcompare={deleteFromCompare}
-        addtoast={addToast}
+        // discountedprice={discountedPrice}
+        // productprice={productPrice}
+        // cartitems={cartItems}
+        // cartitem={cartItem}
+        // wishlistitem={wishlistItem}
+        // compareitem={compareItem}
+        // addtocart={addToCart}
+        // addtowishlist={addToWishlist}
+        // deletefromwishlist={deleteFromWishlist}
+        // addtocompare={addToCompare}
+        // deletefromcompare={deleteFromCompare}
+        // addtoast={addToast}
       />
     </Fragment>
   );

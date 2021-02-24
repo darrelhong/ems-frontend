@@ -1,7 +1,7 @@
 import Swiper from "react-id-swiper";
-import { ProductGridWrapperFive } from "../ProductThumb";
+import EventGridWrapperFiveEoProfile from '../ProductThumb/EventGridWrapperFiveEoProfile';
 
-const ProductSliderTen = ({ products }) => {
+const ProductSliderTen = ({ events }) => {
   const params = {
     loop: false,
     slidesPerView: 4,
@@ -35,8 +35,8 @@ const ProductSliderTen = ({ products }) => {
   return (
     <div className="product-slider-wrap product-slider-wrap--custom-bullet">
       <Swiper {...params}>
-        <ProductGridWrapperFive
-          products={products}
+        <EventGridWrapperFiveEoProfile
+          events={events}
           sliderClass="swiper-slide"
           bottomSpace="space-mb--30"
         />
