@@ -9,7 +9,8 @@ import { FooterOne } from '../../../components/Footer';
 import AdminHeaderTop from '../../../components/Header/AdminHeaderTop';
 import withProtectRoute from '../../../components/ProtectRouteWrapper';
 import { BreadcrumbOne } from '../../../components/Breadcrumb';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Alert, Col, Container, Row } from 'react-bootstrap';
+import ButtonWithLoading from '../../../components/custom/ButtonWithLoading';
 
 const getEventOrganiser = async (id) => {
   const { data } = await api.get(`/api/organiser/${id}`);
@@ -51,6 +52,15 @@ function EventOrganiserDetails({ id }) {
 
   const { mutate: disable } = useMutationInvalidate((id) =>
     api.post(`/api/user/disable/${id}`)
+  );
+
+  const {
+    mutate: resetPassword,
+    isLoading: rpIsLoading,
+    isSuccess: rpSuccess,
+    isError: rpError,
+  } = useMutation((email) =>
+    api.post(`/api/user/reset-password/request?email=${email}`)
   );
 
   // data fetching
@@ -144,7 +154,7 @@ function EventOrganiserDetails({ id }) {
                   Reject
                 </button>
               </Col>
-              <Col md={5}>
+              <Col md={5} className="mb-4">
                 <button
                   type="button"
                   className="btn btn-success btn-sm"
@@ -161,6 +171,28 @@ function EventOrganiserDetails({ id }) {
                 >
                   Disable
                 </button>
+              </Col>
+            </Row>
+
+            <Row>
+              <Col>
+                <ButtonWithLoading
+                  className="btn btn-primary btn-sm mb-2"
+                  onClick={() => resetPassword(eo.email)}
+                  isLoading={rpIsLoading}
+                >
+                  Send password reset email
+                </ButtonWithLoading>
+                {rpSuccess && (
+                  <Alert variant="success">
+                    Password reset email sent to user
+                  </Alert>
+                )}
+                {rpError && (
+                  <Alert variant="danger">
+                    An error has occured sending reset password email
+                  </Alert>
+                )}
               </Col>
             </Row>
           </>
