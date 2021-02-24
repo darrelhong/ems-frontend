@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import cx from 'classnames';
 
@@ -14,6 +15,7 @@ import Alert from 'react-bootstrap/Alert';
 import { useMutation } from 'react-query';
 
 export default function RegisterEvnOrg({ title, registerApiUrl }) {
+  const router = useRouter();
   const { register, handleSubmit, errors, watch } = useForm();
   const [show, setShow] = useState(true);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -24,8 +26,7 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
     (data) => api.post(registerApiUrl, data),
     {
       onSuccess: () => {
-        // router.push('/organiser/register-success');
-        setShowSuccess(true);
+        router.push('/register/success');
       },
     }
   );

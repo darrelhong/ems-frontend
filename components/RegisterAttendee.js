@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 
 import { Col, Container, Row } from 'react-bootstrap';
@@ -13,6 +14,7 @@ import { useMutation } from 'react-query';
 import api from '../lib/ApiClient';
 
 export default function RegisterAttendee({ title, registerApiUrl }) {
+  const router = useRouter();
   const { register, handleSubmit, errors, watch } = useForm();
   const [show, setShow] = useState(true);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -23,8 +25,7 @@ export default function RegisterAttendee({ title, registerApiUrl }) {
     (data) => api.post(registerApiUrl, data),
     {
       onSuccess: () => {
-        // router.push('/organiser/register-success');
-        setShowSuccess(true);
+        router.push('/register/success');
       },
     }
   );
