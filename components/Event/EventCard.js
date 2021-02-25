@@ -10,13 +10,14 @@ const EventCard = ({ event }) => {
             <Col
                 lg={4}
                 sm={6}
+                className="space-mb--50"
             >
                 <div className="product-list">
                     <div className="product-list__image">
                         <Link
                             href={`/organiser/event/1`}>
                             <a>
-                                <img src="nil" alt="event_image" />
+                                <img src="https://image.freepik.com/free-vector/cute-avocado-cartoon-hand-drawn-style_42349-476.jpg" alt="event_image" />
                             </a>
                         </Link>
                     </div>

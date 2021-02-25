@@ -8,11 +8,14 @@ import { getAllEventsByOrganiser } from "../../../lib/query/eventApi";
 import { LayoutOne } from "../../../layouts";
 import { Sidebar, ShopHeader, ShopProducts } from "../../../components/Shop";
 import EventView from "../../../components/Event/EventView";
+import useUser from '../../../lib/query/useUser';
 
 
 function myEvents() {
     const [events, setEvents] = useState([]);
     //test
+    const { data: user } = useUser(localStorage.getItem('userId'));
+    console.log("user", user);
     const [sortType, setSortType] = useState("");
     const [sortValue, setSortValue] = useState("");
     const [filterSortType, setFilterSortType] = useState("");
@@ -27,13 +30,17 @@ function myEvents() {
 
 
     useEffect(() => {
-        const getEvents = async () => {
-            const data = await getAllEventsByOrganiser(2);
-            setEvents(data);
+        if (user != null) {
+            const getEvents = async () => {
+                const data = await getAllEventsByOrganiser(user.id);
+                setEvents(data);
+
+            }
+            getEvents();
+            setCurrentData(events.slice(offset, offset + pageLimit));
         }
-        getEvents();
-        setCurrentData(events.slice(offset, offset + pageLimit));
-    }, [offset]);
+
+    }, [offset, user]);
 
     const getLayout = (layout) => {
         setLayout(layout);
