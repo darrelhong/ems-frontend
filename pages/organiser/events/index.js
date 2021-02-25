@@ -7,12 +7,17 @@ import OrganiserWrapper from '../../../components/wrapper/OrganiserWrapper';
 import { getAllEvents } from "../../../lib/query/eventApi";
 import { LayoutOne } from "../../../layouts";
 import { Sidebar, ShopHeader, ShopProducts } from "../../../components/Shop";
-
+import EventView from "../../../components/Event/EventView";
 
 
 function myEvents() {
     const [events, setEvents] = useState([]);
     //test
+    const [sortType, setSortType] = useState("");
+    const [sortValue, setSortValue] = useState("");
+    const [filterSortType, setFilterSortType] = useState("");
+    const [filterSortValue, setFilterSortValue] = useState("");
+    const [shopTopFilterStatus, setShopTopFilterStatus] = useState(false);
     const [layout, setLayout] = useState("list");
     const [offset, setOffset] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
@@ -27,8 +32,22 @@ function myEvents() {
             setEvents(data);
         }
         getEvents();
-        // setCurrentData(events.slice(offset, offset + pageLimit));
-    });
+        setCurrentData(events.slice(offset, offset + pageLimit));
+    }, [offset]);
+
+    const getLayout = (layout) => {
+        setLayout(layout);
+    };
+
+    const getSortParams = (sortType, sortValue) => {
+        setSortType(sortType);
+        setSortValue(sortValue);
+    };
+
+    const getFilterSortParams = (sortType, sortValue) => {
+        setFilterSortType(sortType);
+        setFilterSortValue(sortValue);
+    };
 
     return (
         <div>
@@ -44,7 +63,6 @@ function myEvents() {
                     </ol>
                 </BreadcrumbOne>
 
-<<<<<<< HEAD
                 <div className="shop-content space-pt--r100 space-pb--r100">
                     <Container>
                         <Row>
@@ -61,12 +79,8 @@ function myEvents() {
                         </Row>
                     </Container>
                 </div>
-=======
-            <Container>
 
-            </Container>
->>>>>>> d38dc8a (Refactor api to use eventapi)
-
+            </OrganiserWrapper>
 
             </OrganiserWrapper>
 
