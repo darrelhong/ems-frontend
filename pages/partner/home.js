@@ -31,7 +31,9 @@ function PartnerHome() {
           </>
         )}
 
-        <button className="btn btn-fill-out btn-sm">View events</button>
+        <Link href="/partner/events">
+          <button className="btn btn-fill-out btn-sm">View events</button>
+        </Link>
       </Container>
     </PartnerWrapper>
   );
