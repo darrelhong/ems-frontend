@@ -1,4 +1,6 @@
+import React, { useState, useEffect } from 'react';
 import Link from "next/link";
+import { useRouter } from 'next/router';
 import { Container, Row, Col } from "react-bootstrap";
 import { useToasts } from "react-toast-notifications";
 // import { getDiscountPrice } from "../../../lib/product";
@@ -20,9 +22,26 @@ import { BreadcrumbOne } from "../../../components/Breadcrumb";
 // } from "../../../redux/actions/compareActions";
 // import products from "../../../data/products.json";
 import { ProductSliderTwo } from "../../../components/ProductSlider";
+import { getEventDetails, getAllEvents } from '../../../lib/query/eventApi';
 
 const OrganiserViewEventDetails = () => {
   const { addToast } = useToasts();
+  const [event, setEvent] = useState(Object);
+  const [events, setEvents] = useState([]);
+  const router = useRouter()
+  console.log(router.query); //this should give me the id?
+
+  useEffect(() => {
+    const loadEvents = async () => {
+      let eventData = await getEventDetails(1);
+      console.log('got event data');
+      console.log(eventData);
+      setEvent(eventData);
+      let allEvents = await getAllEvents();
+      setEvents(allEvents);
+    };
+    loadEvents();
+  });
 
   // const productPrice = product.price.toFixed(2);
   // const cartItem = cartItems.filter(
@@ -38,7 +57,7 @@ const OrganiserViewEventDetails = () => {
   return (
     <LayoutOne>
       {/* breadcrumb */}
-      <BreadcrumbOne pageTitle={product.name}>
+      <BreadcrumbOne pageTitle={event.name}>
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/">
@@ -50,7 +69,7 @@ const OrganiserViewEventDetails = () => {
               <a>Shop</a>
             </Link>
           </li>
-          <li className="breadcrumb-item active">{product.name}</li>
+          <li className="breadcrumb-item active">{event.name}</li>
         </ol>
       </BreadcrumbOne>
 
@@ -98,16 +117,16 @@ const OrganiserViewEventDetails = () => {
   );
 };
 
-const mapStateToProps = (state, ownProps) => {
-  const products = state.productData;
-  const category = ownProps.product.category[0];
-  return {
-    relatedProducts: getProducts(products, category, "popular", 8),
-    cartItems: state.cartData,
-    wishlistItems: state.wishlistData,
-    compareItems: state.compareData
-  };
-};
+// const mapStateToProps = (state, ownProps) => {
+//   const products = state.productData;
+//   const category = ownProps.product.category[0];
+//   return {
+//     relatedProducts: getProducts(products, category, "popular", 8),
+//     cartItems: state.cartData,
+//     wishlistItems: state.wishlistData,
+//     compareItems: state.compareData
+//   };
+// };
 
 // const mapDispatchToProps = (dispatch) => {
 //   return {
@@ -147,18 +166,18 @@ export default OrganiserViewEventDetails;
 
 // export default connect(mapStateToProps, mapDispatchToProps)(ProductThumbLeft);
 
-export async function getStaticPaths() {
-  // get the paths we want to pre render based on products
-  const paths = products.map((product) => ({
-    params: { slug: product.slug }
-  }));
+// export async function getStaticPaths() {
+//   // get the paths we want to pre render based on products
+//   const paths = events.map((event) => ({
+//     params: { slug: event.eid }
+//   }));
 
-  return { paths, fallback: false };
-}
+//   return { paths, fallback: false };
+// }
 
-export async function getStaticProps({ params }) {
-  // get product data based on slug
-  const product = products.filter((single) => single.slug === params.slug)[0];
+// export async function getStaticProps({ params }) {
+//   // get product data based on slug
+//   const event = events.filter((single) => event.eid === params.slug)[0];
 
-  return { props: { product } };
-}
+//   return { props: { event } };
+// }
