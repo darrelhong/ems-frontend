@@ -3,9 +3,16 @@ import { Row, Col } from "react-bootstrap";
 import Swiper from "react-id-swiper";
 import { LightgalleryProvider, LightgalleryItem } from "react-lightgallery";
 
-const ImageGalleryLeftThumb = ({ product }) => {
+const ImageGalleryLeftThumb = ({ event }) => {
   const [gallerySwiper, getGallerySwiper] = useState(null);
   const [thumbnailSwiper, getThumbnailSwiper] = useState(null);
+  const [somearray,setSomearray] = useState(['one','two','third']);
+  const [imageArray,setImageArray] = useState([
+    'https://www.petguide.com/wp-content/uploads/2017/02/Online-Resources-for-Cat-Owners.jpg',
+    'https://cnet1.cbsistatic.com/img/EfkEAmi5LXXE-cFxIV0n1kFk11o=/940x0/2019/06/06/b11ccfac-685e-4cb2-a239-b09af07b1baf/toriflynn2.jpg',
+    'https://newsroom.unsw.edu.au/sites/default/files/thumbnails/image/3500028168_c85a03256a_b_2.jpg',
+    'https://blog.ssa.gov/wp-content/uploads/2015/10/Retire-Online-Its-The-Cats-Meow.jpg'
+  ]);
 
   // effect for swiper slider synchronize
   useEffect(() => {
@@ -69,8 +76,8 @@ const ImageGalleryLeftThumb = ({ product }) => {
           <div className="product-large-image-wrapper">
             <LightgalleryProvider>
               <Swiper {...gallerySwiperParams}>
-                {product.image &&
-                  product.image.map((single, key) => {
+                {imageArray &&
+                  imageArray.map((single, key) => {
                     return (
                       <div key={key}>
                         <LightgalleryItem group="any" src={single}>
@@ -91,8 +98,8 @@ const ImageGalleryLeftThumb = ({ product }) => {
         <Col xl={2} className="order-2 order-xl-1">
           <div className="product-small-image-wrapper product-small-image-wrapper--side-thumb">
             <Swiper {...thumbnailSwiperParams}>
-              {product.image &&
-                product.image.map((image, i) => {
+              {imageArray &&
+                imageArray.map((image, i) => {
                   return (
                     <div key={i}>
                       <div className="single-image">

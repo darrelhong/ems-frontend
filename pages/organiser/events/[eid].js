@@ -7,22 +7,7 @@ import { useToasts } from "react-toast-notifications";
 import { LayoutOne } from "../../../layouts";
 import { BreadcrumbOne } from "../../../components/Breadcrumb";
 import EventDescription from "../../../components/events/viewEventDetails/EventDescription";
-
-// import {
-//   ImageGalleryLeftThumb,
-//   ProductDescription,
-//   ProductDescriptionTab
-// } from "../../../components/ProductDetails";
-// import { addToCart } from "../../../redux/actions/cartActions";
-// import {
-//   addToWishlist,
-//   deleteFromWishlist
-// } from "../../../redux/actions/wishlistActions";
-// import {
-//   addToCompare,
-//   deleteFromCompare
-// } from "../../../redux/actions/compareActions";
-// import products from "../../../data/products.json";
+import ImageGalleryLeftThumb from "../../../components/events/viewEventDetails/ImageGalleryLeftThumb";
 import { ProductSliderTwo } from "../../../components/ProductSlider";
 import { getEventDetails, getAllEvents } from '../../../lib/query/eventApi';
 import { Events } from 'react-scroll';
@@ -81,9 +66,9 @@ const OrganiserViewEventDetails = () => {
       <div className="product-details space-pt--r100 space-pb--r100">
         <Container>
           <Row>
-            {/* <Col lg={6} className="space-mb-mobile-only--40">
-              <ImageGalleryLeftThumb product={product} />
-            </Col> */}
+            <Col lg={6} className="space-mb-mobile-only--40">
+              <ImageGalleryLeftThumb event={event} />
+            </Col>
             <Col lg={6}>
               {/* product description */}
               <EventDescription
