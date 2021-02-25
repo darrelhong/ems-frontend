@@ -1,7 +1,5 @@
 import { Fragment, useState } from "react";
 import Link from "next/link";
-import { getProductCartQuantity } from "../../lib/product";
-import { ProductRating } from "../Product";
 import { BsShield } from "react-icons/bs";
 import { AiOutlineReload } from "react-icons/ai";
 import { GiSwapBag } from "react-icons/gi";
@@ -76,23 +74,23 @@ const EventDescription = ({
 
       <Fragment>
         <div
-          className={`${productContentButtonStyleClass
-            ? productContentButtonStyleClass
-            : "product-content__button-wrapper d-flex align-items-center"
-            }`}
+          // className={`${productContentButtonStyleClass
+          //   ? productContentButtonStyleClass
+          //   : "product-content__button-wrapper d-flex align-items-center"
+          //   }`}
         >
           {/* first button */}
           <button
-            onClick={() =>
-              addToCart(
-                product,
-                addToast,
-                quantityCount,
-                selectedProductColor,
-                selectedProductSize
-              )
-            }
-            disabled={productCartQty >= productStock}
+            // onClick={() =>
+            //   addToCart(
+            //     product,
+            //     addToast,
+            //     quantityCount,
+            //     selectedProductColor,
+            //     selectedProductSize
+            //   )
+            // }
+            // disabled={productCartQty >= productStock}
             className="btn btn-fill-out btn-addtocart space-ml--10"
           >
             <i className="icon-basket-loaded" /> Add To Cart
@@ -100,77 +98,42 @@ const EventDescription = ({
 
           {/* second button */}
           <button
-            className={`product-content__compare ${compareItem !== undefined ? "active" : ""
-              }`}
-            title={
-              compareItem !== undefined
-                ? "Added to compare"
-                : "Add to compare"
-            }
-            onClick={
-              compareItem !== undefined
-                ? () => deleteFromCompare(product, addToast)
-                : () => addToCompare(product, addToast)
-            }
+            // className={`product-content__compare ${compareItem !== undefined ? "active" : ""
+            //   }`}
+            // title={
+            //   compareItem !== undefined
+            //     ? "Added to compare"
+            //     : "Add to compare"
+            // }
+            // onClick={
+            //   compareItem !== undefined
+            //     ? () => deleteFromCompare(product, addToast)
+            //     : () => addToCompare(product, addToast)
+            // }
           >
             <i className="icon-shuffle" />
           </button>
 
           {/* third button */}
           <button
-            className={`product-content__wishlist ${wishlistItem !== undefined ? "active" : ""
-              }`}
-            title={
-              wishlistItem !== undefined
-                ? "Added to wishlist"
-                : "Add to wishlist"
-            }
-            onClick={
-              wishlistItem !== undefined
-                ? () => deleteFromWishlist(product, addToast)
-                : () => addToWishlist(product, addToast)
-            }
+            // className={`product-content__wishlist ${wishlistItem !== undefined ? "active" : ""
+            //   }`}
+            // title={
+            //   wishlistItem !== undefined
+            //     ? "Added to wishlist"
+            //     : "Add to wishlist"
+            // }
+            // onClick={
+            //   wishlistItem !== undefined
+            //     ? () => deleteFromWishlist(product, addToast)
+            //     : () => addToWishlist(product, addToast)
+            // }
           >
             <i className="icon-heart" />
           </button>
         </div>
       </Fragment>
       <hr />
-      <ul className="product-content__product-meta">
-        <li>
-          SKU: <span>{product.sku}</span>
-        </li>
-        <li>
-          Category:
-          {product.category &&
-            product.category.map((item, index, arr) => {
-              return (
-                <Link
-                  href="/shop/grid-left-sidebar"
-                  as={"/shop/grid-left-sidebar"}
-                  key={index}
-                >
-                  <a>{item + (index !== arr.length - 1 ? ", " : "")}</a>
-                </Link>
-              );
-            })}
-        </li>
-        <li>
-          Tags:
-          {product.tag &&
-            product.tag.map((item, index, arr) => {
-              return (
-                <Link
-                  href="/shop/grid-left-sidebar"
-                  as={"/shop/grid-left-sidebar"}
-                  key={index}
-                >
-                  <a>{item + (index !== arr.length - 1 ? ", " : "")}</a>
-                </Link>
-              );
-            })}
-        </li>
-      </ul>
       <div className="product-content__product-share space-mt--15">
         <span>Share:</span>
         <ul className="social-icons">
