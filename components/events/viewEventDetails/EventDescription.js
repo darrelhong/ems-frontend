@@ -8,7 +8,10 @@ import {
   IoLogoTwitter,
   IoLogoGoogleplus,
   IoLogoYoutube,
-  IoLogoInstagram
+  IoLogoInstagram,
+  IoLogoRss,
+  IoMdWifi,
+  IoIosBody
 } from "react-icons/io";
 
 const EventDescription = ({
@@ -37,7 +40,7 @@ const EventDescription = ({
       <h2 className="product-content__title space-mb--10">{event.name}</h2>
       <div className="product-content__price-rating-wrapper space-mb--10">
         <div className="product-content__price d-flex-align-items-center">
-          <span className="price">${event.startDate}</span> {/* keep this part */}
+          <span className="price">{event.eventStartDate}</span> {/* keep this part */}
         </div>
 
         {/* for now comment out  */}
@@ -59,11 +62,17 @@ const EventDescription = ({
 
       <div className="product-content__sort-info space-mb--20">
         <ul>
+          {event.physical ? (
+            <li>
+            <IoIosBody /> Physical Event
+            </li>
+            ) : (
+              <li>
+                <IoMdWifi /> Online Event
+              </li>
+          )}
           <li>
-            <BsShield /> Physical : Online
-          </li>
-          <li>
-            <AiOutlineReload /> {event.address}
+            <AiOutlineReload /> Event Location: {event.address}
           </li>
           <li>
             <GiSwapBag /> VIP?
