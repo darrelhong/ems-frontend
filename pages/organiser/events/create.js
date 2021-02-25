@@ -50,7 +50,15 @@ const CreateEvent = () => {
   const onSubmit = async (data) => {
     let eventStartDate = dateConverter(data.eventStartDate);
     let eventEndDate = dateConverter(data.eventEndDate);
-    let inputData = { ...data, eventStartDate, eventEndDate };
+    let saleStartDate = dateConverter(data.saleStartDate);
+    let salesEndDate = dateConverter(data.salesEndDate);
+    let inputData = {
+      ...data,
+      eventStartDate,
+      eventEndDate,
+      saleStartDate,
+      salesEndDate,
+    };
     try {
       const response = await createEvent(inputData, user.id);
       console.log('created event details:');

@@ -16,7 +16,7 @@ const OnlinePhysicalPane = ({ register, watch }) => {
                 <label>
                   <input
                     className="form-control"
-                    name="isPhysical"
+                    name="physical"
                     type="radio"
                     ref={register()}
                     value={true}
@@ -27,7 +27,7 @@ const OnlinePhysicalPane = ({ register, watch }) => {
                 <label>
                   <input
                     className="form-control"
-                    name="isPhysical"
+                    name="physical"
                     type="radio"
                     ref={register()}
                     value={false}
