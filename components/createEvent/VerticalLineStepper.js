@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import { Col } from 'react-bootstrap';
 import Nav from 'react-bootstrap/Nav';
 // import { IoIosSearch, IoIosMenu } from 'react-icons/io';
+import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,55 +28,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function getSteps() {
-  return [
-    {
-      label: 'Account Details',
-      eventKey: 'accountDetails',
-    },
-    {
-      label: 'Event Details',
-      eventKey: 'eventDetails',
-    },
-    {
-      label: 'Online / Physical',
-      eventKey: 'onlinePhysical',
-    },
-    {
-      label: 'Ticketing',
-      eventKey: 'ticketing',
-    },
-    {
-      label: 'Event Images',
-      eventKey: 'download',
-    },
-  ];
-
-  // return ['Select campaign settings', 'Create an ad group', 'Create an ad'];
-}
-
-function getStepContent(step) {
-  switch (step) {
-    case 0:
-      return `For each ad campaign that you create, you can control how much
-              you're willing to spend on clicks and conversions, which networks
-              and geographical locations you want your ads to show on, and more.`;
-    case 1:
-      return 'An ad group contains one or more ads which target a shared set of keywords.';
-    case 2:
-      return `Try out different ad text to see what brings in the most customers,
-              and learn how to enhance your ads using features like ad extensions.
-              If you run into any problems with your ads, find out how to tell if
-              they're running and how to resolve approval issues.`;
-    default:
-      return 'Unknown step';
-  }
-}
-
-export default function VerticalLinearStepper() {
+const VerticalLinearStepper = ({ activeStep, setActiveStep, steps }) => {
   const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(0);
-  const steps = getSteps();
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -124,7 +78,7 @@ export default function VerticalLinearStepper() {
                 </Nav.Link>
               </Nav.Item>
               <StepContent>
-                <Typography>{getStepContent(index)}</Typography>
+                <Typography>{step.content}</Typography>
                 <div className={classes.actionsContainer}>
                   <div>
                     <Button
@@ -160,61 +114,12 @@ export default function VerticalLinearStepper() {
       {/* </div> */}
     </Col>
   );
-}
+};
 
-// import { Col } from 'react-bootstrap';
-// import Nav from 'react-bootstrap/Nav';
-// import {
-//   IoIosList,
-//   IoIosClipboard,
-//   IoIosDownload,
-//   IoIosCash,
-//   IoIosCreate,
-//   IoIosPerson,
-//   IoIosArrowRoundDown,
-//   IoMdArrowRoundDown
-// } from 'react-icons/io';
+export default VerticalLinearStepper;
 
-// const FormStepper = () => {
-//   return (
-//     <Col lg={3} md={4}>
-//       <Nav
-//         variant="pills"
-//         className="flex-column my-account-content__navigation space-mb--r60"
-//       >
-//         <Nav.Item style={{ marginBottom: 100 }}>
-//           <Nav.Link eventKey="accountDetails">
-//             <IoIosPerson /> Event Details
-//           </Nav.Link>
-//         </Nav.Item>
-//         <IoIosArrowRoundDown size="large"/>
-//         <Nav.Item>
-//           <Nav.Link eventKey="dashboard">
-//             <IoIosList /> Physical / Online
-//           </Nav.Link>
-//         </Nav.Item>
-//         <Nav.Item>
-//           <Nav.Link eventKey="orders">
-//             <IoIosClipboard /> Ticketing
-//           </Nav.Link>
-//         </Nav.Item>
-//         <Nav.Item>
-//           <Nav.Link eventKey="download">
-//             <IoIosDownload /> Event Images
-//           </Nav.Link>
-//         </Nav.Item>
-//         <Nav.Item>
-//           <Nav.Link eventKey="payment">
-//             <IoIosCash /> Payment
-//           </Nav.Link>
-//         </Nav.Item>
-//         <Nav.Item>
-//           <Nav.Link eventKey="address">
-//             <IoIosCreate /> Address
-//           </Nav.Link>
-//         </Nav.Item>
-//       </Nav>
-//     </Col>
-//   );
-// };
-// export default FormStepper;
+VerticalLinearStepper.propTypes = {
+  activeStep: PropTypes.number,
+  setActiveStep: PropTypes.func,
+  steps: PropTypes.array,
+};
