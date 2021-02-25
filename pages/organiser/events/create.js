@@ -117,7 +117,7 @@ const CreateEvent = () => {
                     />
                   </Tab.Pane>
                   <Tab.Pane eventKey="ticketing">
-                    <TicketingPane register={register} />
+                    <TicketingPane register={register} watch={watch} />
                   </Tab.Pane>
                   <Tab.Pane eventKey="booths">
                     <BoothPane register={register} />

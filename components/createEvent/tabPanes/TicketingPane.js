@@ -2,7 +2,21 @@ import { Row, Col } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import PropTypes from 'prop-types';
 
-const TicketingPane = ({ register }) => {
+const TicketingPane = ({ register, watch }) => {
+  const renderDateError = () => {
+    if (
+      watch('saleStartDate') &&
+      watch('salesEndDate') &&
+      watch('salesEndDate') < watch('saleStartDate')
+    ) {
+      return (
+        <span style={{ color: 'red' }}>
+          End date must be the same as or after start date!
+        </span>
+      );
+    }
+  };
+
   return (
     <Card className="my-account-content__content">
       <Card.Header>
@@ -33,6 +47,26 @@ const TicketingPane = ({ register }) => {
                   ref={register()}
                 />
               </Col>
+              <Col className="form-group" md={12}>
+                <label>Ticket Sales Start Date</label>
+                <input
+                  className="form-control"
+                  name="saleStartDate"
+                  type="datetime-local"
+                  ref={register()}
+                />
+              </Col>
+
+              <Col className="form-group" md={12}>
+                <label>Ticket Sales End Date</label>
+                <input
+                  className="form-control"
+                  name="salesEndDate"
+                  type="datetime-local"
+                  ref={register()}
+                />
+                {renderDateError()}
+              </Col>
             </Row>
           </form>
         </div>
@@ -43,6 +77,7 @@ const TicketingPane = ({ register }) => {
 
 TicketingPane.propTypes = {
   register: PropTypes.func,
+  watch: PropTypes.func,
 };
 
 export default TicketingPane;
