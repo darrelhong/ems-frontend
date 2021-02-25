@@ -6,7 +6,7 @@ import { useToasts } from "react-toast-notifications";
 // import { getDiscountPrice } from "../../../lib/product";
 import { LayoutOne } from "../../../layouts";
 import { BreadcrumbOne } from "../../../components/Breadcrumb";
-import { EventDescription } from "../../../components/events/viewEventDetails/EventDescription";
+import EventDescription from "../../../components/events/viewEventDetails/EventDescription";
 
 // import {
 //   ImageGalleryLeftThumb,
@@ -37,7 +37,7 @@ const OrganiserViewEventDetails = () => {
 
   useEffect(() => {
     const loadEvents = async () => {
-      let eventData = await getEventDetails(1);
+      let eventData = await getEventDetails(eid);
       console.log('got event data');
       console.log(eventData);
       setEvent(eventData);
@@ -45,7 +45,7 @@ const OrganiserViewEventDetails = () => {
       setEvents(allEvents);
     };
     loadEvents();
-  });
+  },[]);
 
   // const productPrice = product.price.toFixed(2);
   // const cartItem = cartItems.filter(
@@ -91,18 +91,19 @@ const OrganiserViewEventDetails = () => {
               />
             </Col>
           </Row>
-          <Row>
+              {/* product description tab */} 
+                       {/* <Row>
             <Col>
-              {/* product description tab */}
+
               <ProductDescriptionTab product={product} />
             </Col>
-          </Row>
+          </Row> */}
 
           {/* related product slider */}
-          <ProductSliderTwo
+          {/* <ProductSliderTwo
             title="Related Products"
             products={relatedProducts}
-          />
+          /> */}
         </Container>
       </div>
     </LayoutOne>
