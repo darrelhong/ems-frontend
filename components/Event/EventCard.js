@@ -33,7 +33,7 @@ const EventCard = ({ event }) => {
                         <div className="d-flex justify-content-between">
                             <div className="product-price">
                                 <span className="price">${event.ticketPrice}</span>
-                                <span className="rating-num"> {`Sales End: ${formatDate(event.salesEndDate)}`} </span>
+                                <span className="rating-num"> {`Sales End Date: ${formatDate(event.salesEndDate)}`} </span>
                             </div>
                         </div>
                         <div className="product-description">

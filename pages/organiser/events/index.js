@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { BreadcrumbOne } from '../../../components/Breadcrumb';
 import { Container, Row, Col } from "react-bootstrap";
 import OrganiserWrapper from '../../../components/wrapper/OrganiserWrapper';
-import { getAllEvents } from "../../../lib/query/eventApi";
+import { getAllEventsByOrganiser } from "../../../lib/query/eventApi";
 import { LayoutOne } from "../../../layouts";
 import { Sidebar, ShopHeader, ShopProducts } from "../../../components/Shop";
 import EventView from "../../../components/Event/EventView";
@@ -28,7 +28,7 @@ function myEvents() {
 
     useEffect(() => {
         const getEvents = async () => {
-            const data = await getAllEvents();
+            const data = await getAllEventsByOrganiser(2);
             setEvents(data);
         }
         getEvents();
