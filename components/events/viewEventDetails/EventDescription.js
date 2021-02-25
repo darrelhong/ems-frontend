@@ -33,7 +33,7 @@ const EventDescription = ({
   //   selectedProductColor,
   //   selectedProductSize
   // );
-  
+
   return (
     <div className="product-content">
       <h2 className="product-content__title space-mb--10">{event.name}</h2>
@@ -41,7 +41,10 @@ const EventDescription = ({
         <div className="product-content__price d-flex-align-items-center">
           <span className="price">${event.startDate}</span> {/* keep this part */}
         </div>
-        {product.rating && product.rating > 0 ? (
+
+        {/* for now comment out  */}
+
+        {/* {product.rating && product.rating > 0 ? (
           <div className="product-content__rating-wrap">
             <div className="product-content__rating">
               <ProductRating ratingValue={product.rating} />
@@ -50,7 +53,7 @@ const EventDescription = ({
           </div>
         ) : (
           ""
-        )}
+        )} */}
       </div>
       <div className="product-content__description space-mb--20">
         <p>{event.descriptions}</p>
@@ -70,84 +73,68 @@ const EventDescription = ({
         </ul>
       </div>
       <hr />
-      {product.affiliateLink ? (
-        <div className="product-content__quality">
-          <div className="product-content__cart btn-hover">
-            <a
-              href={product.affiliateLink}
-              target="_blank"
-              className="btn btn-fill-out btn-addtocart"
-            >
-              Buy Now
-            </a>
-          </div>
-        </div>
-      ) : (
-        <Fragment>
-          <div
-            className={`${
-              productContentButtonStyleClass
-                ? productContentButtonStyleClass
-                : "product-content__button-wrapper d-flex align-items-center"
+
+      <Fragment>
+        <div
+          className={`${productContentButtonStyleClass
+            ? productContentButtonStyleClass
+            : "product-content__button-wrapper d-flex align-items-center"
             }`}
+        >
+          {/* first button */}
+          <button
+            onClick={() =>
+              addToCart(
+                product,
+                addToast,
+                quantityCount,
+                selectedProductColor,
+                selectedProductSize
+              )
+            }
+            disabled={productCartQty >= productStock}
+            className="btn btn-fill-out btn-addtocart space-ml--10"
           >
-            {/* first button */}
-            <button
-              onClick={() =>
-                addToCart(
-                  product,
-                  addToast,
-                  quantityCount,
-                  selectedProductColor,
-                  selectedProductSize
-                )
-              }
-              disabled={productCartQty >= productStock}
-              className="btn btn-fill-out btn-addtocart space-ml--10"
-            >
-              <i className="icon-basket-loaded" /> Add To Cart
+            <i className="icon-basket-loaded" /> Add To Cart
             </button>
 
-            {/* second button */}
-            <button
-              className={`product-content__compare ${
-                compareItem !== undefined ? "active" : ""
+          {/* second button */}
+          <button
+            className={`product-content__compare ${compareItem !== undefined ? "active" : ""
               }`}
-              title={
-                compareItem !== undefined
-                  ? "Added to compare"
-                  : "Add to compare"
-              }
-              onClick={
-                compareItem !== undefined
-                  ? () => deleteFromCompare(product, addToast)
-                  : () => addToCompare(product, addToast)
-              }
-            >
-              <i className="icon-shuffle" />
-            </button>
+            title={
+              compareItem !== undefined
+                ? "Added to compare"
+                : "Add to compare"
+            }
+            onClick={
+              compareItem !== undefined
+                ? () => deleteFromCompare(product, addToast)
+                : () => addToCompare(product, addToast)
+            }
+          >
+            <i className="icon-shuffle" />
+          </button>
 
-            {/* third button */}
-            <button
-              className={`product-content__wishlist ${
-                wishlistItem !== undefined ? "active" : ""
+          {/* third button */}
+          <button
+            className={`product-content__wishlist ${wishlistItem !== undefined ? "active" : ""
               }`}
-              title={
-                wishlistItem !== undefined
-                  ? "Added to wishlist"
-                  : "Add to wishlist"
-              }
-              onClick={
-                wishlistItem !== undefined
-                  ? () => deleteFromWishlist(product, addToast)
-                  : () => addToWishlist(product, addToast)
-              }
-            >
-              <i className="icon-heart" />
-            </button>
-          </div>
-        </Fragment>
-      )}
+            title={
+              wishlistItem !== undefined
+                ? "Added to wishlist"
+                : "Add to wishlist"
+            }
+            onClick={
+              wishlistItem !== undefined
+                ? () => deleteFromWishlist(product, addToast)
+                : () => addToWishlist(product, addToast)
+            }
+          >
+            <i className="icon-heart" />
+          </button>
+        </div>
+      </Fragment>
       <hr />
       <ul className="product-content__product-meta">
         <li>
