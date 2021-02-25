@@ -6,6 +6,8 @@ import { useToasts } from "react-toast-notifications";
 // import { getDiscountPrice } from "../../../lib/product";
 import { LayoutOne } from "../../../layouts";
 import { BreadcrumbOne } from "../../../components/Breadcrumb";
+import { EventDescription } from "../../../components/events/viewEventDetails/EventDescription";
+
 // import {
 //   ImageGalleryLeftThumb,
 //   ProductDescription,
@@ -23,12 +25,14 @@ import { BreadcrumbOne } from "../../../components/Breadcrumb";
 // import products from "../../../data/products.json";
 import { ProductSliderTwo } from "../../../components/ProductSlider";
 import { getEventDetails, getAllEvents } from '../../../lib/query/eventApi';
+import { Events } from 'react-scroll';
 
 const OrganiserViewEventDetails = () => {
   const { addToast } = useToasts();
   const [event, setEvent] = useState(Object);
   const [events, setEvents] = useState([]);
-  const router = useRouter()
+  const router = useRouter();
+  const { eid } = router.query;
   console.log(router.query); //this should give me the id?
 
   useEffect(() => {
@@ -82,20 +86,8 @@ const OrganiserViewEventDetails = () => {
             </Col> */}
             <Col lg={6}>
               {/* product description */}
-              <ProductDescription
-                product={product}
-                productPrice={productPrice}
-                discountedPrice={discountedPrice}
-                cartItems={cartItems}
-                cartItem={cartItem}
-                wishlistItem={wishlistItem}
-                compareItem={compareItem}
-                addToast={addToast}
-                addToCart={addToCart}
-                addToWishlist={addToWishlist}
-                deleteFromWishlist={deleteFromWishlist}
-                addToCompare={addToCompare}
-                deleteFromCompare={deleteFromCompare}
+              <EventDescription
+                event={event}
               />
             </Col>
           </Row>
