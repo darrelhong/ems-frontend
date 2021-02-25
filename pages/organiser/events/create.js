@@ -10,12 +10,28 @@ import VerticalLineStepper from '../../../components/createEvent/VerticalLineSte
 import EventDetailsPane from '../../../components/createEvent/tabPanes/EventDetailsPane';
 import TicketingPane from '../../../components/createEvent/tabPanes/TicketingPane';
 import OnlinePhysicalPane from '../../../components/createEvent/tabPanes/OnlinePhysicalPane';
+import useUser from '../../../lib/query/useUser';
+import { createEvent } from '../../../lib/query/eventApi';
+import { dateConverter } from '../../../lib/util/functions';
 
-export default function CreateEvent() {
+const CreateEvent = () => {
   const { control, register, handleSubmit, watch } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const { data: user } = useUser(localStorage.getItem('userId'));
+
+  const onSubmit = async (data) => {
+    let eventStartDate = dateConverter(data.eventStartDate);
+    let eventEndDate = dateConverter(data.eventEndDate);
+    let inputData = { ...data, eventStartDate, eventEndDate };
+    try {
+      const response = await createEvent(inputData, user.id);
+      console.log('created event details:');
+      console.log(response);
+      //probably show the created details on some page
+    } catch (e) {
+      //some popup probably
+      console.log(e);
+    }
   };
 
   return (
@@ -28,6 +44,26 @@ export default function CreateEvent() {
             </Link>
           </li>
           <li className="breadcrumb-item active">Create New Event</li>
+        </ol>
+        <ol>
+          <button
+            type="submit"
+            className="btn btn-fill-out"
+            name="submit"
+            value="Submit"
+          >
+            Save as Draft
+          </button>
+        </ol>
+        <ol>
+          <button
+            type="submit"
+            className="btn btn-fill-out"
+            name="submit"
+            value="Submit"
+          >
+            Finish
+          </button>
         </ol>
       </BreadcrumbOne>
 
@@ -331,4 +367,6 @@ export default function CreateEvent() {
     //   </SettingsWrapper>
     // </ChakraWrapper>
   );
-}
+};
+
+export default CreateEvent;

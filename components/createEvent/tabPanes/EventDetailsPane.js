@@ -5,9 +5,9 @@ import PropTypes from 'prop-types';
 const EventDetailsPane = ({ register, handleSubmit, onSubmit, watch }) => {
   const renderDateError = () => {
     if (
-      watch('startDate') &&
-      watch('endDate') &&
-      watch('endDate') < watch('startDate')
+      watch('eventStartDate') &&
+      watch('eventEndDate') &&
+      watch('eventEndDate') < watch('eventStartDate')
     ) {
       return (
         <span style={{ color: 'red' }}>
@@ -78,8 +78,8 @@ const EventDetailsPane = ({ register, handleSubmit, onSubmit, watch }) => {
                 <label>Start Date</label>
                 <input
                   className="form-control"
-                  name="startDate"
-                  type="date"
+                  name="eventStartDate"
+                  type="datetime-local"
                   ref={register()}
                 />
               </Col>
@@ -88,8 +88,8 @@ const EventDetailsPane = ({ register, handleSubmit, onSubmit, watch }) => {
                 <label>End Date</label>
                 <input
                   className="form-control"
-                  name="endDate"
-                  type="date"
+                  name="eventEndDate"
+                  type="datetime-local"
                   ref={register()}
                 />
                 {renderDateError()}
