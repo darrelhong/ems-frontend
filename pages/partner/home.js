@@ -1,9 +1,10 @@
+import Link from 'next/link';
+import { Container } from 'react-bootstrap';
+
 import useUser from '../../lib/query/useUser';
 
 import PartnerWrapper from '../../components/wrapper/PartnerWrapper';
 import { BreadcrumbOne } from '../../components/Breadcrumb';
-import Link from 'next/link';
-import { Container } from 'react-bootstrap';
 
 function PartnerHome() {
   const { data: user, isLoading, isSuccess } = useUser(
@@ -11,17 +12,17 @@ function PartnerHome() {
   );
   return (
     <PartnerWrapper title="Partner Home">
-      <BreadcrumbOne pageTitle="Organiser Home">
+      <BreadcrumbOne pageTitle="Partner Home">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
-            <Link href="/organiser/home">
-              <a>Organiser Home</a>
+            <Link href="/partner/home">
+              <a>Partner Home</a>
             </Link>
           </li>
         </ol>
       </BreadcrumbOne>
 
-      <Container>
+      <Container className="my-4">
         {isLoading && <div className="spinner-grow" role="status" />}
         {isSuccess && (
           <>
@@ -29,6 +30,8 @@ function PartnerHome() {
             <p>User ID: {user?.id}</p>
           </>
         )}
+
+        <button className="btn btn-fill-out btn-sm">View events</button>
       </Container>
     </PartnerWrapper>
   );
