@@ -1,11 +1,5 @@
 import { Fragment, useState } from "react";
-import { AiOutlineReload } from "react-icons/ai";
 import {
-  IoLogoFacebook,
-  IoLogoTwitter,
-  IoLogoGoogleplus,
-  IoLogoYoutube,
-  IoLogoInstagram,
   IoMdWifi,
   IoIosBody,
   IoMdStar, //vip
@@ -133,11 +127,6 @@ const EventDescription = ({
               <li>
                 <a href="#">
                   <IoMdCreate />
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <IoLogoInstagram title="Edit your Event!"/>
                 </a>
               </li>
             </ul>
