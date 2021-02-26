@@ -32,16 +32,12 @@ const OrganiserViewEventDetails = () => {
     loadEvents();
   },[]);
 
-  // const productPrice = product.price.toFixed(2);
-  // const cartItem = cartItems.filter(
-  //   (cartItem) => cartItem.id === product.id
-  // )[0];
-  // const wishlistItem = wishlistItems.filter(
-  //   (wishlistItem) => wishlistItem.id === product.id
-  // )[0];
-  // const compareItem = compareItems.filter(
-  //   (compareItem) => compareItem.id === product.id
-  // )[0];
+  const publishOrHide = () => {
+    const currentState = event.eventStatus;
+    let eventStatus = '';
+    (currentState == 'HIDDEN') ? eventStatus = 'PUBLISHED' : eventStatus = 'HIDDEN';
+    
+  };
 
   return (
     <LayoutOne>
