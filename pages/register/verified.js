@@ -1,6 +1,8 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { Container, Row } from 'react-bootstrap';
+import button from 'react-bootstrap/Button'
+import { LayoutOne } from '../../layouts';
 
 import HomeHeaderTop from '../../components/Header/HomeHeaderTop';
 
@@ -12,15 +14,19 @@ export default function RegisterVerified() {
       </Head>
 
       <HomeHeaderTop />
-
+      <LayoutOne> 
+          
       <Container>
         <Row className="justify-content-center">
           <p className="mt-5">
-            <strong>
+            {/* <strong> */}
               Email succesfully verified. Please proceed to login.
-            </strong>
+            {/* </strong> */}
           </p>
-          <Row>
+          </Row>
+          <Row className="justify-content-center">
+            &nbsp;
+            <div>
             <Link href="/organiser/login">
               <button className="btn btn-sm btn-fill-out">
                 Event Organiser Login
@@ -31,9 +37,11 @@ export default function RegisterVerified() {
                 Business Partner Login
               </button>
             </Link>
+            </div>
           </Row>
-        </Row>
+        
       </Container>
+    </LayoutOne>
     </>
   );
 }

@@ -18,9 +18,9 @@ import {
   Alert
 } from 'react-bootstrap';
 import {FaRegEdit } from 'react-icons/fa';
-import OrganiserWrapper from '../../components/wrapper/OrganiserWrapper';
+import PartnerWrapper from '../../components/wrapper/PartnerWrapper';
 import { BsFillInfoCircleFill } from 'react-icons/bs';
-
+import { AiOutlineNotification } from 'react-icons/ai';
 import {
   IoIosCash,
   IoIosPerson,
@@ -36,12 +36,11 @@ import { logout } from '../../lib/auth';
 
 
 const MyAccount = () => {
-  // const [show, setShow] = useState(false);
-  // const handleClose = () => setShow(false);
+
   const [showSuccessMsg, setShowSuccessMsg] = useState(false);
   const [showFailedMsg, setShowFailedMsg] = useState(false);
-  //const [updateAccDetailStatus, setUpdateAccDetailStatus, ] = useState(false);
-  //const [uploadSucess, setUploadSucess] = useState(false);
+  const [businessCategory, setBusinessCategory] = useState("");
+
   const [fileUpload, setfileUpload] = useState(false);
   const [file, setFile] = useState('uploadfile');
 
@@ -114,34 +113,6 @@ const MyAccount = () => {
     logout({ redirectTo: '/organiser/login' });
   };
 
-  // const mutateAccDetail = useMutation((data) =>
-  //   api.post('/api/user/update', data, {
-  //       onSuccess: () => {
-  //         queryClient.invalidateQueries(['user', user?.id.toString()]);
-  //       },
-  //     })
-  //     .then((response) => {
-  //       console.log(response);
-  //       if (response.status == 200) {
-  //         // show update sucess message
-  //         setShowSuccessMsg(true);
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //       // show error message
-  //       setShowFailedMsg(true);
-  //     })
-  // );
-
-  // const mutatePassword = useMutation(
-  //   (data) => api.post('/api/user/change-password', data),
-  //   {
-  //     onSuccess: () => {
-  //       queryClient.invalidateQueries(['user', user?.id.toString()]);
-  //     },
-  //   logout({ redirectTo: '/organiser/login' });
-  // };
 
   const { register, handleSubmit, errors } = useForm({
     defaultValues: { name: user?.name },
@@ -150,7 +121,7 @@ const MyAccount = () => {
 
   const mutateAccDetail = useMutation(
 
-    (data) => api.post('/api/user/update', data) 
+    (data) => api.post('/api/partner/update', data) 
     .then(response => {
       setAccSaved(true);
      setAccSuccess(" Account details saved successfully! ");
@@ -164,9 +135,24 @@ const MyAccount = () => {
     )
   );
 
+    const onChangeBizCategory = async (event) => {
+    console.log("change" + event.target.value);
+    setBusinessCategory(event.target.value)
+  };
+
   const onSubmit = async (data) => {
     console.log('data acc' + data['name']);
-    if (
+    if(businessCategory != ""){
+        mutateAccDetail.mutate({
+            address: data.address,
+            description: data.description,
+            name: data.name,
+            phonenumber: data.phonenumber,
+            id: user?.id,
+            businessCategory : businessCategory,
+          });
+    }
+    else if (
       user?.address != data.address ||
       user?.description != data.description ||
       user?.name != data.name ||
@@ -179,6 +165,7 @@ const MyAccount = () => {
         name: data.name,
         phonenumber: data.phonenumber,
         id: user?.id,
+        businessCategory : user?.businessCategory,
       });
     }
     if (fileUpload == true) {
@@ -186,16 +173,6 @@ const MyAccount = () => {
       submitFile();
     }
   };
-
-  // const onSubmitPassword = async (data) => {
-  //   console.log('call change password' + data['newPassword']);
-
-  //   mutatePassword.mutate({
-  //     oldPassword: data.oldPassword,
-  //     newPassword: data.newPassword,
-  //   });
-  //   // console.log(data);
-  // };
 
   const handleFileChange = async (e) => {
     console.log('call handleFileChange');
@@ -333,7 +310,7 @@ const MyAccount = () => {
 
   return (
     // <LayoutOne>
-    <OrganiserWrapper title="Organiser Home">
+    <PartnerWrapper title="Partner Home">
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Confirmation</Modal.Title>
@@ -380,7 +357,7 @@ const MyAccount = () => {
                   </Nav.Item>
                   <Nav.Item>
                     <Nav.Link eventKey="notification">
-                      <IoIosCash /> Notification
+                    <AiOutlineNotification /> Notification
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
@@ -558,6 +535,44 @@ const MyAccount = () => {
                                   />
                                 </Form.Group>
                               </Col>
+                              <Col className="form-group" md={12}>
+                              {/* <FormControl isInvalid={errors.businesscategory}> */}
+                             <Form.Label htmlFor="businesscategory">Business Category <span className="required"></span></Form.Label>
+
+                             {/* {(user?.businessCategory !== "" )&& ( 
+                             <p> Current Business Category : { user?.businessCategory}</p> 
+                           )} */}
+                           
+                                  
+                            <div className="form-group">
+                                
+                                <Form.Control  name="businesscategory" defaultValue={user?.businessCategory} as="select" onChange={onChangeBizCategory.bind(this)}>
+                                {(user?.businessCategory == "" || user?.businessCategory == null  )&& ( 
+                            <option value= "" >Select</option>
+                           )}
+                            {(user?.businessCategory !== "" )&& ( 
+                            <option value= {user?.businessCategory} >{user?.businessCategory}</option>
+                           )}
+                                
+                                <option value="Automotive">Automotive</option>
+                                <option value="Business Support & Supplies">Business Support & Supplies</option>
+                                <option value="Computers & Electronics">Computers & Electronics</option>
+                                <option value="Construction & Contractor">Construction & Contractor</option>
+                                <option value="Education">Education</option>
+                                <option value="Entertainment">Entertainment</option>
+                                <option value="Food & Dining">Food & Dining</option>
+                                <option value="Health & Medicine">Health & Medicine</option>
+                                <option value="Home & Garden">Home & Garden</option>
+                                <option value="Legal & Financial">Legal & Financial </option>
+                                <option value="Manufacturing, Wholesale, Distribution">Manufacturing, Wholesale, Distribution</option>
+                                <option value="Merchants (Retail)">Merchants (Retail)</option>
+                                <option value="Personal Care & Services">Personal Care & Services</option>
+                                <option value="Real Estate">Real Estate</option>
+                                <option value="Travel & Transportation">Travel & Transportation</option>
+                                </Form.Control>
+
+                            </div>
+                                  </Col>
 
                               <Col className="form-group" md={12}>
                                 <label>
@@ -713,7 +728,7 @@ const MyAccount = () => {
                                 name="newPassword"
                                 type="password"
                                 placeholder="Enter new password"
-                                pattern="(?=.\d)(?=.[a-z])(?=.*[A-Z]).{8,}"
+                                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                                 title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
                                 ref={register()}
                               />
@@ -730,7 +745,7 @@ const MyAccount = () => {
                                 name="confirmPassword"
                                 type="password"
                                 placeholder="Re-enter your new password"
-                                pattern="(?=.\d)(?=.[a-z])(?=.*[A-Z]).{8,}"
+                                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                                 title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
                                 ref={register()}
                               />
@@ -802,7 +817,7 @@ const MyAccount = () => {
           </Tab.Container>
         </Container>
       </div>
-    </OrganiserWrapper>
+    </PartnerWrapper>
     // </LayoutOne>
   );
 };

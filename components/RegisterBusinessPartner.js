@@ -24,7 +24,7 @@ export default function RegisterBusinessPartner({ title, registerApiUrl }) {
     (data) => api.post(registerApiUrl, data),
     {
       onSuccess: () => {
-        // router.push('/organiser/register-success');
+        // router.push('/partner/home');
         setShowSuccess(true);
       },
     }

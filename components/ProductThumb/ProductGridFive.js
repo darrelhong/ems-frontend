@@ -2,7 +2,7 @@ import { Fragment, useState } from "react";
 import Link from "next/link";
 import ProductModal from "./elements/ProductModal";
 import { ProductRating } from "../Product";
-
+import Image from 'react-bootstrap/Image';
 const ProductGridFive = ({
   product,
   // discountedPrice,
@@ -30,9 +30,19 @@ const ProductGridFive = ({
           bottomSpace ? bottomSpace : ""
         }`}
       >
-        <div className="product-grid product-grid--style-three">
-          {/* <div className="product-grid__image">
-            <Link
+        <div className="product-grid product-grid--style-three"style= {{width:"40%"}}>
+          <div className="product-grid__image" >
+
+          <a>
+       <img
+                  src={"https://www.careerup.com/wp-content/uploads/2016/01/internship-opportunity-advertising-saga-events-1.png"}
+                  alt="product_img1"
+                  
+                />
+              </a>
+             
+
+           {/*  <Link
               href={`/shop/product-basic/[slug]?slug=${product.slug}`}
               as={"/shop/product-basic/" + product.slug}
             >
@@ -127,9 +137,10 @@ const ProductGridFive = ({
                   </button>
                 </li>
               </ul>
-            </div>
-          </div> */} 
+            </div>*/} 
+          </div> 
           <div className="product-grid__info">
+          <div>
             <h6 className="product-title">
               {/* <Link
                 href={`/shop/product-basic/[slug]?slug=${product.slug}`}
@@ -138,6 +149,19 @@ const ProductGridFive = ({
                 <a>{product.name}</a>
               {/* </Link> */}
             </h6>
+            </div>
+            <div>
+            <h6 className="product-description">
+              {/* <Link
+                href={`/shop/product-basic/[slug]?slug=${product.slug}`}
+                as={"/shop/product-basic/" + product.slug}
+              > */}
+                <a>{product.descriptions}</a>
+              {/* </Link> */}
+            </h6>
+
+            </div>
+
             {/* <div className="product-price">
               {product.discount ? (
                 <Fragment>

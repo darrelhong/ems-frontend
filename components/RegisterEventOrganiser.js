@@ -94,8 +94,10 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
            .then((response) => {
              console.log(response);
              if (response.status == 200) {
-
+             
               document.getElementById('register-form').reset();
+              document.getElementById('custom-file').value = '';
+            setFileName("Choose File");
                console.log(response.data["message"]);
                if (response.data['message'] == 'alreadyExisted') {
 
@@ -126,6 +128,7 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
             console.log("exceeded");
             setShowFileSizeError(true);
             document.getElementById('custom-file').value = '';
+            
           }else{
             setShowFileSizeError(false);
              setFile(e.target.files[0]);
@@ -258,6 +261,7 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
                     </div>
                   </div>
                   <Row>
+                  <div className="form-group">
                     <Form.Label className="uploadFileLabel">
                       Upload Business Document &nbsp;
                       <OverlayTrigger
@@ -268,6 +272,7 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
                         <BsFillInfoCircleFill></BsFillInfoCircleFill>
                       </OverlayTrigger>
                     </Form.Label>
+                
                     <Col className="form-group" md={12}>
                       <Form.Group>
                         <Form.File
@@ -275,6 +280,7 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
                           type="file"
                           accept=".zip"
                           onChange={handleFileChange}
+                         
                           required
                           custom
                         />
@@ -297,6 +303,7 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
                                   </div> */}
                       </Form.Group>
                     </Col>
+                    </div>
                   </Row>
 
                   <div className="form-group">
@@ -305,6 +312,7 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
                       type="submit"
                       className="btn btn-fill-out btn-block"
                       name="register"
+
                     >
                       Register
                     </button>
