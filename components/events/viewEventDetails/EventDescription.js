@@ -134,6 +134,7 @@ const EventDescription = ({
 
             (<button
               onClick={hideToggle}
+              title="Unhide your event from attendees!"
               className="btn btn-fill-out btn-addtocart space-ml--10"
             >
               <i className="icon-basket-loaded" /> Unhide Event
@@ -141,6 +142,7 @@ const EventDescription = ({
             :
             (<button
               onClick={hideToggle}
+              title="Hide your event from attendees from now"
               className="btn btn-fill-out btn-addtocart space-ml--10"
             >
               <i className="icon-basket-loaded" /> Hide Event
