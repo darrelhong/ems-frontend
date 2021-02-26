@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { Container, Row, Col } from 'react-bootstrap';
 import Tab from 'react-bootstrap/Tab';
 import { useForm } from 'react-hook-form';
@@ -11,7 +12,7 @@ import BoothPane from '../../../components/createEvent/tabPanes/BoothPane';
 import TicketingPane from '../../../components/createEvent/tabPanes/TicketingPane';
 import OnlinePhysicalPane from '../../../components/createEvent/tabPanes/OnlinePhysicalPane';
 import useUser from '../../../lib/query/useUser';
-import { createEvent } from '../../../lib/query/eventApi';
+import { createEvent, getEventDetails } from '../../../lib/query/eventApi';
 import { dateConverter } from '../../../lib/util/functions';
 
 const steps = [
@@ -43,10 +44,27 @@ const steps = [
 ];
 
 const CreateEvent = () => {
-  const { control, register, handleSubmit, watch } = useForm();
+  const { control, register, handleSubmit, watch, setValue } = useForm();
   const { data: user } = useUser(localStorage.getItem('userId'));
   const [activeStep, setActiveStep] = useState(0);
   const [isFinal, setIsFinal] = useState(true);
+  // const [eventInProgress,setEventInProgress] = useState(Object);
+
+  const router = useRouter();
+  const { eid } = router.query;
+
+  useEffect(()=>{
+    const loadData = async () => {
+      let eventData = await getEventDetails(eid);
+      setAllValues(eventData);
+    };
+    loadData();
+  },[])
+
+  const setAllValues = (eventData) => {
+    // setValue(eventData.name);
+    setValue("name",eventData.name);
+  };
 
   const onSubmit = async (data) => {
     //original method, doesnt work cos im forcing empty date strings
