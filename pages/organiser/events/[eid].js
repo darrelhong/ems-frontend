@@ -2,19 +2,18 @@ import React, { useState, useEffect } from 'react';
 import Link from "next/link";
 import { useRouter } from 'next/router';
 import { Container, Row, Col } from "react-bootstrap";
-import { useToasts } from "react-toast-notifications";
+// import { useToasts } from "react-toast-notifications";
 // import { getDiscountPrice } from "../../../lib/product";
 import { LayoutOne } from "../../../layouts";
 import { BreadcrumbOne } from "../../../components/Breadcrumb";
 import EventDescription from "../../../components/events/viewEventDetails/EventDescription";
 import ImageGalleryLeftThumb from "../../../components/events/viewEventDetails/ImageGalleryLeftThumb";
-import { ProductSliderTwo } from "../../../components/ProductSlider";
-import { getEventDetails, getAllEvents } from '../../../lib/query/eventApi';
-import { Events } from 'react-scroll';
+// import { ProductSliderTwo } from "../../../components/ProductSlider";
+import { getEventDetails, updateEvent } from '../../../lib/query/eventApi';
 import { dbDateToPretty } from '../../../lib/util/functions';
 
 const OrganiserViewEventDetails = () => {
-  const { addToast } = useToasts();
+  // const { addToast } = useToasts();
   const [event, setEvent] = useState(Object);
   const [prettyStartDate, setPrettyStartDate] = useState('');
   const router = useRouter();
@@ -22,21 +21,22 @@ const OrganiserViewEventDetails = () => {
   console.log(router.query); //this should give me the id?
 
   useEffect(() => {
-    const loadEvents = async () => {
+    const loadEvent = async () => {
       let eventData = await getEventDetails(eid);
       console.log('got event data');
       console.log(eventData);
       setEvent(eventData);
       setPrettyStartDate(dbDateToPretty(eventData.eventStartDate));
     };
-    loadEvents();
+    loadEvent();
   },[]);
 
-  const publishOrHide = () => {
+  const publishOrHide = async () => {
     const currentState = event.eventStatus;
     let eventStatus = '';
     (currentState == 'HIDDEN') ? eventStatus = 'PUBLISHED' : eventStatus = 'HIDDEN';
-    
+    let updatedEvent = await updateEvent({...event,eventStatus});
+    setEvent(updatedEvent);
   };
 
   return (
@@ -70,6 +70,7 @@ const OrganiserViewEventDetails = () => {
               <EventDescription
                 event={event}
                 prettyStartDate = {prettyStartDate}
+                publishOrHide = {publishOrHide}
               />
             </Col>
           </Row>
