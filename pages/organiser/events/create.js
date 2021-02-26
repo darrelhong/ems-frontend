@@ -46,12 +46,25 @@ const CreateEvent = () => {
   const { control, register, handleSubmit, watch } = useForm();
   const { data: user } = useUser(localStorage.getItem('userId'));
   const [activeStep, setActiveStep] = useState(0);
+  const [isFinal, setIsFinal] = useState(true);
 
   const onSubmit = async (data) => {
-    let eventStartDate = dateConverter(data?.eventStartDate);
-    let eventEndDate = dateConverter(data?.eventEndDate);
-    let saleStartDate = dateConverter(data?.saleStartDate);
-    let salesEndDate = dateConverter(data?.salesEndDate);
+    //original method, doesnt work cos im forcing empty date strings
+    // let eventStartDate = dateConverter(data?.eventStartDate);
+    // let eventEndDate = dateConverter(data?.eventEndDate);
+    // let saleStartDate = dateConverter(data?.saleStartDate);
+    // let salesEndDate = dateConverter(data?.salesEndDate);
+
+    let eventStartDate = data.eventStartDate;
+    let eventEndDate = data.eventEndDate;
+    let saleStartDate = data.saleStartDate;
+    let salesEndDate = data.salesEndDate;
+
+    if (data.eventStartDate)
+      eventStartDate = dateConverter(data.eventStartDate);
+    if (data.eventEndDate) eventEndDate = dateConverter(data.eventEndDate);
+    if (data.saleStartDate) saleStartDate = dateConverter(data.saleStartDate);
+    if (data.salesEndDate) salesEndDate = dateConverter(data.salesEndDate);
     let inputData = {
       ...data,
       eventStartDate,
@@ -60,6 +73,7 @@ const CreateEvent = () => {
       salesEndDate,
     };
     try {
+      setIsFinal(true);
       const response = await createEvent(inputData, user.id);
       console.log('created event details:');
       console.log(response);
@@ -122,6 +136,7 @@ const CreateEvent = () => {
                         control={control}
                         register={register}
                         watch={watch}
+                        isFinal={isFinal}
                       />
                     </Tab.Pane>
                     <Tab.Pane eventKey="ticketing">

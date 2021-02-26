@@ -2,7 +2,7 @@ import { Row, Col } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import PropTypes from 'prop-types';
 
-const EventDetailsPane = ({ register, watch }) => {
+const EventDetailsPane = ({ register, watch, isFinal }) => {
   const renderDateError = () => {
     if (
       watch('eventStartDate') &&
@@ -30,11 +30,11 @@ const EventDetailsPane = ({ register, watch }) => {
                 Event Name <span className="required">*</span>
               </label>
               <input
-                required
+                // required
                 className="form-control"
                 name="name"
                 type="text"
-                ref={register()}
+                ref={register({ required: { isFinal } })}
               />
             </Col>
             <Col className="form-group" md={12}>
@@ -42,7 +42,7 @@ const EventDetailsPane = ({ register, watch }) => {
                 Event Description <span className="required">*</span>
               </label>
               <textarea
-                required
+                // required
                 className="form-control"
                 name="descriptions"
                 maxLength="200" //can consider playing with this if needed
@@ -55,7 +55,7 @@ const EventDetailsPane = ({ register, watch }) => {
                 Address <span className="required">*</span>
               </label>
               <input
-                required
+                // required
                 className="form-control"
                 name="address"
                 type="text"
@@ -102,9 +102,8 @@ const EventDetailsPane = ({ register, watch }) => {
 
 EventDetailsPane.propTypes = {
   register: PropTypes.func,
-  handleSubmit: PropTypes.func,
-  onSubmit: PropTypes.func,
   watch: PropTypes.func,
+  isFinal: PropTypes.bool,
   //onSubmit shouldnt be here actually will shift it out soon
 };
 
