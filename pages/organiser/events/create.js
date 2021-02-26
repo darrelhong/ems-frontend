@@ -53,17 +53,40 @@ const CreateEvent = () => {
   const router = useRouter();
   const { eid } = router.query;
 
-  useEffect(()=>{
+  useEffect(() => {
     const loadData = async () => {
       let eventData = await getEventDetails(eid);
       setAllValues(eventData);
     };
     loadData();
-  },[])
+  }, [])
 
   const setAllValues = (eventData) => {
-    // setValue(eventData.name);
-    setValue("name",eventData.name);
+    const { 
+      name,
+      descriptions,
+      address,
+      website,
+      eventStartDate,
+      eventEndDate,
+      boothCapacity,
+      ticketPrice, 
+      ticketCapacity,
+      saleStartDate,
+      salesEndDate } = eventData;
+
+    console.log('my ticket cap: ' +ticketCapacity);
+    setValue("name", name);
+    setValue("descriptions",descriptions);
+    setValue("address",address);
+    setValue("eventStartDate",eventStartDate);
+    setValue("eventEndDate",eventEndDate);
+    setValue("website",website);
+    setValue("boothCapacity",boothCapacity);
+    setValue("ticketPrice",ticketPrice);
+    setValue("ticketCapacity",ticketCapacity);
+    setValue("saleStartDate",saleStartDate);
+    setValue("salesEndDate",salesEndDate);
   };
 
   const onSubmit = async (data) => {
@@ -83,16 +106,31 @@ const CreateEvent = () => {
     if (data.eventEndDate) eventEndDate = dateConverter(data.eventEndDate);
     if (data.saleStartDate) saleStartDate = dateConverter(data.saleStartDate);
     if (data.salesEndDate) salesEndDate = dateConverter(data.salesEndDate);
-    let inputData = {
-      ...data,
-      eventStartDate,
-      eventEndDate,
-      saleStartDate,
-      salesEndDate,
-    };
+    let inputData;
+    if (eid) {
+      inputData = {
+        ...data,
+        eid,
+        eventStartDate,
+        eventEndDate,
+        saleStartDate,
+        salesEndDate,
+      };
+    } else {
+      const eventOrganiserId = user.id;
+      inputData = {
+        ...data,
+        eventOrganiserId,
+        eventStartDate,
+        eventEndDate,
+        saleStartDate,
+        salesEndDate,
+      };
+    }
+    
     try {
       setIsFinal(true);
-      const response = await createEvent(inputData, user.id);
+      const response = await createEvent(inputData);
       console.log('created event details:');
       console.log(response);
       //probably show the created details on some page

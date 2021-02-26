@@ -36,6 +36,12 @@ const EventDetailsPane = ({ register, watch, isFinal }) => {
                 type="text"
                 ref={register({ required: { isFinal } })}
               />
+              {/* { errors.firstName && (
+                <span role="alert">
+                  This field is required
+                </span>
+              )
+            } */}
             </Col>
             <Col className="form-group" md={12}>
               <label>

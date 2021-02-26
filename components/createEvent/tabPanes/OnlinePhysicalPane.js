@@ -40,15 +40,6 @@ const OnlinePhysicalPane = ({ register, watch }) => {
             ) : (
               <h1>{watch('isPhysical')}</h1>
             )}
-            <Col className="form-group" md={12}>
-              <label>Ticket Capacity</label>
-              <input
-                className="form-control"
-                name="ticketCapacity"
-                type="number"
-                ref={register()}
-              />
-            </Col>
           </Row>
         </div>
       </Card.Body>
