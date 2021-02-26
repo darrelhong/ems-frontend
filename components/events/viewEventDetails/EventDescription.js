@@ -1,15 +1,11 @@
 import { Fragment, useState } from "react";
-import Link from "next/link";
-import { BsShield } from "react-icons/bs";
 import { AiOutlineReload } from "react-icons/ai";
-import { GiSwapBag } from "react-icons/gi";
 import {
   IoLogoFacebook,
   IoLogoTwitter,
   IoLogoGoogleplus,
   IoLogoYoutube,
   IoLogoInstagram,
-  IoLogoRss,
   IoMdWifi,
   IoIosBody,
   IoMdStar
@@ -17,7 +13,8 @@ import {
 
 const EventDescription = ({
   event,
-  prettyStartDate
+  prettyStartDate,
+  publishOrHide
 }) => {
   // const [selectedProductColor, setSelectedProductColor] = useState(
   //   product.variation ? product.variation[0].color : ""
@@ -67,18 +64,18 @@ const EventDescription = ({
         <ul>
           {event.physical ? (
             <li>
-            <IoIosBody /> Physical Event
+              <IoIosBody /> Physical Event
             </li>
-            ) : (
+          ) : (
               <li>
                 <IoMdWifi /> Online Event
               </li>
-          )}
+            )}
           <li>
             <AiOutlineReload /> Event Location: {event.address}
           </li>
           <li>
-            < IoMdStar/> VIP ? (not properly done yet)
+            < IoMdStar /> VIP ? (not properly done yet)
           </li>
         </ul>
       </div>
@@ -86,10 +83,10 @@ const EventDescription = ({
 
       <Fragment>
         <div
-          // className={`${productContentButtonStyleClass
-          //   ? productContentButtonStyleClass
-          //   : "product-content__button-wrapper d-flex align-items-center"
-          //   }`}
+        // className={`${productContentButtonStyleClass
+        //   ? productContentButtonStyleClass
+        //   : "product-content__button-wrapper d-flex align-items-center"
+        //   }`}
         >
           {/* first button */}
           <button
@@ -107,86 +104,65 @@ const EventDescription = ({
           >
             <i className="icon-basket-loaded" /> Edit
           </button>
+
+          {event.eventStatus == 'HIDDEN' ?
+
+            (<button
+              onClick={publishOrHide}
+              className="btn btn-fill-out btn-addtocart space-ml--10"
+            >
+              <i className="icon-basket-loaded" /> Publish Event
+            </button>)
+            :
+            (<button
+              onClick={publishOrHide}
+              className="btn btn-fill-out btn-addtocart space-ml--10"
+            >
+              <i className="icon-basket-loaded" /> Hide Event
+            </button>)
+          }
+
           <button
-            // onClick={() =>
-            //   addToCart(
-            //     product,
-            //     addToast,
-            //     quantityCount,
-            //     selectedProductColor,
-            //     selectedProductSize
-            //   )
-            // }
-            // disabled={productCartQty >= productStock}
-            className="btn btn-fill-out btn-addtocart space-ml--10"
-          >
-            <i className="icon-basket-loaded" /> Hide Event
-          </button>
-          <button
-            // onClick={() =>
-            //   addToCart(
-            //     product,
-            //     addToast,
-            //     quantityCount,
-            //     selectedProductColor,
-            //     selectedProductSize
-            //   )
-            // }
-            // disabled={productCartQty >= productStock}
-            className="btn btn-fill-out btn-addtocart space-ml--10"
-          >
-            <i className="icon-basket-loaded" /> Publish
-          </button>   <button
-            // onClick={() =>
-            //   addToCart(
-            //     product,
-            //     addToast,
-            //     quantityCount,
-            //     selectedProductColor,
-            //     selectedProductSize
-            //   )
-            // }
-            // disabled={productCartQty >= productStock}
             className="btn btn-fill-out btn-addtocart space-ml--10"
           >
             <i className="icon-basket-loaded" /> Make VIP
           </button>
 
-          
-          
-          
+
+
+
           {/* second button */}
           <button
-            // className={`product-content__compare ${compareItem !== undefined ? "active" : ""
-            //   }`}
-            // title={
-            //   compareItem !== undefined
-            //     ? "Added to compare"
-            //     : "Add to compare"
-            // }
-            // onClick={
-            //   compareItem !== undefined
-            //     ? () => deleteFromCompare(product, addToast)
-            //     : () => addToCompare(product, addToast)
-            // }
+          // className={`product-content__compare ${compareItem !== undefined ? "active" : ""
+          //   }`}
+          // title={
+          //   compareItem !== undefined
+          //     ? "Added to compare"
+          //     : "Add to compare"
+          // }
+          // onClick={
+          //   compareItem !== undefined
+          //     ? () => deleteFromCompare(product, addToast)
+          //     : () => addToCompare(product, addToast)
+          // }
           >
             <i className="icon-shuffle" />
           </button>
 
           {/* third button */}
           <button
-            // className={`product-content__wishlist ${wishlistItem !== undefined ? "active" : ""
-            //   }`}
-            // title={
-            //   wishlistItem !== undefined
-            //     ? "Added to wishlist"
-            //     : "Add to wishlist"
-            // }
-            // onClick={
-            //   wishlistItem !== undefined
-            //     ? () => deleteFromWishlist(product, addToast)
-            //     : () => addToWishlist(product, addToast)
-            // }
+          // className={`product-content__wishlist ${wishlistItem !== undefined ? "active" : ""
+          //   }`}
+          // title={
+          //   wishlistItem !== undefined
+          //     ? "Added to wishlist"
+          //     : "Add to wishlist"
+          // }
+          // onClick={
+          //   wishlistItem !== undefined
+          //     ? () => deleteFromWishlist(product, addToast)
+          //     : () => addToWishlist(product, addToast)
+          // }
           >
             <i className="icon-heart" />
           </button>
