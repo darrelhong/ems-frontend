@@ -1,12 +1,12 @@
 import Link from 'next/link';
 import { useState } from 'react';
-import { Alert, Card, Col, Container, Row, Spinner } from 'react-bootstrap';
+import { Alert, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { useQuery } from 'react-query';
-import { format, parseISO } from 'date-fns';
 
 import { BreadcrumbOne } from '../../../components/Breadcrumb';
 import PartnerWrapper from '../../../components/wrapper/PartnerWrapper';
 import api from '../../../lib/ApiClient';
+import EventCard from '../../../components/events/EventCard';
 
 const getEvents = async (page = 0) => {
   const { data } = await api.get('/api/event/get-events?page=' + page);
@@ -48,25 +48,7 @@ function PartnerHome() {
                 className="mb-5 d-flex align-items-stretch3"
                 as="a"
               >
-                <Card>
-                  <Card.Img
-                    variant="top"
-                    src={event.images?.[0]}
-                    style={{ height: 200 }}
-                  />
-                  <Card.Body className="d-flex flex-column">
-                    <Card.Title>{event.name}</Card.Title>
-                    <Card.Text className="line-clamp">
-                      {event?.descriptions}
-                    </Card.Text>
-                    <Card.Text className="text-default mt-auto">
-                      {format(
-                        parseISO(event.eventStartDate),
-                        'eee, dd MMM yy hh:mmbbb'
-                      )}
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
+                <EventCard event={event} />
               </Col>
             ))}
           </Row>
