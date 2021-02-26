@@ -3,6 +3,7 @@ import { Fragment } from "react";
 import Link from "next/link";
 import { Col } from "react-bootstrap";
 import { formatDate } from '../../lib/formatDate'
+import { ProgressBar } from 'react-bootstrap';
 
 const EventCard = ({ event }) => {
     return (
@@ -45,11 +46,15 @@ const EventCard = ({ event }) => {
                             <ul>
                                 <li>
                                     {/* Require to be changed */}
-                                    <Link href={`/organiser/events`}>
+                                    {/* <Link href={`/organiser/events`}>
                                         <a className="btn btn-fill-out btn-addtocart">
                                             <i className="icon-basket-loaded" /> Add To Cart
                                         </a>
-                                    </Link>
+                                    </Link> */}
+                                    <div>
+                                        <ProgressBar now={60} label="60%" />
+                                        <h5>{event.ticketCapacity}</h5>
+                                    </div>
                                 </li>
                             </ul>
                         </div>
