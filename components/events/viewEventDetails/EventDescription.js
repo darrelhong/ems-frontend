@@ -13,12 +13,16 @@ import {
   IoMdCloudDownload, //publish and unpublish
   IoMdCloudUpload,
   IoMdEye, //hide and unhide
-  IoMdEyeOff 
+  IoMdEyeOff,
+  IoMdCalendar,
+  IoMdLocate,
+  IoMdCreate
 } from "react-icons/io";
 
 const EventDescription = ({
   event,
   prettyStartDate,
+  prettyEndDate,
   publishToggle,
   hideToggle,
   vipToggle
@@ -45,10 +49,10 @@ const EventDescription = ({
     <div className="product-content">
       <h2 className="product-content__title space-mb--10">{event.name}</h2>
       <div className="product-content__price-rating-wrapper space-mb--10">
-        <div className="product-content__price d-flex-align-items-center">
-          {/* <span className="price">{event.eventStartDate}</span>  */}
-          <span className="price">{prettyStartDate}</span> {/* keep this part */}
-        </div>
+
+        {/* <div className="product-content__price d-flex-align-items-center">
+          <span className="price">{prettyStartDate}</span>
+        </div> */}
 
         {/* for now comment out  */}
 
@@ -71,44 +75,83 @@ const EventDescription = ({
         <ul>
           {event.physical ? (
             <li>
-              <IoIosBody /> Physical Event
+              <IoIosBody />Physical Event
             </li>
+
           ) : (
               <li>
-                <IoMdWifi /> Online Event
+                <IoMdWifi />Online Event
               </li>
             )}
           <li>
-            <AiOutlineReload /> Event Location: {event.address}
+            <IoMdLocate />Event Location: {event.address}
           </li>
-
-          {event.vip ? (
+          <li>
+            <IoMdCalendar />{prettyStartDate} to {prettyEndDate}
+          </li>
+          {event.vip && (
             <li>
-              < IoMdStar /> Undo VIP
+              < IoMdStar onClick={vipToggle} />VIP event
             </li>
-          ) : (
-              <li>
-                < IoMdStar /> Make Event VIP
-              </li>)}
+          )}
         </ul>
       </div>
       <hr />
 
       <Fragment>
-        <div
-        // className={`${productContentButtonStyleClass
-        //   ? productContentButtonStyleClass
-        //   : "product-content__button-wrapper d-flex align-items-center"
-        //   }`}
-        >
-          {/* first button */}
-          {/* <button
-            className="btn btn-fill-out btn-addtocart space-ml--10"
-          >
-            <i className="icon-basket-loaded" /> Edit
-          </button>
-*/}
-          {event.published ?
+        <div>
+          <div className="product-content__product-share space-mt--15">
+            <span>Actions:</span>
+            <ul className="social-icons">
+              <li>
+                <a href="javascript:void(0);" onClick={vipToggle}>
+                  {/* <IoLogoFacebook  /> */}
+                  {event.vip ? (
+                    <IoMdStarOutline title="Unlist event from VIP" />
+                  ) :
+                    (<IoMdStar title="Make this a VIP-only event!" />)}
+                </a>
+              </li>
+              <li>
+                <a href="javascript:void(0);" onClick={hideToggle}>
+                  {event.hidden ? (
+                    <IoMdEye title="Unhide your event from attendees!" />
+                  ) : (
+                      <IoMdEyeOff title="Temporarily hide your event from attendees" />
+                    )}
+                </a>
+              </li>
+              <li>
+                <a href="javascript:void(0);" onClick={publishToggle}>
+                  {event.published ? (
+                    <IoMdCloudDownload title="Temporarily unpublish your event from business partners!" />
+                  ) : (
+                      <IoMdCloudUpload title="Publish your event for business partners to see!" />
+                    )}
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <IoMdCreate />
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <IoLogoInstagram title="Edit your Event!"/>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+            <button
+              onClick={publishToggle}
+              className="btn btn-fill-out btn-addtocart space-ml--10"
+              style={{ marginLeft: 'auto', marginRight: 'auto' }}
+            >
+              <i className="icon-basket-loaded" /> Cancel Event
+            </button>
+          {/* three ugly ass buttons */}
+          {/* {event.published ?
 
             (<button
               onClick={publishToggle}
@@ -160,52 +203,7 @@ const EventDescription = ({
                 <i className="icon-basket-loaded" /> Make VIP
               </button>
             )
-          } 
-
-          <div className="product-content__product-share space-mt--15">
-        <span>Actions:</span>
-        <ul className="social-icons">
-         <li>
-            <a href="javascript:void(0);" onClick={vipToggle}>
-              {/* <IoLogoFacebook  /> */}
-              {event.vip ? (
-                <IoMdStarOutline title = "Unlist event from VIP"/>
-              ) : 
-              ( <IoMdStar title="Make this a VIP-only event!"/> )}
-            </a>
-            </li>
-          <li>
-            <a href="javascript:void(0);" onClick={hideToggle}>
-              {event.hidden ? (
-                <IoMdEye title="Unhide your event from attendees!" />
-              ) : ( 
-                <IoMdEyeOff title="Temporarily hide your event from attendees" />
-              )}
-            </a>
-          </li>
-          <li>
-            <a href="javascript:void(0);" onClick={publishToggle}>
-              {event.published ? (
-                <IoMdCloudDownload title="Temporarily unpublish your event from business partners!" />
-              ) : (
-                <IoMdCloudUpload title="Publish your event for business partners to see!" />
-              )}
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <IoLogoYoutube />
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <IoLogoInstagram />
-            </a>
-          </li>
-        </ul>
-      </div>
-
-
+          } */}
         </div>
       </Fragment>
       <hr />

@@ -16,6 +16,7 @@ const OrganiserViewEventDetails = () => {
   // const { addToast } = useToasts();
   const [event, setEvent] = useState(Object);
   const [prettyStartDate, setPrettyStartDate] = useState('');
+  const [prettyEndDate, setPrettyEndDate] = useState('');
   const router = useRouter();
   const { eid } = router.query;
   console.log(router.query); //this should give me the id?
@@ -23,9 +24,8 @@ const OrganiserViewEventDetails = () => {
   useEffect(() => {
     const loadEvent = async () => {
       let eventData = await getEventDetails(eid);
-      console.log('got event data');
-      console.log(eventData);
       setEvent(eventData);
+      setPrettyEndDate(dbDateToPretty(eventData.eventEndDate));
       setPrettyStartDate(dbDateToPretty(eventData.eventStartDate));
     };
     loadEvent();
@@ -81,6 +81,7 @@ const OrganiserViewEventDetails = () => {
               <EventDescription
                 event={event}
                 prettyStartDate = {prettyStartDate}
+                prettyEndDate={prettyEndDate}
                 hideToggle = {hideToggle}
                 publishToggle = {publishToggle}
                 vipToggle={vipToggle}
