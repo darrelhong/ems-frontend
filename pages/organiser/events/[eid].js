@@ -11,11 +11,12 @@ import ImageGalleryLeftThumb from "../../../components/events/viewEventDetails/I
 import { ProductSliderTwo } from "../../../components/ProductSlider";
 import { getEventDetails, getAllEvents } from '../../../lib/query/eventApi';
 import { Events } from 'react-scroll';
+import { dbDateToPretty } from '../../../lib/util/functions';
 
 const OrganiserViewEventDetails = () => {
   const { addToast } = useToasts();
   const [event, setEvent] = useState(Object);
-  const [events, setEvents] = useState([]);
+  const [prettyStartDate, setPrettyStartDate] = useState('');
   const router = useRouter();
   const { eid } = router.query;
   console.log(router.query); //this should give me the id?
@@ -26,8 +27,7 @@ const OrganiserViewEventDetails = () => {
       console.log('got event data');
       console.log(eventData);
       setEvent(eventData);
-      let allEvents = await getAllEvents();
-      setEvents(allEvents);
+      setPrettyStartDate(dbDateToPretty(eventData.eventStartDate));
     };
     loadEvents();
   },[]);
@@ -55,7 +55,7 @@ const OrganiserViewEventDetails = () => {
           </li>
           <li className="breadcrumb-item">
             <Link href="/shop/grid-left-sidebar">
-              <a>Shop</a>
+              <a>Events</a>
             </Link>
           </li>
           <li className="breadcrumb-item active">{event.name}</li>
@@ -73,6 +73,7 @@ const OrganiserViewEventDetails = () => {
               {/* product description */}
               <EventDescription
                 event={event}
+                prettyStartDate = {prettyStartDate}
               />
             </Col>
           </Row>

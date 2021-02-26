@@ -11,11 +11,13 @@ import {
   IoLogoInstagram,
   IoLogoRss,
   IoMdWifi,
-  IoIosBody
+  IoIosBody,
+  IoMdStar
 } from "react-icons/io";
 
 const EventDescription = ({
-  event
+  event,
+  prettyStartDate
 }) => {
   // const [selectedProductColor, setSelectedProductColor] = useState(
   //   product.variation ? product.variation[0].color : ""
@@ -40,7 +42,8 @@ const EventDescription = ({
       <h2 className="product-content__title space-mb--10">{event.name}</h2>
       <div className="product-content__price-rating-wrapper space-mb--10">
         <div className="product-content__price d-flex-align-items-center">
-          <span className="price">{event.eventStartDate}</span> {/* keep this part */}
+          {/* <span className="price">{event.eventStartDate}</span>  */}
+          <span className="price">{prettyStartDate}</span> {/* keep this part */}
         </div>
 
         {/* for now comment out  */}
@@ -75,7 +78,7 @@ const EventDescription = ({
             <AiOutlineReload /> Event Location: {event.address}
           </li>
           <li>
-            <GiSwapBag /> VIP?
+            < IoMdStar/> VIP ? (not properly done yet)
           </li>
         </ul>
       </div>
@@ -102,9 +105,56 @@ const EventDescription = ({
             // disabled={productCartQty >= productStock}
             className="btn btn-fill-out btn-addtocart space-ml--10"
           >
-            <i className="icon-basket-loaded" /> Add To Cart
-            </button>
+            <i className="icon-basket-loaded" /> Edit
+          </button>
+          <button
+            // onClick={() =>
+            //   addToCart(
+            //     product,
+            //     addToast,
+            //     quantityCount,
+            //     selectedProductColor,
+            //     selectedProductSize
+            //   )
+            // }
+            // disabled={productCartQty >= productStock}
+            className="btn btn-fill-out btn-addtocart space-ml--10"
+          >
+            <i className="icon-basket-loaded" /> Hide Event
+          </button>
+          <button
+            // onClick={() =>
+            //   addToCart(
+            //     product,
+            //     addToast,
+            //     quantityCount,
+            //     selectedProductColor,
+            //     selectedProductSize
+            //   )
+            // }
+            // disabled={productCartQty >= productStock}
+            className="btn btn-fill-out btn-addtocart space-ml--10"
+          >
+            <i className="icon-basket-loaded" /> Publish
+          </button>   <button
+            // onClick={() =>
+            //   addToCart(
+            //     product,
+            //     addToast,
+            //     quantityCount,
+            //     selectedProductColor,
+            //     selectedProductSize
+            //   )
+            // }
+            // disabled={productCartQty >= productStock}
+            className="btn btn-fill-out btn-addtocart space-ml--10"
+          >
+            <i className="icon-basket-loaded" /> Make VIP
+          </button>
 
+          
+          
+          
           {/* second button */}
           <button
             // className={`product-content__compare ${compareItem !== undefined ? "active" : ""
