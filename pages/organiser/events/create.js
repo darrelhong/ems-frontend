@@ -13,7 +13,7 @@ import TicketingPane from '../../../components/createEvent/tabPanes/TicketingPan
 import OnlinePhysicalPane from '../../../components/createEvent/tabPanes/OnlinePhysicalPane';
 import useUser from '../../../lib/query/useUser';
 import { createEvent, getEventDetails } from '../../../lib/query/eventApi';
-import { dateConverter } from '../../../lib/util/functions';
+import { htmlDateToDb, dbDateToPretty } from '../../../lib/util/functions';
 
 const steps = [
   {
@@ -62,7 +62,7 @@ const CreateEvent = () => {
   }, [])
 
   const setAllValues = (eventData) => {
-    const { 
+    const {
       name,
       descriptions,
       address,
@@ -70,23 +70,23 @@ const CreateEvent = () => {
       eventStartDate,
       eventEndDate,
       boothCapacity,
-      ticketPrice, 
+      ticketPrice,
       ticketCapacity,
       saleStartDate,
       salesEndDate } = eventData;
 
-    console.log('my ticket cap: ' +ticketCapacity);
+    console.log('my ticket cap: ' + ticketCapacity);
     setValue("name", name);
-    setValue("descriptions",descriptions);
-    setValue("address",address);
-    setValue("eventStartDate",eventStartDate);
-    setValue("eventEndDate",eventEndDate);
-    setValue("website",website);
-    setValue("boothCapacity",boothCapacity);
-    setValue("ticketPrice",ticketPrice);
-    setValue("ticketCapacity",ticketCapacity);
-    setValue("saleStartDate",saleStartDate);
-    setValue("salesEndDate",salesEndDate);
+    setValue("descriptions", descriptions);
+    setValue("address", address);
+    setValue("eventStartDate", eventStartDate);
+    setValue("eventEndDate", eventEndDate);
+    setValue("website", website);
+    setValue("boothCapacity", boothCapacity);
+    setValue("ticketPrice", ticketPrice);
+    setValue("ticketCapacity", ticketCapacity);
+    setValue("saleStartDate", saleStartDate);
+    setValue("salesEndDate", salesEndDate);
   };
 
   const onSubmit = async (data) => {
@@ -100,16 +100,21 @@ const CreateEvent = () => {
     let eventEndDate = data.eventEndDate;
     let saleStartDate = data.saleStartDate;
     let salesEndDate = data.salesEndDate;
+    const eventOrganiserId = user.id;
 
-    if (data.eventStartDate)
-      eventStartDate = dateConverter(data.eventStartDate);
-    if (data.eventEndDate) eventEndDate = dateConverter(data.eventEndDate);
-    if (data.saleStartDate) saleStartDate = dateConverter(data.saleStartDate);
-    if (data.salesEndDate) salesEndDate = dateConverter(data.salesEndDate);
     let inputData;
     if (eid) {
+      if (data.eventStartDate)
+        eventStartDate = htmlDateToDb(data.eventStartDate);
+      if (data.eventEndDate) eventEndDate = htmlDateToDb(data.eventEndDate);
+      if (data.saleStartDate) saleStartDate = htmlDateToDb(data.saleStartDate);
+      if (data.salesEndDate) salesEndDate = htmlDateToDb(data.salesEndDate);
+
+      //doesn't work now, leaving out old data plus not saving to original
+      //need to concat and use the updateUser method instead actually
       inputData = {
         ...data,
+        eventOrganiserId,
         eid,
         eventStartDate,
         eventEndDate,
@@ -117,7 +122,11 @@ const CreateEvent = () => {
         salesEndDate,
       };
     } else {
-      const eventOrganiserId = user.id;
+      if (data.eventStartDate)
+        eventStartDate = htmlDateToDb(data.eventStartDate);
+      if (data.eventEndDate) eventEndDate = htmlDateToDb(data.eventEndDate);
+      if (data.saleStartDate) saleStartDate = htmlDateToDb(data.saleStartDate);
+      if (data.salesEndDate) salesEndDate = htmlDateToDb(data.salesEndDate);
       inputData = {
         ...data,
         eventOrganiserId,
@@ -127,7 +136,7 @@ const CreateEvent = () => {
         salesEndDate,
       };
     }
-    
+
     try {
       setIsFinal(true);
       const response = await createEvent(inputData);
