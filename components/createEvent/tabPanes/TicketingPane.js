@@ -24,51 +24,49 @@ const TicketingPane = ({ register, watch }) => {
       </Card.Header>
       <Card.Body>
         <div className="account-details-form">
-          <form method="post" name="enq">
-            <Row>
-              <Col className="form-group" md={12}>
-                <label>Ticket Price (SGD)</label>
-                <input
-                  className="form-control"
-                  name="ticketPrice"
-                  type="number"
-                  step="0.1"
-                  ref={register()}
-                />
-              </Col>
-              <Col className="form-group" md={12}>
-                <label>
-                  Ticket Capacity - How many tickets do you want to sell?
-                </label>
-                <input
-                  className="form-control"
-                  name="ticketCapacity"
-                  type="number"
-                  ref={register()}
-                />
-              </Col>
-              <Col className="form-group" md={12}>
-                <label>Ticket Sales Start Date</label>
-                <input
-                  className="form-control"
-                  name="saleStartDate"
-                  type="datetime-local"
-                  ref={register()}
-                />
-              </Col>
+          <Row>
+            <Col className="form-group" md={12}>
+              <label>Ticket Price (SGD)</label>
+              <input
+                className="form-control"
+                name="ticketPrice"
+                type="number"
+                step="0.1"
+                ref={register()}
+              />
+            </Col>
+            <Col className="form-group" md={12}>
+              <label>
+                Ticket Capacity - How many tickets do you want to sell?
+              </label>
+              <input
+                className="form-control"
+                name="ticketCapacity"
+                type="number"
+                ref={register()}
+              />
+            </Col>
+            <Col className="form-group" md={12}>
+              <label>Ticket Sales Start Date</label>
+              <input
+                className="form-control"
+                name="saleStartDate"
+                type="datetime-local"
+                ref={register()}
+              />
+            </Col>
 
-              <Col className="form-group" md={12}>
-                <label>Ticket Sales End Date</label>
-                <input
-                  className="form-control"
-                  name="salesEndDate"
-                  type="datetime-local"
-                  ref={register()}
-                />
-                {renderDateError()}
-              </Col>
-            </Row>
-          </form>
+            <Col className="form-group" md={12}>
+              <label>Ticket Sales End Date</label>
+              <input
+                className="form-control"
+                name="salesEndDate"
+                type="datetime-local"
+                ref={register()}
+              />
+              {renderDateError()}
+            </Col>
+          </Row>
         </div>
       </Card.Body>
     </Card>

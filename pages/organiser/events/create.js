@@ -48,10 +48,10 @@ const CreateEvent = () => {
   const [activeStep, setActiveStep] = useState(0);
 
   const onSubmit = async (data) => {
-    let eventStartDate = dateConverter(data.eventStartDate);
-    let eventEndDate = dateConverter(data.eventEndDate);
-    let saleStartDate = dateConverter(data.saleStartDate);
-    let salesEndDate = dateConverter(data.salesEndDate);
+    let eventStartDate = dateConverter(data?.eventStartDate);
+    let eventEndDate = dateConverter(data?.eventEndDate);
+    let saleStartDate = dateConverter(data?.saleStartDate);
+    let salesEndDate = dateConverter(data?.salesEndDate);
     let inputData = {
       ...data,
       eventStartDate,
@@ -72,73 +72,74 @@ const CreateEvent = () => {
 
   return (
     <OrganiserWrapper title="Create New Event">
-      <BreadcrumbOne pageTitle="Create New Event">
-        <ol className="breadcrumb justify-content-md-end">
-          <li className="breadcrumb-item">
-            <Link href="/organiser/home">
-              <a>Home</a>
-            </Link>
-          </li>
-          <li className="breadcrumb-item active">Create New Event</li>
-        </ol>
-        <ol>
-          <button
-            type="submit"
-            className="btn btn-fill-out"
-            name="submit"
-            value="Submit"
-          >
-            Save as Draft
-          </button>
-        </ol>
-        <ol>
-          <button
-            type="submit"
-            className="btn btn-fill-out"
-            name="submit"
-            value="Submit"
-            ref={register()}
-          >
-            Finish
-          </button>
-        </ol>
-      </BreadcrumbOne>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <BreadcrumbOne pageTitle="Create New Event">
+          <ol className="breadcrumb justify-content-md-end">
+            <li className="breadcrumb-item">
+              <Link href="/organiser/home">
+                <a>Home</a>
+              </Link>
+            </li>
+            <li className="breadcrumb-item active">Create New Event</li>
+          </ol>
+          <ol>
+            <button
+              type="submit"
+              className="btn btn-fill-out"
+              name="submit"
+              value="Submit"
+            >
+              Save as Draft
+            </button>
+          </ol>
+          <ol>
+            <button
+              type="submit"
+              className="btn btn-fill-out"
+              name="submit"
+              value="Submit"
+              ref={register()}
+            >
+              Finish
+            </button>
+          </ol>
+        </BreadcrumbOne>
 
-      <div className="my-account-content space-pt--r100 space-pb--r100">
-        <Container>
-          <Tab.Container defaultActiveKey="eventDetails">
-            <Row>
-              <VerticalLineStepper
-                steps={steps}
-                activeStep={activeStep}
-                setActiveStep={setActiveStep}
-              />
-              <Col lg={9} md={8}>
-                <Tab.Content>
-                  <Tab.Pane eventKey="eventDetails">
-                    <EventDetailsPane
-                      onSubmit={onSubmit}
-                      control={control}
-                      register={register}
-                      handleSubmit={handleSubmit}
-                      watch={watch}
-                    />
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="ticketing">
-                    <TicketingPane register={register} watch={watch} />
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="booths">
-                    <BoothPane register={register} />
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="onlinePhysical">
-                    <OnlinePhysicalPane register={register} watch={watch} />
-                  </Tab.Pane>
-                </Tab.Content>
-              </Col>
-            </Row>
-          </Tab.Container>
-        </Container>
-      </div>
+        <div className="my-account-content space-pt--r100 space-pb--r100">
+          <Container>
+            <Tab.Container defaultActiveKey="eventDetails">
+              <Row>
+                <VerticalLineStepper
+                  steps={steps}
+                  activeStep={activeStep}
+                  setActiveStep={setActiveStep}
+                />
+                <Col lg={9} md={8}>
+                  <Tab.Content>
+                    <Tab.Pane eventKey="eventDetails">
+                      <EventDetailsPane
+                        onSubmit={onSubmit}
+                        control={control}
+                        register={register}
+                        watch={watch}
+                      />
+                    </Tab.Pane>
+                    <Tab.Pane eventKey="ticketing">
+                      <TicketingPane register={register} watch={watch} />
+                    </Tab.Pane>
+                    <Tab.Pane eventKey="booths">
+                      <BoothPane register={register} />
+                    </Tab.Pane>
+                    <Tab.Pane eventKey="onlinePhysical">
+                      <OnlinePhysicalPane register={register} watch={watch} />
+                    </Tab.Pane>
+                  </Tab.Content>
+                </Col>
+              </Row>
+            </Tab.Container>
+          </Container>
+        </div>
+      </form>
     </OrganiserWrapper>
   );
 };

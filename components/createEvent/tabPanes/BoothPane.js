@@ -10,19 +10,17 @@ const BoothPane = ({ register }) => {
       </Card.Header>
       <Card.Body>
         <div className="account-details-form">
-          <form method="post" name="enq">
-            <Row>
-              <Col className="form-group" md={12}>
-                <label>Booth Capacity - How many at your event?</label>
-                <input
-                  className="form-control"
-                  name="boothCapacity"
-                  type="number"
-                  ref={register()}
-                />
-              </Col>
-            </Row>
-          </form>
+          <Row>
+            <Col className="form-group" md={12}>
+              <label>Booth Capacity - How many at your event?</label>
+              <input
+                className="form-control"
+                name="boothCapacity"
+                type="number"
+                ref={register()}
+              />
+            </Col>
+          </Row>
         </div>
       </Card.Body>
     </Card>

@@ -2,7 +2,7 @@ import { Row, Col } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import PropTypes from 'prop-types';
 
-const EventDetailsPane = ({ register, handleSubmit, onSubmit, watch }) => {
+const EventDetailsPane = ({ register, watch }) => {
   const renderDateError = () => {
     if (
       watch('eventStartDate') &&
@@ -24,88 +24,76 @@ const EventDetailsPane = ({ register, handleSubmit, onSubmit, watch }) => {
       </Card.Header>
       <Card.Body>
         <div className="account-details-form">
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Row>
-              <Col className="form-group" md={12}>
-                <label>
-                  Event Name <span className="required">*</span>
-                </label>
-                <input
-                  required
-                  className="form-control"
-                  name="name"
-                  type="text"
-                  ref={register()}
-                />
-              </Col>
-              <Col className="form-group" md={12}>
-                <label>
-                  Event Description <span className="required">*</span>
-                </label>
-                <textarea
-                  required
-                  className="form-control"
-                  name="descriptions"
-                  maxLength="5" //can consider playing with this if needed
-                  ref={register()}
-                />
-              </Col>
-              {/* probably need some caption saying either online or physical would do, or shift to online/physical */}
-              <Col className="form-group" md={12}>
-                <label>
-                  Address <span className="required">*</span>
-                </label>
-                <input
-                  required
-                  className="form-control"
-                  name="address"
-                  type="text"
-                  ref={register()}
-                />
-              </Col>
+          <Row>
+            <Col className="form-group" md={12}>
+              <label>
+                Event Name <span className="required">*</span>
+              </label>
+              <input
+                required
+                className="form-control"
+                name="name"
+                type="text"
+                ref={register()}
+              />
+            </Col>
+            <Col className="form-group" md={12}>
+              <label>
+                Event Description <span className="required">*</span>
+              </label>
+              <textarea
+                required
+                className="form-control"
+                name="descriptions"
+                maxLength="200" //can consider playing with this if needed
+                ref={register()}
+              />
+            </Col>
+            {/* probably need some caption saying either online or physical would do, or shift to online/physical */}
+            <Col className="form-group" md={12}>
+              <label>
+                Address <span className="required">*</span>
+              </label>
+              <input
+                required
+                className="form-control"
+                name="address"
+                type="text"
+                ref={register()}
+              />
+            </Col>
 
-              <Col className="form-group" md={12}>
-                <label>Event Website (if any)</label>
-                <input
-                  className="form-control"
-                  name="website"
-                  type="text"
-                  ref={register()}
-                />
-              </Col>
+            <Col className="form-group" md={12}>
+              <label>Event Website (if any)</label>
+              <input
+                className="form-control"
+                name="website"
+                type="text"
+                ref={register()}
+              />
+            </Col>
 
-              <Col className="form-group" md={12}>
-                <label>Start Date</label>
-                <input
-                  className="form-control"
-                  name="eventStartDate"
-                  type="datetime-local"
-                  ref={register()}
-                />
-              </Col>
+            <Col className="form-group" md={12}>
+              <label>Start Date</label>
+              <input
+                className="form-control"
+                name="eventStartDate"
+                type="datetime-local"
+                ref={register()}
+              />
+            </Col>
 
-              <Col className="form-group" md={12}>
-                <label>End Date</label>
-                <input
-                  className="form-control"
-                  name="eventEndDate"
-                  type="datetime-local"
-                  ref={register()}
-                />
-                {renderDateError()}
-              </Col>
-              <Col md={12}>
-                <button
-                  type="submit"
-                  className="btn btn-fill-out"
-                  name="submit"
-                  value="Submit"
-                >
-                  Save
-                </button>
-              </Col>
-            </Row>
-          </form>
+            <Col className="form-group" md={12}>
+              <label>End Date</label>
+              <input
+                className="form-control"
+                name="eventEndDate"
+                type="datetime-local"
+                ref={register()}
+              />
+              {renderDateError()}
+            </Col>
+          </Row>
         </div>
       </Card.Body>
     </Card>

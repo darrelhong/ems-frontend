@@ -10,48 +10,46 @@ const OnlinePhysicalPane = ({ register, watch }) => {
       </Card.Header>
       <Card.Body>
         <div className="account-details-form">
-          <form method="post" name="enq">
-            <Row>
-              <Col className="form-group" md={12}>
-                <label>
-                  <input
-                    className="form-control"
-                    name="physical"
-                    type="radio"
-                    ref={register()}
-                    value={true}
-                    style={{ width: '1em' }}
-                  />
-                  Physical
-                </label>
-                <label>
-                  <input
-                    className="form-control"
-                    name="physical"
-                    type="radio"
-                    ref={register()}
-                    value={false}
-                    style={{ width: '1em' }}
-                  />
-                  Online
-                </label>
-              </Col>
-              {watch('isPhysical') ? (
-                <h1>{watch('isPhysical')}</h1>
-              ) : (
-                <h1>{watch('isPhysical')}</h1>
-              )}
-              <Col className="form-group" md={12}>
-                <label>Ticket Capacity</label>
+          <Row>
+            <Col className="form-group" md={12}>
+              <label>
                 <input
                   className="form-control"
-                  name="ticketCapacity"
-                  type="number"
+                  name="physical"
+                  type="radio"
                   ref={register()}
+                  value={true}
+                  style={{ width: '1em' }}
                 />
-              </Col>
-            </Row>
-          </form>
+                Physical
+              </label>
+              <label>
+                <input
+                  className="form-control"
+                  name="physical"
+                  type="radio"
+                  ref={register()}
+                  value={false}
+                  style={{ width: '1em' }}
+                />
+                Online
+              </label>
+            </Col>
+            {watch('isPhysical') ? (
+              <h1>{watch('isPhysical')}</h1>
+            ) : (
+              <h1>{watch('isPhysical')}</h1>
+            )}
+            <Col className="form-group" md={12}>
+              <label>Ticket Capacity</label>
+              <input
+                className="form-control"
+                name="ticketCapacity"
+                type="number"
+                ref={register()}
+              />
+            </Col>
+          </Row>
         </div>
       </Card.Body>
     </Card>
