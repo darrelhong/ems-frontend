@@ -7,6 +7,7 @@ import { BreadcrumbOne } from '../../../components/Breadcrumb';
 import PartnerWrapper from '../../../components/wrapper/PartnerWrapper';
 import api from '../../../lib/ApiClient';
 import EventCard from '../../../components/events/EventCard';
+import CustomPagination from '../../../components/custom/CustomPagination';
 
 const getEvents = async (page = 0) => {
   const { data } = await api.get('/api/event/get-events?page=' + page);
@@ -14,8 +15,7 @@ const getEvents = async (page = 0) => {
 };
 
 function PartnerHome() {
-  const [page] = useState(0);
-
+  const [page, setPage] = useState(0);
   const { status, data } = useQuery(['events', page], () => getEvents(page));
 
   return (
@@ -39,19 +39,33 @@ function PartnerHome() {
         ) : status === 'error' ? (
           <Alert variant="danger">An error has occured</Alert>
         ) : (
-          <Row>
-            {data.content.map((event, i) => (
-              <Col
-                key={i}
-                sm={6}
-                lg={4}
-                className="mb-5 d-flex align-items-stretch3"
-                as="a"
-              >
-                <EventCard event={event} />
+          <>
+            <Row>
+              {data.content.map((event, i) => (
+                <Col
+                  key={i}
+                  sm={6}
+                  lg={4}
+                  className="mb-5 d-flex align-items-stretch3"
+                  as="a"
+                >
+                  <EventCard event={event} />
+                </Col>
+              ))}
+            </Row>
+
+            <Row>
+              <Col className="d-flex align-items-center">
+                <CustomPagination
+                  number={data?.number}
+                  first={data?.first}
+                  last={data?.last}
+                  totalPages={data?.totalPages}
+                  setPage={setPage}
+                />
               </Col>
-            ))}
-          </Row>
+            </Row>
+          </>
         )}
       </Container>
     </PartnerWrapper>
