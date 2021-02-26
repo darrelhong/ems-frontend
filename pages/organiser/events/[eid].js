@@ -31,17 +31,21 @@ const OrganiserViewEventDetails = () => {
     loadEvent();
   },[]);
 
-  const publishOrHide = async () => {
-    const currentState = event.eventStatus;
-    let eventStatus = '';
-    (currentState == 'HIDDEN') ? eventStatus = 'PUBLISHED' : eventStatus = 'HIDDEN';
-    let updatedEvent = await updateEvent({...event,eventStatus});
+  const publishToggle = async () => {
+    let published = !event.published;
+    let updatedEvent = await updateEvent({...event, published});
     setEvent(updatedEvent);
   };
 
+  const hideToggle = async () => {
+    let hidden = !event.hidden;
+    let updatedEvent = await updateEvent({...event, hidden});
+    setEvent(updatedEvent);
+  };
+
+
   const vipToggle = async () => {
     let vip = !event.vip;
-    console.log('toggling, new value: ' +vip);
     let updatedEvent = await updateEvent({...event, vip});
     setEvent(updatedEvent);
   };
@@ -77,7 +81,8 @@ const OrganiserViewEventDetails = () => {
               <EventDescription
                 event={event}
                 prettyStartDate = {prettyStartDate}
-                publishOrHide = {publishOrHide}
+                hideToggle = {hideToggle}
+                publishToggle = {publishToggle}
                 vipToggle={vipToggle}
               />
             </Col>
