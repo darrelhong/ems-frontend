@@ -8,7 +8,12 @@ import {
   IoLogoInstagram,
   IoMdWifi,
   IoIosBody,
-  IoMdStar
+  IoMdStar, //vip
+  IoMdStarOutline,
+  IoMdCloudDownload, //publish and unpublish
+  IoMdCloudUpload,
+  IoMdEye, //hide and unhide
+  IoMdEyeOff 
 } from "react-icons/io";
 
 const EventDescription = ({
@@ -97,22 +102,12 @@ const EventDescription = ({
         //   }`}
         >
           {/* first button */}
-          <button
-            // onClick={() =>
-            //   addToCart(
-            //     product,
-            //     addToast,
-            //     quantityCount,
-            //     selectedProductColor,
-            //     selectedProductSize
-            //   )
-            // }
-            // disabled={productCartQty >= productStock}
+          {/* <button
             className="btn btn-fill-out btn-addtocart space-ml--10"
           >
             <i className="icon-basket-loaded" /> Edit
           </button>
-
+*/}
           {event.published ?
 
             (<button
@@ -165,52 +160,56 @@ const EventDescription = ({
                 <i className="icon-basket-loaded" /> Make VIP
               </button>
             )
-          }
+          } 
+
+          <div className="product-content__product-share space-mt--15">
+        <span>Actions:</span>
+        <ul className="social-icons">
+         <li>
+            <a href="javascript:void(0);" onClick={vipToggle}>
+              {/* <IoLogoFacebook  /> */}
+              {event.vip ? (
+                <IoMdStarOutline title = "Unlist event from VIP"/>
+              ) : 
+              ( <IoMdStar title="Make this a VIP-only event!"/> )}
+            </a>
+            </li>
+          <li>
+            <a href="javascript:void(0);" onClick={hideToggle}>
+              {event.hidden ? (
+                <IoMdEye title="Unhide your event from attendees!" />
+              ) : ( 
+                <IoMdEyeOff title="Temporarily hide your event from attendees" />
+              )}
+            </a>
+          </li>
+          <li>
+            <a href="javascript:void(0);" onClick={publishToggle}>
+              {event.published ? (
+                <IoMdCloudDownload title="Temporarily unpublish your event from business partners!" />
+              ) : (
+                <IoMdCloudUpload title="Publish your event for business partners to see!" />
+              )}
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <IoLogoYoutube />
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <IoLogoInstagram />
+            </a>
+          </li>
+        </ul>
+      </div>
 
 
-
-
-
-
-          {/* second button */}
-          <button
-          // className={`product-content__compare ${compareItem !== undefined ? "active" : ""
-          //   }`}
-          // title={
-          //   compareItem !== undefined
-          //     ? "Added to compare"
-          //     : "Add to compare"
-          // }
-          // onClick={
-          //   compareItem !== undefined
-          //     ? () => deleteFromCompare(product, addToast)
-          //     : () => addToCompare(product, addToast)
-          // }
-          >
-            <i className="icon-shuffle" />
-          </button>
-
-          {/* third button */}
-          <button
-          // className={`product-content__wishlist ${wishlistItem !== undefined ? "active" : ""
-          //   }`}
-          // title={
-          //   wishlistItem !== undefined
-          //     ? "Added to wishlist"
-          //     : "Add to wishlist"
-          // }
-          // onClick={
-          //   wishlistItem !== undefined
-          //     ? () => deleteFromWishlist(product, addToast)
-          //     : () => addToWishlist(product, addToast)
-          // }
-          >
-            <i className="icon-heart" />
-          </button>
         </div>
       </Fragment>
       <hr />
-      <div className="product-content__product-share space-mt--15">
+      {/* <div className="product-content__product-share space-mt--15">
         <span>Share:</span>
         <ul className="social-icons">
           <li>
@@ -239,7 +238,7 @@ const EventDescription = ({
             </a>
           </li>
         </ul>
-      </div>
+      </div> */}
     </div>
   );
 };
