@@ -14,7 +14,8 @@ import {
 const EventDescription = ({
   event,
   prettyStartDate,
-  publishOrHide,
+  publishToggle,
+  hideToggle,
   vipToggle
 }) => {
   // const [selectedProductColor, setSelectedProductColor] = useState(
@@ -78,12 +79,12 @@ const EventDescription = ({
 
           {event.vip ? (
             <li>
-            < IoMdStar /> Undo VIP
-          </li>
+              < IoMdStar /> Undo VIP
+            </li>
           ) : (
-            <li>
-            < IoMdStar /> Make Event VIP
-          </li>)}
+              <li>
+                < IoMdStar /> Make Event VIP
+              </li>)}
         </ul>
       </div>
       <hr />
@@ -112,17 +113,34 @@ const EventDescription = ({
             <i className="icon-basket-loaded" /> Edit
           </button>
 
-          {event.eventStatus == 'HIDDEN' ?
+          {event.published ?
 
             (<button
-              onClick={publishOrHide}
+              onClick={publishToggle}
+              className="btn btn-fill-out btn-addtocart space-ml--10"
+            >
+              <i className="icon-basket-loaded" /> Unpublish Event
+            </button>)
+            :
+            (<button
+              onClick={publishToggle}
               className="btn btn-fill-out btn-addtocart space-ml--10"
             >
               <i className="icon-basket-loaded" /> Publish Event
             </button>)
+          }
+
+          {event.hidden ?
+
+            (<button
+              onClick={hideToggle}
+              className="btn btn-fill-out btn-addtocart space-ml--10"
+            >
+              <i className="icon-basket-loaded" /> Unhide Event
+            </button>)
             :
             (<button
-              onClick={publishOrHide}
+              onClick={hideToggle}
               className="btn btn-fill-out btn-addtocart space-ml--10"
             >
               <i className="icon-basket-loaded" /> Hide Event
@@ -132,22 +150,22 @@ const EventDescription = ({
 
           {event.vip ? (
             <button
-            onClick={vipToggle}
-            className="btn btn-fill-out btn-addtocart space-ml--10"
-          >
-            <i className="icon-basket-loaded" /> Unlist from VIP
-          </button>
-          ) :(
-            <button
-            onClick={vipToggle}
-            className="btn btn-fill-out btn-addtocart space-ml--10"
-          >
-            <i className="icon-basket-loaded" /> Make VIP
-          </button>
-          ) 
-        }
+              onClick={vipToggle}
+              className="btn btn-fill-out btn-addtocart space-ml--10"
+            >
+              <i className="icon-basket-loaded" /> Unlist from VIP
+            </button>
+          ) : (
+              <button
+                onClick={vipToggle}
+                className="btn btn-fill-out btn-addtocart space-ml--10"
+              >
+                <i className="icon-basket-loaded" /> Make VIP
+              </button>
+            )
+          }
 
-          
+
 
 
 
