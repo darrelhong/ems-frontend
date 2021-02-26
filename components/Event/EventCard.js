@@ -32,6 +32,12 @@ const EventCard = ({ event }) => {
                             </Link>
                         </h6>
 
+                        <span>
+                            <button>
+                                <i className="icon-delete" />Delete
+                            </button>
+                        </span>
+
                         <div className="d-flex justify-content-between">
                             <div className="product-price">
                                 <span className="price">${event.ticketPrice}</span>
@@ -42,19 +48,33 @@ const EventCard = ({ event }) => {
                             {event.descriptions}
                         </div>
 
+                        <div>
+                            <span>
+                                <ProgressBar now={60} label="60%" />
+                            </span>
+                            <span>
+                                {event.ticketCapacity}
+                            </span>
+                        </div>
+
                         <div className="product-list__actions">
                             <ul>
                                 <li>
-                                    {/* Require to be changed */}
-                                    {/* <Link href={`/organiser/events`}>
-                                        <a className="btn btn-fill-out btn-addtocart">
-                                            <i className="icon-basket-loaded" /> Add To Cart
-                                        </a>
-                                    </Link> */}
-                                    <div>
-                                        <ProgressBar now={60} label="60%" />
-                                        <h5>{event.ticketCapacity}</h5>
-                                    </div>
+                                    <button className="btn btn-fill-out btn-addtocart space-ml--10">
+                                        <i className="icon-basket-loaded" /> Publish
+                                    </button>
+                                </li>
+
+                                <li>
+                                    <button className="btn btn-fill-out btn-addtocart space-ml--10">
+                                        <i className="icon-basket-loaded" /> Hide
+                                    </button>
+                                </li>
+
+                                <li>
+                                    <button className="btn btn-fill-out btn-addtocart space-ml--10">
+                                        <i className="icon-basket-loaded" /> Make VIP
+                                    </button>
                                 </li>
                             </ul>
                         </div>
