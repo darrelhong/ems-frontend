@@ -18,6 +18,8 @@ const EventModalEoProfile = (props) => {
   const [gallerySwiper, getGallerySwiper] = useState(null);
   const [thumbnailSwiper, getThumbnailSwiper] = useState(null);
 
+
+
   // effect for swiper slider synchronize
   useEffect(() => {
     if (
@@ -31,25 +33,43 @@ const EventModalEoProfile = (props) => {
     }
   }, [gallerySwiper, thumbnailSwiper]);
 
-  // swiper slider settings
+  //swiper slider settings
   const gallerySwiperParams = {
     getSwiper: getGallerySwiper,
+    slidesPerView: 3,
     spaceBetween: 10,
     loopedSlides: 4,
-    loop: true,
+    loop: false,
     effect: 'fade',
+    
   };
 
   const thumbnailSwiperParams = {
     getSwiper: getThumbnailSwiper,
     spaceBetween: 10,
-    slidesPerView: 4,
+    slidesPerView: 3,
     loopedSlides: 4,
     touchRatio: 0.2,
     freeMode: true,
-    loop: true,
+    loop: false,
     slideToClickedSlide: true,
   };
+
+  //  const params = {
+  //    slidesPerView: 3,
+  //    spaceBetween: 30,
+  //    slidesPerGroup: 3,
+  //    loop: true,
+  //    loopFillGroupWithBlank: true,
+  //    pagination: {
+  //      el: '.swiper-pagination',
+  //      clickable: true,
+  //    },
+  //    navigation: {
+  //      nextEl: '.swiper-button-next',
+  //      prevEl: '.swiper-button-prev',
+  //    },
+  //  };
 
   return (
     <Modal
@@ -62,8 +82,8 @@ const EventModalEoProfile = (props) => {
         <Modal.Header closeButton></Modal.Header>
         <Row>
           <Col lg={6}>
-            <div className="product-quickview__large-image-wrapper">
-              <Swiper {...gallerySwiperParams}>
+            <Swiper {...gallerySwiperParams}>
+              <div>
                 {event.images &&
                   event.images.map((single, key) => {
                     return (
@@ -74,26 +94,8 @@ const EventModalEoProfile = (props) => {
                       </div>
                     );
                   })}
-              </Swiper>
-            </div>
-            <div className="product-quickview__small-image-wrapper">
-              <Swiper {...thumbnailSwiperParams}>
-                {event.images &&
-                  event.images.map((image, i) => {
-                    return (
-                      <div key={i}>
-                        <div className="single-image">
-                          <img
-                            src="http://localhost:8080/api/downloadFile/profilepic-096c0976-f1df-486e-a23c-c22f9adb77c6.png"
-                            className="img-fluid"
-                            alt=""
-                          />
-                        </div>
-                      </div>
-                    );
-                  })}
-              </Swiper>
-            </div>
+              </div>
+            </Swiper>
           </Col>
           <Col lg={6}>
             <div className="product-quickview__content">

@@ -1,5 +1,5 @@
 import Swiper from "react-id-swiper";
-import EventGridWrapperFiveEoProfile from '../ProductThumb/EventGridWrapperFiveEoProfile';
+//import EventGridWrapperFiveEoProfile from '../ProductThumb/EventGridWrapperFiveEoProfile';
 
 const ProductSliderTen = ({ events }) => {
   const params = {
@@ -35,11 +35,14 @@ const ProductSliderTen = ({ events }) => {
   return (
     <div className="product-slider-wrap product-slider-wrap--custom-bullet">
       <Swiper {...params}>
-        <EventGridWrapperFiveEoProfile
+        {/* <EventGridWrapperFiveEoProfile
           events={events}
           sliderClass="swiper-slide"
           bottomSpace="space-mb--30"
-        />
+        /> */}
+        <div>{''}</div>
+        <div>slide 2</div>
+        <div>slide 3</div>
       </Swiper>
     </div>
   );

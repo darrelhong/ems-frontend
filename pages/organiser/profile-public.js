@@ -34,7 +34,7 @@ const paraId_ = JSON.parse(query.paraId);
 useEffect(async () => {
   await getEventByOrganiserId(paraId_).then((events) => {
    setEventlist(events);
-  });
+  })
 },[]);
 
 
@@ -89,55 +89,44 @@ if (user?.id == paraId_) {
         </ol>
       </BreadcrumbOne>
       <div className="my-account-content space-pt--r100 space-pb--r100">
-        <div>
-          <Container>
-            <Row className="justify-content-md-center">
-              <Col xs={4} md={6}>
-                <Image
-                  className="profile-image"
-                  src={eventorganiser?.profilePic}
-                  thumbnail
-                />
-              </Col>
-              <Col xs={4} md={6}>
-                <h2>{eventorganiser?.name}</h2>
-                <div className="product-content__rating-wrap">
-                  <div className="product-content__rating">
-                    <ProductRating ratingValue={3} />
-                    <span>({3})</span>
-                  </div>
-                </div>
+        <Row className="justify-content-md-end">
+          <Col xs={3} md={3}>
+            <Image
+              className="profile-image"
+              src={eventorganiser?.profilePic}
+              thumbnail
+            />
+          </Col>
+              <Col xs={6} md={6}>
+          <h2>{eventorganiser?.name}</h2>
+          <div className="product-content__rating-wrap">
+            <div className="product-content__rating">
+              <ProductRating ratingValue={3} />
+              <span>({3})</span>
+            </div>
+          </div>
 
-                <br></br>
-                <div style={{ display: showPublicView ? 'block' : 'none' }}>
-                  {
-                    <button
-                      className="btn btn-fill-out"
-                      name="follow"
-                      value="follow"
-                    >
-                      Follow
-                    </button>
-                  }
-                </div>
+          <br></br>
+          <div style={{ display: showPublicView ? 'block' : 'none' }}>
+            {
+              <button className="btn btn-fill-out" name="follow" value="follow">
+                Follow
+              </button>
+            }
+          </div>
 
-                <div style={{ display: showEoView ? 'block' : 'none' }}>
-                  <Link href="/organiser/profile-account">
-                    <button
-                      className="btn btn-fill-out"
-                      name="edit"
-                      value="edit"
-                    >
-                      <BsPencilSquare />
-                    </button>
-                  </Link>
-                </div>
-              </Col>
-            </Row>
-          </Container>
-        </div>
+          <div style={{ display: showEoView ? 'block' : 'none' }}>
+            <Link href="/organiser/profile-account">
+              <button className="btn btn-fill-out" name="edit" value="edit">
+                <BsPencilSquare />
+              </button>
+            </Link>
+          </div>
+          </Col>
+        </Row>
+            <br/>
         <Row className="justify-content-md-center">
-          <Col xs={6} md={9}>
+          <Col xs={6} md={6}>
             <Tab.Container defaultActiveKey="Events">
               <Nav
                 variant="pills"

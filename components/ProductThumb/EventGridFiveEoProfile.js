@@ -7,6 +7,7 @@ const EventGridFiveEOProfile = ({ event, bottomSpace, sliderClass }) => {
   const [modalShow, setModalShow] = useState(false);
   const [colorImage, setColorImage] = useState('');
 
+
   return (
     <Fragment>
       <div
@@ -21,18 +22,25 @@ const EventGridFiveEOProfile = ({ event, bottomSpace, sliderClass }) => {
             // as={"/shop/product-basic/" + product.slug}
             > */}
             <a>
-              <img
-                //event images is here
-                // src={colorImage ? colorImage : product.images[0]}
-                src="https://www.creativiva.com/wp-content/uploads/2016/05/decor-blog-1.jpg"
-                alt="product_img1"
-              />
-              <img
-                className="product-hover-image"
-                src="https://i.pinimg.com/originals/b4/c3/8a/b4c38aad1728a7d6bb4bff0b3f88187d.jpg"
-                // src={colorImage ? colorImage : product.images[1]}
-                alt="product_img1"
-              />
+
+                <div>
+                  <img
+                    className="view-profile-event-image"
+                    //event images is here
+                    // src={colorImage ? colorImage : product.images[0]}
+                    src="https://www.creativiva.com/wp-content/uploads/2016/05/decor-blog-1.jpg"
+                    alt="product_img1"
+                  />
+
+                  <img
+                    className="product-hover-image view-profile-event-image"
+                    src="https://i.pinimg.com/originals/b4/c3/8a/b4c38aad1728a7d6bb4bff0b3f88187d.jpg"
+                    // src={colorImage ? colorImage : product.images[1]}
+                    alt="product_img1"
+                  />
+                </div>
+          
+           
             </a>
             {/* </Link> */}
             <div className="product-grid__badge-wrapper">
@@ -77,11 +85,11 @@ const EventGridFiveEOProfile = ({ event, bottomSpace, sliderClass }) => {
         </div>
       </div>
       {/* product modal */}
-      <EventModal
+      {/* <EventModal
         show={modalShow}
         onHide={() => setModalShow(false)}
         event={event}
-      />
+      /> */}
     </Fragment>
   );
 };
