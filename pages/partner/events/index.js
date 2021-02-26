@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { Alert, Card, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { useQuery } from 'react-query';
+import { format, parseISO } from 'date-fns';
 
 import { BreadcrumbOne } from '../../../components/Breadcrumb';
 import PartnerWrapper from '../../../components/wrapper/PartnerWrapper';
@@ -13,7 +14,7 @@ const getEvents = async (page = 0) => {
 };
 
 function PartnerHome() {
-  const [page, setPage] = useState(0);
+  const [page] = useState(0);
 
   const { status, data } = useQuery(['events', page], () => getEvents(page));
 
@@ -53,10 +54,16 @@ function PartnerHome() {
                     src={event.images?.[0]}
                     style={{ height: 200 }}
                   />
-                  <Card.Body>
+                  <Card.Body className="d-flex flex-column">
                     <Card.Title>{event.name}</Card.Title>
                     <Card.Text className="line-clamp">
                       {event?.descriptions}
+                    </Card.Text>
+                    <Card.Text className="text-default mt-auto">
+                      {format(
+                        parseISO(event.eventStartDate),
+                        'eee, dd MMM yy hh:mmbbb'
+                      )}
                     </Card.Text>
                   </Card.Body>
                 </Card>
