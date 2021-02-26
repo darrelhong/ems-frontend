@@ -14,7 +14,8 @@ import {
 const EventDescription = ({
   event,
   prettyStartDate,
-  publishOrHide
+  publishOrHide,
+  vipToggle
 }) => {
   // const [selectedProductColor, setSelectedProductColor] = useState(
   //   product.variation ? product.variation[0].color : ""
@@ -74,9 +75,15 @@ const EventDescription = ({
           <li>
             <AiOutlineReload /> Event Location: {event.address}
           </li>
-          <li>
-            < IoMdStar /> VIP ? (not properly done yet)
+
+          {event.vip ? (
+            <li>
+            < IoMdStar /> Undo VIP
           </li>
+          ) : (
+            <li>
+            < IoMdStar /> Make Event VIP
+          </li>)}
         </ul>
       </div>
       <hr />
@@ -122,11 +129,25 @@ const EventDescription = ({
             </button>)
           }
 
-          <button
+
+          {event.vip ? (
+            <button
+            onClick={vipToggle}
+            className="btn btn-fill-out btn-addtocart space-ml--10"
+          >
+            <i className="icon-basket-loaded" /> Unlist from VIP
+          </button>
+          ) :(
+            <button
+            onClick={vipToggle}
             className="btn btn-fill-out btn-addtocart space-ml--10"
           >
             <i className="icon-basket-loaded" /> Make VIP
           </button>
+          ) 
+        }
+
+          
 
 
 

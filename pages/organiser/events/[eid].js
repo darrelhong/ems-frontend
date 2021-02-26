@@ -39,6 +39,13 @@ const OrganiserViewEventDetails = () => {
     setEvent(updatedEvent);
   };
 
+  const vipToggle = async () => {
+    let vip = !event.vip;
+    console.log('toggling, new value: ' +vip);
+    let updatedEvent = await updateEvent({...event, vip});
+    setEvent(updatedEvent);
+  };
+
   return (
     <LayoutOne>
       {/* breadcrumb */}
@@ -71,6 +78,7 @@ const OrganiserViewEventDetails = () => {
                 event={event}
                 prettyStartDate = {prettyStartDate}
                 publishOrHide = {publishOrHide}
+                vipToggle={vipToggle}
               />
             </Col>
           </Row>
