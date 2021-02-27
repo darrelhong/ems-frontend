@@ -1,11 +1,16 @@
 import Link from 'next/link';
 import { LayoutOne } from '../../layouts';
-import  EventTabOne from '../../components/EventTabEoProfile';
+import EventTabOne from '../../components/EventTabEoProfile';
 import { BreadcrumbOne } from '../../components/Breadcrumb';
 import { Container, Row, Col } from 'react-bootstrap';
 import { ProductRating } from '../../components/Product';
 import useUser from '../../lib/query/useUser';
-import getEventByOrganiserId from '../../lib/query/useEvent';
+import {
+  getEventByOrganiserId,
+  getPastEventsByOrganiserId,
+  getCurrentEventsByOrganiserId,
+  getUpcomingEventsByOrganiserId,
+} from '../../lib/query/useEvent';
 import api from '../../lib/ApiClient';
 import { IoIosStar, IoIosStarOutline } from 'react-icons/io';
 import { BsPencilSquare } from 'react-icons/bs';
@@ -13,66 +18,66 @@ import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
 import { withRouter } from 'next/router';
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { convertCompilerOptionsFromJson } from 'typescript';
 
-const EventOrgProfile = ({
-  router:{query}
-}) => {
-
+const EventOrgProfile = ({ router: { query } }) => {
   const [showEoView, setShowEoView] = useState(false);
   const [showPublicView, setShowPublicView] = useState(false);
-  const [eventlist, setEventlist] = useState([]);
-//  const [eventArraylist, setEventArraylist] = useState([[]]);
+  //const [eventlist, setEventlist] = useState([]);
+  const [upcomingeventlist, setUpcomingeventlistEventlist] = useState([]);
+  const [pasteventlist, setPastEventlist] = useState([]);
+  const [currenteventlist, setCurrenteventlist] = useState([]);
+  //  const [eventArraylist, setEventArraylist] = useState([[]]);
   // if there is user login credential
- if(localStorage.getItem('userId') != null){
-const { data: user } = useUser(localStorage.getItem('userId'));
-const paraId_ = JSON.parse(query.paraId);
-//let eventlist_ = null;
-//const { data: eventlist } = getEventByOrganiserId(paraId_);
+  if (localStorage.getItem('userId') != null) {
+    const { data: user } = useUser(localStorage.getItem('userId'));
+    const paraId_ = JSON.parse(query.paraId);
+    //let eventlist_ = null;
+    //const { data: eventlist } = getEventByOrganiserId(paraId_);
 
-useEffect(async () => {
-  await getEventByOrganiserId(paraId_).then((events) => {
-   setEventlist(events);
-  })
-},[]);
+    useEffect(async () => {
+      await getCurrentEventsByOrganiserId(paraId_).then((events) => {
+        setCurrenteventlist(events);
+      });
 
+      await getPastEventsByOrganiserId(paraId_).then((events) => {
+        setPastEventlist(events);
+      });
 
+      await getUpcomingEventsByOrganiserId(paraId_).then((events) => {
+        setUpcomingeventlistEventlist(events);
+      });
 
-useEffect(() => { 
-//const eventList = getEventByOrganiserId(paraId_);
-//console.log(eventList);
+      await getPastEventsByOrganiserId(paraId_).then((events) => {
+        setPastEventlist(events);
+      });
+    }, []);
 
-if(user?.id != null){
+    useEffect(() => {
+      if (user?.id != null) {
+        if (user?.id == paraId_) {
+          setShowEoView(true);
+          setShowPublicView(false);
+        } else {
+          setShowPublicView(true);
+          setShowEoView(false);
+        }
+      } else {
+        setShowPublicView(true);
+        setShowEoView(false);
+      }
+    }, []);
+  } else {
+    useEffect(() => {
+      setShowPublicView(true);
+      setShowEoView(false);
+    });
+  }
 
-if (user?.id == paraId_) {
-  setShowEoView(true);
-  setShowPublicView(false);
-} else {
-  setShowPublicView(true);
-  setShowEoView(false);
-}
-}else{
-    setShowPublicView(true);
-    setShowEoView(false);
-}
-},[]);
-
-}else{
-  
-  useEffect(() => { 
-
-   setShowPublicView(true);
-   setShowEoView(false);
-  });
-}
-
-// the paraID should always have id value
- const paraId_ = JSON.parse(query.paraId);
- const { data: eventorganiser } = useUser(paraId_);
-
-
-
+  // the paraID should always have id value
+  const paraId_ = JSON.parse(query.paraId);
+  const { data: eventorganiser } = useUser(paraId_);
 
   return (
     <LayoutOne>
@@ -97,34 +102,38 @@ if (user?.id == paraId_) {
               thumbnail
             />
           </Col>
-              <Col xs={6} md={6}>
-          <h2>{eventorganiser?.name}</h2>
-          <div className="product-content__rating-wrap">
-            <div className="product-content__rating">
-              <ProductRating ratingValue={3} />
-              <span>({3})</span>
+          <Col xs={6} md={6}>
+            <h2>{eventorganiser?.name}</h2>
+            <div className="product-content__rating-wrap">
+              <div className="product-content__rating">
+                <ProductRating ratingValue={3} />
+                <span>({3})</span>
+              </div>
             </div>
-          </div>
 
-          <br></br>
-          <div style={{ display: showPublicView ? 'block' : 'none' }}>
-            {
-              <button className="btn btn-fill-out" name="follow" value="follow">
-                Follow
-              </button>
-            }
-          </div>
+            <br></br>
+            <div style={{ display: showPublicView ? 'block' : 'none' }}>
+              {
+                <button
+                  className="btn btn-fill-out"
+                  name="follow"
+                  value="follow"
+                >
+                  Follow
+                </button>
+              }
+            </div>
 
-          <div style={{ display: showEoView ? 'block' : 'none' }}>
-            <Link href="/organiser/profile-account">
-              <button className="btn btn-fill-out" name="edit" value="edit">
-                <BsPencilSquare />
-              </button>
-            </Link>
-          </div>
+            <div style={{ display: showEoView ? 'block' : 'none' }}>
+              <Link href="/organiser/profile-account">
+                <button className="btn btn-fill-out" name="edit" value="edit">
+                  <BsPencilSquare />
+                </button>
+              </Link>
+            </div>
           </Col>
         </Row>
-            <br/>
+        <br />
         <Row className="justify-content-md-center">
           <Col xs={6} md={6}>
             <Tab.Container defaultActiveKey="Events">
@@ -166,13 +175,17 @@ if (user?.id == paraId_) {
                       />
                       */}
                     {/* tab product -> refers to eletronic-two*/}
-                    <EventTabOne current={eventlist} />
+                    <EventTabOne
+                      current={currenteventlist}
+                      upcoming={upcomingeventlist}
+                      past={pasteventlist}
+                    />
                   </div>
                 </Tab.Pane>
                 <Tab.Pane eventKey="Description">
-                  {eventlist.map((event) => (
+                  {/* {eventlist.map((event) => (
                     <div key={event.eid}>{event.eid}</div>
-                  ))}
+                  ))} */}
                   <br></br>
                   <div className="product-description-tab__additional-info">
                     {eventorganiser?.description}
