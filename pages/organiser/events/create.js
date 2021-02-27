@@ -13,7 +13,8 @@ import TicketingPane from '../../../components/createEvent/tabPanes/TicketingPan
 import OnlinePhysicalPane from '../../../components/createEvent/tabPanes/OnlinePhysicalPane';
 import useUser from '../../../lib/query/useUser';
 import { createEvent, getEventDetails } from '../../../lib/query/eventApi';
-import { htmlDateToDb, dbDateToPretty } from '../../../lib/util/functions';
+import { htmlDateToDb, formatDates } from '../../../lib/util/functions';
+import Modal from 'react-bootstrap/Modal';
 
 const steps = [
   {
@@ -44,10 +45,12 @@ const steps = [
 ];
 
 const CreateEvent = () => {
-  const { control, register, handleSubmit, watch, setValue, errors } = useForm();
+  const { control, register, handleSubmit, watch, setValue, errors, getValues } = useForm();
   const { data: user } = useUser(localStorage.getItem('userId'));
   const [activeStep, setActiveStep] = useState(0);
-  const [isFinal, setIsFinal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [eventData,setEventData] = useState(Object);
+
   // const [eventInProgress,setEventInProgress] = useState(Object);
 
   const router = useRouter();
@@ -56,10 +59,11 @@ const CreateEvent = () => {
   useEffect(() => {
     const loadData = async () => {
       let eventData = await getEventDetails(eid);
+      setEventData(eventData);
       setAllValues(eventData);
     };
     if (eid) loadData();
-  }, [])
+  }, []);
 
   const setAllValues = (eventData) => {
     const {
@@ -122,23 +126,11 @@ const CreateEvent = () => {
         salesEndDate,
       };
     } else {
-      if (data.eventStartDate)
-        eventStartDate = htmlDateToDb(data.eventStartDate);
-      if (data.eventEndDate) eventEndDate = htmlDateToDb(data.eventEndDate);
-      if (data.saleStartDate) saleStartDate = htmlDateToDb(data.saleStartDate);
-      if (data.salesEndDate) salesEndDate = htmlDateToDb(data.salesEndDate);
-      inputData = {
-        ...data,
-        eventOrganiserId,
-        eventStartDate,
-        eventEndDate,
-        saleStartDate,
-        salesEndDate,
-      };
+      const formattedData = formatDates(data);
+      inputData = {...formattedData,eventOrganiserId};
     }
 
     try {
-      setIsFinal(true);
       const response = await createEvent(inputData);
       console.log('created event details:');
       console.log(response);
@@ -149,9 +141,48 @@ const CreateEvent = () => {
     }
   };
 
+  const saveDraft = () => {
+
+  };
+
   return (
-    <OrganiserWrapper title="Create New Event">
+    <OrganiserWrapper title={eid ? `Updating ${eventData.name}` : "Create New Event"}>
       <form onSubmit={handleSubmit(onSubmit)}>
+        <Modal show={showModal}
+          onHide={(event) => {
+            setShowModal(false);
+          }}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Confirmation</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Are you sure you want to disable your account?</Modal.Body>
+          <Modal.Footer>
+            <button
+              type="submit"
+              className="btn btn-fill-out"
+              name="submit"
+              value="Submit"
+              ref={register()}
+            >
+              Finish
+            </button>
+            <button
+              type="submit"
+              className="btn btn-fill-out"
+              name="submit"
+              value="Submit"
+              ref={register()}
+              onClick={()=>{
+                console.log('pressing button?');
+                console.log('errors: ');
+                console.log(errors);
+              }}
+            >
+              Finish
+            </button>
+          </Modal.Footer>
+        </Modal>
         <BreadcrumbOne pageTitle="Create New Event">
           <ol className="breadcrumb justify-content-md-end">
             <li className="breadcrumb-item">
@@ -163,10 +194,9 @@ const CreateEvent = () => {
           </ol>
           <ol>
             <button
-              type="submit"
+              type="button"
               className="btn btn-fill-out"
-              name="submit"
-              value="Submit"
+              onClick={saveDraft}
             >
               Save as Draft
             </button>
@@ -180,6 +210,29 @@ const CreateEvent = () => {
               ref={register()}
             >
               Finish
+            </button>
+          </ol>
+          <ol>
+            <button
+              type="button"
+              className="btn btn-fill-out"
+              onClick={() => {
+                setShowModal(true);
+              }}
+            >
+              Show modal
+            </button>
+          </ol> <ol>
+            <button
+              type="button"
+              className="btn btn-fill-out"
+              onClick={() => {
+                let data = getValues();
+                console.log('printing data now');
+                console.log(data);
+              }}
+            >
+              Show modal
             </button>
           </ol>
         </BreadcrumbOne>
@@ -201,7 +254,6 @@ const CreateEvent = () => {
                         control={control}
                         register={register}
                         watch={watch}
-                        isFinal={isFinal}
                         errors={errors}
                       />
                     </Tab.Pane>

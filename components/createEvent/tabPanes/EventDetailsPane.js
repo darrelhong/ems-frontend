@@ -2,7 +2,7 @@ import { Row, Col } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import PropTypes from 'prop-types';
 
-const EventDetailsPane = ({ register, watch, isFinal, errors }) => {
+const EventDetailsPane = ({ register, watch, errors }) => {
   const renderDateError = () => {
     if (
       watch('eventStartDate') &&
@@ -37,7 +37,7 @@ const EventDetailsPane = ({ register, watch, isFinal, errors }) => {
                 ref={register({ required: true })}
               />
               {errors.name && (
-                <span role="alert">
+                <span role="alert" style={{ color: 'red' }}>
                   This field is required
                 </span>
               )
@@ -114,8 +114,7 @@ const EventDetailsPane = ({ register, watch, isFinal, errors }) => {
 
 EventDetailsPane.propTypes = {
   register: PropTypes.func,
-  watch: PropTypes.func,
-  isFinal: PropTypes.bool,
+  watch: PropTypes.func
   //onSubmit shouldnt be here actually will shift it out soon
 };
 
