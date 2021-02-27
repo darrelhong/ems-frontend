@@ -5,7 +5,11 @@ import { Card } from 'react-bootstrap';
 export default function EventCard({ event }) {
   return (
     <Card>
-      <Card.Img variant="top" src={event.images?.[0]} style={{ height: 200 }} />
+      <Card.Img
+        variant="top"
+        src={event.images?.[0] || '/assets/images/img-placeholder.jpg'}
+        style={{ height: 200 }}
+      />
       <Card.Body className="d-flex flex-column">
         <Card.Title>{event.name}</Card.Title>
         <Card.Text className="line-clamp">{event?.descriptions}</Card.Text>
