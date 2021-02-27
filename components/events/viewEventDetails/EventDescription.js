@@ -13,6 +13,7 @@ import {
   IoMdCreate
 } from "react-icons/io";
 import ProductRating from "../../Product/ProductRating";
+import Link from 'next/link';
 
 const EventDescription = ({
   event,
@@ -55,7 +56,7 @@ const EventDescription = ({
         <div className="product-content__rating-wrap">
           <div className="product-content__rating">
             <ProductRating ratingValue={event.rating} />
-            <span>({event.rating})</span> {/* number of ratings done here */}
+            <span>(0)</span> {/* we hardcode 0 ratings for now */}
           </div>
         </div>
         {/*  ) : (
@@ -115,8 +116,8 @@ const EventDescription = ({
 
       <Fragment>
         <div>
-          <div className="product-content__product-share space-mt--15" style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <span>Actions:</span>
+        <div className="product-content__product-share space-mt--15" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            {/* <span>Actions:</span> */}
             <ul className="social-icons">
               <li>
                 <a href="javascript:void(0);" onClick={vipToggle}>
@@ -125,7 +126,7 @@ const EventDescription = ({
                     <IoMdStarOutline title="Unlist event from VIP" />
                   ) :
                     (<IoMdStar title="Make this a VIP-only event!" />)}
-                </a>
+               </a>
               </li>
               <li>
                 <a href="javascript:void(0);" onClick={hideToggle}>
@@ -146,9 +147,11 @@ const EventDescription = ({
                 </a>
               </li>
               <li>
-                <a href="#">
-                  <IoMdCreate />
-                </a>
+                <Link href={`/organiser/events/create?eid=${event.eid}`}>
+                  <a>
+                    <IoMdCreate />
+                  </a>
+                </Link>
               </li>
             </ul>
             <button

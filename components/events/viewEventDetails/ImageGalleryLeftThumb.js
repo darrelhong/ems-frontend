@@ -12,7 +12,14 @@ const ImageGalleryLeftThumb = ({ event }) => {
     'https://cnet1.cbsistatic.com/img/EfkEAmi5LXXE-cFxIV0n1kFk11o=/940x0/2019/06/06/b11ccfac-685e-4cb2-a239-b09af07b1baf/toriflynn2.jpg',
     'https://newsroom.unsw.edu.au/sites/default/files/thumbnails/image/3500028168_c85a03256a_b_2.jpg',
     'https://blog.ssa.gov/wp-content/uploads/2015/10/Retire-Online-Its-The-Cats-Meow.jpg'
+    // "https://storage.googleapis.com/ems-images/events/event-7/image-1.jpg",
+    // "https://storage.googleapis.com/ems-images/events//event-7/image-2.jpg",
+    // "https://storage.googleapis.com/ems-images/events//event-7/image-3.jpg"
   ]);
+
+  // useEffect(()=>{
+  //   setImageArray(event.images);
+  // },[]);
 
   // effect for swiper slider synchronize
   useEffect(() => {

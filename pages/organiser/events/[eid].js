@@ -13,6 +13,7 @@ import ProductDescriptionTab from "../../../components/events/viewEventDetails/P
 import { getEventDetails, updateEvent } from '../../../lib/query/eventApi';
 import { dbDateToPretty } from '../../../lib/util/functions';
 import { format, parseISO, parseJSON } from 'date-fns';
+import { useToasts } from 'react-toast-notifications';
 
 const OrganiserViewEventDetails = () => {
   // const { addToast } = useToasts();
@@ -23,7 +24,7 @@ const OrganiserViewEventDetails = () => {
   const [prettySalesEndDate, setPrettySalesEndDate] = useState('');
   const router = useRouter();
   const { eid } = router.query;
-  console.log(router.query); //this should give me the id?
+  const {addToast} = useToasts();
 
   useEffect(() => {
     const loadEvent = async () => {
@@ -46,12 +47,18 @@ const OrganiserViewEventDetails = () => {
     let published = !event.published;
     let updatedEvent = await updateEvent({ ...event, published });
     setEvent(updatedEvent);
+    let message='';
+    published ? message = "Published Successfully" : message = "Event unpublished";
+    addToast(message, { appearance: 'success' });
   };
 
   const hideToggle = async () => {
     let hidden = !event.hidden;
     let updatedEvent = await updateEvent({ ...event, hidden });
     setEvent(updatedEvent);
+    let message='';
+    hidden ? message = "Event Hidden" : message = "Event now visible to business partners!";
+    addToast(message, { appearance: 'success' });
   };
 
 
@@ -59,6 +66,9 @@ const OrganiserViewEventDetails = () => {
     let vip = !event.vip;
     let updatedEvent = await updateEvent({ ...event, vip });
     setEvent(updatedEvent);
+    let message='';
+    vip ? message = "Event is exclusive to VIP members!" : message = "Event open for all!";
+    addToast(message, { appearance: 'success' });
   };
 
   return (
