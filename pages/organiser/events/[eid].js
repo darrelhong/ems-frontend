@@ -12,7 +12,7 @@ import ProductDescriptionTab from "../../../components/events/viewEventDetails/P
 // import { ProductSliderTwo } from "../../../components/ProductSlider";
 import { getEventDetails, updateEvent } from '../../../lib/query/eventApi';
 import { dbDateToPretty } from '../../../lib/util/functions';
-import { format, parseISO } from 'date-fns';
+import { format, parseISO, parseJSON } from 'date-fns';
 
 const OrganiserViewEventDetails = () => {
   // const { addToast } = useToasts();
@@ -28,7 +28,6 @@ const OrganiserViewEventDetails = () => {
   useEffect(() => {
     const loadEvent = async () => {
       let eventData = await getEventDetails(eid);
-      console.log('oprinting date');
       setPrettyEndDate(format(parseISO(eventData.eventEndDate), 'dd MMM yy hh:mmbbb'));
       setPrettyStartDate(format(parseISO(eventData.eventStartDate), 'dd MMM yy hh:mmbbb'));
       setPrettySaleStartDate(format(parseISO(eventData.saleStartDate), 'dd MMM yy hh:mmbbb'));

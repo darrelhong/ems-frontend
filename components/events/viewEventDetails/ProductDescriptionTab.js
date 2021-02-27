@@ -1,15 +1,17 @@
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
 import {
-  IoIosBody,
-  IoMdLocate,
+  IoMdCalendar,
+  IoMdRestaurant,
+  IoMdCash,
+  IoMdTrophy
 } from "react-icons/io";
 import { format, parseISO } from 'date-fns';
 
 const ProductDescriptionTab = ({ event, prettySaleStartDate, prettySalesEndDate }) => {
   return (
     <div className="product-description-tab space-pt--r100 space-pb--50">
-      <Tab.Container defaultActiveKey="description">
+      <Tab.Container defaultActiveKey="ticketing">
         <Nav
           variant="pills"
           className="product-description-tab__navigation space-mb--50"
@@ -18,7 +20,7 @@ const ProductDescriptionTab = ({ event, prettySaleStartDate, prettySalesEndDate 
             <Nav.Link eventKey="ticketing">TICKETING</Nav.Link>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link eventKey="additionalInfo">BUSINESS PARTNERS</Nav.Link>
+            <Nav.Link eventKey="businessPartners">BUSINESS PARTNERS</Nav.Link>
           </Nav.Item>
           <Nav.Item>
             <Nav.Link eventKey="reviews">
@@ -28,32 +30,51 @@ const ProductDescriptionTab = ({ event, prettySaleStartDate, prettySalesEndDate 
         </Nav>
         <Tab.Content>
           <Tab.Pane eventKey="ticketing">
-
             <div className="product-content__sort-info space-mb--20">
               <ul>
                 {event.ticketPrice && (
                   <li>
-                    <IoIosBody />Ticket Price: ${event.ticketPrice}
+                    <IoMdCash />Ticket Price: ${event.ticketPrice}
                   </li>
 
                 )}
                 {event.ticketCapacity && (
                   <li>
-                    <IoIosBody />Tickets sold: {event.ticketTransactions.length} / {event.ticketCapacity}
+                    <IoMdRestaurant />Tickets sold: {event.ticketTransactions.length} / {event.ticketCapacity}
                   </li>
                 )}
                 <li>
-                  <IoMdLocate />Ticket Sale Start Date: {prettySaleStartDate}
+                  <IoMdCalendar />Ticket Sale Start Date: {prettySaleStartDate}
                   {/* <IoMdLocate />{format(parseISO(event.eventStartDate), 'eee, dd MMM yy hh:mmbbb')} */}
                 </li>
                 <li>
-                  <IoMdLocate />Ticket Sale Start Date {prettySalesEndDate}
+                  <IoMdCalendar />Ticket Sale End Date: {prettySalesEndDate}
                 </li>
               </ul>
             </div>
-
-
           </Tab.Pane>
+
+          <Tab.Pane eventKey="businessPartners">
+            <div className="product-content__sort-info space-mb--20" style={{ display: "flex", justifyContent: "space-between", flexDirection: "row" }}>
+              <ul>
+                {event.eventBoothTransactions && (
+                  <li>
+                    <IoMdTrophy />Confirmed booths for your event: {event.eventBoothTransactions.length} / {event.boothCapacity}
+                  </li>
+                )}
+              </ul>
+              <ul>
+                <button
+                  onClick={() => console.log('hello')}
+                  className="btn btn-fill-out btn-addtocart space-ml--10"
+                  style={{ textAlign: "right" }}
+                >
+                  <i className="icon-basket-loaded" /> Manage Event Booths
+              </button>
+              </ul>
+            </div>
+          </Tab.Pane>
+
           <Tab.Pane eventKey="reviews">
             <div className="product-description-tab__details" style={{ textAlign: 'center' }}>
               No reviews yet!

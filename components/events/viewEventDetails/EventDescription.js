@@ -85,7 +85,7 @@ const EventDescription = ({
           <li>
             <IoMdCalendar />{prettyStartDate} to {prettyEndDate}
           </li>
-          {event.vip && (
+          {/* {event.vip && (
             <li>
               < IoMdStar onClick={vipToggle} />VIP event
             </li>
@@ -107,7 +107,7 @@ const EventDescription = ({
               <li>
                 <IoMdCloudUpload title="Publish your event for business partners to see!" onClick={publishToggle} />Event is unpublished, business partners won't find your event
               </li>
-            )}
+            )} */}
 
         </ul>
       </div>
