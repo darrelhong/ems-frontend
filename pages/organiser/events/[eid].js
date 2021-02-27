@@ -24,7 +24,7 @@ const OrganiserViewEventDetails = () => {
   const [prettySalesEndDate, setPrettySalesEndDate] = useState('');
   const router = useRouter();
   const { eid } = router.query;
-  const {addToast} = useToasts();
+  const { addToast, removeToast } = useToasts();
 
   useEffect(() => {
     const loadEvent = async () => {
@@ -43,22 +43,27 @@ const OrganiserViewEventDetails = () => {
     loadEvent();
   }, []);
 
+  const createToast = (message, appearanceStyle) => {
+    const toastId = addToast(message, { appearance: appearanceStyle });
+    setTimeout(() => removeToast(toastId), 3000);
+  };
+
   const publishToggle = async () => {
     let published = !event.published;
     let updatedEvent = await updateEvent({ ...event, published });
     setEvent(updatedEvent);
-    let message='';
+    let message = '';
     published ? message = "Published Successfully" : message = "Event unpublished";
-    addToast(message, { appearance: 'success' });
+    createToast(message, 'success');
   };
 
   const hideToggle = async () => {
     let hidden = !event.hidden;
     let updatedEvent = await updateEvent({ ...event, hidden });
     setEvent(updatedEvent);
-    let message='';
+    let message = '';
     hidden ? message = "Event Hidden" : message = "Event now visible to business partners!";
-    addToast(message, { appearance: 'success' });
+    createToast(message, 'success');
   };
 
 
@@ -66,9 +71,29 @@ const OrganiserViewEventDetails = () => {
     let vip = !event.vip;
     let updatedEvent = await updateEvent({ ...event, vip });
     setEvent(updatedEvent);
-    let message='';
+    let message = '';
     vip ? message = "Event is exclusive to VIP members!" : message = "Event open for all!";
-    addToast(message, { appearance: 'success' });
+    createToast(message, 'success');
+  };
+
+  const handleCancelDelete = async (operation) => {
+    if (operation == 'cancel') {
+      const eventStatus = "CANCELLED";
+      try {
+        await updateEvent({ ...event, eventStatus });
+        createToast('Event successfully cancelled', 'success');
+      } catch (e) {
+        createToast('Error cancelling the event', 'error');
+      }
+    } else {
+      const eventStatus = "DELETED";
+      try {
+        await updateEvent({ ...event, eventStatus });
+        createToast('Event successfully deleted!', 'success');
+      } catch (e) {
+        createToast('Error deleting the event', 'error');
+      }
+    }
   };
 
   return (
@@ -106,6 +131,7 @@ const OrganiserViewEventDetails = () => {
                 hideToggle={hideToggle}
                 publishToggle={publishToggle}
                 vipToggle={vipToggle}
+                handleCancelDelete={handleCancelDelete}
               />
             </Col>
           </Row>

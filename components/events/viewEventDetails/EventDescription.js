@@ -10,7 +10,8 @@ import {
   IoMdEyeOff,
   IoMdCalendar,
   IoMdLocate,
-  IoMdCreate
+  IoMdCreate,
+  IoIosTrash
 } from "react-icons/io";
 import ProductRating from "../../Product/ProductRating";
 import Link from 'next/link';
@@ -21,25 +22,14 @@ const EventDescription = ({
   prettyEndDate,
   publishToggle,
   hideToggle,
-  vipToggle
+  vipToggle,
+  handleCancelDelete
 }) => {
-  // const [selectedProductColor, setSelectedProductColor] = useState(
-  //   product.variation ? product.variation[0].color : ""
-  // );
-  // const [selectedProductSize, setSelectedProductSize] = useState(
-  //   product.variation ? product.variation[0].size[0].name : ""
-  // );
-  // const [productStock, setProductStock] = useState(
-  //   product.variation ? product.variation[0].size[0].stock : product.stock
-  // );
-  // const [quantityCount, setQuantityCount] = useState(1);
 
-  // const productCartQty = getProductCartQuantity(
-  //   cartItems,
-  //   product,
-  //   selectedProductColor,
-  //   selectedProductSize
-  // );
+  const checkIfCanDelete = () => {
+    if (event.eventBoothTransactions?.length == 0 && event.ticketTransactions?.length == 0) return true;
+    return false;
+  };
 
   return (
     <div className="product-content">
@@ -116,7 +106,7 @@ const EventDescription = ({
 
       <Fragment>
         <div>
-        <div className="product-content__product-share space-mt--15" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <div className="product-content__product-share space-mt--15" style={{ display: 'flex', justifyContent: 'flex-end' }}>
             {/* <span>Actions:</span> */}
             <ul className="social-icons">
               <li>
@@ -126,7 +116,7 @@ const EventDescription = ({
                     <IoMdStarOutline title="Unlist event from VIP" />
                   ) :
                     (<IoMdStar title="Make this a VIP-only event!" />)}
-               </a>
+                </a>
               </li>
               <li>
                 <a href="javascript:void(0);" onClick={hideToggle}>
@@ -154,13 +144,24 @@ const EventDescription = ({
                 </Link>
               </li>
             </ul>
-            <button
-              onClick={publishToggle}
-              className="btn btn-fill-out btn-addtocart space-ml--10"
-              style={{ marginLeft: 'auto', marginRight: 'auto' }}
-            >
-              <i className="icon-basket-loaded" /> Cancel Event
-            </button>
+            {checkIfCanDelete() ? (
+              <button
+                onClick={() => handleCancelDelete("delete")}
+                className="btn btn-fill-out btn-addtocart space-ml--10"
+                style={{ marginLeft: 'auto', marginRight: 'auto' }}
+              >
+                <i className="icon-basket-loaded" /> Delete Event
+              </button>
+            ) : (
+                <button
+                  onClick={() => handleCancelDelete("cancel")}
+                  className="btn btn-fill-out btn-addtocart space-ml--10"
+                  style={{ marginLeft: 'auto', marginRight: 'auto' }}
+                >
+                  <i className="icon-basket-loaded" /> Cancel Event
+                </button>
+              )
+            }
           </div>
 
 
