@@ -2,7 +2,7 @@ import { Row, Col } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import PropTypes from 'prop-types';
 
-const EventDetailsPane = ({ register, watch, isFinal }) => {
+const EventDetailsPane = ({ register, watch, isFinal, errors }) => {
   const renderDateError = () => {
     if (
       watch('eventStartDate') &&
@@ -34,14 +34,14 @@ const EventDetailsPane = ({ register, watch, isFinal }) => {
                 className="form-control"
                 name="name"
                 type="text"
-                ref={register({ required: { isFinal } })}
+                ref={register({ required: true })}
               />
-              {/* { errors.firstName && (
+              {errors.name && (
                 <span role="alert">
                   This field is required
                 </span>
               )
-            } */}
+              }
             </Col>
             <Col className="form-group" md={12}>
               <label>
@@ -52,8 +52,14 @@ const EventDetailsPane = ({ register, watch, isFinal }) => {
                 className="form-control"
                 name="descriptions"
                 maxLength="200" //can consider playing with this if needed
-                ref={register()}
+                ref={register({ required: true })}
               />
+              {errors.descriptions && (
+                <span role="alert" style={{ color: 'red' }}>
+                  This field is required
+                </span>
+                 )
+               }
             </Col>
             {/* probably need some caption saying either online or physical would do, or shift to online/physical */}
             <Col className="form-group" md={12}>

@@ -1,8 +1,11 @@
+import { useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import PropTypes from 'prop-types';
 
 const TicketingPane = ({ register, watch }) => {
+  const [wantsTickets, setWantsTickets] = useState(false);
+
   const renderDateError = () => {
     if (
       watch('saleStartDate') &&
@@ -26,46 +29,60 @@ const TicketingPane = ({ register, watch }) => {
         <div className="account-details-form">
           <Row>
             <Col className="form-group" md={12}>
-              <label>Ticket Price (SGD)</label>
-              <input
-                className="form-control"
-                name="ticketPrice"
-                type="number"
-                step="0.1"
-                ref={register()}
-              />
+              <input type="checkbox" id="wantsTickets" name="wantsTickets" value={wantsTickets} checked = {wantsTickets} onChange={() => {
+                console.log(!wantsTickets);
+                setWantsTickets(!wantsTickets);
+              }} />
+              <label for="wantsTickets">  Are you selling tickets for your event?</label>
             </Col>
-            <Col className="form-group" md={12}>
-              <label>
-                Ticket Capacity - How many tickets do you want to sell?
-              </label>
-              <input
-                className="form-control"
-                name="ticketCapacity"
-                type="number"
-                ref={register()}
-              />
-            </Col>
-            <Col className="form-group" md={12}>
-              <label>Ticket Sales Start Date</label>
-              <input
-                className="form-control"
-                name="saleStartDate"
-                type="datetime-local"
-                ref={register()}
-              />
-            </Col>
+            {wantsTickets && (
+              <div>
+                <Col className="form-group" md={12}>
+                  <label>Ticket Price (SGD)</label>
+                  <input
+                    className="form-control"
+                    name="ticketPrice"
+                    type="number"
+                    step="0.1"
+                    ref={register()}
+                  />
+                </Col>
+                <Col className="form-group" md={12}>
+                  <label>
+                    Ticket Capacity - How many tickets do you want to sell?
+ </label>
+                  <input
+                    className="form-control"
+                    name="ticketCapacity"
+                    type="number"
+                    ref={register()}
+                  />
+                </Col>
+                <Col className="form-group" md={12}>
+                  <label>Ticket Sales Start Date</label>
+                  <input
+                    className="form-control"
+                    name="saleStartDate"
+                    type="datetime-local"
+                    ref={register()}
+                  />
+                </Col>
 
-            <Col className="form-group" md={12}>
-              <label>Ticket Sales End Date</label>
-              <input
-                className="form-control"
-                name="salesEndDate"
-                type="datetime-local"
-                ref={register()}
-              />
-              {renderDateError()}
-            </Col>
+                <Col className="form-group" md={12}>
+                  <label>Ticket Sales End Date</label>
+                  <input
+                    className="form-control"
+                    name="salesEndDate"
+                    type="datetime-local"
+                    ref={register()}
+                  />
+                  {renderDateError()}
+                </Col>
+              </div>
+            )}
+
+
+
           </Row>
         </div>
       </Card.Body>

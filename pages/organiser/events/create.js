@@ -44,7 +44,7 @@ const steps = [
 ];
 
 const CreateEvent = () => {
-  const { control, register, handleSubmit, watch, setValue } = useForm();
+  const { control, register, handleSubmit, watch, setValue, errors } = useForm();
   const { data: user } = useUser(localStorage.getItem('userId'));
   const [activeStep, setActiveStep] = useState(0);
   const [isFinal, setIsFinal] = useState(true);
@@ -58,7 +58,7 @@ const CreateEvent = () => {
       let eventData = await getEventDetails(eid);
       setAllValues(eventData);
     };
-    loadData();
+    if (eid) loadData();
   }, [])
 
   const setAllValues = (eventData) => {
@@ -202,6 +202,7 @@ const CreateEvent = () => {
                         register={register}
                         watch={watch}
                         isFinal={isFinal}
+                        errors={errors}
                       />
                     </Tab.Pane>
                     <Tab.Pane eventKey="ticketing">
