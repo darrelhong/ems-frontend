@@ -12,6 +12,7 @@ import ProductDescriptionTab from "../../../components/events/viewEventDetails/P
 // import { ProductSliderTwo } from "../../../components/ProductSlider";
 import { getEventDetails, updateEvent } from '../../../lib/query/eventApi';
 import { dbDateToPretty } from '../../../lib/util/functions';
+import { format, parseISO } from 'date-fns';
 
 const OrganiserViewEventDetails = () => {
   // const { addToast } = useToasts();
@@ -27,11 +28,17 @@ const OrganiserViewEventDetails = () => {
   useEffect(() => {
     const loadEvent = async () => {
       let eventData = await getEventDetails(eid);
+      console.log('oprinting date');
+      setPrettyEndDate(format(parseISO(eventData.eventEndDate), 'dd MMM yy hh:mmbbb'));
+      setPrettyStartDate(format(parseISO(eventData.eventStartDate), 'dd MMM yy hh:mmbbb'));
+      setPrettySaleStartDate(format(parseISO(eventData.saleStartDate), 'dd MMM yy hh:mmbbb'));
+      setPrettySalesEndDate(format(parseISO(eventData.salesEndDate), 'dd MMM yy hh:mmbbb'));
       setEvent(eventData);
-      setPrettyEndDate(dbDateToPretty(eventData.eventEndDate));
-      setPrettyStartDate(dbDateToPretty(eventData.eventStartDate));
-      setPrettySaleStartDate(dbDateToPretty(eventData.saleStartDate));
-      setPrettySalesEndDate(dbDateToPretty(eventData.salesEndDate));
+
+      // setPrettyEndDate(dbDateToPretty(eventData.eventEndDate));
+      // setPrettyStartDate(dbDateToPretty(eventData.eventStartDate));
+      // setPrettySaleStartDate(dbDateToPretty(eventData.saleStartDate));
+      // setPrettySalesEndDate(dbDateToPretty(eventData.salesEndDate));
     };
     loadEvent();
   }, []);

@@ -4,6 +4,7 @@ import {
   IoIosBody,
   IoMdLocate,
 } from "react-icons/io";
+import { format, parseISO } from 'date-fns';
 
 const ProductDescriptionTab = ({ event, prettySaleStartDate, prettySalesEndDate }) => {
   return (
@@ -32,17 +33,18 @@ const ProductDescriptionTab = ({ event, prettySaleStartDate, prettySalesEndDate 
               <ul>
                 {event.ticketPrice && (
                   <li>
-                    <IoIosBody />Ticket Price: {event.ticketPrice}
+                    <IoIosBody />Ticket Price: ${event.ticketPrice}
                   </li>
 
                 )}
                 {event.ticketCapacity && (
                   <li>
-                    <IoIosBody />Ticket Capacity: {event.ticketCapacity}
+                    <IoIosBody />Tickets sold: {event.ticketTransactions.length} / {event.ticketCapacity}
                   </li>
                 )}
                 <li>
                   <IoMdLocate />Ticket Sale Start Date: {prettySaleStartDate}
+                  {/* <IoMdLocate />{format(parseISO(event.eventStartDate), 'eee, dd MMM yy hh:mmbbb')} */}
                 </li>
                 <li>
                   <IoMdLocate />Ticket Sale Start Date {prettySalesEndDate}
