@@ -253,10 +253,5 @@ export default function OrganiserSettings() {
         </Container>
       </div>
     </OrganiserWrapper>
-    // <ChakraWrapper>
-    //   <SettingsWrapper>
-    //     <UpdateProfileForm />
-    //   </SettingsWrapper>
-    // </ChakraWrapper>
   );
 }

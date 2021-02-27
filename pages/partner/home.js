@@ -1,31 +1,37 @@
-import { Heading, Skeleton, Text } from '@chakra-ui/react';
-
 import useUser from '../../lib/query/useUser';
 
-import { PartnerPageWrapper } from '../../components/wrapper/PageWrapper';
-import withProtectRoute from '../../components/ProtectRouteWrapper';
-import ChakraWrapper from '../../components/ChakraWrapper';
+import PartnerWrapper from '../../components/wrapper/PartnerWrapper';
+import { BreadcrumbOne } from '../../components/Breadcrumb';
+import Link from 'next/link';
+import { Container } from 'react-bootstrap';
 
 function PartnerHome() {
   const { data: user, isLoading, isSuccess } = useUser(
     localStorage.getItem('userId')
   );
   return (
-    <ChakraWrapper>
-      <PartnerPageWrapper title="Partner Dashboard">
-        <Heading>Partner Home</Heading>
-        {isLoading && <Skeleton height="40px" />}
+    <PartnerWrapper title="Partner Home">
+      <BreadcrumbOne pageTitle="Organiser Home">
+        <ol className="breadcrumb justify-content-md-end">
+          <li className="breadcrumb-item">
+            <Link href="/organiser/home">
+              <a>Organiser Home</a>
+            </Link>
+          </li>
+        </ol>
+      </BreadcrumbOne>
+
+      <Container>
+        {isLoading && <div className="spinner-grow" role="status" />}
         {isSuccess && (
           <>
-            <Text>Name: {user?.name}</Text>
-            <Text>User ID: {user?.id}</Text>
+            <p>{user?.name}</p>
+            <p>User ID: {user?.id}</p>
           </>
         )}
-      </PartnerPageWrapper>
-    </ChakraWrapper>
+      </Container>
+    </PartnerWrapper>
   );
 }
 
-export default withProtectRoute(PartnerHome, {
-  redirectTo: '/partner/login',
-});
+export default PartnerHome;

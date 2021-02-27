@@ -67,23 +67,6 @@ function AdminHome() {
 
       <FooterOne />
     </>
-    // <ChakraWrapper>
-    //   <Head>
-    //     <title>Admin Dasboard</title>
-    //   </Head>
-    //   <AdminNavBar />
-
-    //   <PageContainer>
-    //     <Heading>Admin Home</Heading>
-    //     {isLoading && <Skeleton height="40px" />}
-    //     {isSuccess && (
-    //       <>
-    //         <Text>{user?.name}</Text>
-    //         <Text>User ID: {user?.id}</Text>
-    //       </>
-    //     )}
-    //   </PageContainer>
-    // </ChakraWrapper>
   );
 }
 

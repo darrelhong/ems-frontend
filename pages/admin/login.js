@@ -4,11 +4,6 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 
-// import LoginPage from '../../components/LoginPage';
-// import ChakraWrapper from '../../components/ChakraWrapper';
-
-// import RoleEnum from '../../models/RoleEnum';
-
 import { login } from '../../lib/auth';
 
 import { LayoutOne } from '../../layouts';
@@ -24,20 +19,6 @@ export const getServerSideProps = async ({ query }) => {
     },
   };
 };
-
-// export default function AdminLogin({ info }) {
-//   return (
-//     <ChakraWrapper>
-//       <LoginPage
-//         info={info}
-//         heading="Admin Login"
-//         loginApiUrl={`/api/user/login/${RoleEnum.ADMIN}`}
-//         loginSuccessUrl="/admin/home"
-//         registerUrl="#"
-//       />
-//     </ChakraWrapper>
-//   );
-// }
 
 export default function AdminLogin({ info }) {
   const [loginError, setLoginError] = useState(null);
