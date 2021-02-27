@@ -18,6 +18,8 @@ const OrganiserViewEventDetails = () => {
   const [event, setEvent] = useState(Object);
   const [prettyStartDate, setPrettyStartDate] = useState('');
   const [prettyEndDate, setPrettyEndDate] = useState('');
+  const [prettySaleStartDate, setPrettySaleStartDate] = useState('');
+  const [prettySalesEndDate, setPrettySalesEndDate] = useState('');
   const router = useRouter();
   const { eid } = router.query;
   console.log(router.query); //this should give me the id?
@@ -28,6 +30,8 @@ const OrganiserViewEventDetails = () => {
       setEvent(eventData);
       setPrettyEndDate(dbDateToPretty(eventData.eventEndDate));
       setPrettyStartDate(dbDateToPretty(eventData.eventStartDate));
+      setPrettySaleStartDate(dbDateToPretty(eventData.saleStartDate));
+      setPrettySalesEndDate(dbDateToPretty(eventData.salesEndDate));
     };
     loadEvent();
   }, []);
@@ -92,7 +96,7 @@ const OrganiserViewEventDetails = () => {
           {/* product description tab */}
           <Row>
             <Col>
-              <ProductDescriptionTab event={event} />
+              <ProductDescriptionTab event={event} prettySaleStartDate={prettySaleStartDate} prettySalesEndDate={prettySalesEndDate} />
             </Col>
           </Row>
 

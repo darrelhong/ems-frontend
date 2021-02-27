@@ -76,16 +76,6 @@ const EventDetailsPane = ({ register, watch, errors }) => {
             </Col>
 
             <Col className="form-group" md={12}>
-              <label>Event Website (if any)</label>
-              <input
-                className="form-control"
-                name="website"
-                type="text"
-                ref={register()}
-              />
-            </Col>
-
-            <Col className="form-group" md={12}>
               <label>Start Date</label>
               <input
                 className="form-control"

@@ -1,7 +1,11 @@
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
+import {
+  IoIosBody,
+  IoMdLocate,
+} from "react-icons/io";
 
-const ProductDescriptionTab = ({ event }) => {
+const ProductDescriptionTab = ({ event, prettySaleStartDate, prettySalesEndDate }) => {
   return (
     <div className="product-description-tab space-pt--r100 space-pb--50">
       <Tab.Container defaultActiveKey="description">
@@ -10,7 +14,7 @@ const ProductDescriptionTab = ({ event }) => {
           className="product-description-tab__navigation space-mb--50"
         >
           <Nav.Item>
-            <Nav.Link eventKey="description">TICKETING</Nav.Link>
+            <Nav.Link eventKey="ticketing">TICKETING</Nav.Link>
           </Nav.Item>
           <Nav.Item>
             <Nav.Link eventKey="additionalInfo">BUSINESS PARTNERS</Nav.Link>
@@ -22,9 +26,35 @@ const ProductDescriptionTab = ({ event }) => {
           </Nav.Item>
         </Nav>
         <Tab.Content>
-          <Tab.Pane eventKey="description">
-            <div className="product-description-tab__details">
-              {event.descriptions}
+          <Tab.Pane eventKey="ticketing">
+
+            <div className="product-content__sort-info space-mb--20">
+              <ul>
+                {event.ticketPrice && (
+                  <li>
+                    <IoIosBody />Ticket Price: {event.ticketPrice}
+                  </li>
+
+                )}
+                {event.ticketCapacity && (
+                  <li>
+                    <IoIosBody />Ticket Capacity: {event.ticketCapacity}
+                  </li>
+                )}
+                <li>
+                  <IoMdLocate />Ticket Sale Start Date: {prettySaleStartDate}
+                </li>
+                <li>
+                  <IoMdLocate />Ticket Sale Start Date {prettySalesEndDate}
+                </li>
+              </ul>
+            </div>
+
+
+          </Tab.Pane>
+          <Tab.Pane eventKey="reviews">
+            <div className="product-description-tab__details" style={{ textAlign: 'center' }}>
+              No reviews yet!
             </div>
           </Tab.Pane>
           {/* <Tab.Pane eventKey="additionalInfo">
@@ -172,7 +202,7 @@ const ProductDescriptionTab = ({ event }) => {
             </div>
           </Tab.Pane>
           */}
-        </Tab.Content> 
+        </Tab.Content>
       </Tab.Container>
     </div>
   );

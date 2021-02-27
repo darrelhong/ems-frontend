@@ -41,7 +41,6 @@ const CreateEvent = () => {
       name,
       descriptions,
       address,
-      website,
       eventStartDate,
       eventEndDate,
       boothCapacity,
@@ -55,7 +54,6 @@ const CreateEvent = () => {
     setValue("address", address);
     setValue("eventStartDate", eventStartDate);
     setValue("eventEndDate", eventEndDate);
-    setValue("website", website);
     setValue("boothCapacity", boothCapacity);
     setValue("ticketPrice", ticketPrice);
     setValue("ticketCapacity", ticketCapacity);
