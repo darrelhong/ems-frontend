@@ -1,13 +1,13 @@
 import Link from 'next/link';
-import { useState } from 'react';
 import { Alert, Col, Container, Row, Spinner } from 'react-bootstrap';
-import { useQuery } from 'react-query';
+import { useInfiniteQuery } from 'react-query';
 
 import { BreadcrumbOne } from '../../../components/Breadcrumb';
 import PartnerWrapper from '../../../components/wrapper/PartnerWrapper';
 import api from '../../../lib/ApiClient';
 import EventCard from '../../../components/events/EventCard';
-import CustomPagination from '../../../components/custom/CustomPagination';
+import ButtonWithLoading from '../../../components/custom/ButtonWithLoading';
+import { Fragment } from 'react';
 
 const getEvents = async (page = 0) => {
   const { data } = await api.get('/api/event/get-events?page=' + page);
@@ -15,8 +15,16 @@ const getEvents = async (page = 0) => {
 };
 
 function PartnerHome() {
-  const [page, setPage] = useState(0);
-  const { status, data } = useQuery(['events', page], () => getEvents(page));
+  const {
+    status,
+    data,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery('events', ({ pageParam = 0 }) => getEvents(pageParam), {
+    getNextPageParam: (lastPage) =>
+      lastPage.last ? false : lastPage.number + 1,
+  });
 
   return (
     <PartnerWrapper title="Events">
@@ -41,28 +49,33 @@ function PartnerHome() {
         ) : (
           <>
             <Row>
-              {data.content.map((event, i) => (
-                <Col
-                  key={i}
-                  sm={6}
-                  lg={4}
-                  className="mb-5 d-flex align-items-stretch3"
-                  as="a"
-                >
-                  <EventCard event={event} />
-                </Col>
+              {data.pages.map((page, i) => (
+                <Fragment key={i}>
+                  {page.content.map((event) => (
+                    <Col
+                      key={event.eid}
+                      sm={6}
+                      lg={4}
+                      className="mb-5 d-flex align-items-stretch3"
+                      as="a"
+                    >
+                      <EventCard event={event} />
+                    </Col>
+                  ))}
+                </Fragment>
               ))}
             </Row>
 
             <Row>
               <Col className="d-flex align-items-center">
-                <CustomPagination
-                  number={data?.number}
-                  first={data?.first}
-                  last={data?.last}
-                  totalPages={data?.totalPages}
-                  setPage={setPage}
-                />
+                <ButtonWithLoading
+                  className="btn btn-fill-out btn-sm"
+                  disabled={!hasNextPage || isFetchingNextPage}
+                  isLoading={isFetchingNextPage}
+                  onClick={() => fetchNextPage()}
+                >
+                  {hasNextPage ? 'See more' : 'No more events'}
+                </ButtonWithLoading>
               </Col>
             </Row>
           </>
