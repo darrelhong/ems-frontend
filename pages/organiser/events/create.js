@@ -11,47 +11,18 @@ import EventDetailsPane from '../../../components/createEvent/tabPanes/EventDeta
 import BoothPane from '../../../components/createEvent/tabPanes/BoothPane';
 import TicketingPane from '../../../components/createEvent/tabPanes/TicketingPane';
 import OnlinePhysicalPane from '../../../components/createEvent/tabPanes/OnlinePhysicalPane';
+import { steps } from '../../../components/createEvent/steps';
 import useUser from '../../../lib/query/useUser';
-import { createEvent, getEventDetails } from '../../../lib/query/eventApi';
+import { createEvent, getEventDetails, updateEvent } from '../../../lib/query/eventApi';
 import { htmlDateToDb, formatDates } from '../../../lib/util/functions';
 import Modal from 'react-bootstrap/Modal';
-
-const steps = [
-  {
-    label: 'Event Details',
-    eventKey: 'eventDetails',
-    content: 'Important details about your event!',
-  },
-  {
-    label: 'Online / Physical',
-    eventKey: 'onlinePhysical',
-    content: 'Differing details for an online or physically hosted event',
-  },
-  {
-    label: 'Ticketing',
-    eventKey: 'ticketing',
-    content: 'Details for selling tickets to attendees!',
-  },
-  {
-    label: 'Event Booths',
-    eventKey: 'booths',
-    content: 'Booths to be set up for your event!',
-  },
-  {
-    label: 'Event Images',
-    eventKey: 'images',
-    content: 'Upload some nice images for your event!',
-  },
-];
 
 const CreateEvent = () => {
   const { control, register, handleSubmit, watch, setValue, errors, getValues } = useForm();
   const { data: user } = useUser(localStorage.getItem('userId'));
   const [activeStep, setActiveStep] = useState(0);
   const [showModal, setShowModal] = useState(false);
-  const [eventData,setEventData] = useState(Object);
-
-  // const [eventInProgress,setEventInProgress] = useState(Object);
+  const [eventData, setEventData] = useState(Object);
 
   const router = useRouter();
   const { eid } = router.query;
@@ -79,7 +50,6 @@ const CreateEvent = () => {
       saleStartDate,
       salesEndDate } = eventData;
 
-    console.log('my ticket cap: ' + ticketCapacity);
     setValue("name", name);
     setValue("descriptions", descriptions);
     setValue("address", address);
@@ -93,7 +63,7 @@ const CreateEvent = () => {
     setValue("salesEndDate", salesEndDate);
   };
 
-  const onSubmit = async (data) => {
+  const oldSubmit = async (data) => {
     //original method, doesnt work cos im forcing empty date strings
     // let eventStartDate = dateConverter(data?.eventStartDate);
     // let eventEndDate = dateConverter(data?.eventEndDate);
@@ -127,7 +97,7 @@ const CreateEvent = () => {
       };
     } else {
       const formattedData = formatDates(data);
-      inputData = {...formattedData,eventOrganiserId};
+      inputData = { ...formattedData, eventOrganiserId };
     }
 
     try {
@@ -141,8 +111,46 @@ const CreateEvent = () => {
     }
   };
 
-  const saveDraft = () => {
+  const onSubmit = async (data) => {
+    const formattedData = formatDates(data);
+    let updatedData;
+    if (eid) {
+      //concat data first, already have EID inside and all
+      //have to update to upcoming now, instead of draft
+      const eventStatus = "UPCOMING";
+      updatedData = { ...eventData, ...formattedData, eventStatus };
+      console.log('created event from draft:');
+    } else {
+      //new event, we need to add in the EO ID.
+      let eventOrganiserId = user.id;
+      updatedData = {...formattedData, eventOrganiserId };
+      console.log('creating brand new event:');
+    }
+    const response = await createEvent(updatedData);
+    console.log(response);
+  };
 
+  const saveDraft = async () => {
+    const data = getValues();
+    const formData = formatDates(data);
+    if (eid) {
+      //concat data first
+      const eventStatus = "DRAFT";
+      let updatedData = { ...eventData, ...formData, eventStatus };
+      console.log('printing concat data');
+      console.log(updatedData);
+
+      //update existing event
+      let updatedEvent = await updateEvent(updatedData);
+      console.log('printing updated event:');
+      console.log(updatedEvent);
+    } else {
+      //create new event without validation
+      let eventOrganiserId = user.id;
+      let updatedData = {...formData, eventOrganiserId}
+      const response = await createEvent(updatedData);
+      console.log(response);
+    }
   };
 
   return (
@@ -173,7 +181,7 @@ const CreateEvent = () => {
               name="submit"
               value="Submit"
               ref={register()}
-              onClick={()=>{
+              onClick={() => {
                 console.log('pressing button?');
                 console.log('errors: ');
                 console.log(errors);
@@ -205,8 +213,8 @@ const CreateEvent = () => {
             <button
               type="submit"
               className="btn btn-fill-out"
-              name="submit"
-              value="Submit"
+              // name="submit"
+              // value="Submit"
               ref={register()}
             >
               Finish
@@ -258,7 +266,7 @@ const CreateEvent = () => {
                       />
                     </Tab.Pane>
                     <Tab.Pane eventKey="ticketing">
-                      <TicketingPane register={register} watch={watch} />
+                      <TicketingPane register={register} watch={watch} eventData={eventData} setValue={setValue} />
                     </Tab.Pane>
                     <Tab.Pane eventKey="booths">
                       <BoothPane register={register} />

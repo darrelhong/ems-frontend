@@ -1,10 +1,22 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import PropTypes from 'prop-types';
 
-const TicketingPane = ({ register, watch }) => {
-  const [wantsTickets, setWantsTickets] = useState(false);
+const TicketingPane = ({ register, watch, eventData, setValue }) => {
+  const [wantsTickets, setWantsTickets] = useState(true);
+
+  useEffect(()=>{
+    const {
+      ticketPrice,
+      ticketCapacity,
+      saleStartDate,
+      salesEndDate } = eventData;
+    setValue("ticketPrice", ticketPrice);
+    setValue("ticketCapacity", ticketCapacity);
+    setValue("saleStartDate", saleStartDate);
+    setValue("salesEndDate", salesEndDate);
+  },[wantsTickets]);
 
   const renderDateError = () => {
     if (
@@ -79,7 +91,7 @@ const TicketingPane = ({ register, watch }) => {
                   {renderDateError()}
                 </Col>
               </div>
-            )}
+            )} 
 
 
 
