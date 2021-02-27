@@ -5,7 +5,7 @@ import { useInfiniteQuery } from 'react-query';
 import { BreadcrumbOne } from '../../../components/Breadcrumb';
 import PartnerWrapper from '../../../components/wrapper/PartnerWrapper';
 import api from '../../../lib/ApiClient';
-import EventCard from '../../../components/events/EventCard';
+import EventCard from '../../../components/events/partner/EventCard';
 import ButtonWithLoading from '../../../components/custom/ButtonWithLoading';
 import { Fragment } from 'react';
 
