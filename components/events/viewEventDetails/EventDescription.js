@@ -32,7 +32,7 @@ const EventDescription = ({
       <button
       disabled
       className="btn btn-fill-out btn-addtocart space-ml--10"
-      style={{ marginLeft: 'auto', marginRight: 'auto' }}
+      style={{ marginLeft: 'auto', marginRight: 'auto', pointerEvents:"none"}}
     >
       <i className="icon-basket-loaded" /> Cancelled Event
     </button>
@@ -42,7 +42,7 @@ const EventDescription = ({
         <button
         disabled
         className="btn btn-fill-out btn-addtocart space-ml--10"
-        style={{ marginLeft: 'auto', marginRight: 'auto' }}
+        style={{ marginLeft: 'auto', marginRight: 'auto', pointerEvents:"none" }}
       >
         <i className="icon-basket-loaded" /> Deleted Event
       </button>
