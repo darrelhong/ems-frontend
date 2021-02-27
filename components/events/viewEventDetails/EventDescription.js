@@ -26,9 +26,51 @@ const EventDescription = ({
   handleCancelDelete
 }) => {
 
-  const checkIfCanDelete = () => {
-    if (event.eventBoothTransactions?.length == 0 && event.ticketTransactions?.length == 0) return true;
-    return false;
+  const deleteCancelButton = () => {
+    if (event.eventStatus == 'CANCELLED') {
+      return (
+      <button
+      disabled
+      className="btn btn-fill-out btn-addtocart space-ml--10"
+      style={{ marginLeft: 'auto', marginRight: 'auto' }}
+    >
+      <i className="icon-basket-loaded" /> Cancelled Event
+    </button>
+      )
+    } else if (event.eventStatus == 'DELETED') {
+      return (
+        <button
+        disabled
+        className="btn btn-fill-out btn-addtocart space-ml--10"
+        style={{ marginLeft: 'auto', marginRight: 'auto' }}
+      >
+        <i className="icon-basket-loaded" /> Deleted Event
+      </button>
+      )
+    } else if (event.eventBoothTransactions?.length == 0 && event.ticketTransactions?.length == 0) {
+      //in this case we can delete
+      return (
+        <button
+        onClick={() => handleCancelDelete("delete")}
+        disabled={event.eventStatus == 'DELETED'}
+        className="btn btn-fill-out btn-addtocart space-ml--10"
+        style={{ marginLeft: 'auto', marginRight: 'auto' }}
+      >
+        <i className="icon-basket-loaded" /> Delete Event
+      </button>
+      )
+    } else {
+      //only can cancel, cannot delete
+      return (
+        <button
+        onClick={() => handleCancelDelete("cancel")}
+        className="btn btn-fill-out btn-addtocart space-ml--10"
+        style={{ marginLeft: 'auto', marginRight: 'auto' }}
+      >
+        <i className="icon-basket-loaded" /> Cancel Event
+      </button>
+      )
+    }
   };
 
   return (
@@ -144,24 +186,7 @@ const EventDescription = ({
                 </Link>
               </li>
             </ul>
-            {checkIfCanDelete() ? (
-              <button
-                onClick={() => handleCancelDelete("delete")}
-                className="btn btn-fill-out btn-addtocart space-ml--10"
-                style={{ marginLeft: 'auto', marginRight: 'auto' }}
-              >
-                <i className="icon-basket-loaded" /> Delete Event
-              </button>
-            ) : (
-                <button
-                  onClick={() => handleCancelDelete("cancel")}
-                  className="btn btn-fill-out btn-addtocart space-ml--10"
-                  style={{ marginLeft: 'auto', marginRight: 'auto' }}
-                >
-                  <i className="icon-basket-loaded" /> Cancel Event
-                </button>
-              )
-            }
+            {deleteCancelButton()}
           </div>
 
 
