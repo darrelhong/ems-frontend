@@ -12,6 +12,7 @@ import {
   IoMdLocate,
   IoMdCreate
 } from "react-icons/io";
+import ProductRating from "../../Product/ProductRating";
 
 const EventDescription = ({
   event,
@@ -41,25 +42,26 @@ const EventDescription = ({
 
   return (
     <div className="product-content">
-      <h2 className="product-content__title space-mb--10">{event.name}</h2>
+      {/* event name originally here */}
+      {/* <h2 className="product-content__title space-mb--10">{event.name}</h2> */}
       <div className="product-content__price-rating-wrapper space-mb--10">
-
+        <h2 className="product-content__title space-mb--10">{event.name}</h2>
         {/* <div className="product-content__price d-flex-align-items-center">
           <span className="price">{prettyStartDate}</span>
         </div> */}
 
-        {/* for now comment out  */}
-
-        {/* {product.rating && product.rating > 0 ? (
-          <div className="product-content__rating-wrap">
-            <div className="product-content__rating">
-              <ProductRating ratingValue={product.rating} />
-              <span>({product.ratingCount})</span>
-            </div>
+        {/* CONDITIONAL RENDERING CHECK WHETHER EVENT IS COMPLETED THEN SHOW THIS */}
+        {/* {event.rating && event.rating == 0 ? ( */}
+        <div className="product-content__rating-wrap">
+          <div className="product-content__rating">
+            <ProductRating ratingValue={event.rating} />
+            <span>({event.rating})</span> {/* number of ratings done here */}
           </div>
-        ) : (
+        </div>
+        {/*  ) : (
           ""
-        )} */}
+         )} */}
+
       </div>
       <div className="product-content__description space-mb--20">
         <p>{event.descriptions}</p>
@@ -88,13 +90,32 @@ const EventDescription = ({
               < IoMdStar onClick={vipToggle} />VIP event
             </li>
           )}
+          {event.hidden ? (
+            <li>
+              <IoMdEye title="Unhide your event from attendees!" onClick={hideToggle} />Hidden from attendees
+            </li>
+          ) : (
+              <li>
+                <IoMdEyeOff title="Temporarily hide your event from attendees" onClick={hideToggle} />Open for attendees to view!
+              </li>
+            )}
+          {event.published ? (
+            <li>
+              <IoMdCloudDownload title="Temporarily unpublish your event from business partners!" onClick={publishToggle} />Open for business partners to view!
+            </li>
+          ) : (
+              <li>
+                <IoMdCloudUpload title="Publish your event for business partners to see!" onClick={publishToggle} />Event is unpublished, business partners won't find your event
+              </li>
+            )}
+
         </ul>
       </div>
       <hr />
 
       <Fragment>
         <div>
-          <div className="product-content__product-share space-mt--15">
+          <div className="product-content__product-share space-mt--15" style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <span>Actions:</span>
             <ul className="social-icons">
               <li>
@@ -130,8 +151,6 @@ const EventDescription = ({
                 </a>
               </li>
             </ul>
-          </div>
-
             <button
               onClick={publishToggle}
               className="btn btn-fill-out btn-addtocart space-ml--10"
@@ -139,6 +158,9 @@ const EventDescription = ({
             >
               <i className="icon-basket-loaded" /> Cancel Event
             </button>
+          </div>
+
+
           {/* three ugly ass buttons */}
           {/* {event.published ?
 
