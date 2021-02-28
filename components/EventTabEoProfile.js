@@ -4,7 +4,7 @@ import Nav from 'react-bootstrap/Nav';
 import EventEoProfileSliderTen from './ProductSlider/EventEoProfileSliderTen';
 
 const EventTabOne = ({ current, upcoming, past }) => {
-  if (current !== undefined && upcoming !== undefined && past !== undefined) {
+  if (current !== undefined && past !== undefined) {
     return (
       <div className="product-tab-area space-pb--r70">
         <Container>
@@ -16,9 +16,12 @@ const EventTabOne = ({ current, upcoming, past }) => {
               <Nav.Item>
                 <Nav.Link eventKey="current">Current</Nav.Link>
               </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey="upcoming">Upcoming</Nav.Link>
-              </Nav.Item>
+              {upcoming !== undefined && (
+                <Nav.Item>
+                  <Nav.Link eventKey="upcoming">Upcoming</Nav.Link>
+                </Nav.Item>
+              )}
+
               <Nav.Item>
                 <Nav.Link eventKey="past">Past</Nav.Link>
               </Nav.Item>

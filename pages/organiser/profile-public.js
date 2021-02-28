@@ -8,8 +8,10 @@ import useUser from '../../lib/query/useUser';
 import {
   getEventByOrganiserId,
   getPastEventsByOrganiserId,
-  getCurrentEventsByOrganiserId,
-  getUpcomingEventsByOrganiserId,
+  getAttendeeCurrentEventsByOrganiserId,
+  getPartnerCurrentEventsByOrganiserId,
+  getPartnerUpcomingEventsByOrganiserId,
+  getAttendeeUpcomingEventsByOrganiserId,
 } from '../../lib/query/useEvent';
 import api from '../../lib/ApiClient';
 import { IoIosStar, IoIosStarOutline } from 'react-icons/io';
@@ -24,38 +26,57 @@ import { convertCompilerOptionsFromJson } from 'typescript';
 const EventOrgProfile = ({ router: { query } }) => {
   const [showEoView, setShowEoView] = useState(false);
   const [showPublicView, setShowPublicView] = useState(false);
+  const [userRole, setUserRole] = useState('');
   //const [eventlist, setEventlist] = useState([]);
-  const [upcomingeventlist, setUpcomingeventlistEventlist] = useState([]);
-  const [pasteventlist, setPastEventlist] = useState([]);
   const [currenteventlist, setCurrenteventlist] = useState([]);
-  //  const [eventArraylist, setEventArraylist] = useState([[]]);
+  const [upcomingeventlist, setUpcomingeventlist] = useState([]);
+  const [pasteventlist, setPastEventlist] = useState([]);
   // if there is user login credential
   if (localStorage.getItem('userId') != null) {
     const { data: user } = useUser(localStorage.getItem('userId'));
     const paraId_ = JSON.parse(query.paraId);
-    //let eventlist_ = null;
-    //const { data: eventlist } = getEventByOrganiserId(paraId_);
+
+    // ADMIN: 'admin',
+    // EVNTORG: 'organiser',
+    // BIZPTNR: 'partner',
+    // ATND: 'attendee',
+
+    // useEffect(async () => {
+
+    // }, []);
 
     useEffect(async () => {
-      await getCurrentEventsByOrganiserId(paraId_).then((events) => {
-        setCurrenteventlist(events);
-      });
-
-      await getPastEventsByOrganiserId(paraId_).then((events) => {
-        setPastEventlist(events);
-      });
-
-      await getUpcomingEventsByOrganiserId(paraId_).then((events) => {
-        setUpcomingeventlistEventlist(events);
-      });
-
-      await getPastEventsByOrganiserId(paraId_).then((events) => {
-        setPastEventlist(events);
-      });
-    }, []);
-
-    useEffect(() => {
       if (user?.id != null) {
+        if (user?.roles[0].roleEnum === 'BIZPTNR') {
+          setUserRole('BIZPTNR');
+          await getPartnerCurrentEventsByOrganiserId(paraId_).then((events) => {
+            setCurrenteventlist(events);
+          });
+
+          // await getPartnerUpcomingEventsByOrganiserId(paraId_).then((events) => {
+          //   setUpcomingeventlist(events);
+          // });
+        } else if (
+          user?.roles[0].roleEnum === 'EVNTORG' ||
+          user?.roles[0].roleEnum === 'ATND'
+        ) {
+          await getAttendeeCurrentEventsByOrganiserId(paraId_).then(
+            (events) => {
+              setCurrenteventlist(events);
+            }
+          );
+
+          await getAttendeeUpcomingEventsByOrganiserId(paraId_).then(
+            (events) => {
+              setUpcomingeventlist(events);
+            }
+          );
+        }
+
+        await getPastEventsByOrganiserId(paraId_).then((events) => {
+          setPastEventlist(events);
+        });
+
         if (user?.id == paraId_) {
           setShowEoView(true);
           setShowPublicView(false);
@@ -64,6 +85,14 @@ const EventOrgProfile = ({ router: { query } }) => {
           setShowEoView(false);
         }
       } else {
+        await getAttendeeCurrentEventsByOrganiserId(paraId_).then((events) => {
+          setCurrenteventlist(events);
+        });
+
+        await getAttendeeUpcomingEventsByOrganiserId(paraId_).then((events) => {
+          setUpcomingeventlist(events);
+        });
+
         setShowPublicView(true);
         setShowEoView(false);
       }
@@ -175,11 +204,19 @@ const EventOrgProfile = ({ router: { query } }) => {
                       />
                       */}
                     {/* tab product -> refers to eletronic-two*/}
-                    <EventTabOne
-                      current={currenteventlist}
-                      upcoming={upcomingeventlist}
-                      past={pasteventlist}
-                    />
+                    {userRole === 'BIZPTNR' && (
+                      <EventTabOne
+                        current={currenteventlist}
+                        past={pasteventlist}
+                      />
+                    )}
+                    {userRole !== 'BIZPTNR' && (
+                      <EventTabOne
+                        current={currenteventlist}
+                        upcoming={upcomingeventlist}
+                        past={pasteventlist}
+                      />
+                    )}
                   </div>
                 </Tab.Pane>
                 <Tab.Pane eventKey="Description">
