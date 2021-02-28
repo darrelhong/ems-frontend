@@ -2,6 +2,8 @@ import Head from 'next/head';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useForm } from 'react-hook-form';
+import cx from 'classnames';
 
 import api from '../../../lib/ApiClient';
 
@@ -134,7 +136,6 @@ function EventOrganiserDetails({ id }) {
                 </ul>
               </dd>
             </dl>
-
             <Row>
               <Col md={5} className="mb-4">
                 <button
@@ -173,7 +174,6 @@ function EventOrganiserDetails({ id }) {
                 </button>
               </Col>
             </Row>
-
             <Row>
               <Col>
                 <ButtonWithLoading
@@ -195,6 +195,8 @@ function EventOrganiserDetails({ id }) {
                 )}
               </Col>
             </Row>
+
+            <UpdateEventOrganiserForm eo={eo} />
           </>
         )}
       </Container>
@@ -211,3 +213,118 @@ EventOrganiserDetails.propTypes = {
 export default withProtectRoute(EventOrganiserDetails, {
   redirectTo: '/admin/login',
 });
+
+function UpdateEventOrganiserForm({ eo }) {
+  const queryClient = useQueryClient();
+  const { register, handleSubmit, errors, formState } = useForm({
+    defaultValues: {
+      name: eo.name,
+      phonenumber: eo.phonenumber,
+      address: eo.address,
+      description: eo.description,
+    },
+  });
+
+  const { mutate, isSuccess, isError } = useMutation(
+    (data) => api.post('/api/user/admin-update', data),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['user', eo.id.toString()]);
+      },
+    }
+  );
+
+  const onSubmit = async (data) => {
+    mutate({
+      ...data,
+      id: eo.id,
+    });
+  };
+
+  return (
+    <form className="mt-4" onSubmit={handleSubmit(onSubmit)}>
+      <div className="form-row">
+        <div className="form-group col-md-6">
+          <label htmlFor="name">Name</label>
+          <input
+            className={cx('form-control', {
+              'is-invalid': errors?.name,
+            })}
+            type="text"
+            name="name"
+            id="name"
+            ref={register({ required: 'Name is required' })}
+          />
+          <div className="invalid-feedback">{errors?.name?.message}</div>
+        </div>
+
+        <div className="form-group col-md-6">
+          <label htmlFor="phonenumber">Phone no.</label>
+          <input
+            className={cx('form-control', {
+              'is-invalid': errors?.phone,
+            })}
+            type="text"
+            name="phonenumber"
+            id="phonenumber"
+            ref={register({ required: 'Phone is required' })}
+          />
+          <div className="invalid-feedback">{errors?.phone?.message}</div>
+        </div>
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="description">Description</label>
+        <textarea
+          className={cx('form-control', {
+            'is-invalid': errors?.description,
+          })}
+          type="text"
+          name="description"
+          id="description"
+          ref={register()}
+        />
+        <div className="invalid-feedback">{errors?.description?.message}</div>
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="address">Address</label>
+        <textarea
+          className={cx('form-control', {
+            'is-invalid': errors?.address,
+          })}
+          type="text"
+          name="address"
+          id="address"
+          ref={register()}
+        />
+        <div className="invalid-feedback">{errors?.address?.message}</div>
+      </div>
+      <div className="form-group">
+        <ButtonWithLoading
+          type="submit"
+          className="btn btn-fill-out"
+          isLoading={formState?.isSubmitting}
+        >
+          Update
+        </ButtonWithLoading>
+
+        {isError && (
+          <Alert className="mt-4 mb-0" variant="danger">
+            An error has occurred.
+          </Alert>
+        )}
+
+        {isSuccess && (
+          <Alert className="mt-4 mb-0" variant="success">
+            Profile succesfully updated!
+          </Alert>
+        )}
+      </div>
+    </form>
+  );
+}
+
+UpdateEventOrganiserForm.propTypes = {
+  eo: PropTypes.object,
+};
