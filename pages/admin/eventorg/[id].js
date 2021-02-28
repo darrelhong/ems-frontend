@@ -117,7 +117,7 @@ function EventOrganiserDetails({ id }) {
               <dd className="col-sm-9">{eo.description || '-'}</dd>
 
               <dt className="col-sm-3">Phone no.</dt>
-              <dd className="col-sm-9">{eo.phoneNumber || '-'}</dd>
+              <dd className="col-sm-9">{eo.phonenumber || '-'}</dd>
 
               <dt className="col-sm-3">Address</dt>
               <dd className="col-sm-9">{eo.address || '-'}</dd>
@@ -262,14 +262,20 @@ function UpdateEventOrganiserForm({ eo }) {
           <label htmlFor="phonenumber">Phone no.</label>
           <input
             className={cx('form-control', {
-              'is-invalid': errors?.phone,
+              'is-invalid': errors?.phonenumber,
             })}
             type="text"
             name="phonenumber"
             id="phonenumber"
-            ref={register({ required: 'Phone is required' })}
+            ref={register({
+              required: 'Phone is required',
+              pattern: {
+                value: /(\+65)?(6|8|9)\d{7}/,
+                message: 'Invalid number',
+              },
+            })}
           />
-          <div className="invalid-feedback">{errors?.phone?.message}</div>
+          <div className="invalid-feedback">{errors?.phonenumber?.message}</div>
         </div>
       </div>
 
