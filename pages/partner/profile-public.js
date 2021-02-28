@@ -91,44 +91,50 @@ const PartnerProfile = ({ router: { query } }) => {
                   <Row>
                     {/* <h4 style={{marginLeft: '6%', color:'#ff324d'}}> */}
                     {/* {followers.length}  */}
-                    <Col>
-                      {(followers == undefined && (
-                        <h4 style={{ marginLeft: '15%', color: '#ff324d' }}>
-                          {' '}
-                          0{' '}
-                        </h4>
-                      )) ||
-                        (followers.length > 0 && (
-                          <h4 style={{ marginLeft: '15%', color: '#ff324d' }}>
-                            {' '}
-                            {followers.length}{' '}
-                          </h4>
-                        ))}
-                      {/* </h4> */}
-                    </Col>
-                    <Col>
-                      {(following == undefined && (
-                        <h4 style={{ marginLeft: '15%', color: '#ff324d' }}>
-                          {' '}
-                          0{' '}
-                        </h4>
-                      )) ||
-                        (following.length > 0 && (
-                          <h4 style={{ marginLeft: '15%', color: '#ff324d' }}>
-                            {' '}
-                            {following.length}{' '}
-                          </h4>
-                        ))}
-                    </Col>
                   </Row>
                 </div>
                 <div>
                   <Row>
                     <Col>
-                      <h5>Followers</h5>
+                      <Row>
+                        <Col md={6} className="follow-number">
+                          {(followers == undefined && (
+                            <h4 style={{ color: '#ff324d' }}> 0 </h4>
+                          )) ||
+                            (followers.length > 0 && (
+                              <h4 style={{ color: '#ff324d' }}>
+                                {' '}
+                                {followers.length}{' '}
+                              </h4>
+                            ))}
+                          {/* </h4> */}
+                        </Col>
+                      </Row>
+                      <Row>
+                        <h5>Followers</h5>
+                      </Row>
                     </Col>
                     <Col>
-                      <h5>Following</h5>
+                      <Row>
+                        <Col md={6} className="follow-number">
+                          {(following == undefined && (
+                            <h4 style={{ color: '#ff324d' }}> 0 </h4>
+                          )) ||
+                            (following.length > 0 && (
+                              <h4
+                                style={{
+                                  color: '#ff324d',
+                                }}
+                              >
+                                {' '}
+                                {following.length}{' '}
+                              </h4>
+                            ))}
+                        </Col>
+                      </Row>
+                      <Row>
+                        <h5>Following</h5>
+                      </Row>
                     </Col>
                   </Row>
                 </div>
@@ -210,7 +216,6 @@ const PartnerProfile = ({ router: { query } }) => {
                         return (
                           // <div class="container mt-5 d-flex justify-content-left">
                           <Row md={12} className="follower-box">
-                            <br />
                             <div class="p-3">
                               <div class="d-flex align-items-center">
                                 <div class="image">
@@ -245,28 +250,30 @@ const PartnerProfile = ({ router: { query } }) => {
                     {following != undefined &&
                       following.map((following) => {
                         return (
-                          <div class="container mt-5 d-flex justify-content-left">
-                            <div class="card p-3">
-                              <div class="d-flex align-items-center">
-                                <div class="image">
-                                  {' '}
-                                  <img
-                                    src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=80"
-                                    class="rounded"
-                                    width="100"
-                                  />{' '}
-                                </div>
-                                <div class="ml-3 w-100">
-                                  <h4 class="mb-0 mt-0">{following.name}</h4>{' '}
-                                  <span>{following.description}</span>
-                                  <div class="button mt-2 d-flex flex-row align-items-center">
-                                    <button className="btn btn-sm btn-fill-out">
-                                      View Profile
-                                    </button>
+                          <div>
+                            <Row md={12} className="follower-box">
+                              <div class="p-3">
+                                <div class="d-flex align-items-center">
+                                  <div class="image">
+                                    {' '}
+                                    <img
+                                      src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=80"
+                                      class="rounded"
+                                      width="100"
+                                    />{' '}
+                                  </div>
+                                  <div class="ml-3 w-100">
+                                    <h4 class="mb-0 mt-0">{following.name}</h4>{' '}
+                                    <span>{following.description}</span>
+                                    <div class="button mt-2 d-flex flex-row align-items-center">
+                                      <button className="btn btn-sm btn-fill-out">
+                                        View Profile
+                                      </button>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
+                            </Row>
                           </div>
                         );
                       })}
