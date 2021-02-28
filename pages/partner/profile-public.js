@@ -79,7 +79,9 @@ const PartnerProfile = ({ router: { query } }) => {
                 />
               </Col>
               <Col xs={6} md={4}>
-                <h2>{partner?.name}</h2>
+                <Row>
+                  <h2>{partner?.name}</h2>
+                </Row>
                 {/* <div className="product-content__rating-wrap">
                   <div className="product-content__rating">
                     <ProductRating ratingValue={3} />
@@ -140,15 +142,17 @@ const PartnerProfile = ({ router: { query } }) => {
                 </div>
                 <div>
                   &nbsp;
-                  <h5>
-                    Category :
-                    <span>
-                      {' '}
-                      <Badge variant="primary">
-                        {partner?.businessCategory}
-                      </Badge>{' '}
-                    </span>
-                  </h5>
+                  <Row>
+                    <h5>
+                      Category :
+                      <span>
+                        {' '}
+                        <Badge variant="primary">
+                          {partner?.businessCategory}
+                        </Badge>{' '}
+                      </span>
+                    </h5>
+                  </Row>
                 </div>
                 <br></br>
                 {publicView && (
