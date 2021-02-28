@@ -27,7 +27,7 @@ const PartnerHeaderTop = () => {
                   </Link>
                 </li>
               <li>
-              <li>
+             
                   <Link href="/other/wishlist">
                     <a>
                       <IoIosHeartEmpty />
@@ -36,8 +36,11 @@ const PartnerHeaderTop = () => {
                   </Link>
                 </li>
                   {/* <Link href={`/partner/profile-public?id=${JSON.stringify(localuser?.id)}`}> */}
-                  
-                  <Link href={{ pathname: "/partner/profile-public", query: { localuser: JSON.stringify(localuser) } }}>
+                   <li>
+                  {/* <Link href={{ pathname: "/partner/profile-public", query: { localuser: JSON.stringify(localuser) } }}> */}
+                  <Link href={{
+                    pathname:"/partner/profile-public",
+                    query: { localuser: JSON.stringify(localuser?.id)}}}>
                     <a>
                     <AiOutlineUser />
                       <span>Profile</span>

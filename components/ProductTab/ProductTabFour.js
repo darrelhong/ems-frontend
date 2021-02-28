@@ -9,7 +9,10 @@ const ProductTabFour = ({
   bestSellerProducts,
   featuredProducts,
   saleProducts
+  
+
 }) => {
+  
   return (
     <div className="product-tab-area space-pb--r70">
       <Container>

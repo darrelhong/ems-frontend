@@ -26,8 +26,8 @@ const ProductGridFive = ({
   return (
     <Fragment>
       <div
-        className={`${sliderClass ? sliderClass : ""} ${
-          bottomSpace ? bottomSpace : ""
+        className={`${sliderClass ? sliderClass : ''} ${
+          bottomSpace ? bottomSpace : ''
         }`}
       >
         <div className="product-grid product-grid--style-three"style= {{width:"40%"}}>
@@ -59,7 +59,7 @@ const ProductGridFive = ({
               </a>
             </Link>
             <div className="product-grid__badge-wrapper">
-              {product.new ? <span className="pr-flash">NEW</span> : ""}
+              {/* {product.new ? <span className="pr-flash">NEW</span> : ""}
               {product.featured ? (
                 <span className="pr-flash bg-danger">HOT</span>
               ) : (
@@ -69,10 +69,10 @@ const ProductGridFive = ({
                 <span className="pr-flash bg-success">SALE</span>
               ) : (
                 ""
-              )}
+              )} */}
             </div>
             <div className="product-grid__action-box">
-              <ul>
+              {/* <ul>
                 <li>
                   {product.affiliateLink ? (
                     <a href={product.affiliateLink} target="_blank">
@@ -166,9 +166,9 @@ const ProductGridFive = ({
               {product.discount ? (
                 <Fragment>
                   <span className="price">${discountedPrice}</span>
-                  <del>${productPrice}</del>
-                  <span className="on-sale">{product.discount}% Off</span>
-                </Fragment>
+                  <del>${productPrice}</del> */}
+              {/* {/* <span className="on-sale">{product.discount}% Off</span> */}
+              {/* </Fragment>
               ) : (
                 <span className="price">${productPrice}</span>
               )}

@@ -37,19 +37,19 @@ const PartnerProfile = ({
   const localuser = JSON.parse(query.localuser);
   // if user = BP , and view his own profile, there should be an edit button and should have no follow button
 
-  const { data: partner } = useUser(localuser.id);
+  const { data: partner } = useUser(localuser);
 
   const { data: events } = getEvents(
-    localuser.id
+    localuser
   );
 
   const { data: followers } = getFollowers(
-    localuser.id
+    localuser
 
   );
 
   const { data: following } = getFollowing(
-    localuser.id
+    localuser
 
   );
 
@@ -58,8 +58,8 @@ const PartnerProfile = ({
 
 
   useEffect(() => {
-
-    if (user?.id !== localuser.id) {
+    
+    if (user?.id !== localuser) {
       setPublicView(true);
     } else {
       setPublicView(false);
@@ -67,11 +67,6 @@ const PartnerProfile = ({
 
   })
 
-
-
-
-
-  console.log(followers);
 
 
   return (

@@ -124,25 +124,7 @@ export default function ResetPassword({ token }) {
             An error occurred. Please try again.
           </Alert>
         )}
-        {/* {isSuccess && (
-          <Alert status="success" mb={3}>
-            Your password has been updated successfully. Please proceed to
-            login.
-            <Link href="/" passHref>
-              <Button>Back to home</Button>
-            </Link>
-          </Alert>
-        )} */}
-        {/* 
-        {isSuccess ? (
-          <Alert status="success" mb={3}>
-            Your password has been updated successfully. Please proceed to
-            login.
-            <Link href="/" passHref>
-              <Button>Back to home</Button>
-            </Link>
-          </Alert>
-        ) : ( */}
+   
         <Card>
           <form onSubmit={handleSubmit(onSubmit)} id="reset-password-form">
             {/* <Form.Control isInvalid={errors.password}> */}

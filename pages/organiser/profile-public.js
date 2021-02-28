@@ -1,26 +1,115 @@
 import Link from 'next/link';
 import { LayoutOne } from '../../layouts';
+import  EventTabOne from '../../components/EventTabEoProfile';
 import { BreadcrumbOne } from '../../components/Breadcrumb';
 import { Container, Row, Col } from 'react-bootstrap';
 import { ProductRating } from '../../components/Product';
-import { ProductTabFour } from '../../components/ProductTab';
 import useUser from '../../lib/query/useUser';
+import getEventByOrganiserId from '../../lib/query/useEvent';
+
 import api from '../../lib/ApiClient';
 import { IoIosStar, IoIosStarOutline } from 'react-icons/io';
 import { BsPencilSquare } from 'react-icons/bs';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
+import { withRouter } from 'next/router';
+import { useState,useEffect } from 'react';
+import { convertCompilerOptionsFromJson } from 'typescript';
 
-const EventOrgProfile = () => {
+import getOrgAttendeeFollowers from '../../lib/query/getOrgAttendeeFollowers';
+import getOrgPartnerFollowers from '../../lib/query/getOrgPartnerFollowers';
+
+const EventOrgProfile = ({
+  router:{query}
+}) => {
+
+  const [showEoView, setShowEoView] = useState(false);
+  const [showPublicView, setShowPublicView] = useState(false);
+  const [eventlist, setEventlist] = useState([]);
+  const [attendeeFollowers, setAttendeeFollowers] = useState([]);
+  const [partnerFollowers, setPartnerFollowers] = useState([]);
+
+//  const [eventArraylist, setEventArraylist] = useState([[]]);
+  // if there is user login credential
+ if(localStorage.getItem('userId') != null){
 const { data: user } = useUser(localStorage.getItem('userId'));
-console.log(user);
+const paraId_ = JSON.parse(query.paraId);
+//let eventlist_ = null;
+//const { data: eventlist } = getEventByOrganiserId(paraId_);
+
+
+
+// const{data: attendeeFollowers} = getOrgAttendeeFollowers(paraId_);
+// const{data: partnerFollowers} = getOrgPartnerFollowers(paraId_);
+
+
+useEffect(async () => {
+  
+  // await getOrgPartnerFollowers(paraId_).then((followers) => {
+  //    setPartnerFollowers(followers);
+  //    });  
+
+    //  getOrgAttendeeFollowers(paraId_).then((followers) => {
+    //   setAttendeeFollowers(followers);
+    //   });
+
+    await getEventByOrganiserId(paraId_).then((events) => {
+    setEventlist(events); });
+
+   
+},[]);
+
+
+    // getEventByOrganiserId(paraId_).then((events) => {
+    // setEventlist(events); });
+    // getOrgPartnerFollowers(paraId_).then((followers) => {
+    // setPartnerFollowers(followers);
+    // });  
+    // getOrgAttendeeFollowers(paraId_).then((followers) => {
+    // setAttendeeFollowers(followers);
+    // });
+
+   
+
+
+useEffect(() => { 
+//const eventList = getEventByOrganiserId(paraId_);
+//console.log(eventList);
+
+if(user?.id != null){
+
+if (user?.id == paraId_) {
+  setShowEoView(true);
+  setShowPublicView(false);
+} else {
+  setShowPublicView(true);
+  setShowEoView(false);
+}
+}else{
+    setShowPublicView(true);
+    setShowEoView(false);
+}
+},[]);
+
+}else{
+  
+  useEffect(() => { 
+    fetchData();
+   setShowPublicView(true);
+   setShowEoView(false);
+  });
+}
+
+// the paraID should always have id value
+ const paraId_ = JSON.parse(query.paraId);
+ const { data: eventorganiser } = useUser(paraId_);
+
 
 
 
   return (
     <LayoutOne>
-      {/* breadcrumb */}
       <BreadcrumbOne pageTitle="Event Organiser Profile Details">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
@@ -33,7 +122,6 @@ console.log(user);
           </li>
         </ol>
       </BreadcrumbOne>
-
       <div className="my-account-content space-pt--r100 space-pb--r100">
         <div>
           <Container>
@@ -41,12 +129,12 @@ console.log(user);
               <Col xs={4} md={6}>
                 <Image
                   className="profile-image"
-                  src={user?.profilePic}
+                  src={eventorganiser?.profilePic}
                   thumbnail
                 />
               </Col>
               <Col xs={4} md={6}>
-                <h2>{user?.name}</h2>
+                <h2>{eventorganiser?.name}</h2>
                 <div className="product-content__rating-wrap">
                   <div className="product-content__rating">
                     <ProductRating ratingValue={3} />
@@ -54,17 +142,53 @@ console.log(user);
                   </div>
                 </div>
 
+                &nbsp;
+
+<div>
+  <Row>
+    {/* <h4 style={{marginLeft: '6%', color:'#ff324d'}}> */}
+    {/* {followers.length}  */}
+    <Col>
+    {/* {attendeeFollowers == undefined && partnerFollowers == undefined (<h4 style={{ marginLeft: '6%', color: '#ff324d' }}> 0 </h4>) || (attendeeFollowers > 0 && partnerFollowers> 0 && (<h4 style={{ marginLeft: '6%', color: '#ff324d' }}> {attendeeFollowers.length + partnerFollowers.length} </h4>))} */}
+
+      {<h4 style={{marginLeft: '6%', color: '#ff324d' }}> {attendeeFollowers.length + partnerFollowers.length} </h4>}
+      {/* </h4> */}
+    </Col>
+    {/* <Col>
+      {following == undefined && (<h4 style={{ marginLeft: '15%', color: '#ff324d' }}> 0 </h4>) || (following.length > 0 && (<h4 style={{ marginLeft: '15%', color: '#ff324d' }}> {following.length} </h4>))}
+
+    </Col> */}
+  </Row>
+</div>
+<div>
+                  <Row>
+                    <Col>
+                      <h5 >
+                        Followers
+                  </h5>
+                    </Col>
+                    <Col>
+                      <h5 >
+                        Following
+                  </h5>
+                    </Col>
+                  </Row>
+                </div>
+
                 <br></br>
-             
-                  {/* <button
-                    className="btn btn-fill-out"
-                    name="follow"
-                    value="follow"
-                  >
-                    Follow
-                  </button> */}
-            
-                <div>
+                <div style={{ display: showPublicView ? 'block' : 'none' }}>
+                  {
+                    <button
+                      className="btn btn-fill-out"
+                      name="follow"
+                      value="follow"
+                    >
+                      Follow
+                    </button>
+                  }
+                </div>
+
+                <div style={{ display: showEoView ? 'block' : 'none' }}>
                   <Link href="/organiser/profile-account">
                     <button
                       className="btn btn-fill-out"
@@ -92,15 +216,19 @@ console.log(user);
                 <Nav.Item>
                   <Nav.Link eventKey="Description">DESCRIPTION</Nav.Link>
                 </Nav.Item>
-                <Nav.Item>
+                {/* first system release not need review */}
+                {/* <Nav.Item>
                   <Nav.Link eventKey="reviews">
                     REVIEWS{' '}
-                    {/*product.ratingCount ? `(${product.ratingCount})` : ""*/}
+                    {/*product.ratingCount ? `(${product.ratingCount})` : ""
                   </Nav.Link>
-                </Nav.Item>
+                </Nav.Item> */}
                 <Nav.Item>
                   {/*show only if the role is organiser*/}
-                  <Nav.Link eventKey="followers">
+                  <Nav.Link
+                    eventKey="followers"
+                    style={{ display: showEoView ? 'block' : 'none' }}
+                  >
                     FOLLOWERS{' '}
                     {/*product.ratingCount ? `(${product.ratingCount})` : ""*/}
                   </Nav.Link>
@@ -108,29 +236,26 @@ console.log(user);
               </Nav>
 
               <Tab.Content>
-                <Tab.Pane eventKey="Events">
-                  <div className="product-description-tab__details">
+                {/* <Tab.Pane eventKey="Events">
+                  <div className="product-description-tab__details"> */}
                     {/* category slider 
                       <CategorySliderTwo
                         categorySliderData={categorySliderData}
                       />
                       */}
                     {/* tab product -> refers to eletronic-two*/}
-                    <ProductTabFour
-
-                    // newProducts="newProducts"
-                    //bestSellerProducts="bestSellerProducts"
-                    //featuredProducts="featuredProducts"
-                    //saleProducts="saleProducts"
-                    />
+                    {/* <EventTabOne current={eventlist} />
                   </div>
-                </Tab.Pane>
-                <Tab.Pane eventKey="Description">
+                </Tab.Pane> */}
+                {/* <Tab.Pane eventKey="Description">
+                  {eventlist.map((event) => (
+                    <div key={event.eid}>{event.eid}</div>
+                  ))}
                   <br></br>
                   <div className="product-description-tab__additional-info">
-                    {user?.description}
+                    {eventorganiser?.description}
                   </div>
-                </Tab.Pane>
+                </Tab.Pane> */}
                 <Tab.Pane eventKey="reviews">
                   <div className="product-description-tab__review">
                     <div className="comments">
@@ -295,4 +420,4 @@ const mapStateToProps = (state) => {
 };
  */
 
-export default EventOrgProfile;
+export default withRouter(EventOrgProfile);
