@@ -4,8 +4,51 @@ import Link from "next/link";
 import { Col } from "react-bootstrap";
 import { formatDate } from '../../lib/formatDate'
 import { ProgressBar } from 'react-bootstrap';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import StarIcon from '@material-ui/icons/Star';
+import StarBorderIcon from '@material-ui/icons/StarBorder';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import PublishIcon from '@material-ui/icons/Publish';
 
-const EventCard = ({ event }) => {
+const EventCard = ({ event, publishToggle, hideToggle, vipToggle, handleCancelDelete }) => {
+    const deleteCancelButton = () => {
+        if (event.eventStatus == 'CANCELLED') {
+            return (
+                <button
+                    disabled
+                    className="btn btn-fill-out btn-addtocart space-ml--10"
+                    style={{ marginLeft: 'auto', marginRight: 'auto', pointerEvents: "none" }}
+                >
+                    <i className="icon-basket-loaded" /> Cancelled Event
+                </button>
+            )
+        } else if (event.eventBoothTransactions?.length == 0 && event.ticketTransactions?.length == 0) {
+            //in this case we can delete
+            return (
+                <button
+                    onClick={() => handleCancelDelete("delete")}
+                    disabled={event.eventStatus == 'DELETED'}
+                    className="btn btn-fill-out btn-addtocart space-ml--10"
+                    style={{ marginLeft: 'auto', marginRight: 'auto' }}
+                >
+                    <i className="icon-basket-loaded" /> Delete Event
+                </button>
+            )
+        } else {
+            //only can cancel, cannot delete
+            return (
+                <button
+                    onClick={() => handleCancelDelete("cancel")}
+                    className="btn btn-fill-out btn-addtocart space-ml--10"
+                    style={{ marginLeft: 'auto', marginRight: 'auto' }}
+                >
+                    <i className="icon-basket-loaded" /> Cancel Event
+                </button>
+            )
+        }
+    };
     return (
         <Fragment>
             <Col
@@ -24,6 +67,13 @@ const EventCard = ({ event }) => {
                     </div>
 
                     <div className="product-list__info">
+
+                        <span style={{ float: "right" }}>
+                            <IconButton aria-label="delete" color="secondary">
+                                <DeleteIcon />
+                            </IconButton>
+                        </span>
+
                         <h6 className="product-title">
                             <Link
                                 // Require to be changed
@@ -32,11 +82,6 @@ const EventCard = ({ event }) => {
                             </Link>
                         </h6>
 
-                        <span>
-                            <button>
-                                <i className="icon-delete" />Delete
-                            </button>
-                        </span>
 
                         <div className="d-flex justify-content-between">
                             <div className="product-price">
@@ -48,34 +93,37 @@ const EventCard = ({ event }) => {
                             {event.descriptions}
                         </div>
 
-                        <div>
-                            <span>
-                                <ProgressBar now={60} label="60%" />
-                            </span>
-                            <span>
-                                {event.ticketCapacity}
-                            </span>
-                        </div>
-
                         <div className="product-list__actions">
                             <ul>
                                 <li>
-                                    <button className="btn btn-fill-out btn-addtocart space-ml--10">
-                                        <i className="icon-basket-loaded" /> Publish
-                                    </button>
+                                    <IconButton aria-label="Hide" color="primary" onClick={publishToggle}>
+                                        {event.published ?
+                                            (<PublishIcon />) :
+                                            (<PublishIcon disabled />)
+                                        }
+                                    </IconButton>
                                 </li>
 
                                 <li>
-                                    <button className="btn btn-fill-out btn-addtocart space-ml--10">
-                                        <i className="icon-basket-loaded" /> Hide
-                                    </button>
+                                    <IconButton aria-label="Hide" color="warning" onClick={hideToggle}>
+                                        {event.hidden ?
+                                            (<VisibilityIcon />) :
+                                            (<VisibilityOffIcon />)
+                                        }
+                                    </IconButton>
                                 </li>
 
                                 <li>
-                                    <button className="btn btn-fill-out btn-addtocart space-ml--10">
-                                        <i className="icon-basket-loaded" /> Make VIP
-                                    </button>
+                                    <IconButton aria-label="vip" color="secondary" onClick={vipToggle}>
+                                        {event.vip ?
+                                            (<StarIcon />) :
+                                            (<StarBorderIcon />)
+                                        }
+                                    </IconButton>
                                 </li>
+
+                                <ProgressBar animated now={60} label="60%" style={{ width: "50%", float: "right" }} />
+                                {event.ticketCapacity}
                             </ul>
                         </div>
                     </div>
