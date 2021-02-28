@@ -10,7 +10,7 @@ import EventCard from '../../../components/events/partner/EventCard';
 import ButtonWithLoading from '../../../components/custom/ButtonWithLoading';
 
 const getEvents = async (page = 0, sort, sortDir) => {
-  let url = `/api/event/search?page=${page}`;
+  let url = `/api/event/get-events?page=${page}`;
   if (sort && sortDir) url += `&sort=${sort}&sortDir=${sortDir}`;
   const { data } = await api.get(url);
   return data;
