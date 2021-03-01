@@ -15,6 +15,7 @@ import {
 } from "react-icons/io";
 import ProductRating from "../../Product/ProductRating";
 import Link from 'next/link';
+import HidePopover from "../../Event/HidePopover";
 
 const EventDescription = ({
   event,
@@ -162,37 +163,40 @@ const EventDescription = ({
                 </a>
               </li>
               <li>
-                  <a href="javascript:void(0);" onClick={() => hideToggle(event)}>
-                    {event.hidden ? (
-                      <IoMdEye title="Unhide your event from attendees!" />
-                    ) : (
-                        <IoMdEyeOff title="Temporarily hide your event from attendees" />
-                      )}
+                <HidePopover event={event} />
+              </li>
+              {/* <li>
+                <a href="javascript:void(0);" onClick={() => hideToggle(event)}>
+                  {event.hidden ? (
+                    <IoMdEye title="Unhide your event from attendees!" />
+                  ) : (
+                      <IoMdEyeOff title="Temporarily hide your event from attendees" />
+                    )}
+                </a>
+              </li>
+              <li>
+                <a href="javascript:void(0);" onClick={() => publishToggle(event)}>
+                  {event.published ? (
+                    <IoMdCloudDownload title="Temporarily unpublish your event from business partners!" />
+                  ) : (
+                      <IoMdCloudUpload title="Publish your event for business partners to see!" />
+                    )}
+                </a>
+              </li> */}
+              <li>
+                <Link href={`/organiser/events/create?eid=${event.eid}`}>
+                  <a>
+                    <IoMdCreate />
                   </a>
-                </li>
-                <li>
-                  <a href="javascript:void(0);" onClick={() => publishToggle(event)}>
-                    {event.published ? (
-                      <IoMdCloudDownload title="Temporarily unpublish your event from business partners!" />
-                    ) : (
-                        <IoMdCloudUpload title="Publish your event for business partners to see!" />
-                      )}
-                  </a>
-                </li>
-                <li>
-                  <Link href={`/organiser/events/create?eid=${event.eid}`}>
-                    <a>
-                      <IoMdCreate />
-                    </a>
-                  </Link>
-                </li>
+                </Link>
+              </li>
             </ul>
-              {deleteCancelButton()}
+            {deleteCancelButton()}
           </div>
 
 
-            {/* three ugly ass buttons */}
-            {/* {event.published ?
+          {/* three ugly ass buttons */}
+          {/* {event.published ?
 
             (<button
               onClick={publishToggle}
@@ -245,10 +249,10 @@ const EventDescription = ({
               </button>
             )
           } */}
-          </div>
+        </div>
       </Fragment>
-        <hr />
-        {/* <div className="product-content__product-share space-mt--15">
+      <hr />
+      {/* <div className="product-content__product-share space-mt--15">
         <span>Share:</span>
         <ul className="social-icons">
           <li>
