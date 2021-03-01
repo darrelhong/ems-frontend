@@ -142,10 +142,11 @@ const CreateEvent = () => {
       let updatedEvent = await updateEvent(updatedData);
       console.log('printing updated event:');
       console.log(updatedEvent);
-    } else {
+    }
+    else {
       //create new event without validation
       let eventOrganiserId = user.id;
-      let updatedData = {...formData, eventOrganiserId}
+      let updatedData = { ...formData, eventOrganiserId }
       const response = await createEvent(updatedData);
       console.log(response);
     }
@@ -219,16 +220,6 @@ const CreateEvent = () => {
             </button>
           </ol>
           <ol>
-            <button
-              type="button"
-              className="btn btn-fill-out"
-              onClick={() => {
-                setShowModal(true);
-              }}
-            >
-              Show modal
-            </button>
-          </ol> <ol>
             <button
               type="button"
               className="btn btn-fill-out"

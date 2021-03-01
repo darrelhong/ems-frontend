@@ -8,7 +8,7 @@ import {
 } from "react-icons/io";
 import { format, parseISO } from 'date-fns';
 
-const ProductDescriptionTab = ({ event, prettySaleStartDate, prettySalesEndDate }) => {
+const EventDescriptionTab = ({ event, prettySaleStartDate, prettySalesEndDate }) => {
   return (
     <div className="product-description-tab space-pt--r100 space-pb--50">
       <Tab.Container defaultActiveKey="ticketing">
@@ -235,4 +235,4 @@ const ProductDescriptionTab = ({ event, prettySaleStartDate, prettySalesEndDate 
   );
 };
 
-export default ProductDescriptionTab;
+export default EventDescriptionTab;

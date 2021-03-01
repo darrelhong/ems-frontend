@@ -20,6 +20,11 @@ export const steps = [
       content: 'Booths to be set up for your event!',
     },
     {
+      label: 'Publishing Options',
+      eventKey: 'publishingOptions',
+      content: 'Who you want your events to be shown to!',
+    },
+    {
       label: 'Event Images',
       eventKey: 'images',
       content: 'Upload some nice images for your event!',

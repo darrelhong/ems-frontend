@@ -79,7 +79,7 @@ const EventDescription = ({
       {/* event name originally here */}
       {/* <h2 className="product-content__title space-mb--10">{event.name}</h2> */}
       <div className="product-content__price-rating-wrapper space-mb--10">
-        <h2 className="product-content__title space-mb--10">{event.name}</h2>
+        <h2 className="product-content__title space-mb--10">{event.name ? event.name : '(Add event name)'}</h2>
         {/* <div className="product-content__price d-flex-align-items-center">
           <span className="price">{prettyStartDate}</span>
         </div> */}
@@ -114,10 +114,10 @@ const EventDescription = ({
               </li>
             )}
           <li>
-            <IoMdLocate />Event Location: {event.address ? event.address : '(Not set yet)'}
+            <IoMdLocate />Event Location: {event.address ? event.address : '(Add Event Location)'}
           </li>
           <li>
-            <IoMdCalendar />{prettyStartDate ? prettyStartDate : '(Not set yet)'} to {prettyEndDate ? prettyEndDate : '(Not set yet)'}
+            <IoMdCalendar />{prettyStartDate ? prettyStartDate : '(Add Event Start Date)'} to {prettyEndDate ? prettyEndDate : '(Add Event End Date)'}
           </li>
           {/* {event.vip && (
             <li>

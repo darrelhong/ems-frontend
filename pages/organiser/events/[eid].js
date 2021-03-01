@@ -8,7 +8,7 @@ import { LayoutOne } from "../../../layouts";
 import { BreadcrumbOne } from "../../../components/Breadcrumb";
 import EventDescription from "../../../components/events/viewEventDetails/EventDescription";
 import ImageGalleryLeftThumb from "../../../components/events/viewEventDetails/ImageGalleryLeftThumb";
-import ProductDescriptionTab from "../../../components/events/viewEventDetails/ProductDescriptionTab";
+import EventDescriptionTab from "../../../components/events/viewEventDetails/EventDescriptionTab";
 // import { ProductSliderTwo } from "../../../components/ProductSlider";
 import { getEventDetails, updateEvent, deleteEvent } from '../../../lib/query/eventApi';
 import { dbDateToPretty } from '../../../lib/util/functions';
@@ -29,10 +29,10 @@ const OrganiserViewEventDetails = () => {
   useEffect(() => {
     const loadEvent = async () => {
       let eventData = await getEventDetails(eid);
-      setPrettyEndDate(format(parseISO(eventData.eventEndDate), 'dd MMM yy hh:mmbbb'));
-      setPrettyStartDate(format(parseISO(eventData.eventStartDate), 'dd MMM yy hh:mmbbb'));
-      setPrettySaleStartDate(format(parseISO(eventData.saleStartDate), 'dd MMM yy hh:mmbbb'));
-      setPrettySalesEndDate(format(parseISO(eventData.salesEndDate), 'dd MMM yy hh:mmbbb'));
+      if (eventData.eventEndDate) setPrettyEndDate(format(parseISO(eventData.eventEndDate), 'dd MMM yy hh:mmbbb'));
+      if (eventData.eventStartDate) setPrettyStartDate(format(parseISO(eventData.eventStartDate), 'dd MMM yy hh:mmbbb'));
+      if (eventData.saleStartDate) setPrettySaleStartDate(format(parseISO(eventData.saleStartDate), 'dd MMM yy hh:mmbbb'));
+      if (eventData.salesEndDate) setPrettySalesEndDate(format(parseISO(eventData.salesEndDate), 'dd MMM yy hh:mmbbb'));
       setEvent(eventData);
 
       // setPrettyEndDate(dbDateToPretty(eventData.eventEndDate));
@@ -100,7 +100,7 @@ const OrganiserViewEventDetails = () => {
   return (
     <LayoutOne>
       {/* breadcrumb */}
-      <BreadcrumbOne pageTitle={event.name}>
+      <BreadcrumbOne pageTitle={event.name ? event.name : 'Draft'}>
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/">
@@ -112,7 +112,7 @@ const OrganiserViewEventDetails = () => {
               <a>Events</a>
             </Link>
           </li>
-          <li className="breadcrumb-item active">{event.name}</li>
+          <li className="breadcrumb-item active">{event.name ? event.name : 'Draft'}</li>
         </ol>
       </BreadcrumbOne>
 
@@ -140,7 +140,7 @@ const OrganiserViewEventDetails = () => {
           {/* product description tab */}
           <Row>
             <Col>
-              <ProductDescriptionTab event={event} prettySaleStartDate={prettySaleStartDate} prettySalesEndDate={prettySalesEndDate} />
+              <EventDescriptionTab event={event} prettySaleStartDate={prettySaleStartDate} prettySalesEndDate={prettySalesEndDate} />
             </Col>
           </Row>
 
