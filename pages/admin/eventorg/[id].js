@@ -135,7 +135,24 @@ function EventOrganiserDetails({ id }) {
                   </li>
                 </ul>
               </dd>
+
+              <dt className="col-sm-3">Support docs</dt>
+              <dd className="col-sm-9">
+                {eo.supportDocsUrl ? (
+                  <form
+                    method="get"
+                    action={`/api/downloadFile/${eo.supportDocsUrl}`}
+                  >
+                    <button className="btn btn-purple btn-sm" type="submit">
+                      Download file
+                    </button>
+                  </form>
+                ) : (
+                  <>No file available</>
+                )}
+              </dd>
             </dl>
+
             <Row>
               <Col md={5} className="mb-4">
                 <button
