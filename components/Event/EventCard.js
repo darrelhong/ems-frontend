@@ -8,9 +8,10 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import StarIcon from '@material-ui/icons/Star';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
-import PublishIcon from '@material-ui/icons/Publish';
+// import VisibilityIcon from '@material-ui/icons/Visibility';
+// import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+// import PublishIcon from '@material-ui/icons/Publish';
+import HidePopover from './HidePopover';
 
 const EventCard = ({ event, publishToggle, hideToggle, vipToggle, handleCancelDelete }) => {
     const deleteCancelButton = () => {
@@ -32,7 +33,7 @@ const EventCard = ({ event, publishToggle, hideToggle, vipToggle, handleCancelDe
                         <Link
                             href={`/organiser/event/1`}>
                             <a>
-                                <img src="https://image.freepik.com/free-vector/cute-avocado-cartoon-hand-drawn-style_42349-476.jpg" alt="event_image" />
+                                <img src={`https://storage.googleapis.com/ems-images/events/event-${event.eid}/image-1.jpg`} alt="event_image" />
                             </a>
                         </Link>
                     </div>
@@ -75,22 +76,26 @@ const EventCard = ({ event, publishToggle, hideToggle, vipToggle, handleCancelDe
 
                         <div className="product-list__actions">
                             <ul>
-                                <li>
+                                {/* <li>
                                     <IconButton aria-label="Hide" color="primary" onClick={publishToggle}>
                                         {event.published ?
                                             (<PublishIcon />) :
                                             (<PublishIcon disabled />)
                                         }
                                     </IconButton>
-                                </li>
+                                </li> */}
 
-                                <li>
+                                {/* <li>
                                     <IconButton aria-label="Hide" color="default" onClick={hideToggle}>
                                         {event.hidden ?
                                             (<VisibilityIcon />) :
                                             (<VisibilityOffIcon />)
                                         }
                                     </IconButton>
+                                </li> */}
+
+                                <li>
+                                    <HidePopover />
                                 </li>
 
                                 <li>
