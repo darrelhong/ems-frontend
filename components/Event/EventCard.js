@@ -56,7 +56,7 @@ const EventCard = ({ event, publishToggle, hideToggle, vipToggle, handleCancelDe
 
                         <div className="d-flex justify-content-between">
                             <div className="product-price">
-                                <span className="price"> {formatDate(event.eventStartDate)}</span>
+                                <span className="price"> {formatDate(event.eventStartDate, "eee, dd MMM yyyy, hh:mmbbb")}</span>
                                 {/* <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> */}
                                 {/* <span className="rating-num"> {`Sales End Date: ${formatDate(event.salesEndDate)}`} </span> */}
                             </div>
@@ -70,8 +70,7 @@ const EventCard = ({ event, publishToggle, hideToggle, vipToggle, handleCancelDe
                         </div>
 
                         <div className="d-flex justify-content-between">
-                            <span className="rating-num"> {`Sales Start Date: ${formatDate(event.salesStartDate)}`} </span>
-                            <span className="rating-num"> {`Sales End Date: ${formatDate(event.salesEndDate)}`} </span>
+                            <span className="rating-num"> {`Date: ${formatDate(event.salesStartDate)} ~ ${formatDate(event.salesEndDate)}`} </span>
                         </div>
 
                         <div className="product-list__actions">
