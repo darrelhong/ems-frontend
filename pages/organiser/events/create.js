@@ -11,6 +11,7 @@ import EventDetailsPane from '../../../components/createEvent/tabPanes/EventDeta
 import BoothPane from '../../../components/createEvent/tabPanes/BoothPane';
 import TicketingPane from '../../../components/createEvent/tabPanes/TicketingPane';
 import OnlinePhysicalPane from '../../../components/createEvent/tabPanes/OnlinePhysicalPane';
+import PublishingPane from '../../../components/createEvent/tabPanes/PublishingPane';
 import { steps } from '../../../components/createEvent/steps';
 import useUser from '../../../lib/query/useUser';
 import { createEvent, getEventDetails, updateEvent } from '../../../lib/query/eventApi';
@@ -121,7 +122,7 @@ const CreateEvent = () => {
     } else {
       //new event, we need to add in the EO ID.
       let eventOrganiserId = user.id;
-      updatedData = {...formattedData, eventOrganiserId };
+      updatedData = { ...formattedData, eventOrganiserId };
       console.log('creating brand new event:');
     }
     const response = await createEvent(updatedData);
@@ -130,10 +131,11 @@ const CreateEvent = () => {
 
   const saveDraft = async () => {
     const data = getValues();
-    const formData = formatDates(data);
+    const dateProcessedData = formatDates(data);
+    const formData = processHideOptionsSave(dateProcessedData);
+    const eventStatus = "DRAFT";
     if (eid) {
       //concat data first
-      const eventStatus = "DRAFT";
       let updatedData = { ...eventData, ...formData, eventStatus };
       console.log('printing concat data');
       console.log(updatedData);
@@ -146,10 +148,30 @@ const CreateEvent = () => {
     else {
       //create new event without validation
       let eventOrganiserId = user.id;
-      let updatedData = { ...formData, eventOrganiserId }
+      let updatedData = { ...formData, eventOrganiserId, eventStatus}
       const response = await createEvent(updatedData);
       console.log(response);
     }
+  };
+
+  const processHideOptionsSave = (formData) => {
+    let published; //publish is for attendee
+    let hidden; //hide is for BP
+    if (formData.hideOptions == 'hideBoth') {
+      published = false;
+      hidden = true;
+    } else if (formData.hideOptions == 'showBoth') {
+      published = true;
+      hidden = false;
+    } else if (formData.hideOptions == 'hideFromAttendee') {
+      //hide from attendee but show to BP
+      published = false;
+      hidden = false;
+    } else {
+      published = null;
+      hidden = null;
+    }
+    return { ...formData, published, hidden }
   };
 
   return (
@@ -262,6 +284,9 @@ const CreateEvent = () => {
                     </Tab.Pane>
                     <Tab.Pane eventKey="onlinePhysical">
                       <OnlinePhysicalPane register={register} watch={watch} />
+                    </Tab.Pane>
+                    <Tab.Pane eventKey="publishingOptions">
+                      <PublishingPane register={register} watch={watch} />
                     </Tab.Pane>
                   </Tab.Content>
                 </Col>
