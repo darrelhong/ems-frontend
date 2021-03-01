@@ -23,7 +23,8 @@ const EventDescription = ({
   publishToggle,
   hideToggle,
   vipToggle,
-  handleCancelDelete
+  handleCancel,
+  handleDelete
 }) => {
 
   const deleteCancelButton = () => {
@@ -51,7 +52,7 @@ const EventDescription = ({
       //in this case we can delete
       return (
         <button
-        onClick={() => handleCancelDelete("delete")}
+        onClick={() => handleDelete()}
         disabled={event.eventStatus == 'DELETED'}
         className="btn btn-fill-out btn-addtocart space-ml--10"
         style={{ marginLeft: 'auto', marginRight: 'auto' }}
@@ -63,7 +64,7 @@ const EventDescription = ({
       //only can cancel, cannot delete
       return (
         <button
-        onClick={() => handleCancelDelete("cancel")}
+        onClick={() => handleCancel()}
         className="btn btn-fill-out btn-addtocart space-ml--10"
         style={{ marginLeft: 'auto', marginRight: 'auto' }}
       >

@@ -10,7 +10,7 @@ import EventDescription from "../../../components/events/viewEventDetails/EventD
 import ImageGalleryLeftThumb from "../../../components/events/viewEventDetails/ImageGalleryLeftThumb";
 import ProductDescriptionTab from "../../../components/events/viewEventDetails/ProductDescriptionTab";
 // import { ProductSliderTwo } from "../../../components/ProductSlider";
-import { getEventDetails, updateEvent } from '../../../lib/query/eventApi';
+import { getEventDetails, updateEvent, deleteEvent } from '../../../lib/query/eventApi';
 import { dbDateToPretty } from '../../../lib/util/functions';
 import { format, parseISO, parseJSON } from 'date-fns';
 import { useToasts } from 'react-toast-notifications';
@@ -76,25 +76,24 @@ const OrganiserViewEventDetails = () => {
     createToast(message, 'success');
   };
 
-  const handleCancelDelete = async (operation) => {
-    if (operation == 'cancel') {
+  const handleCancel = async () => {
+    try {
       const eventStatus = "CANCELLED";
-      try {
-        const updatedEvent = await updateEvent({ ...event, eventStatus });
-        setEvent(updatedEvent);
-        createToast('Event successfully cancelled', 'success');
-      } catch (e) {
-        createToast('Error cancelling the event', 'error');
-      }
-    } else {
-      const eventStatus = "DELETED";
-      try {
-        const updatedEvent = await updateEvent({ ...event, eventStatus });
-        setEvent(updatedEvent);
-        createToast('Event successfully deleted!', 'success');
-      } catch (e) {
-        createToast('Error deleting the event', 'error');
-      }
+      const updatedEvent = await updateEvent({ ...event, eventStatus });
+      setEvent(updatedEvent);
+      createToast('Event successfully cancelled', 'success');
+    } catch (e) {
+      createToast('Error cancelling the event', 'error');
+    }
+  }
+
+  const handleDelete = async () => {
+    try {
+      await deleteEvent(event.eid);
+      createToast('Event successfully deleted', 'success');
+      //navigate to somewhere
+    } catch (e) {
+      createToast('Error in deleting event, please contact our help center', 'error');
     }
   };
 
@@ -133,7 +132,8 @@ const OrganiserViewEventDetails = () => {
                 hideToggle={hideToggle}
                 publishToggle={publishToggle}
                 vipToggle={vipToggle}
-                handleCancelDelete={handleCancelDelete}
+                handleCancel={handleCancel}
+                handleDelete={handleDelete}
               />
             </Col>
           </Row>
