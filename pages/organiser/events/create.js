@@ -24,6 +24,7 @@ const CreateEvent = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [eventData, setEventData] = useState(Object);
+  const [vip,setVip] = useState(false);
 
   const router = useRouter();
   const { eid } = router.query;
@@ -48,7 +49,8 @@ const CreateEvent = () => {
       ticketPrice,
       ticketCapacity,
       saleStartDate,
-      salesEndDate } = eventData;
+      salesEndDate,
+      vip } = eventData;
 
     setValue("name", name);
     setValue("descriptions", descriptions);
@@ -60,6 +62,8 @@ const CreateEvent = () => {
     setValue("ticketCapacity", ticketCapacity);
     setValue("saleStartDate", saleStartDate);
     setValue("salesEndDate", salesEndDate);
+    setVip(vip);
+    
   };
 
   const oldSubmit = async (data) => {
@@ -160,12 +164,12 @@ const CreateEvent = () => {
     if (formData.hideOptions == 'hideBoth') {
       published = false;
       hidden = true;
-    } else if (formData.hideOptions == 'showBoth') {
-      published = true;
-      hidden = false;
     } else if (formData.hideOptions == 'hideFromAttendee') {
       //hide from attendee but show to BP
       published = false;
+      hidden = false;
+    } else if (formData.hideOptions == 'showBoth') {
+      published = true;
       hidden = false;
     } else {
       published = null;
@@ -286,7 +290,7 @@ const CreateEvent = () => {
                       <OnlinePhysicalPane register={register} watch={watch} />
                     </Tab.Pane>
                     <Tab.Pane eventKey="publishingOptions">
-                      <PublishingPane register={register} watch={watch} />
+                      <PublishingPane vip={vip} setVip={setVip} register={register} watch={watch} />
                     </Tab.Pane>
                   </Tab.Content>
                 </Col>

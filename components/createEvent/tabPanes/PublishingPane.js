@@ -2,7 +2,7 @@ import { Row, Col } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import PropTypes from 'prop-types';
 
-const PublishingPane = ({ register, watch }) => {
+const PublishingPane = ({ register, watch, vip, setVip }) => {
     return (
         <Card className="my-account-content__content">
             <Card.Header>
@@ -20,8 +20,8 @@ const PublishingPane = ({ register, watch }) => {
                                         name="vip"
                                         ref={register()}
                                         value={true}
-                                        // checked={this.state.selectedOption === "Male"}
-                                        // onChange={this.onValueChange}
+                                        checked={vip}
+                                        onChange={(event) => setVip(event.target.value)}
                                         style={{ marginRight: 5 }}
                                     />
                                     Yes
@@ -32,8 +32,9 @@ const PublishingPane = ({ register, watch }) => {
                                         ref={register()}
                                         name="vip"
                                         value={false}
-                                        // checked={this.state.selectedOption === "Female"}
-                                        // onChange={this.onValueChange}
+                                        checked={vip}
+                                        onChange={(event) => setVip(event.target.value)}
+                                        // onChange={(e) => console.log(e)}
                                         style={{ marginRight: 5 }}
                                     />
                                     No
@@ -68,7 +69,7 @@ const PublishingPane = ({ register, watch }) => {
                                         type="radio"
                                         ref={register()}
                                         name="hideOptions"
-                                        value="showToBoth"
+                                        value="showBoth"
                                         // checked={this.state.selectedOption === "Female"}
                                         // onChange={this.onValueChange}
                                         style={{ marginRight: 5 }}
