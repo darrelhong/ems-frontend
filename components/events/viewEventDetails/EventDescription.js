@@ -38,7 +38,7 @@ const EventDescription = ({
           <i className="icon-basket-loaded" /> Cancelled Event
         </button>
       )
-    } 
+    }
     else if (event.eventStatus == 'DRAFT') {
       return (
         <button
@@ -153,7 +153,7 @@ const EventDescription = ({
             {/* <span>Actions:</span> */}
             <ul className="social-icons">
               <li>
-                <a href="javascript:void(0);" onClick={vipToggle}>
+                <a href="javascript:void(0);" onClick={() => vipToggle(event)}>
                   {/* <IoLogoFacebook  /> */}
                   {event.vip ? (
                     <IoMdStarOutline title="Unlist event from VIP" />
@@ -162,37 +162,37 @@ const EventDescription = ({
                 </a>
               </li>
               <li>
-                <a href="javascript:void(0);" onClick={hideToggle}>
-                  {event.hidden ? (
-                    <IoMdEye title="Unhide your event from attendees!" />
-                  ) : (
-                      <IoMdEyeOff title="Temporarily hide your event from attendees" />
-                    )}
-                </a>
-              </li>
-              <li>
-                <a href="javascript:void(0);" onClick={publishToggle}>
-                  {event.published ? (
-                    <IoMdCloudDownload title="Temporarily unpublish your event from business partners!" />
-                  ) : (
-                      <IoMdCloudUpload title="Publish your event for business partners to see!" />
-                    )}
-                </a>
-              </li>
-              <li>
-                <Link href={`/organiser/events/create?eid=${event.eid}`}>
-                  <a>
-                    <IoMdCreate />
+                  <a href="javascript:void(0);" onClick={() => hideToggle(event)}>
+                    {event.hidden ? (
+                      <IoMdEye title="Unhide your event from attendees!" />
+                    ) : (
+                        <IoMdEyeOff title="Temporarily hide your event from attendees" />
+                      )}
                   </a>
-                </Link>
-              </li>
+                </li>
+                <li>
+                  <a href="javascript:void(0);" onClick={() => publishToggle(event)}>
+                    {event.published ? (
+                      <IoMdCloudDownload title="Temporarily unpublish your event from business partners!" />
+                    ) : (
+                        <IoMdCloudUpload title="Publish your event for business partners to see!" />
+                      )}
+                  </a>
+                </li>
+                <li>
+                  <Link href={`/organiser/events/create?eid=${event.eid}`}>
+                    <a>
+                      <IoMdCreate />
+                    </a>
+                  </Link>
+                </li>
             </ul>
-            {deleteCancelButton()}
+              {deleteCancelButton()}
           </div>
 
 
-          {/* three ugly ass buttons */}
-          {/* {event.published ?
+            {/* three ugly ass buttons */}
+            {/* {event.published ?
 
             (<button
               onClick={publishToggle}
@@ -245,10 +245,10 @@ const EventDescription = ({
               </button>
             )
           } */}
-        </div>
+          </div>
       </Fragment>
-      <hr />
-      {/* <div className="product-content__product-share space-mt--15">
+        <hr />
+        {/* <div className="product-content__product-share space-mt--15">
         <span>Share:</span>
         <ul className="social-icons">
           <li>

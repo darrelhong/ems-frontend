@@ -11,6 +11,7 @@ import ImageGalleryLeftThumb from "../../../components/events/viewEventDetails/I
 import EventDescriptionTab from "../../../components/events/viewEventDetails/EventDescriptionTab";
 // import { ProductSliderTwo } from "../../../components/ProductSlider";
 import { getEventDetails, updateEvent, deleteEvent } from '../../../lib/query/eventApi';
+import { publishToggle, hideToggle, vipToggle, handleCancel, handleDelete } from '../../../lib/functions/eventOrganiser/eventFunctions';
 import { dbDateToPretty } from '../../../lib/util/functions';
 import { format, parseISO, parseJSON } from 'date-fns';
 import { useToasts } from 'react-toast-notifications';
@@ -48,54 +49,93 @@ const OrganiserViewEventDetails = () => {
     setTimeout(() => removeToast(toastId), 3000);
   };
 
-  const publishToggle = async () => {
-    const published = !event.published;
-    const updatedEvent = await updateEvent({ ...event, published });
+  const publishToggleWithToast = async (event) => {
+    const updatedEvent = await publishToggle(event);
     setEvent(updatedEvent);
     let message = '';
-    published ? message = "Published Successfully" : message = "Event unpublished";
+    updatedEvent.published ? message = "Published Successfully" : message = "Event unpublished";
     createToast(message, 'success');
-  };
-
-  const hideToggle = async () => {
-    const hidden = !event.hidden;
-    const updatedEvent = await updateEvent({ ...event, hidden });
-    setEvent(updatedEvent);
-    let message = '';
-    hidden ? message = "Event Hidden" : message = "Event now visible to business partners!";
-    createToast(message, 'success');
-  };
-
-
-  const vipToggle = async () => {
-    const vip = !event.vip;
-    const updatedEvent = await updateEvent({ ...event, vip });
-    setEvent(updatedEvent);
-    let message = '';
-    vip ? message = "Event is exclusive to VIP members!" : message = "Event open for all!";
-    createToast(message, 'success');
-  };
-
-  const handleCancel = async () => {
-    try {
-      const eventStatus = "CANCELLED";
-      const updatedEvent = await updateEvent({ ...event, eventStatus });
-      setEvent(updatedEvent);
-      createToast('Event successfully cancelled', 'success');
-    } catch (e) {
-      createToast('Error cancelling the event', 'error');
-    }
   }
 
-  const handleDelete = async () => {
-    try {
-      await deleteEvent(event.eid);
-      createToast('Event successfully deleted', 'success');
-      //navigate to somewhere
-    } catch (e) {
-      createToast('Error in deleting event, please contact our help center', 'error');
+  const hideToggleWithToast = async (event) => {
+    const updatedEvent = await hideToggle(event);
+    setEvent(updatedEvent);
+    let message = '';
+    updatedEvent.hidden ? message = "Event Hidden" : message = "Event now visible to business partners!";
+    createToast(message, 'success');
+  };
+
+  const vipToggleWithToast = async (event) => {
+    const updatedEvent = await vipToggle(event);
+    setEvent(updatedEvent);
+    let message = '';
+    updatedEvent.vip ? message = "Event is exclusive to VIP members!" : message = "Event open for all!";
+    createToast(message, 'success');
+  };
+
+  const handleCancelWithToast = async (event) => {
+    const updatedEvent = await handleCancel(event);
+    if (updatedEvent) {
+      setEvent(updatedEvent);
+      createToast('Event successfully cancelled', 'success');
+    } else {
+      createToast('Error cancelling the event', 'error');
     }
   };
+
+  const handleDeleteWithToast = async (event) => {
+    const isDeleted = await handleDelete(event);
+    isDeleted ? createToast('Event successfully deleted', 'success') : createToast('Error in deleting event, please contact our help center', 'error');
+  }
+
+  // const publishToggle = async () => {
+  //   const published = !event.published;
+  //   const updatedEvent = await updateEvent({ ...event, published });
+  //   setEvent(updatedEvent);
+  //   let message = '';
+  //   published ? message = "Published Successfully" : message = "Event unpublished";
+  //   createToast(message, 'success');
+  // };
+
+  // const hideToggle = async () => {
+  //   const hidden = !event.hidden;
+  //   const updatedEvent = await updateEvent({ ...event, hidden });
+  //   setEvent(updatedEvent);
+  //   let message = '';
+  //   hidden ? message = "Event Hidden" : message = "Event now visible to business partners!";
+  //   createToast(message, 'success');
+  // };
+
+
+  // const vipToggle = async () => {
+  //   const vip = !event.vip;
+  //   const updatedEvent = await updateEvent({ ...event, vip });
+  //   setEvent(updatedEvent);
+  //   let message = '';
+  //   vip ? message = "Event is exclusive to VIP members!" : message = "Event open for all!";
+  //   createToast(message, 'success');
+  // };
+
+  // const handleCancel = async () => {
+  //   try {
+  //     const eventStatus = "CANCELLED";
+  //     const updatedEvent = await updateEvent({ ...event, eventStatus });
+  //     setEvent(updatedEvent);
+  //     createToast('Event successfully cancelled', 'success');
+  //   } catch (e) {
+  //     createToast('Error cancelling the event', 'error');
+  //   }
+  // }
+
+  // const handleDelete = async () => {
+  //   try {
+  //     await deleteEvent(event.eid);
+  //     createToast('Event successfully deleted', 'success');
+  //     //navigate to somewhere
+  //   } catch (e) {
+  //     createToast('Error in deleting event, please contact our help center', 'error');
+  //   }
+  // };
 
   return (
     <LayoutOne>
@@ -129,11 +169,11 @@ const OrganiserViewEventDetails = () => {
                 event={event}
                 prettyStartDate={prettyStartDate}
                 prettyEndDate={prettyEndDate}
-                hideToggle={hideToggle}
-                publishToggle={publishToggle}
-                vipToggle={vipToggle}
-                handleCancel={handleCancel}
-                handleDelete={handleDelete}
+                hideToggle={hideToggleWithToast}
+                publishToggle={publishToggleWithToast}
+                vipToggle={vipToggleWithToast}
+                handleCancel={handleCancelWithToast}
+                handleDelete={handleDeleteWithToast}
               />
             </Col>
           </Row>
