@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { LayoutOne } from '../../layouts';
+import OrganiserWrapper from '../../components/wrapper/OrganiserWrapper';
 import EventTabOne from '../../components/EventTabEoProfile';
 import FollowersTabEoProfile from '../../components/FollowersTabEoProfile';
 import { BreadcrumbOne } from '../../components/Breadcrumb';
@@ -132,8 +133,8 @@ const EventOrgProfile = ({ router: { query } }) => {
   const { data: eventorganiser } = useUser(paraId_);
 
   return (
-    <LayoutOne>
-      <BreadcrumbOne pageTitle="Event Organiser Profile Details">
+    <OrganiserWrapper>
+      <BreadcrumbOne pageTitle="Organiser Profile Details">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/">
@@ -141,7 +142,7 @@ const EventOrgProfile = ({ router: { query } }) => {
             </Link>
           </li>
           <li className="breadcrumb-item active">
-            Event Organiser Profile Details
+            Profile Details
           </li>
         </ol>
       </BreadcrumbOne>
@@ -162,6 +163,11 @@ const EventOrgProfile = ({ router: { query } }) => {
                 )}
           
           </Col>
+          <Col xs={1} md={1}>
+          
+          
+          </Col>
+
           <Col xs={6} md={6}>
             <h2>{eventorganiser?.name}</h2>
             <div className="product-content__rating-wrap">
@@ -179,7 +185,7 @@ const EventOrgProfile = ({ router: { query } }) => {
               <Row>
                 <Col>
                   <Row>
-                    <Col md={6} className="follow-number">
+                    <Col md={3} className="follow-number">
                       {((attendeeFollowers == undefined || partnerFollowers == undefined) && (
                         <h4 style={{ color: '#ff324d' }}> 0 </h4>
                       )) ||
@@ -247,7 +253,7 @@ const EventOrgProfile = ({ router: { query } }) => {
                   {/* {/show only if the role is organiser/} */}
                   <Nav.Link
                     eventKey="followers"
-                    style={{ display: showEoView ? 'block' : 'none' }}
+                    // style={{ display: showEoView ? 'block' : 'none' }}
                   >
                     FOLLOWERS{' '}
                     {/* {/product.ratingCount ? `(${product.ratingCount})` : ""/} */}
@@ -285,7 +291,7 @@ const EventOrgProfile = ({ router: { query } }) => {
                   ))} */}
                   <br></br>
                   <div className="product-description-tab__additional-info">
-                    {eventorganiser?.description}
+                  {eventorganiser?.description === null && "There is no description." || eventorganiser?.description}
                   </div>
                 </Tab.Pane>
                 <Tab.Pane eventKey="reviews">
@@ -438,21 +444,9 @@ const EventOrgProfile = ({ router: { query } }) => {
           </Col>
         </Row>
       </div>
-    </LayoutOne>
+    </OrganiserWrapper>
   );
 };
-/*
-const mapStateToProps = (state) => {
-  const products = state.productData;
-  return {
-    trendingProducts: getProducts(products, "electronics", "popular", 10),
-    featuredProducts: getProducts(products, "electronics", "featured", 8),
-    newProducts: getProducts(products, "electronics", "new", 8),
-    bestSellerProducts: getProducts(products, "electronics", "popular", 8),
-    saleProducts: getProducts(products, "electronics", "sale", 8),
-  };
- 
-};
- */
+
 
 export default withRouter(EventOrgProfile);

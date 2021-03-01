@@ -23,58 +23,60 @@ import Image from 'react-bootstrap/Image';
 import Badge from 'react-bootstrap/Badge';
 import PropTypes from 'prop-types';
 import { withRouter } from 'next/router';
-import getEvents from '../../lib/query/getEvents';
-import getFollowers from '../../lib/query/getFollowers';
-import getFollowing from '../../lib/query/getFollowing';
-
+// import getEvents from '../../lib/query/getEvents';
+// import getFollowers from '../../lib/query/getFollowers';
+// import getFollowing from '../../lib/query/getFollowing';
+import {getFollowers, getFollowing} from '../../lib/query/getBPFollow';
 import { BsPencilSquare } from 'react-icons/bs';
 
 
 import { FaHtml5 } from 'react-icons/fa';
 
 const PartnerProfile = ({ router: { query } }) => {
-  const { data: user } = useUser(localStorage.getItem('userId'));
-  const localuser = JSON.parse(query.localuser);
-  // if user = BP , and view his own profile, there should be an edit button and should have no follow button
-
-  const { data: partner } = useUser(localuser);
-
-  const { data: events } = getEvents(localuser);
-
-  const { data: followers } = getFollowers(localuser);
-
-  const { data: following } = getFollowing(localuser);
+  
 
   const [publicView, setPublicView] = useState();
+  
+  // const [events, setEvents] = useState([]);
+  const [followers, setFollowers] = useState([]);
+  const [following, setFollowing] = useState([]);
+
+  if(localStorage.getItem('userId') != null){
+  const localuser = JSON.parse(query.localuser); 
+  const { data: user } = useUser(localStorage.getItem('userId'));
 
 
-  useEffect(() => {
+  useEffect(async () => {
+    await getFollowers(localuser).then((data) => {
+      setFollowers(data);
+    });
+    await getFollowing(localuser).then((data) => {
+      setFollowing(data);
+    });
+
     if (user?.id !== localuser) {
       setPublicView(true);
     } else {
       setPublicView(false);
     }
-  });
+  }, []);
 
-  const getRole = (userRole) => {
-    var checkAttendee = false;
-    userRole.roles.forEach(role => {
-      console.log(role);
-      if (role.description === "Attendee") {
-        checkAttendee = true;
-      }
-
-
-    })
-    return checkAttendee
+  }else {
+    useEffect(() => {
+      setPublicView(true);
+    
+    });
   }
 
 
 
+  const localuser = JSON.parse(query.localuser);
+  const { data: partner } = useUser(localuser);
+
   return (
     <PartnerWrapper>
       {/* breadcrumb */}
-      <BreadcrumbOne pageTitle="Business Partner Profile Details">
+      <BreadcrumbOne pageTitle="Partner Profile Details">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/">
@@ -82,7 +84,7 @@ const PartnerProfile = ({ router: { query } }) => {
             </Link>
           </li>
           <li className="breadcrumb-item active">
-            Business Partner Profile Details
+            Profile Details
           </li>
         </ol>
       </BreadcrumbOne>
@@ -224,14 +226,16 @@ const PartnerProfile = ({ router: { query } }) => {
 
               <Tab.Content>
                 <Tab.Pane eventKey="Events">
-                  <div className="product-description-tab__details">
+                <br></br>
+                  <span>There are currently no events.</span>
+                  {/* <div className="product-description-tab__details">
                   
                     <EventsProfile
                       current={events}
                     //   upcoming="bestSellerProducts"
                     //  past="featuredProducts"
                     />
-                  </div>
+                  </div> */}
                 </Tab.Pane>
                 <Tab.Pane eventKey="Description">
                   <br></br>

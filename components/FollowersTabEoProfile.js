@@ -3,6 +3,7 @@ import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
 import Badge from 'react-bootstrap/Badge';
+import Link from 'next/link';
 // import EventEoProfileSliderTen from './ProductSlider/EventEoProfileSliderTen';
 
 const FollowersTabEoProfile = ({ attendees, partners }) => {
@@ -10,10 +11,11 @@ const FollowersTabEoProfile = ({ attendees, partners }) => {
     return (
       <div className="product-tab-area space-pb--r70">
         <Container>
+        
           <Tab.Container defaultActiveKey="attendees">
             <Nav
               variant="pills"
-              className="product-tab-navigation text-center space-mb--30"
+              className="product-tab-navigation text-center justify-content-center space-mb--30" 
             >
               <Nav.Item>
                 <Nav.Link eventKey="attendees">Attendee</Nav.Link>
@@ -92,16 +94,16 @@ const FollowersTabEoProfile = ({ attendees, partners }) => {
                                       class="rounded"
                                       width="100"
                                     /> */}
-                                    {partner?.profilePic == null && (<img
+                                    {partner.profilePic == null && (<img
                                       src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
                                       class="rounded"
                                       width="100"
                                     />)}
-                                    {partner?.profilePic != null && (
+                                    {partner.profilePic != null && (
                                       <Image
                                         class="rounded"
                                         width="100"
-                                        src={partner?.profilePic}
+                                        src={partner.profilePic}
                                         thumbnail
                                       />)}
                                     {' '}
@@ -109,8 +111,14 @@ const FollowersTabEoProfile = ({ attendees, partners }) => {
                                   <div class="ml-3 w-100">
                                    
                                     <h4 class="mb-0 mt-0">
-                   
-                                        {partner.name}
+                                    <Link href={{
+                                        pathname: "/partner/profile-public",
+                                        query: { localuser: JSON.stringify(partner.id) }
+                                      }}>
+                                        {partner.name} 
+                                       
+                                      </Link>
+                                       
                                     </h4>{' '} 
                                     <span>{partner.description} </span>
                                     {(partner.businessCategory != null ) && ( <span>

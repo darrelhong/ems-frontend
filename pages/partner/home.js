@@ -49,7 +49,7 @@ export default function PartnerHome() {
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/partner/home">
-              <a>Partner Home</a>
+              <a>Home</a>
             </Link>
           </li>
         </ol>
