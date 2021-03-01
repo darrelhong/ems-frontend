@@ -46,6 +46,8 @@ const EventOrgProfile = ({ router: { query } }) => {
     // }, []);
 
     useEffect(async () => {
+      console.log('user id');
+      console.log(user?.id);
       if (user?.id != null) {
         if (user?.roles[0].roleEnum === 'BIZPTNR') {
           setUserRole('BIZPTNR');
@@ -93,6 +95,9 @@ const EventOrgProfile = ({ router: { query } }) => {
           setUpcomingeventlist(events);
         });
 
+        await getPastEventsByOrganiserId(paraId_).then((events) => {
+          setPastEventlist(events);
+        });
         setShowPublicView(true);
         setShowEoView(false);
       }
