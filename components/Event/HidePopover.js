@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -6,18 +6,29 @@ import Switch from '@material-ui/core/Switch';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import IconButton from '@material-ui/core/IconButton';
 
-export default function HidePopover() {
+import { eventToHideToggle } from '../../lib/functions/eventOrganiser/eventFunctions';
+
+export default function HidePopover(event) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [hideState, setHideState] = useState({
-        ch: true,
-        bpo: false,
-        all: false,
+        hideBoth: false,
+        hideFromAttendee: false,
+        showBoth: false,
     });
 
+    useEffect(() => {
+        const eventHideToggleStatus = eventToHideToggle(event.event);
+        setHideState({
+            hideBoth: eventHideToggleStatus == 'hideBoth',
+            hideFromAttendee: eventHideToggleStatus == 'hideFromAttendee',
+            showBoth: eventHideToggleStatus == 'showBoth',
+        });
+    }, [])
+
     const defaultState = ({
-        ch: false,
-        bpo: false,
-        all: false,
+        hideBoth: false,
+        hideFromAttendee: false,
+        showBoth: false,
     });
 
     const handleClick = (event) => {
@@ -52,13 +63,13 @@ export default function HidePopover() {
             >
                 <div className="ml-4" style={{ fontSize: "11", fontWeight: "bold" }}>Toggle Visibility:</div>
                 <MenuItem>
-                    <Switch checked={hideState.ch} onClick={toggleVisibility} name="ch" />Mark as Hidden
+                    <Switch checked={hideState.hideBoth} onClick={toggleVisibility} name="hideBoth" />Hide from All
                 </MenuItem>
                 <MenuItem>
-                    <Switch checked={hideState.bpo} onClick={toggleVisibility} name="bpo" />Show to Business Partners / Hide from Attendees
+                    <Switch checked={hideState.hideFromAttendee} onClick={toggleVisibility} name="hideFromAttendee" />Show to Business Partners / Hide from Attendees
                 </MenuItem>
                 <MenuItem>
-                    <Switch checked={hideState.all} onClick={toggleVisibility} name="all" />Show to Business Partners and Attendees
+                    <Switch checked={hideState.showBoth} onClick={toggleVisibility} name="showBoth" />Show to Business Partners and Attendees
                 </MenuItem>
             </Menu>
         </div >
