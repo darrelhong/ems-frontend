@@ -26,6 +26,7 @@ import { withRouter } from 'next/router';
 import getEvents from '../../lib/query/getEvents';
 import getFollowers from '../../lib/query/getFollowers';
 import getFollowing from '../../lib/query/getFollowing';
+
 import { BsPencilSquare } from 'react-icons/bs';
 
 
