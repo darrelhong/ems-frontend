@@ -26,6 +26,8 @@ import { withRouter } from 'next/router';
 import getEvents from '../../lib/query/getEvents';
 import getFollowers from '../../lib/query/getFollowers';
 import getFollowing from '../../lib/query/getFollowing';
+import { BsPencilSquare } from 'react-icons/bs';
+
 
 import { FaHtml5 } from 'react-icons/fa';
 
@@ -44,6 +46,7 @@ const PartnerProfile = ({ router: { query } }) => {
 
   const [publicView, setPublicView] = useState();
 
+
   useEffect(() => {
     if (user?.id !== localuser) {
       setPublicView(true);
@@ -51,6 +54,21 @@ const PartnerProfile = ({ router: { query } }) => {
       setPublicView(false);
     }
   });
+
+  const getRole = (userRole) => {
+    var checkAttendee = false;
+    userRole.roles.forEach(role => {
+      console.log(role);
+      if (role.description === "Attendee") {
+        checkAttendee = true;
+      }
+
+
+    })
+    return checkAttendee
+  }
+
+
 
   return (
     <PartnerWrapper>
@@ -73,28 +91,28 @@ const PartnerProfile = ({ router: { query } }) => {
           <Container>
             <Row>
               <Col xs={6} md={4}>
-                <Image
-                  src="https://www.careerup.com/wp-content/uploads/2016/01/internship-opportunity-advertising-saga-events-1.png"
-                  roundedCircle
-                />
+                <div>
+                {partner?.profilePic == null && (<Image
+                  src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
+                  className="profile-image"
+                  thumbnail
+                />)}
+                {partner?.profilePic != null && (
+                  <Image
+                    className="profile-image"
+                    src={partner?.profilePic}
+                    thumbnail
+                  />
+                )}
+                </div>
               </Col>
               <Col xs={6} md={4}>
                 <Row>
                   <h2>{partner?.name}</h2>
                 </Row>
-                {/* <div className="product-content__rating-wrap">
-                  <div className="product-content__rating">
-                    <ProductRating ratingValue={3} />
-                    <span>({3})</span>
-                  </div>
-                </div> */}
+
                 &nbsp;
-                <div>
-                  <Row>
-                    {/* <h4 style={{marginLeft: '6%', color:'#ff324d'}}> */}
-                    {/* {followers.length}  */}
-                  </Row>
-                </div>
+
                 <div>
                   <Row>
                     <Col>
@@ -154,6 +172,19 @@ const PartnerProfile = ({ router: { query } }) => {
                     </h5>
                   </Row>
                 </div>
+
+                <div style={{ display: !publicView ? 'block' : 'none' }}>
+                  &nbsp;
+                  <Link href="/partner/profile-account">
+                    <button
+                      className="btn btn-fill-out"
+                      name="edit"
+                      value="edit"
+                    >
+                      <BsPencilSquare />
+                    </button>
+                  </Link>
+                </div>
                 <br></br>
                 {publicView && (
                   <button
@@ -193,23 +224,18 @@ const PartnerProfile = ({ router: { query } }) => {
               <Tab.Content>
                 <Tab.Pane eventKey="Events">
                   <div className="product-description-tab__details">
-                    {/* category slider 
-                      <CategorySliderTwo
-                        categorySliderData={categorySliderData}
-                      />
-                      */}
-                    {/* tab product -> refers to eletronic-two*/}
+                  
                     <EventsProfile
                       current={events}
-                      //   upcoming="bestSellerProducts"
-                      //  past="featuredProducts"
+                    //   upcoming="bestSellerProducts"
+                    //  past="featuredProducts"
                     />
                   </div>
                 </Tab.Pane>
                 <Tab.Pane eventKey="Description">
                   <br></br>
                   <div className="product-description-tab__additional-info">
-                    {partner?.description}
+                    {partner?.description === null && "There is no description." || partner?.description}
                   </div>
                 </Tab.Pane>
                 <Tab.Pane eventKey="Followers">
@@ -217,27 +243,45 @@ const PartnerProfile = ({ router: { query } }) => {
                   <div className="product-description-tab__additional-info">
                     {followers != undefined &&
                       followers.map((follower) => {
+                        
                         return (
                           // <div class="container mt-5 d-flex justify-content-left">
                           <Row md={12} className="follower-box">
                             <div class="p-3">
                               <div class="d-flex align-items-center">
                                 <div class="image">
-                                  {' '}
-                                  <img
-                                    src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=80"
+                                
+                                  {follower?.profilePic == null && (<img
+                                    src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
                                     class="rounded"
                                     width="100"
-                                  />{' '}
+                                  />)}
+                                  {follower?.profilePic != null && (<Image
+                                    class="rounded"
+                                    width="100"
+                                    src={follower?.profilePic}
+                                    thumbnail
+                                  />)}
+
+                                  {' '}
                                 </div>
                                 <div class="ml-3 w-100">
                                   <h4 class="mb-0 mt-0">{follower.name}</h4>{' '}
-                                  <span>{follower.description}</span>
-                                  <div class="button mt-2 d-flex flex-row align-items-center">
+                                    {/* { !getRole(follower) && (<div class="button mt-2 d-flex flex-row align-items-center">
                                     <button className="btn btn-sm btn-fill-out">
                                       View Profile
                                     </button>
-                                  </div>
+                                  </div>)} */}
+
+                                  {!follower.categoryPreferences.isEmpty && follower.categoryPreferences.map((eventtype)=>{return( <span>
+                        {' '}
+                        <Badge variant="primary">
+                          {eventtype}
+                        </Badge>{' '}
+                      </span>)})}
+                                    
+
+                                
                                 </div>
                               </div>
                             </div>
@@ -260,20 +304,39 @@ const PartnerProfile = ({ router: { query } }) => {
                                 <div class="d-flex align-items-center">
                                   <div class="image">
                                     {' '}
-                                    <img
+                                    {/* <img
                                       src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=80"
                                       class="rounded"
                                       width="100"
-                                    />{' '}
+                                    /> */}
+                                    {following?.profilePic == null && (<img
+                                      src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
+                                      class="rounded"
+                                      width="100"
+                                    />)}
+                                    {following?.profilePic != null && (
+                                      <Image
+                                        class="rounded"
+                                        width="100"
+                                        src={following?.profilePic}
+                                        thumbnail
+                                      />)}
+                                    {' '}
                                   </div>
                                   <div class="ml-3 w-100">
-                                    <h4 class="mb-0 mt-0">{following.name}</h4>{' '}
-                                    <span>{following.description}</span>
-                                    <div class="button mt-2 d-flex flex-row align-items-center">
-                                      <button className="btn btn-sm btn-fill-out">
-                                        View Profile
-                                      </button>
-                                    </div>
+                                   
+                                    <h4 class="mb-0 mt-0">
+                                      <Link href={{
+                                        pathname: "/organiser/profile-public",
+                                        query: { paraId: JSON.stringify(following?.id) }
+                                      }}>
+                                        {following.name}
+                                       
+                                      </Link>
+                               
+                                    
+                                    </h4>{' '}
+                                    <span>{following.description}</span> 
                                   </div>
                                 </div>
                               </div>
@@ -291,21 +354,5 @@ const PartnerProfile = ({ router: { query } }) => {
     </PartnerWrapper>
   );
 };
-/*
-const mapStateToProps = (state) => {
-  const products = state.productData;
-  return {
-              trendingProducts: getProducts(products, "electronics", "popular", 10),
-    featuredProducts: getProducts(products, "electronics", "featured", 8),
-    newProducts: getProducts(products, "electronics", "new", 8),
-    bestSellerProducts: getProducts(products, "electronics", "popular", 8),
-    saleProducts: getProducts(products, "electronics", "sale", 8),
-  };
 
-};
- */
-
-// PartnerProfile.propTypes = {
-//   id: PropTypes.long,
-// };
 export default withRouter(PartnerProfile);
