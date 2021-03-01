@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { connect } from 'react-redux';
 import { BreadcrumbOne } from '../../../components/Breadcrumb';
 import { Container, Row, Col } from 'react-bootstrap';
 import OrganiserWrapper from '../../../components/wrapper/OrganiserWrapper';
-import { getAllEventsByOrganiser } from '../../../lib/query/eventApi';
-import { LayoutOne } from '../../../layouts';
+import { getAllEventsByOrganiser, getAllEventsTest } from '../../../lib/query/eventApi';
 import { Sidebar, ShopHeader, ShopProducts } from '../../../components/Shop';
-import EventView from '../../../components/Event/EventView';
 import useUser from '../../../lib/query/useUser';
+import EventView from "../../../components/Event/EventView";
+import Paginator from 'react-hooks-paginator';
 
 function myEvents() {
   const [events, setEvents] = useState([]);
@@ -31,6 +30,8 @@ function myEvents() {
     if (user != null) {
       const getEvents = async () => {
         const data = await getAllEventsByOrganiser(user.id);
+        // const data = await getAllEventsTest();
+        console.log(data);
         setEvents(data);
       };
       getEvents();
@@ -78,12 +79,26 @@ function myEvents() {
                 />
 
                 <EventView events={events} layout={layout} />
+
+                <Paginator
+                  totalRecords={data.length}
+                  pageLimit={pageLimit}
+                  pageNeighbours={2}
+                  setOffset={setOffset}
+                  currentPage={currentPage}
+                  setCurrentPage={setCurrentPage}
+                  pageContainerClass="mb-0 mt-0"
+                  pagePrevText="«"
+                  pageNextText="»" />
+
               </Col>
             </Row>
           </Container>
         </div>
       </OrganiserWrapper>
     </div>
+
+
   );
 }
 

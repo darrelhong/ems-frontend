@@ -14,39 +14,10 @@ import PublishIcon from '@material-ui/icons/Publish';
 
 const EventCard = ({ event, publishToggle, hideToggle, vipToggle, handleCancelDelete }) => {
     const deleteCancelButton = () => {
-        if (event.eventStatus == 'CANCELLED') {
-            return (
-                <button
-                    disabled
-                    className="btn btn-fill-out btn-addtocart space-ml--10"
-                    style={{ marginLeft: 'auto', marginRight: 'auto', pointerEvents: "none" }}
-                >
-                    <i className="icon-basket-loaded" /> Cancelled Event
-                </button>
-            )
-        } else if (event.eventBoothTransactions?.length == 0 && event.ticketTransactions?.length == 0) {
-            //in this case we can delete
-            return (
-                <button
-                    onClick={() => handleCancelDelete("delete")}
-                    disabled={event.eventStatus == 'DELETED'}
-                    className="btn btn-fill-out btn-addtocart space-ml--10"
-                    style={{ marginLeft: 'auto', marginRight: 'auto' }}
-                >
-                    <i className="icon-basket-loaded" /> Delete Event
-                </button>
-            )
+        if (event.eventBoothTransactions?.length == 0 && event.ticketTransactions?.length == 0) {
+            handleCancelDelete('delete');
         } else {
-            //only can cancel, cannot delete
-            return (
-                <button
-                    onClick={() => handleCancelDelete("cancel")}
-                    className="btn btn-fill-out btn-addtocart space-ml--10"
-                    style={{ marginLeft: 'auto', marginRight: 'auto' }}
-                >
-                    <i className="icon-basket-loaded" /> Cancel Event
-                </button>
-            )
+            handleCancelDelete('cancel');
         }
     };
     return (
@@ -69,7 +40,7 @@ const EventCard = ({ event, publishToggle, hideToggle, vipToggle, handleCancelDe
                     <div className="product-list__info">
 
                         <span style={{ float: "right" }}>
-                            <IconButton aria-label="delete" color="secondary">
+                            <IconButton onClick={deleteCancelButton} aria-label="delete" color="secondary">
                                 <DeleteIcon />
                             </IconButton>
                         </span>
@@ -85,12 +56,22 @@ const EventCard = ({ event, publishToggle, hideToggle, vipToggle, handleCancelDe
 
                         <div className="d-flex justify-content-between">
                             <div className="product-price">
-                                <span className="price">${event.ticketPrice}</span>
-                                <span className="rating-num"> {`Sales End Date: ${formatDate(event.salesEndDate)}`} </span>
+                                <span className="price"> {formatDate(event.eventStartDate)}</span>
+                                {/* <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> */}
+                                {/* <span className="rating-num"> {`Sales End Date: ${formatDate(event.salesEndDate)}`} </span> */}
                             </div>
                         </div>
                         <div className="product-description">
                             {event.descriptions}
+                        </div>
+
+                        <div>
+                            <span className="price">Ticket Price: ${event.ticketPrice}</span>
+                        </div>
+
+                        <div className="d-flex justify-content-between">
+                            <span className="rating-num"> {`Sales Start Date: ${formatDate(event.salesStartDate)}`} </span>
+                            <span className="rating-num"> {`Sales End Date: ${formatDate(event.salesEndDate)}`} </span>
                         </div>
 
                         <div className="product-list__actions">
