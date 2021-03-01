@@ -13,7 +13,7 @@ function myEvents() {
   const [events, setEvents] = useState([]);
   //test
   const { data: user } = useUser(localStorage.getItem('userId'));
-  console.log('user', user);
+  // console.log('user', user);
   const [sortType, setSortType] = useState('');
   const [sortValue, setSortValue] = useState('');
   const [filterSortType, setFilterSortType] = useState('');
@@ -30,14 +30,19 @@ function myEvents() {
     if (user != null) {
       const getEvents = async () => {
         const data = await getAllEventsByOrganiser(user.id);
-        // const data = await getAllEventsTest();
-        console.log(data);
         setEvents(data);
+        // console.log(data);
       };
       getEvents();
+    }
+  }, [user]
+  );
+
+  useEffect(() => {
+    if (events != null) {
       setCurrentData(events.slice(offset, offset + pageLimit));
     }
-  }, [offset, user]);
+  }, [offset, events]);
 
   const getLayout = (layout) => {
     setLayout(layout);
@@ -78,18 +83,19 @@ function myEvents() {
                   layout={layout}
                 />
 
-                <EventView events={events} layout={layout} />
-
-                <Paginator
-                  totalRecords={data.length}
-                  pageLimit={pageLimit}
-                  pageNeighbours={2}
-                  setOffset={setOffset}
-                  currentPage={currentPage}
-                  setCurrentPage={setCurrentPage}
-                  pageContainerClass="mb-0 mt-0"
-                  pagePrevText="«"
-                  pageNextText="»" />
+                <EventView events={currentData} layout={layout} />
+                <div className="pagination pagination-style pagination-style--two justify -content-center">
+                  <Paginator
+                    totalRecords={events.length}
+                    pageLimit={pageLimit}
+                    pageNeighbours={2}
+                    setOffset={setOffset}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                    pageContainerClass="mb-0 mt-0"
+                    pagePrevText="«"
+                    pageNextText="»" />
+                </div>
 
               </Col>
             </Row>

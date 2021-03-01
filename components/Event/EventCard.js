@@ -86,7 +86,7 @@ const EventCard = ({ event, publishToggle, hideToggle, vipToggle, handleCancelDe
                                 </li>
 
                                 <li>
-                                    <IconButton aria-label="Hide" color="warning" onClick={hideToggle}>
+                                    <IconButton aria-label="Hide" color="default" onClick={hideToggle}>
                                         {event.hidden ?
                                             (<VisibilityIcon />) :
                                             (<VisibilityOffIcon />)
