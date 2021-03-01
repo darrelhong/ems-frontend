@@ -30,46 +30,46 @@ const EventDescription = ({
   const deleteCancelButton = () => {
     if (event.eventStatus == 'CANCELLED') {
       return (
-      <button
-      disabled
-      className="btn btn-fill-out btn-addtocart space-ml--10"
-      style={{ marginLeft: 'auto', marginRight: 'auto', pointerEvents:"none"}}
-    >
-      <i className="icon-basket-loaded" /> Cancelled Event
-    </button>
+        <button
+          disabled
+          className="btn btn-fill-out btn-addtocart space-ml--10"
+          style={{ marginLeft: 'auto', marginRight: 'auto', pointerEvents: "none" }}
+        >
+          <i className="icon-basket-loaded" /> Cancelled Event
+        </button>
       )
-    } else if (event.eventStatus == 'DELETED') {
+    } 
+    else if (event.eventStatus == 'DRAFT') {
       return (
         <button
-        disabled
-        className="btn btn-fill-out btn-addtocart space-ml--10"
-        style={{ marginLeft: 'auto', marginRight: 'auto', pointerEvents:"none" }}
-      >
-        <i className="icon-basket-loaded" /> Deleted Event
-      </button>
+          onClick={() => handleDelete()}
+          className="btn btn-fill-out btn-addtocart space-ml--10"
+          style={{ marginLeft: 'auto', marginRight: 'auto' }}
+        >
+          <i className="icon-basket-loaded" /> Delete Draft
+        </button>
       )
     } else if (event.eventBoothTransactions?.length == 0 && event.ticketTransactions?.length == 0) {
       //in this case we can delete
       return (
         <button
-        onClick={() => handleDelete()}
-        disabled={event.eventStatus == 'DELETED'}
-        className="btn btn-fill-out btn-addtocart space-ml--10"
-        style={{ marginLeft: 'auto', marginRight: 'auto' }}
-      >
-        <i className="icon-basket-loaded" /> Delete Event
-      </button>
+          onClick={() => handleDelete()}
+          className="btn btn-fill-out btn-addtocart space-ml--10"
+          style={{ marginLeft: 'auto', marginRight: 'auto' }}
+        >
+          <i className="icon-basket-loaded" /> Delete Event
+        </button>
       )
     } else {
       //only can cancel, cannot delete
       return (
         <button
-        onClick={() => handleCancel()}
-        className="btn btn-fill-out btn-addtocart space-ml--10"
-        style={{ marginLeft: 'auto', marginRight: 'auto' }}
-      >
-        <i className="icon-basket-loaded" /> Cancel Event
-      </button>
+          onClick={() => handleCancel()}
+          className="btn btn-fill-out btn-addtocart space-ml--10"
+          style={{ marginLeft: 'auto', marginRight: 'auto' }}
+        >
+          <i className="icon-basket-loaded" /> Cancel Event
+        </button>
       )
     }
   };
@@ -98,7 +98,7 @@ const EventDescription = ({
 
       </div>
       <div className="product-content__description space-mb--20">
-        <p>{event.descriptions}</p>
+        <p>{event.descriptions ? event.descriptions : '(Add your event description)'}</p>
       </div>
 
       <div className="product-content__sort-info space-mb--20">
@@ -114,10 +114,10 @@ const EventDescription = ({
               </li>
             )}
           <li>
-            <IoMdLocate />Event Location: {event.address}
+            <IoMdLocate />Event Location: {event.address ? event.address : '(Not set yet)'}
           </li>
           <li>
-            <IoMdCalendar />{prettyStartDate} to {prettyEndDate}
+            <IoMdCalendar />{prettyStartDate ? prettyStartDate : '(Not set yet)'} to {prettyEndDate ? prettyEndDate : '(Not set yet)'}
           </li>
           {/* {event.vip && (
             <li>

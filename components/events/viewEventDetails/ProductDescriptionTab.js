@@ -34,45 +34,49 @@ const ProductDescriptionTab = ({ event, prettySaleStartDate, prettySalesEndDate 
               <ul>
                 {event.ticketPrice && (
                   <li>
-                    <IoMdCash />Ticket Price: ${event.ticketPrice}
+                    <IoMdCash />Ticket Price: ${event.ticketPrice ? event.ticketPrice : 'Not set yet'}
                   </li>
 
                 )}
                 {event.ticketCapacity && (
                   <li>
-                    <IoMdRestaurant />Tickets sold: {event.ticketTransactions.length} / {event.ticketCapacity}
+                    <IoMdRestaurant /> {event.ticketCapacity ? `Tickets sold: ${event.ticketTransactions.length} / ${event.ticketCapacity}` : 'Ticket Capacity not set yet!'}
                   </li>
                 )}
                 <li>
-                  <IoMdCalendar />Ticket Sale Start Date: {prettySaleStartDate}
+                  <IoMdCalendar />Ticket Sale Start Date: {prettySaleStartDate ? prettySaleStartDate : 'Not set yet'}
                   {/* <IoMdLocate />{format(parseISO(event.eventStartDate), 'eee, dd MMM yy hh:mmbbb')} */}
                 </li>
                 <li>
-                  <IoMdCalendar />Ticket Sale End Date: {prettySalesEndDate}
+                  <IoMdCalendar />Ticket Sale End Date: {prettySalesEndDate ? prettySalesEndDate : 'Not set yet'}
                 </li>
               </ul>
             </div>
           </Tab.Pane>
 
           <Tab.Pane eventKey="businessPartners">
-            <div className="product-content__sort-info space-mb--20" style={{ display: "flex", justifyContent: "space-between", flexDirection: "row" }}>
-              <ul>
-                {event.eventBoothTransactions && (
+            {event.eventBoothTransactions ? (
+              <div className="product-content__sort-info space-mb--20" style={{ display: "flex", justifyContent: "space-between", flexDirection: "row" }}>
+                <ul>
                   <li>
                     <IoMdTrophy />Confirmed booths for your event: {event.eventBoothTransactions.length} / {event.boothCapacity}
                   </li>
-                )}
-              </ul>
-              <ul>
-                <button
-                  onClick={() => console.log('hello')}
-                  className="btn btn-fill-out btn-addtocart space-ml--10"
-                  style={{ textAlign: "right" }}
-                >
-                  <i className="icon-basket-loaded" /> Manage Event Booths
+                </ul>
+                <ul>
+                  <button
+                    onClick={() => console.log('hello')}
+                    className="btn btn-fill-out btn-addtocart space-ml--10"
+                    style={{ textAlign: "right" }}
+                  >
+                    <i className="icon-basket-loaded" /> Manage Event Booths
               </button>
-              </ul>
-            </div>
+                </ul>
+              </div>
+            ) : (
+                <div className="product-description-tab__details" style={{ textAlign: 'center' }}>
+                  Booth capacity not set yet !
+                </div>
+              )}
           </Tab.Pane>
 
           <Tab.Pane eventKey="reviews">
