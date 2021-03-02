@@ -68,7 +68,7 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
                         <Link
                             href={`/organiser/events/${currEvent.eid}`}>
                             <a>
-                                <img src={`https://storage.googleapis.com/ems-images/events/event-${currEvent.eid}/image-1.jpg`} alt="event_image" />
+                                <img src={currEvent.images[0]} alt="event_image" />
                             </a>
                         </Link>
                     </div>

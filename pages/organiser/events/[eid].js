@@ -171,7 +171,7 @@ const OrganiserViewEventDetails = () => {
         <Container>
           <Row>
             <Col lg={6} className="space-mb-mobile-only--40">
-              <ImageGalleryLeftThumb event={event} />
+              {event.images && <ImageGalleryLeftThumb event={event} />}
             </Col>
             <Col lg={6}>
               {/* product description */}
