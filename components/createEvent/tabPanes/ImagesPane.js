@@ -12,6 +12,8 @@ const ImagesPane = ({ register }) => {
         '../../../public/assets/images/defaultprofilepic.png'
     );
 
+    const [images,setImages] = useState();
+
     const dataSources = [
         {
           id: 1,
@@ -76,7 +78,9 @@ const ImagesPane = ({ register }) => {
         inputData.append('file',data[0].file);
         console.log('checking inpu data');
         console.log(inputData);
-        const response = await uploadEventImage(inputData);
+        setImages(URL.createObjectURL(data[0].file));
+        
+        // const response = await uploadEventImage(inputData);
 
         //multi file upload
         // let fileArray=[];
@@ -119,11 +123,12 @@ const ImagesPane = ({ register }) => {
 
                     <Row>
                         <Col className="form-group" xs={10} md={6}>
-                            <Image
-                                className="profile-image"
-                                src={profilepicUrl}
-                            // thumbnail
-                            />
+                            {/* <Image
+                                 className="profile-image"
+                                 src={profilepicUrl}
+                            
+                             /> */}
+                            <img src={images}/>
                         </Col>
                     </Row>
                     <Row>

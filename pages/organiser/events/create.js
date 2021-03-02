@@ -229,16 +229,18 @@ const CreateEvent = () => {
             </li>
             <li className="breadcrumb-item active">Create New Event</li>
           </ol>
-          <ol>
-            <button
-              type="button"
-              name="saveDraft"
-              className="btn btn-fill-out"
-              onClick={saveDraft}
-            >
-              Save as Draft
-            </button>
-          </ol>
+          {eventData?.eventStatus != 'CREATED' && (
+            <ol>
+              <button
+                type="button"
+                name="saveDraft"
+                className="btn btn-fill-out"
+                onClick={saveDraft}
+              >
+                Save as Draft
+             </button>
+            </ol>
+          )}
           <ol>
             <button
               type="submit"
@@ -300,7 +302,7 @@ const CreateEvent = () => {
                       <PublishingPane vip={vip} errors={errors} setVip={setVip} register={register} watch={watch} />
                     </Tab.Pane>
                     <Tab.Pane eventKey="images">
-                      <ImagesPane register={register}/>
+                      <ImagesPane register={register} />
                     </Tab.Pane>
                   </Tab.Content>
                 </Col>
