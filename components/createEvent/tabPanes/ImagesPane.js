@@ -80,6 +80,7 @@ const ImagesPane = ({ register }) => {
         for (i = 0; i < length; i++) {
             let inputData = new FormData();
             inputData.append('file', data[i].file);
+            inputData.append('eid', 30); //temp event ID
             console.log('checking input data');
             console.log(inputData);
 
