@@ -286,16 +286,16 @@ const CreateEvent = () => {
                       />
                     </Tab.Pane>
                     <Tab.Pane eventKey="ticketing">
-                      <TicketingPane register={register} watch={watch} eventData={eventData} setValue={setValue} errors={errors} />
+                      <TicketingPane register={register} errors={errors} watch={watch} eventData={eventData} setValue={setValue} errors={errors} />
                     </Tab.Pane>
                     <Tab.Pane eventKey="booths">
-                      <BoothPane register={register} />
+                      <BoothPane register={register} errors={errors} />
                     </Tab.Pane>
                     <Tab.Pane eventKey="location">
-                      <LocationPane register={register} watch={watch} physical={physical} setPhysical={setPhysical} />
+                      <LocationPane register={register} errors={errors} watch={watch} physical={physical} setPhysical={setPhysical} />
                     </Tab.Pane>
                     <Tab.Pane eventKey="publishingOptions">
-                      <PublishingPane vip={vip} setVip={setVip} register={register} watch={watch} />
+                      <PublishingPane vip={vip} errors={errors} setVip={setVip} register={register} watch={watch} />
                     </Tab.Pane>
                   </Tab.Content>
                 </Col>

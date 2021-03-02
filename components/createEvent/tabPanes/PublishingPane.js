@@ -2,7 +2,7 @@ import { Row, Col } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import PropTypes from 'prop-types';
 
-const PublishingPane = ({ register, watch, vip, setVip }) => {
+const PublishingPane = ({ register, watch, vip, setVip, errors }) => {
     return (
         <Card className="my-account-content__content">
             <Card.Header>
@@ -12,13 +12,15 @@ const PublishingPane = ({ register, watch, vip, setVip }) => {
                 <div className="account-details-form">
                     <Row>
                         <Col className="form-group" md={12}>
-                            <label>List as VIP Event</label>
+                            <label>List as VIP Event
+                                <span className="required">*</span>
+                            </label>
                             <div>
                                 <label style={{ marginRight: '10%' }}>
                                     <input
                                         type="radio"
                                         name="vip"
-                                        ref={register()}
+                                        ref={register({ required: true })}
                                         value={true}
                                         checked={vip}
                                         onChange={(event) => setVip(event.target.value)}
@@ -29,7 +31,7 @@ const PublishingPane = ({ register, watch, vip, setVip }) => {
                                 <label>
                                     <input
                                         type="radio"
-                                        ref={register()}
+                                        ref={register({ required: true })}
                                         name="vip"
                                         value={false}
                                         checked={vip}
@@ -40,15 +42,23 @@ const PublishingPane = ({ register, watch, vip, setVip }) => {
                                     No
                                 </label>
                             </div>
+                            {errors.vip && (
+                                <span role="alert" style={{ color: 'red' }}>
+                                    This field is required
+                                </span>
+                            )
+                            }
                         </Col>
                         <Col className="form-group" md={12}>
-                            <label>Publishing Options:</label>
+                            <label>Publishing Options:
+                                <span className="required">*</span>
+                            </label>
                             <div>
                                 <label style={{ marginRight: '10%' }}>
                                     <input
                                         type="radio"
                                         name="hideOptions"
-                                        ref={register()}
+                                        ref={register({ required: true })}
                                         value="hideBoth"
                                         style={{ marginRight: 5 }}
                                     />
@@ -58,7 +68,7 @@ const PublishingPane = ({ register, watch, vip, setVip }) => {
                                     <input
                                         type="radio"
                                         name="hideOptions"
-                                        ref={register()}
+                                        ref={register({ required: true })}
                                         value="hideFromAttendee"
                                         style={{ marginRight: 5 }}
                                     />
@@ -77,6 +87,12 @@ const PublishingPane = ({ register, watch, vip, setVip }) => {
                                     Show to both Attendees and Business Partners
                                 </label>
                             </div>
+                            {errors.hideOptions && (
+                                <span role="alert" style={{ color: 'red' }}>
+                                    This field is required
+                                </span>
+                            )
+                            }
                         </Col>
                     </Row>
                 </div>

@@ -34,7 +34,7 @@ const EventDetailsPane = ({ register, watch, errors }) => {
                 className="form-control"
                 name="name"
                 type="text"
-                ref={register()}
+                ref={register({required : true})}
                 // ref={register({ required: true })}
               />
               {errors.name && (
@@ -53,7 +53,7 @@ const EventDetailsPane = ({ register, watch, errors }) => {
                 className="form-control"
                 name="descriptions"
                 maxLength="200" //can consider playing with this if needed
-                ref={register()}
+                ref={register({required : true})}
                 // ref={register({ required: true })}
               />
               {errors.descriptions && (
@@ -64,23 +64,37 @@ const EventDetailsPane = ({ register, watch, errors }) => {
                }
             </Col>
             <Col className="form-group" md={12}>
-              <label>Start Date</label>
+              <label>Start Date<span className="required">*</span>
+              </label>
               <input
                 className="form-control"
                 name="eventStartDate"
                 type="datetime-local"
-                ref={register()}
+                ref={register({required : true})}
               />
+              {errors.eventStartDate && (
+                <span role="alert" style={{ color: 'red' }}>
+                  This field is required
+                </span>
+              )
+              }
             </Col>
 
             <Col className="form-group" md={12}>
-              <label>End Date</label>
+              <label>End Date<span className="required">*</span>
+              </label>
               <input
                 className="form-control"
                 name="eventEndDate"
                 type="datetime-local"
-                ref={register()}
+                ref={register({required : true})}
               />
+              {errors.eventEndDate && (
+                <span role="alert" style={{ color: 'red' }}>
+                  This field is required
+                </span>
+              )
+              }
               {renderDateError()}
             </Col>
           </Row>

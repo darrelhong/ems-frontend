@@ -61,7 +61,9 @@ const TicketingPane = ({ register, watch, eventData, setValue, errors }) => {
             </Col>
             <div>
               <Col className="form-group" md={12}>
-                <label>Ticket Price (SGD)</label>
+                <label>Ticket Price (SGD)
+                  {wantsTickets && (<span className="required">*</span>)}
+                </label>
                 <input
                   className="form-control"
                   name="ticketPrice"
@@ -81,6 +83,7 @@ const TicketingPane = ({ register, watch, eventData, setValue, errors }) => {
               <Col className="form-group" md={12}>
                 <label>
                   Ticket Capacity - How many tickets do you want to sell?
+                  {wantsTickets && (<span className="required">*</span>)}
                 </label>
                 <input
                   className="form-control"
@@ -98,7 +101,9 @@ const TicketingPane = ({ register, watch, eventData, setValue, errors }) => {
                 }
               </Col>
               <Col className="form-group" md={12}>
-                <label>Ticket Sales Start Date</label>
+                <label>Ticket Sales Start Date
+                {wantsTickets && (<span className="required">*</span>)}
+                </label>
                 <input
                   className="form-control"
                   name="saleStartDate"
@@ -116,7 +121,9 @@ const TicketingPane = ({ register, watch, eventData, setValue, errors }) => {
               </Col>
 
               <Col className="form-group" md={12}>
-                <label>Ticket Sales End Date</label>
+                <label>Ticket Sales End Date
+                {wantsTickets && (<span className="required">*</span>)}
+                </label>
                 <input
                   className="form-control"
                   name="salesEndDate"
