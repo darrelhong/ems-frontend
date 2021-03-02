@@ -3,8 +3,7 @@ import { Row, Col } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import PropTypes from 'prop-types';
 
-const TicketingPane = ({ register, watch, eventData, setValue, errors }) => {
-  const [wantsTickets, setWantsTickets] = useState(true);
+const TicketingPane = ({ wantsTickets, setWantsTickets, register, watch, eventData, setValue, errors }) => {
 
   useEffect(() => {
     const {

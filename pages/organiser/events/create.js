@@ -18,7 +18,7 @@ import useUser from '../../../lib/query/useUser';
 import { createEvent, getEventDetails, updateEvent } from '../../../lib/query/eventApi';
 import { htmlDateToDb, formatDates } from '../../../lib/util/functions';
 import Modal from 'react-bootstrap/Modal';
-import { getHiddenStatus } from '../../../lib/functions/eventOrganiser/eventFunctions';
+import { getHiddenStatus, processHideOptionsSave } from '../../../lib/functions/eventOrganiser/eventFunctions';
 
 const CreateEvent = () => {
   const { control, register, handleSubmit, watch, setValue, errors, getValues } = useForm();
@@ -26,9 +26,10 @@ const CreateEvent = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [eventData, setEventData] = useState(Object);
-  const [vip, setVip] = useState(false);
-  const [physical, setPhysical] = useState(false);
+  const [vip, setVip] = useState();
+  const [physical, setPhysical] = useState();
   const [hideOptions, setHideOptions] = useState('');
+  const [wantsTickets, setWantsTickets] = useState(true);
 
   const router = useRouter();
   const { eid } = router.query;
@@ -165,25 +166,25 @@ const CreateEvent = () => {
     }
   };
 
-  const processHideOptionsSave = (formData) => {
-    let published; //publish is for attendee
-    let hidden; //hide is for BP
-    if (formData.hideOptions == 'hideBoth') {
-      published = false;
-      hidden = true;
-    } else if (formData.hideOptions == 'hideFromAttendee') {
-      //hide from attendee but show to BP
-      published = false;
-      hidden = false;
-    } else if (formData.hideOptions == 'showBoth') {
-      published = true;
-      hidden = false;
-    } else {
-      published = null;
-      hidden = null;
-    }
-    return { ...formData, published, hidden }
-  };
+  // const processHideOptionsSave = (formData) => {
+  //   let published; //publish is for attendee
+  //   let hidden; //hide is for BP
+  //   if (formData.hideOptions == 'hideBoth') {
+  //     published = false;
+  //     hidden = true;
+  //   } else if (formData.hideOptions == 'hideFromAttendee') {
+  //     //hide from attendee but show to BP
+  //     published = false;
+  //     hidden = false;
+  //   } else if (formData.hideOptions == 'showBoth') {
+  //     published = true;
+  //     hidden = false;
+  //   } else {
+  //     published = null;
+  //     hidden = null;
+  //   }
+  //   return { ...formData, published, hidden }
+  // };
 
   return (
     <OrganiserWrapper title={eid ? `Updating ${eventData.name}` : "Create New Event"}>
@@ -279,6 +280,7 @@ const CreateEvent = () => {
                   activeStep={activeStep}
                   setActiveStep={setActiveStep}
                   errors={errors}
+                  wantsTickets={wantsTickets}
                 />
                 <Col lg={9} md={8}>
                   <Tab.Content>
@@ -292,7 +294,7 @@ const CreateEvent = () => {
                       />
                     </Tab.Pane>
                     <Tab.Pane eventKey="ticketing">
-                      <TicketingPane register={register} errors={errors} watch={watch} eventData={eventData} setValue={setValue} errors={errors} />
+                      <TicketingPane wantsTickets={wantsTickets} setWantsTickets={setWantsTickets} register={register} errors={errors} watch={watch} eventData={eventData} setValue={setValue} errors={errors} />
                     </Tab.Pane>
                     <Tab.Pane eventKey="booths">
                       <BoothPane register={register} errors={errors} />

@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const VerticalLinearStepper = ({ activeStep, setActiveStep, steps, errors }) => {
+const VerticalLinearStepper = ({ activeStep, setActiveStep, steps, errors, wantsTickets }) => {
   const classes = useStyles();
 
   const handleNext = () => {
@@ -61,7 +61,7 @@ const VerticalLinearStepper = ({ activeStep, setActiveStep, steps, errors }) => 
       case 1:
         return (errors.physical || errors.address);
       case 2:
-        return (errors.ticketPrice || errors.ticketCapacity || errors.saleStartDate || errors.salesEndDate);
+        return (wantsTickets && (errors.ticketPrice || errors.ticketCapacity || errors.saleStartDate || errors.salesEndDate));
       case 3:
         return errors.boothCapacity;
       case 4:
