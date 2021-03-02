@@ -14,6 +14,20 @@ import { vipToggle } from "../../lib/functions/eventOrganiser/eventFunctions";
 const EventCard = ({ event, deleteCancelButton, createToast }) => {
     const [currEvent, setCurrEvent] = useState(event);
 
+    const handleDeleteCancel = async (currEvent) => {
+        deleteCancelButton(currEvent);
+        createToast("Event Successfully cancelled", 'success');
+    }
+
+    const handleVipToggle = async (currEvent) => {
+        let message = '';
+        await vipToggle(currEvent).then((updatedEvent) => {
+            setCurrEvent(updatedEvent);
+            updatedEvent.vip ? message = "Event is exclusive to VIP members" : message = "Event open for all!";
+            createToast(message, 'success');
+        });
+    }
+
     return (
         <Fragment>
             <Col
@@ -34,7 +48,7 @@ const EventCard = ({ event, deleteCancelButton, createToast }) => {
                     <div className="product-list__info">
 
                         <span style={{ float: "right" }}>
-                            <IconButton onClick={() => { deleteCancelButton(currEvent); createToast("test"); }} aria-label="delete" color="secondary">
+                            <IconButton onClick={() => handleDeleteCancel()} aria-label="delete" color="secondary">
                                 <DeleteIcon />
                             </IconButton>
                         </span>
@@ -93,7 +107,7 @@ const EventCard = ({ event, deleteCancelButton, createToast }) => {
                                 </li>
 
                                 <li>
-                                    <IconButton aria-label="vip" color="secondary" onClick={() => vipToggle(currEvent)}>
+                                    <IconButton aria-label="vip" color="secondary" onClick={() => handleVipToggle(currEvent)}>
                                         {currEvent.vip ?
                                             (<StarIcon />) :
                                             (<StarBorderIcon />)
