@@ -1,8 +1,11 @@
+import { useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import PropTypes from 'prop-types';
 
 const LocationPane = ({ register, watch, physical, setPhysical, errors }) => {
+  // const [physical,setPhysical] = useState(true);
+
   return (
     <Card className="my-account-content__content">
       <Card.Header>
@@ -22,11 +25,7 @@ const LocationPane = ({ register, watch, physical, setPhysical, errors }) => {
                     ref={register({ required: true })}
                     value={true}
                     checked={physical}
-                    onChange={(event) => {
-                      console.log(event.target.value);
-                      if (event.target.value == 'true') setPhysical(true);
-                      // setPhysical(event.target.value);
-                    }}
+                    onChange={() => setPhysical(true)}
                     style={{ marginRight: 5 }}
                   />
                   Yes
@@ -37,12 +36,8 @@ const LocationPane = ({ register, watch, physical, setPhysical, errors }) => {
                     ref={register({ required: true })}
                     name="physical"
                     value={false}
-                    checked={physical}
-                    onChange={(event) => {
-                      // setPhysical(event.target.value);
-                      if (event.target.value == 'false') setPhysical(false);
-                    }}
-                    // onChange={(e) => console.log(e)}
+                    checked={physical == false}
+                    onChange={() => setPhysical(false)}
                     style={{ marginRight: 5 }}
                   />
                   No

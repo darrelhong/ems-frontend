@@ -16,6 +16,21 @@ const PublishingPane = ({ register, watch, vip, setVip, errors }) => {
                                 <span className="required">*</span>
                             </label>
                             <div>
+                                {/* <label>
+                                    <input
+                                    type="checkbox"
+                                    name="vip"
+                                    ref={register()}
+                                    value={true}
+                                    checked = {vip}
+                                    onChange = {(event) => {
+                                        setVip(!vip);
+                                        //console.log(event.target.value);
+                                        //setVip(event.target.value);
+                                    }}
+                                    style={{marginRight: 5}} />
+                                    List as VIP Event
+                                </label> */}
                                 <label style={{ marginRight: '10%' }}>
                                     <input
                                         type="radio"
@@ -23,7 +38,11 @@ const PublishingPane = ({ register, watch, vip, setVip, errors }) => {
                                         ref={register({ required: true })}
                                         value={true}
                                         checked={vip}
-                                        onChange={(event) => setVip(event.target.value)}
+                                        onChange={() => {
+                                            setVip(true);
+                                            // console.log(event.target.value);
+                                            // setVip(event.target.value);
+                                        }}
                                         style={{ marginRight: 5 }}
                                     />
                                     Yes
@@ -34,8 +53,12 @@ const PublishingPane = ({ register, watch, vip, setVip, errors }) => {
                                         ref={register({ required: true })}
                                         name="vip"
                                         value={false}
-                                        checked={vip}
-                                        onChange={(event) => setVip(event.target.value)}
+                                        checked={vip == false}
+                                        onChange={() => {
+                                            setVip(false);
+                                            // console.log(event.target.value);
+                                            // setVip(event.target.value);
+                                        }}
                                         // onChange={(e) => console.log(e)}
                                         style={{ marginRight: 5 }}
                                     />
@@ -104,6 +127,7 @@ const PublishingPane = ({ register, watch, vip, setVip, errors }) => {
 PublishingPane.propTypes = {
     register: PropTypes.func,
     watch: PropTypes.func,
+    vip: PropTypes.bool
 };
 
 export default PublishingPane;
