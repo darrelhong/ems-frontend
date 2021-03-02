@@ -39,7 +39,7 @@ const PartnerHeaderTop = () => {
                    <li>
                   {/* <Link href={{ pathname: "/partner/profile-public", query: { localuser: JSON.stringify(localuser) } }}> */}
                   <Link href={{
-                    pathname:"/partner/profile-public",
+                    pathname:"/partner/partner-profile",
                     query: { localuser: JSON.stringify(localuser?.id)}}}>
                     <a>
                     <AiOutlineUser />

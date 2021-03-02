@@ -112,7 +112,7 @@ const FollowersTabEoProfile = ({ attendees, partners }) => {
                                    
                                     <h4 class="mb-0 mt-0">
                                     <Link href={{
-                                        pathname: "/partner/profile-public",
+                                        pathname: "/partner/partner-profile",
                                         query: { localuser: JSON.stringify(partner.id) }
                                       }}>
                                         {partner.name} 
