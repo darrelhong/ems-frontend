@@ -235,58 +235,60 @@ const PartnerProfile = ({ localuser }) => {
                 </Tab.Pane>
                 <Tab.Pane eventKey="Followers">
                   <br></br>
-                  <div className="product-description-tab__additional-info">
-                    {followers != undefined &&
-                      followers.map((follower) => {
-                        return (
-                          // <div class="container mt-5 d-flex justify-content-left">
-                          <Row md={12} className="follower-box">
-                            <div class="p-3">
-                              <div class="d-flex align-items-center">
-                                <div class="image">
-                                  {follower?.profilePic == null && (
-                                    <img
-                                      src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
-                                      class="rounded"
-                                      width="100"
-                                    />
-                                  )}
-                                  {follower?.profilePic != null && (
-                                    <Image
-                                      class="rounded"
-                                      width="100"
-                                      src={follower?.profilePic}
-                                      thumbnail
-                                    />
-                                  )}{' '}
-                                </div>
-                                <div class="ml-3 w-100">
-                                  <h4 class="mb-0 mt-0">{follower.name}</h4>{' '}
-                                  {/* { !getRole(follower) && (<div class="button mt-2 d-flex flex-row align-items-center">
+                  <div style={{ overflowY: 'scroll' }}>
+                    <div className="product-description-tab__additional-info">
+                      {followers != undefined &&
+                        followers.map((follower) => {
+                          return (
+                            // <div class="container mt-5 d-flex justify-content-left">
+                            <Row md={12} className="follower-box">
+                              <div class="p-3">
+                                <div class="d-flex align-items-center">
+                                  <div class="image">
+                                    {follower?.profilePic == null && (
+                                      <img
+                                        src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
+                                        class="rounded"
+                                        width="100"
+                                      />
+                                    )}
+                                    {follower?.profilePic != null && (
+                                      <Image
+                                        class="rounded"
+                                        width="100"
+                                        src={follower?.profilePic}
+                                        thumbnail
+                                      />
+                                    )}{' '}
+                                  </div>
+                                  <div class="ml-3 w-100">
+                                    <h4 class="mb-0 mt-0">{follower.name}</h4>{' '}
+                                    {/* { !getRole(follower) && (<div class="button mt-2 d-flex flex-row align-items-center">
                                     <button className="btn btn-sm btn-fill-out">
                                       View Profile
                                     </button>
                                   </div>)} */}
-                                  {!follower.categoryPreferences.isEmpty &&
-                                    follower.categoryPreferences.map(
-                                      (eventtype) => {
-                                        return (
-                                          <span>
-                                            {' '}
-                                            <Badge variant="primary">
-                                              {eventtype}
-                                            </Badge>{' '}
-                                          </span>
-                                        );
-                                      }
-                                    )}
+                                    {!follower.categoryPreferences.isEmpty &&
+                                      follower.categoryPreferences.map(
+                                        (eventtype) => {
+                                          return (
+                                            <span>
+                                              {' '}
+                                              <Badge variant="primary">
+                                                {eventtype}
+                                              </Badge>{' '}
+                                            </span>
+                                          );
+                                        }
+                                      )}
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </Row>
-                          // </div>
-                        );
-                      })}
+                            </Row>
+                            // </div>
+                          );
+                        })}
+                    </div>
                   </div>
                 </Tab.Pane>
 
