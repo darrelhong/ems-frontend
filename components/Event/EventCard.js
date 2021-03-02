@@ -66,7 +66,7 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
                 <div className="product-list">
                     <div className="product-list__image">
                         <Link
-                            href={`/organiser/event/1`}>
+                            href={`/organiser/events/${currEvent.eid}`}>
                             <a>
                                 <img src={`https://storage.googleapis.com/ems-images/events/event-${currEvent.eid}/image-1.jpg`} alt="event_image" />
                             </a>
@@ -83,8 +83,7 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
 
                         <h6 className="product-title">
                             <Link
-                                // Require to be changed
-                                href={`/organiser/events/`}>
+                                href={`/organiser/events/${currEvent.eid}`}>
                                 <a>{currEvent.name}</a>
                             </Link>
                         </h6>
