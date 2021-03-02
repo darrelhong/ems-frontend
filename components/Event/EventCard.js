@@ -9,8 +9,9 @@ import StarIcon from '@material-ui/icons/Star';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import HidePopover from './HidePopover';
 import { vipToggle } from "../../lib/functions/eventOrganiser/eventFunctions";
+import { Unstable_TrapFocus } from "@material-ui/core";
 
-const EventCard = ({ event, deleteCancelButton, createToast }) => {
+const EventCard = ({ event, deleteCancelEvent, createToast }) => {
     const [currEvent, setCurrEvent] = useState(event);
 
     const [deleteModalShow, setDeleteModalShow] = useState(false);
@@ -19,8 +20,8 @@ const EventCard = ({ event, deleteCancelButton, createToast }) => {
 
 
     const handleDeleteCancel = async (currEvent) => {
-        deleteCancelButton(currEvent);
-        createToast("Event Successfully cancelled", 'success');
+        await deleteCancelEvent(currEvent);
+        closeModal();
     }
 
     const handleVipToggle = async (currEvent) => {
@@ -32,18 +33,27 @@ const EventCard = ({ event, deleteCancelButton, createToast }) => {
         });
     }
 
+    const checkCanDelete = (currEvent) => {
+        if (currEvent.eventBoothTransactions?.length == 0 && event.ticketTransactions?.length == 0) {
+            return true;
+        }
+        return false;
+    }
+
     return (
         <Fragment>
             <Modal show={deleteModalShow} onHide={closeModal} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>Delete An Event</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Test Test</Modal.Body>
+                <Modal.Body>
+                    {checkCanDelete(currEvent) ? "Are you sure you want to delete this event?" : "Unable to delete this Event. Do you want to cancel this event?"}
+                </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={closeModal}>
                         Close
                     </Button>
-                    <Button variant="primary">
+                    <Button variant="primary" onClick={() => handleDeleteCancel(currEvent)}>
                         Proceed
                     </Button>
                 </Modal.Footer>

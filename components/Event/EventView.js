@@ -6,9 +6,9 @@ import { handleCancel, handleDelete } from "../../lib/functions/eventOrganiser/e
 
 const EventView = ({ events, layout }) => {
     const [currEvents, setCurrEvents] = useState(events);
-    const [deleteModalShow, setDeleteModalShow] = useState(true);
+    // const [deleteModalShow, setDeleteModalShow] = useState(true);
 
-    const closeModal = () => setDeleteModalShow(false);
+    // const closeModal = () => setDeleteModalShow(false);
 
     // console.log("ALL EVENTS: ", events);
     // console.log("event state: ", currEvents);
@@ -25,33 +25,29 @@ const EventView = ({ events, layout }) => {
         setTimeout(() => removeToast(toastId), 3000);
     };
 
-    const deleteCancelButton = (event) => {
+    const deleteCancelEvent = async (event) => {
+        console.log("trying to delete this: ", event);
         if (event.eventBoothTransactions?.length == 0 && event.ticketTransactions?.length == 0) {
-            handleCancel(event);
+            await handleDelete(event).then(
+                (output) => {
+                    console.log(output);
+                    output ? createToast("Event has been successfully deleted", "success") :
+                        CreateToast("An Error occured while trying to delete this event", "warning");
+                });
         } else {
-            handleDelete(event);
+            await handleCancel(event).then(
+                (output) => {
+                    console.log(output);
+                    (output === false) ? CreateToast("An Error occured while trying to cancel this event", "warning") :
+                        CreateToast("Event has been successfully cancelled", "success");
+                }
+            );
         }
     };
 
     return (
 
         <div className="shop-products">
-            <Modal show={deleteModalShow} onHide={closeModal}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Modal Heading</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>Test Test</Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" >
-                        Close
-                    </Button>
-                    <Button variant="primary">
-                        Save Changes
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-
-
             <Row className={layout}>
                 {currEvents &&
                     currEvents.map((event) => {
@@ -59,7 +55,7 @@ const EventView = ({ events, layout }) => {
                             <EventCard
                                 key={event.eid}
                                 event={event}
-                                deleteCancelButton={deleteCancelButton}
+                                deleteCancelEvent={deleteCancelEvent}
                                 createToast={createToast}
                             />
                         );
