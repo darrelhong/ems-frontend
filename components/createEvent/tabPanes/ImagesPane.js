@@ -162,10 +162,23 @@ const ImagesPane = ({ register }) => {
                             dataSources={dataSources}
                         />
                     </Row>
-
+                    <Row>
+                        <div class="multiple-upload">
+                            <h3>Upload Multiple Files</h3>
+                            {/* <form id="multipleUploadForm" name="multipleUploadForm">  */}
+                             <input
+                                id="multipleFileUploadInput"
+                                type="file"
+                                name="files"
+                                class="file-input"
+                                ref={register({ required: true })}
+                                multiple/>
+                            <button type="submit" onClick={(event) => console.log(event)} class="primary submit-btn">Submit</button>
+                        </div>
+                    </Row> 
                 </div>
             </Card.Body>
-        </Card>
+        </Card >
     );
 };
 

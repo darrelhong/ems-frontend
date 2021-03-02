@@ -15,7 +15,7 @@ import PublishingPane from '../../../components/createEvent/tabPanes/PublishingP
 import ImagesPane from '../../../components/createEvent/tabPanes/ImagesPane';
 import { steps } from '../../../components/createEvent/steps';
 import useUser from '../../../lib/query/useUser';
-import { createEvent, getEventDetails, updateEvent } from '../../../lib/query/eventApi';
+import { createEvent, getEventDetails, updateEvent, uploadEventImage } from '../../../lib/query/eventApi';
 import { htmlDateToDb, formatDates } from '../../../lib/util/functions';
 import Modal from 'react-bootstrap/Modal';
 import { getHiddenStatus, processHideOptionsSave } from '../../../lib/functions/eventOrganiser/eventFunctions';
@@ -158,17 +158,41 @@ const CreateEvent = () => {
 
       //update existing event
       let updatedEvent = await updateEvent(updatedData);
+      await saveImages(updatedEvent.eid);
       console.log('printing updated event:');
       console.log(updatedEvent);
     }
     else {
       //create new event without validation
+      console.log('data before submitting');
       let eventOrganiserId = user.id;
       let updatedData = { ...formData, eventOrganiserId, eventStatus }
+      // console.log(formData);
       const response = await createEvent(updatedData);
-      console.log(response);
+      await saveImages(response.eid);
     }
   };
+
+  const saveImages = async (eventId) => {
+    const uploadedImages = getValues("files");
+    const length = uploadedImages.length ?? 0;
+    let i;
+    console.log('length found: ' + length);
+    console.log(uploadedImages.item(0));
+    for (i = 0; i < length; i++) {
+        let inputData = new FormData();
+        inputData.append('file', uploadedImages.item(i));
+        inputData.append('eid', eventId); //temp event ID
+        console.log('checking input data');
+        console.log(inputData);
+
+        // setImages(images.push(URL.createObjectURL(data[0].file)));
+        // setImages(URL.createObjectURL(data[0].file));
+        const response = await uploadEventImage(inputData);
+        console.log('response:');
+        console.log(response);
+    }
+  }
 
   // const processHideOptionsSave = (formData) => {
   //   let published; //publish is for attendee
