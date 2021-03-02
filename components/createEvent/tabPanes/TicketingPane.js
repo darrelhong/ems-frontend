@@ -3,7 +3,9 @@ import { Row, Col } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import PropTypes from 'prop-types';
 
-const TicketingPane = ({ wantsTickets, setWantsTickets, register, watch, eventData, setValue, errors }) => {
+const TicketingPane = ({ wantsTickets, setWantsTickets, formState, getValues, register, watch, eventData, setValue, errors }) => {
+
+  const [freeTickets,setFreeTickets] = useState(false);
 
   useEffect(() => {
     const {
@@ -49,6 +51,8 @@ const TicketingPane = ({ wantsTickets, setWantsTickets, register, watch, eventDa
                 checked={wantsTickets}
                 onChange={() => {
                   console.log(!wantsTickets);
+                  //if go from sell to dont sell then make it false
+                  if (wantsTickets) setFreeTickets(false);
                   setWantsTickets(!wantsTickets);
                 }}
                 style={{ marginRight: 5 }}
@@ -58,6 +62,27 @@ const TicketingPane = ({ wantsTickets, setWantsTickets, register, watch, eventDa
                 Are you selling tickets for your event?
               </label>
             </Col>
+
+            <Col className="form-group" md={12}>
+              <input
+                type="checkbox"
+                id="freeTickets"
+                name="freeTickets"
+                value={freeTickets}
+                checked={freeTickets}
+                onChange={() => {
+                  console.log(!freeTickets);
+                  setFreeTickets(!freeTickets);
+                }}
+                style={{ marginRight: 5 }}
+              />
+              <label htmlFor="freeTickets">
+                {' '}
+                Are your tickets free?
+              </label>
+            </Col>
+
+
             <div>
               <Col className="form-group" md={12}>
                 <label>Ticket Price (SGD)
@@ -68,11 +93,17 @@ const TicketingPane = ({ wantsTickets, setWantsTickets, register, watch, eventDa
                   name="ticketPrice"
                   type="number"
                   step="0.1"
-                  disabled={!wantsTickets}
+                  disabled={!wantsTickets || freeTickets}
                   // ref={register()}
-                  ref={register({ required: wantsTickets })}
+                  ref={register({ required: wantsTickets && !freeTickets })}
                 />
-                {errors.ticketPrice && wantsTickets && (
+                {/* {(watch('ticketPrice') == 0 && formState.touched?.ticketPrice) && (
+                  <span role="alert" style={{ color: 'blue' }}>
+                    Are you sure you are selling for $0?
+                  </span>
+                )
+                } */}
+                {errors.ticketPrice && wantsTickets && !freeTickets && (
                   <span role="alert" style={{ color: 'red' }}>
                     This field is required
                   </span>
@@ -89,12 +120,12 @@ const TicketingPane = ({ wantsTickets, setWantsTickets, register, watch, eventDa
                   name="ticketCapacity"
                   type="number"
                   disabled={!wantsTickets}
-                  ref={register({ required: wantsTickets })}
+                  ref={register({ required: wantsTickets, min:1 })}
                 // ref={register()}
                 />
                 {errors.ticketCapacity && wantsTickets && (
                   <span role="alert" style={{ color: 'red' }}>
-                    This field is required
+                    At least 1 ticket if you are selling!
                   </span>
                 )
                 }

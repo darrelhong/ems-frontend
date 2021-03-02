@@ -21,7 +21,7 @@ import Modal from 'react-bootstrap/Modal';
 import { getHiddenStatus, processHideOptionsSave } from '../../../lib/functions/eventOrganiser/eventFunctions';
 
 const CreateEvent = () => {
-  const { control, register, handleSubmit, watch, setValue, errors, getValues } = useForm();
+  const { control, register, handleSubmit, watch, setValue, errors, getValues, formState } = useForm();
   const { data: user } = useUser(localStorage.getItem('userId'));
   const [activeStep, setActiveStep] = useState(0);
   const [showModal, setShowModal] = useState(false);
@@ -294,7 +294,7 @@ const CreateEvent = () => {
                       />
                     </Tab.Pane>
                     <Tab.Pane eventKey="ticketing">
-                      <TicketingPane wantsTickets={wantsTickets} setWantsTickets={setWantsTickets} register={register} errors={errors} watch={watch} eventData={eventData} setValue={setValue} errors={errors} />
+                      <TicketingPane formState={formState} wantsTickets={wantsTickets} getValues={getValues} setWantsTickets={setWantsTickets} register={register} errors={errors} watch={watch} eventData={eventData} setValue={setValue} errors={errors} />
                     </Tab.Pane>
                     <Tab.Pane eventKey="booths">
                       <BoothPane register={register} errors={errors} />
