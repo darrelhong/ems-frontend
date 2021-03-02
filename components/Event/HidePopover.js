@@ -8,7 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 
 import { eventToHideToggle, updateEventHidden } from '../../lib/functions/eventOrganiser/eventFunctions';
 
-export default function HidePopover(eventData) {
+export default function HidePopover({ event }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [hideState, setHideState] = useState({
         hideBoth: false,
@@ -17,7 +17,7 @@ export default function HidePopover(eventData) {
     });
 
     useEffect(() => {
-        const eventHideToggleStatus = eventToHideToggle(eventData.event);
+        const eventHideToggleStatus = eventToHideToggle(event);
         setHideState({
             hideBoth: eventHideToggleStatus == 'hideBoth',
             hideFromAttendee: eventHideToggleStatus == 'hideFromAttendee',
@@ -31,23 +31,23 @@ export default function HidePopover(eventData) {
         showBoth: false,
     });
 
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
+    const handleClick = (e) => {
+        setAnchorEl(e.currentTarget);
     };
 
     const handleClose = () => {
         setTimeout(() => { setAnchorEl(null) }, 200)
     };
 
-    const toggleVisibility = async (event) => {
-        const newHideState = { ...defaultState, [event.target.name]: event.target.checked };
+    const toggleVisibility = async (e) => {
+        const newHideState = { ...defaultState, [e.target.name]: e.target.checked };
         setHideState(newHideState);
         // can use the console loggin to check if properly updated
-        console.log('event before:');
-        console.log(eventData);
-        const newEvent = await updateEventHidden(eventData.event, newHideState);
-        console.log('event after:');
-        console.log(newEvent);
+        // console.log('event before:');
+        // console.log(event);
+        const newEvent = await updateEventHidden(event, newHideState);
+        // console.log('event after:');
+        // console.log(newEvent);
         handleClose();
     };
 
