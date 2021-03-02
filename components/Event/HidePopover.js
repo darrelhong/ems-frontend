@@ -43,11 +43,11 @@ export default function HidePopover(eventData) {
         const newHideState = { ...defaultState, [event.target.name]: event.target.checked };
         setHideState(newHideState);
         // can use the console loggin to check if properly updated
-        // console.log('event before:');
-        // console.log(eventData.event);
-        const newEvent = await updateEventHidden(eventData.event,newHideState);
-        // console.log('event after:');
-        // console.log(newEvent);
+        console.log('event before:');
+        console.log(eventData);
+        const newEvent = await updateEventHidden(eventData.event, newHideState);
+        console.log('event after:');
+        console.log(newEvent);
         handleClose();
     };
 

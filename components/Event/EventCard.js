@@ -95,7 +95,7 @@ const EventCard = ({ event, publishToggle, hideToggle, vipToggle, handleCancelDe
                                 </li> */}
 
                                 <li>
-                                    <HidePopover event = {event}/>
+                                    <HidePopover event={event} />
                                 </li>
 
                                 <li>

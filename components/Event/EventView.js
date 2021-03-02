@@ -15,7 +15,6 @@ const EventView = ({ events, layout }) => {
     const publishToggle = async () => {
         const published = !event.published;
         const updatedEvent = await updateEvent({ ...event, published });
-        setEvent(updatedEvent);
         let message = '';
         published ? message = "Published Successfully" : message = "Event unpublished";
         createToast(message, 'success');
@@ -24,7 +23,6 @@ const EventView = ({ events, layout }) => {
     const hideToggle = async () => {
         const hidden = !event.hidden;
         const updatedEvent = await updateEvent({ ...event, hidden });
-        setEvent(updatedEvent);
         let message = '';
         hidden ? message = "Event Hidden" : message = "Event now visible to business partners!";
         createToast(message, 'success');
@@ -34,7 +32,6 @@ const EventView = ({ events, layout }) => {
     const vipToggle = async () => {
         const vip = !event.vip;
         const updatedEvent = await updateEvent({ ...event, vip });
-        setEvent(updatedEvent);
         let message = '';
         vip ? message = "Event is exclusive to VIP members!" : message = "Event open for all!";
         createToast(message, 'success');
@@ -45,7 +42,6 @@ const EventView = ({ events, layout }) => {
             const eventStatus = "CANCELLED";
             try {
                 const updatedEvent = await updateEvent({ ...event, eventStatus });
-                setEvent(updatedEvent);
                 createToast('Event successfully cancelled', 'success');
             } catch (e) {
                 createToast('Error cancelling the event', 'error');
@@ -54,7 +50,6 @@ const EventView = ({ events, layout }) => {
             const eventStatus = "DELETED";
             try {
                 const updatedEvent = await updateEvent({ ...event, eventStatus });
-                setEvent(updatedEvent);
                 createToast('Event successfully deleted!', 'success');
             } catch (e) {
                 createToast('Error deleting the event', 'error');
