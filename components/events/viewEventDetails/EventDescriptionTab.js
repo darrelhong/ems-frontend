@@ -9,6 +9,46 @@ import {
 import { format, parseISO } from 'date-fns';
 
 const EventDescriptionTab = ({ event, prettySaleStartDate, prettySalesEndDate }) => {
+
+  const renderBoothSection = () => {
+    if (event.boothCapacity == 0) {
+      //booth capacity not set or left at 0, just say no booth capacity was set, zero button
+      return (
+        <div className="product-description-tab__details" style={{ textAlign: 'center' }}>
+          Booth capacity not set yet !
+        </div>
+      );
+    } else if (event.eventStatus == 'DRAFT') {
+      //this case we just show the booth capacity set, no transaction count or button
+      return (
+        <li>
+          <IoMdRestaurant /> {event.ticketCapacity ? `Tickets sold: ${event.ticketTransactions.length} / ${event.ticketCapacity}` : 'Ticket Capacity not set yet!'}
+        </li>
+      );
+    } else {
+      //render the normal page with count, capacity and button
+      return (
+        <div className="product-content__sort-info space-mb--20" style={{ display: "flex", justifyContent: "space-between", flexDirection: "row" }}>
+          <ul>
+            <li>
+              <IoMdTrophy />Confirmed booths for your event: {event.eventBoothTransactions?.length} / {event.boothCapacity}
+            </li>
+          </ul>
+          <ul>
+            <button
+              onClick={() => console.log('hello')}
+              className="btn btn-fill-out btn-addtocart space-ml--10"
+              style={{ textAlign: "right" }}
+            >
+              <i className="icon-basket-loaded" /> Manage Event Booths
+              </button>
+          </ul>
+        </div>
+      )
+
+    }
+  };
+
   return (
     <div className="product-description-tab space-pt--r100 space-pb--50">
       <Tab.Container defaultActiveKey="ticketing">
@@ -55,7 +95,8 @@ const EventDescriptionTab = ({ event, prettySaleStartDate, prettySalesEndDate })
           </Tab.Pane>
 
           <Tab.Pane eventKey="businessPartners">
-            {event.eventBoothTransactions ? (
+            {renderBoothSection()}
+            {/* {event.eventBoothTransactions ? (
               <div className="product-content__sort-info space-mb--20" style={{ display: "flex", justifyContent: "space-between", flexDirection: "row" }}>
                 <ul>
                   <li>
@@ -76,7 +117,7 @@ const EventDescriptionTab = ({ event, prettySaleStartDate, prettySalesEndDate })
                 <div className="product-description-tab__details" style={{ textAlign: 'center' }}>
                   Booth capacity not set yet !
                 </div>
-              )}
+              )} */}
           </Tab.Pane>
 
           <Tab.Pane eventKey="reviews">

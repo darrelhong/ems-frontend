@@ -3,19 +3,22 @@ import { Row, Col } from "react-bootstrap";
 import Swiper from "react-id-swiper";
 import { LightgalleryProvider, LightgalleryItem } from "react-lightgallery";
 
-const ImageGalleryLeftThumb = ({event}) => {
+const ImageGalleryLeftThumb = ({ event }) => {
   const [gallerySwiper, getGallerySwiper] = useState(null);
   const [thumbnailSwiper, getThumbnailSwiper] = useState(null);
-  // const [imageArray,setImageArray] = useState([
-    // 'https://www.petguide.com/wp-content/uploads/2017/02/Online-Resources-for-Cat-Owners.jpg',
-    // 'https://cnet1.cbsistatic.com/img/EfkEAmi5LXXE-cFxIV0n1kFk11o=/940x0/2019/06/06/b11ccfac-685e-4cb2-a239-b09af07b1baf/toriflynn2.jpg',
-    // 'https://newsroom.unsw.edu.au/sites/default/files/thumbnails/image/3500028168_c85a03256a_b_2.jpg',
-    // 'https://blog.ssa.gov/wp-content/uploads/2015/10/Retire-Online-Its-The-Cats-Meow.jpg'
-    // "https://storage.googleapis.com/ems-images/events/event-18/image-1.jpg",
+  const [imageArray, setImageArray] = useState([
+    'https://www.petguide.com/wp-content/uploads/2017/02/Online-Resources-for-Cat-Owners.jpg',
+    'https://cnet1.cbsistatic.com/img/EfkEAmi5LXXE-cFxIV0n1kFk11o=/940x0/2019/06/06/b11ccfac-685e-4cb2-a239-b09af07b1baf/toriflynn2.jpg',
+    'https://newsroom.unsw.edu.au/sites/default/files/thumbnails/image/3500028168_c85a03256a_b_2.jpg',
+    'https://blog.ssa.gov/wp-content/uploads/2015/10/Retire-Online-Its-The-Cats-Meow.jpg',
+    "https://storage.googleapis.com/ems-images/events/event-18/image-1.jpg",
     // "https://storage.googleapis.com/ems-images/events/event-18/image-2.jpg",
-    // "https://storage.googleapis.com/ems-images/events/event-18/image-3.jpg"
-  // ]);
-  const imageArray = event.images;
+    // "https://storage.googleapis.com/ems-images/events/event-18/image-3.jpg",
+    // "https://storage.googleapis.com/ems-images/events/event-6/image-1.jpg",
+    // "https://storage.googleapis.com/ems-images/events/event-6/image-2.jpg",
+    // "https://storage.googleapis.com/ems-images/events/event-6/image-3.jpg"
+  ]);
+  // const imageArray = event.images;
 
   // useEffect(()=>{
   //   console.log('checking event images');

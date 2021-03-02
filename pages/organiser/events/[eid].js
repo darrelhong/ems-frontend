@@ -85,7 +85,12 @@ const OrganiserViewEventDetails = () => {
 
   const handleDeleteWithToast = async (event) => {
     const isDeleted = await handleDelete(event);
-    isDeleted ? createToast('Event successfully deleted', 'success') : createToast('Error in deleting event, please contact our help center', 'error');
+    if (isDeleted){
+      createToast('Event successfully deleted', 'success');
+      //navigate to somewhere else
+    } else {
+      createToast('Error in deleting event, please contact our help center', 'error');
+    } 
   }
 
   // const publishToggle = async () => {
