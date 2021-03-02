@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { BreadcrumbOne } from '../components/Breadcrumb';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 import { ProductRating } from '../components/Product';
 import EventsProfile from '../components/ProductTab/EventsProfile';
 import PartnerWrapper from '../components/wrapper/PartnerWrapper';
@@ -25,49 +25,41 @@ import { withRouter } from 'next/router';
 // import getEvents from '../../lib/query/getEvents';
 // import getFollowers from '../../lib/query/getFollowers';
 // import getFollowing from '../../lib/query/getFollowing';
-import {getFollowers, getFollowing} from '../lib/query/getBPFollow';
+import { getFollowers, getFollowing } from '../lib/query/getBPFollow';
 import { BsPencilSquare } from 'react-icons/bs';
-
 
 import { FaHtml5 } from 'react-icons/fa';
 
-const PartnerProfile = (localuser) => {
-  
-    console.log(localuser);
+const PartnerProfile = ({ localuser }) => {
+  console.log(localuser);
   const [publicView, setPublicView] = useState();
-  
+
   // const [events, setEvents] = useState([]);
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
 
-  if(localStorage.getItem('userId') != null){
-  const { data: user } = useUser(localStorage.getItem('userId'));
+  if (localStorage.getItem('userId') != null) {
+    const { data: user } = useUser(localStorage.getItem('userId'));
 
+    useEffect(async () => {
+      await getFollowers(localuser).then((data) => {
+        setFollowers(data);
+      });
+      await getFollowing(localuser).then((data) => {
+        setFollowing(data);
+      });
 
-  useEffect(async () => {
-    await getFollowers(localuser).then((data) => {
-      setFollowers(data);
-    });
-    await getFollowing(localuser).then((data) => {
-      setFollowing(data);
-    });
-
-    if (user?.id !== localuser) {
-      setPublicView(true);
-    } else {
-      setPublicView(false);
-    }
-  }, []);
-
-  }else {
+      if (user?.id !== localuser) {
+        setPublicView(true);
+      } else {
+        setPublicView(false);
+      }
+    }, []);
+  } else {
     useEffect(() => {
       setPublicView(true);
-    
     });
   }
-
-
-
 
   const { data: partner } = useUser(localuser);
 
@@ -81,39 +73,37 @@ const PartnerProfile = (localuser) => {
               <a>Home</a>
             </Link>
           </li>
-          <li className="breadcrumb-item active">
-            Profile Details
-          </li>
+          <li className="breadcrumb-item active">Profile Details</li>
         </ol>
       </BreadcrumbOne>
 
       <div className="my-account-content space-pt--r100 space-pb--r100">
         <div>
           <Container>
-            <Row>
-              <Col xs={6} md={4}>
+            <Row md={{ span: 8 }} className="justify-content-md-center row">
+              <Col xs={4} md={4}>
                 <div>
-                {partner?.profilePic == null && (<Image
-                  src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
-                  className="profile-image"
-                  thumbnail
-                />)}
-                {partner?.profilePic != null && (
-                  <Image
-                    className="profile-image"
-                    src={partner?.profilePic}
-                    thumbnail
-                  />
-                )}
+                  {partner?.profilePic == null && (
+                    <Image
+                      src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
+                      className="profile-image"
+                      thumbnail
+                    />
+                  )}
+                  {partner?.profilePic != null && (
+                    <Image
+                      className="profile-image"
+                      src={partner?.profilePic}
+                      thumbnail
+                    />
+                  )}
                 </div>
               </Col>
-              <Col xs={6} md={4}>
+              <Col xs={4} md={4}>
                 <Row>
                   <h2>{partner?.name}</h2>
                 </Row>
-
                 &nbsp;
-
                 <div>
                   <Row>
                     <Col>
@@ -157,6 +147,19 @@ const PartnerProfile = (localuser) => {
                         <h5>Following</h5>
                       </Row>
                     </Col>
+                    <div style={{ display: !publicView ? 'block' : 'none' }}>
+                      &nbsp;
+                      <Link href="/partner/profile-account">
+                        <button
+                          className="btn btn-fill-out btn-sm"
+                          name="edit"
+                          value="edit"
+                          size="sm"
+                        >
+                          <BsPencilSquare />
+                        </button>
+                      </Link>
+                    </div>
                   </Row>
                 </div>
                 <div>
@@ -172,19 +175,6 @@ const PartnerProfile = (localuser) => {
                       </span>
                     </h5>
                   </Row>
-                </div>
-
-                <div style={{ display: !publicView ? 'block' : 'none' }}>
-                  &nbsp;
-                  <Link href="/partner/profile-account">
-                    <button
-                      className="btn btn-fill-out"
-                      name="edit"
-                      value="edit"
-                    >
-                      <BsPencilSquare />
-                    </button>
-                  </Link>
                 </div>
                 <br></br>
                 {publicView && (
@@ -224,7 +214,7 @@ const PartnerProfile = (localuser) => {
 
               <Tab.Content>
                 <Tab.Pane eventKey="Events">
-                <br></br>
+                  <br></br>
                   <span>There are currently no events.</span>
                   {/* <div className="product-description-tab__details">
                   
@@ -238,7 +228,9 @@ const PartnerProfile = (localuser) => {
                 <Tab.Pane eventKey="Description">
                   <br></br>
                   <div className="product-description-tab__additional-info">
-                    {partner?.description === null && "There is no description." || partner?.description}
+                    {(partner?.description === null &&
+                      'There is no description.') ||
+                      partner?.description}
                   </div>
                 </Tab.Pane>
                 <Tab.Pane eventKey="Followers">
@@ -246,45 +238,48 @@ const PartnerProfile = (localuser) => {
                   <div className="product-description-tab__additional-info">
                     {followers != undefined &&
                       followers.map((follower) => {
-                        
                         return (
                           // <div class="container mt-5 d-flex justify-content-left">
                           <Row md={12} className="follower-box">
                             <div class="p-3">
                               <div class="d-flex align-items-center">
                                 <div class="image">
-                                
-                                  {follower?.profilePic == null && (<img
-                                    src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
-                                    class="rounded"
-                                    width="100"
-                                  />)}
-                                  {follower?.profilePic != null && (<Image
-                                    class="rounded"
-                                    width="100"
-                                    src={follower?.profilePic}
-                                    thumbnail
-                                  />)}
-
-                                  {' '}
+                                  {follower?.profilePic == null && (
+                                    <img
+                                      src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
+                                      class="rounded"
+                                      width="100"
+                                    />
+                                  )}
+                                  {follower?.profilePic != null && (
+                                    <Image
+                                      class="rounded"
+                                      width="100"
+                                      src={follower?.profilePic}
+                                      thumbnail
+                                    />
+                                  )}{' '}
                                 </div>
                                 <div class="ml-3 w-100">
                                   <h4 class="mb-0 mt-0">{follower.name}</h4>{' '}
-                                    {/* { !getRole(follower) && (<div class="button mt-2 d-flex flex-row align-items-center">
+                                  {/* { !getRole(follower) && (<div class="button mt-2 d-flex flex-row align-items-center">
                                     <button className="btn btn-sm btn-fill-out">
                                       View Profile
                                     </button>
                                   </div>)} */}
-
-                                  {!follower.categoryPreferences.isEmpty && follower.categoryPreferences.map((eventtype)=>{return( <span>
-                        {' '}
-                        <Badge variant="primary">
-                          {eventtype}
-                        </Badge>{' '}
-                      </span>)})}
-                                    
-
-                                
+                                  {!follower.categoryPreferences.isEmpty &&
+                                    follower.categoryPreferences.map(
+                                      (eventtype) => {
+                                        return (
+                                          <span>
+                                            {' '}
+                                            <Badge variant="primary">
+                                              {eventtype}
+                                            </Badge>{' '}
+                                          </span>
+                                        );
+                                      }
+                                    )}
                                 </div>
                               </div>
                             </div>
@@ -312,34 +307,38 @@ const PartnerProfile = (localuser) => {
                                       class="rounded"
                                       width="100"
                                     /> */}
-                                    {following?.profilePic == null && (<img
-                                      src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
-                                      class="rounded"
-                                      width="100"
-                                    />)}
+                                    {following?.profilePic == null && (
+                                      <img
+                                        src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
+                                        class="rounded"
+                                        width="100"
+                                      />
+                                    )}
                                     {following?.profilePic != null && (
                                       <Image
                                         class="rounded"
                                         width="100"
                                         src={following?.profilePic}
                                         thumbnail
-                                      />)}
-                                    {' '}
+                                      />
+                                    )}{' '}
                                   </div>
                                   <div class="ml-3 w-100">
-                                   
                                     <h4 class="mb-0 mt-0">
-                                      <Link href={{
-                                        pathname: "/organiser/profile-public",
-                                        query: { paraId: JSON.stringify(following?.id) }
-                                      }}>
+                                      <Link
+                                        href={{
+                                          pathname: '/organiser/profile-public',
+                                          query: {
+                                            paraId: JSON.stringify(
+                                              following?.id
+                                            ),
+                                          },
+                                        }}
+                                      >
                                         {following.name}
-                                       
                                       </Link>
-                               
-                                    
                                     </h4>{' '}
-                                    <span>{following.description}</span> 
+                                    <span>{following.description}</span>
                                   </div>
                                 </div>
                               </div>
@@ -354,7 +353,7 @@ const PartnerProfile = (localuser) => {
           </Col>
         </Row>
       </div>
-   </div>
+    </div>
   );
 };
 

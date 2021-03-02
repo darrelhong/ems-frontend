@@ -35,7 +35,7 @@ const Profile = ({ router: { query } }) => {
     }
   }, []);
 
-  // const localuser = JSON.parse(query.localuser);
+  const localuser = JSON.parse(query.localuser);
   return (
     <div>
       {role === 'Partner' && (
