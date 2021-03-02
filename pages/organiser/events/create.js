@@ -122,19 +122,23 @@ const CreateEvent = () => {
   };
 
   const onSubmit = async (data) => {
-    const formattedData = formatDates(data);
+    const dateProcessedData = formatDates(data);
+    const formattedData = processHideOptionsSave(dateProcessedData);
     let updatedData;
+    let eventStatus;
+
     console.log('submitting');
     if (eid) {
       //concat data first, already have EID inside and all
       //have to update to upcoming now, instead of draft
-      const eventStatus = "UPCOMING";
+      eventStatus = "UPCOMING";
       updatedData = { ...eventData, ...formattedData, eventStatus };
       console.log('created event from draft:');
     } else {
       //new event, we need to add in the EO ID.
       let eventOrganiserId = user.id;
-      updatedData = { ...formattedData, eventOrganiserId };
+      eventStatus = "CREATED";
+      updatedData = { ...formattedData, eventOrganiserId, eventStatus };
       console.log('creating brand new event:');
     }
     const response = await createEvent(updatedData);

@@ -3,19 +3,19 @@ import Card from 'react-bootstrap/Card';
 import PropTypes from 'prop-types';
 
 const EventDetailsPane = ({ register, watch, errors }) => {
-  const renderDateError = () => {
-    if (
-      watch('eventStartDate') &&
-      watch('eventEndDate') &&
-      watch('eventEndDate') < watch('eventStartDate')
-    ) {
-      return (
-        <span style={{ color: 'red' }}>
-          End date must be the same as or after start date!
-        </span>
-      );
-    }
-  };
+  // const renderDateError = () => {
+  //   if (
+  //     watch('eventStartDate') &&
+  //     watch('eventEndDate') &&
+  //     watch('eventEndDate') < watch('eventStartDate')
+  //   ) {
+  //     return (
+  //       <span style={{ color: 'red' }}>
+  //         End date must be the same as or after start date!
+  //       </span>
+  //     );
+  //   }
+  // };
 
   return (
     <Card className="my-account-content__content">
@@ -87,15 +87,15 @@ const EventDetailsPane = ({ register, watch, errors }) => {
                 className="form-control"
                 name="eventEndDate"
                 type="datetime-local"
-                ref={register({required : true})}
+                ref={register({required : true, validate: value => value > watch('eventStartDate') })}
               />
               {errors.eventEndDate && (
                 <span role="alert" style={{ color: 'red' }}>
-                  This field is required
+                  This field is required, end date must also be later than start date!
                 </span>
               )
               }
-              {renderDateError()}
+              {/* {renderDateError()} */}
             </Col>
           </Row>
         </div>

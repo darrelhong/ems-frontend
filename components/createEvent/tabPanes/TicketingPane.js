@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 const TicketingPane = ({ wantsTickets, setWantsTickets, formState, getValues, register, watch, eventData, setValue, errors }) => {
 
-  const [freeTickets,setFreeTickets] = useState(false);
+  const [freeTickets, setFreeTickets] = useState(false);
 
   useEffect(() => {
     const {
@@ -19,20 +19,6 @@ const TicketingPane = ({ wantsTickets, setWantsTickets, formState, getValues, re
     setValue('saleStartDate', saleStartDate);
     setValue('salesEndDate', salesEndDate);
   }, [wantsTickets]);
-
-  const renderDateError = () => {
-    if (
-      watch('saleStartDate') &&
-      watch('salesEndDate') &&
-      watch('salesEndDate') < watch('saleStartDate')
-    ) {
-      return (
-        <span style={{ color: 'red' }}>
-          End date must be the same as or after start date!
-        </span>
-      );
-    }
-  };
 
   return (
     <Card className="my-account-content__content">
@@ -120,7 +106,7 @@ const TicketingPane = ({ wantsTickets, setWantsTickets, formState, getValues, re
                   name="ticketCapacity"
                   type="number"
                   disabled={!wantsTickets}
-                  ref={register({ required: wantsTickets, min:1 })}
+                  ref={register({ required: wantsTickets, min: 1 })}
                 // ref={register()}
                 />
                 {errors.ticketCapacity && wantsTickets && (
@@ -159,16 +145,16 @@ const TicketingPane = ({ wantsTickets, setWantsTickets, formState, getValues, re
                   name="salesEndDate"
                   type="datetime-local"
                   disabled={!wantsTickets}
-                  ref={register({ required: wantsTickets })}
+                  // ref={register({ required: wantsTickets })}
+                  ref={register({ required: wantsTickets, validate: value => value > watch('saleStartDate') })}
                 // ref={register()}
                 />
                 {errors.salesEndDate && wantsTickets && (
                   <span role="alert" style={{ color: 'red' }}>
-                    This field is required
+                    This field is required, end date must also be later than start date!
                   </span>
                 )
                 }
-                {renderDateError()}
               </Col>
             </div>
           </Row>
