@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { useQuery } from 'react-query';
 import { Alert, Col, Container, Row, Spinner } from 'react-bootstrap';
+import { format, parseISO } from 'date-fns';
 
 import api from '../../../lib/ApiClient';
 
@@ -54,7 +55,55 @@ export default function PartnerEventPage({ id }) {
               <Col lg={6}>
                 <EventImageGallery images={data.images} />
               </Col>
-              <Col lg={6}></Col>
+              <Col lg={6}>
+                <div className="pt-3">
+                  <h3>{data.name}</h3>
+                  <p>organised by: {data.eventOrganiser.name}</p>
+
+                  <h5 className="text-dark">Location: {data.address}</h5>
+
+                  <br></br>
+
+                  <p className="text-dark font-weight-bold d-inline">
+                    Starts:{' '}
+                  </p>
+                  <p className="text-default d-inline">
+                    {format(
+                      parseISO(data.eventStartDate),
+                      'eee, dd MMM yy hh:mmbbb'
+                    )}
+                  </p>
+                  <br></br>
+                  <p className="text-dark font-weight-bold d-inline">Ends: </p>
+                  <p className="text-default d-inline">
+                    {format(
+                      parseISO(data.eventEndDate),
+                      'eee, dd MMM yy hh:mmbbb'
+                    )}
+                  </p>
+
+                  <br></br>
+                  <br></br>
+
+                  <p className="text-dark d-inline">Sales period: </p>
+                  <p className="text-default d-inline">
+                    {`${format(
+                      parseISO(data.eventStartDate),
+                      'dd MMM yy hh:mmbbb'
+                    )} to ${format(
+                      parseISO(data.eventStartDate),
+                      'dd MMM yy hh:mmbbb'
+                    )}`}
+                  </p>
+
+                  <br></br>
+                  <br></br>
+
+                  <p>{data.descriptions}</p>
+
+                  <button className="btn btn-fill-out">Register Now</button>
+                </div>
+              </Col>
             </Row>
           </Container>
         </>
