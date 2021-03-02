@@ -15,9 +15,9 @@ import {
   Button,
   Modal,
   Image,
-  Alert
+  Alert,
 } from 'react-bootstrap';
-import {FaRegEdit } from 'react-icons/fa';
+import { FaRegEdit } from 'react-icons/fa';
 import PartnerWrapper from '../../components/wrapper/PartnerWrapper';
 import { BsFillInfoCircleFill } from 'react-icons/bs';
 import { AiOutlineNotification } from 'react-icons/ai';
@@ -34,12 +34,9 @@ import { useMutation, useQueryClient } from 'react-query';
 import api from '../../lib/ApiClient';
 import { logout } from '../../lib/auth';
 
-
-const MyAccount = () => {
-
-  const [showSuccessMsg, setShowSuccessMsg] = useState(false);
-  const [showFailedMsg, setShowFailedMsg] = useState(false);
-  const [businessCategory, setBusinessCategory] = useState("");
+export default function MyAccount() {
+  const [setShowFailedMsg] = useState(false);
+  const [businessCategory, setBusinessCategory] = useState('');
 
   const [fileUpload, setfileUpload] = useState(false);
   const [file, setFile] = useState('uploadfile');
@@ -53,48 +50,42 @@ const MyAccount = () => {
   );
   // display the inital profile picture
   //console.log(user?.profilePic);
-  if (user?.profilePic != null) {
-    useEffect(() => {
-      setProfilepicUrl(user?.profilePic);
-    }, [user?.profilePic]);
-  } else {
-    useEffect(() => {
+  useEffect(() => {
+    if (user?.profilePic) {
+      setProfilepicUrl(user.profilePic);
+    } else {
       setProfilepicUrl('../../assets/images/defaultprofilepic.png');
-    }, ['../../assets/images/defaultprofilepic.png']);
-  }
-
+    }
+  }, [user.profilePic]);
 
   useEffect(() => {
     setFileName('Choose image');
-  }, ['Choose image']);
+  }, []);
 
   //for modal of disabling account
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
   const queryClient = useQueryClient();
   // success message for update account details
-  const [accSuccess, setAccSuccess] = useState("");
-  //update account details alert 
+  const [accSuccess, setAccSuccess] = useState('');
+  //update account details alert
   const [showAccSaved, setAccSaved] = useState(false);
-
 
   //check if pw and confirm pw is the same before updating pw
   const [confirmPW, setConfirmPW] = useState(false);
   //success/error message for pw update
-  const [pwAlert, setPWAlert] = useState("");
+  const [pwAlert, setPWAlert] = useState('');
   //show pw error alert
   const [showPW, setShowPW] = useState(false);
- const [showFileSizeError, setShowFileSizeError] = useState(false);
-  
-   const renderTooltip = (props) => (
-     <Tooltip id="button-tooltip" {...props}>
-       Support png and jpg image format.
-     </Tooltip>
-   );
+  const [showFileSizeError, setShowFileSizeError] = useState(false);
+
+  const renderTooltip = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      Support png and jpg image format.
+    </Tooltip>
+  );
 
   const mutateAccStatus = useMutation(
-
     (data) => api.post('/api/user/update-account-status', data),
     {
       onSuccess: () => {
@@ -113,45 +104,39 @@ const MyAccount = () => {
     logout({ redirectTo: '/organiser/login' });
   };
 
-
-  const { register, handleSubmit, errors } = useForm({
+  const { register, handleSubmit } = useForm({
     defaultValues: { name: user?.name },
   });
 
-
-  const mutateAccDetail = useMutation(
-
-    (data) => api.post('/api/attendee/update', data) 
-    .then(response => {
-      setAccSaved(true);
-     setAccSuccess(" Account details saved successfully! ");
-     //document.getElementById("account-details-form").reset();
-
-    }).catch(error =>{
-      console.log(error)
-
-    }
-
-    )
+  const mutateAccDetail = useMutation((data) =>
+    api
+      .post('/api/attendee/update', data)
+      .then(() => {
+        setAccSaved(true);
+        setAccSuccess(' Account details saved successfully! ');
+        //document.getElementById("account-details-form").reset();
+      })
+      .catch((error) => {
+        console.log(error);
+      })
   );
 
-    const onChangeBizCategory = async (event) => {
-    console.log("change" + event.target.value);
-    setBusinessCategory(event.target.value)
+  const onChangeBizCategory = async (event) => {
+    console.log('change' + event.target.value);
+    setBusinessCategory(event.target.value);
   };
-const onSubmit = async (data) => {
+  const onSubmit = async (data) => {
     console.log('data acc' + data['name']);
-    if(businessCategory != ""){
-        mutateAccDetail.mutate({
-            address: data.address,
-            description: data.description,
-            name: data.name,
-            phonenumber: data.phonenumber,
-            id: user?.id,
-            businessCategory : businessCategory,
-          });
-    }
-    else if (
+    if (businessCategory != '') {
+      mutateAccDetail.mutate({
+        address: data.address,
+        description: data.description,
+        name: data.name,
+        phonenumber: data.phonenumber,
+        id: user?.id,
+        businessCategory: businessCategory,
+      });
+    } else if (
       user?.address != data.address ||
       user?.description != data.description ||
       user?.name != data.name ||
@@ -164,7 +149,7 @@ const onSubmit = async (data) => {
         name: data.name,
         phonenumber: data.phonenumber,
         id: user?.id,
-        businessCategory : user?.businessCategory,
+        businessCategory: user?.businessCategory,
       });
     }
     if (fileUpload == true) {
@@ -178,18 +163,18 @@ const onSubmit = async (data) => {
     console.log(e);
     console.log(e.target.files[0].name);
     console.log(e.target.files[0].size);
-      console.log(e.target.files[0].size/1000000);
-  
-      if(e.target.files[0].size/1000000 > 1 || e.target.files[0].name == ''){
-            console.log("exceeded");
-            setShowFileSizeError(true);
-            document.getElementById('custom-file').value = '';
-          }else{
-            setShowFileSizeError(false);
-             setFile(e.target.files[0]);
-             setfileUpload(true);
-             setFileName(e.target.files[0].name);
-          }
+    console.log(e.target.files[0].size / 1000000);
+
+    if (e.target.files[0].size / 1000000 > 1 || e.target.files[0].name == '') {
+      console.log('exceeded');
+      setShowFileSizeError(true);
+      document.getElementById('custom-file').value = '';
+    } else {
+      setShowFileSizeError(false);
+      setFile(e.target.files[0]);
+      setfileUpload(true);
+      setFileName(e.target.files[0].name);
+    }
   };
   const submitFile = async () => {
     const data = new FormData();
@@ -220,55 +205,43 @@ const onSubmit = async (data) => {
   };
 
   const mutatePassword = useMutation((data) => {
- 
-    api.post('/api/user/change-password', data,{
-     
-    }).then(response =>{
-          console.log(response.data['message']);
-      if(response.data["message"] == "Success"){
-        
-        document.getElementById('change-password-form').reset();
-        setPWAlert('Your password has been updated successfully!');
-  
-        setConfirmPW(true);
-        setShowPW(true);
-      
-      }else if(response.data["message"] == "Old password is incorrect."){
-      
-      setPWAlert('Old password is incorrect.');
-      setShowPW(true);
-      }
-    }).catch(error =>{
-      console.log(error)
-     
-      setPWAlert("An error has occured.");
-      setShowPW(true);
-    })
-    
-  });
-
-  const mutateNotificationSetting = useMutation((data) =>
     api
-      .post('/api/user/update-notifcation-setting', data)
+      .post('/api/user/change-password', data, {})
       .then((response) => {
-       
+        console.log(response.data['message']);
+        if (response.data['message'] == 'Success') {
+          document.getElementById('change-password-form').reset();
+          setPWAlert('Your password has been updated successfully!');
+
+          setConfirmPW(true);
+          setShowPW(true);
+        } else if (response.data['message'] == 'Old password is incorrect.') {
+          setPWAlert('Old password is incorrect.');
+          setShowPW(true);
+        }
       })
       .catch((error) => {
-       
-      })
-  );
+        console.log(error);
 
+        setPWAlert('An error has occured.');
+        setShowPW(true);
+      });
+  });
 
   const onSubmitPassword = async (data) => {
-    console.log("onsubmit password1")
-    setPWAlert("");
+    console.log('onsubmit password1');
+    setPWAlert('');
     setShowPW(false);
     setConfirmPW(false);
 
-    var result = validatePassword(data.oldPassword, data.newPassword, data.confirmPassword);  
-    console.log("result");
+    var result = validatePassword(
+      data.oldPassword,
+      data.newPassword,
+      data.confirmPassword
+    );
+    console.log('result');
     console.log(result);
-if(result == "correct") {
+    if (result == 'correct') {
       //setConfirmPW(true);
       //setShowPW(false);
       console.log('onsubmit password2');
@@ -276,35 +249,32 @@ if(result == "correct") {
         oldPassword: data.oldPassword,
         newPassword: data.newPassword,
       });
-    }else if(result =="same as current"){
-      setPWAlert("Your current password is the same as the new password.");
+    } else if (result == 'same as current') {
+      setPWAlert('Your current password is the same as the new password.');
       setShowPW(true);
-    }else if(result == "incorrect"){
-      setPWAlert("Passwords do not match.");
+    } else if (result == 'incorrect') {
+      setPWAlert('Passwords do not match.');
       setShowPW(true);
     }
   };
 
-  const onSubmitNotification = async (data) =>{
-
-  }
-
-  function validatePassword (oldPassword, newPassword, confirmPassword)  {
-
-   if(JSON.stringify(newPassword) === JSON.stringify(confirmPassword) && (JSON.stringify(oldPassword) != JSON.stringify(newPassword))){
-       // setConfirmPW(true);
-       return "correct";
-    } else if(JSON.stringify(oldPassword) === JSON.stringify(newPassword)){
-       return "same as current";
-        // setPWAlert("Your current password is the same as the new password.");
-        //setShowPW(true);
-    }else{
-       return "incorrect";
+  function validatePassword(oldPassword, newPassword, confirmPassword) {
+    if (
+      JSON.stringify(newPassword) === JSON.stringify(confirmPassword) &&
+      JSON.stringify(oldPassword) != JSON.stringify(newPassword)
+    ) {
+      // setConfirmPW(true);
+      return 'correct';
+    } else if (JSON.stringify(oldPassword) === JSON.stringify(newPassword)) {
+      return 'same as current';
+      // setPWAlert("Your current password is the same as the new password.");
+      //setShowPW(true);
+    } else {
+      return 'incorrect';
       //setPWAlert("Passwords do not match.");
-        //setShowPW(true);
-      }
+      //setShowPW(true);
+    }
   }
-
 
   return (
     // <LayoutOne>
@@ -355,7 +325,7 @@ if(result == "correct") {
                   </Nav.Item>
                   <Nav.Item>
                     <Nav.Link eventKey="notification">
-                    <AiOutlineNotification /> Notification
+                      <AiOutlineNotification /> Notification
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
@@ -384,7 +354,7 @@ if(result == "correct") {
                       </Card.Body>
                     </Card>
                   </Tab.Pane>
-<Tab.Pane eventKey="address">
+                  <Tab.Pane eventKey="address">
                     <Card className="my-account-content__content">
                       <Card.Header>
                         <h3>Billing Address</h3>
@@ -467,7 +437,7 @@ if(result == "correct") {
                                   >
                                     {fileName}
                                   </Form.Label>
-{/* <br></br>
+                                  {/* <br></br>
                                   <div style={{display: (showUploadBtn?'block':'none')}}>
                                   <button
                                     className="btn btn-fill-out"
@@ -533,43 +503,79 @@ if(result == "correct") {
                                 </Form.Group>
                               </Col>
                               <Col className="form-group" md={12}>
-                              {/* <FormControl isInvalid={errors.businesscategory}> */}
-                             <Form.Label htmlFor="businesscategory">Business Category <span className="required"></span></Form.Label>
-{/* {(user?.businessCategory !== "" )&& ( 
+                                {/* <FormControl isInvalid={errors.businesscategory}> */}
+                                <Form.Label htmlFor="businesscategory">
+                                  Business Category{' '}
+                                  <span className="required"></span>
+                                </Form.Label>
+                                {/* {(user?.businessCategory !== "" )&& ( 
                              <p> Current Business Category : { user?.businessCategory}</p> 
                            )} */}
-                           
-                                  
-                            <div className="form-group">
-                                
-                                <Form.Control  name="businesscategory" defaultValue={user?.businessCategory} as="select" onChange={onChangeBizCategory.bind(this)}>
-                                {(user?.businessCategory == "" || user?.businessCategory == null  )&& ( 
-                            <option value= "" >Select</option>
-                           )}
-                            {(user?.businessCategory !== "" )&& ( 
-                            <option value= {user?.businessCategory} >{user?.businessCategory}</option>
-                           )}
-                                
-                                <option value="Automotive">Automotive</option>
-                                <option value="Business Support & Supplies">Business Support & Supplies</option>
-                                <option value="Computers & Electronics">Computers & Electronics</option>
-                                <option value="Construction & Contractor">Construction & Contractor</option>
-                                <option value="Education">Education</option>
-                                <option value="Entertainment">Entertainment</option>
-                                <option value="Food & Dining">Food & Dining</option>
-                                <option value="Health & Medicine">Health & Medicine</option>
-                                <option value="Home & Garden">Home & Garden</option>
-                                <option value="Legal & Financial">Legal & Financial </option>
-                                <option value="Manufacturing, Wholesale, Distribution">Manufacturing, Wholesale, Distribution</option>
-                                <option value="Merchants (Retail)">Merchants (Retail)</option>
-                                <option value="Personal Care & Services">Personal Care & Services</option>
-                                <option value="Real Estate">Real Estate</option>
-                                <option value="Travel & Transportation">Travel & Transportation</option>
-                                </Form.Control>
 
-                            </div>
-                                  </Col>
-<Col className="form-group" md={12}>
+                                <div className="form-group">
+                                  <Form.Control
+                                    name="businesscategory"
+                                    defaultValue={user?.businessCategory}
+                                    as="select"
+                                    onChange={onChangeBizCategory.bind(this)}
+                                  >
+                                    {(user?.businessCategory == '' ||
+                                      user?.businessCategory == null) && (
+                                      <option value="">Select</option>
+                                    )}
+                                    {user?.businessCategory !== '' && (
+                                      <option value={user?.businessCategory}>
+                                        {user?.businessCategory}
+                                      </option>
+                                    )}
+
+                                    <option value="Automotive">
+                                      Automotive
+                                    </option>
+                                    <option value="Business Support & Supplies">
+                                      Business Support & Supplies
+                                    </option>
+                                    <option value="Computers & Electronics">
+                                      Computers & Electronics
+                                    </option>
+                                    <option value="Construction & Contractor">
+                                      Construction & Contractor
+                                    </option>
+                                    <option value="Education">Education</option>
+                                    <option value="Entertainment">
+                                      Entertainment
+                                    </option>
+                                    <option value="Food & Dining">
+                                      Food & Dining
+                                    </option>
+                                    <option value="Health & Medicine">
+                                      Health & Medicine
+                                    </option>
+                                    <option value="Home & Garden">
+                                      Home & Garden
+                                    </option>
+                                    <option value="Legal & Financial">
+                                      Legal & Financial{' '}
+                                    </option>
+                                    <option value="Manufacturing, Wholesale, Distribution">
+                                      Manufacturing, Wholesale, Distribution
+                                    </option>
+                                    <option value="Merchants (Retail)">
+                                      Merchants (Retail)
+                                    </option>
+                                    <option value="Personal Care & Services">
+                                      Personal Care & Services
+                                    </option>
+                                    <option value="Real Estate">
+                                      Real Estate
+                                    </option>
+                                    <option value="Travel & Transportation">
+                                      Travel & Transportation
+                                    </option>
+                                  </Form.Control>
+                                </div>
+                              </Col>
+                              <Col className="form-group" md={12}>
                                 <label>
                                   Email Address{' '}
                                   <span className="required"></span>
@@ -627,7 +633,7 @@ if(result == "correct") {
                                 </button>
                               </Col>
                             </Row>
-<div>&nbsp;</div>
+                            <div>&nbsp;</div>
                             <Alert
                               show={showAccSaved}
                               variant="success"
@@ -754,7 +760,7 @@ if(result == "correct") {
                                 Save
                               </button>
                             </Col>
-<div>&nbsp;</div>
+                            <div>&nbsp;</div>
                             <Alert
                               show={confirmPW}
                               variant="success"
@@ -812,4 +818,4 @@ if(result == "correct") {
     </PartnerWrapper>
     // </LayoutOne>
   );
-};
+}
