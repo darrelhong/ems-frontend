@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Fragment } from "react";
 import Link from "next/link";
 import { Col } from "react-bootstrap";
@@ -8,19 +8,12 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import StarIcon from '@material-ui/icons/Star';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
-// import VisibilityIcon from '@material-ui/icons/Visibility';
-// import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
-// import PublishIcon from '@material-ui/icons/Publish';
 import HidePopover from './HidePopover';
+import { vipToggle } from "../../lib/functions/eventOrganiser/eventFunctions";
 
-const EventCard = ({ event, publishToggle, hideToggle, vipToggle, handleCancelDelete }) => {
-    const deleteCancelButton = () => {
-        if (event.eventBoothTransactions?.length == 0 && event.ticketTransactions?.length == 0) {
-            handleCancelDelete('delete');
-        } else {
-            handleCancelDelete('cancel');
-        }
-    };
+const EventCard = ({ event, deleteCancelButton }) => {
+    const [currEvent, setCurrEvent] = useState(event);
+
     return (
         <Fragment>
             <Col
@@ -33,7 +26,7 @@ const EventCard = ({ event, publishToggle, hideToggle, vipToggle, handleCancelDe
                         <Link
                             href={`/organiser/event/1`}>
                             <a>
-                                <img src={`https://storage.googleapis.com/ems-images/events/event-${event.eid}/image-1.jpg`} alt="event_image" />
+                                <img src={`https://storage.googleapis.com/ems-images/events/event-${currEvent.eid}/image-1.jpg`} alt="event_image" />
                             </a>
                         </Link>
                     </div>
@@ -41,7 +34,7 @@ const EventCard = ({ event, publishToggle, hideToggle, vipToggle, handleCancelDe
                     <div className="product-list__info">
 
                         <span style={{ float: "right" }}>
-                            <IconButton onClick={deleteCancelButton} aria-label="delete" color="secondary">
+                            <IconButton onClick={() => deleteCancelButton(currEvent)} aria-label="delete" color="secondary">
                                 <DeleteIcon />
                             </IconButton>
                         </span>
@@ -50,28 +43,28 @@ const EventCard = ({ event, publishToggle, hideToggle, vipToggle, handleCancelDe
                             <Link
                                 // Require to be changed
                                 href={`/organiser/events/`}>
-                                <a>{event.name}</a>
+                                <a>{currEvent.name}</a>
                             </Link>
                         </h6>
 
 
                         <div className="d-flex justify-content-between">
                             <div className="product-price">
-                                <span className="price"> {formatDate(event.eventStartDate, "eee, dd MMM yyyy, hh:mmbbb")}</span>
+                                <span className="price"> {formatDate(currEvent.eventStartDate, "eee, dd MMM yyyy, hh:mmbbb")}</span>
                                 {/* <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> */}
                                 {/* <span className="rating-num"> {`Sales End Date: ${formatDate(event.salesEndDate)}`} </span> */}
                             </div>
                         </div>
                         <div className="product-description">
-                            {event.descriptions}
+                            {currEvent.descriptions}
                         </div>
 
                         <div>
-                            <span className="price">Ticket Price: ${event.ticketPrice}</span>
+                            <span className="price">Ticket Price: ${currEvent.ticketPrice}</span>
                         </div>
 
                         <div className="d-flex justify-content-between">
-                            <span className="rating-num"> {`Date: ${formatDate(event.saleStartDate)} ~ ${formatDate(event.salesEndDate)}`} </span>
+                            <span className="rating-num"> {`Date: ${formatDate(currEvent.saleStartDate)} ~ ${formatDate(currEvent.salesEndDate)}`} </span>
                         </div>
 
                         <div className="product-list__actions">
@@ -94,13 +87,14 @@ const EventCard = ({ event, publishToggle, hideToggle, vipToggle, handleCancelDe
                                     </IconButton>
                                 </li> */}
 
+                                {/* Handles logic for toggling visibility of events for Business Partners and Attendees */}
                                 <li>
-                                    <HidePopover event={event} />
+                                    <HidePopover event={currEvent} />
                                 </li>
 
                                 <li>
-                                    <IconButton aria-label="vip" color="secondary" onClick={vipToggle}>
-                                        {event.vip ?
+                                    <IconButton aria-label="vip" color="secondary" onClick={() => vipToggle(currEvent)}>
+                                        {currEvent.vip ?
                                             (<StarIcon />) :
                                             (<StarBorderIcon />)
                                         }

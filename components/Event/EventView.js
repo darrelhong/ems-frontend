@@ -1,76 +1,46 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import EventCard from './EventCard';
 import { Row } from "react-bootstrap";
 import { useToasts } from 'react-toast-notifications';
-import { updateEvent } from '../../lib/query/eventApi';
+import { handleCancel, handleDelete } from "../../lib/functions/eventOrganiser/eventFunctions";
 
 const EventView = ({ events, layout }) => {
-    const { addToast, removeToast } = useToasts();
+    const [currEvents, setCurrEvents] = useState(events);
 
-    const createToast = (message, appearanceStyle) => {
-        const toastId = addToast(message, { appearance: appearanceStyle });
-        setTimeout(() => removeToast(toastId), 3000);
-    };
+    // console.log("ALL EVENTS: ", events);
+    // console.log("event state: ", currEvents);
 
-    const publishToggle = async () => {
-        const published = !event.published;
-        const updatedEvent = await updateEvent({ ...event, published });
-        let message = '';
-        published ? message = "Published Successfully" : message = "Event unpublished";
-        createToast(message, 'success');
-    };
+    useEffect(() => {
+        if (events) {
+            setCurrEvents(events);
+        }
+    })
+    // const { addToast, removeToast } = useToasts();
 
-    const hideToggle = async () => {
-        const hidden = !event.hidden;
-        const updatedEvent = await updateEvent({ ...event, hidden });
-        let message = '';
-        hidden ? message = "Event Hidden" : message = "Event now visible to business partners!";
-        createToast(message, 'success');
-    };
+    // const createToast = (message, appearanceStyle) => {
+    //     const toastId = addToast(message, { appearance: appearanceStyle });
+    //     setTimeout(() => removeToast(toastId), 3000);
+    // };
 
-
-    const vipToggle = async () => {
-        const vip = !event.vip;
-        const updatedEvent = await updateEvent({ ...event, vip });
-        let message = '';
-        vip ? message = "Event is exclusive to VIP members!" : message = "Event open for all!";
-        createToast(message, 'success');
-    };
-
-    const handleCancelDelete = async (operation) => {
-        if (operation == 'cancel') {
-            const eventStatus = "CANCELLED";
-            try {
-                const updatedEvent = await updateEvent({ ...event, eventStatus });
-                createToast('Event successfully cancelled', 'success');
-            } catch (e) {
-                createToast('Error cancelling the event', 'error');
-            }
+    const deleteCancelButton = (event) => {
+        if (event.eventBoothTransactions?.length == 0 && event.ticketTransactions?.length == 0) {
+            handleCancel(event);
         } else {
-            const eventStatus = "DELETED";
-            try {
-                const updatedEvent = await updateEvent({ ...event, eventStatus });
-                createToast('Event successfully deleted!', 'success');
-            } catch (e) {
-                createToast('Error deleting the event', 'error');
-            }
+            handleDelete(event);
         }
     };
-
 
     return (
         <div className="shop-products">
             <Row className={layout}>
-                {events &&
-                    events.map((event) => {
+                {currEvents &&
+                    currEvents.map((event) => {
                         return (
                             <EventCard
                                 key={event.eid}
                                 event={event}
-                                publishToggle={publishToggle}
-                                hideToggle={hideToggle}
-                                vipToggle={vipToggle}
-                                handleCancelDelete={handleCancelDelete} />
+                                deleteCancelButton={deleteCancelButton}
+                            />
                         );
                     })
                 }
