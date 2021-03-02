@@ -15,12 +15,12 @@ const EventView = ({ events, layout }) => {
             setCurrEvents(events);
         }
     })
-    // const { addToast, removeToast } = useToasts();
+    const { addToast, removeToast } = useToasts();
 
-    // const createToast = (message, appearanceStyle) => {
-    //     const toastId = addToast(message, { appearance: appearanceStyle });
-    //     setTimeout(() => removeToast(toastId), 3000);
-    // };
+    const createToast = (message, appearanceStyle) => {
+        const toastId = addToast(message, { appearance: appearanceStyle });
+        setTimeout(() => removeToast(toastId), 3000);
+    };
 
     const deleteCancelButton = (event) => {
         if (event.eventBoothTransactions?.length == 0 && event.ticketTransactions?.length == 0) {
@@ -40,6 +40,7 @@ const EventView = ({ events, layout }) => {
                                 key={event.eid}
                                 event={event}
                                 deleteCancelButton={deleteCancelButton}
+                                createToast={createToast}
                             />
                         );
                     })

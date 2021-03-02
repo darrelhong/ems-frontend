@@ -11,7 +11,7 @@ import StarBorderIcon from '@material-ui/icons/StarBorder';
 import HidePopover from './HidePopover';
 import { vipToggle } from "../../lib/functions/eventOrganiser/eventFunctions";
 
-const EventCard = ({ event, deleteCancelButton }) => {
+const EventCard = ({ event, deleteCancelButton, createToast }) => {
     const [currEvent, setCurrEvent] = useState(event);
 
     return (
@@ -34,7 +34,7 @@ const EventCard = ({ event, deleteCancelButton }) => {
                     <div className="product-list__info">
 
                         <span style={{ float: "right" }}>
-                            <IconButton onClick={() => deleteCancelButton(currEvent)} aria-label="delete" color="secondary">
+                            <IconButton onClick={() => { deleteCancelButton(currEvent); createToast("test"); }} aria-label="delete" color="secondary">
                                 <DeleteIcon />
                             </IconButton>
                         </span>
