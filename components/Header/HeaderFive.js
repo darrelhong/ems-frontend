@@ -55,12 +55,12 @@ const HeaderFive = ({ cartItems, wishlistItems, navPositionClass }) => {
               <a className="navbar-brand pt-0 pb-0">
                 <img
                   className="logo-light"
-                  src="/assets/images/eventStop.png"
+                  src="/assets/images/event-stop-logo.png"
                   alt="logo"
                 />
                 <img
                   className="logo-dark"
-                  src="/assets/images/eventStop.png"
+                  src="/assets/images/event-stop-logo.png"
                   alt="logo"
                 />
               </a>
