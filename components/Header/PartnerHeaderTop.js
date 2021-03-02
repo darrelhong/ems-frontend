@@ -1,10 +1,12 @@
-import Link from "next/link";
+import Link from 'next/link';
 import { Container, Row, Col } from 'react-bootstrap';
-import { AiOutlineUser, AiOutlineSetting, AiOutlineLogout, AiOutlineNotification } from 'react-icons/ai';
 import {
-
-  IoIosHeartEmpty
-} from "react-icons/io";
+  AiOutlineUser,
+  AiOutlineSetting,
+  AiOutlineLogout,
+  AiOutlineNotification,
+} from 'react-icons/ai';
+import { IoIosHeartEmpty } from 'react-icons/io';
 import useUser from '../../lib/query/useUser';
 import { logout } from '../../lib/auth';
 
@@ -18,16 +20,15 @@ const PartnerHeaderTop = () => {
           <Col>
             <div className="text-right">
               <ul className="header-list">
-              <li>
+                <li>
                   <Link href="/other/wishlist">
                     <a>
-                    <AiOutlineNotification />
+                      <AiOutlineNotification />
                       <span>Notification</span>
                     </a>
                   </Link>
                 </li>
-              <li>
-             
+                <li>
                   <Link href="/other/wishlist">
                     <a>
                       <IoIosHeartEmpty />
@@ -35,14 +36,17 @@ const PartnerHeaderTop = () => {
                     </a>
                   </Link>
                 </li>
-                  {/* <Link href={`/partner/profile-public?id=${JSON.stringify(localuser?.id)}`}> */}
-                   <li>
+                {/* <Link href={`/partner/profile-public?id=${JSON.stringify(localuser?.id)}`}> */}
+                <li>
                   {/* <Link href={{ pathname: "/partner/profile-public", query: { localuser: JSON.stringify(localuser) } }}> */}
-                  <Link href={{
-                    pathname:"/partner/partner-profile",
-                    query: { localuser: JSON.stringify(localuser?.id)}}}>
+                  <Link
+                    href={{
+                      pathname: '/partner/partner-profile',
+                      query: { localuser: JSON.stringify(localuser?.id) },
+                    }}
+                  >
                     <a>
-                    <AiOutlineUser />
+                      <AiOutlineUser />
                       <span>Profile</span>
                     </a>
                   </Link>
@@ -57,7 +61,7 @@ const PartnerHeaderTop = () => {
                 </li>
                 <li>
                   <a onClick={() => logout({ redirectTo: '/partner/login' })}>
-                    <AiOutlineLogout/>
+                    <AiOutlineLogout />
                     <span>Logout</span>
                   </a>
                 </li>

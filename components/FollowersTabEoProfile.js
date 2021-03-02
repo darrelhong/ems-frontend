@@ -120,7 +120,7 @@ const FollowersTabEoProfile = ({ attendees, partners }) => {
                                       </Link>
                                        
                                     </h4>{' '} 
-                                    <span>{partner.description} </span>
+                                    {/* <span>{partner.description} </span> */}
                                     {(partner.businessCategory != null ) && ( <span>
                         {' '}
                         <Badge variant="primary">
