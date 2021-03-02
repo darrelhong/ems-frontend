@@ -1,26 +1,34 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { Container, Row } from 'react-bootstrap';
+import button from 'react-bootstrap/Button'
+import { LayoutOne } from '../../layouts';
+import GuestWrapper from '../../components/wrapper/GuestWrapper';
 
 import HomeHeaderTop from '../../components/Header/HomeHeaderTop';
 
 export default function RegisterVerified() {
   return (
     <>
+    <GuestWrapper> 
       <Head>
         <title>Email verification succesful!</title>
       </Head>
-
-      <HomeHeaderTop />
-
+      
+          
       <Container>
         <Row className="justify-content-center">
           <p className="mt-5">
-            <strong>
+            {/* <strong> */}
               Email succesfully verified. Please proceed to login.
-            </strong>
+            {/* </strong> */}
           </p>
-          <Row>
+          </Row>
+           &nbsp;
+            <br></br>
+          <Row className="justify-content-center">
+           
+            <div>
             <Link href="/organiser/login">
               <button className="btn btn-sm btn-fill-out">
                 Event Organiser Login
@@ -31,9 +39,16 @@ export default function RegisterVerified() {
                 Business Partner Login
               </button>
             </Link>
+            <Link href="/attendee/login">
+              <button className="btn btn-sm btn-fill-out">
+                Attendee Login
+              </button>
+            </Link>
+            </div>
           </Row>
-        </Row>
+        
       </Container>
+    </GuestWrapper>
     </>
   );
 }

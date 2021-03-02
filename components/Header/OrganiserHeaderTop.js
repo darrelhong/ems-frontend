@@ -1,11 +1,10 @@
 import Link from 'next/link';
 import { Container, Row, Col } from 'react-bootstrap';
-import {
-  AiOutlineUser,
-  AiOutlineSetting,
-  AiOutlineLogout,
-} from 'react-icons/ai';
+
+import { AiOutlineUser, AiOutlineSetting, AiOutlineLogout, AiOutlineNotification } from 'react-icons/ai';
+
 import useUser from '../../lib/query/useUser';
+
 import { logout } from '../../lib/auth';
 
 
@@ -25,7 +24,17 @@ const OrganiserHeaderTop = () => {
                     pathname:"/organiser/profile-public",
                     query: { paraId: JSON.stringify(user?.id)}}}>
                     <a>
-                      <AiOutlineUser />
+                    <AiOutlineNotification />
+                      <span>Notification</span>
+                    </a>
+                  </Link>
+                </li>
+                <li>
+                <Link href={{
+                    pathname:"/organiser/organiser-profile",
+                    query: { paraId: JSON.stringify(user?.id)}}}>
+                    <a>
+                    <AiOutlineUser />
                       <span>Profile</span>
                     </a>
                   </Link>

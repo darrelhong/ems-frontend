@@ -113,6 +113,7 @@ import PageContainer from '../../components/PageContainer';
 import Card from '../../components/Card';
 import { BreadcrumbOne } from '../../components/Breadcrumb';
 import Link from 'next/link';
+import GuestWrapper from '../../components/wrapper/GuestWrapper';
 
 export default function ForgotPassword() {
   const { register, handleSubmit, errors } = useForm();
@@ -125,7 +126,7 @@ export default function ForgotPassword() {
   };
 
   return (
-    <LayoutOne>
+    <GuestWrapper>
       <Head>
         <title>Forgot password</title>
       </Head>
@@ -197,6 +198,6 @@ export default function ForgotPassword() {
           )}
         </Container>
       </PageContainer>
-    </LayoutOne>
+    </GuestWrapper>
   );
 }

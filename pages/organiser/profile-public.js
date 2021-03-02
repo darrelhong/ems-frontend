@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { LayoutOne } from '../../layouts';
+import OrganiserWrapper from '../../components/wrapper/OrganiserWrapper';
 import EventTabOne from '../../components/EventTabEoProfile';
+import FollowersTabEoProfile from '../../components/FollowersTabEoProfile';
 import { BreadcrumbOne } from '../../components/Breadcrumb';
 import { Container, Row, Col } from 'react-bootstrap';
 import { ProductRating } from '../../components/Product';
@@ -12,7 +14,10 @@ import {
   getPartnerCurrentEventsByOrganiserId,
   getPartnerUpcomingEventsByOrganiserId,
   getAttendeeUpcomingEventsByOrganiserId,
+  getRating,
 } from '../../lib/query/useEvent';
+import { getOrgAttendeeFollowers } from '../../lib/query/getOrgAttendeeFollowers';
+import { getOrgPartnerFollowers } from '../../lib/query/getOrgPartnerFollowers';
 import api from '../../lib/ApiClient';
 import { IoIosStar, IoIosStarOutline } from 'react-icons/io';
 import { BsPencilSquare } from 'react-icons/bs';
@@ -122,37 +127,72 @@ const EventOrgProfile = ({ router: { query } }) => {
   // localStorage.setItem('updateProfile', 'false');
 
   return (
-    <LayoutOne>
-      <BreadcrumbOne pageTitle="Event Organiser Profile Details">
+    <OrganiserWrapper>
+      <BreadcrumbOne pageTitle="Organiser Profile Details">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/">
               <a>Home</a>
             </Link>
           </li>
-          <li className="breadcrumb-item active">
-            Event Organiser Profile Details
-          </li>
+          <li className="breadcrumb-item active">Profile Details</li>
         </ol>
       </BreadcrumbOne>
       <div className="my-account-content space-pt--r100 space-pb--r100">
         <Row className="justify-content-md-end">
           <Col xs={3} md={3}>
-            <Image
-              className="profile-image"
-              src={eventorganiser?.profilePic}
-              thumbnail
-            />
+            {eventorganiser?.profilePic == null && (
+              <Image
+                src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
+                className="profile-image"
+                thumbnail
+              />
+            )}
+            {eventorganiser?.profilePic != null && (
+              <Image
+                className="profile-image"
+                src={partner?.profilePic}
+                thumbnail
+              />
+            )}
           </Col>
+          <Col xs={1} md={1}></Col>
+
           <Col xs={6} md={6}>
             <h2>{eventorganiser?.name}</h2>
             <div className="product-content__rating-wrap">
               <div className="product-content__rating">
-                <ProductRating ratingValue={3} />
-                <span>({3})</span>
+                <ProductRating ratingValue={rating} />
+                <span>({rating})</span>
               </div>
             </div>
-
+            &nbsp;
+            <div>
+              <Row>
+                <Col>
+                  <Row>
+                    <Col md={3} className="follow-number">
+                      {((attendeeFollowers == undefined ||
+                        partnerFollowers == undefined) && (
+                        <h4 style={{ color: '#ff324d' }}> 0 </h4>
+                      )) ||
+                        (attendeeFollowers.length + partnerFollowers.length >
+                          0 && (
+                          <h4 style={{ color: '#ff324d' }}>
+                            {' '}
+                            {attendeeFollowers.length +
+                              partnerFollowers.length}{' '}
+                          </h4>
+                        ))}
+                      {/* </h4> */}
+                    </Col>
+                  </Row>
+                  <Row>
+                    <h5>Followers</h5>
+                  </Row>
+                </Col>
+              </Row>
+            </div>
             <br></br>
             <div style={{ display: showPublicView ? 'block' : 'none' }}>
               {
@@ -165,7 +205,6 @@ const EventOrgProfile = ({ router: { query } }) => {
                 </button>
               }
             </div>
-
             <div style={{ display: showEoView ? 'block' : 'none' }}>
               <Link href="/organiser/profile-account">
                 <button className="btn btn-fill-out" name="edit" value="edit">
@@ -197,13 +236,13 @@ const EventOrgProfile = ({ router: { query } }) => {
                   </Nav.Link>
                 </Nav.Item> */}
                 <Nav.Item>
-                  {/*show only if the role is organiser*/}
+                  {/* {/show only if the role is organiser/} */}
                   <Nav.Link
                     eventKey="followers"
-                    style={{ display: showEoView ? 'block' : 'none' }}
+                    // style={{ display: showEoView ? 'block' : 'none' }}
                   >
                     FOLLOWERS{' '}
-                    {/*product.ratingCount ? `(${product.ratingCount})` : ""*/}
+                    {/* {/product.ratingCount ? `(${product.ratingCount})` : ""/} */}
                   </Nav.Link>
                 </Nav.Item>
               </Nav>
@@ -238,7 +277,9 @@ const EventOrgProfile = ({ router: { query } }) => {
                   ))} */}
                   <br></br>
                   <div className="product-description-tab__additional-info">
-                    {eventorganiser?.description}
+                    {(eventorganiser?.description === null &&
+                      'There is no description.') ||
+                      eventorganiser?.description}
                   </div>
                 </Tab.Pane>
                 <Tab.Pane eventKey="reviews">
@@ -246,7 +287,7 @@ const EventOrgProfile = ({ router: { query } }) => {
                     <div className="comments">
                       <br></br>
                       <h5 className="product-tab-title">
-                        {/*the product name is the event name*/}
+                        {/* {/the product name is the event name/} */}
                         {5} Review For <span>{'productname'}</span>
                       </h5>
                       <ul className="list-none comment-list mt-4">
@@ -379,8 +420,10 @@ const EventOrgProfile = ({ router: { query } }) => {
                 <Tab.Pane eventKey="followers">
                   <br></br>
                   <div className="product-description-tab__additional-info">
-                    {/*put the list of followers here*/}
-                    {''}
+                    <FollowersTabEoProfile
+                      attendees={attendeeFollowers}
+                      partners={partnerFollowers}
+                    />
                   </div>
                 </Tab.Pane>
               </Tab.Content>
@@ -388,21 +431,8 @@ const EventOrgProfile = ({ router: { query } }) => {
           </Col>
         </Row>
       </div>
-    </LayoutOne>
+    </OrganiserWrapper>
   );
 };
-/*
-const mapStateToProps = (state) => {
-  const products = state.productData;
-  return {
-    trendingProducts: getProducts(products, "electronics", "popular", 10),
-    featuredProducts: getProducts(products, "electronics", "featured", 8),
-    newProducts: getProducts(products, "electronics", "new", 8),
-    bestSellerProducts: getProducts(products, "electronics", "popular", 8),
-    saleProducts: getProducts(products, "electronics", "sale", 8),
-  };
- 
-};
- */
 
 export default withRouter(EventOrgProfile);

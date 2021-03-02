@@ -2,7 +2,7 @@ import { Fragment, useState } from "react";
 import Link from "next/link";
 import ProductModal from "./elements/ProductModal";
 import { ProductRating } from "../Product";
-
+import Image from 'react-bootstrap/Image';
 const ProductGridFive = ({
   product,
   // discountedPrice,
@@ -10,7 +10,7 @@ const ProductGridFive = ({
   // cartItem,
   // wishlistItem,
   // compareItem,
-   bottomSpace,
+  bottomSpace,
   // addToCart,
   // addToWishlist,
   // deleteFromWishlist,
@@ -30,27 +30,34 @@ const ProductGridFive = ({
           bottomSpace ? bottomSpace : ''
         }`}
       >
-        <div className="product-grid product-grid--style-three">
-          <div className="product-grid__image">
-            {/* <Link
-            // href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-            // as={"/shop/product-basic/" + product.slug}
-            > */}
-            <a>
-              <img
-                //event images is here
-                // src={colorImage ? colorImage : product.images[0]}
-                src="https://www.creativiva.com/wp-content/uploads/2016/05/decor-blog-1.jpg"
-                alt="product_img1"
-              />
-              <img
-                className="product-hover-image"
-                src="https://i.pinimg.com/originals/b4/c3/8a/b4c38aad1728a7d6bb4bff0b3f88187d.jpg"
-                // src={colorImage ? colorImage : product.images[1]}
-                alt="product_img1"
-              />
-            </a>
-            {/* </Link> */}
+        <div className="product-grid product-grid--style-three"style= {{width:"40%"}}>
+          <div className="product-grid__image" >
+
+          <a>
+       <img
+                  src={"https://www.careerup.com/wp-content/uploads/2016/01/internship-opportunity-advertising-saga-events-1.png"}
+                  alt="product_img1"
+                  
+                />
+              </a>
+             
+
+           {/*  <Link
+              href={`/shop/product-basic/[slug]?slug=${product.slug}`}
+              as={"/shop/product-basic/" + product.slug}
+            >
+              <a>
+                <img
+                  src={colorImage ? colorImage : product.thumbImage[0]}
+                  alt="product_img1"
+                />
+                <img
+                  className="product-hover-image"
+                  src={colorImage ? colorImage : product.thumbImage[1]}
+                  alt="product_img1"
+                />
+              </a>
+            </Link>
             <div className="product-grid__badge-wrapper">
               {/* {product.new ? <span className="pr-flash">NEW</span> : ""}
               {product.featured ? (
@@ -129,54 +136,68 @@ const ProductGridFive = ({
                     <i className="icon-heart" />
                   </button>
                 </li>
-              </ul> */}
-            </div>
-          </div>
+              </ul>
+            </div>*/} 
+          </div> 
           <div className="product-grid__info">
+          <div>
             <h6 className="product-title">
               {/* <Link
-                // href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-                // as={'/shop/product-basic/' + product.slug}
+                href={`/shop/product-basic/[slug]?slug=${product.slug}`}
+                as={"/shop/product-basic/" + product.slug}
               > */}
-              <a>{product.name}</a>
+                <a>{product.name}</a>
               {/* </Link> */}
             </h6>
-            <div className="product-price">
-              {/* {product.ticketPrice ? (
+            </div>
+            <div>
+            <h6 className="product-description">
+              {/* <Link
+                href={`/shop/product-basic/[slug]?slug=${product.slug}`}
+                as={"/shop/product-basic/" + product.slug}
+              > */}
+                <a>{product.descriptions}</a>
+              {/* </Link> */}
+            </h6>
+
+            </div>
+
+            {/* <div className="product-price">
+              {product.discount ? (
                 <Fragment>
                   <span className="price">${discountedPrice}</span>
                   <del>${productPrice}</del> */}
               {/* {/* <span className="on-sale">{product.discount}% Off</span> */}
               {/* </Fragment>
               ) : (
-                <span className="price">{product.ticketPrice}</span>
-              )}*/}
-            </div>
-            <div className="rating-wrap">
+                <span className="price">${productPrice}</span>
+              )}
+            </div> */}
+            {/* <div className="rating-wrap">
               <ProductRating ratingValue={product.rating} />
-              <span className="rating-num">({product.rating})</span>
-            </div>
+              <span className="rating-num">({product.ratingCount})</span>
+            </div> */}
           </div>
         </div>
       </div>
       {/* product modal */}
-      <ProductModal
+      {/* <ProductModal
         show={modalShow}
         onHide={() => setModalShow(false)}
         product={product}
-        // discountedprice={discountedPrice}
-        // productprice={productPrice}
-        // cartitems={cartItems}
-        // cartitem={cartItem}
-        // wishlistitem={wishlistItem}
-        // compareitem={compareItem}
-        // addtocart={addToCart}
-        // addtowishlist={addToWishlist}
-        // deletefromwishlist={deleteFromWishlist}
-        // addtocompare={addToCompare}
-        // deletefromcompare={deleteFromCompare}
-        // addtoast={addToast}
-      />
+        discountedprice={discountedPrice}
+        productprice={productPrice}
+        cartitems={cartItems}
+        cartitem={cartItem}
+        wishlistitem={wishlistItem}
+        compareitem={compareItem}
+        addtocart={addToCart}
+        addtowishlist={addToWishlist}
+        deletefromwishlist={deleteFromWishlist}
+        addtocompare={addToCompare}
+        deletefromcompare={deleteFromCompare}
+        addtoast={addToast}
+      /> */}
     </Fragment>
   );
 };

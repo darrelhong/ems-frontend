@@ -1,21 +1,21 @@
 import { Fragment } from "react";
 
-import { connect } from "react-redux";
-import { useToasts } from "react-toast-notifications";
-import { getDiscountPrice } from "../../lib/product";
-import { addToCart } from "../../redux/actions/cartActions";
-import {
-  addToWishlist,
-  deleteFromWishlist
-} from "../../redux/actions/wishlistActions";
-import {
-  addToCompare,
-  deleteFromCompare
-} from "../../redux/actions/compareActions";
+// import { connect } from "react-redux";
+// import { useToasts } from "react-toast-notifications";
+// import { getDiscountPrice } from "../../lib/product";
+// import { addToCart } from "../../redux/actions/cartActions";
+// import {
+//   addToWishlist,
+//   deleteFromWishlist
+// } from "../../redux/actions/wishlistActions";
+// import {
+//   addToCompare,
+//   deleteFromCompare
+// } from "../../redux/actions/compareActions";
 import ProductGridFive from "./ProductGridFive";
 
 const ProductGridWrapperFive = ({
-  products
+  products,
   // bottomSpace,
   // addToCart,
   // addToWishlist,
@@ -27,15 +27,11 @@ const ProductGridWrapperFive = ({
   // compareItems,
   // sliderClass
 }) => {
-  const { addToast } = useToasts();
+  // const { addToast } = useToasts();
   return (
     <Fragment>
       {products &&
         products.map((product) => {
-
-          const eid = product.eid;
-          console.log("print eid");
-          console.log(eid);
           // const discountedPrice = getDiscountPrice(
           //   product.price,
           //   product.discount
@@ -113,7 +109,6 @@ const ProductGridWrapperFive = ({
 //       dispatch(addToCompare(item, addToast));
 //     },
 //     deleteFromCompare: (item, addToast) => {
-  
 //       dispatch(deleteFromCompare(item, addToast));
 //     }
 //   };
@@ -124,6 +119,4 @@ const ProductGridWrapperFive = ({
 //   mapDispatchToProps
 // )(ProductGridWrapperFive);
 
-
-export default (ProductGridWrapperFive);
-
+export default ProductGridWrapperFive;

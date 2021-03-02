@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
+import GuestWrapper from '../components/wrapper/GuestWrapper';
 
 import { Col, Container, Row } from 'react-bootstrap';
 import { BreadcrumbOne } from './Breadcrumb';
@@ -38,7 +39,7 @@ export default function RegisterAttendee({ title, registerApiUrl }) {
   };
 
   return (
-    <LayoutOne>
+    <GuestWrapper>
       <Head>
         <title>{title}</title>
       </Head>
@@ -168,7 +169,7 @@ export default function RegisterAttendee({ title, registerApiUrl }) {
           </Row>
         </Container>
       </div>
-    </LayoutOne>
+    </GuestWrapper>
   );
 }
 

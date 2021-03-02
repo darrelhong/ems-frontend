@@ -1,13 +1,14 @@
 import PropTypes from 'prop-types';
 import Head from 'next/head';
 import Link from 'next/link';
-import { Alert, AlertIcon, Button, Container, Text } from '@chakra-ui/react';
+import { useState} from 'react';
+import HomeHeaderTop from '../../components/Header/HomeHeaderTop';
+import { LayoutOne } from '../../layouts';
+import { Container, Row, Alert } from 'react-bootstrap';
+import GuestWrapper from '../../components/wrapper/GuestWrapper';
 
-import NavBar from '../../components/NavBar/NavBar';
-import PageContainer from '../../components/PageContainer';
 import { useMutation } from 'react-query';
 import api from '../../lib/ApiClient';
-import ChakraWrapper from '../../components/ChakraWrapper';
 
 export const getServerSideProps = async ({ query }) => {
   return {
@@ -22,51 +23,88 @@ export default function RegisterVerificationError({ token }) {
     api.get(`/api/user/register/resend?token=${token}`)
   );
 
+  const [showMsg, setShowMsg] = useState(true);
+
   return (
-    <ChakraWrapper>
+    <>
       <Head>
         <title>Email verification unsuccesful!</title>
       </Head>
+     
 
-      <NavBar />
+      <GuestWrapper>
+        <Container>
+          <Row className="justify-content-center">
+            <p className="mt-5">
 
-      <PageContainer centerContent>
-        <Text mt={10} fontWeight="bold">
-          Your email could not be verified.{' '}
-          {token && 'Your verfication link may have expired.'}
-        </Text>
-        {token ? (
-          <Button
-            mt={4}
-            isLoading={isLoading}
-            onClick={() => {
-              mutate({ token });
-            }}
-          >
-            Resend verification email
-          </Button>
-        ) : (
-          <Link href="/" passHref>
-            <Button mt={4}>Back to home</Button>
-          </Link>
-        )}
+              Your email could not be verified.{' '}
+              {token && 'Your verfication link may have expired.'}
+            &nbsp;
+          </p>
+          </Row>
+          &nbsp;
+          <br></br>
+          <Row className="justify-content-center">
+            {token ? (
+              <button className="btn btn-sm btn-fill-out"
 
-        <Container maxW="sm" mt={4}>
-          {isError && (
-            <Alert status="error">
-              <AlertIcon />
-              An error occured.
-            </Alert>
-          )}
-          {isSuccess && (
-            <Alert status="success">
-              <AlertIcon />
-              Verification email resent. Please check your inbox.
-            </Alert>
-          )}
+                isLoading={isLoading}
+                onClick={() => {
+                  mutate({ token });
+                }}
+              >
+                Resend verification email
+              </button>
+            ) : (
+                <Link href="/" passHref>
+                  <button className="btn btn-sm btn-fill-out" >Back to home</button>
+                </Link>
+              )}
+
+
+
+          </Row>
+          <Row className="justify-content-center">
+            <div>
+              &nbsp;
+              
+    {isError && (
+                // <Alert status="error">
+                //   <AlertIcon />
+                //   An error occured.
+                // </Alert>
+                <Alert
+                show={showMsg && isError}
+                  variant="danger"
+                  onClose={() => setShowMsg(false)}
+                  dismissible
+                >
+                  An error occured. Please try again.
+                </Alert>
+              )}
+              {isSuccess && (
+                // <Alert status="success">
+                //   <AlertIcon />
+                //   Verification email resent. Please check your inbox.
+                // </Alert>
+                <Alert
+                show={showMsg && isSuccess}
+                  variant="success"
+                  dismissible
+                  onClose={() => setShowMsg(false)}
+                >
+                  Verification email resent. Please check your inbox.
+                </Alert>
+              )}
+            </div>
+          </Row>
+
+
+
         </Container>
-      </PageContainer>
-    </ChakraWrapper>
+
+      </GuestWrapper>
+    </>
   );
 }
 

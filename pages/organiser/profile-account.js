@@ -118,35 +118,6 @@ const MyAccount = () => {
     logout({ redirectTo: '/organiser/login' });
   };
 
-  // const mutateAccDetail = useMutation((data) =>
-  //   api.post('/api/user/update', data, {
-  //       onSuccess: () => {
-  //         queryClient.invalidateQueries(['user', user?.id.toString()]);
-  //       },
-  //     })
-  //     .then((response) => {
-  //       console.log(response);
-  //       if (response.status == 200) {
-  //         // show update sucess message
-  //         setShowSuccessMsg(true);
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //       // show error message
-  //       setShowFailedMsg(true);
-  //     })
-  // );
-
-  // const mutatePassword = useMutation(
-  //   (data) => api.post('/api/user/change-password', data),
-  //   {
-  //     onSuccess: () => {
-  //       queryClient.invalidateQueries(['user', user?.id.toString()]);
-  //     },
-  //   logout({ redirectTo: '/organiser/login' });
-  // };
-
   const { register, handleSubmit, errors } = useForm({
     defaultValues: { name: user?.name },
   });

@@ -7,12 +7,14 @@ import cx from 'classnames';
 
 import { Col, Container, Row, Form,OverlayTrigger,Tooltip } from 'react-bootstrap';
 import { BsFillInfoCircleFill } from 'react-icons/bs';
+import api from '../lib/ApiClient';
+
 import { BreadcrumbOne } from './Breadcrumb';
 import { LayoutOne } from '../layouts';
 import Alert from 'react-bootstrap/Alert';
 import { useMutation } from 'react-query';
-import api from '../lib/ApiClient';
 
+import GuestWrapper from '../components/wrapper/GuestWrapper';
 
 export default function RegisterEvnOrg({ title, registerApiUrl }) {
   const { register, handleSubmit, errors, watch } = useForm();
@@ -93,8 +95,10 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
            .then((response) => {
              console.log(response);
              if (response.status == 200) {
-
+             
               document.getElementById('register-form').reset();
+              document.getElementById('custom-file').value = '';
+            setFileName("Choose File");
                console.log(response.data["message"]);
                if (response.data['message'] == 'alreadyExisted') {
 
@@ -125,6 +129,7 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
             console.log("exceeded");
             setShowFileSizeError(true);
             document.getElementById('custom-file').value = '';
+            
           }else{
             setShowFileSizeError(false);
              setFile(e.target.files[0]);
@@ -170,7 +175,7 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
   };
 
   return (
-    <LayoutOne>
+    <GuestWrapper>
       <Head>
         <title>{title}</title>
       </Head>
@@ -257,6 +262,7 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
                     </div>
                   </div>
                   <Row>
+                  <div className="form-group">
                     <Form.Label className="uploadFileLabel">
                       Upload Business Document &nbsp;
                       <OverlayTrigger
@@ -267,6 +273,7 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
                         <BsFillInfoCircleFill></BsFillInfoCircleFill>
                       </OverlayTrigger>
                     </Form.Label>
+                
                     <Col className="form-group" md={12}>
                       <Form.Group>
                         <Form.File
@@ -274,6 +281,7 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
                           type="file"
                           accept=".zip"
                           onChange={handleFileChange}
+                         
                           required
                           custom
                         />
@@ -296,6 +304,7 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
                                   </div> */}
                       </Form.Group>
                     </Col>
+                    </div>
                   </Row>
 
                   <div className="form-group">
@@ -304,6 +313,7 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
                       type="submit"
                       className="btn btn-fill-out btn-block"
                       name="register"
+
                     >
                       Register
                     </button>
@@ -379,7 +389,7 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
           </Row>
         </Container>
       </div>
-    </LayoutOne>
+    </GuestWrapper>
   );
 }
 
