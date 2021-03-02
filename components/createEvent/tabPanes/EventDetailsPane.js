@@ -34,7 +34,8 @@ const EventDetailsPane = ({ register, watch, errors }) => {
                 className="form-control"
                 name="name"
                 type="text"
-                ref={register({ required: true })}
+                ref={register()}
+                // ref={register({ required: true })}
               />
               {errors.name && (
                 <span role="alert" style={{ color: 'red' }}>
@@ -52,7 +53,8 @@ const EventDetailsPane = ({ register, watch, errors }) => {
                 className="form-control"
                 name="descriptions"
                 maxLength="200" //can consider playing with this if needed
-                ref={register({ required: true })}
+                ref={register()}
+                // ref={register({ required: true })}
               />
               {errors.descriptions && (
                 <span role="alert" style={{ color: 'red' }}>

@@ -117,6 +117,7 @@ const CreateEvent = () => {
   const onSubmit = async (data) => {
     const formattedData = formatDates(data);
     let updatedData;
+    console.log('submitting');
     if (eid) {
       //concat data first, already have EID inside and all
       //have to update to upcoming now, instead of draft
@@ -196,8 +197,7 @@ const CreateEvent = () => {
               className="btn btn-fill-out"
               name="submit"
               value="Submit"
-              ref={register()}
-            >
+              ref={register()}            >
               Finish
             </button>
             <button
@@ -228,6 +228,7 @@ const CreateEvent = () => {
           <ol>
             <button
               type="button"
+              name="saveDraft"
               className="btn btn-fill-out"
               onClick={saveDraft}
             >
@@ -238,9 +239,10 @@ const CreateEvent = () => {
             <button
               type="submit"
               className="btn btn-fill-out"
-              // name="submit"
-              // value="Submit"
+              name="submit"
+              value="Submit"
               ref={register()}
+              onClick={handleSubmit(onSubmit)}
             >
               Finish
             </button>
@@ -281,7 +283,7 @@ const CreateEvent = () => {
                       />
                     </Tab.Pane>
                     <Tab.Pane eventKey="ticketing">
-                      <TicketingPane register={register} watch={watch} eventData={eventData} setValue={setValue} />
+                      <TicketingPane register={register} watch={watch} eventData={eventData} setValue={setValue} errors={errors} />
                     </Tab.Pane>
                     <Tab.Pane eventKey="booths">
                       <BoothPane register={register} />

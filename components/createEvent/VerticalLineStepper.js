@@ -79,7 +79,7 @@ const VerticalLinearStepper = ({ activeStep, setActiveStep, steps }) => {
               </Nav.Item>
               <StepContent>
                 <Typography>{step.content}</Typography>
-                <div className={classes.actionsContainer}>
+                {/* <div className={classes.actionsContainer}>
                   <div>
                     <Button
                       disabled={activeStep === 0}
@@ -97,7 +97,7 @@ const VerticalLinearStepper = ({ activeStep, setActiveStep, steps }) => {
                       {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                     </Button>
                   </div>
-                </div>
+                </div> */}
               </StepContent>
             </Step>
           ))}

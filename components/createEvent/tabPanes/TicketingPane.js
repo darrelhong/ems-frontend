@@ -3,7 +3,7 @@ import { Row, Col } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import PropTypes from 'prop-types';
 
-const TicketingPane = ({ register, watch, eventData, setValue }) => {
+const TicketingPane = ({ register, watch, eventData, setValue, errors }) => {
   const [wantsTickets, setWantsTickets] = useState(true);
 
   useEffect(() => {
@@ -68,8 +68,15 @@ const TicketingPane = ({ register, watch, eventData, setValue }) => {
                   type="number"
                   step="0.1"
                   disabled={!wantsTickets}
-                  ref={register()}
+                  // ref={register()}
+                  ref={register({ required: wantsTickets })}
                 />
+                {errors.ticketPrice && wantsTickets && (
+                  <span role="alert" style={{ color: 'red' }}>
+                    This field is required
+                  </span>
+                )
+                }
               </Col>
               <Col className="form-group" md={12}>
                 <label>
@@ -80,8 +87,15 @@ const TicketingPane = ({ register, watch, eventData, setValue }) => {
                   name="ticketCapacity"
                   type="number"
                   disabled={!wantsTickets}
-                  ref={register()}
+                  ref={register({ required: wantsTickets })}
+                // ref={register()}
                 />
+                {errors.ticketCapacity && wantsTickets && (
+                  <span role="alert" style={{ color: 'red' }}>
+                    This field is required
+                  </span>
+                )
+                }
               </Col>
               <Col className="form-group" md={12}>
                 <label>Ticket Sales Start Date</label>
@@ -90,8 +104,15 @@ const TicketingPane = ({ register, watch, eventData, setValue }) => {
                   name="saleStartDate"
                   type="datetime-local"
                   disabled={!wantsTickets}
-                  ref={register()}
+                  ref={register({ required: wantsTickets })}
+                // ref={register()}
                 />
+                {errors.saleStartDate && wantsTickets && (
+                  <span role="alert" style={{ color: 'red' }}>
+                    This field is required
+                  </span>
+                )
+                }
               </Col>
 
               <Col className="form-group" md={12}>
@@ -101,8 +122,15 @@ const TicketingPane = ({ register, watch, eventData, setValue }) => {
                   name="salesEndDate"
                   type="datetime-local"
                   disabled={!wantsTickets}
-                  ref={register()}
+                  ref={register({ required: wantsTickets })}
+                // ref={register()}
                 />
+                {errors.salesEndDate && wantsTickets && (
+                  <span role="alert" style={{ color: 'red' }}>
+                    This field is required
+                  </span>
+                )
+                }
                 {renderDateError()}
               </Col>
             </div>
