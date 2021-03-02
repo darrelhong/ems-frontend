@@ -38,7 +38,7 @@ export default function EventImageGallery({ images }) {
     slideToClickedSlide: true,
   };
 
-  if (!images) {
+  if (images?.length == 0) {
     images = Array(4).fill('/assets/images/img-placeholder.jpg');
   }
 
