@@ -4,7 +4,7 @@ import EventTabOne from '../../components/EventTabEoProfile';
 import { BreadcrumbOne } from '../../components/Breadcrumb';
 import { Container, Row, Col } from 'react-bootstrap';
 import { ProductRating } from '../../components/Product';
-import useUser from '../../lib/query/useUser';
+import { getUser } from '../../lib/query/getUser';
 import {
   getEventByOrganiserId,
   getPastEventsByOrganiserId,
@@ -31,83 +31,95 @@ const EventOrgProfile = ({ router: { query } }) => {
   const [currenteventlist, setCurrenteventlist] = useState([]);
   const [upcomingeventlist, setUpcomingeventlist] = useState([]);
   const [pasteventlist, setPastEventlist] = useState([]);
+  const [eventorganiser, setEventOrganiser] = useState();
+
   // if there is user login credential
-  // if (localStorage.getItem('userId') != null) {
-  const { data: user } = useUser(localStorage.getItem('userId'));
   const paraId_ = JSON.parse(query.paraId);
-  const { data: eventorganiser } = useUser(paraId_);
 
   // ADMIN: 'admin',
   // EVNTORG: 'organiser',
   // BIZPTNR: 'partner',
   // ATND: 'attendee',
 
-  // useEffect(async () => {
-
-  // }, []);
-
   useEffect(async () => {
-    console.log('user id');
-    console.log(user?.id);
-    if (user?.id != null) {
-      if (user?.roles[0].roleEnum === 'BIZPTNR') {
-        setUserRole('BIZPTNR');
-        await getPartnerCurrentEventsByOrganiserId(paraId_).then((events) => {
-          setCurrenteventlist(events);
-        });
+    await getUser(paraId_).then((eventOrg) => {
+      //console.log('eo data');
+      // console.log(eventOrg);
+      setEventOrganiser(eventOrg);
+    });
+    //const { data: user } = useUser(localStorage.getItem('userId'));
+    console.log(localStorage.getItem('userId'));
+    if (localStorage.getItem('userId') != null) {
+      await getUser(localStorage.getItem('userId')).then(async (data) => {
+        console.log(data);
+        if (data.id != null) {
+          if (data.roles[0].roleEnum === 'BIZPTNR') {
+            setUserRole('BIZPTNR');
+            await getPartnerCurrentEventsByOrganiserId(paraId_).then(
+              (events) => {
+                setCurrenteventlist(events);
+              }
+            );
 
-        // await getPartnerUpcomingEventsByOrganiserId(paraId_).then((events) => {
-        //   setUpcomingeventlist(events);
-        // });
-      } else if (
-        user?.roles[0].roleEnum === 'EVNTORG' ||
-        user?.roles[0].roleEnum === 'ATND'
-      ) {
-        await getAttendeeCurrentEventsByOrganiserId(paraId_).then((events) => {
-          setCurrenteventlist(events);
-        });
+            // await getPartnerUpcomingEventsByOrganiserId(paraId_).then((events) => {
+            //   setUpcomingeventlist(events);
+            // });
+          } else if (
+            data.roles[0].roleEnum === 'EVNTORG' ||
+            data.roles[0].roleEnum === 'ATND'
+          ) {
+            await getAttendeeCurrentEventsByOrganiserId(paraId_).then(
+              (events) => {
+                setCurrenteventlist(events);
+              }
+            );
 
-        await getAttendeeUpcomingEventsByOrganiserId(paraId_).then((events) => {
-          setUpcomingeventlist(events);
-        });
-      }
+            await getAttendeeUpcomingEventsByOrganiserId(paraId_).then(
+              (events) => {
+                setUpcomingeventlist(events);
+              }
+            );
+          }
 
-      await getPastEventsByOrganiserId(paraId_).then((events) => {
-        setPastEventlist(events);
+          await getPastEventsByOrganiserId(paraId_).then((events) => {
+            setPastEventlist(events);
+          });
+
+          if (data?.id == paraId_) {
+            setShowEoView(true);
+            setShowPublicView(false);
+          } else {
+            setShowPublicView(true);
+            setShowEoView(false);
+          }
+        } else {
+          await getAttendeeCurrentEventsByOrganiserId(paraId_).then(
+            (events) => {
+              setCurrenteventlist(events);
+            }
+          );
+
+          await getAttendeeUpcomingEventsByOrganiserId(paraId_).then(
+            (events) => {
+              setUpcomingeventlist(events);
+            }
+          );
+
+          await getPastEventsByOrganiserId(paraId_).then((events) => {
+            setPastEventlist(events);
+          });
+          setShowPublicView(true);
+          setShowEoView(false);
+        }
       });
-
-      if (user?.id == paraId_) {
-        setShowEoView(true);
-        setShowPublicView(false);
-      } else {
-        setShowPublicView(true);
-        setShowEoView(false);
-      }
-    } else {
-      await getAttendeeCurrentEventsByOrganiserId(paraId_).then((events) => {
-        setCurrenteventlist(events);
-      });
-
-      await getAttendeeUpcomingEventsByOrganiserId(paraId_).then((events) => {
-        setUpcomingeventlist(events);
-      });
-
-      await getPastEventsByOrganiserId(paraId_).then((events) => {
-        setPastEventlist(events);
-      });
-      setShowPublicView(true);
-      setShowEoView(false);
     }
   }, []);
-  // } else {
-  //   useEffect(() => {
-  //     setShowPublicView(true);
-  //     setShowEoView(false);
-  //   });
-  //}
 
-  // the paraID should always have id value
-  // const paraId_ = JSON.parse(query.paraId);
+  //console.log('update detected');
+  //console.log(localStorage);
+
+  // window.location.reload();
+  // localStorage.setItem('updateProfile', 'false');
 
   return (
     <LayoutOne>
