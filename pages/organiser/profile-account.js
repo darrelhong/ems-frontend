@@ -15,9 +15,9 @@ import {
   Button,
   Modal,
   Image,
-  Alert
+  Alert,
 } from 'react-bootstrap';
-import {FaRegEdit } from 'react-icons/fa';
+import { FaRegEdit } from 'react-icons/fa';
 import OrganiserWrapper from '../../components/wrapper/OrganiserWrapper';
 import { BsFillInfoCircleFill } from 'react-icons/bs';
 
@@ -33,7 +33,6 @@ import useUser from '../../lib/query/useUser';
 import { useMutation, useQueryClient } from 'react-query';
 import api from '../../lib/ApiClient';
 import { logout } from '../../lib/auth';
-
 
 const MyAccount = () => {
   // const [show, setShow] = useState(false);
@@ -54,16 +53,23 @@ const MyAccount = () => {
   );
   // display the inital profile picture
   //console.log(user?.profilePic);
-  if (user?.profilePic != null) {
-    useEffect(() => {
-      setProfilepicUrl(user?.profilePic);
-    }, [user?.profilePic]);
-  } else {
-    useEffect(() => {
-      setProfilepicUrl('../../assets/images/defaultprofilepic.png');
-    }, ['../../assets/images/defaultprofilepic.png']);
-  }
+  // if (user?.profilePic != null) {
+  //   useEffect(() => {
+  //     setProfilepicUrl(user?.profilePic);
+  //   }, [user?.profilePic]);
+  // } else {
+  //   useEffect(() => {
+  //     setProfilepicUrl('../../assets/images/defaultprofilepic.png');
+  //   }, ['../../assets/images/defaultprofilepic.png']);
+  // }
 
+  useEffect(() => {
+    if (user?.profilePic != null) {
+      setProfilepicUrl(user?.profilePic);
+    } else {
+      setProfilepicUrl('../../assets/images/defaultprofilepic.png');
+    }
+  }, [user?.profilePic]);
 
   useEffect(() => {
     setFileName('Choose image');
@@ -75,27 +81,25 @@ const MyAccount = () => {
   const handleShow = () => setShow(true);
   const queryClient = useQueryClient();
   // success message for update account details
-  const [accSuccess, setAccSuccess] = useState("");
-  //update account details alert 
+  const [accSuccess, setAccSuccess] = useState('');
+  //update account details alert
   const [showAccSaved, setAccSaved] = useState(false);
-
 
   //check if pw and confirm pw is the same before updating pw
   const [confirmPW, setConfirmPW] = useState(false);
   //success/error message for pw update
-  const [pwAlert, setPWAlert] = useState("");
+  const [pwAlert, setPWAlert] = useState('');
   //show pw error alert
   const [showPW, setShowPW] = useState(false);
- const [showFileSizeError, setShowFileSizeError] = useState(false);
-  
-   const renderTooltip = (props) => (
-     <Tooltip id="button-tooltip" {...props}>
-       Support png and jpg image format.
-     </Tooltip>
-   );
+  const [showFileSizeError, setShowFileSizeError] = useState(false);
+
+  const renderTooltip = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      Support png and jpg image format.
+    </Tooltip>
+  );
 
   const mutateAccStatus = useMutation(
-
     (data) => api.post('/api/user/update-account-status', data),
     {
       onSuccess: () => {
@@ -147,21 +151,17 @@ const MyAccount = () => {
     defaultValues: { name: user?.name },
   });
 
-
-  const mutateAccDetail = useMutation(
-
-    (data) => api.post('/api/user/update', data) 
-    .then(response => {
-      setAccSaved(true);
-     setAccSuccess(" Account details saved successfully! ");
-     //document.getElementById("account-details-form").reset();
-
-    }).catch(error =>{
-      console.log(error)
-
-    }
-
-    )
+  const mutateAccDetail = useMutation((data) =>
+    api
+      .post('/api/user/update', data)
+      .then((response) => {
+        setAccSaved(true);
+        setAccSuccess(' Account details saved successfully! ');
+        //document.getElementById("account-details-form").reset();
+      })
+      .catch((error) => {
+        console.log(error);
+      })
   );
 
   const onSubmit = async (data) => {
@@ -202,18 +202,18 @@ const MyAccount = () => {
     console.log(e);
     console.log(e.target.files[0].name);
     console.log(e.target.files[0].size);
-      console.log(e.target.files[0].size/1000000);
-  
-      if(e.target.files[0].size/1000000 > 1 || e.target.files[0].name == ''){
-            console.log("exceeded");
-            setShowFileSizeError(true);
-            document.getElementById('custom-file').value = '';
-          }else{
-            setShowFileSizeError(false);
-             setFile(e.target.files[0]);
-             setfileUpload(true);
-             setFileName(e.target.files[0].name);
-          }
+    console.log(e.target.files[0].size / 1000000);
+
+    if (e.target.files[0].size / 1000000 > 1 || e.target.files[0].name == '') {
+      console.log('exceeded');
+      setShowFileSizeError(true);
+      document.getElementById('custom-file').value = '';
+    } else {
+      setShowFileSizeError(false);
+      setFile(e.target.files[0]);
+      setfileUpload(true);
+      setFileName(e.target.files[0].name);
+    }
   };
   const submitFile = async () => {
     const data = new FormData();
@@ -244,56 +244,51 @@ const MyAccount = () => {
   };
 
   const mutatePassword = useMutation((data) => {
- 
-    api.post('/api/user/change-password', data,{
-     
-    }).then(response =>{
-          console.log(response.data['message']);
-      if(response.data["message"] == "Success"){
-        
-        document.getElementById('change-password-form').reset();
-        setPWAlert('Your password has been updated successfully!');
-  
-        setConfirmPW(true);
+    api
+      .post('/api/user/change-password', data, {})
+      .then((response) => {
+        console.log(response.data['message']);
+        if (response.data['message'] == 'Success') {
+          document.getElementById('change-password-form').reset();
+          setPWAlert('Your password has been updated successfully!');
+
+          setConfirmPW(true);
+          setShowPW(true);
+        } else if (response.data['message'] == 'Old password is incorrect.') {
+          setPWAlert('Old password is incorrect.');
+          setShowPW(true);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+
+        setPWAlert('An error has occured.');
         setShowPW(true);
-      
-      }else if(response.data["message"] == "Old password is incorrect."){
-      
-      setPWAlert('Old password is incorrect.');
-      setShowPW(true);
-      }
-    }).catch(error =>{
-      console.log(error)
-     
-      setPWAlert("An error has occured.");
-      setShowPW(true);
-    })
-    
+      });
   });
 
   const mutateNotificationSetting = useMutation((data) =>
     api
       .post('/api/user/update-notifcation-setting', data)
-      .then((response) => {
-       
-      })
-      .catch((error) => {
-       
-      })
+      .then((response) => {})
+      .catch((error) => {})
   );
 
-
   const onSubmitPassword = async (data) => {
-    console.log("onsubmit password1")
-    setPWAlert("");
+    console.log('onsubmit password1');
+    setPWAlert('');
     setShowPW(false);
     setConfirmPW(false);
 
-    var result = validatePassword(data.oldPassword, data.newPassword, data.confirmPassword);  
-    console.log("result");
+    var result = validatePassword(
+      data.oldPassword,
+      data.newPassword,
+      data.confirmPassword
+    );
+    console.log('result');
     console.log(result);
 
-    if(result == "correct") {
+    if (result == 'correct') {
       //setConfirmPW(true);
       //setShowPW(false);
       console.log('onsubmit password2');
@@ -301,35 +296,34 @@ const MyAccount = () => {
         oldPassword: data.oldPassword,
         newPassword: data.newPassword,
       });
-    }else if(result =="same as current"){
-      setPWAlert("Your current password is the same as the new password.");
+    } else if (result == 'same as current') {
+      setPWAlert('Your current password is the same as the new password.');
       setShowPW(true);
-    }else if(result == "incorrect"){
-      setPWAlert("Passwords do not match.");
+    } else if (result == 'incorrect') {
+      setPWAlert('Passwords do not match.');
       setShowPW(true);
     }
   };
 
-  const onSubmitNotification = async (data) =>{
+  const onSubmitNotification = async (data) => {};
 
-  }
-
-  function validatePassword (oldPassword, newPassword, confirmPassword)  {
-
-   if(JSON.stringify(newPassword) === JSON.stringify(confirmPassword) && (JSON.stringify(oldPassword) != JSON.stringify(newPassword))){
-       // setConfirmPW(true);
-       return "correct";
-    } else if(JSON.stringify(oldPassword) === JSON.stringify(newPassword)){
-       return "same as current";
-        // setPWAlert("Your current password is the same as the new password.");
-        //setShowPW(true);
-    }else{
-       return "incorrect";
+  function validatePassword(oldPassword, newPassword, confirmPassword) {
+    if (
+      JSON.stringify(newPassword) === JSON.stringify(confirmPassword) &&
+      JSON.stringify(oldPassword) != JSON.stringify(newPassword)
+    ) {
+      // setConfirmPW(true);
+      return 'correct';
+    } else if (JSON.stringify(oldPassword) === JSON.stringify(newPassword)) {
+      return 'same as current';
+      // setPWAlert("Your current password is the same as the new password.");
+      //setShowPW(true);
+    } else {
+      return 'incorrect';
       //setPWAlert("Passwords do not match.");
-        //setShowPW(true);
-      }
+      //setShowPW(true);
+    }
   }
-
 
   return (
     // <LayoutOne>

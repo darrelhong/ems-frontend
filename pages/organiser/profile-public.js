@@ -32,61 +32,37 @@ const EventOrgProfile = ({ router: { query } }) => {
   const [upcomingeventlist, setUpcomingeventlist] = useState([]);
   const [pasteventlist, setPastEventlist] = useState([]);
   // if there is user login credential
-  if (localStorage.getItem('userId') != null) {
-    const { data: user } = useUser(localStorage.getItem('userId'));
-    const paraId_ = JSON.parse(query.paraId);
+  // if (localStorage.getItem('userId') != null) {
+  const { data: user } = useUser(localStorage.getItem('userId'));
+  const paraId_ = JSON.parse(query.paraId);
+  const { data: eventorganiser } = useUser(paraId_);
 
-    // ADMIN: 'admin',
-    // EVNTORG: 'organiser',
-    // BIZPTNR: 'partner',
-    // ATND: 'attendee',
+  // ADMIN: 'admin',
+  // EVNTORG: 'organiser',
+  // BIZPTNR: 'partner',
+  // ATND: 'attendee',
 
-    // useEffect(async () => {
+  // useEffect(async () => {
 
-    // }, []);
+  // }, []);
 
-    useEffect(async () => {
-      console.log('user id');
-      console.log(user?.id);
-      if (user?.id != null) {
-        if (user?.roles[0].roleEnum === 'BIZPTNR') {
-          setUserRole('BIZPTNR');
-          await getPartnerCurrentEventsByOrganiserId(paraId_).then((events) => {
-            setCurrenteventlist(events);
-          });
-
-          // await getPartnerUpcomingEventsByOrganiserId(paraId_).then((events) => {
-          //   setUpcomingeventlist(events);
-          // });
-        } else if (
-          user?.roles[0].roleEnum === 'EVNTORG' ||
-          user?.roles[0].roleEnum === 'ATND'
-        ) {
-          await getAttendeeCurrentEventsByOrganiserId(paraId_).then(
-            (events) => {
-              setCurrenteventlist(events);
-            }
-          );
-
-          await getAttendeeUpcomingEventsByOrganiserId(paraId_).then(
-            (events) => {
-              setUpcomingeventlist(events);
-            }
-          );
-        }
-
-        await getPastEventsByOrganiserId(paraId_).then((events) => {
-          setPastEventlist(events);
+  useEffect(async () => {
+    console.log('user id');
+    console.log(user?.id);
+    if (user?.id != null) {
+      if (user?.roles[0].roleEnum === 'BIZPTNR') {
+        setUserRole('BIZPTNR');
+        await getPartnerCurrentEventsByOrganiserId(paraId_).then((events) => {
+          setCurrenteventlist(events);
         });
 
-        if (user?.id == paraId_) {
-          setShowEoView(true);
-          setShowPublicView(false);
-        } else {
-          setShowPublicView(true);
-          setShowEoView(false);
-        }
-      } else {
+        // await getPartnerUpcomingEventsByOrganiserId(paraId_).then((events) => {
+        //   setUpcomingeventlist(events);
+        // });
+      } else if (
+        user?.roles[0].roleEnum === 'EVNTORG' ||
+        user?.roles[0].roleEnum === 'ATND'
+      ) {
         await getAttendeeCurrentEventsByOrganiserId(paraId_).then((events) => {
           setCurrenteventlist(events);
         });
@@ -94,24 +70,44 @@ const EventOrgProfile = ({ router: { query } }) => {
         await getAttendeeUpcomingEventsByOrganiserId(paraId_).then((events) => {
           setUpcomingeventlist(events);
         });
+      }
 
-        await getPastEventsByOrganiserId(paraId_).then((events) => {
-          setPastEventlist(events);
-        });
+      await getPastEventsByOrganiserId(paraId_).then((events) => {
+        setPastEventlist(events);
+      });
+
+      if (user?.id == paraId_) {
+        setShowEoView(true);
+        setShowPublicView(false);
+      } else {
         setShowPublicView(true);
         setShowEoView(false);
       }
-    }, []);
-  } else {
-    useEffect(() => {
+    } else {
+      await getAttendeeCurrentEventsByOrganiserId(paraId_).then((events) => {
+        setCurrenteventlist(events);
+      });
+
+      await getAttendeeUpcomingEventsByOrganiserId(paraId_).then((events) => {
+        setUpcomingeventlist(events);
+      });
+
+      await getPastEventsByOrganiserId(paraId_).then((events) => {
+        setPastEventlist(events);
+      });
       setShowPublicView(true);
       setShowEoView(false);
-    });
-  }
+    }
+  }, []);
+  // } else {
+  //   useEffect(() => {
+  //     setShowPublicView(true);
+  //     setShowEoView(false);
+  //   });
+  //}
 
   // the paraID should always have id value
-  const paraId_ = JSON.parse(query.paraId);
-  const { data: eventorganiser } = useUser(paraId_);
+  // const paraId_ = JSON.parse(query.paraId);
 
   return (
     <LayoutOne>
