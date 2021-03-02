@@ -2,7 +2,7 @@ import { Row, Col } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import PropTypes from 'prop-types';
 
-const PublishingPane = ({ register, watch, vip, setVip, errors }) => {
+const PublishingPane = ({ register, watch, vip, setVip, errors, hideOptions, setHideOptions }) => {
     return (
         <Card className="my-account-content__content">
             <Card.Header>
@@ -83,6 +83,8 @@ const PublishingPane = ({ register, watch, vip, setVip, errors }) => {
                                         name="hideOptions"
                                         ref={register({ required: true })}
                                         value="hideBoth"
+                                        checked={hideOptions == "hideBoth"}
+                                        onChange={()=>setHideOptions("hideBoth")}
                                         style={{ marginRight: 5 }}
                                     />
                                     Hide from both Attendees and Business Partners
@@ -91,8 +93,10 @@ const PublishingPane = ({ register, watch, vip, setVip, errors }) => {
                                     <input
                                         type="radio"
                                         name="hideOptions"
+                                        checked={hideOptions == "hideFromAttendee"}
                                         ref={register({ required: true })}
                                         value="hideFromAttendee"
+                                        onChange={()=>setHideOptions("hideFromAttendee")}
                                         style={{ marginRight: 5 }}
                                     />
                                     Hide from Attendees but show Business Partners
@@ -103,6 +107,8 @@ const PublishingPane = ({ register, watch, vip, setVip, errors }) => {
                                         ref={register()}
                                         name="hideOptions"
                                         value="showBoth"
+                                        onChange={()=>setHideOptions("showBoth")}
+                                        checked={hideOptions == "showBoth"}
                                         // checked={this.state.selectedOption === "Female"}
                                         // onChange={this.onValueChange}
                                         style={{ marginRight: 5 }}

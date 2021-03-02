@@ -18,6 +18,7 @@ import useUser from '../../../lib/query/useUser';
 import { createEvent, getEventDetails, updateEvent } from '../../../lib/query/eventApi';
 import { htmlDateToDb, formatDates } from '../../../lib/util/functions';
 import Modal from 'react-bootstrap/Modal';
+import { getHiddenStatus } from '../../../lib/functions/eventOrganiser/eventFunctions';
 
 const CreateEvent = () => {
   const { control, register, handleSubmit, watch, setValue, errors, getValues } = useForm();
@@ -27,6 +28,7 @@ const CreateEvent = () => {
   const [eventData, setEventData] = useState(Object);
   const [vip, setVip] = useState(false);
   const [physical, setPhysical] = useState(false);
+  const [hideOptions, setHideOptions] = useState('');
 
   const router = useRouter();
   const { eid } = router.query;
@@ -67,7 +69,7 @@ const CreateEvent = () => {
     setValue("salesEndDate", salesEndDate);
     setVip(vip);
     setPhysical(physical);
-
+    setHideOptions(getHiddenStatus(eventData));
   };
 
   const oldSubmit = async (data) => {
@@ -299,7 +301,7 @@ const CreateEvent = () => {
                       <LocationPane register={register} errors={errors} watch={watch} physical={physical} setPhysical={setPhysical} />
                     </Tab.Pane>
                     <Tab.Pane eventKey="publishingOptions">
-                      <PublishingPane vip={vip} errors={errors} setVip={setVip} register={register} watch={watch} />
+                      <PublishingPane vip={vip} hideOptions={hideOptions} setHideOptions={setHideOptions} errors={errors} setVip={setVip} register={register} watch={watch} />
                     </Tab.Pane>
                     <Tab.Pane eventKey="images">
                       <ImagesPane register={register} />
