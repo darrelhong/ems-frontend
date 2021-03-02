@@ -1,4 +1,4 @@
-import PartnerProfile from '../../components/PartnerProfile';
+import OrganiserProfile from '../../components/OrganiserProfile';
 import { useState, useEffect } from 'react';
 import { withRouter } from 'next/router';
 import PartnerWrapper from '../../components/wrapper/PartnerWrapper';
@@ -49,32 +49,32 @@ const Profile = ({ router: { query } }) => {
       return check;
   }
 
-  const localuser = JSON.parse(query.localuser);
+  const paraId_ = JSON.parse(query.paraId);
 return (
  <div>
        {role === "Partner" && (
         <PartnerWrapper>
-          <PartnerProfile localuser={localuser} />
+          <OrganiserProfile paraId_={paraId_} />
         </PartnerWrapper>
       )}
 
       {role === 'Attendee' && (
         <AttendeeWrapper>
-          <PartnerProfile localuser={localuser} />
+          <OrganiserProfile paraId_={paraId_} />
         </AttendeeWrapper>
       )}
 
       {role === 'Organiser' && (
         <OrganiserWrapper>
-          <PartnerProfile
-            localuser={localuser}
+          <OrganiserProfile
+            paraId_={paraId_}
           />
         </OrganiserWrapper>)}
 
         {role === 'Guest' && (
         <GuestWrapper>
-          <PartnerProfile
-            localuser={localuser}
+          <OrganiserProfile
+           paraId_={paraId_}
           />
         </GuestWrapper>)}
 

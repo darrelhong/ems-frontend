@@ -12,6 +12,8 @@ import Alert from 'react-bootstrap/Alert';
 
 import { useMutation } from 'react-query';
 import api from '../lib/ApiClient';
+import GuestWrapper from '../components/wrapper/GuestWrapper';
+
 
 export default function RegisterBusinessPartner({ title, registerApiUrl }) {
   const { register, handleSubmit, errors, watch } = useForm();
@@ -39,7 +41,7 @@ export default function RegisterBusinessPartner({ title, registerApiUrl }) {
   };
 
   return (
-    <LayoutOne>
+    <GuestWrapper>
       <Head>
         <title>{title}</title>
       </Head>
@@ -174,7 +176,7 @@ export default function RegisterBusinessPartner({ title, registerApiUrl }) {
           </Row>
         </Container>
       </div>
-    </LayoutOne>
+    </GuestWrapper>
   );
 }
 

@@ -31,7 +31,7 @@ const OrganiserHeaderTop = () => {
                 </li>
                 <li>
                 <Link href={{
-                    pathname:"/organiser/profile-public",
+                    pathname:"/organiser/organiser-profile",
                     query: { paraId: JSON.stringify(user?.id)}}}>
                     <a>
                     <AiOutlineUser />

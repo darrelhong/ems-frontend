@@ -14,6 +14,7 @@ import { LayoutOne } from '../layouts';
 import Alert from 'react-bootstrap/Alert';
 import { useMutation } from 'react-query';
 
+import GuestWrapper from '../components/wrapper/GuestWrapper';
 
 export default function RegisterEvnOrg({ title, registerApiUrl }) {
   const { register, handleSubmit, errors, watch } = useForm();
@@ -174,7 +175,7 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
   };
 
   return (
-    <LayoutOne>
+    <GuestWrapper>
       <Head>
         <title>{title}</title>
       </Head>
@@ -388,7 +389,7 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
           </Row>
         </Container>
       </div>
-    </LayoutOne>
+    </GuestWrapper>
   );
 }
 

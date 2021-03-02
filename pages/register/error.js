@@ -5,6 +5,7 @@ import { useState} from 'react';
 import HomeHeaderTop from '../../components/Header/HomeHeaderTop';
 import { LayoutOne } from '../../layouts';
 import { Container, Row, Alert } from 'react-bootstrap';
+import GuestWrapper from '../../components/wrapper/GuestWrapper';
 
 import { useMutation } from 'react-query';
 import api from '../../lib/ApiClient';
@@ -29,9 +30,9 @@ export default function RegisterVerificationError({ token }) {
       <Head>
         <title>Email verification unsuccesful!</title>
       </Head>
-      <HomeHeaderTop />
+     
 
-      <LayoutOne>
+      <GuestWrapper>
         <Container>
           <Row className="justify-content-center">
             <p className="mt-5">
@@ -41,6 +42,8 @@ export default function RegisterVerificationError({ token }) {
             &nbsp;
           </p>
           </Row>
+          &nbsp;
+          <br></br>
           <Row className="justify-content-center">
             {token ? (
               <button className="btn btn-sm btn-fill-out"
@@ -100,7 +103,7 @@ export default function RegisterVerificationError({ token }) {
 
         </Container>
 
-      </LayoutOne>
+      </GuestWrapper>
     </>
   );
 }

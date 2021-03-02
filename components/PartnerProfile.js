@@ -39,18 +39,12 @@ const PartnerProfile = ({localuser}) => {
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
 
-  if(localStorage.getItem('userId') != null && localuser !== undefined){
+  if(localStorage.getItem('userId') != null){
   const { data: user } = useUser(localStorage.getItem('userId'));
 
 
   useEffect(async () => {
-    await getFollowers(localuser).then((data) => {
-      setFollowers(data);
-      console.log("data" + data);
-    });
-    await getFollowing(localuser).then((data) => {
-      setFollowing(data);
-    });
+  
 
     if (user?.id !== localuser) {
       setPublicView(true);
@@ -60,10 +54,19 @@ const PartnerProfile = ({localuser}) => {
   }, []);
 
   }else {
-    useEffect(() => {
+    console.log("testttt");
+    useEffect(async () => {
       setPublicView(true);
-    
+      console.log("testttt2");
+      await getFollowers(localuser).then((data) => {
+      setFollowers(data);
+      console.log("data" + data);
     });
+    await getFollowing(localuser).then((data) => {
+      setFollowing(data);
+      console.log("data following" + data);
+    });
+    }, []);
   }
 
 
@@ -332,7 +335,7 @@ const PartnerProfile = ({localuser}) => {
                                    
                                     <h4 class="mb-0 mt-0">
                                       <Link href={{
-                                        pathname: "/organiser/profile-public",
+                                        pathname: "/organiser/organiser-profile",
                                         query: { paraId: JSON.stringify(following?.id) }
                                       }}>
                                         {following.name}
