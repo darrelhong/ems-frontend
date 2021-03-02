@@ -83,7 +83,7 @@ const ImagesPane = ({ register }) => {
             console.log('checking input data');
             console.log(inputData);
 
-            setImages(images.push(URL.createObjectURL(data[0].file)));
+            // setImages(images.push(URL.createObjectURL(data[0].file)));
             // setImages(URL.createObjectURL(data[0].file));
             const response = await uploadEventImage(inputData);
             console.log('response:');
