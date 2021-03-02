@@ -235,7 +235,12 @@ const PartnerProfile = ({ localuser }) => {
                 </Tab.Pane>
                 <Tab.Pane eventKey="Followers">
                   <br></br>
-                  <div style={{ overflowY: 'scroll' }}>
+                  <div
+                    style={{
+                      overflowY: 'scroll',
+                      overflowX: 'scroll false',
+                    }}
+                  >
                     <div className="product-description-tab__additional-info">
                       {followers != undefined &&
                         followers.map((follower) => {
