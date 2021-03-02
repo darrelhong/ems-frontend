@@ -41,7 +41,7 @@ const Profile = ({ router: { query } }) => {
       } else if (user.roles[0].description === "Event Organiser") {
         check = "Organiser";
       } else {
-        check = "Partner";
+        check = 'Partner';
       }
       
       return check;
@@ -52,19 +52,17 @@ return (
  <div>
        {role === "Partner" && (
         <PartnerWrapper>
-          <PartnerProfile
-            localuser={localuser}
-          />
-        </PartnerWrapper>)}
+          <PartnerProfile localuser={localuser} />
+        </PartnerWrapper>
+      )}
 
-      {role === "Attendee" && (
+      {role === 'Attendee' && (
         <AttendeeWrapper>
-          <PartnerProfile
-            localuser={localuser}
-          />
-        </AttendeeWrapper>)}
+          <PartnerProfile localuser={localuser} />
+        </AttendeeWrapper>
+      )}
 
-      {role === "Organiser" && (
+      {role === 'Organiser' && (
         <OrganiserWrapper>
           <PartnerProfile
             localuser={localuser}
@@ -76,7 +74,5 @@ return (
 
 
 };
-
-
 
 export default withRouter(Profile);
