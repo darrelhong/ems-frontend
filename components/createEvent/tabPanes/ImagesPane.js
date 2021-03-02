@@ -12,32 +12,32 @@ const ImagesPane = ({ register }) => {
         '../../../public/assets/images/defaultprofilepic.png'
     );
 
-    const [images,setImages] = useState();
+    const [images, setImages] = useState([]);
 
     const dataSources = [
         {
-          id: 1,
-          dataURL: "https://picsum.photos/seed/1/600",
+            id: 1,
+            dataURL: "https://picsum.photos/seed/1/600",
         },
         {
-          id: 2,
-          dataURL: "https://picsum.photos/seed/2/600",
+            id: 2,
+            dataURL: "https://picsum.photos/seed/2/600",
         },
         {
-          id: 3,
-          dataURL: "https://picsum.photos/seed/3/600",
+            id: 3,
+            dataURL: "https://picsum.photos/seed/3/600",
         },
         {
-          id: 4,
-          dataURL: "https://picsum.photos/seed/4/600",
+            id: 4,
+            dataURL: "https://picsum.photos/seed/4/600",
         },
         {
-          id: 5,
-          dataURL: "https://picsum.photos/seed/5/600",
+            id: 5,
+            dataURL: "https://picsum.photos/seed/5/600",
         },
         {
-          id: 6,
-          dataURL: "https://picsum.photos/seed/6/600",
+            id: 6,
+            dataURL: "https://picsum.photos/seed/6/600",
         },
         // {
         //   id: 7,
@@ -55,7 +55,7 @@ const ImagesPane = ({ register }) => {
         //   id: 10,
         //   dataURL: "https://picsum.photos/seed/10/600",
         // },
-      ];
+    ];
 
     const [visible, setVisible] = useState(false);
     const handleSetVisible = () => {
@@ -72,15 +72,30 @@ const ImagesPane = ({ register }) => {
         // console.log(data[0].file);
         // console.log(data);
         // console.log("Upload files", data);
-        
-        //single file
-        let inputData = new FormData();
-        inputData.append('file',data[0].file);
-        console.log('checking inpu data');
-        console.log(inputData);
-        setImages(URL.createObjectURL(data[0].file));
-        
-        // const response = await uploadEventImage(inputData);
+
+        //single file method
+        const length = data.length ?? 0;
+        let i;
+        console.log('length found: ' + length);
+        for (i = 0; i < length; i++) {
+            let inputData = new FormData();
+            inputData.append('file', data[i].file);
+            console.log('checking input data');
+            console.log(inputData);
+
+            setImages(images.push(URL.createObjectURL(data[0].file)));
+            // setImages(URL.createObjectURL(data[0].file));
+            const response = await uploadEventImage(inputData);
+            console.log('response:');
+            console.log(response);
+        }
+
+
+        // inputData.append('file', data[0].file);
+        // console.log('checking inpu data');
+        // console.log(inputData);
+        // setImages(URL.createObjectURL(data[0].file));
+
 
         //multi file upload
         // let fileArray=[];
@@ -128,7 +143,11 @@ const ImagesPane = ({ register }) => {
                                  src={profilepicUrl}
                             
                              /> */}
-                            <img src={images}/>
+                            {/* {images && images.map((image, index) => {
+                                return (
+                                    <img src={image} />
+                                )
+                            })} */}
                         </Col>
                     </Row>
                     <Row>
