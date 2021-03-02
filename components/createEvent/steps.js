@@ -5,9 +5,9 @@ export const steps = [
       content: 'Important details about your event!',
     },
     {
-      label: 'Online / Physical',
-      eventKey: 'onlinePhysical',
-      content: 'Differing details for an online or physically hosted event',
+      label: 'Location',
+      eventKey: 'location',
+      content: 'More details about where your event will be hosted!',
     },
     {
       label: 'Ticketing',

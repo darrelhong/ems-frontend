@@ -10,7 +10,7 @@ import VerticalLineStepper from '../../../components/createEvent/VerticalLineSte
 import EventDetailsPane from '../../../components/createEvent/tabPanes/EventDetailsPane';
 import BoothPane from '../../../components/createEvent/tabPanes/BoothPane';
 import TicketingPane from '../../../components/createEvent/tabPanes/TicketingPane';
-import OnlinePhysicalPane from '../../../components/createEvent/tabPanes/OnlinePhysicalPane';
+import LocationPane from '../../../components/createEvent/tabPanes/LocationPane';
 import PublishingPane from '../../../components/createEvent/tabPanes/PublishingPane';
 import { steps } from '../../../components/createEvent/steps';
 import useUser from '../../../lib/query/useUser';
@@ -24,7 +24,8 @@ const CreateEvent = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [eventData, setEventData] = useState(Object);
-  const [vip,setVip] = useState(false);
+  const [vip, setVip] = useState(false);
+  const [physical, setPhysical] = useState(false);
 
   const router = useRouter();
   const { eid } = router.query;
@@ -50,7 +51,8 @@ const CreateEvent = () => {
       ticketCapacity,
       saleStartDate,
       salesEndDate,
-      vip } = eventData;
+      vip,
+      physical } = eventData;
 
     setValue("name", name);
     setValue("descriptions", descriptions);
@@ -63,7 +65,8 @@ const CreateEvent = () => {
     setValue("saleStartDate", saleStartDate);
     setValue("salesEndDate", salesEndDate);
     setVip(vip);
-    
+    setPhysical(physical);
+
   };
 
   const oldSubmit = async (data) => {
@@ -153,7 +156,7 @@ const CreateEvent = () => {
     else {
       //create new event without validation
       let eventOrganiserId = user.id;
-      let updatedData = { ...formData, eventOrganiserId, eventStatus}
+      let updatedData = { ...formData, eventOrganiserId, eventStatus }
       const response = await createEvent(updatedData);
       console.log(response);
     }
@@ -288,8 +291,8 @@ const CreateEvent = () => {
                     <Tab.Pane eventKey="booths">
                       <BoothPane register={register} />
                     </Tab.Pane>
-                    <Tab.Pane eventKey="onlinePhysical">
-                      <OnlinePhysicalPane register={register} watch={watch} />
+                    <Tab.Pane eventKey="location">
+                      <LocationPane register={register} watch={watch} physical={physical} setPhysical={setPhysical} />
                     </Tab.Pane>
                     <Tab.Pane eventKey="publishingOptions">
                       <PublishingPane vip={vip} setVip={setVip} register={register} watch={watch} />

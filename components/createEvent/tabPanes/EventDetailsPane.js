@@ -63,20 +63,6 @@ const EventDetailsPane = ({ register, watch, errors }) => {
                  )
                }
             </Col>
-            {/* probably need some caption saying either online or physical would do, or shift to online/physical */}
-            <Col className="form-group" md={12}>
-              <label>
-                Address <span className="required">*</span>
-              </label>
-              <input
-                // required
-                className="form-control"
-                name="address"
-                type="text"
-                ref={register()}
-              />
-            </Col>
-
             <Col className="form-group" md={12}>
               <label>Start Date</label>
               <input
