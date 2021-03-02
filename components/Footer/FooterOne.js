@@ -61,13 +61,14 @@ const FooterOne = () => {
             <Row>
               <Col lg={3} md={6} sm={12}>
                 <div className="widget">
-                  <div className="footer-logo">
+                   <h6 className="widget-title">EventStop</h6>
+                  {/* <div className="footer-logo">
                     <Link href="/">
                       <a>
-                        <img src="/assets/images/logo_light.png" alt="logo" />
+                        <img src="/assets/images/eventStop.png" alt="logo" />
                       </a>
                     </Link>
-                  </div>
+                  </div> */}
                   <p>
                     Discover new events or Create your own event!
                   </p>

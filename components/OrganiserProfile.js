@@ -28,7 +28,7 @@ import { withRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import { convertCompilerOptionsFromJson } from 'typescript';
 
-const EventOrgProfile = ({paraId_}) => {
+const EventOrgProfile = ({ paraId_ }) => {
   const [showEoView, setShowEoView] = useState(false);
   const [showPublicView, setShowPublicView] = useState(false);
   const [userRole, setUserRole] = useState('');
@@ -56,7 +56,7 @@ const EventOrgProfile = ({paraId_}) => {
     // }, []);
 
     useEffect(async () => {
-      console.log(paraId_);
+      console.log("test" + paraId_);
       await getOrgAttendeeFollowers(paraId_).then((followers) => {
         setAttendeeFollowers(followers);
       });
@@ -65,11 +65,11 @@ const EventOrgProfile = ({paraId_}) => {
         setPartnerFollowers(followers);
       });
 
-      await getRating(paraId_).then((rate)=>{
+      await getRating(paraId_).then((rate) => {
         setRating(rate);
       })
 
-      
+
       if (user?.id != null) {
         if (user?.roles[0].roleEnum === 'BIZPTNR') {
           setUserRole('BIZPTNR');
@@ -122,14 +122,33 @@ const EventOrgProfile = ({paraId_}) => {
       }
     }, []);
   } else {
-    useEffect(() => {
+    useEffect(async () => {
       setShowPublicView(true);
       setShowEoView(false);
-    });
+      await getOrgAttendeeFollowers(paraId_).then((followers) => {
+        setAttendeeFollowers(followers);
+      });
+
+      await getOrgPartnerFollowers(paraId_).then((followers) => {
+        setPartnerFollowers(followers);
+      });
+
+      await getRating(paraId_).then((rate)=>{
+        setRating(rate);
+      })
+
+      await getAttendeeCurrentEventsByOrganiserId(paraId_).then((events) => {
+        setCurrenteventlist(events);
+      });
+
+      await getAttendeeUpcomingEventsByOrganiserId(paraId_).then((events) => {
+        setUpcomingeventlist(events);
+      });
+    }, []);
   }
 
   // the paraID should always have id value
-//   const paraId_ = JSON.parse(query.paraId);
+  //   const paraId_ = JSON.parse(query.paraId);
   const { data: eventorganiser } = useUser(paraId_);
 
   return (
@@ -149,23 +168,23 @@ const EventOrgProfile = ({paraId_}) => {
       <div className="my-account-content space-pt--r100 space-pb--r100">
         <Row className="justify-content-md-end">
           <Col xs={3} md={3}>
-          {eventorganiser?.profilePic == null && (<Image
-                  src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
-                  className="profile-image"
-                  thumbnail
-                />)}
-                {eventorganiser?.profilePic != null && (
-                  <Image
-                    className="profile-image"
-                    src={partner?.profilePic}
-                    thumbnail
-                  />
-                )}
-          
+            {eventorganiser?.profilePic == null && (<Image
+              src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
+              className="profile-image"
+              thumbnail
+            />)}
+            {eventorganiser?.profilePic != null && (
+              <Image
+                className="profile-image"
+                src={partner?.profilePic}
+                thumbnail
+              />
+            )}
+
           </Col>
           <Col xs={1} md={1}>
-          
-          
+
+
           </Col>
 
           <Col xs={6} md={6}>
@@ -177,7 +196,7 @@ const EventOrgProfile = ({paraId_}) => {
               </div>
             </div>
 
-        
+
 
             &nbsp;
 
@@ -202,7 +221,7 @@ const EventOrgProfile = ({paraId_}) => {
                     <h5>Followers</h5>
                   </Row>
                 </Col>
-                
+
               </Row>
             </div>
 
@@ -253,7 +272,7 @@ const EventOrgProfile = ({paraId_}) => {
                   {/* {/show only if the role is organiser/} */}
                   <Nav.Link
                     eventKey="followers"
-                    // style={{ display: showEoView ? 'block' : 'none' }}
+                  // style={{ display: showEoView ? 'block' : 'none' }}
                   >
                     FOLLOWERS{' '}
                     {/* {/product.ratingCount ? `(${product.ratingCount})` : ""/} */}
@@ -291,7 +310,7 @@ const EventOrgProfile = ({paraId_}) => {
                   ))} */}
                   <br></br>
                   <div className="product-description-tab__additional-info">
-                  {eventorganiser?.description === null && "There is no description." || eventorganiser?.description}
+                    {eventorganiser?.description === null && "There is no description." || eventorganiser?.description}
                   </div>
                 </Tab.Pane>
                 <Tab.Pane eventKey="reviews">
@@ -431,12 +450,21 @@ const EventOrgProfile = ({paraId_}) => {
                 </Tab.Pane>
                 <Tab.Pane eventKey="followers">
                   <br></br>
+                  <div  style={{
+                      overflowY: 'scroll',
+                      // border:'1px solid red',
+                      // width:'500px',
+                      overflowX: 'hidden',
+                      height:'40vh',
+                      position:'relative'
+                    }}>
                   <div className="product-description-tab__additional-info">
-                  <FollowersTabEoProfile
-                        attendees={attendeeFollowers}
-                        partners={partnerFollowers}
-                      
-                      />
+                    <FollowersTabEoProfile
+                      attendees={attendeeFollowers}
+                      partners={partnerFollowers}
+
+                    />
+                  </div>
                   </div>
                 </Tab.Pane>
               </Tab.Content>
@@ -444,7 +472,7 @@ const EventOrgProfile = ({paraId_}) => {
           </Col>
         </Row>
       </div>
-      </div>
+    </div>
   );
 };
 

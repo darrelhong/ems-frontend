@@ -14,7 +14,7 @@ import { useState, useEffect } from 'react';
 //IoIosCreate,
 //IoIosPerson,
 //} from "react-icons/io";
-
+import {getUser} from '../lib/query/getUser';
 import { IoIosStar, IoIosStarOutline } from 'react-icons/io';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
@@ -31,50 +31,54 @@ import { BsPencilSquare } from 'react-icons/bs';
 import { FaHtml5 } from 'react-icons/fa';
 
 const PartnerProfile = ({ localuser }) => {
-  console.log(localuser);
+  
   const [publicView, setPublicView] = useState();
+  
 
   // const [events, setEvents] = useState([]);
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
 
-  if(localStorage.getItem('userId') != null){
-  const { data: user } = useUser(localStorage.getItem('userId'));
+ 
 
     useEffect(async () => {
-      await getFollowers(localuser).then((data) => {
+      
+      if (localStorage.getItem('userId') != null) {
+        await getUser(localStorage.getItem('userId')).then((data) => {
+          
+        
+          if (data?.id !== localuser) {
+           
+            setPublicView(true);
+          } else {
+            console.log("test false");
+            setPublicView(false);
+          }
+         
+        });
+
+
+    }else {
+    
+      setPublicView(true);
+    }
+        await getFollowers(localuser).then((data) => {
         setFollowers(data);
       });
       await getFollowing(localuser).then((data) => {
         setFollowing(data);
       });
+
+   
   
-    if (user?.id !== localuser) {
-      setPublicView(true);
-    } else {
-      setPublicView(false);
-    }
   }, []);
 
-  }else {
-    console.log("testttt");
-    useEffect(async () => {
-      setPublicView(true);
-      console.log("testttt2");
-      await getFollowers(localuser).then((data) => {
-      setFollowers(data);
-      console.log("data" + data);
-    });
-    await getFollowing(localuser).then((data) => {
-      setFollowing(data);
-      console.log("data following" + data);
-    });
-    }, []);
-  }
+  
 
   const { data: partner } = useUser(localuser);
-
+ 
   return (
+
     <div>
       {/* breadcrumb */}
       <BreadcrumbOne pageTitle="Partner Profile Details">
@@ -158,7 +162,8 @@ const PartnerProfile = ({ localuser }) => {
                         <h5>Following</h5>
                       </Row>
                     </Col>
-                    <div style={{ display: !publicView ? 'block' : 'none' }}>
+                   
+                    {!publicView && ( <div>
                       &nbsp;
                       <Link href="/partner/profile-account">
                         <button
@@ -170,7 +175,17 @@ const PartnerProfile = ({ localuser }) => {
                           <BsPencilSquare />
                         </button>
                       </Link>
-                    </div>
+                    </div> )}
+                     {publicView && (<div> &nbsp;
+                  <button
+                    type="submit"
+                    className="btn btn-fill-out btn-sm"
+                    name="submit"
+                    value="Submit"
+                  >
+                    Follow
+                  </button></div>
+                )}
                   </Row>
                 </div>
                 <div>
@@ -188,21 +203,14 @@ const PartnerProfile = ({ localuser }) => {
                   </Row>
                 </div>
                 <br></br>
-                {publicView && (
-                  <button
-                    type="submit"
-                    className="btn btn-fill-out"
-                    name="submit"
-                    value="Submit"
-                  >
-                    Follow
-                  </button>
-                )}
+               
               </Col>
             </Row>
           </Container>
-        </div>
+        </div> 
+         <br></br>
         <Row className="justify-content-md-center">
+        
           <Col md={{ span: 8 }}>
             <Tab.Container defaultActiveKey="Events">
               <Nav
@@ -248,8 +256,12 @@ const PartnerProfile = ({ localuser }) => {
                   <br></br>
                   <div
                     style={{
-                      overflowY: 'scroll',
-                      overflowX: 'scroll false',
+                      overflowY: 'auto',
+                      // border:'1px solid red',
+                      // width:'500px',
+                      overflowX: 'hidden',
+                      height:'40vh',
+                      position:'relative'
                     }}
                   >
                     <div className="product-description-tab__additional-info">
@@ -310,6 +322,16 @@ const PartnerProfile = ({ localuser }) => {
 
                 <Tab.Pane eventKey="Following">
                   <br></br>
+                  <div
+                    style={{
+                      overflowY: 'auto',
+                      // border:'1px solid red',
+                      // width:'500px',
+                      overflowX: 'hidden',
+                      height:'40vh',
+                      position:'relative'
+                    }}
+                  >
                   <div className="product-description-tab__additional-info">
                     {following != undefined &&
                       following.map((following) => {
@@ -358,6 +380,7 @@ const PartnerProfile = ({ localuser }) => {
                           </div>
                         );
                       })}
+                  </div>
                   </div>
                 </Tab.Pane>
               </Tab.Content>

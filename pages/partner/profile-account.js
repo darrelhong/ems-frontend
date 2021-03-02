@@ -125,6 +125,7 @@ const MyAccount = () => {
     .then(response => {
       setAccSaved(true);
      setAccSuccess(" Account details saved successfully! ");
+     user = useUser(localStorage.getItem('userId'));
      //document.getElementById("account-details-form").reset();
 
     }).catch(error =>{
