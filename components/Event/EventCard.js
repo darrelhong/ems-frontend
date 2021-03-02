@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { Fragment } from "react";
 import Link from "next/link";
-import { Col } from "react-bootstrap";
+import { Col, ProgressBar, Modal, Button } from "react-bootstrap";
 import { formatDate } from '../../lib/formatDate'
-import { ProgressBar } from 'react-bootstrap';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import StarIcon from '@material-ui/icons/Star';
@@ -13,6 +12,11 @@ import { vipToggle } from "../../lib/functions/eventOrganiser/eventFunctions";
 
 const EventCard = ({ event, deleteCancelButton, createToast }) => {
     const [currEvent, setCurrEvent] = useState(event);
+
+    const [deleteModalShow, setDeleteModalShow] = useState(false);
+    const closeModal = () => setDeleteModalShow(false);
+    const openModal = () => setDeleteModalShow(true);
+
 
     const handleDeleteCancel = async (currEvent) => {
         deleteCancelButton(currEvent);
@@ -30,6 +34,20 @@ const EventCard = ({ event, deleteCancelButton, createToast }) => {
 
     return (
         <Fragment>
+            <Modal show={deleteModalShow} onHide={closeModal} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Delete An Event</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Test Test</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={closeModal}>
+                        Close
+                    </Button>
+                    <Button variant="primary">
+                        Proceed
+                    </Button>
+                </Modal.Footer>
+            </Modal>
             <Col
                 lg={4}
                 sm={6}
@@ -48,7 +66,7 @@ const EventCard = ({ event, deleteCancelButton, createToast }) => {
                     <div className="product-list__info">
 
                         <span style={{ float: "right" }}>
-                            <IconButton onClick={() => handleDeleteCancel()} aria-label="delete" color="secondary">
+                            <IconButton onClick={() => openModal()} aria-label="delete" color="secondary">
                                 <DeleteIcon />
                             </IconButton>
                         </span>

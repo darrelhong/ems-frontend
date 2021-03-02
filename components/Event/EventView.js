@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import EventCard from './EventCard';
-import { Row } from "react-bootstrap";
+import { Row, Modal, Button } from "react-bootstrap";
 import { useToasts } from 'react-toast-notifications';
 import { handleCancel, handleDelete } from "../../lib/functions/eventOrganiser/eventFunctions";
 
 const EventView = ({ events, layout }) => {
     const [currEvents, setCurrEvents] = useState(events);
+    const [deleteModalShow, setDeleteModalShow] = useState(true);
+
+    const closeModal = () => setDeleteModalShow(false);
 
     // console.log("ALL EVENTS: ", events);
     // console.log("event state: ", currEvents);
@@ -31,7 +34,24 @@ const EventView = ({ events, layout }) => {
     };
 
     return (
+
         <div className="shop-products">
+            <Modal show={deleteModalShow} onHide={closeModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Modal Heading</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Test Test</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" >
+                        Close
+                    </Button>
+                    <Button variant="primary">
+                        Save Changes
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+
             <Row className={layout}>
                 {currEvents &&
                     currEvents.map((event) => {
