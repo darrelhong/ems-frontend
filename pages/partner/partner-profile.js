@@ -9,60 +9,54 @@ import useUser from '../../lib/query/useUser';
 const Profile = ({ router: { query } }) => {
   const [role, setRole] = useState();
   const { data: user } = useUser(localStorage.getItem('userId'));
+  //const [user, setUser] = useState();
 
   useEffect(async () => {
-    if (localStorage.getItem('userId') != null || user != undefined) {
-      console.log("hello2");
+    console.log('result');
+    console.log(user?.id);
+    console.log(user);
+    if (user?.id != undefined) {
+      console.log('hello2');
       // await useUser().then((data) => {setUser(data)})
 
-    //   console.log({ user }) useUser(localStorage.getItem('userId'));
-      var check = ""
-      if (user.roles[0].description === "Attendee") {
-        check = "Attendee";
-      } else if (user.roles[0].description === "Event Organiser") {
-        check = "Organiser";
+      //   console.log({ user }) useUser(localStorage.getItem('userId'));
+      var check = '';
+      if (user.roles[0].description === 'Attendee') {
+        check = 'Attendee';
+      } else if (user.roles[0].description === 'Event Organiser') {
+        check = 'Organiser';
       } else {
-        check = "Partner";
+        check = 'Partner';
       }
       // });
       setRole(check);
-    }else {
-
-      setRole("Guest");
+    } else {
+      setRole('Guest');
     }
-    
-  })
+  }, []);
 
-  const localuser = JSON.parse(query.localuser);
+  // const localuser = JSON.parse(query.localuser);
   return (
     <div>
-      {role === "Partner" && (
+      {role === 'Partner' && (
         <PartnerWrapper>
-          <PartnerProfile
-            localuser={localuser}
-          />
-        </PartnerWrapper>)}
+          <PartnerProfile localuser={localuser} />
+        </PartnerWrapper>
+      )}
 
-      {role === "Attendee" && (
+      {role === 'Attendee' && (
         <AttendeeWrapper>
-          <PartnerProfile
-            localuser={localuser}
-          />
-        </AttendeeWrapper>)}
+          <PartnerProfile localuser={localuser} />
+        </AttendeeWrapper>
+      )}
 
-      {role === "Organiser" && (
+      {role === 'Organiser' && (
         <OrganiserWrapper>
-          <PartnerProfile
-            localuser={localuser}
-          />
-        </OrganiserWrapper>)}
-
+          <PartnerProfile localuser={localuser} />
+        </OrganiserWrapper>
+      )}
     </div>
-  )
-
-
+  );
 };
-
-
 
 export default withRouter(Profile);
