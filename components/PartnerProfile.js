@@ -31,8 +31,7 @@ import { BsPencilSquare } from 'react-icons/bs';
 
 import { FaHtml5 } from 'react-icons/fa';
 
-const PartnerProfile = (localuser) => {
-  
+const PartnerProfile = ({localuser}) => {
     console.log(localuser);
   const [publicView, setPublicView] = useState();
   
@@ -40,13 +39,14 @@ const PartnerProfile = (localuser) => {
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
 
-  if(localStorage.getItem('userId') != null){
+  if(localStorage.getItem('userId') != null && localuser !== undefined){
   const { data: user } = useUser(localStorage.getItem('userId'));
 
 
   useEffect(async () => {
     await getFollowers(localuser).then((data) => {
       setFollowers(data);
+      console.log("data" + data);
     });
     await getFollowing(localuser).then((data) => {
       setFollowing(data);
@@ -243,7 +243,8 @@ const PartnerProfile = (localuser) => {
                 </Tab.Pane>
                 <Tab.Pane eventKey="Followers">
                   <br></br>
-                  <div className="product-description-tab__additional-info">
+                  <div style={{overflowY: 'scroll'}}>
+                  <div className="product-description-tab__additional-info"  >
                     {followers != undefined &&
                       followers.map((follower) => {
                         
@@ -292,6 +293,7 @@ const PartnerProfile = (localuser) => {
                           // </div>
                         );
                       })}
+                  </div>
                   </div>
                 </Tab.Pane>
 

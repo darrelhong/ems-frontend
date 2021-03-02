@@ -10,7 +10,7 @@ import { logout } from '../../lib/auth';
 
 const PartnerHeaderTop = () => {
   const { data: localuser } = useUser(localStorage.getItem('userId'));
-  console.log(JSON.stringify(localuser) );
+  // console.log(JSON.stringify(localuser) );
   return (
     <div className="top-header d-lg-block">
       <Container>
