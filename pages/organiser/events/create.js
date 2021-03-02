@@ -12,6 +12,7 @@ import BoothPane from '../../../components/createEvent/tabPanes/BoothPane';
 import TicketingPane from '../../../components/createEvent/tabPanes/TicketingPane';
 import LocationPane from '../../../components/createEvent/tabPanes/LocationPane';
 import PublishingPane from '../../../components/createEvent/tabPanes/PublishingPane';
+import ImagesPane from '../../../components/createEvent/tabPanes/ImagesPane';
 import { steps } from '../../../components/createEvent/steps';
 import useUser from '../../../lib/query/useUser';
 import { createEvent, getEventDetails, updateEvent } from '../../../lib/query/eventApi';
@@ -297,6 +298,9 @@ const CreateEvent = () => {
                     </Tab.Pane>
                     <Tab.Pane eventKey="publishingOptions">
                       <PublishingPane vip={vip} errors={errors} setVip={setVip} register={register} watch={watch} />
+                    </Tab.Pane>
+                    <Tab.Pane eventKey="images">
+                      <ImagesPane register={register}/>
                     </Tab.Pane>
                   </Tab.Content>
                 </Col>
