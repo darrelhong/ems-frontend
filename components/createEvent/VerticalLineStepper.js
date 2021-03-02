@@ -11,6 +11,7 @@ import { Col } from 'react-bootstrap';
 import Nav from 'react-bootstrap/Nav';
 // import { IoIosSearch, IoIosMenu } from 'react-icons/io';
 import PropTypes from 'prop-types';
+import { IoIosWarning } from 'react-icons/io';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const VerticalLinearStepper = ({ activeStep, setActiveStep, steps }) => {
+const VerticalLinearStepper = ({ activeStep, setActiveStep, steps, errors }) => {
   const classes = useStyles();
 
   const handleNext = () => {
@@ -53,6 +54,21 @@ const VerticalLinearStepper = ({ activeStep, setActiveStep, steps }) => {
     setActiveStep(index);
   };
 
+  const checkSectionErrors = (index) => {
+    switch (index) {
+      case 0:
+        return (errors.name || errors.descriptions || errors.eventStartDate || errors.eventEndDate);
+      case 1:
+        return (errors.physical || errors.address);
+      case 2:
+        return (errors.ticketPrice || errors.ticketCapacity || errors.saleStartDate || errors.salesEndDate);
+      case 3:
+        return errors.boothCapacity;
+      case 4:
+        return (errors.vip || errors.hideOptions);
+    }
+  };
+
   return (
     // <div className={classes.root}>
     <Col lg={3} md={4}>
@@ -74,7 +90,7 @@ const VerticalLinearStepper = ({ activeStep, setActiveStep, steps }) => {
                   >
                     {step.label}
                   </StepLabel> */}
-                  {index + 1}. {step.label}
+                  {index + 1}. {step.label} {checkSectionErrors(index) && (<IoIosWarning />)}
                 </Nav.Link>
               </Nav.Item>
               <StepContent>

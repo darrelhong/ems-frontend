@@ -273,6 +273,7 @@ const CreateEvent = () => {
                   steps={steps}
                   activeStep={activeStep}
                   setActiveStep={setActiveStep}
+                  errors={errors}
                 />
                 <Col lg={9} md={8}>
                   <Tab.Content>
