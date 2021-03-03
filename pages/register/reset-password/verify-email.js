@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { LayoutOne } from '../../../layouts';
 import { BreadcrumbOne } from '../../../components/Breadcrumb';
 import { useState, useEffect } from 'react';
+import GuestWrapper from '../../components/wrapper/GuestWrapper';
+
 import cx from 'classnames';
 // import {
 //   Alert,
@@ -109,7 +111,7 @@ export default function ResetPassword({ token }) {
   }
 
   return (
-    <LayoutOne>
+    <GuestWrapper>
       <Head>
         <title>Change Password</title>
       </Head>
@@ -200,7 +202,7 @@ export default function ResetPassword({ token }) {
         </Card>
         {/* )} */}
       </Container>
-    </LayoutOne>
+    </GuestWrapper>
   );
 }
 

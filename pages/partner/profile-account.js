@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 // import { LayoutOne } from '../../layouts';
 import { BreadcrumbOne } from '../../components/Breadcrumb';
+import ButtonWithLoading from '../../components/custom/ButtonWithLoading';
 import {
   Container,
   Row,
@@ -37,7 +38,8 @@ import { logout } from '../../lib/auth';
 const MyAccount = () => {
   const [showSuccessMsg, setShowSuccessMsg] = useState(false);
   const [showFailedMsg, setShowFailedMsg] = useState(false);
-  const [businessCategory, setBusinessCategory] = useState('');
+  const [businessCategory, setBusinessCategory] = useState("");
+  const [loginLoading, setLoginLoading] = useState(false);
 
   const [fileUpload, setfileUpload] = useState(false);
   const [file, setFile] = useState('uploadfile');
@@ -89,11 +91,11 @@ const MyAccount = () => {
     </Tooltip>
   );
 
-  const mutateAccStatus = useMutation(
-    (data) => api.post('/api/user/update-account-status', data),
+    (data) => api.post(`/api/user/disableStatus/${user?.id}`),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(['user', user?.id.toString()]);
+        logout({ redirectTo: '/partner/login' });
       },
     }
   );
@@ -105,7 +107,7 @@ const MyAccount = () => {
     // close the modal once yes click.
     setShow(false);
 
-    logout({ redirectTo: '/organiser/login' });
+    
   };
 
   const { register, handleSubmit, errors } = useForm({
@@ -119,11 +121,21 @@ const MyAccount = () => {
         setAccSaved(true);
         setAccSuccess(' Account details saved successfully! ');
 
-        //document.getElementById("account-details-form").reset();
-      })
-      .catch((error) => {
-        console.log(error);
-      })
+  const mutateAccDetail = useMutation(
+
+    (data) => api.post('/api/partner/update', data) 
+    .then(response => {
+      setAccSaved(true);
+     setAccSuccess(" Account details saved successfully! ");
+     setLoginLoading(false);
+     //document.getElementById("account-details-form").reset();
+     window.location.reload();
+    }).catch(error =>{
+      console.log(error)
+
+    }
+
+    )
   );
 
   const onChangeBizCategory = async (event) => {
@@ -133,16 +145,18 @@ const MyAccount = () => {
 
   const onSubmit = async (data) => {
     console.log('data acc' + data['name']);
-    if (businessCategory != '') {
-      mutateAccDetail.mutate({
-        address: data.address,
-        description: data.description,
-        name: data.name,
-        phonenumber: data.phonenumber,
-        id: user?.id,
-        businessCategory: businessCategory,
-      });
-    } else if (
+    setLoginLoading(true);
+    if(businessCategory != ""){
+        mutateAccDetail.mutate({
+            address: data.address,
+            description: data.description,
+            name: data.name,
+            phonenumber: data.phonenumber,
+            id: user?.id,
+            businessCategory : businessCategory,
+          });
+    }
+    else if (
       user?.address != data.address ||
       user?.description != data.description ||
       user?.name != data.name ||
@@ -231,7 +245,22 @@ const MyAccount = () => {
 
         setPWAlert('An error has occured.');
         setShowPW(true);
-      });
+        setLoginLoading(false);
+      
+      }else if(response.data["message"] == "Old password is incorrect."){
+      
+      setPWAlert('Current password is incorrect.');
+      setShowPW(true);
+      setLoginLoading(false);
+      }
+    }).catch(error =>{
+      console.log(error)
+     
+      setPWAlert("An error has occured.");
+      setShowPW(true);
+      setLoginLoading(false);
+    })
+    
   });
 
   const mutateNotificationSetting = useMutation((data) =>
@@ -304,9 +333,9 @@ const MyAccount = () => {
           <Button variant="secondary" onClick={handleDisabled}>
             Yes
           </Button>
-          <Button className="btn btn-fill-out" onClick={handleClose}>
+          <button className="btn btn-fill-out" onClick={handleClose}>
             No
-          </Button>
+          </button>
         </Modal.Footer>
       </Modal>
 
@@ -642,14 +671,15 @@ const MyAccount = () => {
                               </Col>
 
                               <Col md={12}>
-                                <button
+                                <ButtonWithLoading
                                   type="submit"
                                   className="btn btn-fill-out"
                                   name="submit"
                                   value="Submit"
+                                  isLoading={loginLoading}
                                 >
                                   Save
-                                </button>
+                                </ButtonWithLoading>
                               </Col>
                             </Row>
 
