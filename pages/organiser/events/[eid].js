@@ -29,14 +29,14 @@ const OrganiserViewEventDetails = () => {
     const loadEvent = async () => {
       try {
         let eventData = await getEventDetails(eid);
-        // if (eventData.eventEndDate) setPrettyEndDate(format(parseISO(eventData.eventEndDate), 'dd MMM yy hh:mmbbb'));
-        // if (eventData.eventStartDate) setPrettyStartDate(format(parseISO(eventData.eventStartDate), 'dd MMM yy hh:mmbbb'));
-        // if (eventData.saleStartDate) setPrettySaleStartDate(format(parseISO(eventData.saleStartDate), 'dd MMM yy hh:mmbbb'));
-        // if (eventData.salesEndDate) setPrettySalesEndDate(format(parseISO(eventData.salesEndDate), 'dd MMM yy hh:mmbbb'));
-        setPrettyEndDate(eventData.eventEndDate);
-        setPrettyStartDate(eventData.eventStartDate);
-        setPrettySaleStartDate(eventData.salesStartDate);
-        setPrettySalesEndDate(eventData.salesEndDate);
+        if (eventData.eventEndDate) setPrettyEndDate(format(parseISO(eventData.eventEndDate), 'dd MMM yy hh:mmbbb'));
+        if (eventData.eventStartDate) setPrettyStartDate(format(parseISO(eventData.eventStartDate), 'dd MMM yy hh:mmbbb'));
+        if (eventData.saleStartDate) setPrettySaleStartDate(format(parseISO(eventData.saleStartDate), 'dd MMM yy hh:mmbbb'));
+        if (eventData.salesEndDate) setPrettySalesEndDate(format(parseISO(eventData.salesEndDate), 'dd MMM yy hh:mmbbb'));
+        // setPrettyEndDate(eventData.eventEndDate);
+        // setPrettyStartDate(eventData.eventStartDate);
+        // setPrettySaleStartDate(eventData.salesStartDate);
+        // setPrettySalesEndDate(eventData.salesEndDate);
         setEvent(eventData);
 
         setEvent(eventData);
