@@ -12,7 +12,7 @@ import { Fragment } from 'react';
 //   addToCompare,
 //   deleteFromCompare
 // } from "../../redux/actions/compareActions";
-import ProductGridFive from "./ProductGridFive";
+import ProductGridFive from './ProductGridFive';
 
 const ProductGridWrapperFive = ({
   products,

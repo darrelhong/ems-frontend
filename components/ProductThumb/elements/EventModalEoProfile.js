@@ -18,8 +18,6 @@ const EventModalEoProfile = (props) => {
   const [gallerySwiper, getGallerySwiper] = useState(null);
   const [thumbnailSwiper, getThumbnailSwiper] = useState(null);
 
-
-
   // effect for swiper slider synchronize
   useEffect(() => {
     if (
@@ -41,7 +39,6 @@ const EventModalEoProfile = (props) => {
     loopedSlides: 4,
     loop: false,
     effect: 'fade',
-    
   };
 
   const thumbnailSwiperParams = {

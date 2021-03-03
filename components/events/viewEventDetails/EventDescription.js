@@ -1,5 +1,5 @@
-import { Fragment, useState } from "react";
-import { AiOutlineReload } from "react-icons/ai";
+import { Fragment, useState } from 'react';
+import { AiOutlineReload } from 'react-icons/ai';
 import {
   IoLogoFacebook,
   IoLogoTwitter,
@@ -8,15 +8,15 @@ import {
   IoLogoInstagram,
   IoMdWifi,
   IoIosBody,
-  IoMdStar
-} from "react-icons/io";
+  IoMdStar,
+} from 'react-icons/io';
 
 const EventDescription = ({
   event,
   prettyStartDate,
   publishToggle,
   hideToggle,
-  vipToggle
+  vipToggle,
 }) => {
   // const [selectedProductColor, setSelectedProductColor] = useState(
   //   product.variation ? product.variation[0].color : ""
@@ -42,7 +42,8 @@ const EventDescription = ({
       <div className="product-content__price-rating-wrapper space-mb--10">
         <div className="product-content__price d-flex-align-items-center">
           {/* <span className="price">{event.eventStartDate}</span>  */}
-          <span className="price">{prettyStartDate}</span> {/* keep this part */}
+          <span className="price">{prettyStartDate}</span>{' '}
+          {/* keep this part */}
         </div>
 
         {/* for now comment out  */}
@@ -69,22 +70,23 @@ const EventDescription = ({
               <IoIosBody /> Physical Event
             </li>
           ) : (
-              <li>
-                <IoMdWifi /> Online Event
-              </li>
-            )}
+            <li>
+              <IoMdWifi /> Online Event
+            </li>
+          )}
           <li>
             <AiOutlineReload /> Event Location: {event.address}
           </li>
 
           {event.vip ? (
             <li>
-              < IoMdStar /> Undo VIP
+              <IoMdStar /> Undo VIP
             </li>
           ) : (
-              <li>
-                < IoMdStar /> Make Event VIP
-              </li>)}
+            <li>
+              <IoMdStar /> Make Event VIP
+            </li>
+          )}
         </ul>
       </div>
       <hr />
@@ -113,42 +115,39 @@ const EventDescription = ({
             <i className="icon-basket-loaded" /> Edit
           </button>
 
-          {event.published ?
-
-            (<button
+          {event.published ? (
+            <button
               onClick={publishToggle}
               className="btn btn-fill-out btn-addtocart space-ml--10"
             >
               <i className="icon-basket-loaded" /> Unpublish Event
-            </button>)
-            :
-            (<button
+            </button>
+          ) : (
+            <button
               onClick={publishToggle}
               className="btn btn-fill-out btn-addtocart space-ml--10"
             >
               <i className="icon-basket-loaded" /> Publish Event
-            </button>)
-          }
+            </button>
+          )}
 
-          {event.hidden ?
-
-            (<button
+          {event.hidden ? (
+            <button
               onClick={hideToggle}
               title="Unhide your event from attendees!"
               className="btn btn-fill-out btn-addtocart space-ml--10"
             >
               <i className="icon-basket-loaded" /> Unhide Event
-            </button>)
-            :
-            (<button
+            </button>
+          ) : (
+            <button
               onClick={hideToggle}
               title="Hide your event from attendees from now"
               className="btn btn-fill-out btn-addtocart space-ml--10"
             >
               <i className="icon-basket-loaded" /> Hide Event
-            </button>)
-          }
-
+            </button>
+          )}
 
           {event.vip ? (
             <button
@@ -158,19 +157,13 @@ const EventDescription = ({
               <i className="icon-basket-loaded" /> Unlist from VIP
             </button>
           ) : (
-              <button
-                onClick={vipToggle}
-                className="btn btn-fill-out btn-addtocart space-ml--10"
-              >
-                <i className="icon-basket-loaded" /> Make VIP
-              </button>
-            )
-          }
-
-
-
-
-
+            <button
+              onClick={vipToggle}
+              className="btn btn-fill-out btn-addtocart space-ml--10"
+            >
+              <i className="icon-basket-loaded" /> Make VIP
+            </button>
+          )}
 
           {/* second button */}
           <button

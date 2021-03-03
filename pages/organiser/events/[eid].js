@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import Link from "next/link";
+import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col } from 'react-bootstrap';
 // import { useToasts } from "react-toast-notifications";
 // import { getDiscountPrice } from "../../../lib/product";
-import { LayoutOne } from "../../../layouts";
-import { BreadcrumbOne } from "../../../components/Breadcrumb";
-import EventDescription from "../../../components/events/viewEventDetails/EventDescription";
-import ImageGalleryLeftThumb from "../../../components/events/viewEventDetails/ImageGalleryLeftThumb";
+import { LayoutOne } from '../../../layouts';
+import { BreadcrumbOne } from '../../../components/Breadcrumb';
+import EventDescription from '../../../components/events/viewEventDetails/EventDescription';
+import ImageGalleryLeftThumb from '../../../components/events/viewEventDetails/ImageGalleryLeftThumb';
 // import { ProductSliderTwo } from "../../../components/ProductSlider";
 import { getEventDetails, updateEvent } from '../../../lib/query/eventApi';
 import { dbDateToPretty } from '../../../lib/util/functions';
@@ -29,24 +29,23 @@ const OrganiserViewEventDetails = () => {
       setPrettyStartDate(dbDateToPretty(eventData.eventStartDate));
     };
     loadEvent();
-  },[]);
+  }, []);
 
   const publishToggle = async () => {
     let published = !event.published;
-    let updatedEvent = await updateEvent({...event, published});
+    let updatedEvent = await updateEvent({ ...event, published });
     setEvent(updatedEvent);
   };
 
   const hideToggle = async () => {
     let hidden = !event.hidden;
-    let updatedEvent = await updateEvent({...event, hidden});
+    let updatedEvent = await updateEvent({ ...event, hidden });
     setEvent(updatedEvent);
   };
 
-
   const vipToggle = async () => {
     let vip = !event.vip;
-    let updatedEvent = await updateEvent({...event, vip});
+    let updatedEvent = await updateEvent({ ...event, vip });
     setEvent(updatedEvent);
   };
 
@@ -80,15 +79,15 @@ const OrganiserViewEventDetails = () => {
               {/* product description */}
               <EventDescription
                 event={event}
-                prettyStartDate = {prettyStartDate}
-                hideToggle = {hideToggle}
-                publishToggle = {publishToggle}
+                prettyStartDate={prettyStartDate}
+                hideToggle={hideToggle}
+                publishToggle={publishToggle}
                 vipToggle={vipToggle}
               />
             </Col>
           </Row>
-              {/* product description tab */} 
-                       {/* <Row>
+          {/* product description tab */}
+          {/* <Row>
             <Col>
 
               <ProductDescriptionTab product={product} />

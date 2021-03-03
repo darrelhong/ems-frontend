@@ -5,9 +5,14 @@ import {
   IoLogoFacebook,
   IoLogoInstagram,
   IoLogoPinterest,
-  IoMdPerson
-} from "react-icons/io";
-import { AiOutlineUser, AiOutlineSetting, AiOutlineLogout, AiOutlineNotification } from 'react-icons/ai';
+  IoMdPerson,
+} from 'react-icons/io';
+import {
+  AiOutlineUser,
+  AiOutlineSetting,
+  AiOutlineLogout,
+  AiOutlineNotification,
+} from 'react-icons/ai';
 
 import Link from 'next/link';
 
@@ -17,26 +22,26 @@ const MobileMenuWidgets = () => {
       <div className="contact-widget space-mb--30">
         <ul>
           <li>
-          <AiOutlineNotification />
-          <Link href="/other/wishlist">
+            <AiOutlineNotification />
+            <Link href="/other/wishlist">
               <a>Notification</a>
             </Link>
           </li>
           <li>
-          <AiOutlineUser />
-          <Link href="/other/wishlist">
+            <AiOutlineUser />
+            <Link href="/other/wishlist">
               <a>Profile</a>
             </Link>
           </li>
           <li>
-          <AiOutlineSetting />
-          <Link href="/other/wishlist">
+            <AiOutlineSetting />
+            <Link href="/other/wishlist">
               <a>Settings</a>
             </Link>
           </li>
           <li>
-           <AiOutlineLogout/>
-          <a onClick={() => logout({ redirectTo: '/organiser/login' })}>
+            <AiOutlineLogout />
+            <a onClick={() => logout({ redirectTo: '/organiser/login' })}>
               <a>Log out</a>
             </a>
           </li>

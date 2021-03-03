@@ -1,7 +1,7 @@
-import { Container, Row, Col } from "react-bootstrap";
-import Tab from "react-bootstrap/Tab";
-import Nav from "react-bootstrap/Nav";
-import { ProductSliderTen } from "../ProductSlider";
+import { Container, Row, Col } from 'react-bootstrap';
+import Tab from 'react-bootstrap/Tab';
+import Nav from 'react-bootstrap/Nav';
+import { ProductSliderTen } from '../ProductSlider';
 
 const EventsProfile = ({
   title,

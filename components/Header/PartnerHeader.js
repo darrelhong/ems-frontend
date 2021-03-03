@@ -74,8 +74,6 @@ const HeaderOne = ({ cartItems, navPositionClass }) => {
                 </button>
               </li>
 
-          
-
               <li className="d-block d-lg-none">
                 <button
                   className="nav-link mobile-menu-trigger pr-0"

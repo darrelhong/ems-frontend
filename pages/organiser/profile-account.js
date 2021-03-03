@@ -102,7 +102,6 @@ const MyAccount = () => {
   );
 
   const mutateAccStatus = useMutation(
-
     (data) => api.post(`/api/user/disableStatus/${user?.id}`),
     {
       onSuccess: () => {
@@ -217,8 +216,9 @@ const MyAccount = () => {
           var newlink = response.data['fileDownloadUri'];
           setProfilepicUrl(newlink);
         }
-      }).catch(() => {
-        setShowFailedMsg(true)
+      })
+      .catch(() => {
+        setShowFailedMsg(true);
       });
   };
 

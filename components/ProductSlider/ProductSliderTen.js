@@ -1,4 +1,4 @@
-import Swiper from "react-id-swiper";
+import Swiper from 'react-id-swiper';
 //import EventGridWrapperFiveEoProfile from '../ProductThumb/EventGridWrapperFiveEoProfile';
 
 const ProductSliderTen = ({ events }) => {

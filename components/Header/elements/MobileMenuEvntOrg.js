@@ -1,11 +1,11 @@
-import { IoIosClose } from "react-icons/io";
-import MobileMenuSearch from "./MobileMenuSearch";
-import MobileMenuNavEvntOrg from "./MobileMenuNavEvntOrg";
-import MobileMenuWidgets from "./MobileMenuWidgets";
+import { IoIosClose } from 'react-icons/io';
+import MobileMenuSearch from './MobileMenuSearch';
+import MobileMenuNavEvntOrg from './MobileMenuNavEvntOrg';
+import MobileMenuWidgets from './MobileMenuWidgets';
 
 const MobileMenuEvntOrg = ({ activeStatus, getActiveStatus }) => {
   return (
-    <div className={`offcanvas-mobile-menu ${activeStatus ? "active" : ""}`}>
+    <div className={`offcanvas-mobile-menu ${activeStatus ? 'active' : ''}`}>
       <div
         className="offcanvas-mobile-menu__overlay-close"
         onClick={() => getActiveStatus(false)}
@@ -24,8 +24,6 @@ const MobileMenuEvntOrg = ({ activeStatus, getActiveStatus }) => {
 
             {/* mobile nav menu */}
             <MobileMenuNavEvntOrg getActiveStatus={getActiveStatus} />
-
-          
           </div>
         </div>
       </div>

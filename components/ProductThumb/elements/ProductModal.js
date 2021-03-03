@@ -17,7 +17,7 @@ import {
 
 const ProductModal = (props) => {
   const {
-    product
+    product,
     // discountedprice,
     // productprice,
     // cartitems,
@@ -140,8 +140,8 @@ const ProductModal = (props) => {
                     <Fragment>
                       <span className="price">${product.ticketPrice}</span>
                       <del>${product.ticketPrice}</del> */}
-                      {/* <span className="on-sale">{product.discount}% Off</span> */}
-                    {/* </Fragment>
+                {/* <span className="on-sale">{product.discount}% Off</span> */}
+                {/* </Fragment>
                   ) : (
                     <span className="price">{product.ticketPrice}</span>
                   )}

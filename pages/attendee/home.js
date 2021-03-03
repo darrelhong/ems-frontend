@@ -39,7 +39,7 @@
 //             Your are logged in as {user?.name}. ID: {user?.id}
 //           </p>
 //         )}
-   
+
 //       </Container>
 
 //       <FooterOne />
@@ -49,7 +49,6 @@
 // }
 
 // export default withProtectRoute(AttendeeHome, { redirectTo: '/attendee/login',});
-
 
 import Link from 'next/link';
 import { Container } from 'react-bootstrap';
@@ -65,7 +64,7 @@ export default function PartnerHome() {
   );
   return (
     <AttendeeWrapper title="Attendee Home">
-      <BreadcrumbOne pageTitle={"Welcome " + user?.name} >
+      <BreadcrumbOne pageTitle={'Welcome ' + user?.name}>
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/attendee/home">
@@ -95,4 +94,3 @@ export default function PartnerHome() {
     </AttendeeWrapper>
   );
 }
-

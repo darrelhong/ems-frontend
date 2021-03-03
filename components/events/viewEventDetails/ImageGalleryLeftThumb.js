@@ -1,17 +1,17 @@
-import { Fragment, useState, useEffect } from "react";
-import { Row, Col } from "react-bootstrap";
-import Swiper from "react-id-swiper";
-import { LightgalleryProvider, LightgalleryItem } from "react-lightgallery";
+import { Fragment, useState, useEffect } from 'react';
+import { Row, Col } from 'react-bootstrap';
+import Swiper from 'react-id-swiper';
+import { LightgalleryProvider, LightgalleryItem } from 'react-lightgallery';
 
 const ImageGalleryLeftThumb = ({ event }) => {
   const [gallerySwiper, getGallerySwiper] = useState(null);
   const [thumbnailSwiper, getThumbnailSwiper] = useState(null);
-  const [somearray,setSomearray] = useState(['one','two','third']);
-  const [imageArray,setImageArray] = useState([
+  const [somearray, setSomearray] = useState(['one', 'two', 'third']);
+  const [imageArray, setImageArray] = useState([
     'https://www.petguide.com/wp-content/uploads/2017/02/Online-Resources-for-Cat-Owners.jpg',
     'https://cnet1.cbsistatic.com/img/EfkEAmi5LXXE-cFxIV0n1kFk11o=/940x0/2019/06/06/b11ccfac-685e-4cb2-a239-b09af07b1baf/toriflynn2.jpg',
     'https://newsroom.unsw.edu.au/sites/default/files/thumbnails/image/3500028168_c85a03256a_b_2.jpg',
-    'https://blog.ssa.gov/wp-content/uploads/2015/10/Retire-Online-Its-The-Cats-Meow.jpg'
+    'https://blog.ssa.gov/wp-content/uploads/2015/10/Retire-Online-Its-The-Cats-Meow.jpg',
   ]);
 
   // effect for swiper slider synchronize
@@ -33,7 +33,7 @@ const ImageGalleryLeftThumb = ({ event }) => {
     spaceBetween: 10,
     loopedSlides: 4,
     loop: true,
-    effect: "fade"
+    effect: 'fade',
   };
 
   const thumbnailSwiperParams = {
@@ -44,29 +44,29 @@ const ImageGalleryLeftThumb = ({ event }) => {
     touchRatio: 0.2,
     loop: true,
     slideToClickedSlide: true,
-    direction: "vertical",
+    direction: 'vertical',
     breakpoints: {
       1200: {
         slidesPerView: 5,
-        direction: "vertical"
+        direction: 'vertical',
       },
       992: {
         slidesPerView: 4,
-        direction: "horizontal"
+        direction: 'horizontal',
       },
       768: {
         slidesPerView: 4,
-        direction: "horizontal"
+        direction: 'horizontal',
       },
       640: {
         slidesPerView: 4,
-        direction: "horizontal"
+        direction: 'horizontal',
       },
       320: {
         slidesPerView: 4,
-        direction: "horizontal"
-      }
-    }
+        direction: 'horizontal',
+      },
+    },
   };
 
   return (

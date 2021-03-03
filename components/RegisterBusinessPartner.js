@@ -16,7 +16,6 @@ import api from '../lib/ApiClient';
 import GuestWrapper from '../components/wrapper/GuestWrapper';
 import ButtonWithLoading from './custom/ButtonWithLoading';
 
-
 export default function RegisterBusinessPartner({ title, registerApiUrl }) {
   const router = useRouter();
   const { register, handleSubmit, errors, watch } = useForm();
@@ -29,47 +28,42 @@ export default function RegisterBusinessPartner({ title, registerApiUrl }) {
   password.current = watch('password', '');
 
   const { mutate, isError } = useMutation(
-  //   (data) => api.post(registerApiUrl, data),
-  //   {
-  //     onSuccess: () => {
-  //       // router.push('/partner/home');
-  //       setShowSuccess(true);
-  //       document.getElementById('register-form').reset();
+    //   (data) => api.post(registerApiUrl, data),
+    //   {
+    //     onSuccess: () => {
+    //       // router.push('/partner/home');
+    //       setShowSuccess(true);
+    //       document.getElementById('register-form').reset();
 
-  //     },
-  //   }
-  // );
+    //     },
+    //   }
+    // );
 
-  (data) => { api.post(registerApiUrl, data)
-  .then ((response)=>{
-
-    console.log(response.data["message"]);
-    if (response.status == 200) {
-             
-      document.getElementById('register-form').reset();
-      if (response.data['message'] == 'alreadyExisted') {
-
-        setShowUserAlrExistError(true);
-        setShowSuccess(false);
-        setLoginLoading(false);
-
-        
-     } else if(response.data['message'] == 'success') {
-       setShowSuccess(true);
-       setShowUserAlrExistError(false);
-       setLoginLoading(false);
-     } else {
-      setShow(true);
-     }
+    (data) => {
+      api
+        .post(registerApiUrl, data)
+        .then((response) => {
+          console.log(response.data['message']);
+          if (response.status == 200) {
+            document.getElementById('register-form').reset();
+            if (response.data['message'] == 'alreadyExisted') {
+              setShowUserAlrExistError(true);
+              setShowSuccess(false);
+              setLoginLoading(false);
+            } else if (response.data['message'] == 'success') {
+              setShowSuccess(true);
+              setShowUserAlrExistError(false);
+              setLoginLoading(false);
+            } else {
+              setShow(true);
+            }
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
-
-
-  })
-  .catch((error) => {
-    console.log(error);
-  });
-  })
-  
+  );
 
   const onSubmit = async (data) => {
     setShow(false);
@@ -177,29 +171,29 @@ export default function RegisterBusinessPartner({ title, registerApiUrl }) {
                         type="submit"
                         className="btn btn-fill-out btn-block"
                         name="register"
-                        isLoading={loginLoading && !isError  }
+                        isLoading={loginLoading && !isError}
                       >
                         Register
                       </ButtonWithLoading>
                     </div>
 
                     <div
-                    style={{
-                      display: showUserAlrExistError ? 'block' : 'none',
-                    }}
-                  >
-                    {
-                      <Alert
-                        show={showUserAlrExistError}
-                        variant="danger"
-                        onClose={() => setShowUserAlrExistError(false)}
-                        dismissible
-                      >
-                        {' '}
-                        User already exist.{' '}
-                      </Alert>
-                    }
-                  </div>
+                      style={{
+                        display: showUserAlrExistError ? 'block' : 'none',
+                      }}
+                    >
+                      {
+                        <Alert
+                          show={showUserAlrExistError}
+                          variant="danger"
+                          onClose={() => setShowUserAlrExistError(false)}
+                          dismissible
+                        >
+                          {' '}
+                          User already exist.{' '}
+                        </Alert>
+                      }
+                    </div>
                     {isError && (
                       <Alert
                         show={show}

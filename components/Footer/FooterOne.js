@@ -61,7 +61,7 @@ const FooterOne = () => {
             <Row>
               <Col lg={3} md={6} sm={12}>
                 <div className="widget">
-                   <h6 className="widget-title">EventStop</h6>
+                  <h6 className="widget-title">EventStop</h6>
                   {/* <div className="footer-logo">
                     <Link href="/">
                       <a>
@@ -69,9 +69,7 @@ const FooterOne = () => {
                       </a>
                     </Link>
                   </div> */}
-                  <p>
-                    Discover new events or Create your own event!
-                  </p>
+                  <p>Discover new events or Create your own event!</p>
                 </div>
                 {/* <div className="widget">
                   <ul className="social-icons">
@@ -117,11 +115,10 @@ const FooterOne = () => {
                         <a>FAQ</a>
                       </Link>
                     </li>
-      
                   </ul>
                 </div>
               </Col>
-            
+
               <Col lg={3} md={4} sm={6}>
                 <div className="widget">
                   <h6 className="widget-title">Contact Info</h6>
@@ -144,7 +141,7 @@ const FooterOne = () => {
             </Row>
           </Container>
         </div>
-       
+
         <button
           className={`scroll-top ${scroll > top ? 'show' : ''}`}
           onClick={() => scrollToTop()}

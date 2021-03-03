@@ -6,7 +6,7 @@ import OrganiserWrapper from '../../components/wrapper/OrganiserWrapper';
 import AttendeeWrapper from '../../components/wrapper/AttendeeWrapper';
 import GuestWrapper from '../../components/wrapper/GuestWrapper';
 
-import {getUser} from '../../lib/query/getUser';
+import { getUser } from '../../lib/query/getUser';
 import api from '../../lib/ApiClient';
 
 const Profile = ({ router: { query } }) => {
@@ -57,22 +57,17 @@ const Profile = ({ router: { query } }) => {
 
       {role === 'Organiser' && (
         <OrganiserWrapper>
-          <PartnerProfile
-            localuser={localuser}
-          />
-        </OrganiserWrapper>)}
+          <PartnerProfile localuser={localuser} />
+        </OrganiserWrapper>
+      )}
 
-        {role === 'Guest' && (
+      {role === 'Guest' && (
         <GuestWrapper>
-          <PartnerProfile
-            localuser={localuser}
-          />
-        </GuestWrapper>)}
-
-     </div>
-   )
-
-
+          <PartnerProfile localuser={localuser} />
+        </GuestWrapper>
+      )}
+    </div>
+  );
 };
 
 export default withRouter(Profile);

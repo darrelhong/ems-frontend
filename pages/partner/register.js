@@ -8,8 +8,7 @@ export default function BusinessPartnerRegister() {
     <RegisterPage
       title="Join as Business Partner"
       // registerApiUrl={`/api/${RoleEnum.BIZPTNR}/register/`}
-      registerApiUrl={`/api/partner/register`}
-
+      registerApiUrl="/api/partner/register"
     />
   );
 }

@@ -1,7 +1,7 @@
-import { IoIosClose } from "react-icons/io";
-import MobileMenuSearch from "./MobileMenuSearch";
-import MobileMenuNav from "./MobileMenuNavEvntOrg";
-import MobileMenuWidgets from "./MobileMenuWidgets";
+import { IoIosClose } from 'react-icons/io';
+import MobileMenuSearch from './MobileMenuSearch';
+import MobileMenuNav from './MobileMenuNavEvntOrg';
+import MobileMenuWidgets from './MobileMenuWidgets';
 
 const MobileMenu = ({ activeStatus, getActiveStatus }) => {
   return (

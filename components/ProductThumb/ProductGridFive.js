@@ -1,7 +1,7 @@
-import { Fragment, useState } from "react";
-import Link from "next/link";
-import ProductModal from "./elements/ProductModal";
-import { ProductRating } from "../Product";
+import { Fragment, useState } from 'react';
+import Link from 'next/link';
+import ProductModal from './elements/ProductModal';
+import { ProductRating } from '../Product';
 import Image from 'react-bootstrap/Image';
 const ProductGridFive = ({
   product,
@@ -18,7 +18,7 @@ const ProductGridFive = ({
   // deleteFromCompare,
   // addToast,
   // cartItems,
-  sliderClass
+  sliderClass,
 }) => {
   const [modalShow, setModalShow] = useState(false);
   const [colorImage, setColorImage] = useState('');
@@ -30,19 +30,19 @@ const ProductGridFive = ({
           bottomSpace ? bottomSpace : ''
         }`}
       >
-        <div className="product-grid product-grid--style-three"style= {{width:"40%"}}>
-          <div className="product-grid__image" >
+        <div
+          className="product-grid product-grid--style-three"
+          style={{ width: '40%' }}
+        >
+          <div className="product-grid__image">
+            <a>
+              <img
+                src="https://www.careerup.com/wp-content/uploads/2016/01/internship-opportunity-advertising-saga-events-1.png"
+                alt="product_img1"
+              />
+            </a>
 
-          <a>
-       <img
-                  src={"https://www.careerup.com/wp-content/uploads/2016/01/internship-opportunity-advertising-saga-events-1.png"}
-                  alt="product_img1"
-                  
-                />
-              </a>
-             
-
-           {/*  <Link
+            {/*  <Link
               href={`/shop/product-basic/[slug]?slug=${product.slug}`}
               as={'/shop/product-basic/' + product.slug}
             >
@@ -70,9 +70,9 @@ const ProductGridFive = ({
               ) : (
                 ""
               )} */}
-            </div>
-            <div className="product-grid__action-box">
-              {/* <ul>
+          </div>
+          <div className="product-grid__action-box">
+            {/* <ul>
                 <li>
                   {product.affiliateLink ? (
                     <a href={product.affiliateLink} target="_blank">
@@ -137,29 +137,28 @@ const ProductGridFive = ({
                   </button>
                 </li>
               </ul>
-            </div>*/} 
-          </div> 
+            </div>*/}
+          </div>
           <div className="product-grid__info">
-          <div>
-            <h6 className="product-title">
-              {/* <Link
+            <div>
+              <h6 className="product-title">
+                {/* <Link
                 href={`/shop/product-basic/[slug]?slug=${product.slug}`}
                 as={"/shop/product-basic/" + product.slug}
               > */}
                 <a>{product.name}</a>
-              {/* </Link> */}
-            </h6>
+                {/* </Link> */}
+              </h6>
             </div>
             <div>
-            <h6 className="product-description">
-              {/* <Link
+              <h6 className="product-description">
+                {/* <Link
                 href={`/shop/product-basic/[slug]?slug=${product.slug}`}
                 as={"/shop/product-basic/" + product.slug}
               > */}
                 <a>{product.descriptions}</a>
-              {/* </Link> */}
-            </h6>
-
+                {/* </Link> */}
+              </h6>
             </div>
 
             {/* <div className="product-price">
@@ -167,8 +166,8 @@ const ProductGridFive = ({
                 <Fragment>
                   <span className="price">${discountedPrice}</span>
                   <del>${productPrice}</del> */}
-              {/* {/* <span className="on-sale">{product.discount}% Off</span> */}
-              {/* </Fragment>
+            {/* {/* <span className="on-sale">{product.discount}% Off</span> */}
+            {/* </Fragment>
               ) : (
                 <span className="price">${productPrice}</span>
               )}
