@@ -33,6 +33,7 @@ const CreateEvent = () => {
   const [physical, setPhysical] = useState();
   const [hideOptions, setHideOptions] = useState('');
   const [wantsTickets, setWantsTickets] = useState(true);
+  const [freeTickets, setFreeTickets] = useState(false);
 
   const router = useRouter();
   const { eid } = router.query;
@@ -247,7 +248,9 @@ const CreateEvent = () => {
               className="btn btn-fill-out"
               name="submit"
               value="Submit"
-              ref={register()}            >
+              ref={register()}  
+              onClick={()=>console.log('hello finished')}          
+              >
               Finish
             </button>
             <button
@@ -324,6 +327,7 @@ const CreateEvent = () => {
                   setActiveStep={setActiveStep}
                   errors={errors}
                   wantsTickets={wantsTickets}
+                  freeTickets={freeTickets}
                 />
                 <Col lg={9} md={8}>
                   <Tab.Content>
@@ -337,7 +341,7 @@ const CreateEvent = () => {
                       />
                     </Tab.Pane>
                     <Tab.Pane eventKey="ticketing">
-                      <TicketingPane formState={formState} wantsTickets={wantsTickets} getValues={getValues} setWantsTickets={setWantsTickets} register={register} errors={errors} watch={watch} eventData={eventData} setValue={setValue} errors={errors} />
+                      <TicketingPane freeTickets = {freeTickets} setFreeTickets={setFreeTickets} setValue={setValue} formState={formState} wantsTickets={wantsTickets} getValues={getValues} setWantsTickets={setWantsTickets} register={register} errors={errors} watch={watch} eventData={eventData} setValue={setValue} errors={errors} />
                     </Tab.Pane>
                     <Tab.Pane eventKey="booths">
                       <BoothPane register={register} errors={errors} />

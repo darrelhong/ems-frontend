@@ -145,7 +145,7 @@ const EventDescription = ({
             )} */}
 
         </ul>
-      </div>
+    </div>
       <hr />
 
       <Fragment>

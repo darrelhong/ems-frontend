@@ -35,7 +35,7 @@ const OrganiserViewEventDetails = () => {
         if (eventData.salesEndDate) setPrettySalesEndDate(format(parseISO(eventData.salesEndDate), 'dd MMM yy hh:mmbbb'));
         setEvent(eventData);
       } catch (e) {
-        router.push('/register/success');
+        router.push('/organiser/events/not-found');
 
       }
 
@@ -72,6 +72,7 @@ const OrganiserViewEventDetails = () => {
   const vipToggleWithToast = async (event) => {
     const updatedEvent = await vipToggle(event);
     setEvent(updatedEvent);
+    console.log(updatedEvent);
     let message = '';
     updatedEvent.vip ? message = "Event is exclusive to VIP members!" : message = "Event open for all!";
     createToast(message, 'success');

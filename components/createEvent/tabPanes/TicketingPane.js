@@ -3,9 +3,8 @@ import { Row, Col } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import PropTypes from 'prop-types';
 
-const TicketingPane = ({ wantsTickets, setWantsTickets, formState, getValues, register, watch, eventData, setValue, errors }) => {
+const TicketingPane = ({ freeTickets, setFreeTickets, wantsTickets, setWantsTickets, formState, getValues, register, watch, eventData, setValue, errors }) => {
 
-  const [freeTickets, setFreeTickets] = useState(false);
 
   useEffect(() => {
     const {
@@ -38,7 +37,10 @@ const TicketingPane = ({ wantsTickets, setWantsTickets, formState, getValues, re
                 onChange={() => {
                   console.log(!wantsTickets);
                   //if go from sell to dont sell then make it false
-                  if (wantsTickets) setFreeTickets(false);
+                  if (wantsTickets) {
+                    setFreeTickets(false);
+                    setValue("ticketPrice", 16);
+                  }
                   setWantsTickets(!wantsTickets);
                 }}
                 style={{ marginRight: 5 }}
@@ -89,7 +91,8 @@ const TicketingPane = ({ wantsTickets, setWantsTickets, formState, getValues, re
                   </span>
                 )
                 } */}
-                {errors.ticketPrice && wantsTickets && !freeTickets && (
+                {errors.ticketPrice && (
+                // {errors.ticketPrice && wantsTickets && !freeTickets && (
                   <span role="alert" style={{ color: 'red' }}>
                     This field is required
                   </span>
