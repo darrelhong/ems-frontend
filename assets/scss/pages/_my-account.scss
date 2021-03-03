@@ -63,10 +63,10 @@
       margin-right: 35%;
     }
 
-    .profile-image {
-      max-height: 350px;
-      max-width: 350px;
-    }
+    // .profile-image{
+    //   border:solid;
+    //   border-color: black;
+    // }
 
     form {
       .form-control {
@@ -75,23 +75,5 @@
     }
   }
 }
-.custom-file-label {
-  margin-left: 3%;
-  margin-right: 2%;
-}
-.uploadFileLabel {
-  margin-left: 3%;
-}
-.follower-box {
-  border-radius: 4px;
-  border-color: lightgray;
-  border-style: solid;
-  border-width: thin;
-  margin-bottom: 10px;
-  border-top: hidden;
 
-}
-.follow-number {
-  text-align: center;
-}
 /*=====  End of my account  ======*/

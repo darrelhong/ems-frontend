@@ -7,6 +7,5 @@ export default function OrganiserRegister() {
       title="Join as Event Organiser"
       registerApiUrl={`/api/${RoleEnum.EVNTORG}/register/`}
     />
-    );
-
+  );
 }

@@ -4,10 +4,12 @@ import Link from 'next/link';
 import { Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { IoIosSearch, IoIosMenu } from 'react-icons/io';
+import { AiOutlineShoppingCart } from 'react-icons/ai';
 import OrganiserHeaderTop from './OrganiserHeaderTop';
-import Navigation from './elements/NavigationEvntOrg';
+import Navigation from './elements/Navigation';
 import SearchOverlay from './elements/SearchOverlay';
-import MobileMenuEvntOrg from './elements/MobileMenuEvntOrg';
+import MobileMenu from './elements/MobileMenu';
+import MiniCart from './elements/MiniCart';
 
 const HeaderOne = ({ cartItems, navPositionClass }) => {
   const [scroll, setScroll] = useState(0);
@@ -74,8 +76,35 @@ const HeaderOne = ({ cartItems, navPositionClass }) => {
                 </button>
               </li>
 
-          
+              <li className="d-none d-lg-block position-relative">
+                <Link href="/other/cart">
+                  <a className="nav-link mini-cart-trigger pr-3 pr-lg-0">
+                    <AiOutlineShoppingCart />
+                    {cartItems.length > 0 ? (
+                      <span className="cart-count">{cartItems.length}</span>
+                    ) : (
+                      ''
+                    )}
+                  </a>
+                </Link>
+                {/* mini cart */}
+                <MiniCart cartItems={cartItems} />
+              </li>
 
+              <li className="d-block d-lg-none position-relative">
+                <Link href="/other/cart">
+                  <a className="nav-link mini-cart-trigger pr-3 pr-lg-0">
+                    <AiOutlineShoppingCart />
+                    {cartItems.length > 0 ? (
+                      <span className="cart-count cart-count--mobile">
+                        {cartItems.length}
+                      </span>
+                    ) : (
+                      ''
+                    )}
+                  </a>
+                </Link>
+              </li>
               <li className="d-block d-lg-none">
                 <button
                   className="nav-link mobile-menu-trigger pr-0"
@@ -98,7 +127,7 @@ const HeaderOne = ({ cartItems, navPositionClass }) => {
       />
 
       {/* mobile menu */}
-      <MobileMenuEvntOrg
+      <MobileMenu
         activeStatus={offCanvasMobileMenuActive}
         getActiveStatus={setOffCanvasMobileMenuActive}
       />

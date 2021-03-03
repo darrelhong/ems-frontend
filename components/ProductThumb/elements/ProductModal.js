@@ -17,37 +17,37 @@ import {
 
 const ProductModal = (props) => {
   const {
-    product
-    // discountedprice,
-    // productprice,
-    // cartitems,
-    // wishlistitem,
-    // compareitem,
-    // addtocart,
-    // addtowishlist,
-    // deletefromwishlist,
-    // addtocompare,
-    // deletefromcompare,
-    // addtoast
+    product,
+    discountedprice,
+    productprice,
+    cartitems,
+    wishlistitem,
+    compareitem,
+    addtocart,
+    addtowishlist,
+    deletefromwishlist,
+    addtocompare,
+    deletefromcompare,
+    addtoast,
   } = props;
 
-  // const [selectedProductColor, setSelectedProductColor] = useState(
-  //   product.variation ? product.variation[0].color : ""
-  // );
-  // const [selectedProductSize, setSelectedProductSize] = useState(
-  //   product.variation ? product.variation[0].size[0].name : ""
-  // );
-  // const [productStock, setProductStock] = useState(
-  //   product.variation ? product.variation[0].size[0].stock : product.stock
-  // );
-  // const [quantityCount, setQuantityCount] = useState(1);
+  const [selectedProductColor, setSelectedProductColor] = useState(
+    product.variation ? product.variation[0].color : ''
+  );
+  const [selectedProductSize, setSelectedProductSize] = useState(
+    product.variation ? product.variation[0].size[0].name : ''
+  );
+  const [productStock, setProductStock] = useState(
+    product.variation ? product.variation[0].size[0].stock : product.stock
+  );
+  const [quantityCount, setQuantityCount] = useState(1);
 
-  // const productCartQty = getProductCartQuantity(
-  //   cartitems,
-  //   product,
-  //   selectedProductColor,
-  //   selectedProductSize
-  // );
+  const productCartQty = getProductCartQuantity(
+    cartitems,
+    product,
+    selectedProductColor,
+    selectedProductSize
+  );
 
   const [gallerySwiper, getGallerySwiper] = useState(null);
   const [thumbnailSwiper, getThumbnailSwiper] = useState(null);
@@ -98,8 +98,8 @@ const ProductModal = (props) => {
           <Col lg={6}>
             <div className="product-quickview__large-image-wrapper">
               <Swiper {...gallerySwiperParams}>
-                {product.images &&
-                  product.images.map((single, key) => {
+                {product.image &&
+                  product.image.map((single, key) => {
                     return (
                       <div key={key}>
                         <div className="single-image">
@@ -112,16 +112,12 @@ const ProductModal = (props) => {
             </div>
             <div className="product-quickview__small-image-wrapper">
               <Swiper {...thumbnailSwiperParams}>
-                {product.images &&
-                  product.images.map((image, i) => {
+                {product.image &&
+                  product.image.map((image, i) => {
                     return (
                       <div key={i}>
                         <div className="single-image">
-                          <img
-                            src="http://localhost:8080/api/downloadFile/profilepic-096c0976-f1df-486e-a23c-c22f9adb77c6.png"
-                            className="img-fluid"
-                            alt=""
-                          />
+                          <img src={image} className="img-fluid" alt="" />
                         </div>
                       </div>
                     );
@@ -135,30 +131,30 @@ const ProductModal = (props) => {
                 {product.name}
               </h2>
               <div className="product-quickview__price-rating-wrapper space-mb--10">
-                {/* <div className="product-quickview__price d-flex-align-items-center">
-                  {product.ticketPrice ? (
+                <div className="product-quickview__price d-flex-align-items-center">
+                  {product.discount ? (
                     <Fragment>
-                      <span className="price">${product.ticketPrice}</span>
-                      <del>${product.ticketPrice}</del> */}
-                      {/* <span className="on-sale">{product.discount}% Off</span> */}
-                    {/* </Fragment>
+                      <span className="price">${discountedprice}</span>
+                      <del>${productprice}</del>
+                      <span className="on-sale">{product.discount}% Off</span>
+                    </Fragment>
                   ) : (
-                    <span className="price">{product.ticketPrice}</span>
+                    <span className="price">${productprice}</span>
                   )}
-                </div> */}
+                </div>
                 {product.rating && product.rating > 0 ? (
                   <div className="product-quickview__rating-wrap">
                     <div className="product-quickview__rating">
                       <ProductRating ratingValue={product.rating} />
-                      <span>({product.rating})</span>
+                      <span>({product.ratingCount})</span>
                     </div>
                   </div>
                 ) : (
                   ''
                 )}
               </div>
-              {/* <div className="product-quickview__description space-mb--20">
-                <p>{product.descriptions}</p>
+              <div className="product-quickview__description space-mb--20">
+                <p>{product.shortDescription}</p>
               </div>
 
               <div className="product-quickview__sort-info space-mb--20">
@@ -173,9 +169,9 @@ const ProductModal = (props) => {
                     <GiSwapBag /> Cash on Delivery available
                   </li>
                 </ul>
-              </div> */}
+              </div>
 
-              {/* {product.variation ? (
+              {product.variation ? (
                 <div className="product-quickview__size-color">
                   <div className="product-quickview__color space-mb--10">
                     <div className="product-quickview__color__title">Color</div>
@@ -246,9 +242,9 @@ const ProductModal = (props) => {
                 </div>
               ) : (
                 ''
-              )} */}
+              )}
               <hr />
-              {/* {product.affiliateLink ? (
+              {product.affiliateLink ? (
                 <div className="product-quickview__quality">
                   <div className="product-quickview__cart btn-hover">
                     <a
@@ -357,9 +353,9 @@ const ProductModal = (props) => {
                     </button>
                   </div>
                 </Fragment>
-              )} */}
+              )}
               <hr />
-              {/* <ul className="product-quickview__product-meta">
+              <ul className="product-quickview__product-meta">
                 <li>
                   SKU: <span>{product.sku}</span>
                 </li>
@@ -370,7 +366,7 @@ const ProductModal = (props) => {
                       return (
                         <Link
                           href="/shop/grid-left-sidebar"
-                          as={'/shop/grid-left-sidebar'}
+                          as="/shop/grid-left-sidebar"
                           key={index}
                         >
                           <a>{item + (index !== arr.length - 1 ? ', ' : '')}</a>
@@ -385,7 +381,7 @@ const ProductModal = (props) => {
                       return (
                         <Link
                           href="/shop/grid-left-sidebar"
-                          as={'/shop/grid-left-sidebar'}
+                          as="/shop/grid-left-sidebar"
                           key={index}
                         >
                           <a>{item + (index !== arr.length - 1 ? ', ' : '')}</a>
@@ -393,7 +389,7 @@ const ProductModal = (props) => {
                       );
                     })}
                 </li>
-              </ul> */}
+              </ul>
               <div className="product-quickview__product-share space-mt--15">
                 <span>Share:</span>
                 <ul className="social-icons">
