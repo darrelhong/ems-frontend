@@ -4,7 +4,7 @@ export default function AttendeeRegister() {
   return (
     <RegisterPage
       title="Join as Participant"
-      registerApiUrl="/api/user/register/atnd"
+      registerApiUrl={`/api/attendee/register`}
     />
   );
 }

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import GuestWrapper from '../components/wrapper/GuestWrapper';
-
+import cx from 'classnames';
 import { Col, Container, Row } from 'react-bootstrap';
 import { BreadcrumbOne } from './Breadcrumb';
 import { LayoutOne } from '../layouts';
@@ -13,6 +13,7 @@ import Alert from 'react-bootstrap/Alert';
 
 import { useMutation } from 'react-query';
 import api from '../lib/ApiClient';
+import ButtonWithLoading from './custom/ButtonWithLoading';
 
 export default function RegisterAttendee({ title, registerApiUrl }) {
   const router = useRouter();
@@ -20,18 +21,53 @@ export default function RegisterAttendee({ title, registerApiUrl }) {
   const [show, setShow] = useState(true);
   const [showSuccess, setShowSuccess] = useState(false);
   const password = useRef({});
+  const [showUserAlrExistError, setShowUserAlrExistError] = useState(false);
+  const [loginLoading, setLoginLoading] = useState(false);
   password.current = watch('password', '');
 
   const { mutate, isError } = useMutation(
-    (data) => api.post(registerApiUrl, data),
-    {
-      onSuccess: () => {
-        router.push('/register/success');
-      },
-    }
-  );
+  //   (data) => api.post(registerApiUrl, data),
+  //   {
+  //     onSuccess: () => {
+  //       router.push('/register/success');
+  //     },
+  //   }
+  // );
+  (data) => { api.post(registerApiUrl, data)
+    .then ((response)=>{
+  
+      console.log(response.data["message"]);
+      if (response.status == 200) {
+               
+        document.getElementById('register-form').reset();
+        if (response.data['message'] == 'alreadyExisted') {
+  
+          setShowUserAlrExistError(true);
+          setShowSuccess(false);
+          setLoginLoading(false);
+  
+          
+       } else if(response.data['message'] == 'success') {
+         setShowSuccess(true);
+         setShowUserAlrExistError(false);
+         setLoginLoading(false);
+       } else {
+        setShow(true);
+       }
+      }
+  
+  
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+    })
 
   const onSubmit = async (data) => {
+    setShow(false);
+    setShowSuccess(false);
+    setShowUserAlrExistError(false);
+    setLoginLoading(true);
     mutate({
       name: data.name,
       email: data.email,
@@ -64,7 +100,7 @@ export default function RegisterAttendee({ title, registerApiUrl }) {
                   <h3>{title}</h3>
                 </div>
                 <div>
-                  <form onSubmit={handleSubmit(onSubmit)}>
+                  <form onSubmit={handleSubmit(onSubmit)} id="register-form">
                     <div className="form-group">
                       <label htmlFor="email">Email</label>
                       <input
@@ -98,13 +134,16 @@ export default function RegisterAttendee({ title, registerApiUrl }) {
                         placeholder="Password"
                         pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                         title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
-                        ref={register({ required: true })}
+                        ref={register()}
                       />
                     </div>
+
                     <div className="form-group">
                       <label htmlFor="password_confirm">Confirm Password</label>
                       <input
-                        className="form-control"
+                        className={cx('form-control', {
+                          'is-invalid': errors?.password_confirm,
+                        })}
                         required
                         type="password"
                         name="password_confirm"
@@ -125,13 +164,14 @@ export default function RegisterAttendee({ title, registerApiUrl }) {
 
                     <div className="form-group">
                       &nbsp;
-                      <button
+                      <ButtonWithLoading
                         type="submit"
                         className="btn btn-fill-out btn-block"
                         name="register"
+                        isLoading={loginLoading && !isError  }
                       >
                         Register
-                      </button>
+                      </ButtonWithLoading>
                     </div>
 
                     {isError && (
@@ -155,7 +195,37 @@ export default function RegisterAttendee({ title, registerApiUrl }) {
                       {' '}
                       You have succesfully registered. Please check your inbox
                       to verify your email.{' '}
-                    </Alert>
+                    </Alert> <div
+                    style={{
+                      display: showUserAlrExistError ? 'block' : 'none',
+                    }}
+                  >
+                    {
+                      <Alert
+                        show={showUserAlrExistError}
+                        variant="danger"
+                        onClose={() => setShowUserAlrExistError(false)}
+                        dismissible
+                      >
+                        {' '}
+                        User already exist.{' '}
+                      </Alert>
+                    }
+                  </div>
+                    {isError && (
+                      <Alert
+                        show={show}
+                        variant="danger"
+                        onClose={() => setShow(false)}
+                        dismissible
+                      >
+                        {' '}
+                        An error occurred creating your account. Please try
+                        again.{' '}
+                      </Alert>
+                    )}
+
+                  
                   </form>
 
                   <div className="form-note text-center space-mt--20">

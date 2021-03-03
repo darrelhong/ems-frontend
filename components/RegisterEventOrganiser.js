@@ -69,58 +69,13 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
   //     })
   //     .then((response) => {
 
-
-       const { mutate, isLoading, isError } =  useMutation((data) => {
-        
-        console.log(data);
-        var form_data = new FormData();
-        form_data.append('name', data["name"]);
-        form_data.append("email", data["email"]);
-        form_data.append("password", data['password']);
-        form_data.append('file', file);
-
-        // for (var value of form_data.values()) {
-        //   console.log(value);
-        // }
-          
-         api
-           .post(registerApiUrl, form_data, {
-             headers: {
-               'Content-Type': 'multipart/form-data',
-             },
-             // onSuccess: () => {
-             //   // router.push('/organiser/register-success');
-             // //  setShowSuccess(true);
-             // },
-           })
-           .then((response) => {
-             console.log(response);
-             if (response.status == 200) {
-             
-              document.getElementById('register-form').reset();
-              document.getElementById('custom-file').value = '';
-            setFileName("Choose File");
-               console.log(response.data["message"]);
-               if (response.data['message'] == 'alreadyExisted') {
-
-                  setShowUserAlrExistError(true);
-                  setShowSuccess(false);
-                  setLoginLoading(false);
-                  
-               } else if(response.data['message'] == 'success') {
-                 setShowSuccess(true);
-                 setShowUserAlrExistError(false);
-                 setLoginLoading(false);
-               } else {
-                 setShow(true);
-               }
-             }
-           })
-           .catch((error) => {
-             console.log(error);
-             
-           });
-       });
+  const { mutate, isLoading, isError } = useMutation((data) => {
+    console.log(data);
+    var form_data = new FormData();
+    form_data.append('name', data['name']);
+    form_data.append('email', data['email']);
+    form_data.append('password', data['password']);
+    form_data.append('file', file);
 
     // for (var value of form_data.values()) {
     //   console.log(value);
@@ -146,10 +101,13 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
           if (response.data['message'] == 'alreadyExisted') {
             setShowUserAlrExistError(true);
             setShowSuccess(false);
+            setLoginLoading(false);
           } else if (response.data['message'] == 'success') {
             setShowSuccess(true);
             setShowUserAlrExistError(false);
-            setShowFileSizeError(false);
+            setLoginLoading(false);
+          } else {
+            setShow(true);
           }
         }
       })
@@ -267,42 +225,43 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
                     </div>
                   </div>
                   <div className="form-group">
-                    <label htmlFor="password">Password</label>
-                    <input
-                      className="form-control"
-                      required
-                      type="password"
-                      name="password"
-                      placeholder="Password"
-                      pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                      title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
-                      ref={register()}
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="password_confirm">Confirm Password</label>
-                    <input
-                      className={cx('form-control', {
-                        'is-invalid': errors?.password_confirm,
-                      })}
-                      required
-                      type="password"
-                      name="password_confirm"
-                      id="password_confirm"
-                      placeholder="Re-enter password"
-                      pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                      title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
-                      ref={register({
-                        validate: (value) =>
-                          value === password.current ||
-                          'Passwords do not match',
-                      })}
-                    />
-                    <div className="invalid-feedback">
-                      {errors?.password_confirm?.message}
+                      <label htmlFor="password">Password</label>
+                      <input
+                        className="form-control"
+                        required
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                        title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                        ref={register()}
+                      />
                     </div>
-                  </div>
+
+                    <div className="form-group">
+                      <label htmlFor="password_confirm">Confirm Password</label>
+                      <input
+                        className={cx('form-control', {
+                          'is-invalid': errors?.password_confirm,
+                        })}
+                        required
+                        type="password"
+                        name="password_confirm"
+                        id="password_confirm"
+                        placeholder="Re-enter password"
+                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                        title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                        ref={register({
+                          validate: (value) =>
+                            value === password.current ||
+                            'Passwords do not match',
+                        })}
+                      />
+                      <div className="invalid-feedback">
+                        {errors?.password_confirm?.message}
+                      </div>
+                    </div>
+
                   <Row>
                     <div className="form-group">
                       <Form.Label className="uploadFileLabel">
@@ -354,7 +313,7 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
                       type="submit"
                       className="btn btn-fill-out btn-block"
                       name="register"
-                      isLoading={loginLoading && !isError }
+                      isLoading={loginLoading && !isError}
                     >
                       Register
                     </ButtonWithLoading>

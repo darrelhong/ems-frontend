@@ -29,12 +29,12 @@ export default function RegisterVerified() {
           <Row className="justify-content-center">
            
             <div>
-            <Link href="/organiser/login">
+            <Link href="/">
               <button className="btn btn-sm btn-fill-out">
-                Event Organiser Login
+                Back to Home
               </button>
             </Link>
-            <Link href="/partner/login">
+            {/* <Link href="/partner/login">
               <button className="btn btn-sm btn-fill-out">
                 Business Partner Login
               </button>
@@ -43,7 +43,7 @@ export default function RegisterVerified() {
               <button className="btn btn-sm btn-fill-out">
                 Attendee Login
               </button>
-            </Link>
+            </Link> */}
             </div>
           </Row>
         
