@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Link from "next/link";
 import { useRouter } from 'next/router';
 import { Container, Row, Col } from "react-bootstrap";
-// import { useToasts } from "react-toast-notifications";
 // import { getDiscountPrice } from "../../../lib/product";
 import { LayoutOne } from "../../../layouts";
 import { BreadcrumbOne } from "../../../components/Breadcrumb";
@@ -17,7 +16,6 @@ import { format, parseISO, parseJSON } from 'date-fns';
 import { useToasts } from 'react-toast-notifications';
 
 const OrganiserViewEventDetails = () => {
-  // const { addToast } = useToasts();
   const [event, setEvent] = useState(Object);
   const [prettyStartDate, setPrettyStartDate] = useState('');
   const [prettyEndDate, setPrettyEndDate] = useState('');

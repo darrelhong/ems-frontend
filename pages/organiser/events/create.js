@@ -19,8 +19,11 @@ import { createEvent, getEventDetails, updateEvent, uploadEventImage } from '../
 import { htmlDateToDb, formatDates } from '../../../lib/util/functions';
 import Modal from 'react-bootstrap/Modal';
 import { getHiddenStatus, processHideOptionsSave } from '../../../lib/functions/eventOrganiser/eventFunctions';
+import { useToasts } from 'react-toast-notifications';
 
 const CreateEvent = () => {
+  const { addToast, removeToast } = useToasts();
+
   const { control, register, handleSubmit, watch, setValue, errors, getValues, formState } = useForm();
   const { data: user } = useUser(localStorage.getItem('userId'));
   const [activeStep, setActiveStep] = useState(0);
@@ -71,6 +74,11 @@ const CreateEvent = () => {
     setVip(vip);
     setPhysical(physical);
     setHideOptions(getHiddenStatus(eventData));
+  };
+
+  const createToast = (message, appearanceStyle) => {
+    const toastId = addToast(message, { appearance: appearanceStyle });
+    setTimeout(() => removeToast(toastId), 3000);
   };
 
   const oldSubmit = async (data) => {
@@ -125,19 +133,17 @@ const CreateEvent = () => {
     const dateProcessedData = formatDates(data);
     const formattedData = processHideOptionsSave(dateProcessedData);
     let updatedData;
-    let eventStatus;
+    let eventStatus = "CREATED";
 
     console.log('submitting');
     if (eid) {
       //concat data first, already have EID inside and all
       //have to update to upcoming now, instead of draft
-      eventStatus = "UPCOMING";
-      updatedData = { ...eventData, ...formattedData, eventStatus };
+      updatedData = { ...eventData, ...formattedData };
       console.log('created event from draft:');
     } else {
       //new event, we need to add in the EO ID.
       let eventOrganiserId = user.id;
-      eventStatus = "CREATED";
       updatedData = { ...formattedData, eventOrganiserId, eventStatus };
       console.log('creating brand new event:');
     }
@@ -150,6 +156,7 @@ const CreateEvent = () => {
     const dateProcessedData = formatDates(data);
     const formData = processHideOptionsSave(dateProcessedData);
     const eventStatus = "DRAFT";
+    let eventId;
     if (eid) {
       //concat data first
       let updatedData = { ...eventData, ...formData, eventStatus };
@@ -158,9 +165,10 @@ const CreateEvent = () => {
 
       //update existing event
       let updatedEvent = await updateEvent(updatedData);
-      await saveImages(updatedEvent.eid);
+      // await saveImages(updatedEvent.eid);
       console.log('printing updated event:');
       console.log(updatedEvent);
+      eventId = updatedEvent.eid;
     }
     else {
       //create new event without validation
@@ -169,8 +177,15 @@ const CreateEvent = () => {
       let updatedData = { ...formData, eventOrganiserId, eventStatus }
       // console.log(formData);
       const response = await createEvent(updatedData);
-      await saveImages(response.eid);
+      eventId = response.eid;
+      // await saveImages(response.eid);
+
     }
+
+    // let message = '';
+    // updatedEvent.published ? message = "Saved Successfully" : message = "Event unpublished";
+    createToast('Saved as Draft successfully', 'success');
+    router.push(`/organiser/events/${eventId}`);
   };
 
   const saveImages = async (eventId) => {
@@ -251,14 +266,14 @@ const CreateEvent = () => {
             </button>
           </Modal.Footer>
         </Modal>
-        <BreadcrumbOne pageTitle="Create New Event">
+        <BreadcrumbOne pageTitle= {eid ? `Updating ${eventData.name}` : 'Create New Event'}>
           <ol className="breadcrumb justify-content-md-end">
             <li className="breadcrumb-item">
               <Link href="/organiser/home">
                 <a>Home</a>
               </Link>
             </li>
-            <li className="breadcrumb-item active">Create New Event</li>
+            <li className="breadcrumb-item active">{eid ? `Updating ${eventData.name}` : 'Create New Event'}</li>
           </ol>
           {eventData?.eventStatus != 'CREATED' && (
             <ol>

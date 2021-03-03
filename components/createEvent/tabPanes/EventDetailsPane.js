@@ -87,6 +87,7 @@ const EventDetailsPane = ({ register, watch, errors }) => {
                 className="form-control"
                 name="eventEndDate"
                 type="datetime-local"
+                // ref={register({required : true})}
                 ref={register({required : true, validate: value => value > watch('eventStartDate') })}
               />
               {errors.eventEndDate && (
