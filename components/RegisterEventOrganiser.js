@@ -6,7 +6,14 @@ import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import cx from 'classnames';
 
-import { Col, Container, Row, Form,OverlayTrigger,Tooltip } from 'react-bootstrap';
+import {
+  Col,
+  Container,
+  Row,
+  Form,
+  OverlayTrigger,
+  Tooltip,
+} from 'react-bootstrap';
 import { BsFillInfoCircleFill } from 'react-icons/bs';
 import api from '../lib/ApiClient';
 
@@ -38,135 +45,130 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
   // );
   const renderTooltip = (props) => (
     <Tooltip id="button-tooltip" {...props}>
-     Please upload your business supporting document(s) as a zip file.
+      Please upload your business supporting document(s) as a zip file.
     </Tooltip>
   );
 
-    const [fileUpload, setfileUpload] = useState(false);
-    // if multiple file, we ask them to zip
-    const [fileName, setFileName] = useState('Choose file');
-    const [file, setFile] = useState('uploadfile');
-    useEffect(() => {
-      setFileName('Choose file');
-    }, ['Choose file']);
+  const [fileUpload, setfileUpload] = useState(false);
+  // if multiple file, we ask them to zip
+  const [fileName, setFileName] = useState('Choose file');
+  const [file, setFile] = useState('uploadfile');
+  useEffect(() => {
+    setFileName('Choose file');
+  }, ['Choose file']);
 
-    // const { mutate, isLoading, isError } = useMutation((data) =>
-    //   api
-    //     .post(registerApiUrl, data, {
-    //       // onSuccess: () => {
-    //       //   // router.push('/organiser/register-success');
-    //       // //  setShowSuccess(true);
-    //       // },
-    //     })
-    //     .then((response) => {
-          
-    //       console.log(response);
-    //       if (response.status == 200) {
-    //            setShowSuccess(true);
-    //         // submitFile();
-    //       }
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     })
-    // );
+  // const { mutate, isLoading, isError } = useMutation((data) =>
+  //   api
+  //     .post(registerApiUrl, data, {
+  //       // onSuccess: () => {
+  //       //   // router.push('/organiser/register-success');
+  //       // //  setShowSuccess(true);
+  //       // },
+  //     })
+  //     .then((response) => {
 
-       const { mutate, isLoading, isError } =  useMutation((data) => {
-        
-        console.log(data);
-        var form_data = new FormData();
-        form_data.append('name', data["email"]);
-        form_data.append("email", data["email"]);
-        form_data.append("password", data['password']);
-        form_data.append('file', file);
+  //       console.log(response);
+  //       if (response.status == 200) {
+  //            setShowSuccess(true);
+  //         // submitFile();
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     })
+  // );
 
-        // for (var value of form_data.values()) {
-        //   console.log(value);
-        // }
-          
-         api
-           .post(registerApiUrl, form_data, {
-             headers: {
-               'Content-Type': 'multipart/form-data',
-             },
-             // onSuccess: () => {
-             //   // router.push('/organiser/register-success');
-             // //  setShowSuccess(true);
-             // },
-           })
-           .then((response) => {
-             console.log(response);
-             if (response.status == 200) {
-             
-              document.getElementById('register-form').reset();
-              document.getElementById('custom-file').value = '';
-            setFileName("Choose File");
-               console.log(response.data["message"]);
-               if (response.data['message'] == 'alreadyExisted') {
+  const { mutate, isLoading, isError } = useMutation((data) => {
+    console.log(data);
+    var form_data = new FormData();
+    form_data.append('name', data['name']);
+    form_data.append('email', data['email']);
+    form_data.append('password', data['password']);
+    form_data.append('file', file);
 
-                  setShowUserAlrExistError(true);
-                  setShowSuccess(false);
+    // for (var value of form_data.values()) {
+    //   console.log(value);
+    // }
 
-                  
-               } else if(response.data['message'] == 'success') {
-                 setShowSuccess(true);
-                 setShowUserAlrExistError(false);
-               }
-             }
-           })
-           .catch((error) => {
-             console.log(error);
-           });
-       });
-
-        const handleFileChange = async (e) => {
-          console.log('call handleFileChange');
-          console.log(e);
-          console.log(e.target.files[0].name);
-          console.log(e.target.files[0].size);
-
-          // if size is more than 5mb, display error message
-          console.log(e.target.files[0].size/1000000);
-          if(e.target.files[0].size/1000000 > 5 || e.target.files[0].name == ''){
-            console.log("exceeded");
-            setShowFileSizeError(true);
-            document.getElementById('custom-file').value = '';
-            
-          }else{
+    api
+      .post(registerApiUrl, form_data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        // onSuccess: () => {
+        //   // router.push('/organiser/register-success');
+        // //  setShowSuccess(true);
+        // },
+      })
+      .then((response) => {
+        console.log(response);
+        if (response.status == 200) {
+          document.getElementById('register-form').reset();
+          document.getElementById('custom-file').value = '';
+          setFileName('Choose File');
+          console.log(response.data['message']);
+          if (response.data['message'] == 'alreadyExisted') {
+            setShowUserAlrExistError(true);
+            setShowSuccess(false);
+          } else if (response.data['message'] == 'success') {
+            setShowSuccess(true);
+            setShowUserAlrExistError(false);
             setShowFileSizeError(false);
-             setFile(e.target.files[0]);
-             setfileUpload(true);
-             setFileName(e.target.files[0].name);
           }
-        };
-        // const submitFile = async () => {
-        //   const data = new FormData();
-        //   //if(file name is not empty..... handle condition when no file is selected)
-        //   data.append('file', file);
-        //   api
-        //     .post('/api/uploadBizFile', data, {
-        //       headers: {
-        //         'Content-Type': 'multipart/form-data',
-        //       }
-        //       // onSuccess: () => {
-        //       //   queryClient.invalidateQueries(['user', user?.id.toString()]);
-        //       // },
-        //     })
-        //     .then((response) => {
-        //       console.log(response);
-        //       if (response.status == 200) {
-        //         console.log('file upload sucessfully');
-        //         console.log(response);
-        //         console.log(response.data['fileDownloadUri']);
-        //         var newlink = response.data['fileDownloadUri'];
-        //         setProfilepicUrl(newlink);
-        //       }
-        //     })
-        //     .catch(() => {
-        //       setShowFailedMsg(true);
-        //     });
-        // };
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
 
+  const handleFileChange = async (e) => {
+    console.log('call handleFileChange');
+    console.log(e);
+    console.log(e.target.files[0].name);
+    console.log(e.target.files[0].size);
+
+    // if size is more than 5mb, display error message
+    console.log(e.target.files[0].size / 1000000);
+    if (e.target.files[0].size / 1000000 > 5 || e.target.files[0].name == '') {
+      console.log('exceeded');
+      setShowFileSizeError(true);
+      setShowSuccess(false);
+      document.getElementById('custom-file').value = '';
+    } else {
+      setShowFileSizeError(false);
+      setFile(e.target.files[0]);
+      setfileUpload(true);
+      setFileName(e.target.files[0].name);
+    }
+  };
+  // const submitFile = async () => {
+  //   const data = new FormData();
+  //   //if(file name is not empty..... handle condition when no file is selected)
+  //   data.append('file', file);
+  //   api
+  //     .post('/api/uploadBizFile', data, {
+  //       headers: {
+  //         'Content-Type': 'multipart/form-data',
+  //       }
+  //       // onSuccess: () => {
+  //       //   queryClient.invalidateQueries(['user', user?.id.toString()]);
+  //       // },
+  //     })
+  //     .then((response) => {
+  //       console.log(response);
+  //       if (response.status == 200) {
+  //         console.log('file upload sucessfully');
+  //         console.log(response);
+  //         console.log(response.data['fileDownloadUri']);
+  //         var newlink = response.data['fileDownloadUri'];
+  //         setProfilepicUrl(newlink);
+  //       }
+  //     })
+  //     .catch(() => {
+  //       setShowFailedMsg(true);
+  //     });
+  // };
 
   const onSubmit = async (data) => {
     mutate({
@@ -264,38 +266,37 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
                     </div>
                   </div>
                   <Row>
-                  <div className="form-group">
-                    <Form.Label className="uploadFileLabel">
-                      Upload Business Document &nbsp;
-                      <OverlayTrigger
-                        placement="right"
-                        delay={{ show: 250, hide: 400 }}
-                        overlay={renderTooltip}
-                      >
-                        <BsFillInfoCircleFill></BsFillInfoCircleFill>
-                      </OverlayTrigger>
-                    </Form.Label>
-                
-                    <Col className="form-group" md={12}>
-                      <Form.Group>
-                        <Form.File
-                          id="custom-file"
-                          type="file"
-                          accept=".zip"
-                          onChange={handleFileChange}
-                         
-                          required
-                          custom
-                        />
-                        <Form.Label
-                          className="form-group custom-file-label"
-                          md={12}
-                          for="custom-file"
+                    <div className="form-group">
+                      <Form.Label className="uploadFileLabel">
+                        Upload Business Document &nbsp;
+                        <OverlayTrigger
+                          placement="right"
+                          delay={{ show: 250, hide: 400 }}
+                          overlay={renderTooltip}
                         >
-                          {fileName}
-                        </Form.Label>
+                          <BsFillInfoCircleFill></BsFillInfoCircleFill>
+                        </OverlayTrigger>
+                      </Form.Label>
 
-                        {/* <br></br>
+                      <Col className="form-group" md={12}>
+                        <Form.Group>
+                          <Form.File
+                            id="custom-file"
+                            type="file"
+                            accept=".zip"
+                            onChange={handleFileChange}
+                            required
+                            custom
+                          />
+                          <Form.Label
+                            className="form-group custom-file-label"
+                            md={12}
+                            for="custom-file"
+                          >
+                            {fileName}
+                          </Form.Label>
+
+                          {/* <br></br>
                                   <div style={{display: (showUploadBtn?'block':'none')}}>
                                   <button
                                     className="btn btn-fill-out"
@@ -304,8 +305,8 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
                                     Upload
                                   </button>
                                   </div> */}
-                      </Form.Group>
-                    </Col>
+                        </Form.Group>
+                      </Col>
                     </div>
                   </Row>
 
@@ -315,7 +316,6 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
                       type="submit"
                       className="btn btn-fill-out btn-block"
                       name="register"
-
                     >
                       Register
                     </button>

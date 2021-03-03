@@ -408,7 +408,7 @@ const MyAccount = () => {
                       style={{
                         display: showFailedMsg ? 'block' : 'none',
                       }}
-                    > 
+                    >
                       <Alert variant="danger">Error Occured</Alert>
                     </div>*/}
                     <Card className="my-account-content__content">

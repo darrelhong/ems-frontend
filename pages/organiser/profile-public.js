@@ -161,10 +161,10 @@ const EventOrgProfile = ({ router: { query } }) => {
           <Col xs={6} md={6}>
             <h2>{eventorganiser?.name}</h2>
             <div className="product-content__rating-wrap">
-              <div className="product-content__rating">
+              {/* <div className="product-content__rating">
                 <ProductRating ratingValue={rating} />
                 <span>({rating})</span>
-              </div>
+              </div> */}
             </div>
             &nbsp;
             <div>
@@ -250,7 +250,7 @@ const EventOrgProfile = ({ router: { query } }) => {
               <Tab.Content>
                 <Tab.Pane eventKey="Events">
                   <div className="product-description-tab__details">
-                    {/* category slider 
+                    {/* category slider
                       <CategorySliderTwo
                         categorySliderData={categorySliderData}
                       />

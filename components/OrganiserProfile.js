@@ -51,8 +51,9 @@ const EventOrgProfile = ({ paraId_ }) => {
 
   useEffect(async () => {
     await getUser(paraId_).then((eventOrg) => {
-      //console.log('eo data');
-      // console.log(eventOrg);
+      console.log('eo data');
+      console.log(eventOrg);
+
       setEventOrganiser(eventOrg);
     });
 
@@ -68,7 +69,7 @@ const EventOrgProfile = ({ paraId_ }) => {
       setRating(rate);
     });
     //const { data: user } = useUser(localStorage.getItem('userId'));
-    console.log(localStorage.getItem('userId'));
+
     if (localStorage.getItem('userId') != null) {
       await getUser(localStorage.getItem('userId')).then(async (data) => {
         console.log(data);
@@ -80,13 +81,10 @@ const EventOrgProfile = ({ paraId_ }) => {
                 setCurrenteventlist(events);
               }
             );
-
-            // await getPartnerUpcomingEventsByOrganiserId(paraId_).then((events) => {
-            //   setUpcomingeventlist(events);
-            // });
+            //partner has no upcoming events
           } else if (
-            data.roles[0].roleEnum === 'EVNTORG' ||
-            data.roles[0].roleEnum === 'ATND'
+            data.roles[0].roleEnum === 'ATND' ||
+            (data.roles[0].roleEnum === 'EVNTORG' && data.id != paraId_)
           ) {
             await getAttendeeCurrentEventsByOrganiserId(paraId_).then(
               (events) => {
@@ -99,52 +97,66 @@ const EventOrgProfile = ({ paraId_ }) => {
                 setUpcomingeventlist(events);
               }
             );
-          } else {
-            // when data is null nothing guest user
-            // await getAttendeeCurrentEventsByOrganiserId(paraId_).then(
-            //   (events) => {
-            //     setCurrenteventlist(events);
-            //   }
-            // );
-            // await getAttendeeUpcomingEventsByOrganiserId(paraId_).then(
-            //   (events) => {
-            //     setUpcomingeventlist(events);
-            //   }
-            // );
-          }
 
-          await getPastEventsByOrganiserId(paraId_).then((events) => {
-            setPastEventlist(events);
-          });
-
-          // add guest user, no data at all.
-          if (data?.id == paraId_) {
-            setShowEoView(true);
-            setShowPublicView(false);
-          } else {
             setShowPublicView(true);
             setShowEoView(false);
+            // } else if (
+            //   data.roles[0].roleEnum === 'EVNTORG' &&
+            //   data.id != paraId_
+            // ) {
+            //   await getAttendeeCurrentEventsByOrganiserId(paraId_).then(
+            //     (events) => {
+            //       setCurrenteventlist(events);
+            //     }
+            //   );
+
+            //   await getAttendeeUpcomingEventsByOrganiserId(paraId_).then(
+            //     (events) => {
+            //       setUpcomingeventlist(events);
+            //     }
+            //   );
+            //   setShowPublicView(true);
+            //   setShowEoView(false);
+            // }
+          } else if (
+            data.roles[0].roleEnum === 'EVNTORG' &&
+            data.id == paraId_
+          ) {
+            await getAttendeeCurrentEventsByOrganiserId(paraId_).then(
+              (events) => {
+                setCurrenteventlist(events);
+              }
+            );
+
+            await getAttendeeUpcomingEventsByOrganiserId(paraId_).then(
+              (events) => {
+                setUpcomingeventlist(events);
+              }
+            );
+
+            setShowPublicView(false);
+            setShowEoView(true);
           }
-        } else {
-          await getAttendeeCurrentEventsByOrganiserId(paraId_).then(
-            (events) => {
-              setCurrenteventlist(events);
-            }
-          );
-
-          await getAttendeeUpcomingEventsByOrganiserId(paraId_).then(
-            (events) => {
-              setUpcomingeventlist(events);
-            }
-          );
-
+          // past events all the same for all users.
           await getPastEventsByOrganiserId(paraId_).then((events) => {
             setPastEventlist(events);
           });
-          setShowPublicView(true);
-          setShowEoView(false);
         }
       });
+    } else if (localStorage.getItem('userId') == null) {
+      await getAttendeeCurrentEventsByOrganiserId(paraId_).then((events) => {
+        setCurrenteventlist(events);
+      });
+
+      await getAttendeeUpcomingEventsByOrganiserId(paraId_).then((events) => {
+        setUpcomingeventlist(events);
+      });
+
+      await getPastEventsByOrganiserId(paraId_).then((events) => {
+        setPastEventlist(events);
+      });
+      setShowPublicView(true);
+      setShowEoView(false);
     }
   }, []);
 
@@ -179,7 +191,7 @@ const EventOrgProfile = ({ paraId_ }) => {
             {eventorganiser?.profilePic != null && (
               <Image
                 className="profile-image"
-                src={partner?.profilePic}
+                src={eventorganiser?.profilePic}
                 thumbnail
               />
             )}
@@ -190,8 +202,13 @@ const EventOrgProfile = ({ paraId_ }) => {
             <h2>{eventorganiser?.name}</h2>
             <div className="product-content__rating-wrap">
               <div className="product-content__rating">
-                <ProductRating ratingValue={rating} />
-                <span>({rating})</span>
+                {rating != null && rating != undefined && (
+                  <ProductRating ratingValue={rating} />
+                )}
+
+                {rating != null && rating != undefined && (
+                  <span>({rating})</span>
+                )}
               </div>
             </div>
             &nbsp;
