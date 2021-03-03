@@ -45,12 +45,12 @@ const HeaderThree = ({ cartItems, navPositionClass }) => {
               <a className="navbar-brand">
                 <img
                   className="logo-light"
-                  src="/assets/images/eventStop.png"
+                  src="/assets/images/event-stop-logo.png"
                   alt="logo"
                 />
                 <img
                   className="logo-dark"
-                  src="/assets/images/eventStop.png"
+                  src="/assets/images/event-stop-logo.png"
                   alt="logo"
                 />
               </a>

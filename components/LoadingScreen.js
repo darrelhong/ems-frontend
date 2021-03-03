@@ -1,12 +1,11 @@
-import { Grid, Spinner } from '@chakra-ui/react';
-import PageContainer from './PageContainer';
+import { Container, Row, Spinner } from 'react-bootstrap';
 
 export default function LoadingScreen() {
   return (
-    <PageContainer>
-      <Grid justifyContent="center" alignItems="center" height="100vw">
-        <Spinner size="xl" />
-      </Grid>
-    </PageContainer>
+    <Container className="vh-100">
+      <Row className="justify-content-center align-items-center h-100">
+        <Spinner animation="grow" />
+      </Row>
+    </Container>
   );
 }

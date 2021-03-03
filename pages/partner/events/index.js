@@ -55,9 +55,7 @@ function PartnerHome() {
               <a>Partner Home</a>
             </Link>
           </li>
-          <li className="breadcrumb-item">
-            <a>Events</a>
-          </li>
+          <li className="breadcrumb-item active">Events</li>
         </ol>
       </BreadcrumbOne>
 
@@ -86,9 +84,12 @@ function PartnerHome() {
                       sm={6}
                       lg={4}
                       className="mb-5 d-flex align-items-stretch3"
-                      as="a"
                     >
-                      <EventCard event={event} />
+                      <Link href={`/partner/events/${event.eid}`}>
+                        <a>
+                          <EventCard event={event} />
+                        </a>
+                      </Link>
                     </Col>
                   ))}
                 </Fragment>
