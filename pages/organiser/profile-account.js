@@ -217,9 +217,8 @@ const MyAccount = () => {
           var newlink = response.data['fileDownloadUri'];
           setProfilepicUrl(newlink);
         }
-      })
-      .catch(() => {
-        setShowFailedMsg(true);
+      }).catch(() => {
+        setShowFailedMsg(true)
       });
   };
 

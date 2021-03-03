@@ -38,7 +38,7 @@ import { logout } from '../../lib/auth';
 const MyAccount = () => {
   const [showSuccessMsg, setShowSuccessMsg] = useState(false);
   const [showFailedMsg, setShowFailedMsg] = useState(false);
-  const [businessCategory, setBusinessCategory] = useState("");
+  const [businessCategory, setBusinessCategory] = useState('');
   const [loginLoading, setLoginLoading] = useState(false);
 
   const [fileUpload, setfileUpload] = useState(false);
@@ -91,7 +91,9 @@ const MyAccount = () => {
     </Tooltip>
   );
 
+  const mutateAccStatus = useMutation(
     (data) => api.post(`/api/user/disableStatus/${user?.id}`),
+
     {
       onSuccess: () => {
         queryClient.invalidateQueries(['user', user?.id.toString()]);
@@ -106,8 +108,6 @@ const MyAccount = () => {
     });
     // close the modal once yes click.
     setShow(false);
-
-    
   };
 
   const { register, handleSubmit, errors } = useForm({
@@ -120,22 +120,13 @@ const MyAccount = () => {
       .then((response) => {
         setAccSaved(true);
         setAccSuccess(' Account details saved successfully! ');
-
-  const mutateAccDetail = useMutation(
-
-    (data) => api.post('/api/partner/update', data) 
-    .then(response => {
-      setAccSaved(true);
-     setAccSuccess(" Account details saved successfully! ");
-     setLoginLoading(false);
-     //document.getElementById("account-details-form").reset();
-     window.location.reload();
-    }).catch(error =>{
-      console.log(error)
-
-    }
-
-    )
+        setLoginLoading(false);
+        //document.getElementById("account-details-form").reset();
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.log(error);
+      })
   );
 
   const onChangeBizCategory = async (event) => {
@@ -145,18 +136,18 @@ const MyAccount = () => {
 
   const onSubmit = async (data) => {
     console.log('data acc' + data['name']);
+
     setLoginLoading(true);
-    if(businessCategory != ""){
-        mutateAccDetail.mutate({
-            address: data.address,
-            description: data.description,
-            name: data.name,
-            phonenumber: data.phonenumber,
-            id: user?.id,
-            businessCategory : businessCategory,
-          });
-    }
-    else if (
+    if (businessCategory != '') {
+      mutateAccDetail.mutate({
+        address: data.address,
+        description: data.description,
+        name: data.name,
+        phonenumber: data.phonenumber,
+        id: user?.id,
+        businessCategory: businessCategory,
+      });
+    } else if (
       user?.address != data.address ||
       user?.description != data.description ||
       user?.name != data.name ||
@@ -235,9 +226,11 @@ const MyAccount = () => {
 
           setConfirmPW(true);
           setShowPW(true);
+          setLoginLoading(false);
         } else if (response.data['message'] == 'Old password is incorrect.') {
-          setPWAlert('Old password is incorrect.');
+          setPWAlert('Current password is incorrect.');
           setShowPW(true);
+          setLoginLoading(false);
         }
       })
       .catch((error) => {
@@ -246,21 +239,7 @@ const MyAccount = () => {
         setPWAlert('An error has occured.');
         setShowPW(true);
         setLoginLoading(false);
-      
-      }else if(response.data["message"] == "Old password is incorrect."){
-      
-      setPWAlert('Current password is incorrect.');
-      setShowPW(true);
-      setLoginLoading(false);
-      }
-    }).catch(error =>{
-      console.log(error)
-     
-      setPWAlert("An error has occured.");
-      setShowPW(true);
-      setLoginLoading(false);
-    })
-    
+      });
   });
 
   const mutateNotificationSetting = useMutation((data) =>
