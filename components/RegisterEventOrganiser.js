@@ -9,6 +9,7 @@ import cx from 'classnames';
 import { Col, Container, Row, Form,OverlayTrigger,Tooltip } from 'react-bootstrap';
 import { BsFillInfoCircleFill } from 'react-icons/bs';
 import api from '../lib/ApiClient';
+import ButtonWithLoading from './custom/ButtonWithLoading';
 
 import { BreadcrumbOne } from './Breadcrumb';
 import { LayoutOne } from '../layouts';
@@ -26,6 +27,7 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
   const [showSuccess, setShowSuccess] = useState(false);
   const password = useRef({});
   password.current = watch('password', '');
+  const [loginLoading, setLoginLoading] = useState(false);
 
   // const { mutate, isError } = useMutation(
   //   (data) => api.post(registerApiUrl, data),
@@ -106,16 +108,20 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
 
                   setShowUserAlrExistError(true);
                   setShowSuccess(false);
-
+                  setLoginLoading(false);
                   
                } else if(response.data['message'] == 'success') {
                  setShowSuccess(true);
                  setShowUserAlrExistError(false);
+                 setLoginLoading(false);
+               } else {
+                 setShow(true);
                }
              }
            })
            .catch((error) => {
              console.log(error);
+             
            });
        });
 
@@ -169,6 +175,8 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
 
 
   const onSubmit = async (data) => {
+    setLoginLoading(true);
+
     mutate({
       name: data.name,
       email: data.email,
@@ -311,14 +319,14 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
 
                   <div className="form-group">
                     &nbsp;
-                    <button
+                    <ButtonWithLoading
                       type="submit"
                       className="btn btn-fill-out btn-block"
                       name="register"
-
+                      isLoading={loginLoading && !isError }
                     >
                       Register
-                    </button>
+                    </ButtonWithLoading>
                   </div>
 
                   <div
@@ -351,7 +359,7 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
                         dismissible
                       >
                         {' '}
-                        Username already exist.{' '}
+                        User already exist.{' '}
                       </Alert>
                     }
                   </div>

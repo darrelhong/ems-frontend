@@ -66,6 +66,7 @@ const EventOrgProfile = ({ paraId_ }) => {
 
     await getRating(paraId_).then((rate) => {
       setRating(rate);
+      console.log("rating" + rating);
     });
     //const { data: user } = useUser(localStorage.getItem('userId'));
     console.log(localStorage.getItem('userId'));
@@ -179,7 +180,7 @@ const EventOrgProfile = ({ paraId_ }) => {
             {eventorganiser?.profilePic != null && (
               <Image
                 className="profile-image"
-                src={partner?.profilePic}
+                src={eventorganiser?.profilePic}
                 thumbnail
               />
             )}
@@ -191,7 +192,9 @@ const EventOrgProfile = ({ paraId_ }) => {
             <div className="product-content__rating-wrap">
               <div className="product-content__rating">
                 <ProductRating ratingValue={rating} />
-                <span>({rating})</span>
+              
+                {(rating == undefined || rating == null ) && <span> 0 </span>}
+                {(rating >= 0 ) && <span> {rating}</span>}
               </div>
             </div>
             &nbsp;
@@ -305,7 +308,7 @@ const EventOrgProfile = ({ paraId_ }) => {
                   ))} */}
                   <br></br>
                   <div className="product-description-tab__additional-info">
-                    {(eventorganiser?.description === null &&
+                    {((eventorganiser?.description === null || eventorganiser?.description === "") &&
                       'There is no description.') ||
                       eventorganiser?.description}
                   </div>

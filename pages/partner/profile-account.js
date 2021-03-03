@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 // import { LayoutOne } from '../../layouts';
 import { BreadcrumbOne } from '../../components/Breadcrumb';
+import ButtonWithLoading from '../../components/custom/ButtonWithLoading';
 import {
   Container,
   Row,
@@ -40,6 +41,7 @@ const MyAccount = () => {
   const [showSuccessMsg, setShowSuccessMsg] = useState(false);
   const [showFailedMsg, setShowFailedMsg] = useState(false);
   const [businessCategory, setBusinessCategory] = useState("");
+  const [loginLoading, setLoginLoading] = useState(false);
 
   const [fileUpload, setfileUpload] = useState(false);
   const [file, setFile] = useState('uploadfile');
@@ -95,10 +97,11 @@ const MyAccount = () => {
 
   const mutateAccStatus = useMutation(
 
-    (data) => api.post('/api/user/update-account-status', data),
+    (data) => api.post(`/api/user/disableStatus/${user?.id}`),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(['user', user?.id.toString()]);
+        logout({ redirectTo: '/partner/login' });
       },
     }
   );
@@ -110,7 +113,7 @@ const MyAccount = () => {
     // close the modal once yes click.
     setShow(false);
 
-    logout({ redirectTo: '/organiser/login' });
+    
   };
 
 
@@ -125,9 +128,9 @@ const MyAccount = () => {
     .then(response => {
       setAccSaved(true);
      setAccSuccess(" Account details saved successfully! ");
-     
+     setLoginLoading(false);
      //document.getElementById("account-details-form").reset();
-
+     window.location.reload();
     }).catch(error =>{
       console.log(error)
 
@@ -143,6 +146,7 @@ const MyAccount = () => {
 
   const onSubmit = async (data) => {
     console.log('data acc' + data['name']);
+    setLoginLoading(true);
     if(businessCategory != ""){
         mutateAccDetail.mutate({
             address: data.address,
@@ -234,17 +238,20 @@ const MyAccount = () => {
   
         setConfirmPW(true);
         setShowPW(true);
+        setLoginLoading(false);
       
       }else if(response.data["message"] == "Old password is incorrect."){
       
-      setPWAlert('Old password is incorrect.');
+      setPWAlert('Current password is incorrect.');
       setShowPW(true);
+      setLoginLoading(false);
       }
     }).catch(error =>{
       console.log(error)
      
       setPWAlert("An error has occured.");
       setShowPW(true);
+      setLoginLoading(false);
     })
     
   });
@@ -321,9 +328,9 @@ const MyAccount = () => {
           <Button variant="secondary" onClick={handleDisabled}>
             Yes
           </Button>
-          <Button className="btn btn-fill-out" onClick={handleClose}>
+          <button className="btn btn-fill-out" onClick={handleClose}>
             No
-          </Button>
+          </button>
         </Modal.Footer>
       </Modal>
 
@@ -623,14 +630,15 @@ const MyAccount = () => {
                               </Col>
 
                               <Col md={12}>
-                                <button
+                                <ButtonWithLoading
                                   type="submit"
                                   className="btn btn-fill-out"
                                   name="submit"
                                   value="Submit"
+                                  isLoading={loginLoading}
                                 >
                                   Save
-                                </button>
+                                </ButtonWithLoading>
                               </Col>
                             </Row>
 

@@ -20,6 +20,7 @@ import {
 import { FaRegEdit } from 'react-icons/fa';
 import OrganiserWrapper from '../../components/wrapper/OrganiserWrapper';
 import { BsFillInfoCircleFill } from 'react-icons/bs';
+import ButtonWithLoading from '../../components/custom/ButtonWithLoading';
 
 import {
   IoIosCash,
@@ -45,6 +46,7 @@ const MyAccount = () => {
   const [file, setFile] = useState('uploadfile');
 
   const [fileName, setFileName] = useState('Choose image');
+  const [loginLoading, setLoginLoading] = useState(false);
 
   const { data: user } = useUser(localStorage.getItem('userId'));
   //const profiepicSrcUrl = user?.profilePic;
@@ -100,10 +102,12 @@ const MyAccount = () => {
   );
 
   const mutateAccStatus = useMutation(
-    (data) => api.post('/api/user/update-account-status', data),
+
+    (data) => api.post(`/api/user/disableStatus/${user?.id}`),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(['user', user?.id.toString()]);
+        logout({ redirectTo: '/organiser/login' });
       },
     }
   );
@@ -128,6 +132,9 @@ const MyAccount = () => {
       .then((response) => {
         setAccSaved(true);
         setAccSuccess(' Account details saved successfully! ');
+        setLoginLoading(false);
+        window.location.reload();
+
         //document.getElementById("account-details-form").reset();
       })
       .catch((error) => {
@@ -137,6 +144,8 @@ const MyAccount = () => {
 
   const onSubmit = async (data) => {
     console.log('data acc' + data['name']);
+    setLoginLoading(true);
+
     if (
       user?.address != data.address ||
       user?.description != data.description ||
@@ -225,9 +234,11 @@ const MyAccount = () => {
 
           setConfirmPW(true);
           setShowPW(true);
+          setLoginLoading(false);
         } else if (response.data['message'] == 'Old password is incorrect.') {
-          setPWAlert('Old password is incorrect.');
+          setPWAlert('Current password is incorrect.');
           setShowPW(true);
+          setLoginLoading(false);
         }
       })
       .catch((error) => {
@@ -235,6 +246,7 @@ const MyAccount = () => {
 
         setPWAlert('An error has occured.');
         setShowPW(true);
+        setLoginLoading(false);
       });
   });
 
@@ -308,9 +320,9 @@ const MyAccount = () => {
           <Button variant="secondary" onClick={handleDisabled}>
             Yes
           </Button>
-          <Button className="btn btn-fill-out" onClick={handleClose}>
+          <button className="btn btn-fill-out" onClick={handleClose}>
             No
-          </Button>
+          </button>
         </Modal.Footer>
       </Modal>
 
@@ -572,14 +584,15 @@ const MyAccount = () => {
                               </Col>
 
                               <Col md={12}>
-                                <button
+                                <ButtonWithLoading
                                   type="submit"
                                   className="btn btn-fill-out"
                                   name="submit"
                                   value="Submit"
+                                  isLoading={loginLoading}
                                 >
                                   Save
-                                </button>
+                                </ButtonWithLoading>
                               </Col>
                             </Row>
                             <div>&nbsp;</div>

@@ -31,7 +31,7 @@ const FollowersTabEoProfile = ({ attendees, partners }) => {
                   <Col md={12}>
                   {attendees.map((attendee) => {
                         return (
-                          <div>
+                          <div  >
                             <Row md={12} className="follower-box">
                               <div class="p-3">
                                 <div class="d-flex align-items-center">
@@ -83,9 +83,10 @@ const FollowersTabEoProfile = ({ attendees, partners }) => {
                   <Col md={12}>
                   {partners.map((partner) => {
                         return (
-                          <div>
+                          <div  >
                             <Row md={12} className="follower-box">
-                              <div class="p-3">
+                            
+                              <div class="p-3" >
                                 <div class="d-flex align-items-center">
                                   <div class="image">
                                     {' '}
@@ -108,6 +109,7 @@ const FollowersTabEoProfile = ({ attendees, partners }) => {
                                       />)}
                                     {' '}
                                   </div>
+                                  
                                   <div class="ml-3 w-100">
                                    
                                     <h4 class="mb-0 mt-0">

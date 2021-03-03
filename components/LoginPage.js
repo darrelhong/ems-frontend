@@ -46,11 +46,7 @@ export default function LoginPage({
           <Row className="justify-content-center">
             <Col xl={6} md={10}>
               <div className="login-wrap">
-                {info == 'noToken' && (
-                  <div className="alert alert-danger" role="alert">
-                    Session timed out. Please sign in again.
-                  </div>
-                )}
+               
 
                 <div className="heading-s1 space-mb--20">
                   <h3>{heading}</h3>
@@ -106,7 +102,11 @@ export default function LoginPage({
                       <div className="alert alert-danger" role="alert">
                         {loginError}
                       </div>
-                    )}
+                    )} {info == 'noToken' && (
+                  <div className="alert alert-danger" role="alert">
+                    Session timed out. Please sign in again.
+                  </div>
+                )}
                     <div className="form-group">
                       <ButtonWithLoading
                         type="submit"
