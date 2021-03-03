@@ -67,6 +67,7 @@ const EventOrgProfile = ({ paraId_ }) => {
 
     await getRating(paraId_).then((rate) => {
       setRating(rate);
+      console.log('rating' + rating);
     });
     //const { data: user } = useUser(localStorage.getItem('userId'));
 
@@ -334,7 +335,8 @@ const EventOrgProfile = ({ paraId_ }) => {
                   ))} */}
                   <br></br>
                   <div className="product-description-tab__additional-info">
-                    {(eventorganiser?.description === null &&
+                    {((eventorganiser?.description === null ||
+                      eventorganiser?.description === '') &&
                       'There is no description.') ||
                       eventorganiser?.description}
                   </div>
