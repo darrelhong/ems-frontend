@@ -1,10 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import EventCard from './EventCard';
-import { Row } from "react-bootstrap";
+import { Row, Modal, Button } from "react-bootstrap";
 import { useToasts } from 'react-toast-notifications';
-import { updateEvent } from '../../lib/query/eventApi';
+import { handleCancel, handleDelete } from "../../lib/functions/eventOrganiser/eventFunctions";
 
 const EventView = ({ events, layout }) => {
+    const [currEvents, setCurrEvents] = useState(events);
+    // const [deleteModalShow, setDeleteModalShow] = useState(true);
+
+    // const closeModal = () => setDeleteModalShow(false);
+
+    // console.log("ALL EVENTS: ", events);
+    // console.log("event state: ", currEvents);
+
+    useEffect(() => {
+        if (events) {
+            setCurrEvents(events);
+        }
+    })
     const { addToast, removeToast } = useToasts();
 
     const createToast = (message, appearanceStyle) => {
@@ -12,70 +25,39 @@ const EventView = ({ events, layout }) => {
         setTimeout(() => removeToast(toastId), 3000);
     };
 
-    const publishToggle = async () => {
-        const published = !event.published;
-        const updatedEvent = await updateEvent({ ...event, published });
-        setEvent(updatedEvent);
-        let message = '';
-        published ? message = "Published Successfully" : message = "Event unpublished";
-        createToast(message, 'success');
-    };
-
-    const hideToggle = async () => {
-        const hidden = !event.hidden;
-        const updatedEvent = await updateEvent({ ...event, hidden });
-        setEvent(updatedEvent);
-        let message = '';
-        hidden ? message = "Event Hidden" : message = "Event now visible to business partners!";
-        createToast(message, 'success');
-    };
-
-
-    const vipToggle = async () => {
-        const vip = !event.vip;
-        const updatedEvent = await updateEvent({ ...event, vip });
-        setEvent(updatedEvent);
-        let message = '';
-        vip ? message = "Event is exclusive to VIP members!" : message = "Event open for all!";
-        createToast(message, 'success');
-    };
-
-    const handleCancelDelete = async (operation) => {
-        if (operation == 'cancel') {
-            const eventStatus = "CANCELLED";
-            try {
-                const updatedEvent = await updateEvent({ ...event, eventStatus });
-                setEvent(updatedEvent);
-                createToast('Event successfully cancelled', 'success');
-            } catch (e) {
-                createToast('Error cancelling the event', 'error');
-            }
+    const deleteCancelEvent = async (event) => {
+        console.log("trying to delete this: ", event);
+        if (event.eventBoothTransactions?.length == 0 && event.ticketTransactions?.length == 0) {
+            await handleDelete(event).then(
+                (output) => {
+                    console.log(output);
+                    output ? createToast("Event has been successfully deleted", "success") :
+                        CreateToast("An Error occured while trying to delete this event", "warning");
+                });
         } else {
-            const eventStatus = "DELETED";
-            try {
-                const updatedEvent = await updateEvent({ ...event, eventStatus });
-                setEvent(updatedEvent);
-                createToast('Event successfully deleted!', 'success');
-            } catch (e) {
-                createToast('Error deleting the event', 'error');
-            }
+            await handleCancel(event).then(
+                (output) => {
+                    console.log(output);
+                    (output === false) ? CreateToast("An Error occured while trying to cancel this event", "warning") :
+                        CreateToast("Event has been successfully cancelled", "success");
+                }
+            );
         }
     };
 
-
     return (
+
         <div className="shop-products">
             <Row className={layout}>
-                {events &&
-                    events.map((event) => {
+                {currEvents &&
+                    currEvents.map((event) => {
                         return (
                             <EventCard
                                 key={event.eid}
                                 event={event}
-                                publishToggle={publishToggle}
-                                hideToggle={hideToggle}
-                                vipToggle={vipToggle}
-                                handleCancelDelete={handleCancelDelete} />
+                                deleteCancelEvent={deleteCancelEvent}
+                                createToast={createToast}
+                            />
                         );
                     })
                 }
