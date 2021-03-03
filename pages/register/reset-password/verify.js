@@ -15,9 +15,6 @@ import ButtonWithLoading from '../../../components/custom/ButtonWithLoading';
 
 import GuestWrapper from '../../../components/wrapper/GuestWrapper';
 
-
-
-
 export const getServerSideProps = async ({ query }) => {
   return {
     props: {
@@ -62,11 +59,11 @@ export default function ResetPassword({ token }) {
                   login.
                   <div>
                     <br></br>
-                  <Link href="/">
-                    <button className="btn btn-sm btn-fill-out">
-                      Back to home
-                    </button>
-                  </Link>
+                    <Link href="/">
+                      <button className="btn btn-sm btn-fill-out">
+                        Back to home
+                      </button>
+                    </Link>
                   </div>
                 </Alert>
               ) : (
@@ -77,11 +74,14 @@ export default function ResetPassword({ token }) {
                       <input
                         name="password"
                         id="password"
-                        type="password"  
-                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                        title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                        type="password"
                         ref={register({
-                          required: 'Password is required',                    
+                          required: 'Password is required',
+                          pattern: {
+                            value: /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/,
+                            message:
+                              'Message must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters',
+                          },
                         })}
                         placeholder="Enter new password"
                         className={cx('form-control', {
@@ -99,8 +99,6 @@ export default function ResetPassword({ token }) {
                         name="password_confirm"
                         id="password_confirm"
                         type="password"
-                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                        title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
                         ref={register({
                           validate: (value) =>
                             value === password.current ||
