@@ -20,6 +20,21 @@ export default function OrganiserHome() {
             </Link>
           </li>
         </ol>
+
+        <ol>
+          <li>
+            <Link href="/organiser/events">
+              <a>View Events</a>
+            </Link>
+          </li>
+
+          <li>
+            <Link href="/organiser/events/create">
+              <a>Create Event</a>
+            </Link>
+          </li>
+
+        </ol>
       </BreadcrumbOne>
 
       <Container>
