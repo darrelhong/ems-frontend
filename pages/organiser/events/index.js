@@ -29,6 +29,7 @@ function myEvents() {
   const [offset, setOffset] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentData, setCurrentData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const pageLimit = 12;
   // console.log("Sort value index:", sortValue);
@@ -48,7 +49,11 @@ function myEvents() {
 
   useEffect(() => {
     if (events != null) {
-      const tempSortedEvents = filterEvents(events, sortValue);
+      let tempSortedEvents = filterEvents(events, sortValue);
+      if (searchTerm.length >= 3) {
+        tempSortedEvents = applySearch(tempSortedEvents, searchTerm);
+        // console.log("events: ", tempSortedEvents);
+      }
       const tempCurrentData = tempSortedEvents.slice(
         offset,
         offset + pageLimit
@@ -56,7 +61,11 @@ function myEvents() {
       setSortedEvents(tempSortedEvents);
       setCurrentData(tempCurrentData);
     }
-  }, [offset, events, sortValue]);
+  }, [offset, events, sortValue, searchTerm]);
+
+  const applySearch = (listEvents, searchTerm) => {
+    return listEvents.filter((e) => e.name.toLowerCase().includes(searchTerm) || e.descriptions.toLowerCase().includes(searchTerm));
+  }
 
   const getLayout = (layout) => {
     setLayout(layout);
@@ -106,6 +115,8 @@ function myEvents() {
                   shopTopFilterStatus={shopTopFilterStatus}
                   setShopTopFilterStatus={setShopTopFilterStatus}
                   layout={layout}
+                  searchTerm={searchTerm}
+                  setSearchTerm={setSearchTerm}
                 />
 
                 <EventView events={currentData} layout={layout} />
