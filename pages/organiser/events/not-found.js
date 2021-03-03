@@ -1,8 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { Col, Container, Row } from 'react-bootstrap';
-
-import HomeHeaderTop from '../../components/Header/HomeHeaderTop';
+import HomeHeaderTop from '../../../components/Header/HomeHeaderTop';
 
 const EventNotFound = () => {
   return (
@@ -36,4 +35,4 @@ const EventNotFound = () => {
   );
 };
 
-export const EventNotFound;
+export default EventNotFound;

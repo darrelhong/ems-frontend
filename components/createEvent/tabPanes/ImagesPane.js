@@ -171,7 +171,7 @@ const ImagesPane = ({ register }) => {
                                 type="file"
                                 name="files"
                                 class="file-input"
-                                ref={register({ required: true })}
+                                // ref={register({ required: true })}
                                 multiple/>
                             <button type="submit" onClick={(event) => console.log(event)} class="primary submit-btn">Submit</button>
                         </div>
