@@ -29,21 +29,21 @@ const OrganiserViewEventDetails = () => {
     const loadEvent = async () => {
       try {
         let eventData = await getEventDetails(eid);
-        if (eventData.eventEndDate) setPrettyEndDate(format(parseISO(eventData.eventEndDate), 'dd MMM yy hh:mmbbb'));
-        if (eventData.eventStartDate) setPrettyStartDate(format(parseISO(eventData.eventStartDate), 'dd MMM yy hh:mmbbb'));
-        if (eventData.saleStartDate) setPrettySaleStartDate(format(parseISO(eventData.saleStartDate), 'dd MMM yy hh:mmbbb'));
-        if (eventData.salesEndDate) setPrettySalesEndDate(format(parseISO(eventData.salesEndDate), 'dd MMM yy hh:mmbbb'));
+        // if (eventData.eventEndDate) setPrettyEndDate(format(parseISO(eventData.eventEndDate), 'dd MMM yy hh:mmbbb'));
+        // if (eventData.eventStartDate) setPrettyStartDate(format(parseISO(eventData.eventStartDate), 'dd MMM yy hh:mmbbb'));
+        // if (eventData.saleStartDate) setPrettySaleStartDate(format(parseISO(eventData.saleStartDate), 'dd MMM yy hh:mmbbb'));
+        // if (eventData.salesEndDate) setPrettySalesEndDate(format(parseISO(eventData.salesEndDate), 'dd MMM yy hh:mmbbb'));
+        setPrettyEndDate(eventData.eventEndDate);
+        setPrettyStartDate(eventData.eventStartDate);
+        setPrettySaleStartDate(eventData.salesStartDate);
+        setPrettySalesEndDate(eventData.salesEndDate);
+        setEvent(eventData);
+
         setEvent(eventData);
       } catch (e) {
         router.push('/organiser/events/not-found');
 
       }
-
-
-      // setPrettyEndDate(dbDateToPretty(eventData.eventEndDate));
-      // setPrettyStartDate(dbDateToPretty(eventData.eventStartDate));
-      // setPrettySaleStartDate(dbDateToPretty(eventData.saleStartDate));
-      // setPrettySalesEndDate(dbDateToPretty(eventData.salesEndDate));
     };
     loadEvent();
   }, []);
@@ -90,12 +90,12 @@ const OrganiserViewEventDetails = () => {
 
   const handleDeleteWithToast = async (event) => {
     const isDeleted = await handleDelete(event);
-    if (isDeleted){
+    if (isDeleted) {
       createToast('Event successfully deleted', 'success');
       //navigate to somewhere else
     } else {
       createToast('Error in deleting event, please contact our help center', 'error');
-    } 
+    }
   }
 
   // const publishToggle = async () => {
