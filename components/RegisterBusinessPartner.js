@@ -13,6 +13,8 @@ import Alert from 'react-bootstrap/Alert';
 
 import { useMutation } from 'react-query';
 import api from '../lib/ApiClient';
+import GuestWrapper from '../components/wrapper/GuestWrapper';
+import ButtonWithLoading from './custom/ButtonWithLoading';
 
 export default function RegisterBusinessPartner({ title, registerApiUrl }) {
   const router = useRouter();
@@ -20,18 +22,54 @@ export default function RegisterBusinessPartner({ title, registerApiUrl }) {
   const [show, setShow] = useState(true);
   const [showSuccess, setShowSuccess] = useState(false);
   const password = useRef({});
+  const [showUserAlrExistError, setShowUserAlrExistError] = useState(false);
+  const [loginLoading, setLoginLoading] = useState(false);
+
   password.current = watch('password', '');
 
   const { mutate, isError } = useMutation(
-    (data) => api.post(registerApiUrl, data),
-    {
-      onSuccess: () => {
-        router.push('/register/success');
-      },
+    //   (data) => api.post(registerApiUrl, data),
+    //   {
+    //     onSuccess: () => {
+    //       // router.push('/partner/home');
+    //       setShowSuccess(true);
+    //       document.getElementById('register-form').reset();
+
+    //     },
+    //   }
+    // );
+
+    (data) => {
+      api
+        .post(registerApiUrl, data)
+        .then((response) => {
+          console.log(response.data['message']);
+          if (response.status == 200) {
+            document.getElementById('register-form').reset();
+            if (response.data['message'] == 'alreadyExisted') {
+              setShowUserAlrExistError(true);
+              setShowSuccess(false);
+              setLoginLoading(false);
+            } else if (response.data['message'] == 'success') {
+              setShowSuccess(true);
+              setShowUserAlrExistError(false);
+              setLoginLoading(false);
+            } else {
+              setShow(true);
+            }
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   );
 
   const onSubmit = async (data) => {
+    setShow(false);
+    setShowSuccess(false);
+    setShowUserAlrExistError(false);
+    setLoginLoading(true);
     mutate({
       name: data.name,
       email: data.email,
@@ -40,7 +78,7 @@ export default function RegisterBusinessPartner({ title, registerApiUrl }) {
   };
 
   return (
-    <LayoutOne>
+    <GuestWrapper>
       <Head>
         <title>{title}</title>
       </Head>
@@ -64,7 +102,7 @@ export default function RegisterBusinessPartner({ title, registerApiUrl }) {
                   <h3>{title}</h3>
                 </div>
                 <div>
-                  <form onSubmit={handleSubmit(onSubmit)}>
+                  <form onSubmit={handleSubmit(onSubmit)} id="register-form">
                     <div className="form-group">
                       <label htmlFor="email">Email</label>
                       <input
@@ -129,15 +167,33 @@ export default function RegisterBusinessPartner({ title, registerApiUrl }) {
 
                     <div className="form-group">
                       &nbsp;
-                      <button
+                      <ButtonWithLoading
                         type="submit"
                         className="btn btn-fill-out btn-block"
                         name="register"
+                        isLoading={loginLoading && !isError}
                       >
                         Register
-                      </button>
+                      </ButtonWithLoading>
                     </div>
 
+                    <div
+                      style={{
+                        display: showUserAlrExistError ? 'block' : 'none',
+                      }}
+                    >
+                      {
+                        <Alert
+                          show={showUserAlrExistError}
+                          variant="danger"
+                          onClose={() => setShowUserAlrExistError(false)}
+                          dismissible
+                        >
+                          {' '}
+                          User already exist.{' '}
+                        </Alert>
+                      }
+                    </div>
                     {isError && (
                       <Alert
                         show={show}
@@ -175,7 +231,7 @@ export default function RegisterBusinessPartner({ title, registerApiUrl }) {
           </Row>
         </Container>
       </div>
-    </LayoutOne>
+    </GuestWrapper>
   );
 }
 

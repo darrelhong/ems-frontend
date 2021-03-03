@@ -3,11 +3,12 @@ import RegisterPage from '../../components/RegisterBusinessPartner';
 
 //import RegisterPage from '../../components/RegisterPage';
 
-export default function OrganiserRegister() {
+export default function BusinessPartnerRegister() {
   return (
     <RegisterPage
       title="Join as Business Partner"
-      registerApiUrl={`/api/${RoleEnum.BIZPTNR}/register/`}
+      // registerApiUrl={`/api/${RoleEnum.BIZPTNR}/register/`}
+      registerApiUrl="/api/partner/register"
     />
   );
 }

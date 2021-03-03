@@ -2,22 +2,22 @@ import { Fragment, useState } from 'react';
 import Link from 'next/link';
 import ProductModal from './elements/ProductModal';
 import { ProductRating } from '../Product';
-
+import Image from 'react-bootstrap/Image';
 const ProductGridFive = ({
   product,
-  discountedPrice,
-  productPrice,
-  cartItem,
-  wishlistItem,
-  compareItem,
+  // discountedPrice,
+  // productPrice,
+  // cartItem,
+  // wishlistItem,
+  // compareItem,
   bottomSpace,
-  addToCart,
-  addToWishlist,
-  deleteFromWishlist,
-  addToCompare,
-  deleteFromCompare,
-  addToast,
-  cartItems,
+  // addToCart,
+  // addToWishlist,
+  // deleteFromWishlist,
+  // addToCompare,
+  // deleteFromCompare,
+  // addToast,
+  // cartItems,
   sliderClass,
 }) => {
   const [modalShow, setModalShow] = useState(false);
@@ -30,9 +30,19 @@ const ProductGridFive = ({
           bottomSpace ? bottomSpace : ''
         }`}
       >
-        <div className="product-grid product-grid--style-three">
+        <div
+          className="product-grid product-grid--style-three"
+          style={{ width: '40%' }}
+        >
           <div className="product-grid__image">
-            <Link
+            <a>
+              <img
+                src="https://www.careerup.com/wp-content/uploads/2016/01/internship-opportunity-advertising-saga-events-1.png"
+                alt="product_img1"
+              />
+            </a>
+
+            {/*  <Link
               href={`/shop/product-basic/[slug]?slug=${product.slug}`}
               as={'/shop/product-basic/' + product.slug}
             >
@@ -49,7 +59,7 @@ const ProductGridFive = ({
               </a>
             </Link>
             <div className="product-grid__badge-wrapper">
-              {product.new ? <span className="pr-flash">NEW</span> : ''}
+              {/* {product.new ? <span className="pr-flash">NEW</span> : ""}
               {product.featured ? (
                 <span className="pr-flash bg-danger">HOT</span>
               ) : (
@@ -58,11 +68,11 @@ const ProductGridFive = ({
               {product.discount ? (
                 <span className="pr-flash bg-success">SALE</span>
               ) : (
-                ''
-              )}
-            </div>
-            <div className="product-grid__action-box">
-              <ul>
+                ""
+              )} */}
+          </div>
+          <div className="product-grid__action-box">
+            {/* <ul>
                 <li>
                   {product.affiliateLink ? (
                     <a href={product.affiliateLink} target="_blank">
@@ -127,37 +137,50 @@ const ProductGridFive = ({
                   </button>
                 </li>
               </ul>
-            </div>
+            </div>*/}
           </div>
           <div className="product-grid__info">
-            <h6 className="product-title">
-              <Link
+            <div>
+              <h6 className="product-title">
+                {/* <Link
                 href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-                as={'/shop/product-basic/' + product.slug}
-              >
+                as={"/shop/product-basic/" + product.slug}
+              > */}
                 <a>{product.name}</a>
-              </Link>
-            </h6>
-            <div className="product-price">
+                {/* </Link> */}
+              </h6>
+            </div>
+            <div>
+              <h6 className="product-description">
+                {/* <Link
+                href={`/shop/product-basic/[slug]?slug=${product.slug}`}
+                as={"/shop/product-basic/" + product.slug}
+              > */}
+                <a>{product.descriptions}</a>
+                {/* </Link> */}
+              </h6>
+            </div>
+
+            {/* <div className="product-price">
               {product.discount ? (
                 <Fragment>
                   <span className="price">${discountedPrice}</span>
-                  <del>${productPrice}</del>
-                  <span className="on-sale">{product.discount}% Off</span>
-                </Fragment>
+                  <del>${productPrice}</del> */}
+            {/* {/* <span className="on-sale">{product.discount}% Off</span> */}
+            {/* </Fragment>
               ) : (
                 <span className="price">${productPrice}</span>
               )}
-            </div>
-            <div className="rating-wrap">
+            </div> */}
+            {/* <div className="rating-wrap">
               <ProductRating ratingValue={product.rating} />
               <span className="rating-num">({product.ratingCount})</span>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
       {/* product modal */}
-      <ProductModal
+      {/* <ProductModal
         show={modalShow}
         onHide={() => setModalShow(false)}
         product={product}
@@ -173,7 +196,7 @@ const ProductGridFive = ({
         addtocompare={addToCompare}
         deletefromcompare={deleteFromCompare}
         addtoast={addToast}
-      />
+      /> */}
     </Fragment>
   );
 };

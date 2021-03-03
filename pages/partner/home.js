@@ -3,10 +3,10 @@ import { Container } from 'react-bootstrap';
 
 import useUser from '../../lib/query/useUser';
 
-import PartnerWrapper from '../../components/wrapper/PartnerWrapper';
 import { BreadcrumbOne } from '../../components/Breadcrumb';
+import PartnerWrapper from '../../components/wrapper/PartnerWrapper';
 
-function PartnerHome() {
+export default function PartnerHome() {
   const { data: user, isLoading, isSuccess } = useUser(
     localStorage.getItem('userId')
   );
@@ -16,13 +16,13 @@ function PartnerHome() {
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/partner/home">
-              <a>Partner Home</a>
+              <a>Home</a>
             </Link>
           </li>
         </ol>
       </BreadcrumbOne>
 
-      <Container className="my-4">
+      <Container>
         {isLoading && <div className="spinner-grow" role="status" />}
         {isSuccess && (
           <>
@@ -38,5 +38,3 @@ function PartnerHome() {
     </PartnerWrapper>
   );
 }
-
-export default PartnerHome;

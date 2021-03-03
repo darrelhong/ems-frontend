@@ -233,35 +233,33 @@ const EventDescription = ({
               className="btn btn-fill-out btn-addtocart space-ml--10"
             >
               <i className="icon-basket-loaded" /> Unpublish Event
-            </button>)
-            :
-            (<button
+            </button>
+          ) : (
+            <button
               onClick={publishToggle}
               className="btn btn-fill-out btn-addtocart space-ml--10"
             >
               <i className="icon-basket-loaded" /> Publish Event
-            </button>)
-          }
+            </button>
+          )}
 
-          {event.hidden ?
-
-            (<button
+          {event.hidden ? (
+            <button
               onClick={hideToggle}
               title="Unhide your event from attendees!"
               className="btn btn-fill-out btn-addtocart space-ml--10"
             >
               <i className="icon-basket-loaded" /> Unhide Event
-            </button>)
-            :
-            (<button
+            </button>
+          ) : (
+            <button
               onClick={hideToggle}
               title="Hide your event from attendees from now"
               className="btn btn-fill-out btn-addtocart space-ml--10"
             >
               <i className="icon-basket-loaded" /> Hide Event
-            </button>)
-          }
-
+            </button>
+          )}
 
           {event.vip ? (
             <button

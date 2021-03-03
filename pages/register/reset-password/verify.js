@@ -13,6 +13,8 @@ import { LayoutOne } from '../../../layouts';
 import { Alert, Container } from 'react-bootstrap';
 import ButtonWithLoading from '../../../components/custom/ButtonWithLoading';
 
+import GuestWrapper from '../../../components/wrapper/GuestWrapper';
+
 export const getServerSideProps = async ({ query }) => {
   return {
     props: {
@@ -40,11 +42,11 @@ export default function ResetPassword({ token }) {
         <title>Password Reset</title>
       </Head>
 
-      <LayoutOne>
+      <GuestWrapper>
         <Container className="my-4">
           <div className="d-flex justify-content-center">
             <div>
-              <h2>Change password</h2>
+              <h2>Reset Password</h2>
               {isError && (
                 <Alert variant="danger">
                   An error occurred. Please try again.
@@ -55,11 +57,14 @@ export default function ResetPassword({ token }) {
                 <Alert varaint="success">
                   Your password has been updated successfully. Please proceed to
                   login.
-                  <Link href="/">
-                    <button className="btn btn-fill-out btn-sm">
-                      Back to home
-                    </button>
-                  </Link>
+                  <div>
+                    <br></br>
+                    <Link href="/">
+                      <button className="btn btn-sm btn-fill-out">
+                        Back to home
+                      </button>
+                    </Link>
+                  </div>
                 </Alert>
               ) : (
                 <div>
@@ -72,9 +77,10 @@ export default function ResetPassword({ token }) {
                         type="password"
                         ref={register({
                           required: 'Password is required',
-                          minLength: {
-                            value: 8,
-                            message: 'Password must have at least 8 characters',
+                          pattern: {
+                            value: /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/,
+                            message:
+                              'Message must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters',
                           },
                         })}
                         placeholder="Enter new password"
@@ -122,7 +128,7 @@ export default function ResetPassword({ token }) {
             </div>
           </div>
         </Container>
-      </LayoutOne>
+      </GuestWrapper>
     </>
   );
 }

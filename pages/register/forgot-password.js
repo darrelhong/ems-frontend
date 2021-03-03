@@ -1,15 +1,16 @@
 import Head from 'next/head';
+import { Alert, Container } from 'react-bootstrap';
 import { useMutation } from 'react-query';
 import { useForm } from 'react-hook-form';
-import { Alert, Container } from 'react-bootstrap';
+import cx from 'classnames';
 
 import api from '../../lib/ApiClient';
 
-import { LayoutOne } from '../../layouts';
+import GuestWrapper from '../../components/wrapper/GuestWrapper';
 import ButtonWithLoading from '../../components/custom/ButtonWithLoading';
 
 export default function ForgotPassword() {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, errors } = useForm();
   const { mutate, isLoading, isSuccess, isError } = useMutation(({ email }) =>
     api.post(`/api/user/reset-password/request?email=${email}`)
   );
@@ -24,7 +25,7 @@ export default function ForgotPassword() {
         <title>Forgot password</title>
       </Head>
 
-      <LayoutOne>
+      <GuestWrapper>
         <Container className="my-4">
           <div className="d-flex justify-content-center">
             <div style={{ maxWidth: '576px' }}>
@@ -51,14 +52,18 @@ export default function ForgotPassword() {
                         }
                       </label>
                       <input
-                        className="form-control"
+                        className={cx('form-control', {
+                          'is-invalid': errors?.email,
+                        })}
                         placeholder="Enter email"
                         type="email"
                         name="email"
                         id="email"
-                        required
-                        ref={register()}
+                        ref={register({ required: 'Email is required' })}
                       />
+                      <div className="invalid-feedback">
+                        {errors?.email?.message}
+                      </div>
                     </div>
 
                     <ButtonWithLoading
@@ -74,7 +79,7 @@ export default function ForgotPassword() {
             </div>
           </div>
         </Container>
-      </LayoutOne>
+      </GuestWrapper>
     </>
   );
 }

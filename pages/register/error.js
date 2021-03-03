@@ -1,12 +1,11 @@
 import PropTypes from 'prop-types';
 import Head from 'next/head';
 import Link from 'next/link';
-
+import GuestWrapper from '../../components/wrapper/GuestWrapper';
+import ButtonWithLoading from '../../components/custom/ButtonWithLoading';
 import { useMutation } from 'react-query';
 import api from '../../lib/ApiClient';
 import { Alert, Container } from 'react-bootstrap';
-import { LayoutOne } from '../../layouts';
-import ButtonWithLoading from '../../components/custom/ButtonWithLoading';
 
 export const getServerSideProps = async ({ query }) => {
   return {
@@ -27,7 +26,7 @@ export default function RegisterVerificationError({ token }) {
         <title>Email verification unsuccesful!</title>
       </Head>
 
-      <LayoutOne>
+      <GuestWrapper>
         <Container className="my-4">
           <div className="d-flex justify-content-center">
             <div className="d-flex flex-column" style={{ maxWidth: '576px' }}>
@@ -63,7 +62,7 @@ export default function RegisterVerificationError({ token }) {
             </div>
           </div>
         </Container>
-      </LayoutOne>
+      </GuestWrapper>
     </>
   );
 }

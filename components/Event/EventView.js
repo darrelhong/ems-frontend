@@ -65,6 +65,4 @@ const EventView = ({ events, layout }) => {
         </div>
     );
 
-}
-
 export default EventView;
