@@ -5,8 +5,9 @@ import {
   IoLogoFacebook,
   IoLogoInstagram,
   IoLogoPinterest,
-  IoMdPerson,
-} from 'react-icons/io';
+  IoMdPerson
+} from "react-icons/io";
+import { AiOutlineUser, AiOutlineSetting, AiOutlineLogout, AiOutlineNotification } from 'react-icons/ai';
 
 import Link from 'next/link';
 
@@ -16,23 +17,33 @@ const MobileMenuWidgets = () => {
       <div className="contact-widget space-mb--30">
         <ul>
           <li>
-            <IoMdPerson />
-            <Link href="/other/login">
-              <a>Login</a>
+          <AiOutlineNotification />
+          <Link href="/other/wishlist">
+              <a>Notification</a>
             </Link>
           </li>
           <li>
-            <IoIosPhonePortrait />
-            <a href="tel://12452456012">(1245) 2456 012 </a>
+          <AiOutlineUser />
+          <Link href="/other/wishlist">
+              <a>Profile</a>
+            </Link>
           </li>
           <li>
-            <IoMdMail />
-            <a href="mailto:info@yourdomain.com">info@yourdomain.com</a>
+          <AiOutlineSetting />
+          <Link href="/other/wishlist">
+              <a>Settings</a>
+            </Link>
+          </li>
+          <li>
+           <AiOutlineLogout/>
+          <a onClick={() => logout({ redirectTo: '/organiser/login' })}>
+              <a>Log out</a>
+            </a>
           </li>
         </ul>
       </div>
 
-      <div className="social-widget">
+      {/* <div className="social-widget">
         <a href="https://www.twitter.com" target="_blank">
           <IoLogoTwitter />
         </a>
@@ -45,7 +56,7 @@ const MobileMenuWidgets = () => {
         <a href="https://www.pinterest.com" target="_blank">
           <IoLogoPinterest />
         </a>
-      </div>
+      </div>  */}
     </div>
   );
 };
