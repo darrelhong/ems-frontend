@@ -209,12 +209,13 @@ const EventOrgProfile = ({ paraId_ }) => {
                 <div className="product-content__rating-wrap">
                   <div className="product-content__rating">
                     {/* {rating != null && rating != undefined && ( */}
-                    <ProductRating ratingValue={rating} />
+                    <ProductRating ratingValue={5} />
                     {/* )} */}
-                    {(rating == undefined || rating == null) && (
+                    {/* {(rating == undefined || rating == null) && (
                       <span> (0) </span>
                     )}
-                    {rating >= 0 && <span>({rating})</span>}
+                    {rating >= 0 && <span>({rating})</span>} */}
+                    <span>({5})</span>
                   </div>
                 </div>
               </Row>
