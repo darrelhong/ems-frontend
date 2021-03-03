@@ -27,12 +27,18 @@ const OrganiserViewEventDetails = () => {
 
   useEffect(() => {
     const loadEvent = async () => {
-      let eventData = await getEventDetails(eid);
-      if (eventData.eventEndDate) setPrettyEndDate(format(parseISO(eventData.eventEndDate), 'dd MMM yy hh:mmbbb'));
-      if (eventData.eventStartDate) setPrettyStartDate(format(parseISO(eventData.eventStartDate), 'dd MMM yy hh:mmbbb'));
-      if (eventData.saleStartDate) setPrettySaleStartDate(format(parseISO(eventData.saleStartDate), 'dd MMM yy hh:mmbbb'));
-      if (eventData.salesEndDate) setPrettySalesEndDate(format(parseISO(eventData.salesEndDate), 'dd MMM yy hh:mmbbb'));
-      setEvent(eventData);
+      try {
+        let eventData = await getEventDetails(eid);
+        if (eventData.eventEndDate) setPrettyEndDate(format(parseISO(eventData.eventEndDate), 'dd MMM yy hh:mmbbb'));
+        if (eventData.eventStartDate) setPrettyStartDate(format(parseISO(eventData.eventStartDate), 'dd MMM yy hh:mmbbb'));
+        if (eventData.saleStartDate) setPrettySaleStartDate(format(parseISO(eventData.saleStartDate), 'dd MMM yy hh:mmbbb'));
+        if (eventData.salesEndDate) setPrettySalesEndDate(format(parseISO(eventData.salesEndDate), 'dd MMM yy hh:mmbbb'));
+        setEvent(eventData);
+      } catch (e) {
+        router.push('/register/success');
+
+      }
+
 
       // setPrettyEndDate(dbDateToPretty(eventData.eventEndDate));
       // setPrettyStartDate(dbDateToPretty(eventData.eventStartDate));
