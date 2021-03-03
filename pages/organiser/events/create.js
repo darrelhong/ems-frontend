@@ -146,7 +146,7 @@ const CreateEvent = () => {
       //const dateProcessedData = formatDates(getValues()); //update method no need format
       const formattedData = processHideOptionsSave(data);
 
-      updatedData = { ...eventData, ...formattedData, eventOrganiserId };
+      updatedData = { ...eventData, ...formattedData, eventOrganiserId, eventStatus };
       console.log('updated data to update the db?:');
       console.log(updatedData);
       const response = await updateEvent(updatedData);
