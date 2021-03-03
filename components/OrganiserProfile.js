@@ -179,86 +179,101 @@ const EventOrgProfile = ({ paraId_ }) => {
         </ol>
       </BreadcrumbOne>
       <div className="my-account-content space-pt--r100 space-pb--r100">
-        <Row className="justify-content-md-end">
-          <Col xs={3} md={3}>
-            {eventorganiser?.profilePic == null && (
-              <Image
-                src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
-                className="profile-image"
-                thumbnail
-              />
-            )}
-            {eventorganiser?.profilePic != null && (
-              <Image
-                className="profile-image"
-                src={eventorganiser?.profilePic}
-                thumbnail
-              />
-            )}
-          </Col>
-          <Col xs={1} md={1}></Col>
-
-          <Col xs={6} md={6}>
-            <h2>{eventorganiser?.name}</h2>
-            <div className="product-content__rating-wrap">
-              <div className="product-content__rating">
-                {rating != null && rating != undefined && (
-                  <ProductRating ratingValue={rating} />
+        <Container>
+          <Row md={{ span: 8 }} className="justify-content-md-center row">
+            <Col xs={4} md={4}>
+              <div className="profile-imgdiv">
+                {eventorganiser?.profilePic == null && (
+                  <Image
+                    src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
+                    className="profile-image"
+                    thumbnail
+                  />
                 )}
-
-                {rating != null && rating != undefined && (
-                  <span>({rating})</span>
+                {eventorganiser?.profilePic != null && (
+                  <Image
+                    className="profile-image"
+                    src={eventorganiser?.profilePic}
+                    thumbnail
+                  />
                 )}
               </div>
-            </div>
-            &nbsp;
-            <div>
+            </Col>
+
+            <Col xs={4} md={4}>
               <Row>
-                <Col>
-                  <Row>
-                    <Col md={3} className="follow-number">
-                      {((attendeeFollowers == undefined ||
-                        partnerFollowers == undefined) && (
-                        <h4 style={{ color: '#ff324d' }}> 0 </h4>
-                      )) ||
-                        (attendeeFollowers.length + partnerFollowers.length >
-                          0 && (
-                          <h4 style={{ color: '#ff324d' }}>
-                            {' '}
-                            {attendeeFollowers.length +
-                              partnerFollowers.length}{' '}
-                          </h4>
-                        ))}
-                      {/* </h4> */}
-                    </Col>
-                  </Row>
-                  <Row>
-                    <h5>Followers</h5>
-                  </Row>
-                </Col>
+                <h2>{eventorganiser?.name}</h2>
               </Row>
-            </div>
-            <br></br>
-            <div style={{ display: showPublicView ? 'block' : 'none' }}>
-              {
-                <button
-                  className="btn btn-fill-out"
-                  name="follow"
-                  value="follow"
-                >
-                  Follow
-                </button>
-              }
-            </div>
-            <div style={{ display: showEoView ? 'block' : 'none' }}>
-              <Link href="/organiser/profile-account">
-                <button className="btn btn-fill-out" name="edit" value="edit">
-                  <BsPencilSquare />
-                </button>
-              </Link>
-            </div>
-          </Col>
-        </Row>
+              <Row>
+                <div className="product-content__rating-wrap">
+                  <div className="product-content__rating">
+                    {rating != null && rating != undefined && (
+                      <ProductRating ratingValue={rating} />
+                    )}
+
+                    {rating != null && rating != undefined && (
+                      <span>({rating})</span>
+                    )}
+                  </div>
+                </div>
+              </Row>
+              &nbsp;
+              <div>
+                <Row>
+                  <Col>
+                    <Row>
+                      <Col md={2} className="follow-number">
+                        {((attendeeFollowers == undefined ||
+                          partnerFollowers == undefined) && (
+                          <h4 style={{ color: '#ff324d' }}> 0 </h4>
+                        )) ||
+                          (attendeeFollowers.length + partnerFollowers.length >
+                            0 && (
+                            <h4 style={{ color: '#ff324d' }}>
+                              {' '}
+                              {attendeeFollowers.length +
+                                partnerFollowers.length}{' '}
+                            </h4>
+                          ))}
+                        {/* </h4> */}
+                      </Col>
+                    </Row>
+                    <Row>
+                      <h5>Followers</h5>
+                    </Row>
+                  </Col>
+                </Row>
+              </div>
+              <br></br>
+              <Row>
+                <div style={{ display: showPublicView ? 'block' : 'none' }}>
+                  {
+                    <button
+                      className="btn btn-fill-out btn-sm"
+                      name="follow"
+                      value="follow"
+                    >
+                      Follow
+                    </button>
+                  }
+                </div>
+              </Row>
+              <Row>
+                <div style={{ display: showEoView ? 'block' : 'none' }}>
+                  <Link href="/organiser/profile-account">
+                    <button
+                      className="btn btn-fill-out btn-sm"
+                      name="edit"
+                      value="edit"
+                    >
+                      <BsPencilSquare />
+                    </button>
+                  </Link>
+                </div>
+              </Row>
+            </Col>
+          </Row>
+        </Container>
         <br />
         <Row className="justify-content-md-center">
           <Col xs={6} md={6}>
@@ -294,13 +309,8 @@ const EventOrgProfile = ({ paraId_ }) => {
 
               <Tab.Content>
                 <Tab.Pane eventKey="Events">
+                  <br></br>
                   <div className="product-description-tab__details">
-                    {/* category slider 
-                      <CategorySliderTwo
-                        categorySliderData={categorySliderData}
-                      />
-                      */}
-                    {/* tab product -> refers to eletronic-two*/}
                     {userRole === 'BIZPTNR' && (
                       <EventTabOne
                         current={currenteventlist}
@@ -308,11 +318,13 @@ const EventOrgProfile = ({ paraId_ }) => {
                       />
                     )}
                     {userRole !== 'BIZPTNR' && (
-                      <EventTabOne
-                        current={currenteventlist}
-                        upcoming={upcomingeventlist}
-                        past={pasteventlist}
-                      />
+                      <div className="product-description-tab__additional-info">
+                        <EventTabOne
+                          current={currenteventlist}
+                          upcoming={upcomingeventlist}
+                          past={pasteventlist}
+                        />
+                      </div>
                     )}
                   </div>
                 </Tab.Pane>

@@ -14,7 +14,7 @@ import { useState, useEffect } from 'react';
 //IoIosCreate,
 //IoIosPerson,
 //} from "react-icons/io";
-import {getUser} from '../lib/query/getUser';
+import { getUser } from '../lib/query/getUser';
 import { IoIosStar, IoIosStarOutline } from 'react-icons/io';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
@@ -31,54 +31,36 @@ import { BsPencilSquare } from 'react-icons/bs';
 import { FaHtml5 } from 'react-icons/fa';
 
 const PartnerProfile = ({ localuser }) => {
-  
   const [publicView, setPublicView] = useState();
-  
 
   // const [events, setEvents] = useState([]);
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
 
- 
-
-    useEffect(async () => {
-      
-      if (localStorage.getItem('userId') != null) {
-        await getUser(localStorage.getItem('userId')).then((data) => {
-          
-        
-          if (data?.id !== localuser) {
-           
-            setPublicView(true);
-          } else {
-            console.log("test false");
-            setPublicView(false);
-          }
-         
-        });
-
-
-    }else {
-    
+  useEffect(async () => {
+    if (localStorage.getItem('userId') != null) {
+      await getUser(localStorage.getItem('userId')).then((data) => {
+        if (data?.id !== localuser) {
+          setPublicView(true);
+        } else {
+          console.log('test false');
+          setPublicView(false);
+        }
+      });
+    } else {
       setPublicView(true);
     }
-        await getFollowers(localuser).then((data) => {
-        setFollowers(data);
-      });
-      await getFollowing(localuser).then((data) => {
-        setFollowing(data);
-      });
-
-   
-  
+    await getFollowers(localuser).then((data) => {
+      setFollowers(data);
+    });
+    await getFollowing(localuser).then((data) => {
+      setFollowing(data);
+    });
   }, []);
 
-  
-
   const { data: partner } = useUser(localuser);
- 
-  return (
 
+  return (
     <div>
       {/* breadcrumb */}
       <BreadcrumbOne pageTitle="Partner Profile Details">
@@ -97,7 +79,7 @@ const PartnerProfile = ({ localuser }) => {
           <Container>
             <Row md={{ span: 8 }} className="justify-content-md-center row">
               <Col xs={4} md={4}>
-                <div>
+                <div className="profile-imgdiv">
                   {partner?.profilePic == null && (
                     <Image
                       src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
@@ -162,30 +144,36 @@ const PartnerProfile = ({ localuser }) => {
                         <h5>Following</h5>
                       </Row>
                     </Col>
-                   
-                    {!publicView && ( <div>
-                      &nbsp;
-                      <Link href="/partner/profile-account">
+
+                    {!publicView && (
+                      <div>
+                        &nbsp;
+                        <Link href="/partner/profile-account">
+                          <button
+                            className="btn btn-fill-out btn-sm"
+                            name="edit"
+                            value="edit"
+                            size="sm"
+                          >
+                            <BsPencilSquare />
+                          </button>
+                        </Link>
+                      </div>
+                    )}
+                    {publicView && (
+                      <div>
+                        {' '}
+                        &nbsp;
                         <button
+                          type="submit"
                           className="btn btn-fill-out btn-sm"
-                          name="edit"
-                          value="edit"
-                          size="sm"
+                          name="submit"
+                          value="Submit"
                         >
-                          <BsPencilSquare />
+                          Follow
                         </button>
-                      </Link>
-                    </div> )}
-                     {publicView && (<div> &nbsp;
-                  <button
-                    type="submit"
-                    className="btn btn-fill-out btn-sm"
-                    name="submit"
-                    value="Submit"
-                  >
-                    Follow
-                  </button></div>
-                )}
+                      </div>
+                    )}
                   </Row>
                 </div>
                 <div>
@@ -203,15 +191,13 @@ const PartnerProfile = ({ localuser }) => {
                   </Row>
                 </div>
                 <br></br>
-               
               </Col>
             </Row>
           </Container>
-        </div> 
-         <br></br>
+        </div>
+        <br></br>
         <Row className="justify-content-md-center">
-        
-          <Col md={{ span: 8 }}>
+          <Col md={{ span: 6 }}>
             <Tab.Container defaultActiveKey="Events">
               <Nav
                 variant="pills"
@@ -260,8 +246,8 @@ const PartnerProfile = ({ localuser }) => {
                       // border:'1px solid red',
                       // width:'500px',
                       overflowX: 'hidden',
-                      height:'40vh',
-                      position:'relative'
+                      height: '40vh',
+                      position: 'relative',
                     }}
                   >
                     <div className="product-description-tab__additional-info">
@@ -270,27 +256,29 @@ const PartnerProfile = ({ localuser }) => {
                           return (
                             // <div class="container mt-5 d-flex justify-content-left">
                             <Row md={12} className="follower-box">
-                              <div class="p-3">
-                                <div class="d-flex align-items-center">
-                                  <div class="image">
+                              <div className="p-3">
+                                <div className="d-flex align-items-center">
+                                  <div className="image">
                                     {follower?.profilePic == null && (
                                       <img
                                         src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
-                                        class="rounded"
+                                        className="rounded"
                                         width="100"
                                       />
                                     )}
                                     {follower?.profilePic != null && (
                                       <Image
-                                        class="rounded"
+                                        className="rounded"
                                         width="100"
                                         src={follower?.profilePic}
                                         thumbnail
                                       />
                                     )}{' '}
                                   </div>
-                                  <div class="ml-3 w-100">
-                                    <h4 class="mb-0 mt-0">{follower.name}</h4>{' '}
+                                  <div className="ml-3 w-100">
+                                    <h4 className="mb-0 mt-0">
+                                      {follower.name}
+                                    </h4>{' '}
                                     {/* { !getRole(follower) && (<div class="button mt-2 d-flex flex-row align-items-center">
                                     <button className="btn btn-sm btn-fill-out">
                                       View Profile
@@ -328,59 +316,66 @@ const PartnerProfile = ({ localuser }) => {
                       // border:'1px solid red',
                       // width:'500px',
                       overflowX: 'hidden',
-                      height:'40vh',
-                      position:'relative'
+                      height: '40vh',
+                      position: 'relative',
                     }}
                   >
-                  <div className="product-description-tab__additional-info">
-                    {following != undefined &&
-                      following.map((following) => {
-                        return (
-                          <div>
-                            <Row md={12} className="follower-box">
-                              <div class="p-3">
-                                <div class="d-flex align-items-center">
-                                  <div class="image">
-                                    {' '}
-                                    {/* <img
+                    <div className="product-description-tab__additional-info">
+                      {following != undefined &&
+                        following.map((following) => {
+                          return (
+                            <div>
+                              <Row md={12} className="follower-box">
+                                <div className="p-3">
+                                  <div className="d-flex align-items-center">
+                                    <div className="image">
+                                      {' '}
+                                      {/* <img
                                       src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=80"
                                       class="rounded"
                                       width="100"
                                     /> */}
-                                    {following?.profilePic == null && (
-                                      <img
-                                        src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
-                                        class="rounded"
-                                        width="100"
-                                      />
-                                    )}
-                                    {following?.profilePic != null && (
-                                      <Image
-                                        class="rounded"
-                                        width="100"
-                                        src={following?.profilePic}
-                                        thumbnail
-                                      />
-                                    )}{' '}
-                                  </div>
-                                  <div class="ml-3 w-100">
-                                    <h4 class="mb-0 mt-0">
-                                      <Link href={{
-                                        pathname: "/organiser/organiser-profile",
-                                        query: { paraId: JSON.stringify(following?.id) }
-                                      }}>
-                                        {following.name}
-                                      </Link>
-                                    </h4>{' '}
-                                    <span>{following.description}</span>
+                                      {following?.profilePic == null && (
+                                        <img
+                                          src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
+                                          className="rounded"
+                                          width="100"
+                                        />
+                                      )}
+                                      {following?.profilePic != null && (
+                                        <Image
+                                          className="rounded"
+                                          width="100"
+                                          src={following?.profilePic}
+                                          thumbnail
+                                        />
+                                      )}{' '}
+                                    </div>
+                                    <div className="ml-3 w-100">
+                                      <h4 className="mb-0 mt-0">
+                                        <Link
+                                          href={{
+                                            pathname:
+                                              '/organiser/organiser-profile',
+                                            query: {
+                                              paraId: JSON.stringify(
+                                                following?.id
+                                              ),
+                                            },
+                                          }}
+                                        >
+                                          {following.name}
+                                        </Link>
+                                      </h4>{' '}
+                                      <span>{following.description}</span>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            </Row>
-                          </div>
-                        );
-                      })}
-                  </div>
+                              </Row>
+                            </div>
+                          );
+                        })}
+                    </div>
                   </div>
                 </Tab.Pane>
               </Tab.Content>

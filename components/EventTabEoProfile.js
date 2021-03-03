@@ -11,7 +11,7 @@ const EventTabOne = ({ current, upcoming, past }) => {
           <Tab.Container defaultActiveKey="current">
             <Nav
               variant="pills"
-              className="product-tab-navigation text-center space-mb--30"
+              className="product-tab-navigation text-center justify-content-center space-mb--30"
             >
               <Nav.Item>
                 <Nav.Link eventKey="current">Current</Nav.Link>
