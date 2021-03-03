@@ -21,7 +21,7 @@ import { FaRegEdit } from 'react-icons/fa';
 import OrganiserWrapper from '../../components/wrapper/OrganiserWrapper';
 import { BsFillInfoCircleFill } from 'react-icons/bs';
 import ButtonWithLoading from '../../components/custom/ButtonWithLoading';
-
+//test
 import {
   IoIosCash,
   IoIosPerson,
