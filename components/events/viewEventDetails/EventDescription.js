@@ -13,6 +13,10 @@ import {
   IoMdCreate,
   IoIosTrash
 } from "react-icons/io";
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import StarIcon from '@material-ui/icons/Star';
+import StarBorderIcon from '@material-ui/icons/StarBorder';
 import ProductRating from "../../Product/ProductRating";
 import Link from 'next/link';
 import HidePopover from "../../Event/HidePopover";
@@ -145,7 +149,7 @@ const EventDescription = ({
             )} */}
 
         </ul>
-    </div>
+      </div>
       <hr />
 
       <Fragment>
@@ -153,14 +157,21 @@ const EventDescription = ({
           <div className="product-content__product-share space-mt--15" style={{ display: 'flex', justifyContent: 'flex-end' }}>
             {/* <span>Actions:</span> */}
             <ul className="social-icons">
-              <li>
+              {/* <li>
                 <a href="javascript:void(0);" onClick={() => vipToggle(event)}>
-                  {/* <IoLogoFacebook  /> */}
                   {event.vip ? (
                     <IoMdStarOutline title="Unlist event from VIP" />
                   ) :
                     (<IoMdStar title="Make this a VIP-only event!" />)}
                 </a>
+              </li> */}
+              <li>
+                <IconButton aria-label="vip" color="secondary" onClick={() => vipToggle(event)}>
+                  {event.vip ?
+                    (<StarIcon />) :
+                    (<StarBorderIcon />)
+                  }
+                </IconButton>
               </li>
               <li>
                 <HidePopover event={event} />
