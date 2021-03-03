@@ -15,16 +15,33 @@ import PublishingPane from '../../../components/createEvent/tabPanes/PublishingP
 import ImagesPane from '../../../components/createEvent/tabPanes/ImagesPane';
 import { steps } from '../../../components/createEvent/steps';
 import useUser from '../../../lib/query/useUser';
-import { createEvent, getEventDetails, updateEvent, uploadEventImage } from '../../../lib/query/eventApi';
+import {
+  createEvent,
+  getEventDetails,
+  updateEvent,
+  uploadEventImage,
+} from '../../../lib/query/eventApi';
 import { htmlDateToDb, formatDates } from '../../../lib/util/functions';
 import Modal from 'react-bootstrap/Modal';
-import { getHiddenStatus, processHideOptionsSave } from '../../../lib/functions/eventOrganiser/eventFunctions';
+import {
+  getHiddenStatus,
+  processHideOptionsSave,
+} from '../../../lib/functions/eventOrganiser/eventFunctions';
 import { useToasts } from 'react-toast-notifications';
 
 const CreateEvent = () => {
   const { addToast, removeToast } = useToasts();
 
-  const { control, register, handleSubmit, watch, setValue, errors, getValues, formState } = useForm();
+  const {
+    control,
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    errors,
+    getValues,
+    formState,
+  } = useForm();
   const { data: user } = useUser(localStorage.getItem('userId'));
   const [activeStep, setActiveStep] = useState(0);
   const [showModal, setShowModal] = useState(false);
@@ -60,22 +77,23 @@ const CreateEvent = () => {
       saleStartDate,
       salesEndDate,
       vip,
-      physical } = eventData;
+      physical,
+    } = eventData;
 
-    setValue("name", name);
-    setValue("descriptions", descriptions);
-    setValue("address", address);
+    setValue('name', name);
+    setValue('descriptions', descriptions);
+    setValue('address', address);
     console.log('printing out dates to fix setValue');
     console.log(eventStartDate);
     console.log(eventEndDate);
-    setValue("eventStartDate", eventStartDate);
+    setValue('eventStartDate', eventStartDate);
     // setValue("eventStartDate","10-10-2010 11:11:00");
-    setValue("eventEndDate", eventEndDate);
-    setValue("boothCapacity", boothCapacity);
-    setValue("ticketPrice", ticketPrice);
-    setValue("ticketCapacity", ticketCapacity);
-    setValue("saleStartDate", saleStartDate);
-    setValue("salesEndDate", salesEndDate);
+    setValue('eventEndDate', eventEndDate);
+    setValue('boothCapacity', boothCapacity);
+    setValue('ticketPrice', ticketPrice);
+    setValue('ticketCapacity', ticketCapacity);
+    setValue('saleStartDate', saleStartDate);
+    setValue('salesEndDate', salesEndDate);
     setVip(vip);
     setPhysical(physical);
     setHideOptions(getHiddenStatus(eventData));
@@ -137,7 +155,7 @@ const CreateEvent = () => {
   const onSubmit = async (data) => {
     let updatedData;
     const eventOrganiserId = user.id;
-    let eventStatus = "CREATED";
+    let eventStatus = 'CREATED';
 
     console.log('submitting');
     if (eid) {
@@ -146,7 +164,12 @@ const CreateEvent = () => {
       //const dateProcessedData = formatDates(getValues()); //update method no need format
       const formattedData = processHideOptionsSave(data);
 
-      updatedData = { ...eventData, ...formattedData, eventOrganiserId, eventStatus };
+      updatedData = {
+        ...eventData,
+        ...formattedData,
+        eventOrganiserId,
+        eventStatus,
+      };
       console.log('updated data to update the db?:');
       console.log(updatedData);
       const response = await updateEvent(updatedData);
@@ -171,7 +194,7 @@ const CreateEvent = () => {
 
   const saveDraft = async () => {
     const data = getValues();
-    const eventStatus = "DRAFT";
+    const eventStatus = 'DRAFT';
     let eventId;
     if (eid) {
       // const dateProcessedData = formatDates(data); //update no need format
@@ -188,20 +211,18 @@ const CreateEvent = () => {
       console.log('printing updated event:');
       console.log(updatedEvent);
       eventId = updatedEvent.eid;
-    }
-    else {
+    } else {
       const dateProcessedData = formatDates(data);
       const formData = processHideOptionsSave(dateProcessedData);
 
       //create new event without validation
       console.log('data before submitting');
       let eventOrganiserId = user.id;
-      let updatedData = { ...formData, eventOrganiserId, eventStatus }
+      let updatedData = { ...formData, eventOrganiserId, eventStatus };
       // console.log(formData);
       const response = await createEvent(updatedData);
       eventId = response.eid;
       // await saveImages(response.eid);
-
     }
 
     // let message = '';
@@ -211,7 +232,7 @@ const CreateEvent = () => {
   };
 
   const saveImages = async (eventId) => {
-    const uploadedImages = getValues("files");
+    const uploadedImages = getValues('files');
     const length = uploadedImages.length ?? 0;
     let i;
     console.log('length found: ' + length);
@@ -229,7 +250,7 @@ const CreateEvent = () => {
       console.log('response:');
       console.log(response);
     }
-  }
+  };
 
   // const processHideOptionsSave = (formData) => {
   //   let published; //publish is for attendee
@@ -252,9 +273,12 @@ const CreateEvent = () => {
   // };
 
   return (
-    <OrganiserWrapper title={eid ? `Updating ${eventData.name}` : "Create New Event"}>
+    <OrganiserWrapper
+      title={eid ? `Updating ${eventData.name}` : 'Create New Event'}
+    >
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Modal show={showModal}
+        <Modal
+          show={showModal}
           onHide={(event) => {
             setShowModal(false);
           }}
@@ -262,7 +286,9 @@ const CreateEvent = () => {
           <Modal.Header closeButton>
             <Modal.Title>Confirmation</Modal.Title>
           </Modal.Header>
-          <Modal.Body>Are you sure you want to disable your account?</Modal.Body>
+          <Modal.Body>
+            Are you sure you want to disable your account?
+          </Modal.Body>
           <Modal.Footer>
             <button
               type="submit"
@@ -290,14 +316,18 @@ const CreateEvent = () => {
             </button>
           </Modal.Footer>
         </Modal>
-        <BreadcrumbOne pageTitle={eid ? `Updating ${eventData.name}` : 'Create New Event'}>
+        <BreadcrumbOne
+          pageTitle={eid ? `Updating ${eventData.name}` : 'Create New Event'}
+        >
           <ol className="breadcrumb justify-content-md-end">
             <li className="breadcrumb-item">
               <Link href="/organiser/home">
                 <a>Home</a>
               </Link>
             </li>
-            <li className="breadcrumb-item active">{eid ? `Updating ${eventData.name}` : 'Create New Event'}</li>
+            <li className="breadcrumb-item active">
+              {eid ? `Updating ${eventData.name}` : 'Create New Event'}
+            </li>
           </ol>
           {/* {eventData?.eventStatus != 'CREATED' && (
             <ol>
@@ -363,16 +393,48 @@ const CreateEvent = () => {
                       />
                     </Tab.Pane>
                     <Tab.Pane eventKey="ticketing">
-                      <TicketingPane freeTickets={freeTickets} setFreeTickets={setFreeTickets} setValue={setValue} formState={formState} wantsTickets={wantsTickets} getValues={getValues} setWantsTickets={setWantsTickets} register={register} errors={errors} watch={watch} eventData={eventData} setValue={setValue} errors={errors} />
+                      <TicketingPane
+                        freeTickets={freeTickets}
+                        setFreeTickets={setFreeTickets}
+                        setValue={setValue}
+                        formState={formState}
+                        wantsTickets={wantsTickets}
+                        getValues={getValues}
+                        setWantsTickets={setWantsTickets}
+                        register={register}
+                        errors={errors}
+                        watch={watch}
+                        eventData={eventData}
+                        setValue={setValue}
+                        errors={errors}
+                      />
                     </Tab.Pane>
                     <Tab.Pane eventKey="booths">
                       <BoothPane register={register} errors={errors} />
                     </Tab.Pane>
                     <Tab.Pane eventKey="location">
-                      <LocationPane register={register} errors={errors} watch={watch} physical={physical} setPhysical={setPhysical} />
+                      <LocationPane
+                        register={register}
+                        errors={errors}
+                        watch={watch}
+                        physical={physical}
+                        setPhysical={setPhysical}
+                      />
                     </Tab.Pane>
                     <Tab.Pane eventKey="publishingOptions">
-                      <PublishingPane eventStatus={eventData.eventStatus} handleSubmit={handleSubmit} saveDraft={saveDraft} onSubmit={onSubmit} vip={vip} hideOptions={hideOptions} setHideOptions={setHideOptions} errors={errors} setVip={setVip} register={register} watch={watch} />
+                      <PublishingPane
+                        eventStatus={eventData.eventStatus}
+                        handleSubmit={handleSubmit}
+                        saveDraft={saveDraft}
+                        onSubmit={onSubmit}
+                        vip={vip}
+                        hideOptions={hideOptions}
+                        setHideOptions={setHideOptions}
+                        errors={errors}
+                        setVip={setVip}
+                        register={register}
+                        watch={watch}
+                      />
                     </Tab.Pane>
                     <Tab.Pane eventKey="images">
                       <ImagesPane register={register} />

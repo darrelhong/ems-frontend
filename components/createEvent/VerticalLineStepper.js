@@ -29,7 +29,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const VerticalLinearStepper = ({ freeTickets, activeStep, setActiveStep, steps, errors, wantsTickets }) => {
+const VerticalLinearStepper = ({
+  freeTickets,
+  activeStep,
+  setActiveStep,
+  steps,
+  errors,
+  wantsTickets,
+}) => {
   const classes = useStyles();
 
   const handleNext = () => {
@@ -57,16 +64,27 @@ const VerticalLinearStepper = ({ freeTickets, activeStep, setActiveStep, steps, 
   const checkSectionErrors = (index) => {
     switch (index) {
       case 0:
-        return (errors.name || errors.descriptions || errors.eventStartDate || errors.eventEndDate);
+        return (
+          errors.name ||
+          errors.descriptions ||
+          errors.eventStartDate ||
+          errors.eventEndDate
+        );
       case 1:
-        return (errors.physical || errors.address);
+        return errors.physical || errors.address;
       case 2:
         // return (wantsTickets && (!freeTickets && errors.ticketPrice || errors.ticketCapacity || errors.saleStartDate || errors.salesEndDate));
-        return (wantsTickets && (errors.ticketPrice || errors.ticketCapacity || errors.saleStartDate || errors.salesEndDate));
+        return (
+          wantsTickets &&
+          (errors.ticketPrice ||
+            errors.ticketCapacity ||
+            errors.saleStartDate ||
+            errors.salesEndDate)
+        );
       case 3:
         return errors.boothCapacity;
       case 4:
-        return (errors.vip || errors.hideOptions);
+        return errors.vip || errors.hideOptions;
     }
   };
 
@@ -91,7 +109,8 @@ const VerticalLinearStepper = ({ freeTickets, activeStep, setActiveStep, steps, 
                   >
                     {step.label}
                   </StepLabel> */}
-                  {index + 1}. {step.label} {checkSectionErrors(index) && (<IoIosWarning />)}
+                  {index + 1}. {step.label}{' '}
+                  {checkSectionErrors(index) && <IoIosWarning />}
                 </Nav.Link>
               </Nav.Item>
               <StepContent>

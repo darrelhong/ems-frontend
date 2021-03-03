@@ -1,7 +1,6 @@
 import Link from 'next/link';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import Swiper from 'react-id-swiper';
-import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 const HeroSliderFive = ({ heroSliderData }) => {
   const params = {

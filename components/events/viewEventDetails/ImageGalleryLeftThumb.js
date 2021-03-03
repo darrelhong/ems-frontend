@@ -1,7 +1,7 @@
-import { Fragment, useState, useEffect } from "react";
-import { Row, Col } from "react-bootstrap";
-import Swiper from "react-id-swiper";
-import { LightgalleryProvider, LightgalleryItem } from "react-lightgallery";
+import { Fragment, useState, useEffect } from 'react';
+import { Row, Col } from 'react-bootstrap';
+import Swiper from 'react-id-swiper';
+import { LightgalleryProvider, LightgalleryItem } from 'react-lightgallery';
 
 const ImageGalleryLeftThumb = ({ event }) => {
   const [gallerySwiper, getGallerySwiper] = useState(null);
@@ -47,7 +47,7 @@ const ImageGalleryLeftThumb = ({ event }) => {
     spaceBetween: 10,
     loopedSlides: 4,
     loop: true,
-    effect: "fade"
+    effect: 'fade',
   };
 
   const thumbnailSwiperParams = {
@@ -58,80 +58,83 @@ const ImageGalleryLeftThumb = ({ event }) => {
     touchRatio: 0.2,
     loop: true,
     slideToClickedSlide: true,
-    direction: "vertical",
+    direction: 'vertical',
     breakpoints: {
       1200: {
         slidesPerView: 5,
-        direction: "vertical"
+        direction: 'vertical',
       },
       992: {
         slidesPerView: 4,
-        direction: "horizontal"
+        direction: 'horizontal',
       },
       768: {
         slidesPerView: 4,
-        direction: "horizontal"
+        direction: 'horizontal',
       },
       640: {
         slidesPerView: 4,
-        direction: "horizontal"
+        direction: 'horizontal',
       },
       320: {
         slidesPerView: 4,
-        direction: "horizontal"
-      }
-    }
+        direction: 'horizontal',
+      },
+    },
   };
 
   return (
     <Fragment>
       {imageArray.length == 0 ? (
-        <div className="product-description-tab__details" style={{ textAlign: 'center' }}>
+        <div
+          className="product-description-tab__details"
+          style={{ textAlign: 'center' }}
+        >
           No Images uploaded yet!
         </div>
       ) : (
-          <Row className="image-gallery-side-thumb-wrapper">
-            <Col xl={10} className="order-1 order-xl-2">
-              <div className="product-large-image-wrapper">
-                <LightgalleryProvider>
-                  <Swiper {...gallerySwiperParams}>
-                    {imageArray &&
-                      imageArray.map((single, key) => {
-                        return (
-                          <div key={key}>
-                            <LightgalleryItem group="any" src={single}>
-                              <button className="enlarge-icon">
-                                <i className="icon-magnifier-add" />
-                              </button>
-                            </LightgalleryItem>
-                            <div className="single-image">
-                              <img src={single} className="img-fluid" alt="" />
-                            </div>
-                          </div>
-                        );
-                      })}
-                  </Swiper>
-                </LightgalleryProvider>
-              </div>
-            </Col>
-            <Col xl={2} className="order-2 order-xl-1">
-              <div className="product-small-image-wrapper product-small-image-wrapper--side-thumb">
-                <Swiper {...thumbnailSwiperParams}>
+        <Row className="image-gallery-side-thumb-wrapper">
+          <Col xl={10} className="order-1 order-xl-2">
+            <div className="product-large-image-wrapper">
+              <LightgalleryProvider>
+                <Swiper {...gallerySwiperParams}>
                   {imageArray &&
-                    imageArray.map((image, i) => {
+                    imageArray.map((single, key) => {
                       return (
-                        <div key={i}>
+                        <div key={key}>
+                          <LightgalleryItem group="any" src={single}>
+                            <button className="enlarge-icon">
+                              <i className="icon-magnifier-add" />
+                            </button>
+                          </LightgalleryItem>
                           <div className="single-image">
-                            <img src={image} className="img-fluid" alt="" />
+                            <img src={single} className="img-fluid" alt="" />
                           </div>
                         </div>
                       );
                     })}
                 </Swiper>
-              </div>
-            </Col>
-          </Row>
-        )}
+              </LightgalleryProvider>
+            </div>
+          </Col>
+          <Col xl={2} className="order-2 order-xl-1">
+            <div className="product-small-image-wrapper product-small-image-wrapper--side-thumb">
+              <Swiper {...thumbnailSwiperParams}>
+                {imageArray &&
+                  imageArray.map((image, i) => {
+                    return (
+                      <div key={i}>
+                        <div className="single-image">
+                          <img src={image} className="img-fluid" alt="" />
+                        </div>
+                      </div>
+                    );
+                  })}
+              </Swiper>
+            </div>
+          </Col>
+        </Row>
+      )}
     </Fragment>
   );
 };

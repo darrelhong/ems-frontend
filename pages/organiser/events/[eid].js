@@ -1,16 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import Link from "next/link";
+import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col } from 'react-bootstrap';
 // import { getDiscountPrice } from "../../../lib/product";
-import { LayoutOne } from "../../../layouts";
-import { BreadcrumbOne } from "../../../components/Breadcrumb";
-import EventDescription from "../../../components/events/viewEventDetails/EventDescription";
-import ImageGalleryLeftThumb from "../../../components/events/viewEventDetails/ImageGalleryLeftThumb";
-import EventDescriptionTab from "../../../components/events/viewEventDetails/EventDescriptionTab";
+import { LayoutOne } from '../../../layouts';
+import { BreadcrumbOne } from '../../../components/Breadcrumb';
+import EventDescription from '../../../components/events/viewEventDetails/EventDescription';
+import ImageGalleryLeftThumb from '../../../components/events/viewEventDetails/ImageGalleryLeftThumb';
+import EventDescriptionTab from '../../../components/events/viewEventDetails/EventDescriptionTab';
 // import { ProductSliderTwo } from "../../../components/ProductSlider";
-import { getEventDetails, updateEvent, deleteEvent } from '../../../lib/query/eventApi';
-import { publishToggle, hideToggle, vipToggle, handleCancel, handleDelete } from '../../../lib/functions/eventOrganiser/eventFunctions';
+import {
+  getEventDetails,
+  updateEvent,
+  deleteEvent,
+} from '../../../lib/query/eventApi';
+import {
+  publishToggle,
+  hideToggle,
+  vipToggle,
+  handleCancel,
+  handleDelete,
+} from '../../../lib/functions/eventOrganiser/eventFunctions';
 import { dbDateToPretty } from '../../../lib/util/functions';
 import { format, parseISO, parseJSON } from 'date-fns';
 import { useToasts } from 'react-toast-notifications';
@@ -29,10 +39,22 @@ const OrganiserViewEventDetails = () => {
     const loadEvent = async () => {
       try {
         let eventData = await getEventDetails(eid);
-        if (eventData.eventEndDate) setPrettyEndDate(format(parseISO(eventData.eventEndDate), 'dd MMM yy hh:mmbbb'));
-        if (eventData.eventStartDate) setPrettyStartDate(format(parseISO(eventData.eventStartDate), 'dd MMM yy hh:mmbbb'));
-        if (eventData.saleStartDate) setPrettySaleStartDate(format(parseISO(eventData.saleStartDate), 'dd MMM yy hh:mmbbb'));
-        if (eventData.salesEndDate) setPrettySalesEndDate(format(parseISO(eventData.salesEndDate), 'dd MMM yy hh:mmbbb'));
+        if (eventData.eventEndDate)
+          setPrettyEndDate(
+            format(parseISO(eventData.eventEndDate), 'dd MMM yy hh:mmbbb')
+          );
+        if (eventData.eventStartDate)
+          setPrettyStartDate(
+            format(parseISO(eventData.eventStartDate), 'dd MMM yy hh:mmbbb')
+          );
+        if (eventData.saleStartDate)
+          setPrettySaleStartDate(
+            format(parseISO(eventData.saleStartDate), 'dd MMM yy hh:mmbbb')
+          );
+        if (eventData.salesEndDate)
+          setPrettySalesEndDate(
+            format(parseISO(eventData.salesEndDate), 'dd MMM yy hh:mmbbb')
+          );
         // setPrettyEndDate(eventData.eventEndDate);
         // setPrettyStartDate(eventData.eventStartDate);
         // setPrettySaleStartDate(eventData.salesStartDate);
@@ -42,7 +64,6 @@ const OrganiserViewEventDetails = () => {
         setEvent(eventData);
       } catch (e) {
         router.push('/organiser/events/not-found');
-
       }
     };
     loadEvent();
@@ -57,15 +78,19 @@ const OrganiserViewEventDetails = () => {
     const updatedEvent = await publishToggle(event);
     setEvent(updatedEvent);
     let message = '';
-    updatedEvent.published ? message = "Published Successfully" : message = "Event unpublished";
+    updatedEvent.published
+      ? (message = 'Published Successfully')
+      : (message = 'Event unpublished');
     createToast(message, 'success');
-  }
+  };
 
   const hideToggleWithToast = async (event) => {
     const updatedEvent = await hideToggle(event);
     setEvent(updatedEvent);
     let message = '';
-    updatedEvent.hidden ? message = "Event Hidden" : message = "Event now visible to business partners!";
+    updatedEvent.hidden
+      ? (message = 'Event Hidden')
+      : (message = 'Event now visible to business partners!');
     createToast(message, 'success');
   };
 
@@ -74,7 +99,9 @@ const OrganiserViewEventDetails = () => {
     setEvent(updatedEvent);
     console.log(updatedEvent);
     let message = '';
-    updatedEvent.vip ? message = "Event is exclusive to VIP members!" : message = "Event open for all!";
+    updatedEvent.vip
+      ? (message = 'Event is exclusive to VIP members!')
+      : (message = 'Event open for all!');
     createToast(message, 'success');
   };
 
@@ -95,9 +122,12 @@ const OrganiserViewEventDetails = () => {
       router.push('organiser/events');
       //navigate to somewhere else
     } else {
-      createToast('Error in deleting event, please contact our help center', 'error');
+      createToast(
+        'Error in deleting event, please contact our help center',
+        'error'
+      );
     }
-  }
+  };
 
   // const publishToggle = async () => {
   //   const published = !event.published;
@@ -116,7 +146,6 @@ const OrganiserViewEventDetails = () => {
   //   hidden ? message = "Event Hidden" : message = "Event now visible to business partners!";
   //   createToast(message, 'success');
   // };
-
 
   // const vipToggle = async () => {
   //   const vip = !event.vip;
@@ -163,7 +192,9 @@ const OrganiserViewEventDetails = () => {
               <a>Events</a>
             </Link>
           </li>
-          <li className="breadcrumb-item active">{event.name ? event.name : 'Draft'}</li>
+          <li className="breadcrumb-item active">
+            {event.name ? event.name : 'Draft'}
+          </li>
         </ol>
       </BreadcrumbOne>
 
@@ -191,7 +222,11 @@ const OrganiserViewEventDetails = () => {
           {/* product description tab */}
           <Row>
             <Col>
-              <EventDescriptionTab event={event} prettySaleStartDate={prettySaleStartDate} prettySalesEndDate={prettySalesEndDate} />
+              <EventDescriptionTab
+                event={event}
+                prettySaleStartDate={prettySaleStartDate}
+                prettySalesEndDate={prettySalesEndDate}
+              />
             </Col>
           </Row>
 

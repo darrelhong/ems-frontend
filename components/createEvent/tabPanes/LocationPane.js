@@ -15,7 +15,9 @@ const LocationPane = ({ register, watch, physical, setPhysical, errors }) => {
         <div className="account-details-form">
           <Row>
             <Col className="form-group" md={12}>
-              <label>Is this a physically hosted event?<span className="required">*</span>
+              <label>
+                Is this a physically hosted event?
+                <span className="required">*</span>
               </label>
               <div>
                 <label style={{ marginRight: '10%' }}>
@@ -47,14 +49,16 @@ const LocationPane = ({ register, watch, physical, setPhysical, errors }) => {
                 <span role="alert" style={{ color: 'red' }}>
                   This field is required
                 </span>
-              )
-              }
+              )}
             </Col>
 
             {/* probably need some caption saying either online or physical would do, or shift to online/physical */}
             <Col className="form-group" md={12}>
               <label>
-                Address <span className="required">* (Could be an online link or physical venue)</span>
+                Address{' '}
+                <span className="required">
+                  * (Could be an online link or physical venue)
+                </span>
               </label>
               <input
                 // required
@@ -67,8 +71,7 @@ const LocationPane = ({ register, watch, physical, setPhysical, errors }) => {
                 <span role="alert" style={{ color: 'red' }}>
                   This field is required
                 </span>
-              )
-              }
+              )}
             </Col>
             {/* {watch('isPhysical') ? (
               <h1>{watch('isPhysical')}</h1>

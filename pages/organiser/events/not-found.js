@@ -17,7 +17,8 @@ const EventNotFound = () => {
           <Col>
             <p className="mt-5 text-center">
               <strong>
-                  This event has already been deleted. Please continue to look at other available events!
+                This event has already been deleted. Please continue to look at
+                other available events!
               </strong>
             </p>
           </Col>

@@ -3,9 +3,19 @@ import { Row, Col } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import PropTypes from 'prop-types';
 
-const TicketingPane = ({ freeTickets, setFreeTickets, wantsTickets, setWantsTickets, formState, getValues, register, watch, eventData, setValue, errors }) => {
-
-
+const TicketingPane = ({
+  freeTickets,
+  setFreeTickets,
+  wantsTickets,
+  setWantsTickets,
+  formState,
+  getValues,
+  register,
+  watch,
+  eventData,
+  setValue,
+  errors,
+}) => {
   useEffect(() => {
     const {
       ticketPrice,
@@ -57,7 +67,7 @@ const TicketingPane = ({ freeTickets, setFreeTickets, wantsTickets, setWantsTick
                 Are you selling tickets for your event?
               </label>
             </Col>
-{/* 
+            {/* 
             <Col className="form-group" md={12}>
               <input
                 type="checkbox"
@@ -77,11 +87,11 @@ const TicketingPane = ({ freeTickets, setFreeTickets, wantsTickets, setWantsTick
               </label>
             </Col> */}
 
-
             <div>
               <Col className="form-group" md={12}>
-                <label>Ticket Price (SGD)
-                  {wantsTickets && (<span className="required">*</span>)}
+                <label>
+                  Ticket Price (SGD)
+                  {wantsTickets && <span className="required">*</span>}
                 </label>
                 <input
                   className="form-control"
@@ -99,17 +109,16 @@ const TicketingPane = ({ freeTickets, setFreeTickets, wantsTickets, setWantsTick
                 )
                 } */}
                 {errors.ticketPrice && (
-                // {errors.ticketPrice && wantsTickets && !freeTickets && (
+                  // {errors.ticketPrice && wantsTickets && !freeTickets && (
                   <span role="alert" style={{ color: 'red' }}>
                     This field is required
                   </span>
-                )
-                }
+                )}
               </Col>
               <Col className="form-group" md={12}>
                 <label>
                   Ticket Capacity - How many tickets do you want to sell?
-                  {wantsTickets && (<span className="required">*</span>)}
+                  {wantsTickets && <span className="required">*</span>}
                 </label>
                 <input
                   className="form-control"
@@ -117,18 +126,18 @@ const TicketingPane = ({ freeTickets, setFreeTickets, wantsTickets, setWantsTick
                   type="number"
                   disabled={!wantsTickets}
                   ref={register({ required: wantsTickets, min: 1 })}
-                // ref={register()}
+                  // ref={register()}
                 />
                 {errors.ticketCapacity && wantsTickets && (
                   <span role="alert" style={{ color: 'red' }}>
                     At least 1 ticket if you are selling!
                   </span>
-                )
-                }
+                )}
               </Col>
               <Col className="form-group" md={12}>
-                <label>Ticket Sales Start Date
-                {wantsTickets && (<span className="required">*</span>)}
+                <label>
+                  Ticket Sales Start Date
+                  {wantsTickets && <span className="required">*</span>}
                 </label>
                 <input
                   className="form-control"
@@ -136,19 +145,19 @@ const TicketingPane = ({ freeTickets, setFreeTickets, wantsTickets, setWantsTick
                   type="datetime-local"
                   disabled={!wantsTickets}
                   ref={register({ required: wantsTickets })}
-                // ref={register()}
+                  // ref={register()}
                 />
                 {errors.saleStartDate && wantsTickets && (
                   <span role="alert" style={{ color: 'red' }}>
                     This field is required
                   </span>
-                )
-                }
+                )}
               </Col>
 
               <Col className="form-group" md={12}>
-                <label>Ticket Sales End Date
-                {wantsTickets && (<span className="required">*</span>)}
+                <label>
+                  Ticket Sales End Date
+                  {wantsTickets && <span className="required">*</span>}
                 </label>
                 <input
                   className="form-control"
@@ -158,14 +167,14 @@ const TicketingPane = ({ freeTickets, setFreeTickets, wantsTickets, setWantsTick
                   // ref={register({ required: wantsTickets })}
                   ref={register({ required: wantsTickets })}
                   // ref={register({ required: wantsTickets, validate: value => value > watch('saleStartDate') })}
-                // ref={register()}
+                  // ref={register()}
                 />
                 {errors.salesEndDate && wantsTickets && (
                   <span role="alert" style={{ color: 'red' }}>
-                    This field is required, end date must also be later than start date!
+                    This field is required, end date must also be later than
+                    start date!
                   </span>
-                )
-                }
+                )}
               </Col>
             </div>
           </Row>

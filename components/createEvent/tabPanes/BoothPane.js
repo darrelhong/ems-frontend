@@ -12,21 +12,21 @@ const BoothPane = ({ register, errors }) => {
         <div className="account-details-form">
           <Row>
             <Col className="form-group" md={12}>
-              <label>Booth Capacity - How many at your event?
-              <span className="required">*</span>
+              <label>
+                Booth Capacity - How many at your event?
+                <span className="required">*</span>
               </label>
               <input
                 className="form-control"
                 name="boothCapacity"
                 type="number"
-                ref={register({required : true})}
+                ref={register({ required: true })}
               />
               {errors.boothCapacity && (
                 <span role="alert" style={{ color: 'red' }}>
                   This field is required
                 </span>
-              )
-              }
+              )}
             </Col>
           </Row>
         </div>

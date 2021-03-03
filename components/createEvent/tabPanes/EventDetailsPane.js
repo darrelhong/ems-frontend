@@ -34,15 +34,14 @@ const EventDetailsPane = ({ register, watch, errors }) => {
                 className="form-control"
                 name="name"
                 type="text"
-                ref={register({required : true})}
+                ref={register({ required: true })}
                 // ref={register({ required: true })}
               />
               {errors.name && (
                 <span role="alert" style={{ color: 'red' }}>
                   This field is required
                 </span>
-              )
-              }
+              )}
             </Col>
             <Col className="form-group" md={12}>
               <label>
@@ -53,49 +52,52 @@ const EventDetailsPane = ({ register, watch, errors }) => {
                 className="form-control"
                 name="descriptions"
                 maxLength="200" //can consider playing with this if needed
-                ref={register({required : true})}
+                ref={register({ required: true })}
                 // ref={register({ required: true })}
               />
               {errors.descriptions && (
                 <span role="alert" style={{ color: 'red' }}>
                   This field is required
                 </span>
-                 )
-               }
+              )}
             </Col>
             <Col className="form-group" md={12}>
-              <label>Start Date<span className="required">*</span>
+              <label>
+                Start Date<span className="required">*</span>
               </label>
               <input
                 className="form-control"
                 name="eventStartDate"
                 type="datetime-local"
-                ref={register({required : true})}
+                ref={register({ required: true })}
               />
               {errors.eventStartDate && (
                 <span role="alert" style={{ color: 'red' }}>
                   This field is required
                 </span>
-              )
-              }
+              )}
             </Col>
 
             <Col className="form-group" md={12}>
-              <label>End Date<span className="required">*</span>
+              <label>
+                End Date<span className="required">*</span>
               </label>
               <input
                 className="form-control"
                 name="eventEndDate"
                 type="datetime-local"
                 // ref={register({required : true})}
-                ref={register({required : true, validate: value => value > watch('eventStartDate') })}
+                ref={register({
+                  required: true,
+                  validate: (value) => value > watch('eventStartDate'),
+                })}
               />
               {errors.eventEndDate && (
                 <span role="alert" style={{ color: 'red' }}>
-                  This field is required, end date must also be later than start date!
+                  This field is required, end date must also be later than start
+                  date!
                 </span>
-              )
-              }
+              )}
               {/* {renderDateError()} */}
             </Col>
           </Row>
@@ -107,7 +109,7 @@ const EventDetailsPane = ({ register, watch, errors }) => {
 
 EventDetailsPane.propTypes = {
   register: PropTypes.func,
-  watch: PropTypes.func
+  watch: PropTypes.func,
   //onSubmit shouldnt be here actually will shift it out soon
 };
 

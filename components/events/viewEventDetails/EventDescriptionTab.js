@@ -1,20 +1,26 @@
-import Tab from "react-bootstrap/Tab";
-import Nav from "react-bootstrap/Nav";
+import Tab from 'react-bootstrap/Tab';
+import Nav from 'react-bootstrap/Nav';
 import {
   IoMdCalendar,
   IoMdRestaurant,
   IoMdCash,
-  IoMdTrophy
-} from "react-icons/io";
+  IoMdTrophy,
+} from 'react-icons/io';
 import { format, parseISO } from 'date-fns';
 
-const EventDescriptionTab = ({ event, prettySaleStartDate, prettySalesEndDate }) => {
-
+const EventDescriptionTab = ({
+  event,
+  prettySaleStartDate,
+  prettySalesEndDate,
+}) => {
   const renderBoothSection = () => {
     if (event.boothCapacity == 0) {
       //booth capacity not set or left at 0, just say no booth capacity was set, zero button
       return (
-        <div className="product-description-tab__details" style={{ textAlign: 'center' }}>
+        <div
+          className="product-description-tab__details"
+          style={{ textAlign: 'center' }}
+        >
           Booth capacity not set yet !
         </div>
       );
@@ -22,30 +28,41 @@ const EventDescriptionTab = ({ event, prettySaleStartDate, prettySalesEndDate })
       //this case we just show the booth capacity set, no transaction count or button
       return (
         <li>
-          <IoMdRestaurant /> {event.ticketCapacity ? `Tickets sold: ${event.ticketTransactions.length} / ${event.ticketCapacity}` : 'Ticket Capacity not set yet!'}
+          <IoMdRestaurant />{' '}
+          {event.ticketCapacity
+            ? `Tickets sold: ${event.ticketTransactions.length} / ${event.ticketCapacity}`
+            : 'Ticket Capacity not set yet!'}
         </li>
       );
     } else {
       //render the normal page with count, capacity and button
       return (
-        <div className="product-content__sort-info space-mb--20" style={{ display: "flex", justifyContent: "space-between", flexDirection: "row" }}>
+        <div
+          className="product-content__sort-info space-mb--20"
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexDirection: 'row',
+          }}
+        >
           <ul>
             <li>
-              <IoMdTrophy />Confirmed booths for your event: {event.eventBoothTransactions?.length} / {event.boothCapacity}
+              <IoMdTrophy />
+              Confirmed booths for your event:{' '}
+              {event.eventBoothTransactions?.length} / {event.boothCapacity}
             </li>
           </ul>
           <ul>
             <button
               onClick={() => console.log('hello')}
               className="btn btn-fill-out btn-addtocart space-ml--10"
-              style={{ textAlign: "right" }}
+              style={{ textAlign: 'right' }}
             >
               <i className="icon-basket-loaded" /> Manage Event Booths
-              </button>
+            </button>
           </ul>
         </div>
-      )
-
+      );
     }
   };
 
@@ -64,7 +81,7 @@ const EventDescriptionTab = ({ event, prettySaleStartDate, prettySalesEndDate })
           </Nav.Item>
           <Nav.Item>
             <Nav.Link eventKey="reviews">
-              REVIEWS {event.ratingCount ? `(${event.ratingCount})` : ""}
+              REVIEWS {event.ratingCount ? `(${event.ratingCount})` : ''}
             </Nav.Link>
           </Nav.Item>
         </Nav>
@@ -72,18 +89,27 @@ const EventDescriptionTab = ({ event, prettySaleStartDate, prettySalesEndDate })
           <Tab.Pane eventKey="ticketing">
             <div className="product-content__sort-info space-mb--20">
               <ul>
-                  <li>
-                    <IoMdCash />Ticket Price: {event.ticketPrice ? '$'+event.ticketPrice : 'Not set yet'}
-                  </li>
-                  <li>
-                    <IoMdRestaurant />{event.ticketCapacity ? `Tickets sold: ${event.ticketTransactions.length} / ${event.ticketCapacity}` : 'Ticket Capacity not set yet!'}
-                  </li>
                 <li>
-                  <IoMdCalendar />Ticket Sale Start Date: {prettySaleStartDate ? prettySaleStartDate : 'Not set yet'}
+                  <IoMdCash />
+                  Ticket Price:{' '}
+                  {event.ticketPrice ? '$' + event.ticketPrice : 'Not set yet'}
+                </li>
+                <li>
+                  <IoMdRestaurant />
+                  {event.ticketCapacity
+                    ? `Tickets sold: ${event.ticketTransactions.length} / ${event.ticketCapacity}`
+                    : 'Ticket Capacity not set yet!'}
+                </li>
+                <li>
+                  <IoMdCalendar />
+                  Ticket Sale Start Date:{' '}
+                  {prettySaleStartDate ? prettySaleStartDate : 'Not set yet'}
                   {/* <IoMdLocate />{format(parseISO(event.eventStartDate), 'eee, dd MMM yy hh:mmbbb')} */}
                 </li>
                 <li>
-                  <IoMdCalendar />Ticket Sale End Date: {prettySalesEndDate ? prettySalesEndDate : 'Not set yet'}
+                  <IoMdCalendar />
+                  Ticket Sale End Date:{' '}
+                  {prettySalesEndDate ? prettySalesEndDate : 'Not set yet'}
                 </li>
               </ul>
             </div>
@@ -116,7 +142,10 @@ const EventDescriptionTab = ({ event, prettySaleStartDate, prettySalesEndDate })
           </Tab.Pane>
 
           <Tab.Pane eventKey="reviews">
-            <div className="product-description-tab__details" style={{ textAlign: 'center' }}>
+            <div
+              className="product-description-tab__details"
+              style={{ textAlign: 'center' }}
+            >
               No reviews yet!
             </div>
           </Tab.Pane>

@@ -3,13 +3,16 @@ import Link from 'next/link';
 import { BreadcrumbOne } from '../../../components/Breadcrumb';
 import { Container, Row, Col } from 'react-bootstrap';
 import OrganiserWrapper from '../../../components/wrapper/OrganiserWrapper';
-import { getAllEventsByOrganiser, getAllEventsTest } from '../../../lib/query/eventApi';
+import {
+  getAllEventsByOrganiser,
+  getAllEventsTest,
+} from '../../../lib/query/eventApi';
 import { Sidebar, ShopHeader, ShopProducts } from '../../../components/Shop';
 import useUser from '../../../lib/query/useUser';
-import EventView from "../../../components/Event/EventView";
+import EventView from '../../../components/Event/EventView';
 import Paginator from 'react-hooks-paginator';
-import EventSideBar from "../../../components/Event/EventSideBar";
-import { parseISO } from "date-fns";
+import EventSideBar from '../../../components/Event/EventSideBar';
+import { parseISO } from 'date-fns';
 
 function myEvents() {
   const [events, setEvents] = useState([]);
@@ -41,13 +44,15 @@ function myEvents() {
       };
       getEvents();
     }
-  }, [user]
-  );
+  }, [user]);
 
   useEffect(() => {
     if (events != null) {
       const tempSortedEvents = filterEvents(events, sortValue);
-      const tempCurrentData = tempSortedEvents.slice(offset, offset + pageLimit)
+      const tempCurrentData = tempSortedEvents.slice(
+        offset,
+        offset + pageLimit
+      );
       setSortedEvents(tempSortedEvents);
       setCurrentData(tempCurrentData);
     }
@@ -68,17 +73,15 @@ function myEvents() {
   };
 
   const filterEvents = (listEvents, sortValue) => {
-    if (["DRAFT", "CREATED", "CANCELLED"].includes(sortValue)) {
-      return listEvents.filter(e => e.eventStatus == sortValue);
+    if (['DRAFT', 'CREATED', 'CANCELLED'].includes(sortValue)) {
+      return listEvents.filter((e) => e.eventStatus == sortValue);
+    } else {
+      if (sortValue == 'past') {
+        return listEvents.filter((e) => parseISO(e.eventEndDate) < new Date());
+      } else
+        return listEvents.filter((e) => parseISO(e.eventEndDate) > new Date());
     }
-    else {
-      if (sortValue == "past") {
-        return listEvents.filter(e => parseISO(e.eventEndDate) < new Date());
-      }
-      else return listEvents.filter(e => parseISO(e.eventEndDate) > new Date());
-    }
-
-  }
+  };
 
   return (
     <div>
@@ -116,22 +119,22 @@ function myEvents() {
                     setCurrentPage={setCurrentPage}
                     pageContainerClass="mb-0 mt-0"
                     pagePrevText="«"
-                    pageNextText="»" />
+                    pageNextText="»"
+                  />
                 </div>
-
               </Col>
 
               <Col lg={3} className="order-lg-first mt-4 pt-2 mt-lg-0 pt-lg-0">
-                <EventSideBar getSortParams={getSortParams} sortValue={sortValue} />
+                <EventSideBar
+                  getSortParams={getSortParams}
+                  sortValue={sortValue}
+                />
               </Col>
-
             </Row>
           </Container>
         </div>
       </OrganiserWrapper>
     </div>
-
-
   );
 }
 

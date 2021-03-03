@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState } from 'react';
 import {
   IoMdWifi,
   IoIosBody,
@@ -11,15 +11,15 @@ import {
   IoMdCalendar,
   IoMdLocate,
   IoMdCreate,
-  IoIosTrash
-} from "react-icons/io";
+  IoIosTrash,
+} from 'react-icons/io';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import StarIcon from '@material-ui/icons/Star';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
-import ProductRating from "../../Product/ProductRating";
+import ProductRating from '../../Product/ProductRating';
 import Link from 'next/link';
-import HidePopover from "../../Event/HidePopover";
+import HidePopover from '../../Event/HidePopover';
 
 const EventDescription = ({
   event,
@@ -29,22 +29,24 @@ const EventDescription = ({
   hideToggle,
   vipToggle,
   handleCancel,
-  handleDelete
+  handleDelete,
 }) => {
-
   const deleteCancelButton = () => {
     if (event.eventStatus == 'CANCELLED') {
       return (
         <button
           disabled
           className="btn btn-fill-out btn-addtocart space-ml--10"
-          style={{ marginLeft: 'auto', marginRight: 'auto', pointerEvents: "none" }}
+          style={{
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            pointerEvents: 'none',
+          }}
         >
           <i className="icon-basket-loaded" /> Cancelled Event
         </button>
-      )
-    }
-    else if (event.eventStatus == 'DRAFT') {
+      );
+    } else if (event.eventStatus == 'DRAFT') {
       return (
         <button
           onClick={() => handleDelete(event)}
@@ -53,8 +55,11 @@ const EventDescription = ({
         >
           <i className="icon-basket-loaded" /> Delete Draft
         </button>
-      )
-    } else if (event.eventBoothTransactions?.length == 0 && event.ticketTransactions?.length == 0) {
+      );
+    } else if (
+      event.eventBoothTransactions?.length == 0 &&
+      event.ticketTransactions?.length == 0
+    ) {
       //in this case we can delete
       return (
         <button
@@ -64,7 +69,7 @@ const EventDescription = ({
         >
           <i className="icon-basket-loaded" /> Delete Event
         </button>
-      )
+      );
     } else {
       //only can cancel, cannot delete
       return (
@@ -75,7 +80,7 @@ const EventDescription = ({
         >
           <i className="icon-basket-loaded" /> Cancel Event
         </button>
-      )
+      );
     }
   };
 
@@ -84,7 +89,9 @@ const EventDescription = ({
       {/* event name originally here */}
       {/* <h2 className="product-content__title space-mb--10">{event.name}</h2> */}
       <div className="product-content__price-rating-wrapper space-mb--10">
-        <h2 className="product-content__title space-mb--10">{event.name ? event.name : '(Add event name)'}</h2>
+        <h2 className="product-content__title space-mb--10">
+          {event.name ? event.name : '(Add event name)'}
+        </h2>
         {/* <div className="product-content__price d-flex-align-items-center">
           <span className="price">{prettyStartDate}</span>
         </div> */}
@@ -100,29 +107,39 @@ const EventDescription = ({
         {/*  ) : (
           ""
          )} */}
-
       </div>
       <div className="product-content__description space-mb--20">
-        <p>{event.descriptions ? event.descriptions : '(Add your event description)'}</p>
+        <p>
+          {event.descriptions
+            ? event.descriptions
+            : '(Add your event description)'}
+        </p>
       </div>
 
       <div className="product-content__sort-info space-mb--20">
         <ul>
           {event.physical ? (
             <li>
-              <IoIosBody />Physical Event
+              <IoIosBody />
+              Physical Event
             </li>
-
           ) : (
-              <li>
-                <IoMdWifi />Online Event
-              </li>
-            )}
+            <li>
+              <IoMdWifi />
+              Online Event
+            </li>
+          )}
           <li>
-            <IoMdLocate />Event Location: {event.address ? event.address : '(Add Event Location)'}
+            <IoMdLocate />
+            Event Location:{' '}
+            {event.address ? event.address : '(Add Event Location)'}
           </li>
           <li>
-            <IoMdCalendar />{prettyStartDate ? prettyStartDate : '(Add Event Start Date)'} to {prettyEndDate ? prettyEndDate : '(Add Event End Date)'}
+            <IoMdCalendar />
+            {prettyStartDate
+              ? prettyStartDate
+              : '(Add Event Start Date)'} to{' '}
+            {prettyEndDate ? prettyEndDate : '(Add Event End Date)'}
           </li>
           {/* {event.vip && (
             <li>
@@ -147,14 +164,16 @@ const EventDescription = ({
                 <IoMdCloudUpload title="Publish your event for business partners to see!" onClick={publishToggle} />Event is unpublished, business partners won't find your event
               </li>
             )} */}
-
         </ul>
       </div>
       <hr />
 
       <Fragment>
         <div>
-          <div className="product-content__product-share space-mt--15" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <div
+            className="product-content__product-share space-mt--15"
+            style={{ display: 'flex', justifyContent: 'flex-end' }}
+          >
             {/* <span>Actions:</span> */}
             <ul className="social-icons">
               {/* <li>
@@ -166,11 +185,12 @@ const EventDescription = ({
                 </a>
               </li> */}
               <li>
-                <IconButton aria-label="vip" color="secondary" onClick={() => vipToggle(event)}>
-                  {event.vip ?
-                    (<StarIcon />) :
-                    (<StarBorderIcon />)
-                  }
+                <IconButton
+                  aria-label="vip"
+                  color="secondary"
+                  onClick={() => vipToggle(event)}
+                >
+                  {event.vip ? <StarIcon /> : <StarBorderIcon />}
                 </IconButton>
               </li>
               <li>
@@ -204,7 +224,6 @@ const EventDescription = ({
             </ul>
             {deleteCancelButton()}
           </div>
-
 
           {/* three ugly ass buttons */}
           {/* {event.published ?
