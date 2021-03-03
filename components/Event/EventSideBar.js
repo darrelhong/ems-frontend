@@ -1,60 +1,30 @@
 import React from 'react';
 import { Container, Row, Col } from "react-bootstrap";
-import Tab from "react-bootstrap/Tab";
-import Nav from "react-bootstrap/Nav";
-import EventView from "./EventView";
 
-const EventSideBar = ({ events, layout }) => {
+import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+
+const EventSideBar = ({ getSortParams, sortValue }) => {
+
+    const checkActive = (value) => {
+        return value == sortValue;
+    }
+    // console.log("Sort value sidebar:", sortValue);
 
     return (
         <div className='my-account-content space-pt--r100 space-pb--r100'>
-            <Container>
-                <Tab.Container defaultActiveKey="all">
-                    <Row>
-                        <Col lg={3} md={4}>
-                            <Nav variant="pills"
-                                className="flex-column my-account-content__navigation space-mb--r60" >
-                                <Nav.Item>
-                                    <Nav.Link eventKey="all">
-                                        All
-                                </Nav.Link>
-                                </Nav.Item>
-
-                                <Nav.Item>
-                                    <Nav.Link eventKey="upcoming">
-                                        Upcoming
-                                </Nav.Link>
-                                </Nav.Item>
-
-                                <Nav.Item>
-                                    <Nav.Link eventKey="completed">
-                                        Completed
-                                </Nav.Link>
-                                </Nav.Item>
-
-                                <Nav.Item>
-                                    <Nav.Link eventKey="draft">
-                                        Draft
-                                </Nav.Link>
-                                </Nav.Item>
-
-                                <Nav.Item>
-                                    <Nav.Link eventKey="cancelled">
-                                        Cancelled
-                                </Nav.Link>
-                                </Nav.Item>
-                            </Nav>
-                        </Col>
-                        <Col lg={9} md={8} >
-                            <Tab.Content>
-                                <Tab.Pane eventKey="all">
-                                    <EventView events={events} layout={layout} />
-                                </Tab.Pane>
-                            </Tab.Content>
-                        </Col>
-                    </Row>
-                </Tab.Container>
-            </Container>
+            <div className='sidebar'>
+                <div className="widget">
+                    <h5 className="widget__title">Status</h5>
+                    <ButtonGroup color="primary" aria-label=" vertical outlined primary button group" orientation="vertical">
+                        <Button variant={`${checkActive("CREATED") ? "contained" : "outlined"}`} onClick={() => getSortParams("status", "CREATED")} color="secondary">All</Button>
+                        <Button variant={`${checkActive("past") ? "contained" : "outlined"}`} onClick={() => getSortParams("status", "past")} value="past" color="secondary">Past</Button>
+                        <Button variant={`${checkActive("upcoming") ? "contained" : "outlined"}`} onClick={() => getSortParams("status", "upcoming")} value="upcoming" color="secondary">Upcoming</Button>
+                        <Button variant={`${checkActive("DRAFT") ? "contained" : "outlined"}`} onClick={() => getSortParams("status", "DRAFT")} value="draft" color="secondary">Draft</Button>
+                        <Button variant={`${checkActive("CANCELLED") ? "contained" : "outlined"}`} onClick={() => getSortParams("status", "CANCELLED")} value="cancelled" color="secondary">Cancelled</Button>
+                    </ButtonGroup>
+                </div>
+            </div>
         </div>
     )
 

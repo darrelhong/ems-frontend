@@ -8,6 +8,8 @@ import { Sidebar, ShopHeader, ShopProducts } from '../../../components/Shop';
 import useUser from '../../../lib/query/useUser';
 import EventView from "../../../components/Event/EventView";
 import Paginator from 'react-hooks-paginator';
+import EventSideBar from "../../../components/Event/EventSideBar";
+import { parseISO } from "date-fns";
 
 function myEvents() {
   const [events, setEvents] = useState([]);
@@ -15,9 +17,10 @@ function myEvents() {
   const { data: user } = useUser(localStorage.getItem('userId'));
   // console.log('user', user);
   const [sortType, setSortType] = useState('');
-  const [sortValue, setSortValue] = useState('');
+  const [sortValue, setSortValue] = useState('CREATED');
   const [filterSortType, setFilterSortType] = useState('');
   const [filterSortValue, setFilterSortValue] = useState('');
+  const [sortedEvents, setSortedEvents] = useState('');
   const [shopTopFilterStatus, setShopTopFilterStatus] = useState(false);
   const [layout, setLayout] = useState('list');
   const [offset, setOffset] = useState(0);
@@ -25,13 +28,16 @@ function myEvents() {
   const [currentData, setCurrentData] = useState([]);
 
   const pageLimit = 12;
+  // console.log("Sort value index:", sortValue);
+  // console.log("DAta: ", events);
+  // console.log("sortedEvents: ", sortedEvents);
+  // console.log("current Data: ", currentData);
 
   useEffect(() => {
     if (user != null) {
       const getEvents = async () => {
         const data = await getAllEventsByOrganiser(user.id);
         setEvents(data);
-        // console.log(data);
       };
       getEvents();
     }
@@ -40,9 +46,12 @@ function myEvents() {
 
   useEffect(() => {
     if (events != null) {
-      setCurrentData(events.slice(offset, offset + pageLimit));
+      const tempSortedEvents = filterEvents(events, sortValue);
+      const tempCurrentData = tempSortedEvents.slice(offset, offset + pageLimit)
+      setSortedEvents(tempSortedEvents);
+      setCurrentData(tempCurrentData);
     }
-  }, [offset, events]);
+  }, [offset, events, sortValue]);
 
   const getLayout = (layout) => {
     setLayout(layout);
@@ -57,6 +66,19 @@ function myEvents() {
     setFilterSortType(sortType);
     setFilterSortValue(sortValue);
   };
+
+  const filterEvents = (listEvents, sortValue) => {
+    if (["DRAFT", "CREATED", "CANCELLED"].includes(sortValue)) {
+      return listEvents.filter(e => e.eventStatus == sortValue);
+    }
+    else {
+      if (sortValue == "past") {
+        return listEvents.filter(e => parseISO(e.eventEndDate) < new Date());
+      }
+      else return listEvents.filter(e => parseISO(e.eventEndDate) > new Date());
+    }
+
+  }
 
   return (
     <div>
@@ -86,7 +108,7 @@ function myEvents() {
                 <EventView events={currentData} layout={layout} />
                 <div className="pagination pagination-style pagination-style--two justify -content-center">
                   <Paginator
-                    totalRecords={events.length}
+                    totalRecords={sortedEvents.length}
                     pageLimit={pageLimit}
                     pageNeighbours={2}
                     setOffset={setOffset}
@@ -98,6 +120,11 @@ function myEvents() {
                 </div>
 
               </Col>
+
+              <Col lg={3} className="order-lg-first mt-4 pt-2 mt-lg-0 pt-lg-0">
+                <EventSideBar getSortParams={getSortParams} sortValue={sortValue} />
+              </Col>
+
             </Row>
           </Container>
         </div>
