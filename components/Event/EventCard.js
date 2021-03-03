@@ -1,13 +1,63 @@
-import React from "react";
+import React, { useState } from "react";
 import { Fragment } from "react";
 import Link from "next/link";
-import { Col } from "react-bootstrap";
+import { Col, ProgressBar, Modal, Button } from "react-bootstrap";
 import { formatDate } from '../../lib/formatDate'
-import { ProgressBar } from 'react-bootstrap';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import StarIcon from '@material-ui/icons/Star';
+import StarBorderIcon from '@material-ui/icons/StarBorder';
+import HidePopover from './HidePopover';
+import { vipToggle } from "../../lib/functions/eventOrganiser/eventFunctions";
+import { Unstable_TrapFocus } from "@material-ui/core";
 
-const EventCard = ({ event }) => {
+const EventCard = ({ event, deleteCancelEvent, createToast }) => {
+    const [currEvent, setCurrEvent] = useState(event);
+
+    const [deleteModalShow, setDeleteModalShow] = useState(false);
+    const closeModal = () => setDeleteModalShow(false);
+    const openModal = () => setDeleteModalShow(true);
+
+
+    const handleDeleteCancel = async (currEvent) => {
+        await deleteCancelEvent(currEvent);
+        closeModal();
+    }
+
+    const handleVipToggle = async (currEvent) => {
+        let message = '';
+        await vipToggle(currEvent).then((updatedEvent) => {
+            setCurrEvent(updatedEvent);
+            updatedEvent.vip ? message = "Event is exclusive to VIP members" : message = "Event open for all!";
+            createToast(message, 'success');
+        });
+    }
+
+    const checkCanDelete = (currEvent) => {
+        if (currEvent.eventBoothTransactions?.length == 0 && event.ticketTransactions?.length == 0) {
+            return true;
+        }
+        return false;
+    }
+
     return (
         <Fragment>
+            <Modal show={deleteModalShow} onHide={closeModal} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Delete An Event</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {checkCanDelete(currEvent) ? "Are you sure you want to delete this event?" : "Unable to delete this Event. Do you want to cancel this event?"}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={closeModal}>
+                        Close
+                    </Button>
+                    <Button variant="primary" onClick={() => handleDeleteCancel(currEvent)}>
+                        Proceed
+                    </Button>
+                </Modal.Footer>
+            </Modal>
             <Col
                 lg={4}
                 sm={6}
@@ -16,66 +66,84 @@ const EventCard = ({ event }) => {
                 <div className="product-list">
                     <div className="product-list__image">
                         <Link
-                            href={`/organiser/event/1`}>
+                            href={`/organiser/events/${currEvent.eid}`}>
                             <a>
-                                <img src="https://image.freepik.com/free-vector/cute-avocado-cartoon-hand-drawn-style_42349-476.jpg" alt="event_image" />
+                                <img src={currEvent.images[0]} alt="event_image" />
                             </a>
                         </Link>
                     </div>
 
                     <div className="product-list__info">
+
+                        <span style={{ float: "right" }}>
+                            <IconButton onClick={() => openModal()} aria-label="delete" color="secondary">
+                                <DeleteIcon />
+                            </IconButton>
+                        </span>
+
                         <h6 className="product-title">
                             <Link
-                                // Require to be changed
-                                href={`/organiser/events/`}>
-                                <a>{event.name}</a>
+                                href={`/organiser/events/${currEvent.eid}`}>
+                                <a>{currEvent.name}</a>
                             </Link>
                         </h6>
 
-                        <span>
-                            <button>
-                                <i className="icon-delete" />Delete
-                            </button>
-                        </span>
 
                         <div className="d-flex justify-content-between">
                             <div className="product-price">
-                                <span className="price">${event.ticketPrice}</span>
-                                <span className="rating-num"> {`Sales End Date: ${formatDate(event.salesEndDate)}`} </span>
+                                <span className="price"> {formatDate(currEvent.eventStartDate, "eee, dd MMM yyyy, hh:mmbbb")}</span>
+                                {/* <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> */}
+                                {/* <span className="rating-num"> {`Sales End Date: ${formatDate(event.salesEndDate)}`} </span> */}
                             </div>
                         </div>
                         <div className="product-description">
-                            {event.descriptions}
+                            {currEvent.descriptions}
                         </div>
 
                         <div>
-                            <span>
-                                <ProgressBar now={60} label="60%" />
-                            </span>
-                            <span>
-                                {event.ticketCapacity}
-                            </span>
+                            <span className="price">Ticket Price: ${currEvent.ticketPrice}</span>
+                        </div>
+
+                        <div className="d-flex justify-content-between">
+                            <span className="rating-num"> {`Date: ${formatDate(currEvent.saleStartDate)} ~ ${formatDate(currEvent.salesEndDate)}`} </span>
                         </div>
 
                         <div className="product-list__actions">
                             <ul>
+                                {/* <li>
+                                    <IconButton aria-label="Hide" color="primary" onClick={publishToggle}>
+                                        {event.published ?
+                                            (<PublishIcon />) :
+                                            (<PublishIcon disabled />)
+                                        }
+                                    </IconButton>
+                                </li> */}
+
+                                {/* <li>
+                                    <IconButton aria-label="Hide" color="default" onClick={hideToggle}>
+                                        {event.hidden ?
+                                            (<VisibilityIcon />) :
+                                            (<VisibilityOffIcon />)
+                                        }
+                                    </IconButton>
+                                </li> */}
+
+                                {/* Handles logic for toggling visibility of events for Business Partners and Attendees */}
                                 <li>
-                                    <button className="btn btn-fill-out btn-addtocart space-ml--10">
-                                        <i className="icon-basket-loaded" /> Publish
-                                    </button>
+                                    <HidePopover event={currEvent} />
                                 </li>
 
                                 <li>
-                                    <button className="btn btn-fill-out btn-addtocart space-ml--10">
-                                        <i className="icon-basket-loaded" /> Hide
-                                    </button>
+                                    <IconButton aria-label="vip" color="secondary" onClick={() => handleVipToggle(currEvent)}>
+                                        {currEvent.vip ?
+                                            (<StarIcon />) :
+                                            (<StarBorderIcon />)
+                                        }
+                                    </IconButton>
                                 </li>
 
-                                <li>
-                                    <button className="btn btn-fill-out btn-addtocart space-ml--10">
-                                        <i className="icon-basket-loaded" /> Make VIP
-                                    </button>
-                                </li>
+                                <ProgressBar animated now={60} label="60%" style={{ width: "50%", float: "right" }} />
+                                {event.ticketCapacity}
                             </ul>
                         </div>
                     </div>

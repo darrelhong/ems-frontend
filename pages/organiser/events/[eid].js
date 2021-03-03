@@ -2,58 +2,156 @@ import React, { useState, useEffect } from 'react';
 import Link from "next/link";
 import { useRouter } from 'next/router';
 import { Container, Row, Col } from "react-bootstrap";
-// import { useToasts } from "react-toast-notifications";
 // import { getDiscountPrice } from "../../../lib/product";
 import { LayoutOne } from "../../../layouts";
 import { BreadcrumbOne } from "../../../components/Breadcrumb";
 import EventDescription from "../../../components/events/viewEventDetails/EventDescription";
 import ImageGalleryLeftThumb from "../../../components/events/viewEventDetails/ImageGalleryLeftThumb";
+import EventDescriptionTab from "../../../components/events/viewEventDetails/EventDescriptionTab";
 // import { ProductSliderTwo } from "../../../components/ProductSlider";
-import { getEventDetails, updateEvent } from '../../../lib/query/eventApi';
+import { getEventDetails, updateEvent, deleteEvent } from '../../../lib/query/eventApi';
+import { publishToggle, hideToggle, vipToggle, handleCancel, handleDelete } from '../../../lib/functions/eventOrganiser/eventFunctions';
 import { dbDateToPretty } from '../../../lib/util/functions';
+import { format, parseISO, parseJSON } from 'date-fns';
+import { useToasts } from 'react-toast-notifications';
 
 const OrganiserViewEventDetails = () => {
-  // const { addToast } = useToasts();
   const [event, setEvent] = useState(Object);
   const [prettyStartDate, setPrettyStartDate] = useState('');
+  const [prettyEndDate, setPrettyEndDate] = useState('');
+  const [prettySaleStartDate, setPrettySaleStartDate] = useState('');
+  const [prettySalesEndDate, setPrettySalesEndDate] = useState('');
   const router = useRouter();
   const { eid } = router.query;
-  console.log(router.query); //this should give me the id?
+  const { addToast, removeToast } = useToasts();
 
   useEffect(() => {
     const loadEvent = async () => {
-      let eventData = await getEventDetails(eid);
-      console.log('got event data');
-      console.log(eventData);
-      setEvent(eventData);
-      setPrettyStartDate(dbDateToPretty(eventData.eventStartDate));
+      try {
+        let eventData = await getEventDetails(eid);
+        if (eventData.eventEndDate) setPrettyEndDate(format(parseISO(eventData.eventEndDate), 'dd MMM yy hh:mmbbb'));
+        if (eventData.eventStartDate) setPrettyStartDate(format(parseISO(eventData.eventStartDate), 'dd MMM yy hh:mmbbb'));
+        if (eventData.saleStartDate) setPrettySaleStartDate(format(parseISO(eventData.saleStartDate), 'dd MMM yy hh:mmbbb'));
+        if (eventData.salesEndDate) setPrettySalesEndDate(format(parseISO(eventData.salesEndDate), 'dd MMM yy hh:mmbbb'));
+        // setPrettyEndDate(eventData.eventEndDate);
+        // setPrettyStartDate(eventData.eventStartDate);
+        // setPrettySaleStartDate(eventData.salesStartDate);
+        // setPrettySalesEndDate(eventData.salesEndDate);
+        setEvent(eventData);
+
+        setEvent(eventData);
+      } catch (e) {
+        router.push('/organiser/events/not-found');
+
+      }
     };
     loadEvent();
-  },[]);
+  }, []);
 
-  const publishToggle = async () => {
-    let published = !event.published;
-    let updatedEvent = await updateEvent({...event, published});
-    setEvent(updatedEvent);
+  const createToast = (message, appearanceStyle) => {
+    const toastId = addToast(message, { appearance: appearanceStyle });
+    setTimeout(() => removeToast(toastId), 3000);
   };
 
-  const hideToggle = async () => {
-    let hidden = !event.hidden;
-    let updatedEvent = await updateEvent({...event, hidden});
+  const publishToggleWithToast = async (event) => {
+    const updatedEvent = await publishToggle(event);
     setEvent(updatedEvent);
+    let message = '';
+    updatedEvent.published ? message = "Published Successfully" : message = "Event unpublished";
+    createToast(message, 'success');
+  }
+
+  const hideToggleWithToast = async (event) => {
+    const updatedEvent = await hideToggle(event);
+    setEvent(updatedEvent);
+    let message = '';
+    updatedEvent.hidden ? message = "Event Hidden" : message = "Event now visible to business partners!";
+    createToast(message, 'success');
   };
 
-
-  const vipToggle = async () => {
-    let vip = !event.vip;
-    let updatedEvent = await updateEvent({...event, vip});
+  const vipToggleWithToast = async (event) => {
+    const updatedEvent = await vipToggle(event);
     setEvent(updatedEvent);
+    console.log(updatedEvent);
+    let message = '';
+    updatedEvent.vip ? message = "Event is exclusive to VIP members!" : message = "Event open for all!";
+    createToast(message, 'success');
   };
+
+  const handleCancelWithToast = async (event) => {
+    const updatedEvent = await handleCancel(event);
+    if (updatedEvent) {
+      setEvent(updatedEvent);
+      createToast('Event successfully cancelled', 'success');
+    } else {
+      createToast('Error cancelling the event', 'error');
+    }
+  };
+
+  const handleDeleteWithToast = async (event) => {
+    const isDeleted = await handleDelete(event);
+    if (isDeleted) {
+      createToast('Event successfully deleted', 'success');
+      router.push('organiser/events');
+      //navigate to somewhere else
+    } else {
+      createToast('Error in deleting event, please contact our help center', 'error');
+    }
+  }
+
+  // const publishToggle = async () => {
+  //   const published = !event.published;
+  //   const updatedEvent = await updateEvent({ ...event, published });
+  //   setEvent(updatedEvent);
+  //   let message = '';
+  //   published ? message = "Published Successfully" : message = "Event unpublished";
+  //   createToast(message, 'success');
+  // };
+
+  // const hideToggle = async () => {
+  //   const hidden = !event.hidden;
+  //   const updatedEvent = await updateEvent({ ...event, hidden });
+  //   setEvent(updatedEvent);
+  //   let message = '';
+  //   hidden ? message = "Event Hidden" : message = "Event now visible to business partners!";
+  //   createToast(message, 'success');
+  // };
+
+
+  // const vipToggle = async () => {
+  //   const vip = !event.vip;
+  //   const updatedEvent = await updateEvent({ ...event, vip });
+  //   setEvent(updatedEvent);
+  //   let message = '';
+  //   vip ? message = "Event is exclusive to VIP members!" : message = "Event open for all!";
+  //   createToast(message, 'success');
+  // };
+
+  // const handleCancel = async () => {
+  //   try {
+  //     const eventStatus = "CANCELLED";
+  //     const updatedEvent = await updateEvent({ ...event, eventStatus });
+  //     setEvent(updatedEvent);
+  //     createToast('Event successfully cancelled', 'success');
+  //   } catch (e) {
+  //     createToast('Error cancelling the event', 'error');
+  //   }
+  // }
+
+  // const handleDelete = async () => {
+  //   try {
+  //     await deleteEvent(event.eid);
+  //     createToast('Event successfully deleted', 'success');
+  //     //navigate to somewhere
+  //   } catch (e) {
+  //     createToast('Error in deleting event, please contact our help center', 'error');
+  //   }
+  // };
 
   return (
     <LayoutOne>
       {/* breadcrumb */}
-      <BreadcrumbOne pageTitle={event.name}>
+      <BreadcrumbOne pageTitle={event.name ? event.name : 'Draft'}>
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/">
@@ -65,7 +163,7 @@ const OrganiserViewEventDetails = () => {
               <a>Events</a>
             </Link>
           </li>
-          <li className="breadcrumb-item active">{event.name}</li>
+          <li className="breadcrumb-item active">{event.name ? event.name : 'Draft'}</li>
         </ol>
       </BreadcrumbOne>
 
@@ -74,26 +172,28 @@ const OrganiserViewEventDetails = () => {
         <Container>
           <Row>
             <Col lg={6} className="space-mb-mobile-only--40">
-              <ImageGalleryLeftThumb event={event} />
+              {event.images && <ImageGalleryLeftThumb event={event} />}
             </Col>
             <Col lg={6}>
               {/* product description */}
               <EventDescription
                 event={event}
-                prettyStartDate = {prettyStartDate}
-                hideToggle = {hideToggle}
-                publishToggle = {publishToggle}
-                vipToggle={vipToggle}
+                prettyStartDate={prettyStartDate}
+                prettyEndDate={prettyEndDate}
+                hideToggle={hideToggleWithToast}
+                publishToggle={publishToggleWithToast}
+                vipToggle={vipToggleWithToast}
+                handleCancel={handleCancelWithToast}
+                handleDelete={handleDeleteWithToast}
               />
             </Col>
           </Row>
-              {/* product description tab */} 
-                       {/* <Row>
+          {/* product description tab */}
+          <Row>
             <Col>
-
-              <ProductDescriptionTab product={product} />
+              <EventDescriptionTab event={event} prettySaleStartDate={prettySaleStartDate} prettySalesEndDate={prettySalesEndDate} />
             </Col>
-          </Row> */}
+          </Row>
 
           {/* related product slider */}
           {/* <ProductSliderTwo
