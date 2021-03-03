@@ -13,10 +13,17 @@ const TicketingPane = ({ freeTickets, setFreeTickets, wantsTickets, setWantsTick
       saleStartDate,
       salesEndDate,
     } = eventData;
-    setValue('ticketPrice', ticketPrice);
-    setValue('ticketCapacity', ticketCapacity);
-    setValue('saleStartDate', saleStartDate);
-    setValue('salesEndDate', salesEndDate);
+    if (wantsTickets) {
+      setValue('ticketPrice', ticketPrice);
+      setValue('ticketCapacity', ticketCapacity);
+      setValue('saleStartDate', saleStartDate);
+      setValue('salesEndDate', salesEndDate);
+    } else {
+      setValue('ticketPrice', null);
+      setValue('ticketCapacity', null);
+      setValue('saleStartDate', null);
+      setValue('salesEndDate', null);
+    }
   }, [wantsTickets]);
 
   return (
@@ -37,10 +44,10 @@ const TicketingPane = ({ freeTickets, setFreeTickets, wantsTickets, setWantsTick
                 onChange={() => {
                   console.log(!wantsTickets);
                   //if go from sell to dont sell then make it false
-                  if (wantsTickets) {
-                    setFreeTickets(false);
-                    setValue("ticketPrice", 16);
-                  }
+                  // if (wantsTickets) {
+                  //   setFreeTickets(false);
+                  //   // setValue("ticketPrice", 16);
+                  // }
                   setWantsTickets(!wantsTickets);
                 }}
                 style={{ marginRight: 5 }}
@@ -50,7 +57,7 @@ const TicketingPane = ({ freeTickets, setFreeTickets, wantsTickets, setWantsTick
                 Are you selling tickets for your event?
               </label>
             </Col>
-
+{/* 
             <Col className="form-group" md={12}>
               <input
                 type="checkbox"
@@ -68,7 +75,7 @@ const TicketingPane = ({ freeTickets, setFreeTickets, wantsTickets, setWantsTick
                 {' '}
                 Are your tickets free?
               </label>
-            </Col>
+            </Col> */}
 
 
             <div>
@@ -81,9 +88,9 @@ const TicketingPane = ({ freeTickets, setFreeTickets, wantsTickets, setWantsTick
                   name="ticketPrice"
                   type="number"
                   step="0.1"
-                  disabled={!wantsTickets || freeTickets}
-                  // ref={register()}
-                  ref={register({ required: wantsTickets && !freeTickets })}
+                  disabled={!wantsTickets}
+                  // disabled={!wantsTickets || freeTickets}
+                  ref={register({ required: wantsTickets })}
                 />
                 {/* {(watch('ticketPrice') == 0 && formState.touched?.ticketPrice) && (
                   <span role="alert" style={{ color: 'blue' }}>
@@ -149,7 +156,8 @@ const TicketingPane = ({ freeTickets, setFreeTickets, wantsTickets, setWantsTick
                   type="datetime-local"
                   disabled={!wantsTickets}
                   // ref={register({ required: wantsTickets })}
-                  ref={register({ required: wantsTickets, validate: value => value > watch('saleStartDate') })}
+                  ref={register({ required: wantsTickets })}
+                  // ref={register({ required: wantsTickets, validate: value => value > watch('saleStartDate') })}
                 // ref={register()}
                 />
                 {errors.salesEndDate && wantsTickets && (

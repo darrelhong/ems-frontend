@@ -85,47 +85,53 @@ const ImageGalleryLeftThumb = ({ event }) => {
 
   return (
     <Fragment>
-      <Row className="image-gallery-side-thumb-wrapper">
-        <Col xl={10} className="order-1 order-xl-2">
-          <div className="product-large-image-wrapper">
-            <LightgalleryProvider>
-              <Swiper {...gallerySwiperParams}>
-                {imageArray &&
-                  imageArray.map((single, key) => {
-                    return (
-                      <div key={key}>
-                        <LightgalleryItem group="any" src={single}>
-                          <button className="enlarge-icon">
-                            <i className="icon-magnifier-add" />
-                          </button>
-                        </LightgalleryItem>
-                        <div className="single-image">
-                          <img src={single} className="img-fluid" alt="" />
+      {imageArray.length == 0 ? (
+        <div className="product-description-tab__details" style={{ textAlign: 'center' }}>
+          No Images uploaded yet!
+        </div>
+      ) : (
+          <Row className="image-gallery-side-thumb-wrapper">
+            <Col xl={10} className="order-1 order-xl-2">
+              <div className="product-large-image-wrapper">
+                <LightgalleryProvider>
+                  <Swiper {...gallerySwiperParams}>
+                    {imageArray &&
+                      imageArray.map((single, key) => {
+                        return (
+                          <div key={key}>
+                            <LightgalleryItem group="any" src={single}>
+                              <button className="enlarge-icon">
+                                <i className="icon-magnifier-add" />
+                              </button>
+                            </LightgalleryItem>
+                            <div className="single-image">
+                              <img src={single} className="img-fluid" alt="" />
+                            </div>
+                          </div>
+                        );
+                      })}
+                  </Swiper>
+                </LightgalleryProvider>
+              </div>
+            </Col>
+            <Col xl={2} className="order-2 order-xl-1">
+              <div className="product-small-image-wrapper product-small-image-wrapper--side-thumb">
+                <Swiper {...thumbnailSwiperParams}>
+                  {imageArray &&
+                    imageArray.map((image, i) => {
+                      return (
+                        <div key={i}>
+                          <div className="single-image">
+                            <img src={image} className="img-fluid" alt="" />
+                          </div>
                         </div>
-                      </div>
-                    );
-                  })}
-              </Swiper>
-            </LightgalleryProvider>
-          </div>
-        </Col>
-        <Col xl={2} className="order-2 order-xl-1">
-          <div className="product-small-image-wrapper product-small-image-wrapper--side-thumb">
-            <Swiper {...thumbnailSwiperParams}>
-              {imageArray &&
-                imageArray.map((image, i) => {
-                  return (
-                    <div key={i}>
-                      <div className="single-image">
-                        <img src={image} className="img-fluid" alt="" />
-                      </div>
-                    </div>
-                  );
-                })}
-            </Swiper>
-          </div>
-        </Col>
-      </Row>
+                      );
+                    })}
+                </Swiper>
+              </div>
+            </Col>
+          </Row>
+        )}
     </Fragment>
   );
 };

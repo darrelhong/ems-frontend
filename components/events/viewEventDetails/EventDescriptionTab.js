@@ -72,17 +72,12 @@ const EventDescriptionTab = ({ event, prettySaleStartDate, prettySalesEndDate })
           <Tab.Pane eventKey="ticketing">
             <div className="product-content__sort-info space-mb--20">
               <ul>
-                {event.ticketPrice && (
                   <li>
-                    <IoMdCash />Ticket Price: ${event.ticketPrice ? event.ticketPrice : 'Not set yet'}
+                    <IoMdCash />Ticket Price: {event.ticketPrice ? '$'+event.ticketPrice : 'Not set yet'}
                   </li>
-
-                )}
-                {event.ticketCapacity && (
                   <li>
-                    <IoMdRestaurant /> {event.ticketCapacity ? `Tickets sold: ${event.ticketTransactions.length} / ${event.ticketCapacity}` : 'Ticket Capacity not set yet!'}
+                    <IoMdRestaurant />{event.ticketCapacity ? `Tickets sold: ${event.ticketTransactions.length} / ${event.ticketCapacity}` : 'Ticket Capacity not set yet!'}
                   </li>
-                )}
                 <li>
                   <IoMdCalendar />Ticket Sale Start Date: {prettySaleStartDate ? prettySaleStartDate : 'Not set yet'}
                   {/* <IoMdLocate />{format(parseISO(event.eventStartDate), 'eee, dd MMM yy hh:mmbbb')} */}

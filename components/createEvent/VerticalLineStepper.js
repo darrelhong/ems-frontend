@@ -61,7 +61,8 @@ const VerticalLinearStepper = ({ freeTickets, activeStep, setActiveStep, steps, 
       case 1:
         return (errors.physical || errors.address);
       case 2:
-        return (wantsTickets && (!freeTickets && errors.ticketPrice || errors.ticketCapacity || errors.saleStartDate || errors.salesEndDate));
+        // return (wantsTickets && (!freeTickets && errors.ticketPrice || errors.ticketCapacity || errors.saleStartDate || errors.salesEndDate));
+        return (wantsTickets && (errors.ticketPrice || errors.ticketCapacity || errors.saleStartDate || errors.salesEndDate));
       case 3:
         return errors.boothCapacity;
       case 4:

@@ -65,7 +65,11 @@ const CreateEvent = () => {
     setValue("name", name);
     setValue("descriptions", descriptions);
     setValue("address", address);
+    console.log('printing out dates to fix setValue');
+    console.log(eventStartDate);
+    console.log(eventEndDate);
     setValue("eventStartDate", eventStartDate);
+    // setValue("eventStartDate","10-10-2010 11:11:00");
     setValue("eventEndDate", eventEndDate);
     setValue("boothCapacity", boothCapacity);
     setValue("ticketPrice", ticketPrice);
@@ -131,34 +135,48 @@ const CreateEvent = () => {
   };
 
   const onSubmit = async (data) => {
-    const dateProcessedData = formatDates(data);
-    const formattedData = processHideOptionsSave(dateProcessedData);
     let updatedData;
+    const eventOrganiserId = user.id;
     let eventStatus = "CREATED";
 
     console.log('submitting');
     if (eid) {
       //concat data first, already have EID inside and all
       //have to update to upcoming now, instead of draft
-      updatedData = { ...eventData, ...formattedData };
-      console.log('created event from draft:');
+      //const dateProcessedData = formatDates(getValues()); //update method no need format
+      const formattedData = processHideOptionsSave(data);
+
+      updatedData = { ...eventData, ...formattedData, eventOrganiserId };
+      console.log('updated data to update the db?:');
+      console.log(updatedData);
+      const response = await updateEvent(updatedData);
+      console.log('saved an existing event');
+      console.log(response);
+      createToast('Event edited successfully', 'success');
+      router.push(`/organiser/events/${eid}`);
     } else {
       //new event, we need to add in the EO ID.
-      let eventOrganiserId = user.id;
+      const dateProcessedData = formatDates(getValues());
+      const formattedData = processHideOptionsSave(dateProcessedData);
+
       updatedData = { ...formattedData, eventOrganiserId, eventStatus };
-      console.log('creating brand new event:');
+      const response = await createEvent(updatedData);
+      console.log('finished creating brand new event:');
+      console.log(response);
+      createToast('Event created successfully', 'success');
+      const eventId = response.eid;
+      router.push(`/organiser/events/${eventId}`);
     }
-    const response = await createEvent(updatedData);
-    console.log(response);
   };
 
   const saveDraft = async () => {
     const data = getValues();
-    const dateProcessedData = formatDates(data);
-    const formData = processHideOptionsSave(dateProcessedData);
     const eventStatus = "DRAFT";
     let eventId;
     if (eid) {
+      // const dateProcessedData = formatDates(data); //update no need format
+      const formData = processHideOptionsSave(data);
+
       //concat data first
       let updatedData = { ...eventData, ...formData, eventStatus };
       console.log('printing concat data');
@@ -172,6 +190,9 @@ const CreateEvent = () => {
       eventId = updatedEvent.eid;
     }
     else {
+      const dateProcessedData = formatDates(data);
+      const formData = processHideOptionsSave(dateProcessedData);
+
       //create new event without validation
       console.log('data before submitting');
       let eventOrganiserId = user.id;
@@ -196,17 +217,17 @@ const CreateEvent = () => {
     console.log('length found: ' + length);
     console.log(uploadedImages.item(0));
     for (i = 0; i < length; i++) {
-        let inputData = new FormData();
-        inputData.append('file', uploadedImages.item(i));
-        inputData.append('eid', eventId); //temp event ID
-        console.log('checking input data');
-        console.log(inputData);
+      let inputData = new FormData();
+      inputData.append('file', uploadedImages.item(i));
+      inputData.append('eid', eventId); //temp event ID
+      console.log('checking input data');
+      console.log(inputData);
 
-        // setImages(images.push(URL.createObjectURL(data[0].file)));
-        // setImages(URL.createObjectURL(data[0].file));
-        const response = await uploadEventImage(inputData);
-        console.log('response:');
-        console.log(response);
+      // setImages(images.push(URL.createObjectURL(data[0].file)));
+      // setImages(URL.createObjectURL(data[0].file));
+      const response = await uploadEventImage(inputData);
+      console.log('response:');
+      console.log(response);
     }
   }
 
@@ -248,9 +269,9 @@ const CreateEvent = () => {
               className="btn btn-fill-out"
               name="submit"
               value="Submit"
-              ref={register()}  
-              onClick={()=>console.log('hello finished')}          
-              >
+              ref={register()}
+              onClick={() => console.log('hello finished')}
+            >
               Finish
             </button>
             <button
@@ -269,7 +290,7 @@ const CreateEvent = () => {
             </button>
           </Modal.Footer>
         </Modal>
-        <BreadcrumbOne pageTitle= {eid ? `Updating ${eventData.name}` : 'Create New Event'}>
+        <BreadcrumbOne pageTitle={eid ? `Updating ${eventData.name}` : 'Create New Event'}>
           <ol className="breadcrumb justify-content-md-end">
             <li className="breadcrumb-item">
               <Link href="/organiser/home">
@@ -278,12 +299,13 @@ const CreateEvent = () => {
             </li>
             <li className="breadcrumb-item active">{eid ? `Updating ${eventData.name}` : 'Create New Event'}</li>
           </ol>
-          {eventData?.eventStatus != 'CREATED' && (
+          {/* {eventData?.eventStatus != 'CREATED' && (
             <ol>
               <button
                 type="button"
                 name="saveDraft"
-                className="btn btn-fill-out"
+                className="btn btn-border-fill btn-sm"
+                // className="btn btn-border-fill-out"
                 onClick={saveDraft}
               >
                 Save as Draft
@@ -293,7 +315,7 @@ const CreateEvent = () => {
           <ol>
             <button
               type="submit"
-              className="btn btn-fill-out"
+              className="btn btn-fill-out btn-sm"
               name="submit"
               value="Submit"
               ref={register()}
@@ -314,7 +336,7 @@ const CreateEvent = () => {
             >
               Show modal
             </button>
-          </ol>
+          </ol> */}
         </BreadcrumbOne>
 
         <div className="my-account-content space-pt--r100 space-pb--r100">
@@ -341,7 +363,7 @@ const CreateEvent = () => {
                       />
                     </Tab.Pane>
                     <Tab.Pane eventKey="ticketing">
-                      <TicketingPane freeTickets = {freeTickets} setFreeTickets={setFreeTickets} setValue={setValue} formState={formState} wantsTickets={wantsTickets} getValues={getValues} setWantsTickets={setWantsTickets} register={register} errors={errors} watch={watch} eventData={eventData} setValue={setValue} errors={errors} />
+                      <TicketingPane freeTickets={freeTickets} setFreeTickets={setFreeTickets} setValue={setValue} formState={formState} wantsTickets={wantsTickets} getValues={getValues} setWantsTickets={setWantsTickets} register={register} errors={errors} watch={watch} eventData={eventData} setValue={setValue} errors={errors} />
                     </Tab.Pane>
                     <Tab.Pane eventKey="booths">
                       <BoothPane register={register} errors={errors} />
@@ -350,7 +372,7 @@ const CreateEvent = () => {
                       <LocationPane register={register} errors={errors} watch={watch} physical={physical} setPhysical={setPhysical} />
                     </Tab.Pane>
                     <Tab.Pane eventKey="publishingOptions">
-                      <PublishingPane vip={vip} hideOptions={hideOptions} setHideOptions={setHideOptions} errors={errors} setVip={setVip} register={register} watch={watch} />
+                      <PublishingPane eventStatus={eventData.eventStatus} handleSubmit={handleSubmit} saveDraft={saveDraft} onSubmit={onSubmit} vip={vip} hideOptions={hideOptions} setHideOptions={setHideOptions} errors={errors} setVip={setVip} register={register} watch={watch} />
                     </Tab.Pane>
                     <Tab.Pane eventKey="images">
                       <ImagesPane register={register} />
