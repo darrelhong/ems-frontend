@@ -9,10 +9,8 @@ import { login } from '../lib/auth';
 // import { FaFacebookF, FaGooglePlusG } from 'react-icons/fa';
 import { Col, Container, Row } from 'react-bootstrap';
 import { BreadcrumbOne } from './Breadcrumb';
-import { LayoutOne } from '../layouts';
 import GuestWrapper from '../components/wrapper/GuestWrapper';
 import ButtonWithLoading from './custom/ButtonWithLoading';
-
 
 export default function LoginPage({
   info,
@@ -46,8 +44,6 @@ export default function LoginPage({
           <Row className="justify-content-center">
             <Col xl={6} md={10}>
               <div className="login-wrap">
-               
-
                 <div className="heading-s1 space-mb--20">
                   <h3>{heading}</h3>
                 </div>
@@ -102,11 +98,12 @@ export default function LoginPage({
                       <div className="alert alert-danger" role="alert">
                         {loginError}
                       </div>
-                    )} {info == 'noToken' && (
-                  <div className="alert alert-danger" role="alert">
-                    Session timed out. Please sign in again.
-                  </div>
-                )}
+                    )}
+                    {info == 'noToken' && (
+                      <div className="alert alert-danger" role="alert">
+                        Session timed out. Please sign in again.
+                      </div>
+                    )}
                     <div className="form-group">
                       <ButtonWithLoading
                         type="submit"
