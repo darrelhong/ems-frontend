@@ -11,8 +11,9 @@ export default function OrganiserDashboard() {
     localStorage.getItem('userId')
   );
   return (
+    // whats the difference between dashboard and home
     <OrganiserWrapper title="Dashboard">
-      <BreadcrumbOne pageTitle={"Welcome " + user?.name} >
+      <BreadcrumbOne pageTitle={'Welcome ' + user?.name}>
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/organiser/dashboard">
