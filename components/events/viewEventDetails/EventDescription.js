@@ -43,7 +43,7 @@ const EventDescription = ({
     else if (event.eventStatus == 'DRAFT') {
       return (
         <button
-          onClick={() => handleDelete()}
+          onClick={() => handleDelete(event)}
           className="btn btn-fill-out btn-addtocart space-ml--10"
           style={{ marginLeft: 'auto', marginRight: 'auto' }}
         >
@@ -54,7 +54,7 @@ const EventDescription = ({
       //in this case we can delete
       return (
         <button
-          onClick={() => handleDelete()}
+          onClick={() => handleDelete(event)}
           className="btn btn-fill-out btn-addtocart space-ml--10"
           style={{ marginLeft: 'auto', marginRight: 'auto' }}
         >
@@ -65,7 +65,7 @@ const EventDescription = ({
       //only can cancel, cannot delete
       return (
         <button
-          onClick={() => handleCancel()}
+          onClick={() => handleCancel(event)}
           className="btn btn-fill-out btn-addtocart space-ml--10"
           style={{ marginLeft: 'auto', marginRight: 'auto' }}
         >
