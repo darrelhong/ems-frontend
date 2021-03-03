@@ -92,6 +92,7 @@ const OrganiserViewEventDetails = () => {
     const isDeleted = await handleDelete(event);
     if (isDeleted) {
       createToast('Event successfully deleted', 'success');
+      router.push('organiser/events');
       //navigate to somewhere else
     } else {
       createToast('Error in deleting event, please contact our help center', 'error');
