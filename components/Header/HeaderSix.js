@@ -1,17 +1,17 @@
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { Container, Row, Col } from "react-bootstrap";
-import { connect } from "react-redux";
-import { IoIosSearch, IoIosMenu } from "react-icons/io";
-import { AiOutlineShoppingCart, AiOutlineHeart } from "react-icons/ai";
-import { BsPerson } from "react-icons/bs";
-import { FiPhoneCall } from "react-icons/fi";
-import HeaderTopThree from "./elements/HeaderTopThree";
-import Navigation from "./elements/Navigation";
-import MobileMenu from "./elements/MobileMenu";
-import MobileCategoryMenuTwo from "./elements/MobileCategoryMenuTwo";
-import MiniCart from "./elements/MiniCart";
-import CategoryMenuThree from "./elements/CategoryMenuThree";
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { Container, Row, Col } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { IoIosSearch, IoIosMenu } from 'react-icons/io';
+import { AiOutlineShoppingCart, AiOutlineHeart } from 'react-icons/ai';
+import { BsPerson } from 'react-icons/bs';
+import { FiPhoneCall } from 'react-icons/fi';
+import HeaderTopThree from './elements/HeaderTopThree';
+import Navigation from './elements/Navigation';
+import MobileMenu from './elements/MobileMenu';
+import MobileCategoryMenuTwo from './elements/MobileCategoryMenuTwo';
+import MiniCart from './elements/MiniCart';
+import CategoryMenuThree from './elements/CategoryMenuThree';
 
 const HeaderSix = ({ cartItems, wishlistItems, navPositionClass }) => {
   const [scroll, setScroll] = useState(0);
@@ -21,15 +21,15 @@ const HeaderSix = ({ cartItems, wishlistItems, navPositionClass }) => {
   );
   const [
     offCanvasMobileCategoryMenuActive,
-    setOffCanvasMobileCategoryMenuActive
+    setOffCanvasMobileCategoryMenuActive,
   ] = useState(false);
 
   useEffect(() => {
-    const header = document.querySelector(".header-wrap");
+    const header = document.querySelector('.header-wrap');
     setHeaderHeight(header.offsetHeight);
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
@@ -212,7 +212,7 @@ const HeaderSix = ({ cartItems, wishlistItems, navPositionClass }) => {
 const mapStateToProps = (state) => {
   return {
     cartItems: state.cartData,
-    wishlistItems: state.wishlistData
+    wishlistItems: state.wishlistData,
   };
 };
 

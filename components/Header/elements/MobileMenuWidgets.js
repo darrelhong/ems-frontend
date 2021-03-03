@@ -9,7 +9,7 @@ import {
 } from "react-icons/io";
 import { AiOutlineUser, AiOutlineSetting, AiOutlineLogout, AiOutlineNotification } from 'react-icons/ai';
 
-import Link from "next/link";
+import Link from 'next/link';
 
 const MobileMenuWidgets = () => {
   return (

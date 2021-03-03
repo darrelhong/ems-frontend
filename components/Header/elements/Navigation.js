@@ -1,13 +1,13 @@
-import Link from "next/link";
-import { Col } from "react-bootstrap";
-import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
+import Link from 'next/link';
+import { Col } from 'react-bootstrap';
+import { IoIosArrowDown, IoIosArrowForward } from 'react-icons/io';
 
 const Navigation = ({ positionClass }) => {
   return (
     <nav className="navigation d-none d-lg-block">
       <ul
         className={`d-flex ${
-          positionClass ? positionClass : "justify-content-end"
+          positionClass ? positionClass : 'justify-content-end'
         }`}
       >
         <li>

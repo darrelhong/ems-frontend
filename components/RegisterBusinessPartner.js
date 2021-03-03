@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import cx from 'classnames';
 
@@ -16,6 +17,7 @@ import GuestWrapper from '../components/wrapper/GuestWrapper';
 
 
 export default function RegisterBusinessPartner({ title, registerApiUrl }) {
+  const router = useRouter();
   const { register, handleSubmit, errors, watch } = useForm();
   const [show, setShow] = useState(true);
   const [showSuccess, setShowSuccess] = useState(false);

@@ -6,12 +6,12 @@ import { useForm } from 'react-hook-form';
 
 import { login } from '../lib/auth';
 
-
 // import { FaFacebookF, FaGooglePlusG } from 'react-icons/fa';
 import { Col, Container, Row } from 'react-bootstrap';
 import { BreadcrumbOne } from './Breadcrumb';
 import { LayoutOne } from '../layouts';
 import GuestWrapper from '../components/wrapper/GuestWrapper';
+import ButtonWithLoading from './custom/ButtonWithLoading';
 
 
 export default function LoginPage({
@@ -22,6 +22,7 @@ export default function LoginPage({
   registerUrl,
 }) {
   const [loginError, setLoginError] = useState(null);
+  const [loginLoading, setLoginLoading] = useState(false);
   const { register, handleSubmit } = useForm();
 
   return (
@@ -57,6 +58,7 @@ export default function LoginPage({
                 <div>
                   <form
                     onSubmit={handleSubmit((data) => {
+                      setLoginLoading(true);
                       login(data, loginApiUrl, loginSuccessUrl, setLoginError);
                     })}
                   >
@@ -106,13 +108,14 @@ export default function LoginPage({
                       </div>
                     )}
                     <div className="form-group">
-                      <button
+                      <ButtonWithLoading
                         type="submit"
                         className="btn btn-fill-out btn-block"
                         name="login"
+                        isLoading={loginLoading && !loginError}
                       >
                         Log in
-                      </button>
+                      </ButtonWithLoading>
                     </div>
                   </form>
                   {/* <div className="different-login">

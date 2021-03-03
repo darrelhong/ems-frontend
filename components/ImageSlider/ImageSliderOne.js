@@ -1,6 +1,6 @@
-import { Container, Row, Col } from "react-bootstrap";
-import Swiper from "react-id-swiper";
-import { FaInstagram } from "react-icons/fa";
+import { Container, Row, Col } from 'react-bootstrap';
+import Swiper from 'react-id-swiper';
+import { FaInstagram } from 'react-icons/fa';
 
 const ImageSliderOne = ({ imageSliderData }) => {
   const params = {
@@ -9,22 +9,22 @@ const ImageSliderOne = ({ imageSliderData }) => {
     grabCursor: true,
     autoplay: {
       delay: 3000,
-      disableOnInteraction: false
+      disableOnInteraction: false,
     },
     breakpoints: {
       1024: {
-        slidesPerView: 6
+        slidesPerView: 6,
       },
       769: {
-        slidesPerView: 4
+        slidesPerView: 4,
       },
       576: {
-        slidesPerView: 2
+        slidesPerView: 2,
       },
       320: {
-        slidesPerView: 1
-      }
-    }
+        slidesPerView: 1,
+      },
+    },
   };
   return (
     <div className="image-slider-area space-pb--r100">

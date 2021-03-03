@@ -1,8 +1,8 @@
-import Link from "next/link";
-import { IoIosFlash } from "react-icons/io";
-import { Container, Row, Col } from "react-bootstrap";
-import Swiper from "react-id-swiper";
-import { ProductGridWrapperFive } from "../ProductThumb";
+import Link from 'next/link';
+import { IoIosFlash } from 'react-icons/io';
+import { Container, Row, Col } from 'react-bootstrap';
+import Swiper from 'react-id-swiper';
+import { ProductGridWrapperFive } from '../ProductThumb';
 
 const ProductSliderEleven = ({ title, products }) => {
   const params = {
@@ -11,27 +11,27 @@ const ProductSliderEleven = ({ title, products }) => {
     slidesPerGroup: 4,
     spaceBetween: 30,
     pagination: {
-      el: ".swiper-pagination",
-      clickable: true
+      el: '.swiper-pagination',
+      clickable: true,
     },
     breakpoints: {
       1024: {
         slidesPerView: 4,
-        slidesPerGroup: 4
+        slidesPerGroup: 4,
       },
       769: {
         slidesPerView: 2,
-        slidesPerGroup: 2
+        slidesPerGroup: 2,
       },
       576: {
         slidesPerView: 2,
-        slidesPerGroup: 2
+        slidesPerGroup: 2,
       },
       320: {
         slidesPerView: 1,
-        slidesPerGroup: 1
-      }
-    }
+        slidesPerGroup: 1,
+      },
+    },
   };
 
   return (

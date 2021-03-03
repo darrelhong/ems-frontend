@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { Row, Col } from "react-bootstrap";
-import Swiper from "react-id-swiper";
+import { useState } from 'react';
+import { Row, Col } from 'react-bootstrap';
+import Swiper from 'react-id-swiper';
 
 const BrandLogoThree = ({ title, brandLogoData }) => {
   const [swiper, setSwiper] = useState(null);
@@ -24,22 +24,22 @@ const BrandLogoThree = ({ title, brandLogoData }) => {
     spaceBetween: 30,
     autoplay: {
       delay: 3000,
-      disableOnInteraction: false
+      disableOnInteraction: false,
     },
     breakpoints: {
       1024: {
-        slidesPerView: 6
+        slidesPerView: 6,
       },
       769: {
-        slidesPerView: 5
+        slidesPerView: 5,
       },
       576: {
-        slidesPerView: 3
+        slidesPerView: 3,
       },
       320: {
-        slidesPerView: 2
-      }
-    }
+        slidesPerView: 2,
+      },
+    },
   };
 
   return (

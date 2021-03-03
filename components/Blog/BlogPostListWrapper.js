@@ -1,7 +1,7 @@
-import { Row, Col } from "react-bootstrap";
-import Link from "next/link";
-import { FaRegComments, FaCalendarAlt } from "react-icons/fa";
-import Swiper from "react-id-swiper";
+import { Row, Col } from 'react-bootstrap';
+import Link from 'next/link';
+import { FaRegComments, FaCalendarAlt } from 'react-icons/fa';
+import Swiper from 'react-id-swiper';
 
 const BlogPostListWrapper = () => {
   const params = {
@@ -9,8 +9,8 @@ const BlogPostListWrapper = () => {
     slidesPerView: 1,
     autoplay: {
       delay: 3000,
-      disableOnInteraction: false
-    }
+      disableOnInteraction: false,
+    },
   };
   return (
     <Row>

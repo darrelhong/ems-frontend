@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Alert, Col, Container, Row } from 'react-bootstrap';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 import api from '../../../lib/ApiClient';
@@ -10,6 +10,7 @@ import { BreadcrumbOne } from '../../../components/Breadcrumb';
 import { FooterOne } from '../../../components/Footer';
 import AdminHeaderTop from '../../../components/Header/AdminHeaderTop';
 import withProtectRoute from '../../../components/ProtectRouteWrapper';
+import ButtonWithLoading from '../../../components/custom/ButtonWithLoading';
 
 const getBusinessPartner = async (id) => {
   const { data } = await api.get(`/api/partner/${id}`);
@@ -46,6 +47,15 @@ function BusinessPartnerDetails({ id }) {
 
   const { mutate: disable } = useMutationInvalidate((id) =>
     api.post(`/api/user/disable/${id}`)
+  );
+
+  const {
+    mutate: resetPassword,
+    isLoading: rpIsLoading,
+    isSuccess: rpSuccess,
+    isError: rpError,
+  } = useMutation((email) =>
+    api.post(`/api/user/reset-password/request?email=${email}`)
   );
 
   return (
@@ -106,7 +116,7 @@ function BusinessPartnerDetails({ id }) {
               </dd>
             </dl>
 
-            <Row>
+            <Row className="mb-4">
               <Col>
                 <button
                   type="button"
@@ -124,6 +134,28 @@ function BusinessPartnerDetails({ id }) {
                 >
                   Disable
                 </button>
+              </Col>
+            </Row>
+
+            <Row>
+              <Col>
+                <ButtonWithLoading
+                  className="btn btn-primary btn-sm mb-2"
+                  onClick={() => resetPassword(bp.email)}
+                  isLoading={rpIsLoading}
+                >
+                  Send password reset email
+                </ButtonWithLoading>
+                {rpSuccess && (
+                  <Alert variant="success">
+                    Password reset email sent to user
+                  </Alert>
+                )}
+                {rpError && (
+                  <Alert variant="danger">
+                    An error has occured sending reset password email
+                  </Alert>
+                )}
               </Col>
             </Row>
           </>

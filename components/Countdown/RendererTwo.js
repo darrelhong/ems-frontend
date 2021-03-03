@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment } from 'react';
 
 const RendererTwo = ({ days, hours, minutes, seconds }) => {
   return (

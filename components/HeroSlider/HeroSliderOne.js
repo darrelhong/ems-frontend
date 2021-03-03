@@ -1,7 +1,7 @@
-import Link from "next/link";
-import { Container, Row, Col } from "react-bootstrap";
-import Swiper from "react-id-swiper";
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import Link from 'next/link';
+import { Container, Row, Col } from 'react-bootstrap';
+import Swiper from 'react-id-swiper';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 const HeroSliderOne = ({ heroSliderData }) => {
   const params = {
@@ -9,13 +9,13 @@ const HeroSliderOne = ({ heroSliderData }) => {
     speed: 1000,
     autoplay: {
       delay: 5000,
-      disableOnInteraction: false
+      disableOnInteraction: false,
     },
     watchSlidesVisibility: true,
-    effect: "fade",
+    effect: 'fade',
     navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev"
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
     },
     renderPrevButton: () => (
       <button className="swiper-button-prev ht-swiper-button-nav">
@@ -26,7 +26,7 @@ const HeroSliderOne = ({ heroSliderData }) => {
       <button className="swiper-button-next ht-swiper-button-nav">
         <FiChevronRight />
       </button>
-    )
+    ),
   };
   return (
     <div className="hero-slider space-pb--r100">

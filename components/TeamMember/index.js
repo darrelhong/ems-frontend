@@ -1,2 +1,2 @@
-import TeamMemberOne from "./TeamMemberOne";
+import TeamMemberOne from './TeamMemberOne';
 export { TeamMemberOne };

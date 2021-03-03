@@ -1,9 +1,9 @@
-import { Fragment } from "react";
-import { Container, Row, Col } from "react-bootstrap";
-import Swiper from "react-id-swiper";
-import Link from "next/link";
-import { getDiscountPrice } from "../../lib/product";
-import { ProductRating } from "../../components/Product";
+import { Fragment } from 'react';
+import { Container, Row, Col } from 'react-bootstrap';
+import Swiper from 'react-id-swiper';
+import Link from 'next/link';
+import { getDiscountPrice } from '../../lib/product';
+import { ProductRating } from '../../components/Product';
 
 const ProductSliderFour = ({ title, products }) => {
   const params = {
@@ -12,8 +12,8 @@ const ProductSliderFour = ({ title, products }) => {
     grabCursor: true,
     spaceBetween: 30,
     navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev"
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
     },
     renderPrevButton: () => (
       <button className="swiper-button-prev ht-swiper-button-nav">
@@ -27,18 +27,18 @@ const ProductSliderFour = ({ title, products }) => {
     ),
     breakpoints: {
       1024: {
-        slidesPerView: 3
+        slidesPerView: 3,
       },
       769: {
-        slidesPerView: 2
+        slidesPerView: 2,
       },
       576: {
-        slidesPerView: 1
+        slidesPerView: 1,
       },
       320: {
-        slidesPerView: 1
-      }
-    }
+        slidesPerView: 1,
+      },
+    },
   };
 
   var chunkArr = [];
@@ -74,7 +74,7 @@ const ProductSliderFour = ({ title, products }) => {
                           <div className="widget-product__image">
                             <Link
                               href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-                              as={"/shop/product-basic/" + product.slug}
+                              as={'/shop/product-basic/' + product.slug}
                             >
                               <a>
                                 <img src={product.thumbImage[0]} alt="" />
@@ -85,7 +85,7 @@ const ProductSliderFour = ({ title, products }) => {
                             <h6 className="product-title">
                               <Link
                                 href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-                                as={"/shop/product-basic/" + product.slug}
+                                as={'/shop/product-basic/' + product.slug}
                               >
                                 <a>{product.name}</a>
                               </Link>

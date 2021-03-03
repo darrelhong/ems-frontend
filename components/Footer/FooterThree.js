@@ -1,21 +1,21 @@
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { Container, Row, Col } from "react-bootstrap";
-import { animateScroll } from "react-scroll";
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { Container, Row, Col } from 'react-bootstrap';
+import { animateScroll } from 'react-scroll';
 import {
   IoIosPhonePortrait,
   IoIosMailOpen,
   IoIosPin,
-  IoIosArrowUp
-} from "react-icons/io";
+  IoIosArrowUp,
+} from 'react-icons/io';
 import {
   FaFacebookF,
   FaTwitter,
   FaGooglePlusG,
   FaYoutube,
-  FaInstagram
-} from "react-icons/fa";
-import { SubscribeEmailTwo } from "../Newsletter";
+  FaInstagram,
+} from 'react-icons/fa';
+import { SubscribeEmailTwo } from '../Newsletter';
 
 const FooterThree = () => {
   const [scroll, setScroll] = useState(0);
@@ -23,9 +23,9 @@ const FooterThree = () => {
 
   useEffect(() => {
     setTop(100);
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
@@ -174,7 +174,7 @@ const FooterThree = () => {
           <Row>
             <Col md={6}>
               <p className="mb-3 mb-md-0 text-center text-md-left">
-                Copyright &copy; {new Date().getFullYear() + " "} HasThemes |{" "}
+                Copyright &copy; {new Date().getFullYear() + ' '} HasThemes |{' '}
                 <a href="https://www.hasthemes.com">
                   Built with Oility by HasThemes
                 </a>
@@ -222,7 +222,7 @@ const FooterThree = () => {
         </Container>
       </div>
       <button
-        className={`scroll-top ${scroll > top ? "show" : ""}`}
+        className={`scroll-top ${scroll > top ? 'show' : ''}`}
         onClick={() => scrollToTop()}
       >
         <IoIosArrowUp />

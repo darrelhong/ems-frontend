@@ -1,5 +1,5 @@
-import { Row, Col } from "react-bootstrap";
-import ProductSliderEight from "./ProductSliderEight";
+import { Row, Col } from 'react-bootstrap';
+import ProductSliderEight from './ProductSliderEight';
 
 const ProductSliderEightWrapper = ({
   featuredTitle,
@@ -7,7 +7,7 @@ const ProductSliderEightWrapper = ({
   saleTitle,
   featuredProducts,
   bestSellerProducts,
-  saleProducts
+  saleProducts,
 }) => {
   return (
     <div className="product-slider-area space-pb--r70">

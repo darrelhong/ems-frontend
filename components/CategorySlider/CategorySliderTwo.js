@@ -1,6 +1,6 @@
-import Link from "next/link";
-import { Container, Row, Col } from "react-bootstrap";
-import Swiper from "react-id-swiper";
+import Link from 'next/link';
+import { Container, Row, Col } from 'react-bootstrap';
+import Swiper from 'react-id-swiper';
 
 const CategorySliderTwo = ({ categorySliderData }) => {
   const params = {
@@ -10,18 +10,18 @@ const CategorySliderTwo = ({ categorySliderData }) => {
     spaceBetween: 30,
     breakpoints: {
       1024: {
-        slidesPerView: 7
+        slidesPerView: 7,
       },
       769: {
-        slidesPerView: 5
+        slidesPerView: 5,
       },
       576: {
-        slidesPerView: 3
+        slidesPerView: 3,
       },
       320: {
-        slidesPerView: 2
-      }
-    }
+        slidesPerView: 2,
+      },
+    },
   };
   return (
     <div className="category-slider-area space-pb--r100">

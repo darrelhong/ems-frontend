@@ -1,7 +1,7 @@
-import { Fragment, useState, useEffect } from "react";
-import { Row, Col } from "react-bootstrap";
-import Swiper from "react-id-swiper";
-import { LightgalleryProvider, LightgalleryItem } from "react-lightgallery";
+import { Fragment, useState, useEffect } from 'react';
+import { Row, Col } from 'react-bootstrap';
+import Swiper from 'react-id-swiper';
+import { LightgalleryProvider, LightgalleryItem } from 'react-lightgallery';
 
 const ImageGalleryLeftThumb = ({ product }) => {
   const [gallerySwiper, getGallerySwiper] = useState(null);
@@ -26,7 +26,7 @@ const ImageGalleryLeftThumb = ({ product }) => {
     spaceBetween: 10,
     loopedSlides: 4,
     loop: true,
-    effect: "fade"
+    effect: 'fade',
   };
 
   const thumbnailSwiperParams = {
@@ -37,29 +37,29 @@ const ImageGalleryLeftThumb = ({ product }) => {
     touchRatio: 0.2,
     loop: true,
     slideToClickedSlide: true,
-    direction: "vertical",
+    direction: 'vertical',
     breakpoints: {
       1200: {
         slidesPerView: 5,
-        direction: "vertical"
+        direction: 'vertical',
       },
       992: {
         slidesPerView: 4,
-        direction: "horizontal"
+        direction: 'horizontal',
       },
       768: {
         slidesPerView: 4,
-        direction: "horizontal"
+        direction: 'horizontal',
       },
       640: {
         slidesPerView: 4,
-        direction: "horizontal"
+        direction: 'horizontal',
       },
       320: {
         slidesPerView: 4,
-        direction: "horizontal"
-      }
-    }
+        direction: 'horizontal',
+      },
+    },
   };
 
   return (

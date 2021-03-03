@@ -1,6 +1,6 @@
-import Tab from "react-bootstrap/Tab";
-import Nav from "react-bootstrap/Nav";
-import { IoIosStar, IoIosStarOutline } from "react-icons/io";
+import Tab from 'react-bootstrap/Tab';
+import Nav from 'react-bootstrap/Nav';
+import { IoIosStar, IoIosStarOutline } from 'react-icons/io';
 
 const ProductDescriptionTab = ({ product }) => {
   return (
@@ -18,7 +18,7 @@ const ProductDescriptionTab = ({ product }) => {
           </Nav.Item>
           <Nav.Item>
             <Nav.Link eventKey="reviews">
-              REVIEWS {product.ratingCount ? `(${product.ratingCount})` : ""}
+              REVIEWS {product.ratingCount ? `(${product.ratingCount})` : ''}
             </Nav.Link>
           </Nav.Item>
         </Nav>
@@ -137,7 +137,7 @@ const ProductDescriptionTab = ({ product }) => {
                       className="form-control"
                       name="message"
                       rows={4}
-                      defaultValue={""}
+                      defaultValue=""
                     />
                   </div>
                   <div className="form-group col-md-6">

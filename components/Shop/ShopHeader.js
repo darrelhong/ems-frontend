@@ -1,18 +1,18 @@
-import { Row, Col } from "react-bootstrap";
-import { MdApps, MdList } from "react-icons/md";
-import { setActiveLayout } from "../../lib/product";
+import { Row, Col } from 'react-bootstrap';
+import { MdApps, MdList } from 'react-icons/md';
+import { setActiveLayout } from '../../lib/product';
 
 const ShopHeader = ({
   getFilterSortParams,
   getLayout,
   layoutClass,
-  layout
+  layout,
 }) => {
   return (
     <div className="shop-header-area">
       <Row
         className={`align-items-center mb-4 pb-1 ${
-          layoutClass ? layoutClass : ""
+          layoutClass ? layoutClass : ''
         }`}
       >
         <Col>
@@ -21,7 +21,7 @@ const ShopHeader = ({
               <select
                 className="form-control form-control-sm"
                 onChange={(e) =>
-                  getFilterSortParams("filterSort", e.target.value)
+                  getFilterSortParams('filterSort', e.target.value)
                 }
               >
                 <option value="default">Default</option>
@@ -33,10 +33,10 @@ const ShopHeader = ({
               <div className="products-view">
                 <button
                   className={`sorting-icon grid ${
-                    layout === "grid" ? "active" : ""
+                    layout === 'grid' ? 'active' : ''
                   }`}
                   onClick={(e) => {
-                    getLayout("grid");
+                    getLayout('grid');
                     setActiveLayout(e);
                   }}
                 >
@@ -44,10 +44,10 @@ const ShopHeader = ({
                 </button>
                 <button
                   className={`sorting-icon list  ${
-                    layout === "list" ? "active" : ""
+                    layout === 'list' ? 'active' : ''
                   }`}
                   onClick={(e) => {
-                    getLayout("list");
+                    getLayout('list');
                     setActiveLayout(e);
                   }}
                 >

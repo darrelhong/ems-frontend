@@ -582,7 +582,6 @@ const MyAccount = () => {
                                 </button>
                               </Col>
                             </Row>
-
                             <div>&nbsp;</div>
                             <Alert
                               show={showAccSaved}

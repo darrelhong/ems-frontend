@@ -1,3 +1,3 @@
-import ImageSliderOne from "./ImageSliderOne";
+import ImageSliderOne from './ImageSliderOne';
 
 export { ImageSliderOne };

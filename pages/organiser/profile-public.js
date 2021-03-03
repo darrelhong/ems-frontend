@@ -381,7 +381,7 @@ const EventOrgProfile = ({ router: { query } }) => {
                             className="form-control"
                             name="message"
                             rows={4}
-                            defaultValue={''}
+                            defaultValue=""
                           />
                         </div>
                         <div className="form-group col-md-6">

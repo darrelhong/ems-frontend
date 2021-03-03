@@ -1,6 +1,6 @@
-import { Fragment } from "react";
-import Link from "next/link";
-import { Row, Col } from "react-bootstrap";
+import { Fragment } from 'react';
+import Link from 'next/link';
+import { Row, Col } from 'react-bootstrap';
 import {
   FaRegComments,
   FaCalendarAlt,
@@ -13,8 +13,8 @@ import {
   FaTh,
   FaArrowLeft,
   FaArrowRight,
-  FaReplyAll
-} from "react-icons/fa";
+  FaReplyAll,
+} from 'react-icons/fa';
 
 const BlogSinglePostVideo = () => {
   return (
@@ -440,7 +440,7 @@ const BlogSinglePostVideo = () => {
                 className="form-control"
                 placeholder="Your Comment"
                 required="required"
-                defaultValue={""}
+                defaultValue=""
               />
             </div>
             <div className="form-group col-md-12">

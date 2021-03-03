@@ -1,3 +1,5 @@
+@import "./overrides.scss";
+
 /* third party styles */
 @import "~bootstrap/scss/bootstrap";
 @import "~animate.css/animate.min.css";
@@ -56,3 +58,5 @@
 @import "pages/contact";
 @import "pages/blog";
 @import "pages/shop";
+
+@import "./events.scss";

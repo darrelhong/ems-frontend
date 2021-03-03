@@ -1,8 +1,8 @@
-import { Fragment, useState } from "react";
-import Link from "next/link";
-import { Col } from "react-bootstrap";
-import ProductModal from "./elements/ProductModal";
-import { ProductRating } from "../Product";
+import { Fragment, useState } from 'react';
+import Link from 'next/link';
+import { Col } from 'react-bootstrap';
+import ProductModal from './elements/ProductModal';
+import { ProductRating } from '../Product';
 
 const ProductGridList = ({
   product,
@@ -19,25 +19,25 @@ const ProductGridList = ({
   deleteFromCompare,
   addToast,
   cartItems,
-  sliderClass
+  sliderClass,
 }) => {
   const [modalShow, setModalShow] = useState(false);
-  const [colorImage, setColorImage] = useState("");
+  const [colorImage, setColorImage] = useState('');
 
   return (
     <Fragment>
       <Col
         lg={4}
         sm={6}
-        className={`${sliderClass ? sliderClass : ""} ${
-          bottomSpace ? bottomSpace : ""
+        className={`${sliderClass ? sliderClass : ''} ${
+          bottomSpace ? bottomSpace : ''
         }`}
       >
         <div className="product-grid">
           <div className="product-grid__image">
             <Link
               href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-              as={"/shop/product-basic/" + product.slug}
+              as={'/shop/product-basic/' + product.slug}
             >
               <a>
                 <img
@@ -47,16 +47,16 @@ const ProductGridList = ({
               </a>
             </Link>
             <div className="product-grid__badge-wrapper">
-              {product.new ? <span className="pr-flash">NEW</span> : ""}
+              {product.new ? <span className="pr-flash">NEW</span> : ''}
               {product.featured ? (
                 <span className="pr-flash bg-danger">HOT</span>
               ) : (
-                ""
+                ''
               )}
               {product.discount ? (
                 <span className="pr-flash bg-success">SALE</span>
               ) : (
-                ""
+                ''
               )}
             </div>
             <div className="product-grid__action-box">
@@ -69,7 +69,7 @@ const ProductGridList = ({
                   ) : product.variation && product.variation.length >= 1 ? (
                     <Link
                       href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-                      as={"/shop/product-basic/" + product.slug}
+                      as={'/shop/product-basic/' + product.slug}
                     >
                       <a>
                         <i className="icon-wrench" />
@@ -82,7 +82,7 @@ const ProductGridList = ({
                         cartItem !== undefined &&
                         cartItem.quantity >= cartItem.stock
                       }
-                      className={cartItem !== undefined ? "active" : ""}
+                      className={cartItem !== undefined ? 'active' : ''}
                     >
                       <i className="icon-basket-loaded" />
                     </button>
@@ -99,7 +99,7 @@ const ProductGridList = ({
                         ? () => deleteFromCompare(product, addToast)
                         : () => addToCompare(product, addToast)
                     }
-                    className={compareItem !== undefined ? "active" : ""}
+                    className={compareItem !== undefined ? 'active' : ''}
                   >
                     <i className="icon-shuffle" />
                   </button>
@@ -119,7 +119,7 @@ const ProductGridList = ({
                         ? () => deleteFromWishlist(product, addToast)
                         : () => addToWishlist(product, addToast)
                     }
-                    className={wishlistItem !== undefined ? "active" : ""}
+                    className={wishlistItem !== undefined ? 'active' : ''}
                   >
                     <i className="icon-heart" />
                   </button>
@@ -131,7 +131,7 @@ const ProductGridList = ({
             <h6 className="product-title">
               <Link
                 href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-                as={"/shop/product-basic/" + product.slug}
+                as={'/shop/product-basic/' + product.slug}
               >
                 <a>{product.name}</a>
               </Link>
@@ -162,7 +162,7 @@ const ProductGridList = ({
                           style={{ backgroundColor: `${single.colorCode}` }}
                           onClick={() => setColorImage(single.image)}
                           className={
-                            colorImage === single.image ? "active" : ""
+                            colorImage === single.image ? 'active' : ''
                           }
                         />
                       </li>
@@ -171,7 +171,7 @@ const ProductGridList = ({
                 </ul>
               </div>
             ) : (
-              ""
+              ''
             )}
           </div>
         </div>
@@ -179,7 +179,7 @@ const ProductGridList = ({
           <div className="product-list__image">
             <Link
               href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-              as={"/shop/product-basic/" + product.slug}
+              as={'/shop/product-basic/' + product.slug}
             >
               <a>
                 <img
@@ -189,16 +189,16 @@ const ProductGridList = ({
               </a>
             </Link>
             <div className="product-grid__badge-wrapper">
-              {product.new ? <span className="pr-flash">NEW</span> : ""}
+              {product.new ? <span className="pr-flash">NEW</span> : ''}
               {product.featured ? (
                 <span className="pr-flash bg-danger">HOT</span>
               ) : (
-                ""
+                ''
               )}
               {product.discount ? (
                 <span className="pr-flash bg-success">SALE</span>
               ) : (
-                ""
+                ''
               )}
             </div>
           </div>
@@ -206,7 +206,7 @@ const ProductGridList = ({
             <h6 className="product-title">
               <Link
                 href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-                as={"/shop/product-basic/" + product.slug}
+                as={'/shop/product-basic/' + product.slug}
               >
                 <a>{product.name}</a>
               </Link>
@@ -241,7 +241,7 @@ const ProductGridList = ({
                           style={{ backgroundColor: `${single.colorCode}` }}
                           onClick={() => setColorImage(single.image)}
                           className={
-                            colorImage === single.image ? "active" : ""
+                            colorImage === single.image ? 'active' : ''
                           }
                         />
                       </li>
@@ -250,7 +250,7 @@ const ProductGridList = ({
                 </ul>
               </div>
             ) : (
-              ""
+              ''
             )}
             <div className="product-list__actions">
               <ul>
@@ -266,7 +266,7 @@ const ProductGridList = ({
                   ) : product.variation && product.variation.length >= 1 ? (
                     <Link
                       href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-                      as={"/shop/product-basic/" + product.slug}
+                      as={'/shop/product-basic/' + product.slug}
                     >
                       <a className="btn btn-fill-out btn-addtocart">
                         <i className="icon-wrench" /> Select Options
@@ -280,7 +280,7 @@ const ProductGridList = ({
                         cartItem.quantity >= cartItem.stock
                       }
                       className={`btn btn-fill-out btn-addtocart ${
-                        cartItem !== undefined ? "active" : ""
+                        cartItem !== undefined ? 'active' : ''
                       }`}
                     >
                       <i className="icon-basket-loaded" /> Add To Cart
@@ -298,7 +298,7 @@ const ProductGridList = ({
                         ? () => deleteFromCompare(product, addToast)
                         : () => addToCompare(product, addToast)
                     }
-                    className={compareItem !== undefined ? "active" : ""}
+                    className={compareItem !== undefined ? 'active' : ''}
                   >
                     <i className="icon-shuffle" />
                   </button>
@@ -318,7 +318,7 @@ const ProductGridList = ({
                         ? () => deleteFromWishlist(product, addToast)
                         : () => addToWishlist(product, addToast)
                     }
-                    className={wishlistItem !== undefined ? "active" : ""}
+                    className={wishlistItem !== undefined ? 'active' : ''}
                   >
                     <i className="icon-heart" />
                   </button>

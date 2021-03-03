@@ -17,7 +17,7 @@ export default function RegisterVerified() {
       
           
       <Container>
-        <Row className="justify-content-center">
+        <Row className="justify-content-center mb-3">
           <p className="mt-5">
             {/* <strong> */}
               Email succesfully verified. Please proceed to login.
@@ -43,7 +43,7 @@ export default function RegisterVerified() {
               <button className="btn btn-sm btn-fill-out">
                 Attendee Login
               </button>
-            </Link>
+            </Link>s
             </div>
           </Row>
         

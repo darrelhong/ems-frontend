@@ -1,4 +1,4 @@
-import MailchimpSubscribe from "react-mailchimp-subscribe";
+import MailchimpSubscribe from 'react-mailchimp-subscribe';
 
 const CustomForm = ({
   status,
@@ -6,25 +6,25 @@ const CustomForm = ({
   onValidated,
   alertColor,
   btnColorClass,
-  customLayoutClass
+  customLayoutClass,
 }) => {
   let email;
   const submit = () => {
     email &&
-      email.value.indexOf("@") > -1 &&
+      email.value.indexOf('@') > -1 &&
       onValidated({
-        EMAIL: email.value
+        EMAIL: email.value,
       });
 
-    let emailInput = document.getElementById("mc-form-email");
-    emailInput.value = "";
+    let emailInput = document.getElementById('mc-form-email');
+    emailInput.value = '';
   };
 
   return (
     <div className="newsletter-form-wrapper">
       <div
         className={`newsletter-form position-relative rounded-input ${
-          customLayoutClass ? customLayoutClass : ""
+          customLayoutClass ? customLayoutClass : ''
         }`}
       >
         <input
@@ -35,42 +35,42 @@ const CustomForm = ({
           placeholder="Your email address"
         />
         <button
-          className={`btn ${btnColorClass ? btnColorClass : "btn-dark"}`}
+          className={`btn ${btnColorClass ? btnColorClass : 'btn-dark'}`}
           onClick={submit}
         >
           Subscribe
         </button>
       </div>
-      {status === "sending" && (
+      {status === 'sending' && (
         <div
           style={{
             color: alertColor,
-            fontSize: "14px",
-            marginTop: "15px",
-            lineHeight: "1.3"
+            fontSize: '14px',
+            marginTop: '15px',
+            lineHeight: '1.3',
           }}
         >
           sending...
         </div>
       )}
-      {status === "error" && (
+      {status === 'error' && (
         <div
           style={{
             color: alertColor,
-            fontSize: "14px",
-            marginTop: "15px",
-            lineHeight: "1.3"
+            fontSize: '14px',
+            marginTop: '15px',
+            lineHeight: '1.3',
           }}
           dangerouslySetInnerHTML={{ __html: message }}
         />
       )}
-      {status === "success" && (
+      {status === 'success' && (
         <div
           style={{
             color: alertColor,
-            fontSize: "14px",
-            marginTop: "15px",
-            lineHeight: "1.3"
+            fontSize: '14px',
+            marginTop: '15px',
+            lineHeight: '1.3',
           }}
           dangerouslySetInnerHTML={{ __html: message }}
         />
@@ -83,7 +83,7 @@ const SubscribeEmailFour = ({
   mailchimpUrl,
   alertColor,
   btnColorClass,
-  customLayoutClass
+  customLayoutClass,
 }) => {
   return (
     <div>

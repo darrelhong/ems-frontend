@@ -1,29 +1,29 @@
-import { Row, Col } from "react-bootstrap";
-import Swiper from "react-id-swiper";
-import { ProductGridWrapperTwo } from "../ProductThumb";
+import { Row, Col } from 'react-bootstrap';
+import Swiper from 'react-id-swiper';
+import { ProductGridWrapperTwo } from '../ProductThumb';
 
 const ProductSliderTwo = ({ title, products, items }) => {
   const params = {
     loop: false,
     spaceBetween: 30,
     pagination: {
-      el: ".swiper-pagination",
-      clickable: true
+      el: '.swiper-pagination',
+      clickable: true,
     },
     breakpoints: {
       1024: {
-        slidesPerView: items ? items : 4
+        slidesPerView: items ? items : 4,
       },
       768: {
-        slidesPerView: 2
+        slidesPerView: 2,
       },
       576: {
-        slidesPerView: 2
+        slidesPerView: 2,
       },
       320: {
-        slidesPerView: 1
-      }
-    }
+        slidesPerView: 1,
+      },
+    },
   };
 
   return (

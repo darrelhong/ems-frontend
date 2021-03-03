@@ -1,5 +1,5 @@
-import { Container, Row, Col } from "react-bootstrap";
-import Swiper from "react-id-swiper";
+import { Container, Row, Col } from 'react-bootstrap';
+import Swiper from 'react-id-swiper';
 
 const TestimonialOne = ({ testimonialData }) => {
   const params = {
@@ -10,11 +10,11 @@ const TestimonialOne = ({ testimonialData }) => {
     //   delay: 5000,
     //   disableOnInteraction: false,
     // }
-    ContainerEl: "div",
-    WrapperEl: "div",
+    ContainerEl: 'div',
+    WrapperEl: 'div',
     navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev"
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
     },
     renderNextButton: () => (
       <button className="swiper-button-next ht-swiper-button-nav">
@@ -25,7 +25,7 @@ const TestimonialOne = ({ testimonialData }) => {
       <button className="swiper-button-prev ht-swiper-button-nav">
         <i className="icon-arrow-left" />
       </button>
-    )
+    ),
   };
   return (
     <div className="testimonial-area bg--redon space-pt--r100 space-pb--r100 space-mb--r100">

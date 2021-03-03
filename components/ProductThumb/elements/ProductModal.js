@@ -1,19 +1,19 @@
-import Link from "next/link";
-import { useState, useEffect, Fragment } from "react";
-import { Modal, Row, Col } from "react-bootstrap";
-import Swiper from "react-id-swiper";
-import { getProductCartQuantity } from "../../../lib/product";
-import { ProductRating } from "../../Product";
-import { BsShield } from "react-icons/bs";
-import { AiOutlineReload } from "react-icons/ai";
-import { GiSwapBag } from "react-icons/gi";
+import Link from 'next/link';
+import { useState, useEffect, Fragment } from 'react';
+import { Modal, Row, Col } from 'react-bootstrap';
+import Swiper from 'react-id-swiper';
+import { getProductCartQuantity } from '../../../lib/product';
+import { ProductRating } from '../../Product';
+import { BsShield } from 'react-icons/bs';
+import { AiOutlineReload } from 'react-icons/ai';
+import { GiSwapBag } from 'react-icons/gi';
 import {
   IoLogoFacebook,
   IoLogoTwitter,
   IoLogoGoogleplus,
   IoLogoYoutube,
-  IoLogoInstagram
-} from "react-icons/io";
+  IoLogoInstagram,
+} from 'react-icons/io';
 
 const ProductModal = (props) => {
   const {
@@ -71,7 +71,7 @@ const ProductModal = (props) => {
     spaceBetween: 10,
     loopedSlides: 4,
     loop: true,
-    effect: "fade"
+    effect: 'fade',
   };
 
   const thumbnailSwiperParams = {
@@ -82,7 +82,7 @@ const ProductModal = (props) => {
     touchRatio: 0.2,
     freeMode: true,
     loop: true,
-    slideToClickedSlide: true
+    slideToClickedSlide: true,
   };
 
   return (

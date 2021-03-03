@@ -1,11 +1,11 @@
-import { Row, Col, Form } from "react-bootstrap";
-import { FaApple, FaAndroid, FaWindows } from "react-icons/fa";
+import { Row, Col, Form } from 'react-bootstrap';
+import { FaApple, FaAndroid, FaWindows } from 'react-icons/fa';
 
 const HeaderTopThree = ({ containerClass }) => {
   return (
     <div className="top-header d-none d-lg-block bg--dark light-skin">
       <div
-        className={`${containerClass ? containerClass : "custom-container"}`}
+        className={`${containerClass ? containerClass : 'custom-container'}`}
       >
         <Row className="align-items-center">
           <Col md={6}>

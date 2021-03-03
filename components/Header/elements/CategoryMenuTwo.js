@@ -1,7 +1,7 @@
-import { useState } from "react";
-import Link from "next/link";
-import { SlideDown } from "react-slidedown";
-import { IoIosMenu, IoIosArrowForward } from "react-icons/io";
+import { useState } from 'react';
+import Link from 'next/link';
+import { SlideDown } from 'react-slidedown';
+import { IoIosMenu, IoIosArrowForward } from 'react-icons/io';
 
 const CategoryMenuTwo = () => {
   const [categoryMenuExpandStatus, setCategoryMenuExpandStatus] = useState(
@@ -9,7 +9,7 @@ const CategoryMenuTwo = () => {
   );
   const [
     categoryMenuItemExpandStatus,
-    setCategoryMenuItemExpandStatus
+    setCategoryMenuItemExpandStatus,
   ] = useState(false);
   return (
     <div className="header-categories-wrap">
@@ -25,7 +25,7 @@ const CategoryMenuTwo = () => {
             <li className="has-children-mega">
               <Link href="/shop/grid-left-sidebar">
                 <a className="nav-link">
-                  <i className="flaticon-tv"></i>{" "}
+                  <i className="flaticon-tv"></i>{' '}
                   <span>
                     Computer <IoIosArrowForward />
                   </span>
@@ -155,7 +155,7 @@ const CategoryMenuTwo = () => {
             <li className="has-children-mega">
               <Link href="/shop/grid-left-sidebar">
                 <a className="nav-link">
-                  <i className="flaticon-responsive"></i>{" "}
+                  <i className="flaticon-responsive"></i>{' '}
                   <span>
                     Mobile & Tablet <IoIosArrowForward />
                   </span>
@@ -302,7 +302,7 @@ const CategoryMenuTwo = () => {
             <li className="has-children-mega">
               <Link href="/shop/grid-left-sidebar">
                 <a className="nav-link">
-                  <i className="flaticon-camera"></i>{" "}
+                  <i className="flaticon-camera"></i>{' '}
                   <span>
                     Camera <IoIosArrowForward />
                   </span>
@@ -444,7 +444,7 @@ const CategoryMenuTwo = () => {
             <li>
               <Link href="/shop/grid-left-sidebar">
                 <a className="nav-link">
-                  <i className="flaticon-headphones"></i>{" "}
+                  <i className="flaticon-headphones"></i>{' '}
                   <span>Headphones</span>
                 </a>
               </Link>
@@ -474,7 +474,7 @@ const CategoryMenuTwo = () => {
               <li>
                 <Link href="/shop/grid-left-sidebar">
                   <a className="nav-link">
-                    <i className="flaticon-music-system"></i>{" "}
+                    <i className="flaticon-music-system"></i>{' '}
                     <span>Home Audio & Theater</span>
                   </a>
                 </Link>
@@ -482,7 +482,7 @@ const CategoryMenuTwo = () => {
               <li>
                 <Link href="/shop/grid-left-sidebar">
                   <a className="nav-link">
-                    <i className="flaticon-monitor"></i>{" "}
+                    <i className="flaticon-monitor"></i>{' '}
                     <span>TV & Smart Box</span>
                   </a>
                 </Link>
@@ -502,7 +502,7 @@ const CategoryMenuTwo = () => {
                   setCategoryMenuItemExpandStatus(!categoryMenuItemExpandStatus)
                 }
               >
-                More Categories <span>+</span>{" "}
+                More Categories <span>+</span>{' '}
               </button>
             </li>
           </ul>

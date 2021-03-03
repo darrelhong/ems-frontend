@@ -5,7 +5,7 @@ import MobileMenuWidgets from "./MobileMenuWidgets";
 
 const MobileMenu = ({ activeStatus, getActiveStatus }) => {
   return (
-    <div className={`offcanvas-mobile-menu ${activeStatus ? "active" : ""}`}>
+    <div className={`offcanvas-mobile-menu ${activeStatus ? 'active' : ''}`}>
       <div
         className="offcanvas-mobile-menu__overlay-close"
         onClick={() => getActiveStatus(false)}

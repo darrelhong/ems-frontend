@@ -22,7 +22,6 @@ export default function LoginPage({
   };
 
   return (
-    
     <LayoutOne>
       {/* breadcrumb */}
       <BreadcrumbOne pageTitle="Login">
@@ -128,7 +127,6 @@ export default function LoginPage({
         </Container>
       </div>
     </LayoutOne>
-
   );
 }
 

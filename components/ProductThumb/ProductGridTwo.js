@@ -1,8 +1,8 @@
-import { Fragment, useState } from "react";
-import Link from "next/link";
-import { Col } from "react-bootstrap";
-import ProductModal from "./elements/ProductModal";
-import { ProductRating } from "../Product";
+import { Fragment, useState } from 'react';
+import Link from 'next/link';
+import { Col } from 'react-bootstrap';
+import ProductModal from './elements/ProductModal';
+import { ProductRating } from '../Product';
 
 const ProductGridTwo = ({
   product,
@@ -19,23 +19,23 @@ const ProductGridTwo = ({
   deleteFromCompare,
   addToast,
   cartItems,
-  sliderClass
+  sliderClass,
 }) => {
   const [modalShow, setModalShow] = useState(false);
-  const [colorImage, setColorImage] = useState("");
+  const [colorImage, setColorImage] = useState('');
 
   return (
     <Fragment>
       <div
-        className={`${sliderClass ? sliderClass : ""} ${
-          bottomSpace ? bottomSpace : ""
+        className={`${sliderClass ? sliderClass : ''} ${
+          bottomSpace ? bottomSpace : ''
         }`}
       >
         <div className="product-grid">
           <div className="product-grid__image">
             <Link
               href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-              as={"/shop/product-basic/" + product.slug}
+              as={'/shop/product-basic/' + product.slug}
             >
               <a>
                 <img
@@ -45,16 +45,16 @@ const ProductGridTwo = ({
               </a>
             </Link>
             <div className="product-grid__badge-wrapper">
-              {product.new ? <span className="pr-flash">NEW</span> : ""}
+              {product.new ? <span className="pr-flash">NEW</span> : ''}
               {product.featured ? (
                 <span className="pr-flash bg-danger">HOT</span>
               ) : (
-                ""
+                ''
               )}
               {product.discount ? (
                 <span className="pr-flash bg-success">SALE</span>
               ) : (
-                ""
+                ''
               )}
             </div>
             <div className="product-grid__action-box">
@@ -67,7 +67,7 @@ const ProductGridTwo = ({
                   ) : product.variation && product.variation.length >= 1 ? (
                     <Link
                       href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-                      as={"/shop/product-basic/" + product.slug}
+                      as={'/shop/product-basic/' + product.slug}
                     >
                       <a>
                         <i className="icon-wrench" />
@@ -80,7 +80,7 @@ const ProductGridTwo = ({
                         cartItem !== undefined &&
                         cartItem.quantity >= cartItem.stock
                       }
-                      className={cartItem !== undefined ? "active" : ""}
+                      className={cartItem !== undefined ? 'active' : ''}
                     >
                       <i className="icon-basket-loaded" />
                     </button>
@@ -97,7 +97,7 @@ const ProductGridTwo = ({
                         ? () => deleteFromCompare(product, addToast)
                         : () => addToCompare(product, addToast)
                     }
-                    className={compareItem !== undefined ? "active" : ""}
+                    className={compareItem !== undefined ? 'active' : ''}
                   >
                     <i className="icon-shuffle" />
                   </button>
@@ -117,7 +117,7 @@ const ProductGridTwo = ({
                         ? () => deleteFromWishlist(product, addToast)
                         : () => addToWishlist(product, addToast)
                     }
-                    className={wishlistItem !== undefined ? "active" : ""}
+                    className={wishlistItem !== undefined ? 'active' : ''}
                   >
                     <i className="icon-heart" />
                   </button>
@@ -129,7 +129,7 @@ const ProductGridTwo = ({
             <h6 className="product-title">
               <Link
                 href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-                as={"/shop/product-basic/" + product.slug}
+                as={'/shop/product-basic/' + product.slug}
               >
                 <a>{product.name}</a>
               </Link>
@@ -160,7 +160,7 @@ const ProductGridTwo = ({
                           style={{ backgroundColor: `${single.colorCode}` }}
                           onClick={() => setColorImage(single.image)}
                           className={
-                            colorImage === single.image ? "active" : ""
+                            colorImage === single.image ? 'active' : ''
                           }
                         />
                       </li>
@@ -169,7 +169,7 @@ const ProductGridTwo = ({
                 </ul>
               </div>
             ) : (
-              ""
+              ''
             )}
           </div>
         </div>

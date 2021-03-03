@@ -40,17 +40,5 @@ export default function OrganiserHome() {
         )}
       </Container>
     </OrganiserWrapper>
-    // <ChakraWrapper>
-    //   <OrganiserPageWrapper title="Organiser Dashboard">
-    //     <Heading>Organiser Home</Heading>
-    //     {isLoading && <Skeleton height="40px" />}
-    //     {isSuccess && (
-    //       <>
-    //         <Text>Name: {user?.name}</Text>
-    //         <Text>User ID: {user?.id}</Text>
-    //       </>
-    //     )}
-    //   </OrganiserPageWrapper>
-    // </ChakraWrapper>
   );
 }

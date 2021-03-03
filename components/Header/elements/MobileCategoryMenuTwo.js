@@ -1,11 +1,11 @@
-import { IoIosClose } from "react-icons/io";
-import MobileCategoryMenuNavTwo from "./MobileCategoryMenuNavTwo";
+import { IoIosClose } from 'react-icons/io';
+import MobileCategoryMenuNavTwo from './MobileCategoryMenuNavTwo';
 
 const MobileCategoryMenuTwo = ({ activeStatus, getActiveStatus }) => {
   return (
     <div
       className={`offcanvas-mobile-menu offcanvas-mobile-menu--style-two ${
-        activeStatus ? "active" : ""
+        activeStatus ? 'active' : ''
       }`}
     >
       <div

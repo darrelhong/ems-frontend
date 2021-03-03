@@ -1,5 +1,5 @@
-import Link from "next/link";
-import { IoIosSearch, IoIosArrowForward } from "react-icons/io";
+import Link from 'next/link';
+import { IoIosSearch, IoIosArrowForward } from 'react-icons/io';
 
 const Sidebar = () => {
   return (
