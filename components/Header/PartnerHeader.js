@@ -4,12 +4,14 @@ import Link from 'next/link';
 import { Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { IoIosSearch, IoIosMenu } from 'react-icons/io';
+import { AiOutlineShoppingCart } from 'react-icons/ai';
 import PartnerHeaderTop from './PartnerHeaderTop';
-import NavigationPartner from './elements/NavigationPartner';
+import Navigation from './elements/Navigation';
 import SearchOverlay from './elements/SearchOverlay';
-import MobileMenuPartner from './elements/MobileMenuPartner';
+import MobileMenu from './elements/MobileMenu';
+import MiniCart from './elements/MiniCart';
 
-const HeaderOne = ({ cartItems, navPositionClass }) => {
+const PartnerHeader = ({ cartItems, navPositionClass }) => {
   const [scroll, setScroll] = useState(0);
   const [headerHeight, setHeaderHeight] = useState(0);
   const [offCanvasSearchActive, setOffCanvasSearchActive] = useState(false);
@@ -59,7 +61,7 @@ const HeaderOne = ({ cartItems, navPositionClass }) => {
             </Link>
 
             {/* navigation */}
-            <NavigationPartner positionClass={navPositionClass} />
+            <Navigation positionClass={navPositionClass} />
 
             {/* icons */}
             <ul className="header-icons d-flex">
@@ -74,8 +76,35 @@ const HeaderOne = ({ cartItems, navPositionClass }) => {
                 </button>
               </li>
 
-          
+              <li className="d-none d-lg-block position-relative">
+                <Link href="/other/cart">
+                  <a className="nav-link mini-cart-trigger pr-3 pr-lg-0">
+                    <AiOutlineShoppingCart />
+                    {cartItems.length > 0 ? (
+                      <span className="cart-count">{cartItems.length}</span>
+                    ) : (
+                      ''
+                    )}
+                  </a>
+                </Link>
+                {/* mini cart */}
+                <MiniCart cartItems={cartItems} />
+              </li>
 
+              <li className="d-block d-lg-none position-relative">
+                <Link href="/other/cart">
+                  <a className="nav-link mini-cart-trigger pr-3 pr-lg-0">
+                    <AiOutlineShoppingCart />
+                    {cartItems.length > 0 ? (
+                      <span className="cart-count cart-count--mobile">
+                        {cartItems.length}
+                      </span>
+                    ) : (
+                      ''
+                    )}
+                  </a>
+                </Link>
+              </li>
               <li className="d-block d-lg-none">
                 <button
                   className="nav-link mobile-menu-trigger pr-0"
@@ -97,8 +126,8 @@ const HeaderOne = ({ cartItems, navPositionClass }) => {
         getActiveStatus={setOffCanvasSearchActive}
       />
 
-      {/* mobile menu NEED TO EDIT THIS TO PARTNER*/}
-      <MobileMenuPartner
+      {/* mobile menu */}
+      <MobileMenu
         activeStatus={offCanvasMobileMenuActive}
         getActiveStatus={setOffCanvasMobileMenuActive}
       />
@@ -106,7 +135,7 @@ const HeaderOne = ({ cartItems, navPositionClass }) => {
   );
 };
 
-HeaderOne.propTypes = {
+PartnerHeader.propTypes = {
   cartItems: PropTypes.array,
   navPositionClass: PropTypes.string,
 };
@@ -117,4 +146,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(HeaderOne);
+export default connect(mapStateToProps)(PartnerHeader);

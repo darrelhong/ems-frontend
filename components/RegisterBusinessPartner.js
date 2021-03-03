@@ -13,8 +13,6 @@ import Alert from 'react-bootstrap/Alert';
 
 import { useMutation } from 'react-query';
 import api from '../lib/ApiClient';
-import GuestWrapper from '../components/wrapper/GuestWrapper';
-
 
 export default function RegisterBusinessPartner({ title, registerApiUrl }) {
   const router = useRouter();
@@ -28,8 +26,7 @@ export default function RegisterBusinessPartner({ title, registerApiUrl }) {
     (data) => api.post(registerApiUrl, data),
     {
       onSuccess: () => {
-        // router.push('/partner/home');
-        setShowSuccess(true);
+        router.push('/register/success');
       },
     }
   );
@@ -43,7 +40,7 @@ export default function RegisterBusinessPartner({ title, registerApiUrl }) {
   };
 
   return (
-    <GuestWrapper>
+    <LayoutOne>
       <Head>
         <title>{title}</title>
       </Head>
@@ -178,7 +175,7 @@ export default function RegisterBusinessPartner({ title, registerApiUrl }) {
           </Row>
         </Container>
       </div>
-    </GuestWrapper>
+    </LayoutOne>
   );
 }
 
