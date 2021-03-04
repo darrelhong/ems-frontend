@@ -145,7 +145,11 @@ function EventOrganiserDetails({ id }) {
                 {eo.supportDocsUrl ? (
                   <form
                     method="get"
-                    action={`/api/downloadFile/${eo.supportDocsUrl}`}
+                    action={
+                      eo?.supportDocsUrl.includes('https')
+                        ? eo?.supportDocsUrl
+                        : `/api/downloadFile/${eo?.supportDocsUrl}`
+                    }
                   >
                     <button className="btn btn-purple btn-sm" type="submit">
                       Download file
