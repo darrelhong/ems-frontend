@@ -9,7 +9,6 @@ import { useForm } from 'react-hook-form';
 
 import api from '../../../lib/ApiClient';
 
-import { LayoutOne } from '../../../layouts';
 import { Alert, Container } from 'react-bootstrap';
 import ButtonWithLoading from '../../../components/custom/ButtonWithLoading';
 
@@ -80,7 +79,7 @@ export default function ResetPassword({ token }) {
                           pattern: {
                             value: /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/,
                             message:
-                              'Message must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters',
+                              'Password must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters',
                           },
                         })}
                         placeholder="Enter new password"

@@ -2,13 +2,11 @@ import { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import cx from 'classnames';
 
 import { Col, Container, Row } from 'react-bootstrap';
 import { BreadcrumbOne } from './Breadcrumb';
-import { LayoutOne } from '../layouts';
 import Alert from 'react-bootstrap/Alert';
 
 import { useMutation } from 'react-query';
@@ -17,7 +15,6 @@ import GuestWrapper from '../components/wrapper/GuestWrapper';
 import ButtonWithLoading from './custom/ButtonWithLoading';
 
 export default function RegisterBusinessPartner({ title, registerApiUrl }) {
-  const router = useRouter();
   const { register, handleSubmit, errors, watch } = useForm();
   const [show, setShow] = useState(true);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -189,8 +186,7 @@ export default function RegisterBusinessPartner({ title, registerApiUrl }) {
                           onClose={() => setShowUserAlrExistError(false)}
                           dismissible
                         >
-                          {' '}
-                          User already exist.{' '}
+                          User already exist.
                         </Alert>
                       }
                     </div>
@@ -201,9 +197,8 @@ export default function RegisterBusinessPartner({ title, registerApiUrl }) {
                         onClose={() => setShow(false)}
                         dismissible
                       >
-                        {' '}
                         An error occurred creating your account. Please try
-                        again.{' '}
+                        again.
                       </Alert>
                     )}
 

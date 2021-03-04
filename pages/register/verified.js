@@ -12,7 +12,7 @@ export default function RegisterVerified() {
           <title>Email verification succesful!</title>
         </Head>
 
-        <Container>
+        <Container className="vh-100">
           <Row className="justify-content-center mb-3">
             <p className="mt-5">
               <strong>
@@ -24,19 +24,9 @@ export default function RegisterVerified() {
           <br></br>
           <Row className="justify-content-center">
             <div>
-              <Link href="/organiser/login">
+              <Link href="/">
                 <button className="btn btn-sm btn-fill-out">
-                  Event Organiser Login
-                </button>
-              </Link>
-              <Link href="/partner/login">
-                <button className="btn btn-sm btn-fill-out">
-                  Business Partner Login
-                </button>
-              </Link>
-              <Link href="/attendee/login">
-                <button className="btn btn-sm btn-fill-out">
-                  Attendee Login
+                  Back to Home
                 </button>
               </Link>
             </div>

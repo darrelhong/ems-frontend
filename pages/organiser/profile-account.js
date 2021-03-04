@@ -117,8 +117,6 @@ const MyAccount = () => {
     });
     // close the modal once yes click.
     setShow(false);
-
-    logout({ redirectTo: '/organiser/login' });
   };
 
   const { register, handleSubmit, errors } = useForm({
@@ -232,7 +230,7 @@ const MyAccount = () => {
           setPWAlert('Your password has been updated successfully!');
 
           setConfirmPW(true);
-          setShowPW(true);
+          // setShowPW(true);
           setLoginLoading(false);
         } else if (response.data['message'] == 'Old password is incorrect.') {
           setPWAlert('Current password is incorrect.');
