@@ -10,6 +10,7 @@ import { LayoutOne } from '../../layouts';
 import { BreadcrumbOne } from '../../components/Breadcrumb';
 import { Col, Container, Row } from 'react-bootstrap';
 import { FaFacebookF, FaGooglePlusG } from 'react-icons/fa';
+import ButtonWithLoading from '../../components/custom/ButtonWithLoading';
 
 // get query params from URL to dispaly relavant feedback
 export const getServerSideProps = async ({ query }) => {
@@ -21,6 +22,7 @@ export const getServerSideProps = async ({ query }) => {
 };
 
 export default function AdminLogin({ info }) {
+  const [loginLoading, setLoginLoading] = useState(false);
   const [loginError, setLoginError] = useState(null);
   const { register, handleSubmit } = useForm();
 
@@ -56,6 +58,7 @@ export default function AdminLogin({ info }) {
                 <div>
                   <form
                     onSubmit={handleSubmit((data) => {
+                      setLoginLoading(true);
                       login(
                         data,
                         '/api/user/login/admin',
@@ -110,13 +113,14 @@ export default function AdminLogin({ info }) {
                       </div>
                     )}
                     <div className="form-group">
-                      <button
+                      <ButtonWithLoading
                         type="submit"
                         className="btn btn-fill-out btn-block"
                         name="login"
+                        isLoading={loginLoading && !loginError}
                       >
                         Log in
-                      </button>
+                      </ButtonWithLoading>
                     </div>
                   </form>
                   <div className="different-login">
