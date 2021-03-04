@@ -17,7 +17,7 @@ export default function OrganiserLogin({ info }) {
       info={info}
       heading="Event Organiser Login"
       loginApiUrl="/api/user/login/evntorg"
-      loginSuccessUrl="/organiser/home"
+      loginSuccessUrl="/organiser/events"
       registerUrl="/organiser/register"
     />
   );

@@ -36,8 +36,8 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
 
   const checkCanDelete = (currEvent) => {
     if (
-      currEvent.eventBoothTransactions?.length == 0 &&
-      event.ticketTransactions?.length == 0
+      (event.eventBoothTransactions?.length == 0 || !event.eventBoothTransactions)
+      && (event.ticketTransactions?.length == 0 || !event.ticketTransactions)
     ) {
       return true;
     }
@@ -146,7 +146,7 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
 
                 {/* Handles logic for toggling visibility of events for Business Partners and Attendees */}
                 <li>
-                  <HidePopover event={currEvent} />
+                  <HidePopover event={currEvent} createToast={createToast} />
                 </li>
 
                 <li>

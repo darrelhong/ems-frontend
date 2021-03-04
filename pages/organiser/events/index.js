@@ -102,6 +102,11 @@ function myEvents() {
         <BreadcrumbOne pageTitle="My Events">
           <ol className="breadcrumb justify-content-md-end">
             <li className="breadcrumb-item">
+              <Link href="/organiser/home">
+                <a>Home</a>
+              </Link>
+            </li>
+            <li className="breadcrumb-item">
               <Link href="/organiser/events">
                 <a>Events</a>
               </Link>

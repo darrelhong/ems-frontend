@@ -11,7 +11,7 @@ import {
   updateEventHidden,
 } from '../../lib/functions/eventOrganiser/eventFunctions';
 
-export default function HidePopover({ event }) {
+export default function HidePopover({ event, createToast }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [hideState, setHideState] = useState({
     hideBoth: false,
@@ -21,6 +21,10 @@ export default function HidePopover({ event }) {
 
   useEffect(() => {
     const eventHideToggleStatus = eventToHideToggle(event);
+    // console.log('checking event');
+    // console.log(event);
+    // console.log('checking hide status');
+    // console.log(eventHideToggleStatus);
     setHideState({
       hideBoth: eventHideToggleStatus == 'hideBoth',
       hideFromAttendee: eventHideToggleStatus == 'hideFromAttendee',
@@ -53,6 +57,7 @@ export default function HidePopover({ event }) {
     const newEvent = await updateEventHidden(event, newHideState);
     // console.log('event after:');
     // console.log(newEvent);
+    createToast('Visibility Updated!', 'success');
     handleClose();
   };
 

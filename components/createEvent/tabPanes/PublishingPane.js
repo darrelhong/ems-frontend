@@ -136,7 +136,7 @@ const PublishingPane = ({
               )}
             </Col>
 
-            <Col>
+            {/* <Col>
               {eventStatus != 'CREATED' && (
                 <button
                   type="button"
@@ -157,7 +157,7 @@ const PublishingPane = ({
               >
                 {eventStatus == 'CREATED' ? 'Save Changes' : 'Create Event'}
               </button>
-            </Col>
+            </Col> */}
           </Row>
         </div>
       </Card.Body>

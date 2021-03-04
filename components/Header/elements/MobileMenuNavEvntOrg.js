@@ -61,7 +61,7 @@ const MobileMenuNavEvntOrg = ({ getActiveStatus }) => {
 
           <ul className="mobile-sub-menu">
             <li>
-              <Link href="/home/fashion-one">
+              <Link href="/organiser/events">
                 <a>Manage My Events</a>
               </Link>
             </li>

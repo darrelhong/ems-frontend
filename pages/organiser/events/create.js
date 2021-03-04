@@ -15,6 +15,8 @@ import PublishingPane from '../../../components/createEvent/tabPanes/PublishingP
 import ImagesPane from '../../../components/createEvent/tabPanes/ImagesPane';
 import { steps } from '../../../components/createEvent/steps';
 import useUser from '../../../lib/query/useUser';
+import api from '../../../lib/ApiClient';
+
 import {
   createEvent,
   getEventDetails,
@@ -51,6 +53,7 @@ const CreateEvent = () => {
   const [hideOptions, setHideOptions] = useState('');
   const [wantsTickets, setWantsTickets] = useState(true);
   const [freeTickets, setFreeTickets] = useState(false);
+  const [files, setFiles] = useState();
 
   const router = useRouter();
   const { eid } = router.query;
@@ -175,6 +178,7 @@ const CreateEvent = () => {
       const response = await updateEvent(updatedData);
       console.log('saved an existing event');
       console.log(response);
+      const imageresponse = await saveImages(response.eid);
       createToast('Event edited successfully', 'success');
       router.push(`/organiser/events/${eid}`);
     } else {
@@ -184,6 +188,7 @@ const CreateEvent = () => {
 
       updatedData = { ...formattedData, eventOrganiserId, eventStatus };
       const response = await createEvent(updatedData);
+      const imageresponse = await saveImages(response.eid);
       console.log('finished creating brand new event:');
       console.log(response);
       createToast('Event created successfully', 'success');
@@ -211,6 +216,9 @@ const CreateEvent = () => {
       console.log('printing updated event:');
       console.log(updatedEvent);
       eventId = updatedEvent.eid;
+      const imageresponse = await saveImages(eventId);
+      console.log('image response');
+      console.log(imageresponse);
     } else {
       const dateProcessedData = formatDates(data);
       const formData = processHideOptionsSave(dateProcessedData);
@@ -222,7 +230,10 @@ const CreateEvent = () => {
       // console.log(formData);
       const response = await createEvent(updatedData);
       eventId = response.eid;
-      // await saveImages(response.eid);
+      // const imageresponse = await saveImage(response.eid);
+      const imageresponse = await saveImages(response.eid);
+      console.log('image response');
+      console.log(imageresponse);
     }
 
     // let message = '';
@@ -232,11 +243,12 @@ const CreateEvent = () => {
   };
 
   const saveImages = async (eventId) => {
-    const uploadedImages = getValues('files');
+    const uploadedImages = files;
+    // const uploadedImages = getValues('files');
     const length = uploadedImages.length ?? 0;
     let i;
     console.log('length found: ' + length);
-    console.log(uploadedImages.item(0));
+    // console.log(uploadedImages.item(0));
     for (i = 0; i < length; i++) {
       let inputData = new FormData();
       inputData.append('file', uploadedImages.item(i));
@@ -251,26 +263,6 @@ const CreateEvent = () => {
       console.log(response);
     }
   };
-
-  // const processHideOptionsSave = (formData) => {
-  //   let published; //publish is for attendee
-  //   let hidden; //hide is for BP
-  //   if (formData.hideOptions == 'hideBoth') {
-  //     published = false;
-  //     hidden = true;
-  //   } else if (formData.hideOptions == 'hideFromAttendee') {
-  //     //hide from attendee but show to BP
-  //     published = false;
-  //     hidden = false;
-  //   } else if (formData.hideOptions == 'showBoth') {
-  //     published = true;
-  //     hidden = false;
-  //   } else {
-  //     published = null;
-  //     hidden = null;
-  //   }
-  //   return { ...formData, published, hidden }
-  // };
 
   return (
     <OrganiserWrapper
@@ -437,7 +429,15 @@ const CreateEvent = () => {
                       />
                     </Tab.Pane>
                     <Tab.Pane eventKey="images">
-                      <ImagesPane register={register} />
+                      <ImagesPane
+                        register={register}
+                        files={files}
+                        setFiles={setFiles}
+                        handleSubmit={handleSubmit}
+                        saveDraft={saveDraft}
+                        onSubmit={onSubmit}
+                        eventStatus={eventData.eventStatus}
+                      />
                     </Tab.Pane>
                   </Tab.Content>
                 </Col>

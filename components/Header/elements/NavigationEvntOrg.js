@@ -6,9 +6,8 @@ const NavigationEvntOrg = ({ positionClass }) => {
   return (
     <nav className="navigation d-none d-lg-block">
       <ul
-        className={`d-flex ${
-          positionClass ? positionClass : 'justify-content-end'
-        }`}
+        className={`d-flex ${positionClass ? positionClass : 'justify-content-end'
+          }`}
       >
         <li>
           <Link href="/organiser/home">
@@ -31,7 +30,7 @@ const NavigationEvntOrg = ({ positionClass }) => {
 
           <ul className="sub-menu sub-menu--one-column">
             <li>
-              <Link href="/home/fashion-one">
+              <Link href="/organiser/events">
                 <a>Manage My Events</a>
               </Link>
             </li>

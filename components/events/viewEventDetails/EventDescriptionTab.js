@@ -30,7 +30,7 @@ const EventDescriptionTab = ({
         <li>
           <IoMdRestaurant />{' '}
           {event.ticketCapacity
-            ? `Tickets sold: ${event.ticketTransactions.length} / ${event.ticketCapacity}`
+            ? `Tickets Capacity: ${event.ticketCapacity}`
             : 'Ticket Capacity not set yet!'}
         </li>
       );
@@ -49,7 +49,7 @@ const EventDescriptionTab = ({
             <li>
               <IoMdTrophy />
               Confirmed booths for your event:{' '}
-              {event.eventBoothTransactions?.length} / {event.boothCapacity}
+              {event.eventBoothTransactions?.length ?? 0} / {event.boothCapacity}
             </li>
           </ul>
           <ul>
@@ -97,7 +97,7 @@ const EventDescriptionTab = ({
                 <li>
                   <IoMdRestaurant />
                   {event.ticketCapacity
-                    ? `Tickets sold: ${event.ticketTransactions.length} / ${event.ticketCapacity}`
+                    ? `Tickets Sold: ${event?.ticketTransactions?.length ?? 0} / ${event.ticketCapacity}`
                     : 'Ticket Capacity not set yet!'}
                 </li>
                 <li>

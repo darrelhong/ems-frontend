@@ -30,6 +30,7 @@ const EventDescription = ({
   vipToggle,
   handleCancel,
   handleDelete,
+  createToast
 }) => {
   const deleteCancelButton = () => {
     if (event.eventStatus == 'CANCELLED') {
@@ -57,8 +58,8 @@ const EventDescription = ({
         </button>
       );
     } else if (
-      event.eventBoothTransactions?.length == 0 &&
-      event.ticketTransactions?.length == 0
+      (event.eventBoothTransactions?.length == 0 || !event.eventBoothTransactions)
+      && (event.ticketTransactions?.length == 0 || !event.ticketTransactions)
     ) {
       //in this case we can delete
       return (
@@ -124,11 +125,11 @@ const EventDescription = ({
               Physical Event
             </li>
           ) : (
-            <li>
-              <IoMdWifi />
+              <li>
+                <IoMdWifi />
               Online Event
-            </li>
-          )}
+              </li>
+            )}
           <li>
             <IoMdLocate />
             Event Location:{' '}
@@ -193,9 +194,11 @@ const EventDescription = ({
                   {event.vip ? <StarIcon /> : <StarBorderIcon />}
                 </IconButton>
               </li>
-              <li>
-                <HidePopover event={event} />
-              </li>
+              {event.eventStatus && (
+                <li>
+                  <HidePopover event={event} createToast={createToast}/>
+                </li>
+              )}
               {/* <li>
                 <a href="javascript:void(0);" onClick={() => hideToggle(event)}>
                   {event.hidden ? (

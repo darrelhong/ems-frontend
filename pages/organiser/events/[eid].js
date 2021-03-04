@@ -184,12 +184,12 @@ const OrganiserViewEventDetails = () => {
       <BreadcrumbOne pageTitle={event.name ? event.name : 'Draft'}>
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
-            <Link href="/">
+            <Link href="/organiser/home">
               <a>Home</a>
             </Link>
           </li>
           <li className="breadcrumb-item">
-            <Link href="/shop/grid-left-sidebar">
+            <Link href="/organiser/events">
               <a>Events</a>
             </Link>
           </li>
@@ -217,17 +217,20 @@ const OrganiserViewEventDetails = () => {
                 vipToggle={vipToggleWithToast}
                 handleCancel={handleCancelWithToast}
                 handleDelete={handleDeleteWithToast}
+                createToast={createToast}
               />
             </Col>
           </Row>
           {/* product description tab */}
           <Row>
             <Col>
-              <EventDescriptionTab
-                event={event}
-                prettySaleStartDate={prettySaleStartDate}
-                prettySalesEndDate={prettySalesEndDate}
-              />
+              {event && (
+                <EventDescriptionTab
+                  event={event}
+                  prettySaleStartDate={prettySaleStartDate}
+                  prettySalesEndDate={prettySalesEndDate}
+                />
+              )}
             </Col>
           </Row>
           {/* related product slider */}
