@@ -105,7 +105,7 @@ function BusinessPartnerDetails({ id }) {
               <dd className="col-sm-9">{bp.description || '-'}</dd>
 
               <dt className="col-sm-3">Phone no.</dt>
-              <dd className="col-sm-9">{bp.phoneNumber || '-'}</dd>
+              <dd className="col-sm-9">{bp.phonenumber || '-'}</dd>
 
               <dt className="col-sm-3">Address</dt>
               <dd className="col-sm-9">{bp.address || '-'}</dd>

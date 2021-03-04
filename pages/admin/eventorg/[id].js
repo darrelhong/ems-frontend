@@ -246,7 +246,7 @@ function UpdateEventOrganiserForm({ eo }) {
     (data) => api.post('/api/user/admin-update', data),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(['user', eo.id.toString()]);
+        queryClient.invalidateQueries(['organiser', eo.id.toString()]);
       },
     }
   );
