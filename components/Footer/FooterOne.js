@@ -65,7 +65,7 @@ const FooterOne = () => {
                   {/* <div className="footer-logo">
                     <Link href="/">
                       <a>
-                        <img src="/assets/images/eventStop.png" alt="logo" />
+                        <img src="/assets/images/event-stop-logo.png" alt="logo" />
                       </a>
                     </Link>
                   </div> */}

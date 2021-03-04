@@ -45,16 +45,7 @@ const HeaderOne = ({ cartItems, navPositionClass }) => {
             {/* logo */}
             <Link href="/">
               <a className="navbar-brand">
-                <img
-                  className="logo-light"
-                  src="/assets/images/eventStop.png"
-                  alt="logo"
-                />
-                <img
-                  className="logo-dark"
-                  src="/assets/images/eventStop.png"
-                  alt="logo"
-                />
+                <img src="/assets/images/event-stop-logo.png" alt="logo" />
               </a>
             </Link>
 
