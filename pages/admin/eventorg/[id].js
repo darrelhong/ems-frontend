@@ -38,23 +38,27 @@ function EventOrganiserDetails({ id }) {
       ...options,
     });
 
-  const { mutate: approve } = useMutationInvalidate((id) =>
-    api.post(`/api/organiser/approve/${id}`)
+  const {
+    mutate: approve,
+    isLoading: approveIsLoading,
+  } = useMutationInvalidate((id) => api.post(`/api/organiser/approve/${id}`));
+
+  const { mutate: reject, isLoading: rejectIsLoading } = useMutationInvalidate(
+    (id) =>
+      api.post(`/api/organiser/reject/${id}`, {
+        message: 'Default message',
+      })
   );
 
-  const { mutate: reject } = useMutationInvalidate((id) =>
-    api.post(`/api/organiser/reject/${id}`, {
-      message: 'Default message',
-    })
-  );
+  const {
+    mutate: enable,
+    isLoading: enableIsLoading,
+  } = useMutationInvalidate((id) => api.post(`/api/user/enable/${id}`));
 
-  const { mutate: enable } = useMutationInvalidate((id) =>
-    api.post(`/api/user/enable/${id}`)
-  );
-
-  const { mutate: disable } = useMutationInvalidate((id) =>
-    api.post(`/api/user/disable/${id}`)
-  );
+  const {
+    mutate: disable,
+    isLoading: disableIsLoading,
+  } = useMutationInvalidate((id) => api.post(`/api/user/disable/${id}`));
 
   const {
     mutate: resetPassword,
@@ -155,40 +159,44 @@ function EventOrganiserDetails({ id }) {
 
             <Row>
               <Col md={5} className="mb-4">
-                <button
+                <ButtonWithLoading
                   type="button"
                   className="btn btn-success btn-sm"
                   disabled={eo.approved}
                   onClick={() => approve(id)}
+                  isLoading={approveIsLoading}
                 >
                   Approve
-                </button>
-                <button
+                </ButtonWithLoading>
+                <ButtonWithLoading
                   type="button"
                   className="btn btn-danger btn-sm"
                   disabled={!eo.approved}
                   onClick={() => reject(id)}
+                  isLoading={rejectIsLoading}
                 >
                   Reject
-                </button>
+                </ButtonWithLoading>
               </Col>
               <Col md={5} className="mb-4">
-                <button
+                <ButtonWithLoading
                   type="button"
                   className="btn btn-success btn-sm"
                   disabled={eo.enabled}
                   onClick={() => enable(id)}
+                  isLoading={enableIsLoading}
                 >
                   Enable
-                </button>
-                <button
+                </ButtonWithLoading>
+                <ButtonWithLoading
                   type="button"
                   className="btn btn-danger btn-sm"
                   disabled={!eo.enabled}
                   onClick={() => disable(id)}
+                  isLoading={disableIsLoading}
                 >
                   Disable
-                </button>
+                </ButtonWithLoading>
               </Col>
             </Row>
             <Row>

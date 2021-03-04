@@ -43,13 +43,15 @@ function AttendeeDetails({ id }) {
       ...options,
     });
 
-  const { mutate: enable } = useMutationInvalidate((id) =>
-    api.post(`/api/user/enable/${id}`)
-  );
+  const {
+    mutate: enable,
+    isLoading: enableIsLoading,
+  } = useMutationInvalidate((id) => api.post(`/api/user/enable/${id}`));
 
-  const { mutate: disable } = useMutationInvalidate((id) =>
-    api.post(`/api/user/disable/${id}`)
-  );
+  const {
+    mutate: disable,
+    isLoading: disableIsLoading,
+  } = useMutationInvalidate((id) => api.post(`/api/user/disable/${id}`));
 
   const {
     mutate: resetPassword,
@@ -120,22 +122,24 @@ function AttendeeDetails({ id }) {
 
             <Row className="mb-4">
               <Col>
-                <button
+                <ButtonWithLoading
                   type="button"
                   className="btn btn-success btn-sm"
                   disabled={atnd.enabled}
                   onClick={() => enable(id)}
+                  isLoading={enableIsLoading}
                 >
                   Enable
-                </button>
-                <button
+                </ButtonWithLoading>
+                <ButtonWithLoading
                   type="button"
                   className="btn btn-danger btn-sm"
                   disabled={!atnd.enabled}
                   onClick={() => disable(id)}
+                  isLoading={disableIsLoading}
                 >
                   Disable
-                </button>
+                </ButtonWithLoading>
               </Col>
             </Row>
 
