@@ -245,7 +245,7 @@ const CreateEvent = () => {
   const saveImages = async (eventId) => {
     const uploadedImages = files;
     // const uploadedImages = getValues('files');
-    const length = uploadedImages.length ?? 0;
+    const length = uploadedImages?.length ?? 0;
     let i;
     console.log('length found: ' + length);
     // console.log(uploadedImages.item(0));
