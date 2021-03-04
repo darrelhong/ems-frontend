@@ -64,5 +64,5 @@ const EventView = ({ events, layout }) => {
             </Row>
         </div>
     );
-
+}
 export default EventView;

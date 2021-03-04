@@ -150,38 +150,6 @@ const ImagesPane = ({ register }) => {
                             })} */}
             </Col>
           </Row>
-          <Row>
-            <button onClick={() => handleSetVisible()}>Show Me</button>
-            <RMIUploader
-              isOpen={visible}
-              hideModal={hideModal}
-              onSelect={onSelect}
-              onUpload={onUpload}
-              onRemove={onRemove}
-              dataSources={dataSources}
-            />
-          </Row>
-          <Row>
-            <div className="multiple-upload">
-              <h3>Upload Multiple Files</h3>
-              {/* <form id="multipleUploadForm" name="multipleUploadForm">  */}
-              <input
-                id="multipleFileUploadInput"
-                type="file"
-                name="files"
-                className="file-input"
-                // ref={register({ required: true })}
-                multiple
-              />
-              <button
-                type="submit"
-                onClick={(event) => console.log(event)}
-                className="primary submit-btn"
-              >
-                Submit
-              </button>
-            </div>
-          </Row>
         </div>
       </Card.Body>
     </Card>
