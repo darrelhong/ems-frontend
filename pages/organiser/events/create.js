@@ -178,7 +178,7 @@ const CreateEvent = () => {
       const response = await updateEvent(updatedData);
       console.log('saved an existing event');
       console.log(response);
-      const imageresponse = await saveImages(response.eid);
+      if (files) await saveImages(response.eid);
       createToast('Event edited successfully', 'success');
       router.push(`/organiser/events/${eid}`);
     } else {
@@ -188,7 +188,7 @@ const CreateEvent = () => {
 
       updatedData = { ...formattedData, eventOrganiserId, eventStatus };
       const response = await createEvent(updatedData);
-      const imageresponse = await saveImages(response.eid);
+      if (files) await saveImages(response.eid);
       console.log('finished creating brand new event:');
       console.log(response);
       createToast('Event created successfully', 'success');
@@ -216,9 +216,7 @@ const CreateEvent = () => {
       console.log('printing updated event:');
       console.log(updatedEvent);
       eventId = updatedEvent.eid;
-      const imageresponse = await saveImages(eventId);
-      console.log('image response');
-      console.log(imageresponse);
+      if (files) await saveImages(eventId);
     } else {
       const dateProcessedData = formatDates(data);
       const formData = processHideOptionsSave(dateProcessedData);
@@ -231,9 +229,7 @@ const CreateEvent = () => {
       const response = await createEvent(updatedData);
       eventId = response.eid;
       // const imageresponse = await saveImage(response.eid);
-      const imageresponse = await saveImages(response.eid);
-      console.log('image response');
-      console.log(imageresponse);
+      if (files) await saveImages(response.eid);
     }
 
     // let message = '';
