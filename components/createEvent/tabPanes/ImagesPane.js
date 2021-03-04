@@ -69,12 +69,8 @@ const ImagesPane = ({
   ];
 
   const handleFileChange = async (e) => {
-    console.log('call handleFileChange');
-    console.log(e.target.files);
     setFiles(e.target.files);
-    console.log(e.target.files[0].name);
     // setFiles(e.target.files[0]);
-    console.log(e.target.files[0]);
     // setfileUpload(true);
     let i;
     let combinedFileName = '';
