@@ -8,6 +8,7 @@ import { BreadcrumbOne } from '../../../components/Breadcrumb';
 import EventDescription from '../../../components/events/viewEventDetails/EventDescription';
 import ImageGalleryLeftThumb from '../../../components/events/viewEventDetails/ImageGalleryLeftThumb';
 import EventDescriptionTab from '../../../components/events/viewEventDetails/EventDescriptionTab';
+import OrganiserWrapper from '../../../components/wrapper/OrganiserWrapper';
 // import { ProductSliderTwo } from "../../../components/ProductSlider";
 import {
   getEventDetails,
@@ -178,7 +179,7 @@ const OrganiserViewEventDetails = () => {
   // };
 
   return (
-    <LayoutOne>
+    <OrganiserWrapper title={event.name ? event.name : 'Draft'}>
       {/* breadcrumb */}
       <BreadcrumbOne pageTitle={event.name ? event.name : 'Draft'}>
         <ol className="breadcrumb justify-content-md-end">
@@ -229,7 +230,6 @@ const OrganiserViewEventDetails = () => {
               />
             </Col>
           </Row>
-
           {/* related product slider */}
           {/* <ProductSliderTwo
             title="Related Products"
@@ -237,7 +237,7 @@ const OrganiserViewEventDetails = () => {
           /> */}
         </Container>
       </div>
-    </LayoutOne>
+    </OrganiserWrapper>
   );
 };
 
