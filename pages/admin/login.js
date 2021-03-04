@@ -6,7 +6,6 @@ import { useForm } from 'react-hook-form';
 
 import { login } from '../../lib/auth';
 
-import { LayoutOne } from '../../layouts';
 import { BreadcrumbOne } from '../../components/Breadcrumb';
 import { Col, Container, Row } from 'react-bootstrap';
 import { FaFacebookF, FaGooglePlusG } from 'react-icons/fa';
@@ -27,7 +26,7 @@ export default function AdminLogin({ info }) {
   const { register, handleSubmit } = useForm();
 
   return (
-    <LayoutOne>
+    <>
       <Head>
         <title>Admin Login</title>
       </Head>
@@ -152,7 +151,7 @@ export default function AdminLogin({ info }) {
           </Row>
         </Container>
       </div>
-    </LayoutOne>
+    </>
   );
 }
 
