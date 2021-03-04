@@ -64,8 +64,12 @@ function myEvents() {
   }, [offset, events, sortValue, searchTerm]);
 
   const applySearch = (listEvents, searchTerm) => {
-    return listEvents.filter((e) => e.name.toLowerCase().includes(searchTerm) || e.descriptions.toLowerCase().includes(searchTerm));
-  }
+    return listEvents.filter(
+      (e) =>
+        e.name.toLowerCase().includes(searchTerm) ||
+        e.descriptions.toLowerCase().includes(searchTerm)
+    );
+  };
 
   const getLayout = (layout) => {
     setLayout(layout);

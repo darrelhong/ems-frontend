@@ -225,42 +225,42 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
                     </div>
                   </div>
                   <div className="form-group">
-                      <label htmlFor="password">Password</label>
-                      <input
-                        className="form-control"
-                        required
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                        title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
-                        ref={register()}
-                      />
-                    </div>
+                    <label htmlFor="password">Password</label>
+                    <input
+                      className="form-control"
+                      required
+                      type="password"
+                      name="password"
+                      placeholder="Password"
+                      pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                      title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                      ref={register()}
+                    />
+                  </div>
 
-                    <div className="form-group">
-                      <label htmlFor="password_confirm">Confirm Password</label>
-                      <input
-                        className={cx('form-control', {
-                          'is-invalid': errors?.password_confirm,
-                        })}
-                        required
-                        type="password"
-                        name="password_confirm"
-                        id="password_confirm"
-                        placeholder="Re-enter password"
-                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                        title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
-                        ref={register({
-                          validate: (value) =>
-                            value === password.current ||
-                            'Passwords do not match',
-                        })}
-                      />
-                      <div className="invalid-feedback">
-                        {errors?.password_confirm?.message}
-                      </div>
+                  <div className="form-group">
+                    <label htmlFor="password_confirm">Confirm Password</label>
+                    <input
+                      className={cx('form-control', {
+                        'is-invalid': errors?.password_confirm,
+                      })}
+                      required
+                      type="password"
+                      name="password_confirm"
+                      id="password_confirm"
+                      placeholder="Re-enter password"
+                      pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                      title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                      ref={register({
+                        validate: (value) =>
+                          value === password.current ||
+                          'Passwords do not match',
+                      })}
+                    />
+                    <div className="invalid-feedback">
+                      {errors?.password_confirm?.message}
                     </div>
+                  </div>
 
                   <Row>
                     <div className="form-group">

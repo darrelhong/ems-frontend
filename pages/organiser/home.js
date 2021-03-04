@@ -33,7 +33,6 @@ export default function OrganiserHome() {
               <a>Create Event</a>
             </Link>
           </li>
-
         </ol>
       </BreadcrumbOne>
 

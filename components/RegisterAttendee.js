@@ -26,42 +26,38 @@ export default function RegisterAttendee({ title, registerApiUrl }) {
   password.current = watch('password', '');
 
   const { mutate, isError } = useMutation(
-  //   (data) => api.post(registerApiUrl, data),
-  //   {
-  //     onSuccess: () => {
-  //       router.push('/register/success');
-  //     },
-  //   }
-  // );
-  (data) => { api.post(registerApiUrl, data)
-    .then ((response)=>{
-  
-      console.log(response.data["message"]);
-      if (response.status == 200) {
-               
-        document.getElementById('register-form').reset();
-        if (response.data['message'] == 'alreadyExisted') {
-  
-          setShowUserAlrExistError(true);
-          setShowSuccess(false);
-          setLoginLoading(false);
-  
-          
-       } else if(response.data['message'] == 'success') {
-         setShowSuccess(true);
-         setShowUserAlrExistError(false);
-         setLoginLoading(false);
-       } else {
-        setShow(true);
-       }
-      }
-  
-  
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-    })
+    //   (data) => api.post(registerApiUrl, data),
+    //   {
+    //     onSuccess: () => {
+    //       router.push('/register/success');
+    //     },
+    //   }
+    // );
+    (data) => {
+      api
+        .post(registerApiUrl, data)
+        .then((response) => {
+          console.log(response.data['message']);
+          if (response.status == 200) {
+            document.getElementById('register-form').reset();
+            if (response.data['message'] == 'alreadyExisted') {
+              setShowUserAlrExistError(true);
+              setShowSuccess(false);
+              setLoginLoading(false);
+            } else if (response.data['message'] == 'success') {
+              setShowSuccess(true);
+              setShowUserAlrExistError(false);
+              setLoginLoading(false);
+            } else {
+              setShow(true);
+            }
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  );
 
   const onSubmit = async (data) => {
     setShow(false);
@@ -123,7 +119,6 @@ export default function RegisterAttendee({ title, registerApiUrl }) {
                         ref={register()}
                       />
                     </div>
-
                     <div className="form-group">
                       <label htmlFor="password">Password</label>
                       <input
@@ -137,7 +132,6 @@ export default function RegisterAttendee({ title, registerApiUrl }) {
                         ref={register()}
                       />
                     </div>
-
                     <div className="form-group">
                       <label htmlFor="password_confirm">Confirm Password</label>
                       <input
@@ -161,19 +155,17 @@ export default function RegisterAttendee({ title, registerApiUrl }) {
                         {errors?.password_confirm?.message}
                       </div>
                     </div>
-
                     <div className="form-group">
                       &nbsp;
                       <ButtonWithLoading
                         type="submit"
                         className="btn btn-fill-out btn-block"
                         name="register"
-                        isLoading={loginLoading && !isError  }
+                        isLoading={loginLoading && !isError}
                       >
                         Register
                       </ButtonWithLoading>
                     </div>
-
                     {isError && (
                       <Alert
                         show={show}
@@ -185,7 +177,6 @@ export default function RegisterAttendee({ title, registerApiUrl }) {
                         Email has already been exist.{' '}
                       </Alert>
                     )}
-
                     <Alert
                       show={showSuccess}
                       variant="success"
@@ -195,23 +186,24 @@ export default function RegisterAttendee({ title, registerApiUrl }) {
                       {' '}
                       You have succesfully registered. Please check your inbox
                       to verify your email.{' '}
-                    </Alert> <div
-                    style={{
-                      display: showUserAlrExistError ? 'block' : 'none',
-                    }}
-                  >
-                    {
-                      <Alert
-                        show={showUserAlrExistError}
-                        variant="danger"
-                        onClose={() => setShowUserAlrExistError(false)}
-                        dismissible
-                      >
-                        {' '}
-                        User already exist.{' '}
-                      </Alert>
-                    }
-                  </div>
+                    </Alert>{' '}
+                    <div
+                      style={{
+                        display: showUserAlrExistError ? 'block' : 'none',
+                      }}
+                    >
+                      {
+                        <Alert
+                          show={showUserAlrExistError}
+                          variant="danger"
+                          onClose={() => setShowUserAlrExistError(false)}
+                          dismissible
+                        >
+                          {' '}
+                          User already exist.{' '}
+                        </Alert>
+                      }
+                    </div>
                     {isError && (
                       <Alert
                         show={show}
@@ -224,8 +216,6 @@ export default function RegisterAttendee({ title, registerApiUrl }) {
                         again.{' '}
                       </Alert>
                     )}
-
-                  
                   </form>
 
                   <div className="form-note text-center space-mt--20">
