@@ -83,7 +83,7 @@ function PartnerHome() {
                       key={event.eid}
                       sm={6}
                       lg={4}
-                      className="mb-5 d-flex align-items-stretch3"
+                      className="mb-5 d-flex align-items-stretch"
                     >
                       <Link href={`/partner/events/${event.eid}`}>
                         <a>

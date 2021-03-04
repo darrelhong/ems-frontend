@@ -4,7 +4,7 @@ import { Card } from 'react-bootstrap';
 
 export default function EventCard({ event }) {
   return (
-    <Card>
+    <Card className="h-100">
       <Card.Img
         variant="top"
         src={event.images?.[0] || '/assets/images/img-placeholder.jpg'}
