@@ -100,7 +100,7 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
                   {' '}
                   {formatDate(
                     currEvent.eventStartDate,
-                    'eee, dd MMM yyyy, hh:mmbbb'
+                    'eee, dd MMM yyyy, hh:mmaa'
                   )}
                 </span>
                 {/* <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> */}
