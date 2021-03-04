@@ -3,6 +3,8 @@ import Link from 'next/link';
 import PropTypes from 'prop-types';
 import { Alert, Col, Container, Row } from 'react-bootstrap';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useForm } from 'react-hook-form';
+import cx from 'classnames';
 
 import api from '../../../lib/ApiClient';
 
@@ -158,6 +160,8 @@ function BusinessPartnerDetails({ id }) {
                 )}
               </Col>
             </Row>
+
+            <UpdatePartnerForm bp={bp} />
           </>
         )}
       </Container>
@@ -174,3 +178,124 @@ BusinessPartnerDetails.propTypes = {
 export default withProtectRoute(BusinessPartnerDetails, {
   redirectTo: '/admin/login',
 });
+
+function UpdatePartnerForm({ bp }) {
+  const queryClient = useQueryClient();
+  const { register, handleSubmit, errors, formState } = useForm({
+    defaultValues: {
+      name: bp.name,
+      phonenumber: bp.phonenumber,
+      address: bp.address,
+      description: bp.description,
+    },
+  });
+
+  const { mutate, isSuccess, isError } = useMutation(
+    (data) => api.post('/api/user/admin-update', data),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['partner', bp.id.toString()]);
+      },
+    }
+  );
+
+  const onSubmit = async (data) => {
+    mutate({
+      ...data,
+      id: bp.id,
+    });
+  };
+
+  return (
+    <form className="mt-4" onSubmit={handleSubmit(onSubmit)}>
+      <div className="form-row">
+        <div className="form-group col-md-6">
+          <label htmlFor="name">Name</label>
+          <input
+            className={cx('form-control', {
+              'is-invalid': errors?.name,
+            })}
+            type="text"
+            name="name"
+            id="name"
+            ref={register({ required: 'Name is required' })}
+          />
+          <div className="invalid-feedback">{errors?.name?.message}</div>
+        </div>
+
+        <div className="form-group col-md-6">
+          <label htmlFor="phonenumber">Phone no.</label>
+          <input
+            className={cx('form-control', {
+              'is-invalid': errors?.phonenumber,
+            })}
+            type="text"
+            name="phonenumber"
+            id="phonenumber"
+            ref={register({
+              required: 'Phone is required',
+              pattern: {
+                value: /(\+65)?(6|8|9)\d{7}/,
+                message: 'Invalid number',
+              },
+            })}
+          />
+          <div className="invalid-feedback">{errors?.phonenumber?.message}</div>
+        </div>
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="description">Description</label>
+        <textarea
+          className={cx('form-control', {
+            'is-invalid': errors?.description,
+          })}
+          type="text"
+          name="description"
+          id="description"
+          ref={register()}
+        />
+        <div className="invalid-feedback">{errors?.description?.message}</div>
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="address">Address</label>
+        <textarea
+          className={cx('form-control', {
+            'is-invalid': errors?.address,
+          })}
+          type="text"
+          name="address"
+          id="address"
+          ref={register()}
+        />
+        <div className="invalid-feedback">{errors?.address?.message}</div>
+      </div>
+      <div className="form-group">
+        <ButtonWithLoading
+          type="submit"
+          className="btn btn-fill-out"
+          isLoading={formState?.isSubmitting}
+        >
+          Update
+        </ButtonWithLoading>
+
+        {isError && (
+          <Alert className="mt-4 mb-0" variant="danger">
+            An error has occurred.
+          </Alert>
+        )}
+
+        {isSuccess && (
+          <Alert className="mt-4 mb-0" variant="success">
+            Profile succesfully updated!
+          </Alert>
+        )}
+      </div>
+    </form>
+  );
+}
+
+UpdatePartnerForm.propTypes = {
+  bp: PropTypes.object,
+};
