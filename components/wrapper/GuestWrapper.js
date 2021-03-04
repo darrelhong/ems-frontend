@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { FooterOne } from '../Footer';
 
 import GuestHeader from '../Header/GuestHeader';
-import withProtectRoute from '../ProtectRouteWrapper';
 
 function GuestWrapper({ title, children }) {
   return (
@@ -23,11 +22,8 @@ function GuestWrapper({ title, children }) {
 }
 
 GuestWrapper.propTypes = {
-  title: PropTypes.string,
-  children: PropTypes.node,
+  title: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
 };
 
-// export default withProtectRoute(GuestWrapper, {
-//   redirectTo: '/index',
-// });
 export default GuestWrapper;

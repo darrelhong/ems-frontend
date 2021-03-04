@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import { Alert, Container } from 'react-bootstrap';
 import { useMutation } from 'react-query';
 import { useForm } from 'react-hook-form';
@@ -21,11 +20,7 @@ export default function ForgotPassword() {
 
   return (
     <>
-      <Head>
-        <title>Forgot password</title>
-      </Head>
-
-      <GuestWrapper>
+      <GuestWrapper title="Forgot password">
         <Container className="my-4">
           <div className="d-flex justify-content-center">
             <div style={{ maxWidth: '576px' }}>
