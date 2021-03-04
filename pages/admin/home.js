@@ -62,6 +62,17 @@ function AdminHome() {
               </Card.Body>
             </Card>
           </Col>
+          <Col sm={6} lg={4}>
+            <Card>
+              <Card.Header>Attendee</Card.Header>
+              <Card.Body>
+                <Card.Text>View Attendee</Card.Text>
+                <Link href="/admin/attendee">
+                  <button className="btn btn-fill-out btn-sm">View</button>
+                </Link>
+              </Card.Body>
+            </Card>
+          </Col>
         </Row>
       </Container>
 

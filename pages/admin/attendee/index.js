@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 import { InfoOutlined } from '@material-ui/icons';
-import { Card, Col, Container, Row } from 'react-bootstrap';
+import { Col, Container, Row } from 'react-bootstrap';
 
 import api from '../../../lib/ApiClient';
 
@@ -13,15 +13,15 @@ import { BreadcrumbOne } from '../../../components/Breadcrumb';
 import MaterialTable from '../../../lib/MaterialTable';
 import { FooterOne } from '../../../components/Footer';
 
-const getBusinessPartners = async () => {
-  const { data } = await api.get('/api/partner/all');
+const getAttendees = async () => {
+  const { data } = await api.get('/api/attendee/all');
   return data;
 };
 
-function AdminBusinessParters() {
+function AdminAttendees() {
   const router = useRouter();
 
-  const { data, isLoading } = useQuery('businessPartners', getBusinessPartners);
+  const { data, isLoading } = useQuery('attendees', getAttendees);
 
   const columns = [
     { field: 'id', title: 'ID' },
@@ -33,19 +33,19 @@ function AdminBusinessParters() {
   return (
     <>
       <Head>
-        <title>Business Partners</title>
+        <title>Attendees</title>
       </Head>
 
       <AdminHeaderTop />
 
-      <BreadcrumbOne pageTitle="Business Partners">
+      <BreadcrumbOne pageTitle="Attendees">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/admin/home">
               <a>Admin Home</a>
             </Link>
           </li>
-          <li className="breadcrumb-item active">Business partners</li>
+          <li className="breadcrumb-item active">Attendees</li>
         </ol>
       </BreadcrumbOne>
 
@@ -60,7 +60,7 @@ function AdminBusinessParters() {
           <Row>
             <Col>
               <MaterialTable
-                title="Business Partners"
+                title="Attendees"
                 columns={columns}
                 data={data}
                 options={{
@@ -70,9 +70,9 @@ function AdminBusinessParters() {
                 actions={[
                   {
                     icon: InfoOutlined,
-                    tooltip: 'View business partner',
+                    tooltip: 'View attendee details',
                     onClick: (event, rowData) => {
-                      router.push(`bizpartners/${rowData.id}`);
+                      router.push(`attendee/${rowData.id}`);
                     },
                   },
                 ]}
@@ -80,19 +80,6 @@ function AdminBusinessParters() {
             </Col>
           </Row>
         )}
-
-        <Row className="mt-4">
-          <Col md={4}>
-            <Card>
-              <Card.Body>
-                <Card.Text>Create business partner</Card.Text>
-                <Link href="/admin/bizpartners/create">
-                  <button className="btn btn-fill-out btn-sm">Create</button>
-                </Link>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
       </Container>
 
       <FooterOne />
@@ -100,6 +87,6 @@ function AdminBusinessParters() {
   );
 }
 
-export default withProtectRoute(AdminBusinessParters, {
+export default withProtectRoute(AdminAttendees, {
   redirectTo: '/admin/login',
 });
