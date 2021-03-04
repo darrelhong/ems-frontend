@@ -60,21 +60,21 @@ function PartnerHome() {
       </BreadcrumbOne>
 
       <Container className="my-4">
+        <Row className="mb-4">
+          <Col xs={4} sm={3}>
+            <select className="custom-select" onChange={handleChange}>
+              <option value="">Sort by</option>
+              <option value="name-asc">Name - A to Z</option>
+              <option value="name-desc">Name - Z to A</option>
+            </select>
+          </Col>
+        </Row>
         {status === 'loading' ? (
           <Spinner animation="grow" role="status" aria-hidden="true" />
         ) : status === 'error' ? (
           <Alert variant="danger">An error has occured</Alert>
         ) : (
           <>
-            <Row className="mb-4">
-              <Col xs={4} sm={3}>
-                <select className="custom-select" onChange={handleChange}>
-                  <option value="">Sort by</option>
-                  <option value="name-asc">Name - A to Z</option>
-                  <option value="name-desc">Name - Z to A</option>
-                </select>
-              </Col>
-            </Row>
             <Row>
               {data.pages.map((page, i) => (
                 <Fragment key={i}>
