@@ -31,75 +31,81 @@ const HeaderOne = ({ cartItems, navPositionClass }) => {
   };
 
   return (
-    <header
-      className={`header-wrap header-with-topbar ${scroll > headerHeight ? 'is-sticky' : ''
+    <>
+      {scroll > headerHeight && (
+        <div style={{ height: 90, width: '100%' }}></div>
+      )}
+      <header
+        className={`header-wrap header-with-topbar ${
+          scroll > headerHeight ? 'is-sticky' : ''
         }`}
-    >
-      {/* header top */}
-      <OrganiserHeaderTop />
+      >
+        {/* header top */}
+        <OrganiserHeaderTop />
 
-      <div className="bottom-header dark-skin">
-        <Container>
-          <div className="bottom-header-container d-flex justify-content-between align-items-center position-relative">
-            {/* logo */}
-            <Link href="/">
-              <a className="navbar-brand">
-                <img
-                  className="logo-light"
-                  src="/assets/images/event-stop-logo.png"
-                  alt="logo"
-                />
-                <img
-                  className="logo-dark"
-                  src="/assets/images/event-stop-logo.png"
-                  alt="logo"
-                />
-              </a>
-            </Link>
+        <div className="bottom-header dark-skin">
+          <Container>
+            <div className="bottom-header-container d-flex justify-content-between align-items-center position-relative">
+              {/* logo */}
+              <Link href="/">
+                <a className="navbar-brand">
+                  <img
+                    className="logo-light"
+                    src="/assets/images/event-stop-logo.png"
+                    alt="logo"
+                  />
+                  <img
+                    className="logo-dark"
+                    src="/assets/images/event-stop-logo.png"
+                    alt="logo"
+                  />
+                </a>
+              </Link>
 
-            {/* navigation */}
-            <Navigation positionClass={navPositionClass} />
+              {/* navigation */}
+              <Navigation positionClass={navPositionClass} />
 
-            {/* icons */}
-            <ul className="header-icons d-flex">
-              <li className="d-none d-lg-block">
-                <button
-                  className="nav-link search-trigger"
-                  onClick={() => {
-                    setOffCanvasSearchActive(true);
-                  }}
-                >
-                  <IoIosSearch />
-                </button>
-              </li>
+              {/* icons */}
+              <ul className="header-icons d-flex">
+                <li className="d-none d-lg-block">
+                  <button
+                    className="nav-link search-trigger"
+                    onClick={() => {
+                      setOffCanvasSearchActive(true);
+                    }}
+                  >
+                    <IoIosSearch />
+                  </button>
+                </li>
 
-              <li className="d-block d-lg-none">
-                <button
-                  className="nav-link mobile-menu-trigger pr-0"
-                  onClick={() => {
-                    setOffCanvasMobileMenuActive(true);
-                  }}
-                >
-                  <IoIosMenu />
-                </button>
-              </li>
-            </ul>
-          </div>
-        </Container>
-      </div>
+                <li className="d-block d-lg-none">
+                  <button
+                    className="nav-link mobile-menu-trigger pr-0"
+                    onClick={() => {
+                      setOffCanvasMobileMenuActive(true);
+                    }}
+                  >
+                    <IoIosMenu />
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </Container>
+        </div>
 
-      {/* search overlay */}
-      <SearchOverlay
-        activeStatus={offCanvasSearchActive}
-        getActiveStatus={setOffCanvasSearchActive}
-      />
+        {/* search overlay */}
+        <SearchOverlay
+          activeStatus={offCanvasSearchActive}
+          getActiveStatus={setOffCanvasSearchActive}
+        />
 
-      {/* mobile menu */}
-      <MobileMenuEvntOrg
-        activeStatus={offCanvasMobileMenuActive}
-        getActiveStatus={setOffCanvasMobileMenuActive}
-      />
-    </header>
+        {/* mobile menu */}
+        <MobileMenuEvntOrg
+          activeStatus={offCanvasMobileMenuActive}
+          getActiveStatus={setOffCanvasMobileMenuActive}
+        />
+      </header>
+    </>
   );
 };
 
