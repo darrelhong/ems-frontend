@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
@@ -61,6 +62,8 @@ function AttendeeDetails({ id }) {
   } = useMutation((email) =>
     api.post(`/api/user/reset-password/request?email=${email}`)
   );
+
+  const [showForm, setShowForm] = useState(false);
 
   return (
     <>
@@ -146,7 +149,7 @@ function AttendeeDetails({ id }) {
             <Row>
               <Col>
                 <ButtonWithLoading
-                  className="btn btn-primary btn-sm mb-2"
+                  className="btn btn-primary btn-sm mb-4"
                   onClick={() => resetPassword(atnd.email)}
                   isLoading={rpIsLoading}
                 >
@@ -165,7 +168,18 @@ function AttendeeDetails({ id }) {
               </Col>
             </Row>
 
-            <UpdateAttendeeForm atnd={atnd} />
+            <Row>
+              <Col>
+                <button
+                  className="btn btn-fill-out btn-sm"
+                  onClick={() => setShowForm((curr) => !curr)}
+                >
+                  {showForm ? 'Close form' : 'Show update form'}
+                </button>
+              </Col>
+            </Row>
+
+            {showForm && <UpdateAttendeeForm atnd={atnd} />}
           </>
         )}
       </Container>

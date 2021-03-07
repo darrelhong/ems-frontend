@@ -40,7 +40,7 @@ function AdminHome() {
           </p>
         )}
         <Row>
-          <Col sm={6} lg={4}>
+          <Col sm={6} lg={4} className="mb-4">
             <Card>
               <Card.Header>Event organisers</Card.Header>
               <Card.Body>
@@ -51,7 +51,7 @@ function AdminHome() {
               </Card.Body>
             </Card>
           </Col>
-          <Col sm={6} lg={4}>
+          <Col sm={6} lg={4} className="mb-4">
             <Card>
               <Card.Header>Business partners</Card.Header>
               <Card.Body>
@@ -62,7 +62,7 @@ function AdminHome() {
               </Card.Body>
             </Card>
           </Col>
-          <Col sm={6} lg={4}>
+          <Col sm={6} lg={4} className="mb-4">
             <Card>
               <Card.Header>Attendee</Card.Header>
               <Card.Body>

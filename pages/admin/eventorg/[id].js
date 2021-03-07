@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
@@ -73,6 +74,8 @@ function EventOrganiserDetails({ id }) {
   const { data: eo, isLoading } = useQuery(['organiser', id], () =>
     getEventOrganiser(id)
   );
+
+  const [showForm, setShowForm] = useState(false);
 
   return (
     <>
@@ -206,7 +209,7 @@ function EventOrganiserDetails({ id }) {
             <Row>
               <Col>
                 <ButtonWithLoading
-                  className="btn btn-primary btn-sm mb-2"
+                  className="btn btn-primary btn-sm mb-4"
                   onClick={() => resetPassword(eo.email)}
                   isLoading={rpIsLoading}
                 >
@@ -225,7 +228,17 @@ function EventOrganiserDetails({ id }) {
               </Col>
             </Row>
 
-            <UpdateEventOrganiserForm eo={eo} />
+            <Row>
+              <Col>
+                <button
+                  className="btn btn-fill-out btn-sm"
+                  onClick={() => setShowForm((curr) => !curr)}
+                >
+                  {showForm ? 'Close form' : 'Show update form'}
+                </button>
+              </Col>
+            </Row>
+            {showForm && <UpdateEventOrganiserForm eo={eo} />}
           </>
         )}
       </Container>
