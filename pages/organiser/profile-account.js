@@ -21,6 +21,8 @@ import { FaRegEdit } from 'react-icons/fa';
 import OrganiserWrapper from '../../components/wrapper/OrganiserWrapper';
 import { BsFillInfoCircleFill } from 'react-icons/bs';
 import ButtonWithLoading from '../../components/custom/ButtonWithLoading';
+import { getUser } from '../../lib/query/getUser';
+
 //test
 import {
   IoIosCash,
@@ -31,51 +33,37 @@ import {
 
 import { useForm } from 'react-hook-form';
 import useUser from '../../lib/query/useUser';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient, useQuery } from 'react-query';
 import api from '../../lib/ApiClient';
 import { logout } from '../../lib/auth';
 
 const MyAccount = () => {
   // const [show, setShow] = useState(false);
   // const handleClose = () => setShow(false);
-  const [showSuccessMsg, setShowSuccessMsg] = useState(false);
-  const [showFailedMsg, setShowFailedMsg] = useState(false);
+  //const [showSuccessMsg, setShowSuccessMsg] = useState(false);
+  //const [showFailedMsg, setShowFailedMsg] = useState(false);
   //const [updateAccDetailStatus, setUpdateAccDetailStatus, ] = useState(false);
   //const [uploadSucess, setUploadSucess] = useState(false);
-  const [fileUpload, setfileUpload] = useState(false);
-  const [file, setFile] = useState('uploadfile');
+  // const [fileUpload, setfileUpload] = useState(false);
+  const [proficpicfile, setProfilePicFile] = useState('uploadprofilepicfile');
 
   const [fileName, setFileName] = useState('Choose image');
   const [loginLoading, setLoginLoading] = useState(false);
-
-  const { data: user } = useUser(localStorage.getItem('userId'));
+  const [user, setUser] = useState();
+  //const { data: user } = useUser(localStorage.getItem('userId'));
   //const profiepicSrcUrl = user?.profilePic;
-  const [profilepicUrl, setProfilepicUrl] = useState(
-    '../../public/assets/images/defaultprofilepic.png'
-  );
-  // display the inital profile picture
-  //console.log(user?.profilePic);
-  // if (user?.profilePic != null) {
-  //   useEffect(() => {
-  //     setProfilepicUrl(user?.profilePic);
-  //   }, [user?.profilePic]);
-  // } else {
-  //   useEffect(() => {
-  //     setProfilepicUrl('../../assets/images/defaultprofilepic.png');
-  //   }, ['../../assets/images/defaultprofilepic.png']);
-  // }
+  const [profilepicUrl, setProfilepicUrl] = useState(null);
 
-  useEffect(() => {
-    if (user?.profilePic != null) {
-      setProfilepicUrl(user?.profilePic);
-    } else {
-      setProfilepicUrl('../../assets/images/defaultprofilepic.png');
-    }
-  }, [user?.profilePic]);
-
-  useEffect(() => {
-    setFileName('Choose image');
-  }, ['Choose image']);
+  useEffect(async () => {
+    await getUser(localStorage.getItem('userId')).then((data) => {
+      setUser(data);
+      // if (user?.profilePic == null) {
+      //   setProfilepicUrl('../../assets/images/defaultprofilepic.png');
+      // } else {
+      //   setProfilepicUrl(user?.profilePic);
+      // }
+    });
+  });
 
   //for modal of disabling account
   const [show, setShow] = useState(false);
@@ -94,6 +82,7 @@ const MyAccount = () => {
   //show pw error alert
   const [showPW, setShowPW] = useState(false);
   const [showFileSizeError, setShowFileSizeError] = useState(false);
+  const [showNoFileSelectError, setShowNoFileSelectError] = useState(false);
 
   const renderTooltip = (props) => (
     <Tooltip id="button-tooltip" {...props}>
@@ -123,101 +112,69 @@ const MyAccount = () => {
     defaultValues: { name: user?.name },
   });
 
-  const mutateAccDetail = useMutation((data) =>
+  const mutateAccDetail = useMutation((data) => {
+    var form_data = new FormData();
+    form_data.append('address', data['address']);
+    form_data.append('description', data['description']);
+    form_data.append('name', data['name']);
+    form_data.append('phonenumber', data['phonenumber']);
+    if (fileName !== 'Choose image') {
+      form_data.append('profilepicfile', proficpicfile);
+    } else {
+      form_data.append('profilepicfile', null);
+    }
+
+    form_data.append('id', data['id']);
+
     api
-      .post('/api/user/update', data)
+      .post('/api/organiser/updateEoProfile', form_data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
       .then((response) => {
+        console.log('update profile response');
+        console.log(response);
+        console.log(response.data['fileDownloadUri']);
+        setProfilepicUrl(response.data['fileDownloadUri']);
         setAccSaved(true);
         setAccSuccess(' Account details saved successfully! ');
         setLoginLoading(false);
-        window.location.reload();
-
-        //document.getElementById("account-details-form").reset();
+        console.log('print user profile pic');
+        console.log(user?.profilePic);
+        // window.location.reload();
       })
       .catch((error) => {
         console.log(error);
-      })
-  );
+      });
+  });
 
   const onSubmit = async (data) => {
-    console.log('data acc' + data['name']);
     setLoginLoading(true);
-
-    if (
-      user?.address != data.address ||
-      user?.description != data.description ||
-      user?.name != data.name ||
-      user?.phonenumber != data.phonenumber ||
-      fileUpload == true
-    ) {
-      mutateAccDetail.mutate({
-        address: data.address,
-        description: data.description,
-        name: data.name,
-        phonenumber: data.phonenumber,
-        id: user?.id,
-      });
-    }
-    if (fileUpload == true) {
-      console.log('fileupload is true');
-      submitFile();
-    }
+    setAccSaved(false);
+    mutateAccDetail.mutate({
+      address: data.address,
+      description: data.description,
+      name: data.name,
+      phonenumber: data.phonenumber,
+      id: user?.id,
+    });
   };
 
-  // const onSubmitPassword = async (data) => {
-  //   console.log('call change password' + data['newPassword']);
-
-  //   mutatePassword.mutate({
-  //     oldPassword: data.oldPassword,
-  //     newPassword: data.newPassword,
-  //   });
-  //   // console.log(data);
-  // };
-
   const handleFileChange = async (e) => {
-    console.log('call handleFileChange');
-    console.log(e);
-    console.log(e.target.files[0].name);
-    console.log(e.target.files[0].size);
-    console.log(e.target.files[0].size / 1000000);
-
-    if (e.target.files[0].size / 1000000 > 1 || e.target.files[0].name == '') {
+    if (e.target.files[0] == undefined) {
+      // setShowNoFileSelectError(true);
+      setFileName('Choose image');
+    } else if (e.target.files[0].size / 1000000 > 1) {
       console.log('exceeded');
       setShowFileSizeError(true);
       document.getElementById('custom-file').value = '';
     } else {
       setShowFileSizeError(false);
-      setFile(e.target.files[0]);
-      setfileUpload(true);
+      setProfilePicFile(e.target.files[0]);
+      //setfileUpload(true);
       setFileName(e.target.files[0].name);
     }
-  };
-  const submitFile = async () => {
-    const data = new FormData();
-    //if(file name is not empty..... handle condition when no file is selected)
-    data.append('file', file);
-    api
-      .post('/api/uploadProfilePicFile', data, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        onSuccess: () => {
-          queryClient.invalidateQueries(['user', user?.id.toString()]);
-        },
-      })
-      .then((response) => {
-        console.log(response);
-        if (response.status == 200) {
-          console.log('file upload sucessfully');
-          console.log(response);
-          console.log(response.data['fileDownloadUri']);
-          var newlink = response.data['fileDownloadUri'];
-          setProfilepicUrl(newlink);
-        }
-      })
-      .catch(() => {
-        setShowFailedMsg(true);
-      });
   };
 
   const mutatePassword = useMutation((data) => {
@@ -314,10 +271,10 @@ const MyAccount = () => {
         </Modal.Header>
         <Modal.Body>Are you sure you want to disable your account?</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleDisabled}>
+          <Button className="btn btn-fill-out" onClick={handleDisabled}>
             Yes
           </Button>
-          <button className="btn btn-fill-out" onClick={handleClose}>
+          <button variant="secondary" onClick={handleClose}>
             No
           </button>
         </Modal.Footer>
@@ -426,30 +383,85 @@ const MyAccount = () => {
                       </Card.Header>
                       <Card.Body>
                         <div className="account-details-form">
-                          <label>
-                            Profile Picture &nbsp;
-                            <OverlayTrigger
-                              placement="right"
-                              delay={{ show: 250, hide: 400 }}
-                              overlay={renderTooltip}
+                          <div
+                            style={{
+                              display: showFileSizeError ? 'block' : 'none',
+                            }}
+                          >
+                            {
+                              <Alert
+                                show={showFileSizeError}
+                                variant="danger"
+                                onClose={() => setShowFileSizeError(false)}
+                                dismissible
+                              >
+                                {' '}
+                                The image size must be less than 3 mb.{' '}
+                              </Alert>
+                            }
+                          </div>
+
+                          <Alert
+                            show={showAccSaved}
+                            variant="success"
+                            onClose={() => setAccSaved(false)}
+                            dismissible
+                          >
+                            {accSuccess}
+                            <Link
+                              href={{
+                                pathname: '/organiser/organiser-profile',
+                                query: { paraId: JSON.stringify(user?.id) },
+                              }}
                             >
-                              <BsFillInfoCircleFill></BsFillInfoCircleFill>
-                            </OverlayTrigger>
-                          </label>
-                          <Row>
-                            <Col className="form-group" xs={10} md={6}>
-                              <Image
-                                className="profile-image"
-                                src={profilepicUrl}
-                                thumbnail
-                              />
-                            </Col>
-                          </Row>
+                              <a>
+                                <span>View Profile</span>
+                              </a>
+                            </Link>
+                          </Alert>
 
                           <form
                             id="account-details-form"
                             onSubmit={handleSubmit(onSubmit)}
                           >
+                            <label>
+                              Profile Picture &nbsp;
+                              <OverlayTrigger
+                                placement="right"
+                                delay={{ show: 250, hide: 400 }}
+                                overlay={renderTooltip}
+                              >
+                                <BsFillInfoCircleFill></BsFillInfoCircleFill>
+                              </OverlayTrigger>
+                            </label>
+                            <Row>
+                              <Col className="form-group" xs={10} md={6}>
+                                {user?.profilePic != null &&
+                                  profilepicUrl == null && (
+                                    <Image
+                                      className="profile-image"
+                                      src={user?.profilePic}
+                                      thumbnail
+                                    />
+                                  )}
+
+                                {user?.profilePic == null && (
+                                  <Image
+                                    className="profile-image"
+                                    src="../../assets/images/defaultprofilepic.png"
+                                    thumbnail
+                                  />
+                                )}
+                                {profilepicUrl != null && (
+                                  <Image
+                                    className="profile-image"
+                                    src={profilepicUrl}
+                                    thumbnail
+                                  />
+                                )}
+                              </Col>
+                            </Row>
+
                             <Row>
                               <Col className="form-group" md={12}>
                                 <Form.Group>
@@ -477,28 +489,6 @@ const MyAccount = () => {
                                   </button>
                                   </div> */}
                                 </Form.Group>
-
-                                <div
-                                  style={{
-                                    display: showFileSizeError
-                                      ? 'block'
-                                      : 'none',
-                                  }}
-                                >
-                                  {
-                                    <Alert
-                                      show={showFileSizeError}
-                                      variant="danger"
-                                      onClose={() =>
-                                        setShowFileSizeError(false)
-                                      }
-                                      dismissible
-                                    >
-                                      {' '}
-                                      The image size must be less than 3 mb.{' '}
-                                    </Alert>
-                                  }
-                                </div>
                               </Col>
                             </Row>
 
@@ -506,7 +496,7 @@ const MyAccount = () => {
                               <Col className="form-group" md={12}>
                                 <label>
                                   Company Name{' '}
-                                  <span className="required"></span>
+                                  <span className="required">*</span>
                                 </label>
                                 <input
                                   required
@@ -536,7 +526,7 @@ const MyAccount = () => {
                               <Col className="form-group" md={12}>
                                 <label>
                                   Email Address{' '}
-                                  <span className="required"></span>
+                                  <span className="required">*</span>
                                 </label>
                                 <input
                                   required
@@ -551,7 +541,7 @@ const MyAccount = () => {
                               <Col className="form-group" md={12}>
                                 <label>
                                   Phone Number (+65){' '}
-                                  <span className="required"></span>
+                                  <span className="required">*</span>
                                 </label>
                                 <input
                                   required
@@ -592,15 +582,6 @@ const MyAccount = () => {
                                 </ButtonWithLoading>
                               </Col>
                             </Row>
-                            <div>&nbsp;</div>
-                            <Alert
-                              show={showAccSaved}
-                              variant="success"
-                              onClose={() => setAccSaved(false)}
-                              dismissible
-                            >
-                              {accSuccess}
-                            </Alert>
                           </form>
                         </div>
                       </Card.Body>
