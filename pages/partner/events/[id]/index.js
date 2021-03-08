@@ -4,12 +4,12 @@ import { useQuery } from 'react-query';
 import { Alert, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { format, parseISO } from 'date-fns';
 
-import api from '../../../lib/ApiClient';
+import api from '../../../../lib/ApiClient';
 
-import { BreadcrumbOne } from '../../../components/Breadcrumb';
-import PartnerWrapper from '../../../components/wrapper/PartnerWrapper';
-import EventImageGallery from '../../../components/events/partner/EventImageGallery';
-import AddToCalendar from '../../../components/custom/AddToCalendar';
+import { BreadcrumbOne } from '../../../../components/Breadcrumb';
+import PartnerWrapper from '../../../../components/wrapper/PartnerWrapper';
+import EventImageGallery from '../../../../components/events/partner/EventImageGallery';
+import AddToCalendar from '../../../../components/custom/AddToCalendar';
 
 const getEvent = async (id) => {
   const { data } = await api.get(`/api/event/${id}`);
