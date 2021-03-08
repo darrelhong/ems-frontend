@@ -38,30 +38,17 @@ import api from '../../lib/ApiClient';
 import { logout } from '../../lib/auth';
 
 const MyAccount = () => {
-  // const [show, setShow] = useState(false);
-  // const handleClose = () => setShow(false);
-  //const [showSuccessMsg, setShowSuccessMsg] = useState(false);
-  //const [showFailedMsg, setShowFailedMsg] = useState(false);
-  //const [updateAccDetailStatus, setUpdateAccDetailStatus, ] = useState(false);
-  //const [uploadSucess, setUploadSucess] = useState(false);
-  // const [fileUpload, setfileUpload] = useState(false);
   const [proficpicfile, setProfilePicFile] = useState('uploadprofilepicfile');
 
   const [fileName, setFileName] = useState('Choose image');
   const [loginLoading, setLoginLoading] = useState(false);
   const [user, setUser] = useState();
   //const { data: user } = useUser(localStorage.getItem('userId'));
-  //const profiepicSrcUrl = user?.profilePic;
   const [profilepicUrl, setProfilepicUrl] = useState(null);
 
   useEffect(async () => {
     await getUser(localStorage.getItem('userId')).then((data) => {
       setUser(data);
-      // if (user?.profilePic == null) {
-      //   setProfilepicUrl('../../assets/images/defaultprofilepic.png');
-      // } else {
-      //   setProfilepicUrl(user?.profilePic);
-      // }
     });
   });
 
@@ -82,7 +69,6 @@ const MyAccount = () => {
   //show pw error alert
   const [showPW, setShowPW] = useState(false);
   const [showFileSizeError, setShowFileSizeError] = useState(false);
-  const [showNoFileSelectError, setShowNoFileSelectError] = useState(false);
 
   const renderTooltip = (props) => (
     <Tooltip id="button-tooltip" {...props}>
@@ -140,9 +126,6 @@ const MyAccount = () => {
         setAccSaved(true);
         setAccSuccess(' Account details saved successfully! ');
         setLoginLoading(false);
-        console.log('print user profile pic');
-        console.log(user?.profilePic);
-        // window.location.reload();
       })
       .catch((error) => {
         console.log(error);
@@ -163,7 +146,6 @@ const MyAccount = () => {
 
   const handleFileChange = async (e) => {
     if (e.target.files[0] == undefined) {
-      // setShowNoFileSelectError(true);
       setFileName('Choose image');
     } else if (e.target.files[0].size / 1000000 > 1) {
       console.log('exceeded');
@@ -216,6 +198,7 @@ const MyAccount = () => {
     setPWAlert('');
     setShowPW(false);
     setConfirmPW(false);
+    setLoginLoading(true);
 
     var result = validatePassword(
       data.oldPassword,
@@ -236,9 +219,11 @@ const MyAccount = () => {
     } else if (result == 'same as current') {
       setPWAlert('Your current password is the same as the new password.');
       setShowPW(true);
+      setLoginLoading(false);
     } else if (result == 'incorrect') {
       setPWAlert('Passwords do not match.');
       setShowPW(true);
+      setLoginLoading(false);
     }
   };
 
@@ -644,65 +629,6 @@ const MyAccount = () => {
                             id="change-password-form"
                             onSubmit={handleSubmit(onSubmitPassword)}
                           >
-                            <Col className="form-group" md={12}>
-                              <label>
-                                Current Password{' '}
-                                <span className="required"></span>
-                              </label>
-                              <input
-                                required
-                                className="form-control"
-                                name="oldPassword"
-                                type="password"
-                                placeholder="Enter password"
-                                ref={register()}
-                              />
-                            </Col>
-                            <Col className="form-group" md={12}>
-                              <label>
-                                New Password <span className="required"></span>
-                              </label>
-                              <input
-                                required
-                                className="form-control"
-                                name="newPassword"
-                                type="password"
-                                placeholder="Enter new password"
-                                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                                title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
-                                ref={register()}
-                              />
-                            </Col>
-
-                            <Col className="form-group" md={12}>
-                              <label>
-                                Confirm Password{' '}
-                                <span className="required"></span>
-                              </label>
-                              <input
-                                required
-                                className="form-control"
-                                name="confirmPassword"
-                                type="password"
-                                placeholder="Re-enter your new password"
-                                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                                title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
-                                ref={register()}
-                              />
-                            </Col>
-
-                            <Col>
-                              <button
-                                type="submit"
-                                className="btn btn-fill-out"
-                                name="submit"
-                                value="Submit"
-                              >
-                                Save
-                              </button>
-                            </Col>
-
-                            <div>&nbsp;</div>
                             <Alert
                               show={confirmPW}
                               variant="success"
@@ -719,6 +645,72 @@ const MyAccount = () => {
                             >
                               {pwAlert}
                             </Alert>
+                            <Col className="form-group" md={12}>
+                              <label>
+                                Current Password{' '}
+                                <span className="required">*</span>
+                              </label>
+                              <input
+                                required
+                                className="form-control"
+                                name="oldPassword"
+                                type="password"
+                                placeholder="Enter password"
+                                ref={register()}
+                              />
+                            </Col>
+                            <Col className="form-group" md={12}>
+                              <label>
+                                New Password <span className="required">*</span>
+                              </label>
+                              <input
+                                required
+                                className="form-control"
+                                name="newPassword"
+                                type="password"
+                                placeholder="Enter new password"
+                                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                                title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                                ref={register()}
+                              />
+                            </Col>
+
+                            <Col className="form-group" md={12}>
+                              <label>
+                                Confirm Password{' '}
+                                <span className="required">*</span>
+                              </label>
+                              <input
+                                required
+                                className="form-control"
+                                name="confirmPassword"
+                                type="password"
+                                placeholder="Re-enter your new password"
+                                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                                title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                                ref={register()}
+                              />
+                            </Col>
+
+                            <Col>
+                              <ButtonWithLoading
+                                type="submit"
+                                className="btn btn-fill-out"
+                                name="submit"
+                                value="Submit"
+                                isLoading={loginLoading}
+                              >
+                                Save
+                              </ButtonWithLoading>
+                              {/* <button
+                                type="submit"
+                                className="btn btn-fill-out"
+                                name="submit"
+                                value="Submit"
+                              >
+                                Save
+                              </button> */}
+                            </Col>
                           </form>
                         </div>
                       </Card.Body>

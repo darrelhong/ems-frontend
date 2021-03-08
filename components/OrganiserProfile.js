@@ -160,12 +160,6 @@ const EventOrgProfile = ({ paraId_ }) => {
     }
   }, []);
 
-  //console.log('update detected');
-  //console.log(localStorage);
-
-  // window.location.reload();
-  // localStorage.setItem('updateProfile', 'false');
-
   return (
     <div>
       <BreadcrumbOne pageTitle="Organiser Profile Details">
