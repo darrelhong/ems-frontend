@@ -22,7 +22,7 @@ export default function PartnerHome() {
         </ol>
       </BreadcrumbOne>
 
-      <Container>
+      <Container className="my-4">
         {isLoading && <div className="spinner-grow" role="status" />}
         {isSuccess && (
           <>

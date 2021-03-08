@@ -9,6 +9,7 @@ import api from '../../../lib/ApiClient';
 import { BreadcrumbOne } from '../../../components/Breadcrumb';
 import PartnerWrapper from '../../../components/wrapper/PartnerWrapper';
 import EventImageGallery from '../../../components/events/partner/EventImageGallery';
+import AddToCalendar from '../../../components/custom/AddToCalendar';
 
 const getEvent = async (id) => {
   const { data } = await api.get(`/api/event/${id}`);
@@ -83,6 +84,10 @@ export default function PartnerEventPage({ id }) {
                   </p>
 
                   <br></br>
+
+                  <AddToCalendar event={data} />
+
+                  <br></br>
                   <br></br>
 
                   <p className="text-dark d-inline">Sales period: </p>
@@ -113,5 +118,5 @@ export default function PartnerEventPage({ id }) {
 }
 
 PartnerEventPage.propTypes = {
-  id: PropTypes.number,
+  id: PropTypes.string,
 };
