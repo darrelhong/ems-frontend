@@ -1,4 +1,6 @@
 import PartnerProfile from '../../components/PartnerProfile';
+import ProfileNew from '../../components/ProfileNew';
+
 import { useState, useEffect } from 'react';
 import { withRouter } from 'next/router';
 import PartnerWrapper from '../../components/wrapper/PartnerWrapper';
@@ -62,12 +64,19 @@ const Profile = ({ router: { query } }) => {
           />
         </OrganiserWrapper>)}
 
-        {role === 'Guest' && (
+        {/* {role === 'Guest' && (
         <GuestWrapper>
           <PartnerProfile
             localuser={localuser}
           />
-        </GuestWrapper>)}
+        </GuestWrapper>)} */}
+
+      {role === 'Guest' && (
+        <GuestWrapper>
+          <ProfileNew
+            localuser={localuser}
+          />
+        </GuestWrapper>)} 
 
      </div>
    )

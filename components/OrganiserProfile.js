@@ -82,6 +82,8 @@ const EventOrgProfile = ({ paraId_ }) => {
                 setCurrenteventlist(events);
               }
             );
+            setShowPublicView(true);
+            setShowEoView(false);
             //partner has no upcoming events
           } else if (
             data.roles[0].roleEnum === 'ATND' ||
