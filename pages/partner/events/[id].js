@@ -104,10 +104,15 @@ export default function PartnerEventPage({ id }) {
                   <br></br>
                   <br></br>
 
-                  <p>{data.descriptions}</p>
-
                   <button className="btn btn-fill-out">Register Now</button>
                 </div>
+              </Col>
+            </Row>
+
+            <Row className="mt-5">
+              <Col>
+                <h5>About this event</h5>
+                <p>{data.descriptions}</p>
               </Col>
             </Row>
           </Container>
