@@ -93,10 +93,10 @@ export default function PartnerEventPage({ id }) {
                   <p className="text-dark d-inline">Sales period: </p>
                   <p className="text-default d-inline">
                     {`${format(
-                      parseISO(data.eventStartDate),
+                      parseISO(data.saleStartDate),
                       'dd MMM yy hh:mmbbb'
                     )} to ${format(
-                      parseISO(data.eventStartDate),
+                      parseISO(data.salesEndDate),
                       'dd MMM yy hh:mmbbb'
                     )}`}
                   </p>
