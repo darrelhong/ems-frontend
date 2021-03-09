@@ -190,33 +190,33 @@ const MyAccount = () => {
       setFileName(e.target.files[0].name);
     }
   };
-  const submitFile = async () => {
-    const data = new FormData();
-    //if(file name is not empty..... handle condition when no file is selected)
-    data.append('file', file);
-    api
-      .post('/api/uploadProfilePicFile', data, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        onSuccess: () => {
-          queryClient.invalidateQueries(['user', user?.id.toString()]);
-        },
-      })
-      .then((response) => {
-        console.log(response);
-        if (response.status == 200) {
-          console.log('file upload sucessfully');
-          console.log(response);
-          console.log(response.data['fileDownloadUri']);
-          var newlink = response.data['fileDownloadUri'];
-          setProfilepicUrl(newlink);
-        }
-      })
-      .catch(() => {
-        setShowFailedMsg(true);
-      });
-  };
+  // const submitFile = async () => {
+  //   const data = new FormData();
+  //   //if(file name is not empty..... handle condition when no file is selected)
+  //   data.append('file', file);
+  //   api
+  //     .post('/api/uploadProfilePicFile', data, {
+  //       headers: {
+  //         'Content-Type': 'multipart/form-data',
+  //       },
+  //       onSuccess: () => {
+  //         queryClient.invalidateQueries(['user', user?.id.toString()]);
+  //       },
+  //     })
+  //     .then((response) => {
+  //       console.log(response);
+  //       if (response.status == 200) {
+  //         console.log('file upload sucessfully');
+  //         console.log(response);
+  //         console.log(response.data['fileDownloadUri']);
+  //         var newlink = response.data['fileDownloadUri'];
+  //         setProfilepicUrl(newlink);
+  //       }
+  //     })
+  //     .catch(() => {
+  //       setShowFailedMsg(true);
+  //     });
+  // };
 
   const mutatePassword = useMutation((data) => {
     api

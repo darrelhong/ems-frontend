@@ -29,6 +29,7 @@ import {
   IoIosPerson,
   IoIosSettings,
   IoIosRadioButtonOn,
+  IoIosDocument,
 } from 'react-icons/io';
 
 import { useForm } from 'react-hook-form';
@@ -38,6 +39,9 @@ import api from '../../lib/ApiClient';
 import { logout } from '../../lib/auth';
 
 const MyAccount = () => {
+  // if multiple file, we ask them to zip
+  const [bizDocInputName, setBizDocInputName] = useState('Choose file');
+  const [bizDocfile, setBizDocfile] = useState(null);
   const [proficpicfile, setProfilePicFile] = useState('uploadprofilepicfile');
 
   const [fileName, setFileName] = useState('Choose image');
@@ -45,12 +49,6 @@ const MyAccount = () => {
   const [user, setUser] = useState();
   //const { data: user } = useUser(localStorage.getItem('userId'));
   const [profilepicUrl, setProfilepicUrl] = useState(null);
-
-  useEffect(async () => {
-    await getUser(localStorage.getItem('userId')).then((data) => {
-      setUser(data);
-    });
-  });
 
   //for modal of disabling account
   const [show, setShow] = useState(false);
@@ -69,12 +67,79 @@ const MyAccount = () => {
   //show pw error alert
   const [showPW, setShowPW] = useState(false);
   const [showFileSizeError, setShowFileSizeError] = useState(false);
+  //show successful upload of file alert
+  const [showSucessBizUpload, setShowSucessBizUpload] = useState(false);
+  const [showErrorBizUpload, setShowErrorBizUpload] = useState(false);
+  const [bizDocErrorMessage, setBizDocErrorMessage] = useState('');
+  const [ispicupdated, setIspicupdated] = useState(false);
 
-  const renderTooltip = (props) => (
-    <Tooltip id="button-tooltip" {...props}>
-      Support png and jpg image format.
-    </Tooltip>
-  );
+  useEffect(async () => {
+    console.log('use effect');
+    await getUser(localStorage.getItem('userId')).then((data) => {
+      setUser(data);
+    });
+
+    setBizDocInputName('Choose file');
+  }, []);
+  const uploadbiz = useMutation((data) => {
+    console.log(data);
+    var form_data = new FormData();
+    form_data.append('id', data['id']);
+    form_data.append('bizSupportDoc', bizDocfile);
+
+    api
+      .post('/api/organiser/uploadbizdoc', form_data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        if (response.status == 200) {
+          setFileName('Choose File');
+          setLoginLoading(false);
+          document.getElementById('biz-upload-custom-file').value = '';
+          //the message that is return
+          if (response.data['fileDownloadUri'] == 'success') {
+            setShowSucessBizUpload(true);
+            setShowErrorBizUpload(false);
+          } else {
+            setBizDocErrorMessage('An error has occured');
+            setShowSucessBizUpload(false);
+            setShowErrorBizUpload(true);
+          }
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
+
+  // upload biz document
+  const handleBizDocFileChange = async (e) => {
+    if (e.target.files[0] == undefined) {
+      setBizDocInputName('Choose file');
+    } else if (e.target.files[0].size / 1000000 > 5) {
+      // if size is more than 5mb, display error message
+      console.log('exceeded');
+
+      setBizDocErrorMessage('The zip file size must be less than 5 mb.');
+      setShowErrorBizUpload(true);
+      setShowSucessBizUpload(false);
+      document.getElementById('biz-upload-custom-file').value = '';
+    } else {
+      setShowErrorBizUpload(false);
+      setBizDocfile(e.target.files[0]);
+      setBizDocInputName(e.target.files[0].name);
+    }
+  };
+
+  const onSubmitBizDoc = async (data) => {
+    setLoginLoading(true);
+    uploadbiz.mutate({
+      id: user?.id,
+    });
+  };
 
   const mutateAccStatus = useMutation(
     (data) => api.post(`/api/user/disableStatus/${user?.id}`),
@@ -123,6 +188,7 @@ const MyAccount = () => {
         console.log(response);
         console.log(response.data['fileDownloadUri']);
         setProfilepicUrl(response.data['fileDownloadUri']);
+        setIspicupdated(true);
         setAccSaved(true);
         setAccSuccess(' Account details saved successfully! ');
         setLoginLoading(false);
@@ -144,6 +210,7 @@ const MyAccount = () => {
     });
   };
 
+  // update profile pic
   const handleFileChange = async (e) => {
     if (e.target.files[0] == undefined) {
       setFileName('Choose image');
@@ -234,18 +301,27 @@ const MyAccount = () => {
       JSON.stringify(newPassword) === JSON.stringify(confirmPassword) &&
       JSON.stringify(oldPassword) != JSON.stringify(newPassword)
     ) {
-      // setConfirmPW(true);
       return 'correct';
     } else if (JSON.stringify(oldPassword) === JSON.stringify(newPassword)) {
       return 'same as current';
-      // setPWAlert("Your current password is the same as the new password.");
-      //setShowPW(true);
     } else {
       return 'incorrect';
-      //setPWAlert("Passwords do not match.");
-      //setShowPW(true);
     }
   }
+
+  const renderTooltip = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      Support png and jpg image format.
+    </Tooltip>
+  );
+
+  // upload biz document section
+
+  const renderTooltipBizDoc = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      Please upload business verification document(s) as a zip file.
+    </Tooltip>
+  );
 
   return (
     // <LayoutOne>
@@ -256,12 +332,12 @@ const MyAccount = () => {
         </Modal.Header>
         <Modal.Body>Are you sure you want to disable your account?</Modal.Body>
         <Modal.Footer>
-          <Button className="btn btn-fill-out" onClick={handleDisabled}>
+          <button className="btn btn-fill-out btn" onClick={handleDisabled}>
             Yes
-          </Button>
-          <button variant="secondary" onClick={handleClose}>
-            No
           </button>
+          <Button variant="secondary" onClick={handleClose}>
+            No
+          </Button>
         </Modal.Footer>
       </Modal>
 
@@ -295,6 +371,11 @@ const MyAccount = () => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
+                    <Nav.Link eventKey="uploadBizDoc">
+                      <IoIosDocument /> Business Verification
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
                     <Nav.Link eventKey="notification">
                       <IoIosCash /> Notification
                     </Nav.Link>
@@ -313,6 +394,146 @@ const MyAccount = () => {
               </Col>
               <Col lg={9} md={8}>
                 <Tab.Content>
+                  <Tab.Pane eventKey="uploadBizDoc">
+                    <Card className="my-account-content__content">
+                      <Card.Header>
+                        <h3> Upload Business Verification Document</h3>
+                      </Card.Header>
+                      <Card.Body>
+                        <div className="account-details-form">
+                          <form
+                            id="uploadbizForm"
+                            onSubmit={handleSubmit(onSubmitBizDoc)}
+                          >
+                            <div
+                              style={{
+                                display: showSucessBizUpload ? 'block' : 'none',
+                              }}
+                            >
+                              {
+                                <Alert
+                                  show={showSucessBizUpload}
+                                  variant="success"
+                                  onClose={() => setShowSucessBizUpload(false)}
+                                  dismissible
+                                >
+                                  {' '}
+                                  Document uploaded sucessfully! We will email
+                                  you the outcome once the document is verified{' '}
+                                </Alert>
+                              }
+                            </div>
+                            <div
+                              style={{
+                                display: showErrorBizUpload ? 'block' : 'none',
+                              }}
+                            >
+                              {
+                                <Alert
+                                  show={showErrorBizUpload}
+                                  variant="danger"
+                                  onClose={() => setShowErrorBizUpload(false)}
+                                  dismissible
+                                >
+                                  {' '}
+                                  {bizDocErrorMessage}{' '}
+                                </Alert>
+                              }
+                            </div>
+
+                            <div className="form-group col-md-12">
+                              {user?.approved == false &&
+                                user?.approvalMessage ==
+                                  null(
+                                    <h6>
+                                      Verification Status:{' '}
+                                      <span className="noteMsg">Pending</span>
+                                    </h6>
+                                  )}
+                            </div>
+                            <div className="form-group col-md-12">
+                              {user?.approved == false &&
+                                user?.approvalMessage !=
+                                  null(
+                                    <h6>
+                                      Verification Status:{' '}
+                                      <span className="noteMsg">Rejected</span>
+                                    </h6>
+                                  )}
+                            </div>
+                            <div className="form-group col-md-12">
+                              {user?.approved == true && (
+                                <h6>
+                                  Verification Status:
+                                  <span className="greenMsg">Approved</span>
+                                </h6>
+                              )}
+                            </div>
+
+                            <Form.Label className="uploadFileLabel">
+                              Business Verification Document &nbsp;
+                              <OverlayTrigger
+                                placement="right"
+                                delay={{ show: 250, hide: 400 }}
+                                overlay={renderTooltipBizDoc}
+                              >
+                                <BsFillInfoCircleFill></BsFillInfoCircleFill>
+                              </OverlayTrigger>
+                            </Form.Label>
+
+                            <Col className="form-group" md={12}>
+                              <Form.Group>
+                                <Form.File
+                                  id="biz-upload-custom-file"
+                                  type="file"
+                                  accept=".zip"
+                                  onChange={handleBizDocFileChange}
+                                  required
+                                  custom
+                                />
+                                <Form.Label
+                                  className="form-group custom-file-label"
+                                  md={12}
+                                  for="custom-file"
+                                >
+                                  {bizDocInputName}
+                                </Form.Label>
+
+                                <div>
+                                  <br></br>
+                                  <p className="saved-message">
+                                    <b className="noteMsg">Note</b>
+                                    <br></br>
+                                    <b className="noteMsg">*</b>You need to
+                                    upload document(s) to verify your business
+                                    before you can create any events on
+                                    EventStop.
+                                    <br></br>
+                                    <b className="noteMsg">*</b> If your
+                                    previous submission is incomplete, you can
+                                    zip and re-upload all the verfication
+                                    document(s).
+                                  </p>
+                                </div>
+
+                                <br></br>
+                                {user?.approved != true && (
+                                  <ButtonWithLoading
+                                    type="submit"
+                                    className="btn btn-fill-out"
+                                    name="submit"
+                                    isLoading={loginLoading}
+                                  >
+                                    Upload
+                                  </ButtonWithLoading>
+                                )}
+                              </Form.Group>
+                            </Col>
+                          </form>
+                        </div>
+                      </Card.Body>
+                    </Card>
+                  </Tab.Pane>
                   <Tab.Pane eventKey="payment">
                     <Card className="my-account-content__content">
                       <Card.Header>
@@ -325,6 +546,7 @@ const MyAccount = () => {
                       </Card.Body>
                     </Card>
                   </Tab.Pane>
+
                   <Tab.Pane eventKey="address">
                     <Card className="my-account-content__content">
                       <Card.Header>
@@ -430,20 +652,22 @@ const MyAccount = () => {
                                     />
                                   )}
 
-                                {user?.profilePic == null && (
-                                  <Image
-                                    className="profile-image"
-                                    src="../../assets/images/defaultprofilepic.png"
-                                    thumbnail
-                                  />
-                                )}
-                                {profilepicUrl != null && (
-                                  <Image
-                                    className="profile-image"
-                                    src={profilepicUrl}
-                                    thumbnail
-                                  />
-                                )}
+                                {user?.profilePic == null &&
+                                  ispicupdated == false && (
+                                    <Image
+                                      className="profile-image"
+                                      src="../../assets/images/defaultprofilepic.png"
+                                      thumbnail
+                                    />
+                                  )}
+                                {profilepicUrl != null &&
+                                  ispicupdated == true && (
+                                    <Image
+                                      className="profile-image"
+                                      src={profilepicUrl}
+                                      thumbnail
+                                    />
+                                  )}
                               </Col>
                             </Row>
 
@@ -722,24 +946,25 @@ const MyAccount = () => {
                         <h3>Account Status</h3>
                       </Card.Header>
                       <Card.Body>
-                        <p className="saved-message">
-                          Your account is active now.<br></br>
-                          <b className="noteMsg">Note</b>: Once you disabled
-                          your account, you are unable to login or sign up with
-                          the registered email. If you like to do so, please
-                          contact us at{' '}
-                          <a className="eventstopEmailText">
-                            enquiry@eventstop.com
-                          </a>
-                        </p>
-                        <Button
-                          variant="secondary"
-                          size="sm"
-                          onClick={() => setShow(true)}
-                        >
-                          Disabled
-                        </Button>{' '}
-                        <Col md={12}></Col>
+                        <div className="account-details-form">
+                          <p className="saved-message">
+                            Your account is active now.<br></br>
+                            <b className="noteMsg">Note</b>: Once you disabled
+                            your account, you are unable to login or sign up
+                            with the registered email. If you like to do so,
+                            please contact us at{' '}
+                            <a className="eventstopEmailText">
+                              enquiry@eventstop.com
+                            </a>
+                          </p>
+                          <button
+                            className="btn btn-fill-out btn"
+                            size="sm"
+                            onClick={() => setShow(true)}
+                          >
+                            Disabled
+                          </button>{' '}
+                        </div>
                       </Card.Body>
                     </Card>
                   </Tab.Pane>
