@@ -4,19 +4,12 @@ import { Alert, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { useInfiniteQuery, useQueryClient } from 'react-query';
 import debounce from 'lodash/debounce';
 
+import { getEventsWithKeywordandSort } from '../../../lib/query/events';
+
 import { BreadcrumbOne } from '../../../components/Breadcrumb';
 import PartnerWrapper from '../../../components/wrapper/PartnerWrapper';
-import api from '../../../lib/ApiClient';
 import EventCard from '../../../components/events/partner/EventCard';
 import ButtonWithLoading from '../../../components/custom/ButtonWithLoading';
-
-const getEvents = async (page = 0, sort, sortDir, searchTerm) => {
-  let url = `/api/event/get-events?page=${page}`;
-  if (sort && sortDir) url += `&sort=${sort}&sortDir=${sortDir}`;
-  if (searchTerm) url += `&keyword=${searchTerm}`;
-  const { data } = await api.get(url);
-  return data;
-};
 
 function PartnerHome() {
   const [sortBy, setSortBy] = useState();
@@ -31,7 +24,12 @@ function PartnerHome() {
   } = useInfiniteQuery(
     ['events', sortBy?.sort, sortBy?.sortDir, searchTerm],
     ({ pageParam = 0 }) =>
-      getEvents(pageParam, sortBy?.sort, sortBy?.sortDir, searchTerm),
+      getEventsWithKeywordandSort(
+        pageParam,
+        sortBy?.sort,
+        sortBy?.sortDir,
+        searchTerm
+      ),
     {
       getNextPageParam: (lastPage) =>
         lastPage.last ? false : lastPage.number + 1,
