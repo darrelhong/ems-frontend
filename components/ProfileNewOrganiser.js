@@ -32,15 +32,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'next/router';
 import { BsPencilSquare } from 'react-icons/bs';
 import api from '../lib/ApiClient';
-import {
-  getEventByOrganiserId,
-  getPastEventsByOrganiserId,
-  getAttendeeCurrentEventsByOrganiserId,
-  getPartnerCurrentEventsByOrganiserId,
-  getPartnerUpcomingEventsByOrganiserId,
-  getAttendeeUpcomingEventsByOrganiserId,
-  getRating,
-} from '../lib/query/useEvent';
+import { getRating, getEoEventsByIdRoleStatus } from '../lib/query/useEvent';
 import { getOrgAttendeeFollowers } from '../lib/query/getOrgAttendeeFollowers';
 import { getOrgPartnerFollowers } from '../lib/query/getOrgPartnerFollowers';
 import { useMutation, useQueryClient } from 'react-query';
@@ -89,28 +81,55 @@ const EventOrgProfile = ({ paraId_ }) => {
         if (data.id != null) {
           if (data.roles[0].roleEnum === 'BIZPTNR') {
             setUserRole('BIZPTNR');
-            await getPartnerCurrentEventsByOrganiserId(paraId_).then(
-              (events) => {
-                setCurrenteventlist(events);
-              }
-            );
+
+            await getEoEventsByIdRoleStatus(
+              paraId_,
+              data.roles[0].roleEnum,
+              'current'
+            ).then((events) => {
+              setCurrenteventlist(events);
+            });
+
             setShowPublicView(true);
             setShowEoView(false);
             followId = data.id;
             type = 'partner';
             //partner has no upcoming events
-          } else if (data.roles[0].roleEnum === 'ATND') {
-            await getAttendeeCurrentEventsByOrganiserId(paraId_).then(
-              (events) => {
-                setCurrenteventlist(events);
-              }
-            );
 
-            await getAttendeeUpcomingEventsByOrganiserId(paraId_).then(
-              (events) => {
-                setUpcomingeventlist(events);
-              }
-            );
+            await getEoEventsByIdRoleStatus(
+              paraId_,
+              data.roles[0].roleEnum,
+              'past'
+            ).then((events) => {
+              setPastEventlist(events);
+            });
+          } else if (data.roles[0].roleEnum === 'ATND') {
+            await getEoEventsByIdRoleStatus(
+              paraId_,
+              data.roles[0].roleEnum,
+              'current'
+            ).then((events) => {
+              setCurrenteventlist(events);
+            });
+
+            // to be removed
+            //  await getAttendeeUpcomingEventsByOrganiserId(paraId_);
+            ///.....
+            await getEoEventsByIdRoleStatus(
+              paraId_,
+              data.roles[0].roleEnum,
+              'upcoming'
+            ).then((events) => {
+              setUpcomingeventlist(events);
+            });
+
+            await getEoEventsByIdRoleStatus(
+              paraId_,
+              data.roles[0].roleEnum,
+              'past'
+            ).then((events) => {
+              setPastEventlist(events);
+            });
             followId = data.id;
             type = 'atn';
             setShowPublicView(true);
@@ -120,17 +139,21 @@ const EventOrgProfile = ({ paraId_ }) => {
             data.roles[0].roleEnum === 'EVNTORG' &&
             data.id != paraId_
           ) {
-            await getAttendeeCurrentEventsByOrganiserId(paraId_).then(
-              (events) => {
-                setCurrenteventlist(events);
-              }
-            );
+            await getEoEventsByIdRoleStatus(
+              paraId_,
+              data.roles[0].roleEnum,
+              'current'
+            ).then((events) => {
+              setCurrenteventlist(events);
+            });
 
-            await getAttendeeUpcomingEventsByOrganiserId(paraId_).then(
-              (events) => {
-                setUpcomingeventlist(events);
-              }
-            );
+            await getEoEventsByIdRoleStatus(
+              paraId_,
+              data.roles[0].roleEnum,
+              'upcoming'
+            ).then((events) => {
+              setUpcomingeventlist(events);
+            });
             followId = data.id;
             setShowPublicView(true);
             setShowEoView(false);
@@ -140,41 +163,54 @@ const EventOrgProfile = ({ paraId_ }) => {
             data.roles[0].roleEnum === 'EVNTORG' &&
             data.id == paraId_
           ) {
-            await getAttendeeCurrentEventsByOrganiserId(paraId_).then(
-              (events) => {
-                setCurrenteventlist(events);
-              }
-            );
+            await getEoEventsByIdRoleStatus(
+              paraId_,
+              data.roles[0].roleEnum,
+              'current'
+            ).then((events) => {
+              setCurrenteventlist(events);
+            });
 
-            await getAttendeeUpcomingEventsByOrganiserId(paraId_).then(
-              (events) => {
-                setUpcomingeventlist(events);
-              }
-            );
+            await getEoEventsByIdRoleStatus(
+              paraId_,
+              data.roles[0].roleEnum,
+              'upcoming'
+            ).then((events) => {
+              setUpcomingeventlist(events);
+            });
+
+            await getEoEventsByIdRoleStatus(
+              paraId_,
+              data.roles[0].roleEnum,
+              'past'
+            ).then((events) => {
+              setPastEventlist(events);
+            });
 
             setShowPublicView(false);
             setShowEoView(true);
             setFollowBtn(false);
             setUnfollowBtn(false);
           }
-          // past events all the same for all users.
-          await getPastEventsByOrganiserId(paraId_).then((events) => {
-            setPastEventlist(events);
-          });
         }
       });
     } else if (localStorage.getItem('userId') == null) {
-      await getAttendeeCurrentEventsByOrganiserId(paraId_).then((events) => {
-        setCurrenteventlist(events);
-      });
+      await getEoEventsByIdRoleStatus(paraId_, 'guest', 'current').then(
+        (events) => {
+          setCurrenteventlist(events);
+        }
+      );
+      await getEoEventsByIdRoleStatus(paraId_, 'guest', 'upcoming').then(
+        (events) => {
+          setUpcomingeventlist(events);
+        }
+      );
 
-      await getAttendeeUpcomingEventsByOrganiserId(paraId_).then((events) => {
-        setUpcomingeventlist(events);
-      });
-
-      await getPastEventsByOrganiserId(paraId_).then((events) => {
-        setPastEventlist(events);
-      });
+      await getEoEventsByIdRoleStatus(paraId_, 'guest', 'past').then(
+        (events) => {
+          setPastEventlist(events);
+        }
+      );
       setShowPublicView(true);
       setShowEoView(false);
       setFollowBtn(false);

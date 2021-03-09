@@ -151,6 +151,16 @@ const EventOrgProfile = ({ paraId_ }) => {
       });
 
       await getAttendeeUpcomingEventsByOrganiserId(paraId_).then((events) => {
+        //setUpcomingeventlist(events);
+      });
+
+      await newgetAttendeeUpcomingEventsByOrganiserId(
+        roles[0].roleEnum,
+        paraId_,
+        'upcoming'
+      ).then((events) => {
+        console.log('events');
+        console.log(events);
         setUpcomingeventlist(events);
       });
 
