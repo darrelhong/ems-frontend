@@ -1,18 +1,14 @@
 import Link from 'next/link';
 import { Container, Row, Col } from 'react-bootstrap';
 import {
-  AiOutlineUser,
   AiOutlineSetting,
   AiOutlineLogout,
   AiOutlineNotification,
 } from 'react-icons/ai';
 import { IoIosHeartEmpty } from 'react-icons/io';
-import useUser from '../../lib/query/useUser';
 import { logout } from '../../lib/auth';
 
 const AttendeeHeaderTop = () => {
-  const { data: localuser } = useUser(localStorage.getItem('userId'));
-  console.log(JSON.stringify(localuser));
   return (
     <div className="top-header d-lg-block">
       <Container>
