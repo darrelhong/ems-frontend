@@ -444,7 +444,7 @@ const MyAccount = () => {
                             <div className="form-group col-md-12">
                               {user?.approved == false &&
                                 user?.approvalMessage ==
-                                  null(
+                                  null && (
                                     <h6>
                                       Verification Status:{' '}
                                       <span className="noteMsg">Pending</span>
@@ -454,7 +454,7 @@ const MyAccount = () => {
                             <div className="form-group col-md-12">
                               {user?.approved == false &&
                                 user?.approvalMessage !=
-                                  null(
+                                  null &&(
                                     <h6>
                                       Verification Status:{' '}
                                       <span className="noteMsg">Rejected</span>
