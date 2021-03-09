@@ -42,7 +42,7 @@ export default function AddToCalendar({ event }) {
 
   return (
     <a
-      className="text-primary"
+      className="text-primary font-weight-bold"
       href={'data:text/plain;charset=utf-8,' + cal.current}
       download="calendar.ics"
     >

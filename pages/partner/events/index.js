@@ -1,7 +1,8 @@
 import { Fragment, useState } from 'react';
 import Link from 'next/link';
 import { Alert, Col, Container, Row, Spinner } from 'react-bootstrap';
-import { useInfiniteQuery } from 'react-query';
+import { useInfiniteQuery, useQueryClient } from 'react-query';
+import debounce from 'lodash/debounce';
 
 import { BreadcrumbOne } from '../../../components/Breadcrumb';
 import PartnerWrapper from '../../../components/wrapper/PartnerWrapper';
@@ -9,15 +10,18 @@ import api from '../../../lib/ApiClient';
 import EventCard from '../../../components/events/partner/EventCard';
 import ButtonWithLoading from '../../../components/custom/ButtonWithLoading';
 
-const getEvents = async (page = 0, sort, sortDir) => {
+const getEvents = async (page = 0, sort, sortDir, searchTerm) => {
   let url = `/api/event/get-events?page=${page}`;
   if (sort && sortDir) url += `&sort=${sort}&sortDir=${sortDir}`;
+  if (searchTerm) url += `&keyword=${searchTerm}`;
   const { data } = await api.get(url);
   return data;
 };
 
 function PartnerHome() {
   const [sortBy, setSortBy] = useState();
+  const [searchTerm, setSearchTerm] = useState('');
+  const queryClient = useQueryClient();
   const {
     status,
     data,
@@ -25,8 +29,9 @@ function PartnerHome() {
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery(
-    ['events', sortBy?.sort, sortBy?.sortDir],
-    ({ pageParam = 0 }) => getEvents(pageParam, sortBy?.sort, sortBy?.sortDir),
+    ['events', sortBy?.sort, sortBy?.sortDir, searchTerm],
+    ({ pageParam = 0 }) =>
+      getEvents(pageParam, sortBy?.sort, sortBy?.sortDir, searchTerm),
     {
       getNextPageParam: (lastPage) =>
         lastPage.last ? false : lastPage.number + 1,
@@ -46,6 +51,20 @@ function PartnerHome() {
     }
   };
 
+  // search results automatically update, with debounced input
+  const debouncedSearch = debounce((value) => setSearchTerm(value), 800);
+  const handleOnSearchInput = (e) => {
+    debouncedSearch(e.target.value);
+  };
+  // invalidate queries to refetch data
+  const handleSearchButtonClicked = () =>
+    queryClient.invalidateQueries([
+      'events',
+      sortBy?.sort,
+      sortBy?.sortDir,
+      searchTerm,
+    ]);
+
   return (
     <PartnerWrapper title="Events">
       <BreadcrumbOne pageTitle="View events">
@@ -60,6 +79,29 @@ function PartnerHome() {
       </BreadcrumbOne>
 
       <Container className="my-4">
+        <Row>
+          <Col md={8} lg={6}>
+            <div className="input-group mb-3">
+              <input
+                type="text"
+                className="form-control "
+                placeholder="Search events"
+                onChange={handleOnSearchInput}
+              />
+              <div className="input-group-append">
+                <button
+                  className="btn btn-outline-primary btn-sm"
+                  type="button"
+                  style={{ height: 38 }}
+                  onClick={handleSearchButtonClicked}
+                >
+                  Search
+                </button>
+              </div>
+            </div>
+          </Col>
+        </Row>
+
         <Row className="mb-4">
           <Col xs={4} sm={3}>
             <select className="custom-select" onChange={handleChange}>
@@ -86,7 +128,7 @@ function PartnerHome() {
                       className="mb-5 d-flex align-items-stretch"
                     >
                       <Link href={`/partner/events/${event.eid}`}>
-                        <a>
+                        <a className="w-100">
                           <EventCard event={event} />
                         </a>
                       </Link>

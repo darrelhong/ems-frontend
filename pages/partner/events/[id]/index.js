@@ -4,12 +4,12 @@ import { useQuery } from 'react-query';
 import { Alert, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { format, parseISO } from 'date-fns';
 
-import api from '../../../lib/ApiClient';
+import api from '../../../../lib/ApiClient';
 
-import { BreadcrumbOne } from '../../../components/Breadcrumb';
-import PartnerWrapper from '../../../components/wrapper/PartnerWrapper';
-import EventImageGallery from '../../../components/events/partner/EventImageGallery';
-import AddToCalendar from '../../../components/custom/AddToCalendar';
+import { BreadcrumbOne } from '../../../../components/Breadcrumb';
+import PartnerWrapper from '../../../../components/wrapper/PartnerWrapper';
+import EventImageGallery from '../../../../components/events/partner/EventImageGallery';
+import AddToCalendar from '../../../../components/custom/AddToCalendar';
 
 const getEvent = async (id) => {
   const { data } = await api.get(`/api/event/${id}`);
@@ -93,21 +93,35 @@ export default function PartnerEventPage({ id }) {
                   <p className="text-dark d-inline">Sales period: </p>
                   <p className="text-default d-inline">
                     {`${format(
-                      parseISO(data.eventStartDate),
+                      parseISO(data.saleStartDate),
                       'dd MMM yy hh:mmbbb'
                     )} to ${format(
-                      parseISO(data.eventStartDate),
+                      parseISO(data.salesEndDate),
                       'dd MMM yy hh:mmbbb'
                     )}`}
                   </p>
 
                   <br></br>
                   <br></br>
-
-                  <p>{data.descriptions}</p>
-
-                  <button className="btn btn-fill-out">Register Now</button>
+                  <div className="d-flex align-items-center">
+                    <button
+                      className="btn btn-fill-out mr-2"
+                      disabled={!data.availableForSale}
+                    >
+                      Register Now
+                    </button>
+                    {!data.availableForSale && (
+                      <p className="text-dark">Sale period has not started</p>
+                    )}
+                  </div>
                 </div>
+              </Col>
+            </Row>
+
+            <Row className="mt-5">
+              <Col>
+                <h5>About this event</h5>
+                <p>{data.descriptions}</p>
               </Col>
             </Row>
           </Container>

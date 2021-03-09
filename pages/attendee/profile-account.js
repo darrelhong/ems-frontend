@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-// import { LayoutOne } from '../../layouts';
 import { BreadcrumbOne } from '../../components/Breadcrumb';
 import {
   Container,
@@ -44,12 +43,9 @@ export default function MyAccount() {
   const [fileName, setFileName] = useState('Choose image');
 
   const { data: user } = useUser(localStorage.getItem('userId'));
-  //const profiepicSrcUrl = user?.profilePic;
   const [profilepicUrl, setProfilepicUrl] = useState(
     '../../public/assets/images/defaultprofilepic.png'
   );
-  // display the inital profile picture
-  //console.log(user?.profilePic);
   useEffect(() => {
     if (user?.profilePic) {
       setProfilepicUrl(user.profilePic);
@@ -101,7 +97,7 @@ export default function MyAccount() {
     // close the modal once yes click.
     setShow(false);
 
-    logout({ redirectTo: '/organiser/login' });
+    logout({ redirectTo: '/attendee/login' });
   };
 
   const { register, handleSubmit } = useForm({
@@ -122,11 +118,9 @@ export default function MyAccount() {
   );
 
   const onChangeBizCategory = async (event) => {
-    console.log('change' + event.target.value);
     setBusinessCategory(event.target.value);
   };
   const onSubmit = async (data) => {
-    console.log('data acc' + data['name']);
     if (businessCategory != '') {
       mutateAccDetail.mutate({
         address: data.address,
@@ -153,20 +147,12 @@ export default function MyAccount() {
       });
     }
     if (fileUpload == true) {
-      console.log('fileupload is true');
       submitFile();
     }
   };
 
   const handleFileChange = async (e) => {
-    console.log('call handleFileChange');
-    console.log(e);
-    console.log(e.target.files[0].name);
-    console.log(e.target.files[0].size);
-    console.log(e.target.files[0].size / 1000000);
-
     if (e.target.files[0].size / 1000000 > 1 || e.target.files[0].name == '') {
-      console.log('exceeded');
       setShowFileSizeError(true);
       document.getElementById('custom-file').value = '';
     } else {
@@ -190,11 +176,7 @@ export default function MyAccount() {
         },
       })
       .then((response) => {
-        console.log(response);
         if (response.status == 200) {
-          console.log('file upload sucessfully');
-          console.log(response);
-          console.log(response.data['fileDownloadUri']);
           var newlink = response.data['fileDownloadUri'];
           setProfilepicUrl(newlink);
         }
@@ -208,7 +190,6 @@ export default function MyAccount() {
     api
       .post('/api/user/change-password', data, {})
       .then((response) => {
-        console.log(response.data['message']);
         if (response.data['message'] == 'Success') {
           document.getElementById('change-password-form').reset();
           setPWAlert('Your password has been updated successfully!');
@@ -229,7 +210,6 @@ export default function MyAccount() {
   });
 
   const onSubmitPassword = async (data) => {
-    console.log('onsubmit password1');
     setPWAlert('');
     setShowPW(false);
     setConfirmPW(false);
@@ -239,12 +219,9 @@ export default function MyAccount() {
       data.newPassword,
       data.confirmPassword
     );
-    console.log('result');
-    console.log(result);
     if (result == 'correct') {
       //setConfirmPW(true);
       //setShowPW(false);
-      console.log('onsubmit password2');
       mutatePassword.mutate({
         oldPassword: data.oldPassword,
         newPassword: data.newPassword,
@@ -816,6 +793,5 @@ export default function MyAccount() {
         </Container>
       </div>
     </PartnerWrapper>
-    // </LayoutOne>
   );
 }
