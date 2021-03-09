@@ -15,6 +15,7 @@ import {
     Col,
 } from "reactstrap";
 import useUser from '../lib/query/useUser';
+import { useMutation, useQueryClient } from 'react-query';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { BreadcrumbOne } from '../components/Breadcrumb';
@@ -29,37 +30,151 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'next/router';
 import { getFollowers, getFollowing } from '../lib/query/getBPFollow';
 import { BsPencilSquare } from 'react-icons/bs';
+import api from '../lib/ApiClient';
+
 
 const PartnerProfile = ({ localuser }) => {
     const [publicView, setPublicView] = useState();
+    const [eoView, setEOView] = useState();
 
     // const [events, setEvents] = useState([]);
     const [followers, setFollowers] = useState([]);
     const [following, setFollowing] = useState([]);
-
+    const [unfollowBtn, setUnfollowBtn] = useState();
+    const [followBtn, setFollowBtn] = useState();
+    const { data: partner } = useUser(localuser);
     useEffect(async () => {
         console.log("user " + localuser);
+        var followId;
         if (localStorage.getItem('userId') != null) {
             await getUser(localStorage.getItem('userId')).then((data) => {
+                console.log("current " + data.id);
                 if (data?.id !== localuser) {
-                    setPublicView(true);
+                    console.log("passed ");
+
+                    if (data.roles[0].roleEnum === 'EVNTORG') {
+                        console.log("eventorg ");
+
+                        setEOView(true);
+                        setPublicView(false);
+                        setFollowBtn(false);
+                        setUnfollowBtn(false);
+                    } else if (data.roles[0].roleEnum === 'ATND') {
+                        console.log("attendee ");
+
+                        setEOView(false);
+                        setPublicView(true);
+                        followId = data.id;
+
+                    }else{
+                        //bp view other bp, cannot follow
+                        setFollowBtn(false);
+                        setUnfollowBtn(false);
+                        setEOView(false);
+                        setPublicView(true);
+                    }
                 } else {
-                    console.log('test false');
                     setPublicView(false);
+                    setEOView(false);
                 }
             });
         } else {
+            //guest cannot follow bp
             setPublicView(true);
+            setEOView(false);
+            setFollowBtn(false);
+            setUnfollowBtn(false);
+
         }
+
         await getFollowers(localuser).then((data) => {
             setFollowers(data);
+            if(followId >= 0){
+            var found = false;
+            for (var i = 0; i < data.length; i++) {
+                console.log("test" + data[i].id + " " + followId);
+                if (data[i].id === followId) {
+                    found = true;
+                    break;
+                }
+            }
+            if (found) {
+                setUnfollowBtn(true);
+                setFollowBtn(false);
+            } else {
+                setFollowBtn(true);
+                setUnfollowBtn(false);
+            }
+        }
+
         });
         await getFollowing(localuser).then((data) => {
             setFollowing(data);
         });
+
+
     }, []);
 
-    const { data: partner } = useUser(localuser);
+    const getRefreshedFollowers = async () => {
+        await getFollowers(localuser).then((data) => {
+            setFollowers(data);
+        });
+    };
+
+
+    const mutateFollow = useMutation((data) =>
+        api
+            .post('/api/attendee/followBP', data)
+            .then((response) => {
+                setUnfollowBtn(true);
+                setFollowBtn(false);
+                getRefreshedFollowers();
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    )
+
+    const mutateUnfollow = useMutation((data) =>
+        api
+            .post('/api/attendee/unfollowBP', data)
+            .then((response) => {
+                setUnfollowBtn(false);
+                setFollowBtn(true);
+                getRefreshedFollowers();
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    )
+
+    const handleFollow = async () => {
+        //if attendee follow bp, userId not null 
+        if (localStorage.getItem('userId') != null) {
+            if (publicView && !eoView) {
+                mutateFollow.mutate({
+                    id: partner?.id
+                });
+
+            }
+
+        } else {
+            //if guest want to follow prompt sign up 
+        }
+    }
+
+    const handleUnfollow = async () => {
+        //if attendee follow bp, userId not null 
+        if (localStorage.getItem('userId') != null) {
+            if (publicView && !eoView) {
+                mutateUnfollow.mutate({
+                    id: partner?.id
+                });
+
+            }
+
+        }
+    }
 
     return (
         <>
@@ -112,12 +227,15 @@ const PartnerProfile = ({ localuser }) => {
                                     <p className="description">{partner?.email}</p>
                                 </div>
                                 <p className="description text-center">
-                                    {(partner?.description === null &&
-                                        'There is no description.') ||
-                                        partner?.description}
+                                    {partner?.description}
                                 </p>
+                                <p className="description text-center">
+                                    Address :
+                                    {partner?.address}
+                                </p>
+
                                 <div className="description text-center">
-                                    <h5>
+                                    <p>
                                         Category :
                       <span>
                                             {' '}
@@ -125,7 +243,7 @@ const PartnerProfile = ({ localuser }) => {
                                                 {partner?.businessCategory}
                                             </Badge>{' '}
                                         </span>
-                                    </h5>
+                                    </p>
                                 </div>
                             </CardBody>
                             <br></br>
@@ -147,7 +265,7 @@ const PartnerProfile = ({ localuser }) => {
                                         </Col>
                                         <Col className="mr-auto" lg="4">
                                             <h5>
-                                                {!publicView && (<Link href="/partner/profile-account">
+                                                {!publicView && !eoView && (<Link href="/partner/profile-account">
                                                     <button
                                                         className="btn btn-fill-out btn-sm"
                                                         name="edit"
@@ -157,14 +275,27 @@ const PartnerProfile = ({ localuser }) => {
                                                         <BsPencilSquare />
                                                     </button>
                                                 </Link>)}
-                                                {publicView && (
+                                                {publicView && !unfollowBtn && followBtn && (
                                                     <button
                                                         type="submit"
                                                         className="btn btn-fill-out btn-sm"
                                                         name="submit"
                                                         value="Submit"
+                                                        onClick={handleFollow}
                                                     >
                                                         Follow
+                                                    </button>
+                                                )}
+
+                                                {publicView && unfollowBtn && !followBtn && (
+                                                    <button
+                                                        type="submit"
+                                                        className="btn btn-fill-out btn-sm"
+                                                        name="submit"
+                                                        value="Submit"
+                                                        onClick={handleUnfollow}
+                                                    >
+                                                        Unfollow
                                                     </button>
                                                 )}
 
@@ -272,15 +403,15 @@ const PartnerProfile = ({ localuser }) => {
                                                                     </Col>
                                                                     <Col className="text-right" md="1" xs="1">
                                                                         <br></br>
-                                                                        <Button
+                                                                        {!publicView && (<Button
                                                                             className="btn-round btn-icon"
                                                                             color="success"
                                                                             outline
                                                                             size="sm"
                                                                         >
                                                                             Select
-                            {/* <i className="fa fa-envelope" /> */}
-                                                                        </Button>
+                                                                            {/* <i className="fa fa-envelope" /> */}
+                                                                        </Button>)}
                                                                     </Col>
                                                                 </Row>
                                                             </li>
@@ -334,15 +465,15 @@ const PartnerProfile = ({ localuser }) => {
                                                                             {following.email}
                                                                         </span>
                                                                         <div>
-                                                                        <span className="text-muted">
-                                                                            {following.description}
-                                                                        </span>
+                                                                            <span className="text-muted">
+                                                                                {following.description}
+                                                                            </span>
                                                                         </div>
 
                                                                     </Col>
                                                                     <Col className="text-right" md="1" xs="1">
                                                                         <br></br>
-                                                                        <Button
+                                                                        {!publicView && (<Button
                                                                             className="btn-round btn-icon"
                                                                             color="success"
                                                                             outline
@@ -350,7 +481,8 @@ const PartnerProfile = ({ localuser }) => {
                                                                         >
                                                                             Select
 
-                                                                        </Button>
+                                                                        </Button>)}
+
                                                                     </Col>
                                                                 </Row>
                                                             </li>

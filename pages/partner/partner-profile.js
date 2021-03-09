@@ -47,19 +47,19 @@ const Profile = ({ router: { query } }) => {
     <div>
       {role === 'Partner' && (
         <PartnerWrapper>
-          <PartnerProfile localuser={localuser} />
+          <ProfileNew localuser={localuser} />
         </PartnerWrapper>
       )}
 
       {role === 'Attendee' && (
         <AttendeeWrapper>
-          <PartnerProfile localuser={localuser} />
+          <ProfileNew localuser={localuser} />
         </AttendeeWrapper>
       )}
 
       {role === 'Organiser' && (
         <OrganiserWrapper>
-          <PartnerProfile
+          <ProfileNew
             localuser={localuser}
           />
         </OrganiserWrapper>)}

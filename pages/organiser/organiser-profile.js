@@ -1,4 +1,6 @@
 import OrganiserProfile from '../../components/OrganiserProfile';
+import ProfileNewOrganiser from '../../components/ProfileNewOrganiser';
+
 import { useState, useEffect } from 'react';
 import { withRouter } from 'next/router';
 import PartnerWrapper from '../../components/wrapper/PartnerWrapper';
@@ -73,7 +75,7 @@ return (
 
         {role === 'Guest' && (
         <GuestWrapper>
-          <OrganiserProfile
+          <ProfileNewOrganiser
            paraId_={paraId_}
           />
         </GuestWrapper>)}

@@ -122,7 +122,7 @@ const MyAccount = () => {
         setAccSuccess(' Account details saved successfully! ');
         setLoginLoading(false);
         //document.getElementById("account-details-form").reset();
-        window.location.reload();
+        // window.location.reload();
       })
       .catch((error) => {
         console.log(error);
@@ -245,8 +245,8 @@ const MyAccount = () => {
   const mutateNotificationSetting = useMutation((data) =>
     api
       .post('/api/user/update-notifcation-setting', data)
-      .then((response) => {})
-      .catch((error) => {})
+      .then((response) => { })
+      .catch((error) => { })
   );
 
   const onSubmitPassword = async (data) => {
@@ -280,7 +280,7 @@ const MyAccount = () => {
     }
   };
 
-  const onSubmitNotification = async (data) => {};
+  const onSubmitNotification = async (data) => { };
 
   function validatePassword(oldPassword, newPassword, confirmPassword) {
     if (
@@ -310,10 +310,10 @@ const MyAccount = () => {
         <Modal.Body>Are you sure you want to disable your account?</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleDisabled}>
-            Yes
+           No
           </Button>
           <button className="btn btn-fill-out" onClick={handleClose}>
-            No
+          Yes
           </button>
         </Modal.Footer>
       </Modal>
@@ -500,7 +500,7 @@ const MyAccount = () => {
                             <Row>
                               <Col className="form-group" md={12}>
                                 <label>
-                                  Company Name{' '}
+                                  Company Name *{' '}
                                   <span className="required"></span>
                                 </label>
                                 <input
@@ -530,7 +530,7 @@ const MyAccount = () => {
                               <Col className="form-group" md={12}>
                                 {/* <FormControl isInvalid={errors.businesscategory}> */}
                                 <Form.Label htmlFor="businesscategory">
-                                  Business Category{' '}
+                                  Business Category *{' '}
                                   <span className="required"></span>
                                 </Form.Label>
 
@@ -547,8 +547,8 @@ const MyAccount = () => {
                                   >
                                     {(user?.businessCategory == '' ||
                                       user?.businessCategory == null) && (
-                                      <option value="">Select</option>
-                                    )}
+                                        <option value="">Select</option>
+                                      )}
                                     {user?.businessCategory !== '' && (
                                       <option value={user?.businessCategory}>
                                         {user?.businessCategory}
@@ -604,7 +604,7 @@ const MyAccount = () => {
 
                               <Col className="form-group" md={12}>
                                 <label>
-                                  Email Address{' '}
+                                  Email Address *{' '}
                                   <span className="required"></span>
                                 </label>
                                 <input
@@ -619,7 +619,7 @@ const MyAccount = () => {
                               </Col>
                               <Col className="form-group" md={12}>
                                 <label>
-                                  Phone Number (+65){' '}
+                                  Phone Number *(+65){' '}
                                   <span className="required"></span>
                                 </label>
                                 <input
@@ -830,13 +830,21 @@ const MyAccount = () => {
                             enquiry@eventstop.com
                           </a>
                         </p>
-                        <Button
+                        {/* <Button
                           variant="secondary"
                           size="sm"
                           onClick={() => setShow(true)}
                         >
                           Disable
-                        </Button>{' '}
+                        </Button>{' '} */}
+                        <button
+                          
+                          className="btn btn-fill-out btn-sm"
+                          name="disable"
+                          onClick={() => setShow(true)}
+                        >
+                          Disable
+                                                    </button>
                         <Col md={12}></Col>
                       </Card.Body>
                     </Card>
