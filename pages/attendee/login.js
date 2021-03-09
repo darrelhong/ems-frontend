@@ -15,7 +15,7 @@ export default function AttendeeLogin({ info }) {
   return (
     <LoginPage
       info={info}
-      heading="Participant Login"
+      heading="Attendee Login"
       loginApiUrl="/api/user/login/atnd"
       loginSuccessUrl="/attendee/home"
       registerUrl="/attendee/register"
