@@ -1,4 +1,6 @@
 import OrganiserProfile from '../../components/OrganiserProfile';
+import ProfileNewOrganiser from '../../components/ProfileNewOrganiser';
+
 import { useState, useEffect } from 'react';
 import { withRouter } from 'next/router';
 import PartnerWrapper from '../../components/wrapper/PartnerWrapper';
@@ -45,25 +47,25 @@ const Profile = ({ router: { query } }) => {
     <div>
       {role === 'Partner' && (
         <PartnerWrapper>
-          <OrganiserProfile paraId_={paraId_} />
+          <ProfileNewOrganiser paraId_={paraId_} />
         </PartnerWrapper>
       )}
 
       {role === 'Attendee' && (
         <AttendeeWrapper>
-          <OrganiserProfile paraId_={paraId_} />
+          <ProfileNewOrganiser paraId_={paraId_} />
         </AttendeeWrapper>
       )}
 
       {role === 'Organiser' && (
         <OrganiserWrapper>
-          <OrganiserProfile paraId_={paraId_} />
+          <ProfileNewOrganiser paraId_={paraId_} />
         </OrganiserWrapper>
       )}
 
       {role === 'Guest' && (
         <GuestWrapper>
-          <OrganiserProfile paraId_={paraId_} />
+          <ProfileNewOrganiser paraId_={paraId_} />
         </GuestWrapper>
       )}
     </div>

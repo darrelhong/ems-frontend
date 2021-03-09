@@ -316,10 +316,10 @@ const MyAccount = () => {
         <Modal.Body>Are you sure you want to disable your account?</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleDisabled}>
-            Yes
+            No
           </Button>
           <button className="btn btn-fill-out" onClick={handleClose}>
-            No
+            Yes
           </button>
         </Modal.Footer>
       </Modal>
@@ -834,13 +834,20 @@ const MyAccount = () => {
                             enquiry@eventstop.com
                           </a>
                         </p>
-                        <Button
+                        {/* <Button
                           variant="secondary"
                           size="sm"
                           onClick={() => setShow(true)}
                         >
                           Disable
-                        </Button>{' '}
+                        </Button>{' '} */}
+                        <button
+                          className="btn btn-fill-out btn-sm"
+                          name="disable"
+                          onClick={() => setShow(true)}
+                        >
+                          Disable
+                        </button>
                         <Col md={12}></Col>
                       </Card.Body>
                     </Card>

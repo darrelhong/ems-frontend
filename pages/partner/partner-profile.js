@@ -1,4 +1,6 @@
 import PartnerProfile from '../../components/PartnerProfile';
+import ProfileNew from '../../components/ProfileNew';
+
 import { useState, useEffect } from 'react';
 import { withRouter } from 'next/router';
 import PartnerWrapper from '../../components/wrapper/PartnerWrapper';
@@ -45,25 +47,32 @@ const Profile = ({ router: { query } }) => {
     <div>
       {role === 'Partner' && (
         <PartnerWrapper>
-          <PartnerProfile localuser={localuser} />
+          <ProfileNew localuser={localuser} />
         </PartnerWrapper>
       )}
 
       {role === 'Attendee' && (
         <AttendeeWrapper>
-          <PartnerProfile localuser={localuser} />
+          <ProfileNew localuser={localuser} />
         </AttendeeWrapper>
       )}
 
       {role === 'Organiser' && (
         <OrganiserWrapper>
-          <PartnerProfile localuser={localuser} />
+          <ProfileNew localuser={localuser} />
         </OrganiserWrapper>
       )}
 
+      {/* {role === 'Guest' && (
+        <GuestWrapper>
+          <PartnerProfile
+            localuser={localuser}
+          />
+        </GuestWrapper>)} */}
+
       {role === 'Guest' && (
         <GuestWrapper>
-          <PartnerProfile localuser={localuser} />
+          <ProfileNew localuser={localuser} />
         </GuestWrapper>
       )}
     </div>

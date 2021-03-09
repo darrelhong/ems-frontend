@@ -4,9 +4,12 @@ import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
 import Badge from 'react-bootstrap/Badge';
 import Link from 'next/link';
+import {
+  Button,
+} from "reactstrap";
 // import EventEoProfileSliderTen from './ProductSlider/EventEoProfileSliderTen';
 
-const FollowersTabEoProfile = ({ attendees, partners }) => {
+const FollowersTabEoProfile = ({ attendees, partners, showPublicView }) => {
   if (attendees !== undefined && partners !== undefined) {
     return (
       <div className="product-tab-area space-pb--r70">
@@ -38,57 +41,70 @@ const FollowersTabEoProfile = ({ attendees, partners }) => {
                       }}
                     >
                       <div className="product-description-tab__additional-info">
-                        {attendees.map((attendee) => {
+                        {attendees != null && attendees.map((attendee) => {
                           return (
-                            <div>
-                              <Row md={12} className="follower-box">
-                                <div className="p-3">
-                                  <div className="d-flex align-items-center">
-                                    <div className="image">
-                                      {' '}
-                                      {/* <img
-                                      src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=80"
-                                      class="rounded"
-                                      width="100"
-                                    /> */}
-                                      {attendee?.profilePic == null && (
-                                        <img
-                                          src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
-                                          className="rounded"
-                                          width="100"
-                                        />
-                                      )}
-                                      {attendee?.profilePic != null && (
-                                        <Image
-                                          className="rounded"
-                                          width="100"
-                                          src={attendee?.profilePic}
-                                          thumbnail
-                                        />
-                                      )}{' '}
-                                    </div>
-                                    <div className="ml-3 w-100">
-                                      <h4 className="mb-0 mt-0">
-                                        {attendee.name}
-                                      </h4>{' '}
-                                      {!attendee.categoryPreferences.isEmpty &&
-                                        attendee.categoryPreferences.map(
-                                          (eventtype) => {
-                                            return (
-                                              <span>
-                                                {' '}
-                                                <Badge variant="primary">
-                                                  {eventtype}
-                                                </Badge>{' '}
-                                              </span>
-                                            );
-                                          }
-                                        )}
-                                    </div>
+                            <li>
+                              <br></br>
+                              <Row>
+
+                                <Col md="1" xs="1"> &nbsp;</Col>
+                                <Col md="2" xs="2">
+                                  <div className="avatar">
+                                    {/* <img
+                              alt="..."
+                              className="img-circle img-no-padding img-responsive"
+                              src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
+                            /> */}
+                                    {attendee?.profilePic == null && (
+                                      <img
+                                        src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
+                                        className="img-circle img-no-padding img-responsive"
+                                      />
+                                    )}
+                                    {attendee?.profilePic != null && (
+                                      <Image
+                                        className="img-circle img-no-padding img-responsive"
+                                        src={attendee?.profilePic}
+                                      />
+                                    )}
                                   </div>
-                                </div>
+                                </Col>
+                                <Col md="6" xs="6">
+                                  {/* <br></br> */}
+                                  {attendee.name} <br />
+                                  <span className="text-muted">
+                                    {attendee.email}
+                                  </span>
+                                  <div>
+                                    {!attendee.categoryPreferences.isEmpty &&
+                                      attendee.categoryPreferences.map(
+                                        (eventtype) => {
+                                          return (
+                                            <span>
+                                              {' '}
+                                              <Badge variant="primary">
+                                                {eventtype}
+                                              </Badge>{' '}
+                                            </span>
+                                          );
+                                        }
+                                      )}
+                                  </div>
+                                </Col>
+                                <Col className="text-right" md="1" xs="1">
+                                  <br></br>
+                                  {!showPublicView && (<Button
+                                    className="btn-round btn-icon"
+                                    color="success"
+                                    outline
+                                    size="sm"
+                                  >
+                                    Select
+                                    {/* <i className="fa fa-envelope" /> */}
+                                  </Button>)}
+                                </Col>
                               </Row>
-                            </div>
+                            </li>
                           );
                         })}
                       </div>
@@ -110,67 +126,86 @@ const FollowersTabEoProfile = ({ attendees, partners }) => {
                       }}
                     >
                       <div className="product-description-tab__additional-info">
-                        {partners.map((partner) => {
-                          return (
-                            <div>
-                              <Row md={12} className="follower-box">
-                                <div className="p-3">
-                                  <div className="d-flex align-items-center">
-                                    <div className="image">
-                                      {' '}
-                                      {/* <img
-                                      src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=80"
-                                      class="rounded"
-                                      width="100"
-                                    /> */}
-                                      {partner.profilePic == null && (
-                                        <img
-                                          src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
-                                          className="rounded"
-                                          width="100"
-                                        />
-                                      )}
-                                      {partner.profilePic != null && (
-                                        <Image
-                                          className="rounded"
-                                          width="100"
-                                          src={partner.profilePic}
-                                          thumbnail
-                                        />
-                                      )}{' '}
-                                    </div>
-                                    <div className="ml-3 w-100">
-                                      <h4 className="mb-0 mt-0">
-                                        <Link
-                                          href={{
-                                            pathname:
-                                              '/partner/partner-profile',
-                                            query: {
-                                              localuser: JSON.stringify(
-                                                partner.id
-                                              ),
-                                            },
-                                          }}
-                                        >
-                                          {partner.name}
-                                        </Link>
-                                      </h4>{' '}
-                                      {/* <span>{partner.description} </span> */}
-                                      {partner.businessCategory != null && (
-                                        <span>
-                                          {' '}
-                                          <Badge variant="primary">
-                                            {partner.businessCategory}
-                                          </Badge>{' '}
-                                        </span>
-                                      )}
-                                    </div>
-                                  </div>
-                                </div>
-                              </Row>
-                            </div>
-                          );
-                        })}
+                        <ul className="list-unstyled team-members">
+                          {partners != null &&
+                            partners.map((partner) => {
+                              return (
+                                <li>
+                                  <br></br>
+                                  <Row>
+
+                                    <Col md="1" xs="1"> &nbsp;</Col>
+                                    <Col md="2" xs="2">
+                                      <div className="avatar">
+                                        {/* <img
+                              alt="..."
+                              className="img-circle img-no-padding img-responsive"
+                              src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
+                            /> */}
+                                        {partner?.profilePic == null && (
+                                          <img
+                                            src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
+                                            className="img-circle img-no-padding img-responsive"
+                                          />
+                                        )}
+                                        {partner?.profilePic != null && (
+                                          <Image
+                                            className="img-circle img-no-padding img-responsive"
+                                            src={partner?.profilePic}
+                                          />
+                                        )}
+                                      </div>
+                                    </Col>
+                                    <Col md="6" xs="6">
+                                      {/* <br></br> */}
+                                      <Link
+                                        href={{
+                                          pathname:
+                                            '/partner/partner-profile',
+                                          query: {
+                                            paraId: JSON.stringify(
+                                              partner?.id
+                                            ),
+                                          },
+                                        }}
+                                      >
+                                        {partner.name}
+                                      </Link> <br /> 
+                                      <span className="text-muted">
+                                        {partner.email}
+                                      </span>
+                                      <div>
+                                        {partner.businessCategory !== null &&
+                                          (
+                                            <span>
+                                              {' '}
+                                              <Badge variant="primary">
+                                                {partner.businessCategory}
+                                              </Badge>{' '}
+                                            </span>
+
+
+                                          )}
+                                      </div>
+                                    </Col>
+                                    <Col className="text-right" md="1" xs="1">
+                                      <br></br>
+                                      {!showPublicView && (<Button
+                                        className="btn-round btn-icon"
+                                        color="success"
+                                        outline
+                                        size="sm"
+                                      >
+                                        Select
+                                        {/* <i className="fa fa-envelope" /> */}
+                                      </Button>)}
+                                    </Col>
+                                  </Row>
+                                </li>
+                              )
+                            })}
+                        </ul>
+
                       </div>
                     </div>
                   </Col>
