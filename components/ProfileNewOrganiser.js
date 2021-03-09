@@ -31,6 +31,7 @@ import Badge from 'react-bootstrap/Badge';
 import PropTypes from 'prop-types';
 import { withRouter } from 'next/router';
 import { BsPencilSquare } from 'react-icons/bs';
+import api from '../lib/ApiClient';
 import {
     getEventByOrganiserId,
     getPastEventsByOrganiserId,
@@ -42,6 +43,7 @@ import {
 } from '../lib/query/useEvent';
 import { getOrgAttendeeFollowers } from '../lib/query/getOrgAttendeeFollowers';
 import { getOrgPartnerFollowers } from '../lib/query/getOrgPartnerFollowers';
+import { useMutation, useQueryClient } from 'react-query';
 
 const EventOrgProfile = ({ paraId_ }) => {
     const [showEoView, setShowEoView] = useState(false);
@@ -56,7 +58,8 @@ const EventOrgProfile = ({ paraId_ }) => {
     const [attendeeFollowers, setAttendeeFollowers] = useState([]);
     const [partnerFollowers, setPartnerFollowers] = useState([]);
     const [rating, setRating] = useState();
-
+    const [unfollowBtn, setUnfollowBtn] = useState();
+    const [followBtn, setFollowBtn] = useState();
     // if there is user login credential
     //const paraId_ = JSON.parse(query.paraId);
 
@@ -64,7 +67,7 @@ const EventOrgProfile = ({ paraId_ }) => {
     // EVNTORG: 'organiser',
     // BIZPTNR: 'partner',
     // ATND: 'attendee',
-
+    var type;
     useEffect(async () => {
         await getUser(paraId_).then((eventOrg) => {
             console.log('eo data');
@@ -73,20 +76,15 @@ const EventOrgProfile = ({ paraId_ }) => {
             setEventOrganiser(eventOrg);
         });
 
-        await getOrgAttendeeFollowers(paraId_).then((followers) => {
-            setAttendeeFollowers(followers);
-        });
-
-        await getOrgPartnerFollowers(paraId_).then((followers) => {
-            setPartnerFollowers(followers);
-        });
+      
 
         await getRating(paraId_).then((rate) => {
             setRating(rate);
             console.log("rating" + rating);
         });
         //const { data: user } = useUser(localStorage.getItem('userId'));
-
+        var followId;
+        
         if (localStorage.getItem('userId') != null) {
             await getUser(localStorage.getItem('userId')).then(async (data) => {
                 console.log(data);
@@ -100,11 +98,11 @@ const EventOrgProfile = ({ paraId_ }) => {
                         );
                         setShowPublicView(true);
                         setShowEoView(false);
+                        followId = data.id;
+                        type ="partner";
                         //partner has no upcoming events
                     } else if (
-                        data.roles[0].roleEnum === 'ATND' ||
-                        (data.roles[0].roleEnum === 'EVNTORG' && data.id != paraId_)
-                    ) {
+                        data.roles[0].roleEnum === 'ATND' ) {
                         await getAttendeeCurrentEventsByOrganiserId(paraId_).then(
                             (events) => {
                                 setCurrenteventlist(events);
@@ -116,28 +114,32 @@ const EventOrgProfile = ({ paraId_ }) => {
                                 setUpcomingeventlist(events);
                             }
                         );
-
+                        followId = data.id;   
+                        type ="atn";
                         setShowPublicView(true);
                         setShowEoView(false);
-                        // } else if (
-                        //   data.roles[0].roleEnum === 'EVNTORG' &&
-                        //   data.id != paraId_
-                        // ) {
-                        //   await getAttendeeCurrentEventsByOrganiserId(paraId_).then(
-                        //     (events) => {
-                        //       setCurrenteventlist(events);
-                        //     }
-                        //   );
-
-                        //   await getAttendeeUpcomingEventsByOrganiserId(paraId_).then(
-                        //     (events) => {
-                        //       setUpcomingeventlist(events);
-                        //     }
-                        //   );
-                        //   setShowPublicView(true);
-                        //   setShowEoView(false);
-                        // }
-                    } else if (
+                        setUserRole("ATND");
+                 
+                    } else if
+                        (data.roles[0].roleEnum === 'EVNTORG' && data.id != paraId_){
+                            await getAttendeeCurrentEventsByOrganiserId(paraId_).then(
+                                (events) => {
+                                    setCurrenteventlist(events);
+                                }
+                            );
+    
+                            await getAttendeeUpcomingEventsByOrganiserId(paraId_).then(
+                                (events) => {
+                                    setUpcomingeventlist(events);
+                                }
+                            );
+                            followId = data.id;   
+                            setShowPublicView(true);
+                            setShowEoView(false);
+                            setFollowBtn(false);
+                            setUnfollowBtn(false);
+                        }
+                    else if (
                         data.roles[0].roleEnum === 'EVNTORG' &&
                         data.id == paraId_
                     ) {
@@ -155,6 +157,8 @@ const EventOrgProfile = ({ paraId_ }) => {
 
                         setShowPublicView(false);
                         setShowEoView(true);
+                        setFollowBtn(false);
+                        setUnfollowBtn(false);
                     }
                     // past events all the same for all users.
                     await getPastEventsByOrganiserId(paraId_).then((events) => {
@@ -176,8 +180,151 @@ const EventOrgProfile = ({ paraId_ }) => {
             });
             setShowPublicView(true);
             setShowEoView(false);
+            setFollowBtn(false);
+            setUnfollowBtn(false);
         }
+
+        await getOrgAttendeeFollowers(paraId_).then((followers) => {
+                    setAttendeeFollowers(followers);
+                    console.log("type" + type + "followId" + followId);
+
+                    if(followId>=0 && type ==="atn"){
+                        var found = false;
+                        for (var i = 0; i < followers.length; i++) {
+                            if (followers[i].id === followId) {
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (found) {
+                            setUnfollowBtn(true);
+                            setFollowBtn(false);
+                        } else {
+                            setFollowBtn(true);
+                            setUnfollowBtn(false);
+                        }
+                    }
+                });
+
+                await getOrgPartnerFollowers(paraId_).then((followers) => {
+                    setPartnerFollowers(followers);
+                    if(followId>=0 && type ==="partner"){
+                      
+                        var found = false;
+                        for (var i = 0; i < followers.length; i++) {
+                            console.log("followers id" + followers[i].id);
+                            if (followers[i].id === followId) {
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (found) {
+                            setUnfollowBtn(true);
+                            setFollowBtn(false);
+                        
+                        } else {
+                            setFollowBtn(true);
+                            setUnfollowBtn(false);
+                        }
+                    }
+                });
+
+
     }, []);
+
+    const getRefreshedFollowers = async () => {
+        await getOrgAttendeeFollowers(paraId_).then((followers) => {
+            setAttendeeFollowers(followers);
+        });
+
+        
+        await getOrgPartnerFollowers(paraId_).then((followers) => {
+            setPartnerFollowers(followers);
+        });
+    };
+
+    const mutateFollowAsBP = useMutation((data) =>
+    api
+        .post('/api/partner/followEO', data)
+        .then((response) => {
+            setUnfollowBtn(true);
+            setFollowBtn(false);
+            getRefreshedFollowers();
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+    )
+
+    const mutateUnfollowAsBP = useMutation((data) =>
+    api
+        .post('/api/partner/unfollowEO', data)
+        .then((response) => {
+            setUnfollowBtn(false);
+            setFollowBtn(true);
+            getRefreshedFollowers();
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+    )
+
+    const mutateFollowAsAtn = useMutation((data) =>
+    api
+        .post('/api/attendee/followEO', data)
+        .then((response) => {
+            setUnfollowBtn(true);
+            setFollowBtn(false);
+            getRefreshedFollowers();
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+    )
+
+    const mutateUnfollowAsAtn = useMutation((data) =>
+    api
+        .post('/api/attendee/unfollowEO', data)
+        .then((response) => {
+            setUnfollowBtn(false);
+            setFollowBtn(true);
+            getRefreshedFollowers();
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+    )
+
+    const handleFollow = async () => {
+        if(userRole === "ATND"){
+             mutateFollowAsAtn.mutate({
+                    id: eventorganiser?.id
+                });
+        }else if(userRole === "BIZPTNR"){
+            mutateFollowAsBP.mutate({
+                id: eventorganiser?.id
+            });
+        }
+    }
+
+    const handleUnfollow = async () => {
+        console.log("role" + userRole);
+        if(userRole === "ATND"){
+             mutateUnfollowAsAtn.mutate({
+                    id: eventorganiser?.id
+                });
+        }else if(userRole === "BIZPTNR"){
+
+            mutateUnfollowAsBP.mutate({
+                id: eventorganiser?.id
+            });
+        }
+    }
+
+    
+
+
+
 
 
     return (
@@ -279,14 +426,27 @@ const EventOrgProfile = ({ paraId_ }) => {
                                                         <BsPencilSquare />
                                                     </button>
                                                 </Link>)}
-                                                {showPublicView && (
+                                                {showPublicView && followBtn  && !unfollowBtn && (
                                                     <button
                                                         type="submit"
                                                         className="btn btn-fill-out btn-sm"
                                                         name="submit"
                                                         value="Submit"
+                                                        onClick={handleFollow}
                                                     >
                                                         Follow
+                                                    </button>
+                                                )}
+                                                {showPublicView && unfollowBtn && !followBtn && (
+                                                    <button
+                                                        type="submit"
+                                                        className="btn btn-fill-out btn-sm"
+                                                        name="submit"
+                                                        value="Submit"
+                                                        
+                                                        onClick={handleUnfollow}
+                                                    >
+                                                        Unfollow
                                                     </button>
                                                 )}
 

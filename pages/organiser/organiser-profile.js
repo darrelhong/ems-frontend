@@ -56,19 +56,19 @@ return (
  <div>
        {role === "Partner" && (
         <PartnerWrapper>
-          <OrganiserProfile paraId_={paraId_} />
+          <ProfileNewOrganiser paraId_={paraId_} />
         </PartnerWrapper>
       )}
 
       {role === 'Attendee' && (
         <AttendeeWrapper>
-          <OrganiserProfile paraId_={paraId_} />
+          <ProfileNewOrganiser paraId_={paraId_} />
         </AttendeeWrapper>
       )}
 
       {role === 'Organiser' && (
         <OrganiserWrapper>
-          <OrganiserProfile
+          <ProfileNewOrganiser
             paraId_={paraId_}
           />
         </OrganiserWrapper>)}

@@ -41,7 +41,7 @@ const FollowersTabEoProfile = ({ attendees, partners, showPublicView }) => {
                       }}
                     >
                       <div className="product-description-tab__additional-info">
-                        {attendees!= null && attendees.map((attendee) => {
+                        {attendees != null && attendees.map((attendee) => {
                           return (
                             <li>
                               <br></br>
@@ -158,21 +158,33 @@ const FollowersTabEoProfile = ({ attendees, partners, showPublicView }) => {
                                     </Col>
                                     <Col md="6" xs="6">
                                       {/* <br></br> */}
-                                      {partner.name} <br />
+                                      <Link
+                                        href={{
+                                          pathname:
+                                            '/partner/partner-profile',
+                                          query: {
+                                            paraId: JSON.stringify(
+                                              partner?.id
+                                            ),
+                                          },
+                                        }}
+                                      >
+                                        {partner.name}
+                                      </Link> <br /> 
                                       <span className="text-muted">
                                         {partner.email}
                                       </span>
                                       <div>
-                                        {!partner.businessCategory &&
-                                         (
-                                                <span>
-                                                  {' '}
-                                                  <Badge variant="primary">
-                                                    {partner.businessCategory}
-                                                  </Badge>{' '}
-                                                </span>
-                                            
-                                            
+                                        {partner.businessCategory !== null &&
+                                          (
+                                            <span>
+                                              {' '}
+                                              <Badge variant="primary">
+                                                {partner.businessCategory}
+                                              </Badge>{' '}
+                                            </span>
+
+
                                           )}
                                       </div>
                                     </Col>
