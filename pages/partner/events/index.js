@@ -11,7 +11,7 @@ import PartnerWrapper from '../../../components/wrapper/PartnerWrapper';
 import EventCard from '../../../components/events/partner/EventCard';
 import ButtonWithLoading from '../../../components/custom/ButtonWithLoading';
 
-function PartnerHome() {
+export default function PartnerEvents() {
   const [sortBy, setSortBy] = useState();
   const [searchTerm, setSearchTerm] = useState('');
   const queryClient = useQueryClient();
@@ -154,5 +154,3 @@ function PartnerHome() {
     </PartnerWrapper>
   );
 }
-
-export default PartnerHome;
