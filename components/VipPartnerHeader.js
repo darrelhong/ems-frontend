@@ -46,7 +46,7 @@ const VipPartnerHeader = ({
               ></input>
             </div>
             <div>
-              <Link href="/organiser/searchbp">
+              <Link href="/organiser/view/partners">
                 <span style={{ float: 'right' }}>
                   <button
                     className="btn btn-fill-out btn-sm"
