@@ -11,8 +11,8 @@ export default function OrganiserHome() {
     localStorage.getItem('userId')
   );
   return (
-    <OrganiserWrapper title="Organiser Home">
-      <BreadcrumbOne pageTitle="Organiser Home">
+    <OrganiserWrapper title="Home">
+      <BreadcrumbOne pageTitle="Home">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/organiser/home">

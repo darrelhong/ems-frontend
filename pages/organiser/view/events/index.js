@@ -4,11 +4,11 @@ import { Alert, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { useInfiniteQuery, useQueryClient } from 'react-query';
 import debounce from 'lodash/debounce';
 
-import { BreadcrumbOne } from '../../../components/Breadcrumb';
-import PartnerWrapper from '../../../components/wrapper/PartnerWrapper';
-import api from '../../../lib/ApiClient';
-import EventCard from '../../../components/events/partner/EventCard';
-import ButtonWithLoading from '../../../components/custom/ButtonWithLoading';
+import { BreadcrumbOne } from '../../../../components/Breadcrumb';
+import PartnerWrapper from '../../../../components/wrapper/PartnerWrapper';
+import api from '../../../../lib/ApiClient';
+import EventCard from '../../../../components/events/partner/EventCard';
+import ButtonWithLoading from '../../../../components/custom/ButtonWithLoading';
 import Nav from 'react-bootstrap/Nav';
 
 const getEvents = async (page = 0, sort, sortDir, searchTerm) => {
@@ -90,21 +90,21 @@ function PartnerHome() {
                             >
                                 <Nav.Item>
                                     <Nav.Link eventKey="Events">
-                                        <Link href="/partner/events">
+                                        <Link href="/organiser/view/events">
                                             VIEW ALL EVENTS
                                         </Link>
                                     </Nav.Link>
                                 </Nav.Item>
                                 {/* <Nav.Item>
                                     <Nav.Link eventKey="bp">
-                                    <Link href="/partner/view/partners">
+                                        <Link href="/organiser/view/partners">
                                             VIEW ALL BUSINESS PARTNERS
                                         </Link>
                                     </Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item>
                                     <Nav.Link eventKey="eo"  >
-                                        <Link href="/partner/view/organisers">
+                                        <Link href="/organiser/view/organisers">
                                             VIEW ALL EVENT ORGANISERS
                                         </Link>
                                     </Nav.Link>
@@ -162,7 +162,7 @@ function PartnerHome() {
                       lg={4}
                       className="mb-5 d-flex align-items-stretch"
                     >
-                      <Link href={`/partner/events/${event.eid}`}>
+                      <Link href={`/organiser/view/events/${event.eid}`}>
                         <a className="w-100">
                           <EventCard event={event} />
                         </a>
