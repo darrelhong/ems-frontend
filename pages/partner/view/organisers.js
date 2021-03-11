@@ -109,13 +109,13 @@ function PartnerViewUsers() {
                                 className="product-description-tab__navigation justify-content-center "
                                 defaultActiveKey="eo"
                             >
-                                <Nav.Item>
+                                {/* <Nav.Item>
                                     <Nav.Link eventKey="Events">
                                         <Link href="/partner/events">
                                             VIEW ALL EVENTS
                                         </Link>
                                     </Nav.Link>
-                                </Nav.Item>
+                                </Nav.Item> */}
                                 <Nav.Item>
                                     <Nav.Link eventKey="bp">
                                     <Link href="/partner/view/partners">

@@ -13,12 +13,14 @@ import OrganiserCard from '../../../components/OrganiserCard';
 import ButtonWithLoading from '../../../components/custom/ButtonWithLoading';
 
 
-const getPartners = async (page = 0, sort, sortDir, searchTerm) => {
-    let url = `/api/partner/get-partners?page=${page}`;
+const getPartners = async (page = 0, sort, sortDir, searchTerm, category) => {
+    console.log("category " + category);
+    let url = `/api/partner/get-partners-cat?page=${page}`;
     if (sort && sortDir) url += `&sort=${sort}&sortDir=${sortDir}`;
     if (searchTerm) url += `&keyword=${searchTerm}`;
+    if (category) url += `&businessCategory=${category}`;
     const { data } = await api.get(url);
-    console.log("partner " + data);
+   
     return data;
 };
 
@@ -27,7 +29,7 @@ const getPartners = async (page = 0, sort, sortDir, searchTerm) => {
 function PartnerViewUsers() {
     const [sortBy, setSortBy] = useState();
     const [searchTerm, setSearchTerm] = useState('');
-
+    const [category, setCategory] = useState('');
     const queryClient = useQueryClient();
 
 
@@ -38,9 +40,9 @@ function PartnerViewUsers() {
         fetchNextPage,
         hasNextPage,
     } = useInfiniteQuery(
-        ['partners', sortBy?.sort, sortBy?.sortDir, searchTerm],
+        ['partners', sortBy?.sort, sortBy?.sortDir, searchTerm, category],
         ({ pageParam = 0 }) =>
-            getPartners(pageParam, sortBy?.sort, sortBy?.sortDir, searchTerm),
+            getPartners(pageParam, sortBy?.sort, sortBy?.sortDir, searchTerm, category),
         {
             getNextPageParam: (lastPage) =>
                 lastPage.last ? false : lastPage.number + 1,
@@ -64,6 +66,17 @@ function PartnerViewUsers() {
         }
     };
 
+    const handleChangeCategory = (e) => {
+        console.log(e.target.value);
+        setCategory (e.target.value);
+        console.log("cat" + category);
+
+        if(e.target.value == ""){
+            setCategory();
+        }
+    };
+
+
 
     // search results automatically update, with debounced input
     const debouncedSearch = debounce((value) => setSearchTerm(value), 800);
@@ -79,6 +92,7 @@ function PartnerViewUsers() {
             sortBy?.sort,
             sortBy?.sortDir,
             searchTerm,
+            category
         ]);
 
 
@@ -87,7 +101,7 @@ function PartnerViewUsers() {
             <BreadcrumbOne pageTitle="View All Business Partners">
                 <ol className="breadcrumb justify-content-md-end">
                     <li className="breadcrumb-item">
-                        <Link href="/organiser/home">
+                        <Link href="/partner/home">
                             <a>Home</a>
                         </Link>
                     </li>
@@ -111,23 +125,23 @@ function PartnerViewUsers() {
                                 className="product-description-tab__navigation justify-content-center "
                                 defaultActiveKey="bp"
                             >
-                              <Nav.Item>
+                                {/* <Nav.Item>
                                     <Nav.Link eventKey="Events">
-                                        <Link href="/organiser/view/events">
+                                        <Link href="/partner/events">
                                             VIEW ALL EVENTS
                                         </Link>
                                     </Nav.Link>
-                                </Nav.Item>
+                                </Nav.Item> */}
                                 <Nav.Item>
                                     <Nav.Link eventKey="bp">
-                                        <Link href="/organiser/view/partners">
+                                        <Link href="/partner/view/partners">
                                             VIEW ALL BUSINESS PARTNERS
                                         </Link>
                                     </Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item>
                                     <Nav.Link eventKey="eo"  >
-                                        <Link href="/organiser/view/organisers">
+                                        <Link href="/partner/view/organisers">
                                             VIEW ALL EVENT ORGANISERS
                                         </Link>
                                     </Nav.Link>
@@ -167,6 +181,54 @@ function PartnerViewUsers() {
                                     <option value="">Sort by</option>
                                     <option value="name-asc">Name - A to Z</option>
                                     <option value="name-desc">Name - Z to A</option>
+                                </select>
+                            </Col>
+                            <Col xs={4} sm={3}>
+                                <select className="custom-select" onChange={handleChangeCategory}>
+                                    <option value="">Filter by Category</option>
+                                    <option value="Automotive">
+                                        Automotive
+                                    </option>
+                                    <option value="Business Support & Supplies">
+                                        Business Support & Supplies
+                                    </option>
+                                    <option value="Computers & Electronics">
+                                        Computers & Electronics
+                                    </option>
+                                    <option value="Construction & Contractor">
+                                        Construction & Contractor
+                                    </option>
+                                    <option value="Education">Education</option>
+                                    <option value="Entertainment">
+                                        Entertainment
+                                    </option>
+                                    <option value="Food & Dining">
+                                        Food & Dining
+                                    </option>
+                                    <option value="Health & Medicine">
+                                        Health & Medicine
+                                    </option>
+                                    <option value="Home & Garden">
+                                        Home & Garden
+                                    </option>
+                                    <option value="Legal & Financial">
+                                        Legal & Financial{' '}
+                                    </option>
+                                    <option value="Manufacturing, Wholesale, Distribution">
+                                        Manufacturing, Wholesale, Distribution
+                                    </option>
+                                    <option value="Merchants (Retail)">
+                                        Merchants (Retail)
+                                    </option>
+                                    <option value="Personal Care & Services">
+                                        Personal Care & Services
+                                    </option>
+                                    <option value="Real Estate">
+                                        Real Estate
+                                    </option>
+                                    <option value="Travel & Transportation">
+                                        Travel & Transportation
+                                    </option>
                                 </select>
                             </Col>
                         </Row>

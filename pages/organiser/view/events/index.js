@@ -95,7 +95,7 @@ function PartnerHome() {
                                         </Link>
                                     </Nav.Link>
                                 </Nav.Item>
-                                <Nav.Item>
+                                {/* <Nav.Item>
                                     <Nav.Link eventKey="bp">
                                         <Link href="/organiser/view/partners">
                                             VIEW ALL BUSINESS PARTNERS
@@ -108,7 +108,7 @@ function PartnerHome() {
                                             VIEW ALL EVENT ORGANISERS
                                         </Link>
                                     </Nav.Link>
-                                </Nav.Item>
+                                </Nav.Item> */}
                             </Nav>
 
 
