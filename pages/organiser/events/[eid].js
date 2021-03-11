@@ -111,6 +111,7 @@ const OrganiserViewEventDetails = () => {
     if (updatedEvent) {
       setEvent(updatedEvent);
       createToast('Event successfully cancelled', 'success');
+      router.push('/organiser/events');
     } else {
       createToast('Error cancelling the event', 'error');
     }

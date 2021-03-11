@@ -20,6 +20,7 @@ import StarBorderIcon from '@material-ui/icons/StarBorder';
 import ProductRating from '../../Product/ProductRating';
 import Link from 'next/link';
 import HidePopover from '../../Event/HidePopover';
+import DeleteModal from '../../Event/DeleteModal';
 
 const EventDescription = ({
   event,
@@ -32,6 +33,11 @@ const EventDescription = ({
   handleDelete,
   createToast
 }) => {
+
+  const [deleteModalShow, setDeleteModalShow] = useState(false);
+  const closeModal = () => setDeleteModalShow(false);
+  const openModal = () => setDeleteModalShow(true);
+
   const deleteCancelButton = () => {
     if (event.eventStatus == 'CANCELLED') {
       return (
@@ -50,7 +56,8 @@ const EventDescription = ({
     } else if (event.eventStatus == 'DRAFT') {
       return (
         <button
-          onClick={() => handleDelete(event)}
+          onClick={() => openModal()}
+          // onClick={() => handleDelete(event)}
           className="btn btn-fill-out btn-addtocart space-ml--10"
           style={{ marginLeft: 'auto', marginRight: 'auto' }}
         >
@@ -64,7 +71,8 @@ const EventDescription = ({
       //in this case we can delete
       return (
         <button
-          onClick={() => handleDelete(event)}
+          onClick={() => openModal()}
+          // onClick={() => handleDelete(event)}
           className="btn btn-fill-out btn-addtocart space-ml--10"
           style={{ marginLeft: 'auto', marginRight: 'auto' }}
         >
@@ -75,7 +83,8 @@ const EventDescription = ({
       //only can cancel, cannot delete
       return (
         <button
-          onClick={() => handleCancel(event)}
+          onClick={() => openModal()}
+          // onClick={() => handleCancel(event)}
           className="btn btn-fill-out btn-addtocart space-ml--10"
           style={{ marginLeft: 'auto', marginRight: 'auto' }}
         >
@@ -85,8 +94,26 @@ const EventDescription = ({
     }
   };
 
+  const deleteCancelEvent = async () => {
+    if (event.eventBoothTransactions?.length == 0 && event.ticketTransactions?.length == 0) {
+      await handleDelete(event);
+    } else {
+      await handleCancel(event);
+    }
+  };
+
+
   return (
     <div className="product-content">
+      <DeleteModal
+        currEvent={event}
+        deleteModalShow={deleteModalShow}
+        setDeleteModalShow={setDeleteModalShow}
+        closeModal={closeModal}
+        openModal={openModal}
+        deleteCancelEvent={deleteCancelEvent}
+      />
+
       {/* event name originally here */}
       {/* <h2 className="product-content__title space-mb--10">{event.name}</h2> */}
       <div className="product-content__price-rating-wrapper space-mb--10">
@@ -196,7 +223,7 @@ const EventDescription = ({
               </li>
               {event.eventStatus && (
                 <li>
-                  <HidePopover event={event} createToast={createToast}/>
+                  <HidePopover event={event} createToast={createToast} />
                 </li>
               )}
               {/* <li>

@@ -8,6 +8,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import StarIcon from '@material-ui/icons/Star';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import HidePopover from './HidePopover';
+import DeleteModal from './DeleteModal';
 import { vipToggle } from '../../lib/functions/eventOrganiser/eventFunctions';
 import { Unstable_TrapFocus } from '@material-ui/core';
 
@@ -46,7 +47,7 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
 
   return (
     <Fragment>
-      <Modal show={deleteModalShow} onHide={closeModal} centered>
+      {/* <Modal show={deleteModalShow} onHide={closeModal} centered>
         <Modal.Header closeButton>
           <Modal.Title>Delete An Event</Modal.Title>
         </Modal.Header>
@@ -66,7 +67,15 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
             Proceed
           </Button>
         </Modal.Footer>
-      </Modal>
+      </Modal> */}
+      <DeleteModal 
+      currEvent = {currEvent}
+      deleteModalShow = {deleteModalShow}
+      setDeleteModalShow = {setDeleteModalShow}
+      closeModal = {closeModal}
+      openModal = {openModal}
+      deleteCancelEvent = {deleteCancelEvent}
+      />
       <Col lg={4} sm={6} className="space-mb--50">
         <div className="product-list">
           <div className="product-list__image">
