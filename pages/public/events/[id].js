@@ -1,9 +1,7 @@
-import { useState } from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { Alert, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { format, parseISO } from 'date-fns';
-import { AiOutlineShareAlt } from 'react-icons/ai';
 
 import { useEvent } from '../../../lib/query/events';
 
@@ -11,6 +9,7 @@ import GuestWrapper from '../../../components/wrapper/GuestWrapper';
 import { BreadcrumbOne } from '../../../components/Breadcrumb';
 import EventImageGallery from '../../../components/events/partner/EventImageGallery';
 import AddToCalendar from '../../../components/custom/AddToCalendar';
+import ShareButton from '../../../components/custom/ShareButton';
 
 export function getServerSideProps({ query }) {
   return {
@@ -20,8 +19,6 @@ export function getServerSideProps({ query }) {
 
 export default function PublicEventPage({ id }) {
   const { data, status } = useEvent(id);
-
-  const [shareText, setShareText] = useState('Share');
 
   return (
     <GuestWrapper title={data?.name || 'Event page'}>
@@ -114,36 +111,10 @@ export default function PublicEventPage({ id }) {
 
             <Row>
               <Col className="col-auto ml-auto">
-                <button
-                  className="btn btn-purple btn-sm"
-                  onClick={() => {
-                    if (navigator?.share) {
-                      navigator.share({
-                        title: data.name,
-                        url: `${process.env.HOSTNAME}/public/events/${id}`,
-                      });
-                    } else {
-                      navigator.permissions
-                        .query({ name: 'clipboard-write' })
-                        .then((result) => {
-                          if (
-                            result.state == 'granted' ||
-                            result.state == 'prompt'
-                          ) {
-                            navigator.clipboard
-                              .writeText(
-                                `${process.env.HOSTNAME}/public/events/${id}`
-                              )
-                              .then(() => {
-                                setShareText('Copied');
-                              });
-                          }
-                        });
-                    }
-                  }}
-                >
-                  {shareText} <AiOutlineShareAlt />
-                </button>
+                <ShareButton
+                  title={data.name}
+                  url={`${process.env.HOSTNAME}/public/events/${id}`}
+                />
               </Col>
             </Row>
 
