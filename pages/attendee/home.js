@@ -34,7 +34,9 @@ export default function PartnerHome() {
 
         <Row>
           <Col>
-            <button className="btn btn-fill-out">View events</button>
+            <Link href="events">
+              <button className="btn btn-fill-out">View events</button>
+            </Link>
           </Col>
         </Row>
       </Container>
