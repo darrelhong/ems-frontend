@@ -44,6 +44,9 @@ export default function PartnerEvents() {
       case 'name-desc':
         setSortBy({ sort: 'name', sortDir: 'desc' });
         break;
+      case 'date-asc':
+        setSortBy({ sort: 'eventStartDate', sortDir: 'asc' });
+        break;
       default:
         setSortBy();
     }
@@ -106,6 +109,7 @@ export default function PartnerEvents() {
               <option value="">Sort by</option>
               <option value="name-asc">Name - A to Z</option>
               <option value="name-desc">Name - Z to A</option>
+              <option value="date-asc">Most recent</option>
             </select>
           </Col>
         </Row>
