@@ -5,12 +5,12 @@ import { Alert, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { format, parseISO } from 'date-fns';
 import { AiOutlineShareAlt } from 'react-icons/ai';
 
-import { useEvent } from '../../../../lib/query/events';
+import { useEvent } from '../../../lib/query/events';
 
-import { BreadcrumbOne } from '../../../../components/Breadcrumb';
-import EventImageGallery from '../../../../components/events/partner/EventImageGallery';
-import AddToCalendar from '../../../../components/custom/AddToCalendar';
-import AttendeeWrapper from '../../../../components/wrapper/AttendeeWrapper';
+import GuestWrapper from '../../../components/wrapper/GuestWrapper';
+import { BreadcrumbOne } from '../../../components/Breadcrumb';
+import EventImageGallery from '../../../components/events/partner/EventImageGallery';
+import AddToCalendar from '../../../components/custom/AddToCalendar';
 
 export function getServerSideProps({ query }) {
   return {
@@ -18,13 +18,13 @@ export function getServerSideProps({ query }) {
   };
 }
 
-export default function AttendeeEventPage({ id }) {
+export default function PublicEventPage({ id }) {
   const { data, status } = useEvent(id);
 
   const [shareText, setShareText] = useState('Share');
 
   return (
-    <AttendeeWrapper title={data?.name || 'Event page'}>
+    <GuestWrapper title={data?.name || 'Event page'}>
       {status === 'loading' ? (
         <Spinner animation="grow" role="status" aria-hidden="true" />
       ) : status === 'error' ? (
@@ -34,14 +34,12 @@ export default function AttendeeEventPage({ id }) {
           <BreadcrumbOne pageTitle="Event">
             <ol className="breadcrumb justify-content-md-end">
               <li className="breadcrumb-item">
-                <Link href="/attendee/home">
-                  <a>Attendee Home</a>
+                <Link href="/">
+                  <a>Home</a>
                 </Link>
               </li>
               <li className="breadcrumb-item">
-                <Link href="/attendee/events">
-                  <a>Events</a>
-                </Link>
+                <a>Events</a>
               </li>
               <li className="breadcrumb-item active">{data.name}</li>
             </ol>
@@ -158,10 +156,10 @@ export default function AttendeeEventPage({ id }) {
           </Container>
         </>
       )}
-    </AttendeeWrapper>
+    </GuestWrapper>
   );
 }
 
-AttendeeEventPage.propTypes = {
+PublicEventPage.propTypes = {
   id: PropTypes.string,
 };
