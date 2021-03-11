@@ -36,8 +36,9 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
 
   const checkCanDelete = (currEvent) => {
     if (
-      (event.eventBoothTransactions?.length == 0 || !event.eventBoothTransactions)
-      && (event.ticketTransactions?.length == 0 || !event.ticketTransactions)
+      (event.eventBoothTransactions?.length == 0 ||
+        !event.eventBoothTransactions) &&
+      (event.ticketTransactions?.length == 0 || !event.ticketTransactions)
     ) {
       return true;
     }
