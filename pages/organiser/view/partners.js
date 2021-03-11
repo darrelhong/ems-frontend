@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Alert, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { useInfiniteQuery, useQueryClient } from 'react-query';
@@ -8,10 +8,10 @@ import Nav from 'react-bootstrap/Nav';
 import { BreadcrumbOne } from '../../../components/Breadcrumb';
 import PartnerWrapper from '../../../components/wrapper/PartnerWrapper';
 import api from '../../../lib/ApiClient';
-import UserCard from '../../../components/UserCard';
+import UserEOCard from '../../../components/UserEOCard';
 import OrganiserCard from '../../../components/OrganiserCard';
 import ButtonWithLoading from '../../../components/custom/ButtonWithLoading';
-
+import { getUser } from '../../../lib/query/getUser';
 
 const getPartners = async (page = 0, sort, sortDir, searchTerm, category) => {
     console.log("category " + category);
@@ -26,11 +26,13 @@ const getPartners = async (page = 0, sort, sortDir, searchTerm, category) => {
 
 
 
+
 function PartnerViewUsers() {
     const [sortBy, setSortBy] = useState();
     const [searchTerm, setSearchTerm] = useState('');
     const [category, setCategory] = useState('');
     const queryClient = useQueryClient();
+    const [user, setUser] = useState();
 
 
     const {
@@ -50,8 +52,15 @@ function PartnerViewUsers() {
     );
 
 
+    useEffect(async () => {
+        getEO();
 
-
+    }, []);
+const getEO = async () => {
+    await getUser(localStorage.getItem('userId')).then((data) => {
+        setUser(data);
+    });
+}
 
     const handleChange = (e) => {
         switch (e.target.value) {
@@ -247,7 +256,7 @@ function PartnerViewUsers() {
                                                 query: { paraId: JSON.stringify(partner.id) },
                                             }}>
                                                 <a className="w-100">
-                                                    <UserCard partner={partner} />
+                                                    <UserEOCard partner={partner} user= {user} />
                                                 </a>
                                             </Link>
                                         </Col>
