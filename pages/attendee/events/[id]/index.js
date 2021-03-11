@@ -96,17 +96,6 @@ export default function AttendeeEventPage({ id }) {
 
                   <br></br>
                   <br></br>
-                  {/* <div className="d-flex align-items-center">
-                    <button
-                      className="btn btn-fill-out mr-2"
-                      disabled={!data.availableForSale}
-                    >
-                      Register Now
-                    </button>
-                    {!data.availableForSale && (
-                      <p className="text-dark">Sale period has not started</p>
-                    )}
-                  </div> */}
                 </div>
               </Col>
             </Row>
