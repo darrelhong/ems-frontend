@@ -9,6 +9,7 @@ import { BreadcrumbOne } from '../../../../components/Breadcrumb';
 import PartnerWrapper from '../../../../components/wrapper/PartnerWrapper';
 import EventImageGallery from '../../../../components/events/partner/EventImageGallery';
 import AddToCalendar from '../../../../components/custom/AddToCalendar';
+import ShareButton from '../../../../components/custom/ShareButton';
 
 export function getServerSideProps({ query }) {
   return {
@@ -110,7 +111,16 @@ export default function PartnerEventPage({ id }) {
               </Col>
             </Row>
 
-            <Row className="mt-5">
+            <Row>
+              <Col className="col-auto mt-3">
+                <ShareButton
+                  title={data.name}
+                  url={`${process.env.HOSTNAME}/public/events/${id}`}
+                />
+              </Col>
+            </Row>
+
+            <Row className="mt-3">
               <Col>
                 <h5>About this event</h5>
                 <p>{data.descriptions}</p>

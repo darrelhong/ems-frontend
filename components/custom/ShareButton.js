@@ -20,7 +20,7 @@ export default function ShareButton({ title, url }) {
             .then((result) => {
               if (result.state == 'granted' || result.state == 'prompt') {
                 navigator.clipboard.writeText(url).then(() => {
-                  setShareText('Copied');
+                  setShareText('Link Copied');
                 });
               }
             });
