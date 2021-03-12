@@ -53,7 +53,7 @@ export default function UserEOCard({ partner, user, handleMarkVip }) {
             <button
               className="btn btn-outline-primary btn-sm"
               type="button"
-              //   onClick={() => addVip(partner?.id)}
+              onClick={() => addVip(partner?.id)}
             >
               {' '}
               Add VIP{' '}
