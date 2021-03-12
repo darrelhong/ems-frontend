@@ -4,6 +4,7 @@ import { Alert, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { format, parseISO } from 'date-fns';
 
 import { useEvent } from '../../../../lib/query/events';
+import { formatter } from '../../../../lib/util/currency';
 
 import { BreadcrumbOne } from '../../../../components/Breadcrumb';
 import EventImageGallery from '../../../../components/events/partner/EventImageGallery';
@@ -96,6 +97,18 @@ export default function AttendeeEventPage({ id }) {
 
                   <br></br>
                   <br></br>
+
+                  {data.sellingTicket && (
+                    <>
+                      <p
+                        className="text-body"
+                        style={{ fontSize: 20, marginBottom: 8 }}
+                      >
+                        {formatter.format(data.ticketPrice)}
+                      </p>
+                      <button className="btn btn-success">Get tickets</button>
+                    </>
+                  )}
                 </div>
               </Col>
             </Row>
