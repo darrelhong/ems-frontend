@@ -18,7 +18,7 @@ export function getServerSideProps({ query }) {
 }
 
 export default function PublicEventPage({ id }) {
-  const { data, status } = useEvent(id);
+  const { data, status } = useEvent(id, { isPublic: true });
 
   return (
     <GuestWrapper title={data?.name || 'Event page'}>
@@ -94,23 +94,12 @@ export default function PublicEventPage({ id }) {
 
                   <br></br>
                   <br></br>
-                  {/* <div className="d-flex align-items-center">
-                    <button
-                      className="btn btn-fill-out mr-2"
-                      disabled={!data.availableForSale}
-                    >
-                      Register Now
-                    </button>
-                    {!data.availableForSale && (
-                      <p className="text-dark">Sale period has not started</p>
-                    )}
-                  </div> */}
                 </div>
               </Col>
             </Row>
 
             <Row>
-              <Col className="col-auto ml-auto">
+              <Col className="col-auto mt-3">
                 <ShareButton
                   title={data.name}
                   url={`${process.env.HOSTNAME}/public/events/${id}`}
@@ -118,7 +107,7 @@ export default function PublicEventPage({ id }) {
               </Col>
             </Row>
 
-            <Row className="mt-5">
+            <Row className="mt-3">
               <Col>
                 <h5>About this event</h5>
                 <p>{data.descriptions}</p>
