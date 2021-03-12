@@ -5,15 +5,15 @@ import PropTypes from 'prop-types';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useForm } from 'react-hook-form';
 import cx from 'classnames';
-
-import api from '../../../lib/ApiClient';
-
-import { FooterOne } from '../../../components/Footer';
-import AdminHeaderTop from '../../../components/Header/AdminHeaderTop';
-import withProtectRoute from '../../../components/ProtectRouteWrapper';
-import { BreadcrumbOne } from '../../../components/Breadcrumb';
 import { Alert, Col, Container, Row } from 'react-bootstrap';
-import ButtonWithLoading from '../../../components/custom/ButtonWithLoading';
+
+import api from 'lib/ApiClient';
+
+import { FooterOne } from 'components/Footer';
+import AdminHeaderTop from 'components/Header/AdminHeaderTop';
+import withProtectRoute from 'components/ProtectRouteWrapper';
+import { BreadcrumbOne } from 'components/Breadcrumb';
+import ButtonWithLoading from 'components/custom/ButtonWithLoading';
 
 const getEventOrganiser = async (id) => {
   const { data } = await api.get(`/api/organiser/${id}`);

@@ -1,7 +1,8 @@
 import Head from 'next/head';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useQuery, useQueryClient } from 'react-query';
-import MaterialTable from '../../../lib/MaterialTable';
+import MaterialTable from 'lib/MaterialTable';
 import { Card, Col, Container, Row } from 'react-bootstrap';
 import {
   CheckCircleOutline,
@@ -9,13 +10,12 @@ import {
   InfoOutlined,
 } from '@material-ui/icons';
 
-import api from '../../../lib/ApiClient';
+import api from 'lib/ApiClient';
 
-import { FooterOne } from '../../../components/Footer';
-import AdminHeaderTop from '../../../components/Header/AdminHeaderTop';
-import { BreadcrumbOne } from '../../../components/Breadcrumb';
-import withProtectRoute from '../../../components/ProtectRouteWrapper';
-import { useRouter } from 'next/router';
+import { FooterOne } from 'components/Footer';
+import AdminHeaderTop from 'components/Header/AdminHeaderTop';
+import { BreadcrumbOne } from 'components/Breadcrumb';
+import withProtectRoute from 'components/ProtectRouteWrapper';
 
 const getEventOrganisers = async () => {
   const { data } = await api.get('/api/organiser/all');

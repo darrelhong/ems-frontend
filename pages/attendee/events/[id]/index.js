@@ -3,15 +3,15 @@ import Link from 'next/link';
 import { Alert, Col, Container, Row } from 'react-bootstrap';
 import { format, parseISO } from 'date-fns';
 
-import { useEvent } from '../../../../lib/query/events';
-import { formatter } from '../../../../lib/util/currency';
+import { useEvent } from 'lib/query/events';
+import { formatter } from 'lib/util/currency';
 
-import { BreadcrumbOne } from '../../../../components/Breadcrumb';
-import EventImageGallery from '../../../../components/events/partner/EventImageGallery';
-import AddToCalendar from '../../../../components/custom/AddToCalendar';
-import AttendeeWrapper from '../../../../components/wrapper/AttendeeWrapper';
-import ShareButton from '../../../../components/custom/ShareButton';
-import CenterSpinner from '../../../../components/custom/CenterSpinner';
+import { BreadcrumbOne } from 'components/Breadcrumb';
+import EventImageGallery from 'components/events/partner/EventImageGallery';
+import AddToCalendar from 'components/custom/AddToCalendar';
+import AttendeeWrapper from 'components/wrapper/AttendeeWrapper';
+import ShareButton from 'components/custom/ShareButton';
+import CenterSpinner from 'components/custom/CenterSpinner';
 
 export function getServerSideProps({ query }) {
   return {

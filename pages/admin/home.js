@@ -2,12 +2,12 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { Card, Col, Container, Row } from 'react-bootstrap';
 
-import useUser from '../../lib/query/useUser';
+import useUser from 'lib/query/useUser';
 
-import withProtectRoute from '../../components/ProtectRouteWrapper';
-import { BreadcrumbOne } from '../../components/Breadcrumb';
-import { FooterOne } from '../../components/Footer';
-import AdminHeaderTop from '../../components/Header/AdminHeaderTop';
+import withProtectRoute from 'components/ProtectRouteWrapper';
+import { BreadcrumbOne } from 'components/Breadcrumb';
+import { FooterOne } from 'components/Footer';
+import AdminHeaderTop from 'components/Header/AdminHeaderTop';
 
 function AdminHome() {
   const { data: user, isSuccess, isLoading } = useUser(

@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
-
-import { login } from '../../lib/auth';
-
-import { BreadcrumbOne } from '../../components/Breadcrumb';
 import { Col, Container, Row } from 'react-bootstrap';
 import { FaFacebookF, FaGooglePlusG } from 'react-icons/fa';
-import ButtonWithLoading from '../../components/custom/ButtonWithLoading';
+
+import { login } from 'lib/auth';
+
+import { BreadcrumbOne } from 'components/Breadcrumb';
+import ButtonWithLoading from 'components/custom/ButtonWithLoading';
 
 // get query params from URL to dispaly relavant feedback
 export const getServerSideProps = async ({ query }) => {

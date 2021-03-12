@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import { Alert, Col, Container, Row } from 'react-bootstrap';
 
-import useUser from '../../lib/query/useUser';
+import useUser from 'lib/query/useUser';
 
-import { BreadcrumbOne } from '../../components/Breadcrumb';
-import AttendeeWrapper from '../../components/wrapper/AttendeeWrapper';
+import { BreadcrumbOne } from 'components/Breadcrumb';
+import AttendeeWrapper from 'components/wrapper/AttendeeWrapper';
 
 export default function PartnerHome() {
   const { data: user, status } = useUser(localStorage.getItem('userId'));

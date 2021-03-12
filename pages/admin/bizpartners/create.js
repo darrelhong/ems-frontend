@@ -6,12 +6,12 @@ import { useMutation } from 'react-query';
 import cx from 'classnames';
 import { Container } from 'react-bootstrap';
 
-import api from '../../../lib/ApiClient';
+import api from 'lib/ApiClient';
 
-import { BreadcrumbOne } from '../../../components/Breadcrumb';
-import AdminHeaderTop from '../../../components/Header/AdminHeaderTop';
-import withProtectRoute from '../../../components/ProtectRouteWrapper';
-import { FooterOne } from '../../../components/Footer';
+import { BreadcrumbOne } from 'components/Breadcrumb';
+import AdminHeaderTop from 'components/Header/AdminHeaderTop';
+import withProtectRoute from 'components/ProtectRouteWrapper';
+import { FooterOne } from 'components/Footer';
 
 function CreateBusinessPartner() {
   const { register, handleSubmit, errors, watch } = useForm();

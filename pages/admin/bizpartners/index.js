@@ -5,13 +5,13 @@ import { useQuery } from 'react-query';
 import { InfoOutlined } from '@material-ui/icons';
 import { Card, Col, Container, Row } from 'react-bootstrap';
 
-import api from '../../../lib/ApiClient';
+import api from 'lib/ApiClient';
 
-import withProtectRoute from '../../../components/ProtectRouteWrapper';
-import AdminHeaderTop from '../../../components/Header/AdminHeaderTop';
-import { BreadcrumbOne } from '../../../components/Breadcrumb';
-import MaterialTable from '../../../lib/MaterialTable';
-import { FooterOne } from '../../../components/Footer';
+import withProtectRoute from 'components/ProtectRouteWrapper';
+import AdminHeaderTop from 'components/Header/AdminHeaderTop';
+import { BreadcrumbOne } from 'components/Breadcrumb';
+import MaterialTable from 'lib/MaterialTable';
+import { FooterOne } from 'components/Footer';
 
 const getBusinessPartners = async () => {
   const { data } = await api.get('/api/partner/all');

@@ -6,12 +6,12 @@ import { useForm } from 'react-hook-form';
 import { Container } from 'react-bootstrap';
 import cx from 'classnames';
 
-import api from '../../../lib/ApiClient';
+import api from 'lib/ApiClient';
 
-import { BreadcrumbOne } from '../../../components/Breadcrumb';
-import { FooterOne } from '../../../components/Footer';
-import AdminHeaderTop from '../../../components/Header/AdminHeaderTop';
-import withProtectRoute from '../../../components/ProtectRouteWrapper';
+import { BreadcrumbOne } from 'components/Breadcrumb';
+import { FooterOne } from 'components/Footer';
+import AdminHeaderTop from 'components/Header/AdminHeaderTop';
+import withProtectRoute from 'components/ProtectRouteWrapper';
 
 function CreateEventOrganiser() {
   const { register, handleSubmit, errors, watch } = useForm();

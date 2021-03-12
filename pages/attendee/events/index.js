@@ -2,15 +2,15 @@ import debounce from 'lodash/debounce';
 import Link from 'next/link';
 import { Fragment, useState } from 'react';
 import { useInfiniteQuery, useQueryClient } from 'react-query';
-import { BreadcrumbOne } from '../../../components/Breadcrumb';
+import { BreadcrumbOne } from 'components/Breadcrumb';
 import { Alert, Col, Container, Row } from 'react-bootstrap';
 
-import { getEventsWithKeywordandSort } from '../../../lib/query/events';
+import { getEventsWithKeywordandSort } from 'lib/query/events';
 
-import AttendeeWrapper from '../../../components/wrapper/AttendeeWrapper';
-import EventCard from '../../../components/events/partner/EventCard';
-import ButtonWithLoading from '../../../components/custom/ButtonWithLoading';
-import CenterSpinner from '../../../components/custom/CenterSpinner';
+import AttendeeWrapper from 'components/wrapper/AttendeeWrapper';
+import EventCard from 'components/events/partner/EventCard';
+import ButtonWithLoading from 'components/custom/ButtonWithLoading';
+import CenterSpinner from 'components/custom/CenterSpinner';
 
 export default function AttendeeEvents() {
   const [sortBy, setSortBy] = useState();

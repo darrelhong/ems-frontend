@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import { Container } from 'react-bootstrap';
 
-import useUser from '../../lib/query/useUser';
+import useUser from 'lib/query/useUser';
 
-import { BreadcrumbOne } from '../../components/Breadcrumb';
-import PartnerWrapper from '../../components/wrapper/PartnerWrapper';
+import { BreadcrumbOne } from 'components/Breadcrumb';
+import PartnerWrapper from 'components/wrapper/PartnerWrapper';
 
 export default function PartnerHome() {
   const { data: user, isLoading, isSuccess } = useUser(
