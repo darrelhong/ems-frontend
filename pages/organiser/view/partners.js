@@ -22,7 +22,6 @@ const getPartners = async (page = 0, sort, sortDir, searchTerm, category) => {
   if (searchTerm) url += `&keyword=${searchTerm}`;
   if (category) url += `&businessCategory=${category}`;
   const { data } = await api.get(url);
-  console.log(data);
 
   return data;
 };
@@ -56,15 +55,30 @@ function PartnerViewUsers() {
     }
   );
 
-  useEffect(async () => {
+  useEffect(() => {
     getEO();
   }, []);
+
   const getEO = async () => {
     await getUser(localStorage.getItem('userId')).then((data) => {
       setUser(data);
     });
   };
 
+  const checkVIP = async (partner) => {
+    var i;
+    var check = false;
+    if (user != undefined) {
+      for (i = 0; i < user.vipList.length; i++) {
+        if (user.vipList[i].id === partner.id) {
+          check = true;
+          break;
+        }
+      }
+    }
+
+    return check;
+  };
   const handleChange = (e) => {
     switch (e.target.value) {
       case 'name-asc':
@@ -79,9 +93,8 @@ function PartnerViewUsers() {
   };
 
   const handleMarkVip = async (vip) => {
-    console.log('markAsVip ' + vip);
-    await addVip(vip);
-    getPartners();
+    await addVip(vip.id);
+    getEO();
   };
 
   const handleChangeCategory = (e) => {
@@ -239,20 +252,14 @@ function PartnerViewUsers() {
                       lg={4}
                       className="mb-5 d-flex align-items-stretch"
                     >
-                      <Link
-                        href={{
-                          pathname: '/partner/partner-profile',
-                          query: { paraId: JSON.stringify(partner.id) },
-                        }}
-                      >
-                        <a className="w-100">
-                          <UserEOCard
-                            partner={partner}
-                            user={user}
-                            handleMarkVip={handleMarkVip}
-                          />
-                        </a>
-                      </Link>
+                      <a className="w-100">
+                        <UserEOCard
+                          partner={partner}
+                          user={user}
+                          handleMarkVip={handleMarkVip}
+                          CheckVip={checkVIP(partner)}
+                        />
+                      </a>
                     </Col>
                   ))}
                 </Fragment>
