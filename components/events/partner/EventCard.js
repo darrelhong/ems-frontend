@@ -1,10 +1,19 @@
 import PropTypes from 'prop-types';
 import { format, parseISO } from 'date-fns';
 import { Card } from 'react-bootstrap';
+import styles from './EventCard.module.css';
 
 export default function EventCard({ event }) {
   return (
-    <Card className="h-100">
+    <Card
+      className={`h-100 ${styles.eventCard}`}
+      style={{
+        transition: 'all 0.3s ease',
+        ':hover': {
+          boxShadow: '2px 1px 8px -3px rgb(0 0 0 / 30%)',
+        },
+      }}
+    >
       <Card.Img
         variant="top"
         src={event.images?.[0] || '/assets/images/img-placeholder.jpg'}
