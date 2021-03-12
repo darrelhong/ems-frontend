@@ -41,9 +41,20 @@ const PartnerProfile = ({ localuser }) => {
   const [following, setFollowing] = useState([]);
   const [unfollowBtn, setUnfollowBtn] = useState();
   const [followBtn, setFollowBtn] = useState();
-  const { data: partner } = useUser(localuser);
+  const [partner, setPartner] = useState();
+  //const { data: partner } = useUser(localuser);
   useEffect(() => {
     console.log('user ' + localuser);
+    const getUserData = async () => {
+      await getUser(localuser).then((partner) => {
+        console.log('eo data');
+        console.log(partner);
+
+        setPartner(partner);
+      });
+    };
+    getUserData();
+
     var followId;
     if (localStorage.getItem('userId') != null) {
       const getUserData = async () => {
