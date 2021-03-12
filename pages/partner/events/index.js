@@ -1,6 +1,6 @@
 import { Fragment, useState } from 'react';
 import Link from 'next/link';
-import { Alert, Col, Container, Row, Spinner } from 'react-bootstrap';
+import { Alert, Col, Container, Row } from 'react-bootstrap';
 import { useInfiniteQuery, useQueryClient } from 'react-query';
 import debounce from 'lodash/debounce';
 
@@ -10,6 +10,7 @@ import { BreadcrumbOne } from '../../../components/Breadcrumb';
 import PartnerWrapper from '../../../components/wrapper/PartnerWrapper';
 import EventCard from '../../../components/events/partner/EventCard';
 import ButtonWithLoading from '../../../components/custom/ButtonWithLoading';
+import CenterSpinner from '../../../components/custom/CenterSpinner';
 
 export default function PartnerEvents() {
   const [sortBy, setSortBy] = useState();
@@ -114,7 +115,7 @@ export default function PartnerEvents() {
           </Col>
         </Row>
         {status === 'loading' ? (
-          <Spinner animation="grow" role="status" aria-hidden="true" />
+          <CenterSpinner />
         ) : status === 'error' ? (
           <Alert variant="danger">An error has occured</Alert>
         ) : (

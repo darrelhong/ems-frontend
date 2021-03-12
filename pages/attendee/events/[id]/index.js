@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import Link from 'next/link';
-import { Alert, Col, Container, Row, Spinner } from 'react-bootstrap';
+import { Alert, Col, Container, Row } from 'react-bootstrap';
 import { format, parseISO } from 'date-fns';
 
 import { useEvent } from '../../../../lib/query/events';
@@ -11,6 +11,7 @@ import EventImageGallery from '../../../../components/events/partner/EventImageG
 import AddToCalendar from '../../../../components/custom/AddToCalendar';
 import AttendeeWrapper from '../../../../components/wrapper/AttendeeWrapper';
 import ShareButton from '../../../../components/custom/ShareButton';
+import CenterSpinner from '../../../../components/custom/CenterSpinner';
 
 export function getServerSideProps({ query }) {
   return {
@@ -24,7 +25,7 @@ export default function AttendeeEventPage({ id }) {
   return (
     <AttendeeWrapper title={data?.name || 'Event page'}>
       {status === 'loading' ? (
-        <Spinner animation="grow" role="status" aria-hidden="true" />
+        <CenterSpinner />
       ) : status === 'error' ? (
         <Alert variant="danger">An error has occured</Alert>
       ) : (
