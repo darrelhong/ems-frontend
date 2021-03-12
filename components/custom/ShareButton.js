@@ -3,11 +3,11 @@ import { useState } from 'react';
 import { AiOutlineShareAlt } from 'react-icons/ai';
 
 export default function ShareButton({ title, url }) {
-  const [shareText, setShareText] = useState('Share');
+  const [copied, setCopied] = useState(false);
 
   return (
     <button
-      className="btn btn-purple btn-sm"
+      className={`btn btn-sm ${copied ? 'btn-purple' : 'btn-outline-purple'}`}
       onClick={() => {
         if (navigator?.share) {
           navigator.share({
@@ -20,14 +20,15 @@ export default function ShareButton({ title, url }) {
             .then((result) => {
               if (result.state == 'granted' || result.state == 'prompt') {
                 navigator.clipboard.writeText(url).then(() => {
-                  setShareText('Link Copied');
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 3000);
                 });
               }
             });
         }
       }}
     >
-      {shareText} <AiOutlineShareAlt />
+      {copied ? 'Link Copied' : 'Share'} <AiOutlineShareAlt />
     </button>
   );
 }
