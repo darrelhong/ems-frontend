@@ -46,7 +46,7 @@ const NavigationEvntOrg = ({ positionClass }) => {
               </Link>
             </li>
             <li>
-              <Link href="/organiser/view-all-vip-partner">
+              <Link href="/organiser/view-all-vip-partner-new">
                 <a>View All VIP Business Partner</a>
               </Link>
             </li>
