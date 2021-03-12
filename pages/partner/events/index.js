@@ -80,39 +80,7 @@ function PartnerHome() {
       </BreadcrumbOne>
 
       <Container className="my-4">
-      <br></br>
-                        <Row>
-
-                            <Nav
-                                variant="pills"
-                                className="product-description-tab__navigation justify-content-center "
-                                defaultActiveKey="Events"
-                            >
-                                <Nav.Item>
-                                    <Nav.Link eventKey="Events">
-                                        <Link href="/partner/events">
-                                            VIEW ALL EVENTS
-                                        </Link>
-                                    </Nav.Link>
-                                </Nav.Item>
-                                {/* <Nav.Item>
-                                    <Nav.Link eventKey="bp">
-                                    <Link href="/partner/view/partners">
-                                            VIEW ALL BUSINESS PARTNERS
-                                        </Link>
-                                    </Nav.Link>
-                                </Nav.Item>
-                                <Nav.Item>
-                                    <Nav.Link eventKey="eo"  >
-                                        <Link href="/partner/view/organisers">
-                                            VIEW ALL EVENT ORGANISERS
-                                        </Link>
-                                    </Nav.Link>
-                                </Nav.Item> */}
-                            </Nav>
-
-
-                        </Row>
+    
                         <br></br>
         <Row>
           <Col md={8} lg={6}>

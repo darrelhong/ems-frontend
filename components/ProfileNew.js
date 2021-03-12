@@ -178,10 +178,10 @@ const PartnerProfile = ({ localuser }) => {
 
     return (
         <>
-            <BreadcrumbOne pageTitle="Partner Profile Details">
+            <BreadcrumbOne pageTitle="Profile Details">
                 <ol className="breadcrumb justify-content-md-end">
                     <li className="breadcrumb-item">
-                        <Link href="/">
+                        <Link href="/partner/home">
                             <a>Home</a>
                         </Link>
                     </li>

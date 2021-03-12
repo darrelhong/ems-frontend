@@ -6,7 +6,7 @@ import debounce from 'lodash/debounce';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import { BreadcrumbOne } from '../../../components/Breadcrumb';
-import PartnerWrapper from '../../../components/wrapper/PartnerWrapper';
+import OrganiserWrapper from '../../../components/wrapper/OrganiserWrapper';
 import api from '../../../lib/ApiClient';
 import UserCard from '../../../components/UserCard';
 import OrganiserCard from '../../../components/OrganiserCard';
@@ -22,7 +22,7 @@ const getOrganisers = async (page = 0, sort, sortDir, searchTerm) => {
 };
 
 
-function PartnerViewUsers() {
+function OrganiserViewUsers() {
     const [sortBy, setSortBy] = useState();
     const [searchTerm, setSearchTerm] = useState('');
 
@@ -81,7 +81,7 @@ function PartnerViewUsers() {
 
 
     return (
-        <PartnerWrapper title="Event Organisers">
+        <OrganiserWrapper title="Event Organisers">
             <BreadcrumbOne pageTitle="View All Event Organisers">
                 <ol className="breadcrumb justify-content-md-end">
                     <li className="breadcrumb-item">
@@ -101,39 +101,7 @@ function PartnerViewUsers() {
                     <Alert variant="danger">An error has occured</Alert>
                 ) : (
                     <>
-                        <br></br>
-                        <Row>
-
-                            <Nav
-                                variant="pills"
-                                className="product-description-tab__navigation justify-content-center "
-                                defaultActiveKey="eo"
-                            >
-                             {/* <Nav.Item>
-                                    <Nav.Link eventKey="Events">
-                                        <Link href="/organiser/view/events">
-                                            VIEW ALL EVENTS
-                                        </Link>
-                                    </Nav.Link>
-                                </Nav.Item> */}
-                                <Nav.Item>
-                                    <Nav.Link eventKey="bp">
-                                        <Link href="/organiser/view/partners">
-                                            VIEW ALL BUSINESS PARTNERS
-                                        </Link>
-                                    </Nav.Link>
-                                </Nav.Item>
-                                <Nav.Item>
-                                    <Nav.Link eventKey="eo"  >
-                                        <Link href="/organiser/view/organisers">
-                                            VIEW ALL EVENT ORGANISERS
-                                        </Link>
-                                    </Nav.Link>
-                                </Nav.Item>
-                            </Nav>
-
-
-                        </Row>
+                       
                         <br></br>
                         <Row>
                             <Col md={8} lg={6}>
@@ -213,8 +181,8 @@ function PartnerViewUsers() {
                     </>
                 )}
             </Container>
-        </PartnerWrapper>
+        </OrganiserWrapper>
     );
 }
 
-export default PartnerViewUsers;
+export default OrganiserViewUsers;

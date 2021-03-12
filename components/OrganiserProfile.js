@@ -174,10 +174,10 @@ const EventOrgProfile = ({ paraId_ }) => {
 
   return (
     <div>
-      <BreadcrumbOne pageTitle="Organiser Profile Details">
+      <BreadcrumbOne pageTitle="Profile Details">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
-            <Link href="/">
+            <Link href="/organiser/home">
               <a>Home</a>
             </Link>
           </li>
