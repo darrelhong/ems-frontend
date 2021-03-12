@@ -2,19 +2,24 @@ import PropTypes from 'prop-types';
 import { format, parseISO } from 'date-fns';
 import { Card } from 'react-bootstrap';
 import Badge from 'react-bootstrap/Badge';
+import Link from 'next/link';
 
 
 export default function UserEOCard({ partner, user }) {
     const checkVIP = () => {
         var i;
         var check = false;
-        for (i = 0; i < user.vipList.length; i++) {
+        if(user!= undefined){
+    for (i = 0; i < user.vipList.length; i++) {
             if (user.vipList[i].id === partner.id) {
 
                 check = true;
                 break;
             }
         }
+
+        }
+    
         return check;
     }
     return (
@@ -25,7 +30,12 @@ export default function UserEOCard({ partner, user }) {
                 style={{ height: 200 }}
             />
             <Card.Body className="d-flex flex-column">
-                <Card.Title>{partner.name}</Card.Title>
+                <Card.Title><Link href={{
+                                                pathname: '/partner/partner-profile',
+                                                query: { localuser: JSON.stringify(partner.id) },
+                                            }}>
+                                                {partner.name}
+                                            </Link></Card.Title>
                 {(partner.description == null) && (<Card.Text className="line-clamp">There is no description.</Card.Text>)}
                 {(partner.description != null) && <Card.Text className="line-clamp">{partner.description}</Card.Text>}
 

@@ -251,14 +251,11 @@ const getEO = async () => {
                                             lg={4}
                                             className="mb-5 d-flex align-items-stretch"
                                         >
-                                            <Link href={{
-                                                pathname: '/partner/partner-profile',
-                                                query: { paraId: JSON.stringify(partner.id) },
-                                            }}>
+                                            
                                                 <a className="w-100">
                                                     <UserEOCard partner={partner} user= {user} />
                                                 </a>
-                                            </Link>
+                                            
                                         </Col>
                                     ))}
                                 </Fragment>
