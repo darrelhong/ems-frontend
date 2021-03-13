@@ -2,40 +2,30 @@ import React from 'react';
 
 // reactstrap components
 import {
-  Button,
   Card,
   CardHeader,
   CardBody,
   CardFooter,
   CardTitle,
-  FormGroup,
-  Form,
-  Input,
   Row,
   Col,
 } from 'reactstrap';
 import EventTabOne from '../components/EventTabEoProfile';
 import FollowersTabEoProfile from '../components/FollowersTabEoProfile';
 import { ProductRating } from '../components/Product';
-import useUser from '../lib/query/useUser';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { BreadcrumbOne } from '../components/Breadcrumb';
-import { Container } from 'react-bootstrap';
 import { getUser } from '../lib/query/getUser';
-import { IoIosStar, IoIosStarOutline } from 'react-icons/io';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
-import Badge from 'react-bootstrap/Badge';
-import PropTypes from 'prop-types';
-import { withRouter } from 'next/router';
 import { BsPencilSquare } from 'react-icons/bs';
 import api from '../lib/ApiClient';
 import { getRating, getEoEventsByIdRoleStatus } from '../lib/query/useEvent';
 import { getOrgAttendeeFollowers } from '../lib/query/getOrgAttendeeFollowers';
 import { getOrgPartnerFollowers } from '../lib/query/getOrgPartnerFollowers';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation } from 'react-query';
+import { BreadcrumbOne } from './Breadcrumb';
 
 const EventOrgProfile = ({ paraId_ }) => {
   const [showEoView, setShowEoView] = useState(false);
@@ -60,214 +50,257 @@ const EventOrgProfile = ({ paraId_ }) => {
   // BIZPTNR: 'partner',
   // ATND: 'attendee',
   var type;
-  useEffect(async () => {
-    await getUser(paraId_).then((eventOrg) => {
-      console.log('eo data');
-      console.log(eventOrg);
-
-      setEventOrganiser(eventOrg);
-    });
-
-    await getRating(paraId_).then((rate) => {
-      setRating(rate);
-      console.log('rating' + rating);
-    });
-    //const { data: user } = useUser(localStorage.getItem('userId'));
-    var followId;
-
-    if (localStorage.getItem('userId') != null) {
-      await getUser(localStorage.getItem('userId')).then(async (data) => {
-        console.log(data);
-        if (data.id != null) {
-          if (data.roles[0].roleEnum === 'BIZPTNR') {
-            setUserRole('BIZPTNR');
-
-            await getEoEventsByIdRoleStatus(
-              paraId_,
-              data.roles[0].roleEnum,
-              'current'
-            ).then((events) => {
-              setCurrenteventlist(events);
-            });
-
-            setShowPublicView(true);
-            setShowEoView(false);
-            followId = data.id;
-            type = 'partner';
-            //partner has no upcoming events
-
-            await getEoEventsByIdRoleStatus(
-              paraId_,
-              data.roles[0].roleEnum,
-              'past'
-            ).then((events) => {
-              setPastEventlist(events);
-            });
-          } else if (data.roles[0].roleEnum === 'ATND') {
-            await getEoEventsByIdRoleStatus(
-              paraId_,
-              data.roles[0].roleEnum,
-              'current'
-            ).then((events) => {
-              setCurrenteventlist(events);
-            });
-
-            // to be removed
-            //  await getAttendeeUpcomingEventsByOrganiserId(paraId_);
-            ///.....
-            await getEoEventsByIdRoleStatus(
-              paraId_,
-              data.roles[0].roleEnum,
-              'upcoming'
-            ).then((events) => {
-              setUpcomingeventlist(events);
-            });
-
-            await getEoEventsByIdRoleStatus(
-              paraId_,
-              data.roles[0].roleEnum,
-              'past'
-            ).then((events) => {
-              setPastEventlist(events);
-            });
-            followId = data.id;
-            type = 'atn';
-            setShowPublicView(true);
-            setShowEoView(false);
-            setUserRole('ATND');
-          } else if (
-            data.roles[0].roleEnum === 'EVNTORG' &&
-            data.id != paraId_
-          ) {
-            await getEoEventsByIdRoleStatus(
-              paraId_,
-              data.roles[0].roleEnum,
-              'current'
-            ).then((events) => {
-              setCurrenteventlist(events);
-            });
-
-            await getEoEventsByIdRoleStatus(
-              paraId_,
-              data.roles[0].roleEnum,
-              'upcoming'
-            ).then((events) => {
-              setUpcomingeventlist(events);
-            });
-            followId = data.id;
-            setShowPublicView(true);
-            setShowEoView(false);
+  var followId;  
+   const loadOrgPartnerFollowerData = async () => {
+      await getOrgPartnerFollowers(paraId_).then((followers) => {
+        setPartnerFollowers(followers);
+        if (followId >= 0 && type === 'partner') {
+          var found = false;
+          for (var i = 0; i < followers.length; i++) {
+            console.log('followers id' + followers[i].id);
+            if (followers[i].id === followId) {
+              found = true;
+              break;
+            }
+          }
+          if (found) {
+            setUnfollowBtn(true);
             setFollowBtn(false);
-            setUnfollowBtn(false);
-          } else if (
-            data.roles[0].roleEnum === 'EVNTORG' &&
-            data.id == paraId_
-          ) {
-            await getEoEventsByIdRoleStatus(
-              paraId_,
-              data.roles[0].roleEnum,
-              'current'
-            ).then((events) => {
-              setCurrenteventlist(events);
-            });
-
-            await getEoEventsByIdRoleStatus(
-              paraId_,
-              data.roles[0].roleEnum,
-              'upcoming'
-            ).then((events) => {
-              setUpcomingeventlist(events);
-            });
-
-            await getEoEventsByIdRoleStatus(
-              paraId_,
-              data.roles[0].roleEnum,
-              'past'
-            ).then((events) => {
-              setPastEventlist(events);
-            });
-
-            setShowPublicView(false);
-            setShowEoView(true);
-            setFollowBtn(false);
+          } else {
+            setFollowBtn(true);
             setUnfollowBtn(false);
           }
         }
       });
-    } else if (localStorage.getItem('userId') == null) {
-      await getEoEventsByIdRoleStatus(paraId_, 'guest', 'current').then(
-        (events) => {
-          setCurrenteventlist(events);
-        }
-      );
-      await getEoEventsByIdRoleStatus(paraId_, 'guest', 'upcoming').then(
-        (events) => {
-          setUpcomingeventlist(events);
-        }
-      );
+    };
+    //const { data: user } = useUser(localStorage.getItem('userId'));
+    const loadOrgAttFollowerData = async () => {
 
-      await getEoEventsByIdRoleStatus(paraId_, 'guest', 'past').then(
-        (events) => {
-          setPastEventlist(events);
+      await getOrgAttendeeFollowers(paraId_).then((followers) => {
+        setAttendeeFollowers(followers);
+        console.log('type' + type + 'followId' + followId);
+
+        if (followId >= 0 && type === 'atn') {
+          var found = false;
+          for (var i = 0; i < followers.length; i++) {
+            console.log('followers' + followers[i].id);
+            if (followers[i].id === followId) {
+              found = true;
+              break;
+            }
+          }
+          if (found) {
+            setUnfollowBtn(true);
+            setFollowBtn(false);
+          } else {
+            setFollowBtn(true);
+            setUnfollowBtn(false);
+          }
+
+
         }
-      );
-      setShowPublicView(true);
-      setShowEoView(false);
-      setFollowBtn(false);
-      setUnfollowBtn(false);
+      });
+    };
+  useEffect(() => {
+    const getUserData = async () => {
+      await getUser(paraId_).then((eventOrg) => {
+        console.log('eo data');
+        console.log(eventOrg);
+
+        setEventOrganiser(eventOrg);
+      });
+    };
+    getUserData();
+
+    const getRatingData = async () => {
+      await getRating(paraId_).then((rate) => {
+        setRating(rate);
+        console.log('rating' + rating);
+      });
+    };
+    getRatingData();
+
+
+    if (localStorage.getItem('userId') != null) {
+      const loadUserData = async () => {
+        await getUser(localStorage.getItem('userId')).then(async (data) => {
+          console.log(data);
+          if (data.id != null) {
+            if (data.roles[0].roleEnum === 'BIZPTNR') {
+              setUserRole('BIZPTNR');
+
+              await getEoEventsByIdRoleStatus(
+                paraId_,
+                data.roles[0].roleEnum,
+                'current'
+              ).then((events) => {
+                setCurrenteventlist(events);
+              });
+
+              setShowPublicView(true);
+              setShowEoView(false);
+              followId = data.id;
+              type = 'partner';
+                  loadOrgAttFollowerData();
+
+
+    loadOrgPartnerFollowerData();
+              //partner has no upcoming events
+
+              await getEoEventsByIdRoleStatus(
+                paraId_,
+                data.roles[0].roleEnum,
+                'past'
+              ).then((events) => {
+                setPastEventlist(events);
+              });
+            } else if (data.roles[0].roleEnum === 'ATND') {
+              await getEoEventsByIdRoleStatus(
+                paraId_,
+                data.roles[0].roleEnum,
+                'current'
+              ).then((events) => {
+                setCurrenteventlist(events);
+              });
+
+              await getEoEventsByIdRoleStatus(
+                paraId_,
+                data.roles[0].roleEnum,
+                'upcoming'
+              ).then((events) => {
+                setUpcomingeventlist(events);
+              });
+
+              await getEoEventsByIdRoleStatus(
+                paraId_,
+                data.roles[0].roleEnum,
+                'past'
+              ).then((events) => {
+                setPastEventlist(events);
+              });
+              followId = data.id;
+              type = 'atn';
+              console.log(followId + "followId");
+              console.log(type + "type");
+              setShowPublicView(true);
+              setShowEoView(false);
+              setUserRole('ATND');
+              loadOrgAttFollowerData();
+
+
+              loadOrgPartnerFollowerData();
+            } else if (
+              data.roles[0].roleEnum === 'EVNTORG' &&
+              data.id != paraId_
+            ) {
+              await getEoEventsByIdRoleStatus(
+                paraId_,
+                data.roles[0].roleEnum,
+                'current'
+              ).then((events) => {
+                setCurrenteventlist(events);
+              });
+
+              await getEoEventsByIdRoleStatus(
+                paraId_,
+                data.roles[0].roleEnum,
+                'upcoming'
+              ).then((events) => {
+                setUpcomingeventlist(events);
+              });
+              followId = data.id;
+              setShowPublicView(true);
+              setShowEoView(false);
+              setFollowBtn(false);
+              setUnfollowBtn(false);
+              loadOrgAttFollowerData();
+
+
+              loadOrgPartnerFollowerData();
+            } else if (
+              data.roles[0].roleEnum === 'EVNTORG' &&
+              data.id == paraId_
+            ) {
+              await getEoEventsByIdRoleStatus(
+                paraId_,
+                data.roles[0].roleEnum,
+                'current'
+              ).then((events) => {
+                setCurrenteventlist(events);
+              });
+
+              await getEoEventsByIdRoleStatus(
+                paraId_,
+                data.roles[0].roleEnum,
+                'upcoming'
+              ).then((events) => {
+                setUpcomingeventlist(events);
+              });
+
+              await getEoEventsByIdRoleStatus(
+                paraId_,
+                data.roles[0].roleEnum,
+                'past'
+              ).then((events) => {
+                setPastEventlist(events);
+              });
+
+              setShowPublicView(false);
+              setShowEoView(true);
+              setFollowBtn(false);
+              setUnfollowBtn(false);
+              loadOrgAttFollowerData();
+
+
+              loadOrgPartnerFollowerData();
+            }
+          }
+        });
+      };
+      loadUserData();
+    } else if (localStorage.getItem('userId') == null) {
+      const loadGuestData = async () => {
+        await getEoEventsByIdRoleStatus(paraId_, 'guest', 'current').then(
+          (events) => {
+            setCurrenteventlist(events);
+          }
+        );
+        await getEoEventsByIdRoleStatus(paraId_, 'guest', 'upcoming').then(
+          (events) => {
+            setUpcomingeventlist(events);
+          }
+        );
+
+        await getEoEventsByIdRoleStatus(paraId_, 'guest', 'past').then(
+          (events) => {
+            setPastEventlist(events);
+          }
+        );
+        setShowPublicView(true);
+        setShowEoView(false);
+        setFollowBtn(false);
+        setUnfollowBtn(false);
+      };
+      loadGuestData();
+      loadOrgAttFollowerData();
+
+
+      loadOrgPartnerFollowerData();
     }
 
-    await getOrgAttendeeFollowers(paraId_).then((followers) => {
-      setAttendeeFollowers(followers);
-      console.log('type' + type + 'followId' + followId);
+ 
 
-      if (followId >= 0 && type === 'atn') {
-        var found = false;
-        for (var i = 0; i < followers.length; i++) {
-          if (followers[i].id === followId) {
-            found = true;
-            break;
-          }
-        }
-        if (found) {
-          setUnfollowBtn(true);
-          setFollowBtn(false);
-        } else {
-          setFollowBtn(true);
-          setUnfollowBtn(false);
-        }
-      }
-    });
-
-    await getOrgPartnerFollowers(paraId_).then((followers) => {
-      setPartnerFollowers(followers);
-      if (followId >= 0 && type === 'partner') {
-        var found = false;
-        for (var i = 0; i < followers.length; i++) {
-          console.log('followers id' + followers[i].id);
-          if (followers[i].id === followId) {
-            found = true;
-            break;
-          }
-        }
-        if (found) {
-          setUnfollowBtn(true);
-          setFollowBtn(false);
-        } else {
-          setFollowBtn(true);
-          setUnfollowBtn(false);
-        }
-      }
-    });
   }, []);
 
   const getRefreshedFollowers = async () => {
     await getOrgAttendeeFollowers(paraId_).then((followers) => {
       setAttendeeFollowers(followers);
+ 
     });
 
     await getOrgPartnerFollowers(paraId_).then((followers) => {
       setPartnerFollowers(followers);
+
     });
   };
 
@@ -406,15 +439,15 @@ const EventOrgProfile = ({ paraId_ }) => {
                 <div className="description text-center">
                   <div className="product-content__rating-wrap">
                     <div className="product-content__rating">
-                      {(rating != null || rating != undefined) && ( 
-                      <ProductRating ratingValue={rating} /> 
+                      {(rating != null || rating != undefined) && (
+                        <ProductRating ratingValue={rating} />
                       )}
-                      {(rating == null || rating == undefined ) && ( 
-                      <ProductRating ratingValue={0} /> 
+                      {(rating == null || rating == undefined) && (
+                        <ProductRating ratingValue={0} />
                       )}
                       {(rating == undefined || rating == null) && (
-                                            <span> (0) </span>
-                                            )}
+                        <span> (0) </span>
+                      )}
                       {rating >= 0 && <span>({rating})</span>}
                     </div>
                   </div>
@@ -501,6 +534,9 @@ const EventOrgProfile = ({ paraId_ }) => {
                     </Nav.Item>
                     <Nav.Item>
                       <Nav.Link eventKey="Followers">FOLLOWERS</Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                      <Nav.Link eventKey="Reviews">REVIEWS</Nav.Link>
                     </Nav.Item>
                   </Nav>
 

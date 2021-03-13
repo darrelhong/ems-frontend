@@ -36,13 +36,8 @@ import api from '../../lib/ApiClient';
 import { logout } from '../../lib/auth';
 
 const MyAccount = () => {
-  const [showSuccessMsg, setShowSuccessMsg] = useState(false);
-  const [showFailedMsg, setShowFailedMsg] = useState(false);
   const [businessCategory, setBusinessCategory] = useState('');
   const [loginLoading, setLoginLoading] = useState(false);
-
-  const [fileUpload, setfileUpload] = useState(false);
-  const [file, setFile] = useState('uploadfile');
 
   const [fileName, setFileName] = useState('Choose image');
   const [user, setUser] = useState();
@@ -50,28 +45,6 @@ const MyAccount = () => {
   //const profiepicSrcUrl = user?.profilePic;
   const [proficpicfile, setProfilePicFile] = useState('uploadprofilepicfile');
   const [profilepicUrl, setProfilepicUrl] = useState(null);
-
-  useEffect(async () => {
-    await getUser(localStorage.getItem('userId')).then((data) => {
-      setUser(data);
-    });
-  });
-
-  // display the inital profile picture
-  //console.log(user?.profilePic);
-  // if (user?.profilePic != null) {
-  //   useEffect(() => {
-  //     setProfilepicUrl(user?.profilePic);
-  //   }, [user?.profilePic]);
-  // } else {
-  //   useEffect(() => {
-  //     setProfilepicUrl('../../assets/images/defaultprofilepic.png');
-  //   }, ['../../assets/images/defaultprofilepic.png']);
-  // }
-
-  // useEffect(() => {
-  //   setFileName('Choose image');
-  // }, ['Choose image']);
 
   //for modal of disabling account
   const [show, setShow] = useState(false);
@@ -91,15 +64,17 @@ const MyAccount = () => {
   const [showPW, setShowPW] = useState(false);
   const [showFileSizeError, setShowFileSizeError] = useState(false);
 
-  const renderTooltip = (props) => (
-    <Tooltip id="button-tooltip" {...props}>
-      Support png and jpg image format.
-    </Tooltip>
-  );
+  useEffect(() => {
+    const getUserData = async () => {
+      await getUser(localStorage.getItem('userId')).then((data) => {
+        setUser(data);
+      });
+    };
+    getUserData();
+  }, []);
 
   const mutateAccStatus = useMutation(
     (data) => api.post(`/api/user/disableStatus/${user?.id}`),
-
     {
       onSuccess: () => {
         queryClient.invalidateQueries(['user', user?.id.toString()]);
@@ -190,33 +165,6 @@ const MyAccount = () => {
       setFileName(e.target.files[0].name);
     }
   };
-  // const submitFile = async () => {
-  //   const data = new FormData();
-  //   //if(file name is not empty..... handle condition when no file is selected)
-  //   data.append('file', file);
-  //   api
-  //     .post('/api/uploadProfilePicFile', data, {
-  //       headers: {
-  //         'Content-Type': 'multipart/form-data',
-  //       },
-  //       onSuccess: () => {
-  //         queryClient.invalidateQueries(['user', user?.id.toString()]);
-  //       },
-  //     })
-  //     .then((response) => {
-  //       console.log(response);
-  //       if (response.status == 200) {
-  //         console.log('file upload sucessfully');
-  //         console.log(response);
-  //         console.log(response.data['fileDownloadUri']);
-  //         var newlink = response.data['fileDownloadUri'];
-  //         setProfilepicUrl(newlink);
-  //       }
-  //     })
-  //     .catch(() => {
-  //       setShowFailedMsg(true);
-  //     });
-  // };
 
   const mutatePassword = useMutation((data) => {
     api
@@ -305,6 +253,12 @@ const MyAccount = () => {
       //setShowPW(true);
     }
   }
+
+  const renderTooltip = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      Support png and jpg image format.
+    </Tooltip>
+  );
 
   return (
     // <LayoutOne>

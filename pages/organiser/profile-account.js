@@ -73,11 +73,14 @@ const MyAccount = () => {
   const [bizDocErrorMessage, setBizDocErrorMessage] = useState('');
   const [ispicupdated, setIspicupdated] = useState(false);
 
-  useEffect(async () => {
+  useEffect(() => {
     console.log('use effect');
-    await getUser(localStorage.getItem('userId')).then((data) => {
-      setUser(data);
-    });
+    const getUserData = async () => {
+      await getUser(localStorage.getItem('userId')).then((data) => {
+        setUser(data);
+      });
+    };
+    getUserData();
 
     setBizDocInputName('Choose file');
   }, []);
@@ -443,23 +446,31 @@ const MyAccount = () => {
 
                             <div className="form-group col-md-12">
                               {user?.approved == false &&
-                                user?.approvalMessage ==
-                                  null && (
-                                    <h6>
-                                      Verification Status:{' '}
-                                      <span className="noteMsg">Pending</span>
-                                    </h6>
-                                  )}
+                                user?.approvalMessage == null &&
+                                user?.supportDocsUrl != null && (
+                                  <h6>
+                                    Verification Status:{' '}
+                                    <span className="noteMsg">Pending</span>
+                                  </h6>
+                                )}
+                            </div>
+                            <div className="form-group col-md-12">
+                              {user?.supportDocsUrl == null && (
+                                <h6>
+                                  Verification Status:{' '}
+                                  <span className="noteMsg">No Submission</span>
+                                </h6>
+                              )}
                             </div>
                             <div className="form-group col-md-12">
                               {user?.approved == false &&
-                                user?.approvalMessage !=
-                                  null &&(
-                                    <h6>
-                                      Verification Status:{' '}
-                                      <span className="noteMsg">Rejected</span>
-                                    </h6>
-                                  )}
+                                user?.approvalMessage != null &&
+                                user?.supportDocsUrl != null && (
+                                  <h6>
+                                    Verification Status:{' '}
+                                    <span className="noteMsg">Rejected</span>
+                                  </h6>
+                                )}
                             </div>
                             <div className="form-group col-md-12">
                               {user?.approved == true && (

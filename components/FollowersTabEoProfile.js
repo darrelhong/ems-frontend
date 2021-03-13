@@ -69,13 +69,13 @@ const FollowersTabEoProfile = ({ attendees, partners, showPublicView }) => {
                                     )}
                                   </div>
                                 </Col>
-                                <Col md="6" xs="6">
+                                <Col md="4" xs="4">
                                   {/* <br></br> */}
                                   {attendee.name} <br />
                                   <span className="text-muted">
                                     {attendee.email}
                                   </span>
-                                  <div>
+                                  {/* <div>
                                     {!attendee.categoryPreferences.isEmpty &&
                                       attendee.categoryPreferences.map(
                                         (eventtype) => {
@@ -89,20 +89,33 @@ const FollowersTabEoProfile = ({ attendees, partners, showPublicView }) => {
                                           );
                                         }
                                       )}
-                                  </div>
+                                  </div> */}
                                 </Col>
-                                <Col className="text-right" md="1" xs="1">
+                                <Col className="text-left" md="4" xs="4">
                                   <br></br>
-                                  {!showPublicView && (<Button
+                                  {!attendee.categoryPreferences.isEmpty &&
+                                      attendee.categoryPreferences.map(
+                                        (eventtype) => {
+                                          return (
+                                            <span>
+                                              {' '}
+                                              <Badge variant="primary">
+                                                {eventtype}
+                                              </Badge>{' '}
+                                            </span>
+                                          );
+                                        }
+                                      )}
+                                  {/* {!showPublicView && (<Button
                                     className="btn-round btn-icon"
                                     color="success"
                                     outline
                                     size="sm"
                                   >
                                     Select
-                                    {/* <i className="fa fa-envelope" /> */}
-                                  </Button>)}
-                                </Col>
+                                     <i className="fa fa-envelope" /> 
+                                   </Button>)} */}
+                                </Col> 
                               </Row>
                             </li>
                           );
@@ -156,7 +169,7 @@ const FollowersTabEoProfile = ({ attendees, partners, showPublicView }) => {
                                         )}
                                       </div>
                                     </Col>
-                                    <Col md="6" xs="6">
+                                    <Col md="4" xs="4">
                                       {/* <br></br> */}
                                       <Link
                                         href={{
@@ -174,7 +187,7 @@ const FollowersTabEoProfile = ({ attendees, partners, showPublicView }) => {
                                       <span className="text-muted">
                                         {partner.email}
                                       </span>
-                                      <div>
+                                      {/* <div>
                                         {partner.businessCategory !== null &&
                                           (
                                             <span>
@@ -186,20 +199,31 @@ const FollowersTabEoProfile = ({ attendees, partners, showPublicView }) => {
 
 
                                           )}
-                                      </div>
+                                      </div> */}
                                     </Col>
-                                    <Col className="text-right" md="1" xs="1">
+                                    <Col className="text-center" md="4" xs="4">
                                       <br></br>
-                                      {!showPublicView && (<Button
+                                      {partner.businessCategory !== null &&
+                                          (
+                                            <span>
+                                              {' '}
+                                              <Badge variant="primary">
+                                                {partner.businessCategory}
+                                              </Badge>{' '}
+                                            </span>
+
+
+                                          )}
+                                      {/* {!showPublicView && (<Button
                                         className="btn-round btn-icon"
                                         color="success"
                                         outline
                                         size="sm"
                                       >
                                         Select
-                                        {/* <i className="fa fa-envelope" /> */}
-                                      </Button>)}
-                                    </Col>
+                                       <i className="fa fa-envelope" /> */}
+                                     {/* </Button>)}  */}
+                                    </Col> 
                                   </Row>
                                 </li>
                               )

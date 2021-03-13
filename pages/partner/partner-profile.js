@@ -15,15 +15,18 @@ const Profile = ({ router: { query } }) => {
   const [role, setRole] = useState();
   const [user, setUser] = useState(Object);
 
-  useEffect(async () => {
+  useEffect(() => {
     console.log('test');
     if (localStorage.getItem('userId') != null) {
-      await getUser(localStorage.getItem('userId')).then((data) => {
-        setUser(data);
-        console.log(data);
-        console.log(user);
-        setRole(getRole(data));
-      });
+      const getUserData = async () => {
+        await getUser(localStorage.getItem('userId')).then((data) => {
+          setUser(data);
+          console.log(data);
+          console.log(user);
+          setRole(getRole(data));
+        });
+      };
+      getUserData();
     } else {
       setRole('Guest');
     }
