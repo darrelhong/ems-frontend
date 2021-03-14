@@ -35,7 +35,7 @@ const VerticalLinearStepper = ({
   setActiveStep,
   steps,
   errors,
-  wantsTickets,
+  sellingTicket,
 }) => {
   const classes = useStyles();
 
@@ -73,9 +73,9 @@ const VerticalLinearStepper = ({
       case 1:
         return errors.physical || errors.address;
       case 2:
-        // return (wantsTickets && (!freeTickets && errors.ticketPrice || errors.ticketCapacity || errors.saleStartDate || errors.salesEndDate));
+        // return (sellingTicket && (!freeTickets && errors.ticketPrice || errors.ticketCapacity || errors.saleStartDate || errors.salesEndDate));
         return (
-          wantsTickets &&
+          sellingTicket &&
           (errors.ticketPrice ||
             errors.ticketCapacity ||
             errors.saleStartDate ||

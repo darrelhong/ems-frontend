@@ -6,8 +6,8 @@ import PropTypes from 'prop-types';
 const TicketingPane = ({
   freeTickets,
   setFreeTickets,
-  wantsTickets,
-  setWantsTickets,
+  sellingTicket,
+  setsellingTicket,
   formState,
   getValues,
   register,
@@ -23,7 +23,7 @@ const TicketingPane = ({
       saleStartDate,
       salesEndDate,
     } = eventData;
-    if (wantsTickets) {
+    if (sellingTicket) {
       setValue('ticketPrice', ticketPrice);
       setValue('ticketCapacity', ticketCapacity);
       setValue('saleStartDate', saleStartDate);
@@ -34,7 +34,7 @@ const TicketingPane = ({
       setValue('saleStartDate', null);
       setValue('salesEndDate', null);
     }
-  }, [wantsTickets]);
+  }, [sellingTicket]);
 
   return (
     <Card className="my-account-content__content">
@@ -47,22 +47,23 @@ const TicketingPane = ({
             <Col className="form-group" md={12}>
               <input
                 type="checkbox"
-                id="wantsTickets"
-                name="wantsTickets"
-                value={wantsTickets}
-                checked={wantsTickets}
+                id="sellingTicket"
+                name="sellingTicket"
+                value={sellingTicket}
+                checked={sellingTicket}
+                ref={register()}
                 onChange={() => {
-                  console.log(!wantsTickets);
+                  console.log(!sellingTicket);
                   //if go from sell to dont sell then make it false
-                  // if (wantsTickets) {
+                  // if (sellingTicket) {
                   //   setFreeTickets(false);
                   //   // setValue("ticketPrice", 16);
                   // }
-                  setWantsTickets(!wantsTickets);
+                  setsellingTicket(!sellingTicket);
                 }}
                 style={{ marginRight: 5 }}
               />
-              <label htmlFor="wantsTickets">
+              <label htmlFor="sellingTicket">
                 {' '}
                 Are you selling tickets for your event?
               </label>
@@ -91,16 +92,16 @@ const TicketingPane = ({
               <Col className="form-group" md={12}>
                 <label>
                   Ticket Price (SGD)
-                  {wantsTickets && <span className="required">*</span>}
+                  {sellingTicket && <span className="required">*</span>}
                 </label>
                 <input
                   className="form-control"
                   name="ticketPrice"
                   type="number"
                   step="0.1"
-                  disabled={!wantsTickets}
-                  // disabled={!wantsTickets || freeTickets}
-                  ref={register({ required: wantsTickets })}
+                  disabled={!sellingTicket}
+                  // disabled={!sellingTicket || freeTickets}
+                  ref={register({ required: sellingTicket })}
                 />
                 {/* {(watch('ticketPrice') == 0 && formState.touched?.ticketPrice) && (
                   <span role="alert" style={{ color: 'blue' }}>
@@ -109,7 +110,7 @@ const TicketingPane = ({
                 )
                 } */}
                 {errors.ticketPrice && (
-                  // {errors.ticketPrice && wantsTickets && !freeTickets && (
+                  // {errors.ticketPrice && sellingTicket && !freeTickets && (
                   <span role="alert" style={{ color: 'red' }}>
                     This field is required
                   </span>
@@ -118,17 +119,17 @@ const TicketingPane = ({
               <Col className="form-group" md={12}>
                 <label>
                   Ticket Capacity - How many tickets do you want to sell?
-                  {wantsTickets && <span className="required">*</span>}
+                  {sellingTicket && <span className="required">*</span>}
                 </label>
                 <input
                   className="form-control"
                   name="ticketCapacity"
                   type="number"
-                  disabled={!wantsTickets}
-                  ref={register({ required: wantsTickets, min: 1 })}
+                  disabled={!sellingTicket}
+                  ref={register({ required: sellingTicket, min: 1 })}
                   // ref={register()}
                 />
-                {errors.ticketCapacity && wantsTickets && (
+                {errors.ticketCapacity && sellingTicket && (
                   <span role="alert" style={{ color: 'red' }}>
                     At least 1 ticket if you are selling!
                   </span>
@@ -137,17 +138,17 @@ const TicketingPane = ({
               <Col className="form-group" md={12}>
                 <label>
                   Ticket Sales Start Date
-                  {wantsTickets && <span className="required">*</span>}
+                  {sellingTicket && <span className="required">*</span>}
                 </label>
                 <input
                   className="form-control"
                   name="saleStartDate"
                   type="datetime-local"
-                  disabled={!wantsTickets}
-                  ref={register({ required: wantsTickets })}
+                  disabled={!sellingTicket}
+                  ref={register({ required: sellingTicket })}
                   // ref={register()}
                 />
-                {errors.saleStartDate && wantsTickets && (
+                {errors.saleStartDate && sellingTicket && (
                   <span role="alert" style={{ color: 'red' }}>
                     This field is required
                   </span>
@@ -157,19 +158,19 @@ const TicketingPane = ({
               <Col className="form-group" md={12}>
                 <label>
                   Ticket Sales End Date
-                  {wantsTickets && <span className="required">*</span>}
+                  {sellingTicket && <span className="required">*</span>}
                 </label>
                 <input
                   className="form-control"
                   name="salesEndDate"
                   type="datetime-local"
-                  disabled={!wantsTickets}
-                  // ref={register({ required: wantsTickets })}
-                  ref={register({ required: wantsTickets })}
-                  // ref={register({ required: wantsTickets, validate: value => value > watch('saleStartDate') })}
+                  disabled={!sellingTicket}
+                  // ref={register({ required: sellingTicket })}
+                  // ref={register({ required: sellingTicket })}
+                  ref={register({ required: sellingTicket, validate: value => !sellingTicket || value > watch('saleStartDate') })}
                   // ref={register()}
                 />
-                {errors.salesEndDate && wantsTickets && (
+                {errors.salesEndDate && sellingTicket && (
                   <span role="alert" style={{ color: 'red' }}>
                     This field is required, end date must also be later than
                     start date!
