@@ -29,6 +29,7 @@ import Badge from 'react-bootstrap/Badge';
 import PropTypes from 'prop-types';
 import { withRouter } from 'next/router';
 import { getFollowers, getFollowing } from '../lib/query/getBPFollow';
+import { isBpVip, addVip } from '../lib/query/useVip';
 import { BsPencilSquare } from 'react-icons/bs';
 import api from '../lib/ApiClient';
 
@@ -42,22 +43,24 @@ const PartnerProfile = ({ localuser }) => {
   const [unfollowBtn, setUnfollowBtn] = useState();
   const [followBtn, setFollowBtn] = useState();
   const [partner, setPartner] = useState();
+  // const [markVip, setMarkVip] = useState(false);
+  // const [unmarkVip, setUnmarkVip] = useState(false);
+  const [checkIsBpVip, setCheckIsBpVip] = useState(null);
   //const { data: partner } = useUser(localuser);
   useEffect(() => {
     console.log('user ' + localuser);
     const getUserData = async () => {
       await getUser(localuser).then((partner) => {
-        console.log('eo data');
-        console.log(partner);
-
         setPartner(partner);
       });
     };
     getUserData();
+  }, [localuser]);
 
+  useEffect(() => {
     var followId;
-    if (localStorage.getItem('userId') != null) {
-      const getUserData = async () => {
+    if (localStorage.getItem('userId') != null && partner != null) {
+      const getCurrentUserData = async () => {
         await getUser(localStorage.getItem('userId')).then((data) => {
           console.log('current ' + data.id);
           if (data?.id !== localuser) {
@@ -70,6 +73,26 @@ const PartnerProfile = ({ localuser }) => {
               setPublicView(false);
               setFollowBtn(false);
               setUnfollowBtn(false);
+
+              const checkIfBpIsVip = async () => {
+                var result = await isBpVip(partner?.id);
+                setCheckIsBpVip(result);
+                // console.log('result');
+                // console.log('checkisvip ' + result);
+                // console.log('eoView ' + eoView);
+                // console.log('publicView ' + publicView);
+              };
+              if (partner != undefined) {
+                checkIfBpIsVip();
+              }
+
+              // if (checkIsBpVip) {
+              //   setUnmarkVip(true);
+              //   setMarkVip(false);
+              // } else if (!checkIsBpVip) {
+              //   setUnmarkVip(false);
+              //   setMarkVip(true);
+              // }
             } else if (data.roles[0].roleEnum === 'ATND') {
               console.log('attendee ');
 
@@ -89,7 +112,7 @@ const PartnerProfile = ({ localuser }) => {
           }
         });
       };
-      getUserData();
+      getCurrentUserData();
     } else {
       //guest cannot follow bp
       setPublicView(true);
@@ -128,7 +151,7 @@ const PartnerProfile = ({ localuser }) => {
       });
     };
     getFollowingData();
-  }, []);
+  }, [partner, localuser, eoView, publicView, checkIsBpVip]);
 
   const getRefreshedFollowers = async () => {
     await getFollowers(localuser).then((data) => {
@@ -184,6 +207,16 @@ const PartnerProfile = ({ localuser }) => {
         });
       }
     }
+  };
+
+  const handleAddVip = async () => {
+    await addVip(partner.id);
+    const checkIfBpIsVip_ = async () => {
+      var result = await isBpVip(partner?.id);
+      setCheckIsBpVip(result);
+    };
+
+    checkIfBpIsVip_();
   };
 
   return (
@@ -312,6 +345,25 @@ const PartnerProfile = ({ localuser }) => {
 
                         <br />
                         {/* <small>Spent</small> */}
+                        {partner != undefined &&
+                          checkIsBpVip != null &&
+                          eoView &&
+                          checkIsBpVip && (
+                            <Badge variant="info">VIP Member</Badge>
+                          )}
+                        {partner != undefined &&
+                          checkIsBpVip != null &&
+                          eoView &&
+                          !checkIsBpVip && (
+                            <button
+                              className="btn btn-outline-danger btn-sm"
+                              onClick={handleAddVip}
+                            >
+                              Add VIP
+                            </button>
+                          )}
+
+                        <br />
                       </h5>
                     </Col>
                   </Row>
