@@ -228,8 +228,10 @@ const OrganiserViewEventDetails = () => {
               {event && (
                 <EventDescriptionTab
                   event={event}
+                  setEvent={setEvent}
                   prettySaleStartDate={prettySaleStartDate}
                   prettySalesEndDate={prettySalesEndDate}
+                  createToast={createToast}
                 />
               )}
             </Col>
