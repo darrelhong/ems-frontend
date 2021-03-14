@@ -14,6 +14,7 @@ import AdminHeaderTop from 'components/Header/AdminHeaderTop';
 import withProtectRoute from 'components/ProtectRouteWrapper';
 import { BreadcrumbOne } from 'components/Breadcrumb';
 import ButtonWithLoading from 'components/custom/ButtonWithLoading';
+import RejectButton from 'components/custom/admin/RejectButton';
 
 const getEventOrganiser = async (id) => {
   const { data } = await api.get(`/api/organiser/${id}`);
@@ -44,11 +45,14 @@ function EventOrganiserDetails({ id }) {
     isLoading: approveIsLoading,
   } = useMutationInvalidate((id) => api.post(`/api/organiser/approve/${id}`));
 
-  const { mutate: reject, isLoading: rejectIsLoading } = useMutationInvalidate(
-    (id) =>
-      api.post(`/api/organiser/reject/${id}`, {
-        message: 'Default message',
-      })
+  const {
+    mutate: reject,
+    isLoading: rejectIsLoading,
+    isSuccess: rejectIsSuccess,
+  } = useMutationInvalidate(({ id, message }) =>
+    api.post(`/api/organiser/reject/${id}`, {
+      message,
+    })
   );
 
   const {
@@ -143,6 +147,9 @@ function EventOrganiserDetails({ id }) {
                 </ul>
               </dd>
 
+              <dt className="col-sm-3">Rejection reason</dt>
+              <dd className="col-sm-9">{eo.approvalMessage || '-'}</dd>
+
               <dt className="col-sm-3">Support docs</dt>
               <dd className="col-sm-9">
                 {eo.supportDocsUrl ? (
@@ -175,15 +182,12 @@ function EventOrganiserDetails({ id }) {
                 >
                   Approve
                 </ButtonWithLoading>
-                <ButtonWithLoading
-                  type="button"
-                  className="btn btn-danger btn-sm"
-                  disabled={!eo.approved}
-                  onClick={() => reject(id)}
-                  isLoading={rejectIsLoading}
-                >
-                  Reject
-                </ButtonWithLoading>
+                <RejectButton
+                  eo={eo}
+                  reject={reject}
+                  rejectIsLoading={rejectIsLoading}
+                  rejectIsSuccess={rejectIsSuccess}
+                />
               </Col>
               <Col md={5} className="mb-4">
                 <ButtonWithLoading
