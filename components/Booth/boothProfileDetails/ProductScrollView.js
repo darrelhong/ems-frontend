@@ -1,4 +1,5 @@
-const ScrollView = () => {
+const ProductScrollView = ({products}) => {
+    
     return (
         <div class="wrapper">
         <section id="section1">
@@ -65,4 +66,4 @@ const ScrollView = () => {
     );
 };
 
-export default ScrollView;
+export default ProductScrollView;

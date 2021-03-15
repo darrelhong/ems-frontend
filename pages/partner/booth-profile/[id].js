@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { getBoothProfile, getBoothsByBoothProfile } from 'lib/query/boothApi';
-import ScrollView from 'components/Booth/boothProfileDetails/ScrollView';
+import ProductScrollView from 'components/Booth/boothProfileDetails/ProductScrollView';
 
 const BoothProfile = () => {
     const router = useRouter();
@@ -23,7 +23,7 @@ const BoothProfile = () => {
         <div>
             <h1>aye lmao {id}</h1>
             <h6>Booth Profile description: {boothProfile?.description ?? 'lmaooo'}</h6>
-            {/* {booths && booths.map((booth) => (
+            {booths && booths.map((booth) => (
                 <div>
                     <h6>Booth number: {booth?.boothNumber ?? 'lmaooo'}</h6>
                     {booth.products && booth.products.map((product) => (
@@ -31,9 +31,10 @@ const BoothProfile = () => {
                     ))
                     }
                 </div>
-            ))} */}
+            ))}
             <h1>ScrollView style</h1>
-          <ScrollView />
+          <ProductScrollView />
+          <ProductScrollView />
         </div>
     )
 }
