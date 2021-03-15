@@ -23,7 +23,7 @@ const BoothProfile = () => {
         <div>
             <h1>aye lmao {id}</h1>
             <h6>Booth Profile description: {boothProfile?.description ?? 'lmaooo'}</h6>
-            {booths && booths.map((booth) => (
+            {/* {booths && booths.map((booth) => (
                 <div>
                     <h6>Booth number: {booth?.boothNumber ?? 'lmaooo'}</h6>
                     {booth.products && booth.products.map((product) => (
@@ -31,10 +31,10 @@ const BoothProfile = () => {
                     ))
                     }
                 </div>
-            ))}
+            ))} */}
             <h1>ScrollView style</h1>
           <ProductScrollView />
-          <ProductScrollView />
+          {/* <ProductScrollView /> */}
         </div>
     )
 }
