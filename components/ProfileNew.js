@@ -24,8 +24,9 @@ import Image from 'react-bootstrap/Image';
 import Badge from 'react-bootstrap/Badge';
 import { getFollowers, getFollowing } from '../lib/query/getBPFollow';
 import { isBpVip, addVip } from '../lib/query/useVip';
-import { BsPencilSquare } from 'react-icons/bs';
+import { BsPencilSquare, BsPlus } from 'react-icons/bs';
 import api from '../lib/ApiClient';
+import { FiPlus } from 'react-icons/fi';
 
 const PartnerProfile = ({ localuser }) => {
   const [publicView, setPublicView] = useState();
@@ -42,17 +43,24 @@ const PartnerProfile = ({ localuser }) => {
   const [checkIsBpVip, setCheckIsBpVip] = useState(null);
   //const { data: partner } = useUser(localuser);
   var followId;
+
   useEffect(() => {
-    console.log('user ' + localuser);
+    // get the profile page bp's data
     const getUserData = async () => {
-      await getUser(localuser).then((partner) => {
-        setPartner(partner);
+      await getUser(localuser).then((data) => {
+        setPartner(data);
       });
     };
     getUserData();
-  }, [localuser]);
 
-  useEffect(() => {
+    console.log('user ' + localuser);
+    // const getPartnerData = async () => {
+    //   await getUser(localuser).then((data) => {
+    //     setPartner(data);
+    //   });
+    // };
+    // getPartnerData();
+
     const getFollowingData = async () => {
       await getFollowing(localuser).then((data) => {
         setFollowing(data);
@@ -83,17 +91,9 @@ const PartnerProfile = ({ localuser }) => {
     };
     getFollowersData();
 
-    const getPartnerData = async () => {
-      await getUser(localuser).then((data) => {
-        setPartner(data);
-      });
-    };
-    getPartnerData();
-
-    if (localStorage.getItem('userId') != null && partner != null) {
+    if (localStorage.getItem('userId') != null) {
       const getCurrentUserData = async () => {
-        //  var followId;
-
+        // get currentUser
         await getUser(localStorage.getItem('userId')).then((data) => {
           console.log('current ' + data.id);
           if (data?.id !== localuser) {
@@ -108,12 +108,14 @@ const PartnerProfile = ({ localuser }) => {
               setUnfollowBtn(false);
 
               const checkIfBpIsVip = async () => {
-                var result = await isBpVip(partner?.id);
-                setCheckIsBpVip(result);
+                console.log('hello');
+                console.log(localuser);
+                await isBpVip(localuser).then((vipresult) => {
+                  setCheckIsBpVip(vipresult);
+                });
               };
-              if (partner != undefined) {
-                checkIfBpIsVip();
-              }
+
+              checkIfBpIsVip();
             } else if (data.roles[0].roleEnum === 'ATND') {
               console.log('attendee ');
 
@@ -280,7 +282,6 @@ const PartnerProfile = ({ localuser }) => {
               </CardBody>
               <br></br>
               <CardFooter>
-                <hr />
                 <div className="button-container">
                   <Row>
                     <Col className="ml-auto" lg="4" md="6" xs="6">
@@ -295,7 +296,7 @@ const PartnerProfile = ({ localuser }) => {
                         <small>Following</small>
                       </h5>
                     </Col>
-                    <Col className="mr-auto" lg="4">
+                    <Col className="mr-auto  mr-auto" lg="4" md="6" xs="6">
                       <h5>
                         {!publicView && !eoView && (
                           <Link href="/partner/profile-account">
@@ -335,21 +336,22 @@ const PartnerProfile = ({ localuser }) => {
 
                         <br />
                         {/* <small>Spent</small> */}
-                        {partner != undefined &&
+                        {localuser != undefined &&
                           checkIsBpVip != null &&
                           eoView &&
                           checkIsBpVip && (
                             <Badge variant="info">VIP Member</Badge>
                           )}
-                        {partner != undefined &&
+                        {localuser != undefined &&
                           checkIsBpVip != null &&
                           eoView &&
                           !checkIsBpVip && (
                             <button
-                              className="btn btn-outline-danger btn-sm"
+                              className="btn btn-fill-out btn-sm"
                               onClick={handleAddVip}
                             >
-                              Add VIP
+                              <FiPlus />
+                              VIP
                             </button>
                           )}
 
@@ -357,7 +359,6 @@ const PartnerProfile = ({ localuser }) => {
                       </h5>
                     </Col>
                   </Row>
-                  <br></br>
                 </div>
               </CardFooter>
             </Card>
@@ -404,7 +405,7 @@ const PartnerProfile = ({ localuser }) => {
                           followers.map((follower) => {
                             return (
                               <li>
-                                <br></br>
+                                <hr></hr>
                                 <Row>
                                   <Col md="1" xs="1">
                                     {' '}
@@ -495,7 +496,7 @@ const PartnerProfile = ({ localuser }) => {
                           following.map((follow) => {
                             return (
                               <li>
-                                <br></br>
+                                <hr></hr>
                                 <Row>
                                   <Col md="1" xs="1">
                                     {' '}
