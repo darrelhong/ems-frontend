@@ -1,4 +1,11 @@
+import { useState, useEffect } from 'react';
+
 const ProductScrollView = ({ paginatedProducts }) => {
+    const [nextId, setNextId] = useState(0);
+    const [backId, setBackId] = useState(0);
+    const [firstId, setFirstId] = useState(0);
+    const [lastId, setLastId] = useState(0);
+    const [currentId, setCurrentId] = useState(0);
 
     // takes in data like
     // [
@@ -13,24 +20,78 @@ const ProductScrollView = ({ paginatedProducts }) => {
     //     }
 
     // ]
+    useEffect(() => {
+        const loadData = () => {
+            const currentId = parseInt(paginatedProducts[0]?.key);
+            setNextId(currentId + 1);
+            setFirstId(currentId);
+            setCurrentId(currentId);
+            const lastId = parseInt(paginatedProducts[paginatedProducts.length - 1]?.key);
+            setBackId(lastId);
+            setLastId(lastId);
+            // console.log('next is ' +(currentId+1));
+            // console.log('current is ' +currentId);
+            // console.log('back is ' +lastId);
+        };
+        if (paginatedProducts) loadData();
+    }, [paginatedProducts]);
 
-    console.log(paginatedProducts);
+    const handleBack = () => {
+        let current = currentId;
+        let back = backId;
+        // console.log('curren is ' +current);
+        // console.log('back is ' +back);
+
+        if (currentId == firstId) {
+            setNextId(current);
+            setBackId(lastId - 1);
+            setCurrentId(lastId);
+        } else {
+            setCurrentId(back);
+            setNextId(current);
+            //if now we go back to first means the back is last one now
+            (back == firstId) ? setBackId(lastId) : setBackId(back - 1);
+        }
+    };
+
+    const handleNext = () => {
+        let current = currentId;
+        let next = nextId;
+        // console.log('curren is ' +current);
+        // console.log('next is ' +next);
+
+        if (currentId == lastId) {
+            setBackId(current);
+            setNextId(firstId + 1);
+            setCurrentId(firstId);
+        } else {
+            setCurrentId(next);
+            setBackId(current);
+            //if now we go forward to last means the next is first one now
+            (next == lastId) ? setNextId(firstId) : setNextId(next + 1);
+        }
+    };
 
     return (
         <div className="wrapper">
             {paginatedProducts && (
                 paginatedProducts.map((section, index) => (
                     <section id={section?.key}>
-                        <a href={index == 0 ? `#${paginatedProducts[paginatedProducts.length - 1]?.key}` : `#${paginatedProducts[index + 1]?.key}`}>‹</a>
+                        <a
+                            // href={index == 0 ? `#${paginatedProducts[paginatedProducts.length - 1]?.key}` : `#${paginatedProducts[index + 1]?.key}`}
+                            href= {`#${backId}`}
+                            onClick={handleBack}
+                        >‹</a>
                         {section.products && section.products.map((product) => (
-                            <img 
-                            src={product.image} 
-                            onClick={()=>console.log('image clicked')}
-                            alt="Product Image" />
+                            <img
+                                src={product.image}
+                                onClick={() => console.log('image clicked')}
+                                alt="Product Image" />
                         ))}
-                        <a 
-                        href={`#${paginatedProducts[index + 1]?.key}`}
-                        onClick={()=>console.log('clicked on right nav')}
+                        <a
+                            // href={`#${paginatedProducts[index + 1]?.key}`}
+                            href= {`#${nextId}`}
+                            onClick={handleNext}
                         >›</a>
                     </section>
                 ))
