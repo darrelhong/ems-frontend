@@ -490,7 +490,7 @@ const EventOrgProfile = ({ paraId_ }) => {
                                                 <small>Following</small>
                                             </h5>
                                         </Col> */}
-                    <Col className="mr-auto" lg="4">
+                    <Col className="ml-auto" lg="4" md="6" xs="6">
                       <h5>
                         {showEoView && (
                           <Link href="/organiser/profile-account">
