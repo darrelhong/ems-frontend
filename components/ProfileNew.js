@@ -1,5 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
+import axios from 'axios';
+
 // reactstrap components
 import {
   Button,
@@ -25,6 +27,7 @@ import Badge from 'react-bootstrap/Badge';
 import { getFollowers, getFollowing } from '../lib/query/getBPFollow';
 import { BsPencilSquare } from 'react-icons/bs';
 import api from '../lib/ApiClient';
+import { PermDataSettingTwoTone } from '@material-ui/icons';
 
 const PartnerProfile = ({ localuser }) => {
   const [publicView, setPublicView] = useState();
@@ -36,6 +39,7 @@ const PartnerProfile = ({ localuser }) => {
   const [unfollowBtn, setUnfollowBtn] = useState();
   const [followBtn, setFollowBtn] = useState();
   const [partner, setPartner] = useState();
+  const [user, setUser] = useState(); 
   //const { data: partner } = useUser(localuser);
   
    var followId;
@@ -82,6 +86,7 @@ const PartnerProfile = ({ localuser }) => {
       const getUserData = async () => {
         await getUser(localStorage.getItem('userId')).then((data) => {
           console.log('current ' + data.id);
+          setUser(data?.name);
           if (data?.id !== localuser) {
             console.log('passed ');
 
@@ -147,7 +152,13 @@ const PartnerProfile = ({ localuser }) => {
         setUnfollowBtn(true);
         setFollowBtn(false);
         getRefreshedFollowers();
-        
+        console.log("parner id" + data.id);
+        console.log("user" + user);
+        let endpoint = "https://api.ravenhub.io/company/WLU2yLZw9d/subscribers/partner" + data.id + "/events/SyTpyGmjrT"
+ 
+        axios.post(endpoint, { "person" : user}, {
+        headers: {'Content-type': 'application/json'}
+        });
       })
       .catch((error) => {
         console.log(error);

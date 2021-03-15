@@ -44,7 +44,7 @@ const EventOrgProfile = ({ paraId_ }) => {
   const [unfollowBtn, setUnfollowBtn] = useState();
   const [followBtn, setFollowBtn] = useState();
   const [reviews, setReviews] = useState();
-  const[userId,setUserId] = useState();
+  const[user,setUser] = useState();
  
   // if there is user login credential
   //const paraId_ = JSON.parse(query.paraId);
@@ -160,7 +160,7 @@ const EventOrgProfile = ({ paraId_ }) => {
       const loadUserData = async () => {
         await getUser(localStorage.getItem('userId')).then(async (data) => {
           console.log(data);
-          setUserId(data.id);
+          setUser(data.name);
           if (data.id != null) {
             if (data.roles[0].roleEnum === 'BIZPTNR') {
               setUserRole('BIZPTNR');
@@ -349,10 +349,10 @@ const EventOrgProfile = ({ paraId_ }) => {
         setUnfollowBtn(true);
         setFollowBtn(false);
         getRefreshedFollowers();
-        console.log("userId" + userId);
-        let endpoint = "https://api.ravenhub.io/company/WLU2yLZw9d/subscribers/partner" + userId + "/events/SyTpyGmjrT"
+        console.log("user " + user);
+        let endpoint = "https://api.ravenhub.io/company/WLU2yLZw9d/subscribers/organiser" + data.id + "/events/SyTpyGmjrT"
  
-  axios.post(endpoint, { "person" : "{eventorganiser?.name}" }, {
+  axios.post(endpoint, { "person" : user }, {
   headers: {'Content-type': 'application/json'}
   });
       })
@@ -381,6 +381,12 @@ const EventOrgProfile = ({ paraId_ }) => {
         setUnfollowBtn(true);
         setFollowBtn(false);
         getRefreshedFollowers();
+        console.log("user " + user );
+        let endpoint = "https://api.ravenhub.io/company/WLU2yLZw9d/subscribers/organiser" + data.id + "/events/SyTpyGmjrT"
+ 
+  axios.post(endpoint, { "person" : user }, {
+  headers: {'Content-type': 'application/json'}
+  });
       })
       .catch((error) => {
         console.log(error);

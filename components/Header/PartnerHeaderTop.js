@@ -11,6 +11,7 @@ import { IoIosHeartEmpty } from 'react-icons/io';
 import useUser from '../../lib/query/useUser';
 import { logout } from '../../lib/auth';
 
+
 const PartnerHeaderTop = () => {
   const { data: localuser } = useUser(localStorage.getItem('userId'));
 
@@ -28,7 +29,7 @@ const PartnerHeaderTop = () => {
                 <li>
                 
                     <a>
-                    <notification-center appId="WLU2yLZw9d" subscriberId= {"partner" + localuser?.id} />
+                    <notification-center  appId="WLU2yLZw9d" subscriberId= {"partner" + localuser?.id} />
                     </a>
                   
                 </li>
