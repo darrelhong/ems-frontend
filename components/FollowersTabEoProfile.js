@@ -4,9 +4,7 @@ import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
 import Badge from 'react-bootstrap/Badge';
 import Link from 'next/link';
-import {
-  Button,
-} from "reactstrap";
+import { Button } from 'reactstrap';
 // import EventEoProfileSliderTen from './ProductSlider/EventEoProfileSliderTen';
 
 const FollowersTabEoProfile = ({ attendees, partners, showPublicView }) => {
@@ -41,41 +39,44 @@ const FollowersTabEoProfile = ({ attendees, partners, showPublicView }) => {
                       }}
                     >
                       <div className="product-description-tab__additional-info">
-                        {attendees != null && attendees.map((attendee) => {
-                          return (
-                            <li>
-                              <br></br>
-                              <Row>
-
-                                <Col md="1" xs="1"> &nbsp;</Col>
-                                <Col md="2" xs="2">
-                                  <div className="avatar">
-                                    {/* <img
+                        {attendees != null &&
+                          attendees.map((attendee) => {
+                            return (
+                              <li>
+                                <hr></hr>
+                                <Row>
+                                  <Col md="1" xs="1">
+                                    {' '}
+                                    &nbsp;
+                                  </Col>
+                                  <Col md="2" xs="2">
+                                    <div className="avatar">
+                                      {/* <img
                               alt="..."
                               className="img-circle img-no-padding img-responsive"
                               src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
                             /> */}
-                                    {attendee?.profilePic == null && (
-                                      <img
-                                        src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
-                                        className="img-circle img-no-padding img-responsive"
-                                      />
-                                    )}
-                                    {attendee?.profilePic != null && (
-                                      <Image
-                                        className="img-circle img-no-padding img-responsive"
-                                        src={attendee?.profilePic}
-                                      />
-                                    )}
-                                  </div>
-                                </Col>
-                                <Col md="6" xs="6">
-                                  {/* <br></br> */}
-                                  {attendee.name} <br />
-                                  <span className="text-muted">
-                                    {attendee.email}
-                                  </span>
-                                  <div>
+                                      {attendee?.profilePic == null && (
+                                        <img
+                                          src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
+                                          className="img-circle img-no-padding img-responsive"
+                                        />
+                                      )}
+                                      {attendee?.profilePic != null && (
+                                        <Image
+                                          className="img-circle img-no-padding img-responsive"
+                                          src={attendee?.profilePic}
+                                        />
+                                      )}
+                                    </div>
+                                  </Col>
+                                  <Col md="4" xs="4">
+                                    {/* <br></br> */}
+                                    {attendee.name} <br />
+                                    <span className="text-muted">
+                                      {attendee.email}
+                                    </span>
+                                    {/* <div>
                                     {!attendee.categoryPreferences.isEmpty &&
                                       attendee.categoryPreferences.map(
                                         (eventtype) => {
@@ -89,24 +90,37 @@ const FollowersTabEoProfile = ({ attendees, partners, showPublicView }) => {
                                           );
                                         }
                                       )}
-                                  </div>
-                                </Col>
-                                <Col className="text-right" md="1" xs="1">
-                                  <br></br>
-                                  {!showPublicView && (<Button
+                                  </div> */}
+                                  </Col>
+                                  <Col className="text-left" md="4" xs="4">
+                                    <br></br>
+                                    {!attendee.categoryPreferences.isEmpty &&
+                                      attendee.categoryPreferences.map(
+                                        (eventtype) => {
+                                          return (
+                                            <span>
+                                              {' '}
+                                              <Badge variant="primary">
+                                                {eventtype}
+                                              </Badge>{' '}
+                                            </span>
+                                          );
+                                        }
+                                      )}
+                                    {/* {!showPublicView && (<Button
                                     className="btn-round btn-icon"
                                     color="success"
                                     outline
                                     size="sm"
                                   >
                                     Select
-                                    {/* <i className="fa fa-envelope" /> */}
-                                  </Button>)}
-                                </Col>
-                              </Row>
-                            </li>
-                          );
-                        })}
+                                     <i className="fa fa-envelope" /> 
+                                   </Button>)} */}
+                                  </Col>
+                                </Row>
+                              </li>
+                            );
+                          })}
                       </div>
                     </div>
                   </Col>
@@ -131,10 +145,12 @@ const FollowersTabEoProfile = ({ attendees, partners, showPublicView }) => {
                             partners.map((partner) => {
                               return (
                                 <li>
-                                  <br></br>
+                                  <hr></hr>
                                   <Row>
-
-                                    <Col md="1" xs="1"> &nbsp;</Col>
+                                    <Col md="1" xs="1">
+                                      {' '}
+                                      &nbsp;
+                                    </Col>
                                     <Col md="2" xs="2">
                                       <div className="avatar">
                                         {/* <img
@@ -156,25 +172,23 @@ const FollowersTabEoProfile = ({ attendees, partners, showPublicView }) => {
                                         )}
                                       </div>
                                     </Col>
-                                    <Col md="6" xs="6">
+                                    <Col md="4" xs="4">
                                       {/* <br></br> */}
                                       <Link
                                         href={{
-                                          pathname:
-                                            '/partner/partner-profile',
+                                          pathname: '/partner/partner-profile',
                                           query: {
-                                            paraId: JSON.stringify(
-                                              partner?.id
-                                            ),
+                                            paraId: JSON.stringify(partner?.id),
                                           },
                                         }}
                                       >
                                         {partner.name}
-                                      </Link> <br /> 
+                                      </Link>{' '}
+                                      <br />
                                       <span className="text-muted">
                                         {partner.email}
                                       </span>
-                                      <div>
+                                      {/* <div>
                                         {partner.businessCategory !== null &&
                                           (
                                             <span>
@@ -186,26 +200,33 @@ const FollowersTabEoProfile = ({ attendees, partners, showPublicView }) => {
 
 
                                           )}
-                                      </div>
+                                      </div> */}
                                     </Col>
-                                    <Col className="text-right" md="1" xs="1">
+                                    <Col className="text-center" md="4" xs="4">
                                       <br></br>
-                                      {!showPublicView && (<Button
+                                      {partner.businessCategory !== null && (
+                                        <span>
+                                          {' '}
+                                          <Badge variant="primary">
+                                            {partner.businessCategory}
+                                          </Badge>{' '}
+                                        </span>
+                                      )}
+                                      {/* {!showPublicView && (<Button
                                         className="btn-round btn-icon"
                                         color="success"
                                         outline
                                         size="sm"
                                       >
                                         Select
-                                        {/* <i className="fa fa-envelope" /> */}
-                                      </Button>)}
+                                       <i className="fa fa-envelope" /> */}
+                                      {/* </Button>)}  */}
                                     </Col>
                                   </Row>
                                 </li>
-                              )
+                              );
                             })}
                         </ul>
-
                       </div>
                     </div>
                   </Col>

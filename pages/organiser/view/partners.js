@@ -3,13 +3,12 @@ import Link from 'next/link';
 import { Alert, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { useInfiniteQuery, useQueryClient } from 'react-query';
 import debounce from 'lodash/debounce';
-import Tab from 'react-bootstrap/Tab';
-import Nav from 'react-bootstrap/Nav';
+
 import { BreadcrumbOne } from '../../../components/Breadcrumb';
-import PartnerWrapper from '../../../components/wrapper/PartnerWrapper';
+import OrganiserWrapper from '../../../components/wrapper/OrganiserWrapper';
 import api from '../../../lib/ApiClient';
 import UserEOCard from '../../../components/UserEOCard';
-import OrganiserCard from '../../../components/OrganiserCard';
+
 import ButtonWithLoading from '../../../components/custom/ButtonWithLoading';
 import { getUser } from '../../../lib/query/getUser';
 import { addVip } from '../../../lib/query/useVip';
@@ -26,7 +25,7 @@ const getPartners = async (page = 0, sort, sortDir, searchTerm, category) => {
   return data;
 };
 
-function PartnerViewUsers() {
+function OrganiserViewUsers() {
   const [sortBy, setSortBy] = useState();
   const [searchTerm, setSearchTerm] = useState('');
   const [category, setCategory] = useState('');
@@ -125,11 +124,11 @@ function PartnerViewUsers() {
     ]);
 
   return (
-    <PartnerWrapper title="Business Partner">
+    <OrganiserWrapper title="Business Partner">
       <BreadcrumbOne pageTitle="View All Business Partners">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
-            <Link href="/partner/home">
+            <Link href="/organiser/home">
               <a>Home</a>
             </Link>
           </li>
@@ -144,36 +143,7 @@ function PartnerViewUsers() {
           <Alert variant="danger">An error has occured</Alert>
         ) : (
           <>
-            <br></br>
-            <Row>
-              <Nav
-                variant="pills"
-                className="product-description-tab__navigation justify-content-center "
-                defaultActiveKey="bp"
-              >
-                {/* <Nav.Item>
-                                    <Nav.Link eventKey="Events">
-                                        <Link href="/partner/events">
-                                            VIEW ALL EVENTS
-                                        </Link>
-                                    </Nav.Link>
-                                </Nav.Item> */}
-                <Nav.Item>
-                  <Nav.Link eventKey="bp">
-                    <Link href="/partner/view/partners">
-                      VIEW ALL BUSINESS PARTNERS
-                    </Link>
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="eo">
-                    <Link href="/partner/view/organisers">
-                      VIEW ALL EVENT ORGANISERS
-                    </Link>
-                  </Nav.Link>
-                </Nav.Item>
-              </Nav>
-            </Row>
+         
             <br></br>
             <Row>
               <Col md={8} lg={6}>
@@ -280,8 +250,8 @@ function PartnerViewUsers() {
           </>
         )}
       </Container>
-    </PartnerWrapper>
+    </OrganiserWrapper>
   );
 }
 
-export default PartnerViewUsers;
+export default OrganiserViewUsers;

@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { IoIosStar, IoIosStarOutline } from 'react-icons/io';
 // reactstrap components
 import {
   Card,
@@ -16,6 +16,7 @@ import { ProductRating } from '../components/Product';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { getUser } from '../lib/query/getUser';
+import { getReviews, getReviewsByEvent } from '../lib/query/getReviews';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
@@ -36,12 +37,12 @@ const EventOrgProfile = ({ paraId_ }) => {
   const [upcomingeventlist, setUpcomingeventlist] = useState([]);
   const [pasteventlist, setPastEventlist] = useState([]);
   const [eventorganiser, setEventOrganiser] = useState();
-
   const [attendeeFollowers, setAttendeeFollowers] = useState([]);
   const [partnerFollowers, setPartnerFollowers] = useState([]);
   const [rating, setRating] = useState();
   const [unfollowBtn, setUnfollowBtn] = useState();
   const [followBtn, setFollowBtn] = useState();
+  const [reviews, setReviews] = useState();
   // if there is user login credential
   //const paraId_ = JSON.parse(query.paraId);
 
@@ -50,6 +51,79 @@ const EventOrgProfile = ({ paraId_ }) => {
   // BIZPTNR: 'partner',
   // ATND: 'attendee',
   var type;
+  var followId;
+  const loadOrgPartnerFollowerData = async () => {
+    await getOrgPartnerFollowers(paraId_).then((followers) => {
+      setPartnerFollowers(followers);
+      if (followId >= 0 && type === 'partner') {
+        var found = false;
+        for (var i = 0; i < followers.length; i++) {
+          console.log('followers id' + followers[i].id);
+          if (followers[i].id === followId) {
+            found = true;
+            break;
+          }
+        }
+        if (found) {
+          setUnfollowBtn(true);
+          setFollowBtn(false);
+        } else {
+          setFollowBtn(true);
+          setUnfollowBtn(false);
+        }
+      }
+    });
+  };
+  //const { data: user } = useUser(localStorage.getItem('userId'));
+  const loadOrgAttFollowerData = async () => {
+    await getOrgAttendeeFollowers(paraId_).then((followers) => {
+      setAttendeeFollowers(followers);
+      console.log('type' + type + 'followId' + followId);
+
+      if (followId >= 0 && type === 'atn') {
+        var found = false;
+        for (var i = 0; i < followers.length; i++) {
+          console.log('followers' + followers[i].id);
+          if (followers[i].id === followId) {
+            found = true;
+            break;
+          }
+        }
+        if (found) {
+          setUnfollowBtn(true);
+          setFollowBtn(false);
+        } else {
+          setFollowBtn(true);
+          setUnfollowBtn(false);
+        }
+      }
+    });
+  };
+
+  const getReviewsEO = async () => {
+    await getReviews(paraId_).then((data) => {
+      setReviews(data);
+    });
+  };
+
+  const getReviewsEvent = async (id) => {
+    await getReviewsByEvent(id).then((data) => {
+      setReviews(data);
+    });
+  };
+
+  const getReviewsEventFilter = async (id) => {
+    var check;
+    await getReviewsByEvent(id).then((data) => {
+      if (data != undefined && data.length > 0) {
+        console.log(data.length + 'length');
+        check = true;
+      } else {
+        check = false;
+      }
+    });
+    return check;
+  };
 
   useEffect(() => {
     const getUserData = async () => {
@@ -61,7 +135,7 @@ const EventOrgProfile = ({ paraId_ }) => {
       });
     };
     getUserData();
-
+    getReviewsEO();
     const getRatingData = async () => {
       await getRating(paraId_).then((rate) => {
         setRating(rate);
@@ -69,9 +143,6 @@ const EventOrgProfile = ({ paraId_ }) => {
       });
     };
     getRatingData();
-
-    //const { data: user } = useUser(localStorage.getItem('userId'));
-    var followId;
 
     if (localStorage.getItem('userId') != null) {
       const loadUserData = async () => {
@@ -93,6 +164,9 @@ const EventOrgProfile = ({ paraId_ }) => {
               setShowEoView(false);
               followId = data.id;
               type = 'partner';
+              loadOrgAttFollowerData();
+
+              loadOrgPartnerFollowerData();
               //partner has no upcoming events
 
               await getEoEventsByIdRoleStatus(
@@ -128,9 +202,14 @@ const EventOrgProfile = ({ paraId_ }) => {
               });
               followId = data.id;
               type = 'atn';
+              console.log(followId + 'followId');
+              console.log(type + 'type');
               setShowPublicView(true);
               setShowEoView(false);
               setUserRole('ATND');
+              loadOrgAttFollowerData();
+
+              loadOrgPartnerFollowerData();
             } else if (
               data.roles[0].roleEnum === 'EVNTORG' &&
               data.id != paraId_
@@ -155,6 +234,9 @@ const EventOrgProfile = ({ paraId_ }) => {
               setShowEoView(false);
               setFollowBtn(false);
               setUnfollowBtn(false);
+              loadOrgAttFollowerData();
+
+              loadOrgPartnerFollowerData();
             } else if (
               data.roles[0].roleEnum === 'EVNTORG' &&
               data.id == paraId_
@@ -187,6 +269,9 @@ const EventOrgProfile = ({ paraId_ }) => {
               setShowEoView(true);
               setFollowBtn(false);
               setUnfollowBtn(false);
+              loadOrgAttFollowerData();
+
+              loadOrgPartnerFollowerData();
             }
           }
         });
@@ -216,56 +301,9 @@ const EventOrgProfile = ({ paraId_ }) => {
         setUnfollowBtn(false);
       };
       loadGuestData();
+      loadOrgAttFollowerData();
+      loadOrgPartnerFollowerData();
     }
-
-    const loadOrgAttFollowerData = async () => {
-      await getOrgAttendeeFollowers(paraId_).then((followers) => {
-        setAttendeeFollowers(followers);
-        console.log('type' + type + 'followId' + followId);
-
-        if (followId >= 0 && type === 'atn') {
-          var found = false;
-          for (var i = 0; i < followers.length; i++) {
-            if (followers[i].id === followId) {
-              found = true;
-              break;
-            }
-          }
-          if (found) {
-            setUnfollowBtn(true);
-            setFollowBtn(false);
-          } else {
-            setFollowBtn(true);
-            setUnfollowBtn(false);
-          }
-        }
-      });
-    };
-    loadOrgAttFollowerData();
-
-    const loadOrgPartnerFollowerData = async () => {
-      await getOrgPartnerFollowers(paraId_).then((followers) => {
-        setPartnerFollowers(followers);
-        if (followId >= 0 && type === 'partner') {
-          var found = false;
-          for (var i = 0; i < followers.length; i++) {
-            console.log('followers id' + followers[i].id);
-            if (followers[i].id === followId) {
-              found = true;
-              break;
-            }
-          }
-          if (found) {
-            setUnfollowBtn(true);
-            setFollowBtn(false);
-          } else {
-            setFollowBtn(true);
-            setUnfollowBtn(false);
-          }
-        }
-      });
-    };
-    loadOrgPartnerFollowerData();
   }, []);
 
   const getRefreshedFollowers = async () => {
@@ -355,12 +393,20 @@ const EventOrgProfile = ({ paraId_ }) => {
     }
   };
 
+  const handleChange = (e) => {
+    if (e.target.value == 'all') {
+      getReviewsEO();
+    } else {
+      getReviewsEvent(e.target.value);
+    }
+  };
+
   return (
     <>
-      <BreadcrumbOne pageTitle="Organiser Profile Details">
+      <BreadcrumbOne pageTitle="Profile Details">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
-            <Link href="/">
+            <Link href="/organiser/home">
               <a>Home</a>
             </Link>
           </li>
@@ -413,15 +459,15 @@ const EventOrgProfile = ({ paraId_ }) => {
                 <div className="description text-center">
                   <div className="product-content__rating-wrap">
                     <div className="product-content__rating">
-                      {(rating != null || rating != undefined) && ( 
-                      <ProductRating ratingValue={rating} /> 
+                      {(rating != null || rating != undefined) && (
+                        <ProductRating ratingValue={rating} />
                       )}
-                      {(rating == null || rating == undefined ) && ( 
-                      <ProductRating ratingValue={0} /> 
+                      {(rating == null || rating == undefined) && (
+                        <ProductRating ratingValue={0} />
                       )}
                       {(rating == undefined || rating == null) && (
-                                            <span> (0) </span>
-                                            )}
+                        <span> (0) </span>
+                      )}
                       {rating >= 0 && <span>({rating})</span>}
                     </div>
                   </div>
@@ -429,7 +475,6 @@ const EventOrgProfile = ({ paraId_ }) => {
               </CardBody>
               <br></br>
               <CardFooter>
-                <hr />
                 <div className="button-container">
                   <Row>
                     <Col className="ml-auto" lg="4" md="6" xs="6">
@@ -481,22 +526,18 @@ const EventOrgProfile = ({ paraId_ }) => {
                             Unfollow
                           </button>
                         )}
-
-                        <br />
-                        {/* <small>Spent</small> */}
                       </h5>
                     </Col>
                   </Row>
-                  <br></br>
                 </div>
               </CardFooter>
             </Card>
           </Col>
           <Col md="8">
             <Card className="card-user">
-              <CardHeader>
+              {/* <CardHeader>
                 <CardTitle tag="h5">Profile Details</CardTitle>
-              </CardHeader>
+              </CardHeader> */}
               <CardBody>
                 <Tab.Container defaultActiveKey="Events">
                   <Nav
@@ -508,6 +549,9 @@ const EventOrgProfile = ({ paraId_ }) => {
                     </Nav.Item>
                     <Nav.Item>
                       <Nav.Link eventKey="Followers">FOLLOWERS</Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                      <Nav.Link eventKey="reviews">REVIEWS</Nav.Link>
                     </Nav.Item>
                   </Nav>
 
@@ -544,12 +588,99 @@ const EventOrgProfile = ({ paraId_ }) => {
                         </div>
                       </ul>
                     </Tab.Pane>
+                    <Tab.Pane eventKey="reviews">
+                      <div className="product-description-tab__review">
+                        <div
+                          style={{
+                            overflowY: 'auto',
+                            // border:'1px solid red',
+                            // width:'500px',
+                            overflowX: 'hidden',
+                            height: '60vh',
+                            position: 'relative',
+                          }}
+                        >
+                          {/* <div className="comments"> */}
+                          <br></br>
+
+                          <Row className="mb-4">
+                            <Col xs={6} sm={6}>
+                              <select
+                                className="custom-select"
+                                onChange={handleChange}
+                              >
+                                <option value="all">Filter By Events</option>
+                                {(pasteventlist != null ||
+                                  pasteventlist != undefined) &&
+                                  pasteventlist.map((event) => {
+                                    console.log('event' + event.name);
+                                    if (getReviewsEventFilter(event.eid)) {
+                                      console.log('passed' + event.name);
+                                      return (
+                                        <option value={event.eid}>
+                                          {event.name}
+                                        </option>
+                                      );
+                                    }
+                                  })}
+                              </select>
+                            </Col>
+                          </Row>
+
+                          <ul className="list-none comment-list mt-8">
+                            <li>
+                              {(reviews == null || reviews == undefined) && (
+                                <span>There is no reviews.</span>
+                              )}
+                              {(reviews != null || reviews != undefined) &&
+                                reviews.map((review) => {
+                                  return (
+                                    <>
+                                      <hr></hr>
+                                      <div className="comment-block">
+                                        <div className="rating-wrap">
+                                          <div className="rating">
+                                            <ProductRating
+                                              ratingValue={review.rating}
+                                            />
+                                          </div>
+                                        </div>
+                                        <p className="customer-meta">
+                                          {review.attendee != null && (
+                                            <span className="review-author">
+                                              {review.attendee.name}
+                                            </span>
+                                          )}
+                                          {review.partner != null && (
+                                            <span className="review-author">
+                                              {review.partner.name}
+                                            </span>
+                                          )}
+
+                                          <span className="comment-date">
+                                            {review.event.name}
+                                          </span>
+                                        </p>
+                                        <div className="description">
+                                          <p>{review.reviewText}</p>
+                                        </div>
+                                      </div>
+                                    </>
+                                  );
+                                })}
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                      {/* </div> */}
+                    </Tab.Pane>
                   </Tab.Content>
                 </Tab.Container>
               </CardBody>
             </Card>
           </Col>
         </Row>
+        <br></br>
       </div>
     </>
   );

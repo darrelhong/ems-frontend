@@ -5,7 +5,7 @@ import { useInfiniteQuery, useQueryClient } from 'react-query';
 import debounce from 'lodash/debounce';
 
 import { BreadcrumbOne } from '../../../../components/Breadcrumb';
-import PartnerWrapper from '../../../../components/wrapper/PartnerWrapper';
+import OrganiserWrapper from '../../../../components/wrapper/OrganiserWrapper';
 import api from '../../../../lib/ApiClient';
 import EventCard from '../../../../components/events/partner/EventCard';
 import ButtonWithLoading from '../../../../components/custom/ButtonWithLoading';
@@ -19,7 +19,7 @@ const getEvents = async (page = 0, sort, sortDir, searchTerm) => {
   return data;
 };
 
-function PartnerHome() {
+function OrganiserHome() {
   const [sortBy, setSortBy] = useState();
   const [searchTerm, setSearchTerm] = useState('');
   const queryClient = useQueryClient();
@@ -67,7 +67,7 @@ function PartnerHome() {
     ]);
 
   return (
-    <PartnerWrapper title="Events">
+    <OrganiserWrapper title="Events">
       <BreadcrumbOne pageTitle="View All Events">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
@@ -81,39 +81,7 @@ function PartnerHome() {
 
       <Container className="my-4">
       <br></br>
-                        <Row>
-
-                            <Nav
-                                variant="pills"
-                                className="product-description-tab__navigation justify-content-center "
-                                defaultActiveKey="Events"
-                            >
-                                <Nav.Item>
-                                    <Nav.Link eventKey="Events">
-                                        <Link href="/organiser/view/events">
-                                            VIEW ALL EVENTS
-                                        </Link>
-                                    </Nav.Link>
-                                </Nav.Item>
-                                {/* <Nav.Item>
-                                    <Nav.Link eventKey="bp">
-                                        <Link href="/organiser/view/partners">
-                                            VIEW ALL BUSINESS PARTNERS
-                                        </Link>
-                                    </Nav.Link>
-                                </Nav.Item>
-                                <Nav.Item>
-                                    <Nav.Link eventKey="eo"  >
-                                        <Link href="/organiser/view/organisers">
-                                            VIEW ALL EVENT ORGANISERS
-                                        </Link>
-                                    </Nav.Link>
-                                </Nav.Item> */}
-                            </Nav>
-
-
-                        </Row>
-                        <br></br>
+                        
         <Row>
           <Col md={8} lg={6}>
             <div className="input-group mb-3">
@@ -188,8 +156,8 @@ function PartnerHome() {
           </>
         )}
       </Container>
-    </PartnerWrapper>
+    </OrganiserWrapper>
   );
 }
 
-export default PartnerHome;
+export default OrganiserHome;

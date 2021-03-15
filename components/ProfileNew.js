@@ -8,26 +8,20 @@ import {
   CardBody,
   CardFooter,
   CardTitle,
-  FormGroup,
-  Form,
-  Input,
   Row,
   Col,
 } from 'reactstrap';
-import useUser from '../lib/query/useUser';
-import { useMutation, useQueryClient } from 'react-query';
+
+import { useMutation } from 'react-query';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { BreadcrumbOne } from '../components/Breadcrumb';
 import { Container } from 'react-bootstrap';
 import { getUser } from '../lib/query/getUser';
-import { IoIosStar, IoIosStarOutline } from 'react-icons/io';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
 import Badge from 'react-bootstrap/Badge';
-import PropTypes from 'prop-types';
-import { withRouter } from 'next/router';
 import { getFollowers, getFollowing } from '../lib/query/getBPFollow';
 import { isBpVip, addVip } from '../lib/query/useVip';
 import { BsPencilSquare } from 'react-icons/bs';
@@ -47,6 +41,7 @@ const PartnerProfile = ({ localuser }) => {
   // const [unmarkVip, setUnmarkVip] = useState(false);
   const [checkIsBpVip, setCheckIsBpVip] = useState(null);
   //const { data: partner } = useUser(localuser);
+  var followId;
   useEffect(() => {
     console.log('user ' + localuser);
     const getUserData = async () => {
@@ -58,9 +53,47 @@ const PartnerProfile = ({ localuser }) => {
   }, [localuser]);
 
   useEffect(() => {
-    var followId;
+    const getFollowingData = async () => {
+      await getFollowing(localuser).then((data) => {
+        setFollowing(data);
+      });
+    };
+    getFollowingData();
+    const getFollowersData = async () => {
+      await getFollowers(localuser).then((data) => {
+        setFollowers(data);
+        if (followId >= 0) {
+          var found = false;
+          for (var i = 0; i < data.length; i++) {
+            console.log('test' + data[i].id + ' ' + followId);
+            if (data[i].id === followId) {
+              found = true;
+              break;
+            }
+          }
+          if (found) {
+            setUnfollowBtn(true);
+            setFollowBtn(false);
+          } else {
+            setFollowBtn(true);
+            setUnfollowBtn(false);
+          }
+        }
+      });
+    };
+    getFollowersData();
+
+    const getPartnerData = async () => {
+      await getUser(localuser).then((data) => {
+        setPartner(data);
+      });
+    };
+    getPartnerData();
+
     if (localStorage.getItem('userId') != null && partner != null) {
       const getCurrentUserData = async () => {
+        //  var followId;
+
         await getUser(localStorage.getItem('userId')).then((data) => {
           console.log('current ' + data.id);
           if (data?.id !== localuser) {
@@ -77,22 +110,10 @@ const PartnerProfile = ({ localuser }) => {
               const checkIfBpIsVip = async () => {
                 var result = await isBpVip(partner?.id);
                 setCheckIsBpVip(result);
-                // console.log('result');
-                // console.log('checkisvip ' + result);
-                // console.log('eoView ' + eoView);
-                // console.log('publicView ' + publicView);
               };
               if (partner != undefined) {
                 checkIfBpIsVip();
               }
-
-              // if (checkIsBpVip) {
-              //   setUnmarkVip(true);
-              //   setMarkVip(false);
-              // } else if (!checkIsBpVip) {
-              //   setUnmarkVip(false);
-              //   setMarkVip(true);
-              // }
             } else if (data.roles[0].roleEnum === 'ATND') {
               console.log('attendee ');
 
@@ -120,38 +141,7 @@ const PartnerProfile = ({ localuser }) => {
       setFollowBtn(false);
       setUnfollowBtn(false);
     }
-
-    const getFollowersData = async () => {
-      await getFollowers(localuser).then((data) => {
-        setFollowers(data);
-        if (followId >= 0) {
-          var found = false;
-          for (var i = 0; i < data.length; i++) {
-            console.log('test' + data[i].id + ' ' + followId);
-            if (data[i].id === followId) {
-              found = true;
-              break;
-            }
-          }
-          if (found) {
-            setUnfollowBtn(true);
-            setFollowBtn(false);
-          } else {
-            setFollowBtn(true);
-            setUnfollowBtn(false);
-          }
-        }
-      });
-    };
-    getFollowersData();
-
-    const getFollowingData = async () => {
-      await getFollowing(localuser).then((data) => {
-        setFollowing(data);
-      });
-    };
-    getFollowingData();
-  }, [partner, localuser, eoView, publicView, checkIsBpVip]);
+  }, [localuser, followId]);
 
   const getRefreshedFollowers = async () => {
     await getFollowers(localuser).then((data) => {
@@ -221,10 +211,10 @@ const PartnerProfile = ({ localuser }) => {
 
   return (
     <>
-      <BreadcrumbOne pageTitle="Partner Profile Details">
+      <BreadcrumbOne pageTitle="Profile Details">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
-            <Link href="/">
+            <Link href="/partner/home">
               <a>Home</a>
             </Link>
           </li>
@@ -441,13 +431,13 @@ const PartnerProfile = ({ localuser }) => {
                                       )}
                                     </div>
                                   </Col>
-                                  <Col md="6" xs="6">
+                                  <Col md="4" xs="4">
                                     {/* <br></br> */}
                                     {follower.name} <br />
                                     <span className="text-muted">
                                       {follower.email}
                                     </span>
-                                    <div>
+                                    {/* <div>
                                       {!follower.categoryPreferences.isEmpty &&
                                         follower.categoryPreferences.map(
                                           (eventtype) => {
@@ -461,11 +451,11 @@ const PartnerProfile = ({ localuser }) => {
                                             );
                                           }
                                         )}
-                                    </div>
+                                    </div> */}
                                   </Col>
-                                  <Col className="text-right" md="1" xs="1">
+                                  <Col className="text-left" md="4" xs="4">
                                     <br></br>
-                                    {!publicView && (
+                                    {/* {!publicView && (
                                       <Button
                                         className="btn-round btn-icon"
                                         color="success"
@@ -473,9 +463,23 @@ const PartnerProfile = ({ localuser }) => {
                                         size="sm"
                                       >
                                         Select
-                                        {/* <i className="fa fa-envelope" /> */}
-                                      </Button>
-                                    )}
+                                        <i className="fa fa-envelope" />
+                                       </Button>
+                                    )} */}
+
+                                    {!follower.categoryPreferences.isEmpty &&
+                                      follower.categoryPreferences.map(
+                                        (eventtype) => {
+                                          return (
+                                            <span>
+                                              {' '}
+                                              <Badge variant="primary">
+                                                {eventtype}
+                                              </Badge>{' '}
+                                            </span>
+                                          );
+                                        }
+                                      )}
                                   </Col>
                                 </Row>
                               </li>
@@ -488,7 +492,7 @@ const PartnerProfile = ({ localuser }) => {
                       <br></br>
                       <ul className="list-unstyled team-members">
                         {following != undefined &&
-                          following.map((following) => {
+                          following.map((follow) => {
                             return (
                               <li>
                                 <br></br>
@@ -499,46 +503,51 @@ const PartnerProfile = ({ localuser }) => {
                                   </Col>
                                   <Col md="2" xs="2">
                                     <div className="avatar">
-                                      {following?.profilePic == null && (
+                                      {follow?.profilePic == null && (
                                         <img
                                           src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
                                           className="img-circle img-no-padding img-responsive"
                                         />
                                       )}
-                                      {following?.profilePic != null && (
+                                      {follow?.profilePic != null && (
                                         <Image
                                           className="img-circle img-no-padding img-responsive"
-                                          src={following?.profilePic}
+                                          src={follow?.profilePic}
                                         />
                                       )}
                                     </div>
                                   </Col>
-                                  <Col md="6" xs="6">
+                                  <Col md="5" xs="5">
                                     {/* <br></br> */}
                                     <Link
                                       href={{
                                         pathname:
                                           '/organiser/organiser-profile',
                                         query: {
-                                          paraId: JSON.stringify(following?.id),
+                                          paraId: JSON.stringify(follow?.id),
                                         },
                                       }}
                                     >
-                                      {following.name}
+                                      {follow.name}
                                     </Link>{' '}
                                     <br />
-                                    <span className="text-muted">
-                                      {following.email}
-                                    </span>
+                                    {/* <span className="text-muted">
+                                      {follow.email}
+                                    </span> */}
                                     <div>
                                       <span className="text-muted">
-                                        {following.description}
+                                        {follow.description}
                                       </span>
                                     </div>
                                   </Col>
-                                  <Col className="text-right" md="1" xs="1">
+
+                                  <Col className="text-left" md="4" xs="4">
+                                    <span>Email:</span>
                                     <br></br>
-                                    {!publicView && (
+                                    <span className="text-muted">
+                                      {follow.email}
+                                    </span>
+                                    {/* {!publicView && (
                                       <Button
                                         className="btn-round btn-icon"
                                         color="success"
@@ -547,7 +556,7 @@ const PartnerProfile = ({ localuser }) => {
                                       >
                                         Select
                                       </Button>
-                                    )}
+                                    )} */}
                                   </Col>
                                 </Row>
                               </li>
