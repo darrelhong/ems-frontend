@@ -8,6 +8,7 @@ import PartnerHeaderTop from './PartnerHeaderTop';
 import NavigationPartner from './elements/NavigationPartner';
 import SearchOverlay from './elements/SearchOverlay';
 import MobileMenuPartner from './elements/MobileMenuPartner';
+import Head from 'next/head';
 
 const HeaderOne = ({ cartItems, navPositionClass }) => {
   const [scroll, setScroll] = useState(0);

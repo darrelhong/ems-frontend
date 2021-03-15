@@ -1,5 +1,5 @@
 import React from 'react';
-
+import Head from 'next/head';
 // reactstrap components
 import {
   Button,
@@ -9,7 +9,7 @@ import {
   CardFooter,
   CardTitle,
   Row,
-  Col,
+  Col
 } from 'reactstrap';
 
 import { useMutation } from 'react-query';
@@ -37,6 +37,7 @@ const PartnerProfile = ({ localuser }) => {
   const [followBtn, setFollowBtn] = useState();
   const [partner, setPartner] = useState();
   //const { data: partner } = useUser(localuser);
+  
    var followId;
   const getFollowersData = async () => {
     await getFollowers(localuser).then((data) => {
@@ -125,6 +126,8 @@ const PartnerProfile = ({ localuser }) => {
       setEOView(false);
       setFollowBtn(false);
       setUnfollowBtn(false);
+      getFollowersData();
+            getFollowingData();
     }
 
 
@@ -144,6 +147,7 @@ const PartnerProfile = ({ localuser }) => {
         setUnfollowBtn(true);
         setFollowBtn(false);
         getRefreshedFollowers();
+        
       })
       .catch((error) => {
         console.log(error);
@@ -189,15 +193,19 @@ const PartnerProfile = ({ localuser }) => {
 
   return (
     <>
+    
       <BreadcrumbOne pageTitle="Profile Details">
+     
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/partner/home">
               <a>Home</a>
             </Link>
+
           </li>
           <li className="breadcrumb-item active">Profile Details</li>
         </ol>
+
       </BreadcrumbOne>
       <br></br>
       <div className="content" style={{ marginLeft: '8%', marginRight: '8%' }}>
@@ -530,6 +538,7 @@ const PartnerProfile = ({ localuser }) => {
             </Card>
           </Col>
         </Row>
+        <br></br>
       </div>
     </>
   );
