@@ -30,7 +30,7 @@ export default function AttendeeEventPage({ id }) {
         <Alert variant="danger">An error has occured</Alert>
       ) : (
         <>
-          <BreadcrumbOne pageTitle="Event">
+          <BreadcrumbOne pageTitle="Event Details">
             <ol className="breadcrumb justify-content-md-end">
               <li className="breadcrumb-item">
                 <Link href="/attendee/home">
@@ -57,8 +57,6 @@ export default function AttendeeEventPage({ id }) {
                   <p>organised by: {data.eventOrganiser.name}</p>
 
                   <h5 className="text-dark">Location: {data.address}</h5>
-
-                  <br></br>
 
                   <p className="text-dark font-weight-bold d-inline">
                     Starts:{' '}
@@ -107,7 +105,9 @@ export default function AttendeeEventPage({ id }) {
                       >
                         {formatter.format(data.ticketPrice)}
                       </p>
-                      <button className="btn btn-success">Get tickets</button>
+                      <Link href={`${id}/ticketing`}>
+                        <button className="btn btn-success">Get tickets</button>
+                      </Link>
                     </>
                   )}
                 </div>
