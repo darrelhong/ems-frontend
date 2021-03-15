@@ -14,7 +14,7 @@ const ProductScrollView = ({ products }) => {
 
     // ]
     return (
-        <div class="wrapper">
+        <div className="wrapper">
             <section id="section1">
                 <a href="#section3">‹</a>
                 <div class="item">

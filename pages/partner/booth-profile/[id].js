@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { getBoothProfile, getBoothsByBoothProfile } from 'lib/query/boothApi';
 import ProductScrollView from 'components/Booth/boothProfileDetails/ProductScrollView';
+import BoothProductComponent from 'components/Booth/boothProfileDetails/BoothProductComponent';
 
 const BoothProfile = () => {
     const router = useRouter();
@@ -33,8 +34,9 @@ const BoothProfile = () => {
                 </div>
             ))} */}
             <h1>ScrollView style</h1>
-          <ProductScrollView />
-          {/* <ProductScrollView /> */}
+            {booths && (<BoothProductComponent booth={booths[0]}/>)}
+            <ProductScrollView />
+            {/* <ProductScrollView /> */}
         </div>
     )
 }
