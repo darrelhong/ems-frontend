@@ -74,69 +74,72 @@ const ProductScrollView = ({ paginatedProducts }) => {
 
     const renderAppendedProducts = (products) => {
         while (products.length < 5) {
-            products.push({"image": "https://static.packt-cdn.com/products/9781849514804/graphics/4804_03_46.jpg"})
+            products.push({ "image": "https://static.packt-cdn.com/products/9781849514804/graphics/4804_03_46.jpg" })
         };
 
         return products.map((product) => (
-                <div className="item">
+            <div className="item">
                 <img
                     src={product.image}
+                    height='150'
                     // onClick={() => console.log('image clicked')}
                     alt="Product Image" />
             </div>
-            ))
+        ))
     };
 
     return (
         <div className="wrapper">
-            {paginatedProducts &&  paginatedProducts.length > 1 ? (
+            {paginatedProducts && paginatedProducts.length > 1 ? (
                 paginatedProducts.map((section, index) => (
-                    <section id={section?.key}> 
+                    <section id={section?.key}>
                         <a
                             // href={index == 0 ? `#${paginatedProducts[paginatedProducts.length - 1]?.key}` : `#${paginatedProducts[index + 1]?.key}`}
                             href={`#${backId}`}
                             onClick={handleBack}
-                            // stye={{
-                            //     display: 'block',
-                            //     paddingTop: '90%',
-                            //     marginTop: '-90%'
-                            // }}
+                        // stye={{
+                        //     display: 'block',
+                        //     paddingTop: '90%',
+                        //     marginTop: '-90%'
+                        // }}
                         >‹</a>
-                        {section.products && section.products.length ==5 ? (
+                        {section.products && section.products.length == 5 ? (
                             section.products.map((product) => (
                                 <div className="item">
                                     <img
                                         src={product.image}
+                                        height='150'
                                         // onClick={() => console.log('image clicked')}
                                         alt="Product Image" />
                                 </div>
                             ))
-                        ) :(renderAppendedProducts(section.products))}
+                        ) : (renderAppendedProducts(section.products))}
                         <a
                             // href={`#${paginatedProducts[index + 1]?.key}`}
                             href={`#${nextId}`}
                             onClick={handleNext}
-                            // stye={{
-                            //     display:'block',
-                            //     paddingTop: '90%',
-                            //     marginTop: '-90%'
-                            // }}
+                        // stye={{
+                        //     display:'block',
+                        //     paddingTop: '90%',
+                        //     marginTop: '-90%'
+                        // }}
                         >›</a>
                     </section>
                 ))
             ) : (
                 paginatedProducts.map((section, index) => (
-                    <section id={section?.key}> 
-                        {section.products && section.products.length ==5 ? (
+                    <section id={section?.key}>
+                        {section.products && section.products.length == 5 ? (
                             section.products.map((product) => (
                                 <div className="item">
                                     <img
                                         src={product.image}
+                                        height='150'
                                         // onClick={() => console.log('image clicked')}
                                         alt="Product Image" />
                                 </div>
                             ))
-                        ) :(renderAppendedProducts(section.products))}
+                        ) : (renderAppendedProducts(section.products))}
                     </section>
                 ))
             )}
