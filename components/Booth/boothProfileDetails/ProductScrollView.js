@@ -89,9 +89,9 @@ const ProductScrollView = ({ paginatedProducts }) => {
 
     return (
         <div className="wrapper">
-            {paginatedProducts && (
+            {paginatedProducts &&  paginatedProducts.length > 1 ? (
                 paginatedProducts.map((section, index) => (
-                    <section id={section?.key}>
+                    <section id={section?.key}> 
                         <a
                             // href={index == 0 ? `#${paginatedProducts[paginatedProducts.length - 1]?.key}` : `#${paginatedProducts[index + 1]?.key}`}
                             href={`#${backId}`}
@@ -112,6 +112,21 @@ const ProductScrollView = ({ paginatedProducts }) => {
                             href={`#${nextId}`}
                             onClick={handleNext}
                         >›</a>
+                    </section>
+                ))
+            ) : (
+                paginatedProducts.map((section, index) => (
+                    <section id={section?.key}> 
+                        {section.products && section.products.length ==5 ? (
+                            section.products.map((product) => (
+                                <div className="item">
+                                    <img
+                                        src={product.image}
+                                        // onClick={() => console.log('image clicked')}
+                                        alt="Product Image" />
+                                </div>
+                            ))
+                        ) :(renderAppendedProducts(section.products))}
                     </section>
                 ))
             )}
