@@ -3,6 +3,10 @@ import { useRouter } from 'next/router';
 import { getBoothProfile, getBoothsByBoothProfile } from 'lib/query/boothApi';
 import ProductScrollView from 'components/Booth/boothProfileDetails/ProductScrollView';
 import BoothProductComponent from 'components/Booth/boothProfileDetails/BoothProductComponent';
+import { BreadcrumbOne } from 'components/Breadcrumb';
+import PartnerWrapper from 'components/wrapper/PartnerWrapper';
+import { Container } from 'react-bootstrap';
+import Link from 'next/link';
 
 const BoothProfile = () => {
     const router = useRouter();
@@ -21,10 +25,21 @@ const BoothProfile = () => {
     }, []);
 
     return (
-        <div>
-            <h1>aye lmao {id}</h1>
-            <h6>Booth Profile description: {boothProfile?.description ?? 'lmaooo'}</h6>
-            {/* {booths && booths.map((booth) => (
+        <PartnerWrapper title={boothProfile ? `Profile for ${boothProfile?.event?.name}` : 'Booth Profile'} >
+            <BreadcrumbOne pageTitle="Booth Profile">
+                <ol className="breadcrumb justify-content-md-end">
+                    <li className="breadcrumb-item">
+                        <Link href="/">
+                            <a>Home</a>
+                        </Link>
+                    </li>
+                    <li className="breadcrumb-item active">{boothProfile ? `Profile for ${boothProfile?.event?.name}` : 'Booth Profile'}</li>
+                </ol>
+            </BreadcrumbOne>
+
+            <div>
+                <h6>Booth Profile description: {boothProfile?.description ?? 'lmaooo'}</h6>
+                {/* {booths && booths.map((booth) => (
                 <div>
                     <h6>Booth number: {booth?.boothNumber ?? 'lmaooo'}</h6>
                     {booth.products && booth.products.map((product) => (
@@ -33,13 +48,14 @@ const BoothProfile = () => {
                     }
                 </div>
             ))} */}
-            <h1>ScrollView style</h1>
-            {booths && booths.map((booth) => (
-                <BoothProductComponent booth={booth}/>
-            ))}
-            {booths && (<BoothProductComponent booth={booths[0]}/>)}
-            {/* <ProductScrollView /> */}
-        </div>
+                <h1>ScrollView style</h1>
+                {booths && booths.map((booth) => (
+                    <BoothProductComponent booth={booth} />
+                ))}
+                {booths && (<BoothProductComponent booth={booths[0]} />)}
+                {/* <ProductScrollView /> */}
+            </div>
+        </PartnerWrapper>
     )
 }
 
