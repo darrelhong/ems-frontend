@@ -34,7 +34,11 @@ const DetailContainer = ({boothProfile,booths}) => {
                                 BOOTH NUMBERS:
                                 </Row>
                             {booths.map((booth) => (
-                                <Row>- {booth.boothNumber}</Row>
+                                <ul>
+                                {/* <Row> */}
+                                    <li>{booth.boothNumber}</li>
+                                    {/* </Row> */}
+                                </ul>
                             ))}
                         </Col>
                     </Row>
