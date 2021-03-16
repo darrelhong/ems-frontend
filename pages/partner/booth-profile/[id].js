@@ -3,9 +3,10 @@ import { useRouter } from 'next/router';
 import { getBoothProfile, getBoothsByBoothProfile } from 'lib/query/boothApi';
 import ProductScrollView from 'components/Booth/boothProfileDetails/ProductScrollView';
 import BoothProductComponent from 'components/Booth/boothProfileDetails/BoothProductComponent';
+import DetailContainer from 'components/Booth/boothProfileDetails/DetailContainer';
 import { BreadcrumbOne } from 'components/Breadcrumb';
 import PartnerWrapper from 'components/wrapper/PartnerWrapper';
-import { Container } from 'react-bootstrap';
+import { Container, Row, Col, Image } from 'react-bootstrap';
 import Link from 'next/link';
 
 const BoothProfile = () => {
@@ -36,9 +37,14 @@ const BoothProfile = () => {
                     <li className="breadcrumb-item active">{boothProfile ? `Profile for ${boothProfile?.event?.name}` : 'Booth Profile'}</li>
                 </ol>
             </BreadcrumbOne>
+            {booths && boothProfile && (
+                <DetailContainer
+                    booths={booths}
+                    boothProfile={boothProfile}
+                />
+            )}
 
             <div>
-                <h6>Booth Profile description: {boothProfile?.description ?? 'lmaooo'}</h6>
                 {/* {booths && booths.map((booth) => (
                 <div>
                     <h6>Booth number: {booth?.boothNumber ?? 'lmaooo'}</h6>
