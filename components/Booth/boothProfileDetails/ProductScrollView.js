@@ -72,6 +72,21 @@ const ProductScrollView = ({ paginatedProducts }) => {
         }
     };
 
+    const renderAppendedProducts = (products) => {
+        while (products.length < 5) {
+            products.push({"image": "https://static.packt-cdn.com/products/9781849514804/graphics/4804_03_46.jpg"})
+        };
+
+        return products.map((product) => (
+                <div className="item">
+                <img
+                    src={product.image}
+                    // onClick={() => console.log('image clicked')}
+                    alt="Product Image" />
+            </div>
+            ))
+    };
+
     return (
         <div className="wrapper">
             {paginatedProducts && (
@@ -82,14 +97,16 @@ const ProductScrollView = ({ paginatedProducts }) => {
                             href={`#${backId}`}
                             onClick={handleBack}
                         >‹</a>
-                        {section.products && section.products.map((product) => (
-                            <div className="item">
-                                <img
-                                    src={product.image}
-                                    // onClick={() => console.log('image clicked')}
-                                    alt="Product Image" />
-                            </div>
-                        ))}
+                        {section.products && section.products.length ==5 ? (
+                            section.products.map((product) => (
+                                <div className="item">
+                                    <img
+                                        src={product.image}
+                                        // onClick={() => console.log('image clicked')}
+                                        alt="Product Image" />
+                                </div>
+                            ))
+                        ) :(renderAppendedProducts(section.products))}
                         <a
                             // href={`#${paginatedProducts[index + 1]?.key}`}
                             href={`#${nextId}`}
