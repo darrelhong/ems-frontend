@@ -5,7 +5,7 @@ import {
     Image
 } from 'react-bootstrap';
 
-const DetailContainer = ({boothProfile,booths}) => {
+const DetailContainer = ({ boothProfile, booths }) => {
     return (
         <Container>
             <Row>
@@ -31,11 +31,11 @@ const DetailContainer = ({boothProfile,booths}) => {
                         </Col>
                         <Col>
                             <Row>
-                                BOOTH NUMBERS:
-                                </Row>
+                                <h5>BOOTH NUMBERS:</h5>
+                            </Row>
                             {booths.map((booth) => (
                                 <ul>
-                                {/* <Row> */}
+                                    {/* <Row> */}
                                     <li>{booth.boothNumber}</li>
                                     {/* </Row> */}
                                 </ul>
@@ -45,8 +45,10 @@ const DetailContainer = ({boothProfile,booths}) => {
                     <Row
                         style={{
                             marginTop: '10%'
-                        }}
-                    >
+                        }}>
+                        <h5>Booth Description:</h5>
+                    </Row>
+                    <Row>
                         {boothProfile?.description ?? 'Empty Description still'}
                     </Row>
 
