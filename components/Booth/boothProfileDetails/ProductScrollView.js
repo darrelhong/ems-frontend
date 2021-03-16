@@ -79,18 +79,20 @@ const ProductScrollView = ({ paginatedProducts }) => {
                     <section id={section?.key}>
                         <a
                             // href={index == 0 ? `#${paginatedProducts[paginatedProducts.length - 1]?.key}` : `#${paginatedProducts[index + 1]?.key}`}
-                            href= {`#${backId}`}
+                            href={`#${backId}`}
                             onClick={handleBack}
                         >‹</a>
                         {section.products && section.products.map((product) => (
-                            <img
-                                src={product.image}
-                                onClick={() => console.log('image clicked')}
-                                alt="Product Image" />
+                            <div className="item">
+                                <img
+                                    src={product.image}
+                                    // onClick={() => console.log('image clicked')}
+                                    alt="Product Image" />
+                            </div>
                         ))}
                         <a
                             // href={`#${paginatedProducts[index + 1]?.key}`}
-                            href= {`#${nextId}`}
+                            href={`#${nextId}`}
                             onClick={handleNext}
                         >›</a>
                     </section>
