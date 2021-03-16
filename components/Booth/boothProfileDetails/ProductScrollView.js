@@ -96,6 +96,11 @@ const ProductScrollView = ({ paginatedProducts }) => {
                             // href={index == 0 ? `#${paginatedProducts[paginatedProducts.length - 1]?.key}` : `#${paginatedProducts[index + 1]?.key}`}
                             href={`#${backId}`}
                             onClick={handleBack}
+                            // stye={{
+                            //     display: 'block',
+                            //     paddingTop: '90%',
+                            //     marginTop: '-90%'
+                            // }}
                         >‹</a>
                         {section.products && section.products.length ==5 ? (
                             section.products.map((product) => (
@@ -111,6 +116,11 @@ const ProductScrollView = ({ paginatedProducts }) => {
                             // href={`#${paginatedProducts[index + 1]?.key}`}
                             href={`#${nextId}`}
                             onClick={handleNext}
+                            // stye={{
+                            //     display:'block',
+                            //     paddingTop: '90%',
+                            //     marginTop: '-90%'
+                            // }}
                         >›</a>
                     </section>
                 ))

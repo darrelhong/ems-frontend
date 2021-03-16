@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import ProductScrollView from './ProductScrollView';
+import { Container, Row } from 'react-bootstrap';
 
 const BoothProductComponent = ({ booth }) => {
     const [products, setProducts] = useState([]);
@@ -43,14 +44,20 @@ const BoothProductComponent = ({ booth }) => {
     }, [booth]);
 
     return (
-        <div>
+        <Container
+        style={{
+            marginTop:'10%'
+        }}
+        >
+            <Row>
             <h4>Booth {booth?.boothNumber}</h4>
             {
                 paginatedProducts && (
                     <ProductScrollView paginatedProducts={paginatedProducts} />
                 )
             }
-        </div>
+            </Row>
+        </Container>
     )
 };
 

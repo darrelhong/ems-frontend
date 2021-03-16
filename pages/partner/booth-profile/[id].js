@@ -54,11 +54,10 @@ const BoothProfile = () => {
                     }
                 </div>
             ))} */}
-                <h1>ScrollView style</h1>
                 {booths && booths.map((booth) => (
                     <BoothProductComponent booth={booth} />
                 ))}
-                {booths && (<BoothProductComponent booth={booths[0]} />)}
+                {/* {booths && (<BoothProductComponent booth={booths[0]} />)} */}
                 {/* <ProductScrollView /> */}
             </div>
         </PartnerWrapper>
