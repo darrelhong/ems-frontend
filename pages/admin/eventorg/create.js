@@ -46,7 +46,8 @@ function CreateEventOrganiser() {
         </ol>
       </BreadcrumbOne>
 
-      <Container className="space-pb--r70 space-pt--r70">
+      <Container className="space-pb--r70 space-pt--r70" style={{ zIndex: -1,
+    position:"relative" }}>
         <form
           onSubmit={handleSubmit((data) => {
             mutate({

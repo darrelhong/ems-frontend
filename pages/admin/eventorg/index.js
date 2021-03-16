@@ -55,7 +55,8 @@ function AdminEventOrg() {
         </ol>
       </BreadcrumbOne>
 
-      <Container className="space-pt--30 space-pb--30">
+      <Container className="space-pt--30 space-pb--30" style={{ zIndex: -1,
+    position:"relative" }}>
         {isLoading && (
           <div className="spinner-grow" role="status">
             <span className="sr-only">Loading...</span>

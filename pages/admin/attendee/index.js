@@ -49,7 +49,8 @@ function AdminAttendees() {
         </ol>
       </BreadcrumbOne>
 
-      <Container className="space-pt--r70 space-pb--r70">
+      <Container className="space-pt--r70 space-pb--r70" style={{ zIndex: -1,
+    position:"relative" }}>
         {isLoading && (
           <div className="spinner-grow" role="status">
             <span className="sr-only">Loading...</span>

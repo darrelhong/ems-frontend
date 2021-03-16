@@ -354,7 +354,8 @@ const MyAccount = () => {
           <li className="breadcrumb-item active">My Account Settings</li>
         </ol>
       </BreadcrumbOne>
-      <div className="my-account-content space-pt--r60 space-pb--r60">
+      <div className="my-account-content space-pt--r60 space-pb--r60" style={{ zIndex: -1,
+    position:"relative" }}>
         <Container>
           <Tab.Container defaultActiveKey="accountDetails">
             <Row>

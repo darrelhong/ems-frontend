@@ -219,7 +219,8 @@ const PartnerProfile = ({ localuser }) => {
 
       </BreadcrumbOne>
       <br></br>
-      <div className="content" style={{ marginLeft: '8%', marginRight: '8%' }}>
+      <div className="content" style={{ marginLeft: '8%', marginRight: '8%', zIndex: -1,
+    position:"relative" }}>
         <Row>
           <Col md="4">
             <Card className="card-user">

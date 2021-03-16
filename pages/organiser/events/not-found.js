@@ -12,7 +12,8 @@ const EventNotFound = () => {
 
       <HomeHeaderTop />
 
-      <Container>
+      <Container style={{ zIndex: -1,
+    position:"relative" }}>
         <Row className="justify-content-center">
           <Col>
             <p className="mt-5 text-center">

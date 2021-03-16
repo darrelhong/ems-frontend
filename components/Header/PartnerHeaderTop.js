@@ -25,7 +25,7 @@ const PartnerHeaderTop = () => {
         <Row>
           <Col>
             <div className="text-right">
-              <ul className="header-list">
+              <ul className="header-list" >
                 <li>
                 
                     <a>

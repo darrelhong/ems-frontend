@@ -22,7 +22,8 @@ export default function PartnerHome() {
         </ol>
       </BreadcrumbOne>
 
-      <Container className="my-4">
+      <Container className="my-4" style={{ zIndex: -1,
+    position:"relative" }}>
         {isLoading && <div className="spinner-grow" role="status" />}
         {isSuccess && (
           <>

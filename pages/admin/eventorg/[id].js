@@ -86,7 +86,7 @@ function EventOrganiserDetails({ id }) {
       <AdminHeaderTop />
 
       <BreadcrumbOne pageTitle="Event Organiser Details">
-        <ol className="breadcrumb justify-content-md-end">
+        <ol className="breadcrumb justify-content-md-end" >
           <li className="breadcrumb-item">
             <Link href="/admin/home">
               <a>Admin Home</a>
@@ -101,7 +101,8 @@ function EventOrganiserDetails({ id }) {
         </ol>
       </BreadcrumbOne>
 
-      <Container className="space-pt--r70 space-pb--r70">
+      <Container className="space-pt--r70 space-pb--r70" style={{ zIndex: -1,
+    position:"relative" }}>
         {isLoading && (
           <div className="spinner-grow" role="status">
             <span className="sr-only">Loading...</span>
