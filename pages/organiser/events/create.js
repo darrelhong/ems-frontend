@@ -357,8 +357,7 @@ const CreateEvent = () => {
           </ol> */}
         </BreadcrumbOne>
 
-        <div className="my-account-content space-pt--r100 space-pb--r100" style={{ zIndex: -1,
-    position:"relative" }}>
+        <div className="my-account-content space-pt--r100 space-pb--r100">
           <Container>
             <Tab.Container defaultActiveKey="eventDetails">
               <Row>

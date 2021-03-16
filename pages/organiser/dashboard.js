@@ -24,8 +24,7 @@ export default function OrganiserDashboard() {
       </BreadcrumbOne>
 
       <Container>
-      <div style={{ zIndex: -1,
-    position:"relative" }}>
+        
         {isLoading && <div className="spinner-grow" role="status" />}
         {isSuccess && (
           <>
@@ -41,7 +40,6 @@ export default function OrganiserDashboard() {
             <p>User ID: {user?.id}</p>
           </>
         )}
-        </div>
       </Container>
     </OrganiserWrapper>
     // <ChakraWrapper>

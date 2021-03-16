@@ -46,8 +46,7 @@ function CreateBusinessPartner() {
         </ol>
       </BreadcrumbOne>
 
-      <Container className="space-pb--r70 space-pt--r70" style={{ zIndex: -1,
-    position:"relative" }}>
+      <Container className="space-pb--r70 space-pt--r70">
         <form
           onSubmit={handleSubmit((data) => {
             mutate({

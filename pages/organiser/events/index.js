@@ -114,8 +114,7 @@ function myEvents() {
           </ol>
         </BreadcrumbOne>
 
-        <div className="shop-content space-pt--r100 space-pb--r100" style={{ zIndex: -1,
-    position:"relative" }}>
+        <div className="shop-content space-pt--r100 space-pb--r100">
           <Container>
             <Row>
               <Col lg={9}>

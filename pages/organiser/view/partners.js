@@ -136,8 +136,7 @@ function OrganiserViewUsers() {
         </ol>
       </BreadcrumbOne>
 
-      <Container className="my-4" style={{ zIndex: -1,
-    position:"relative" }}>
+      <Container className="my-4">
         {status === 'loading' ? (
           <Spinner animation="grow" role="status" aria-hidden="true" />
         ) : status === 'error' ? (

@@ -200,8 +200,7 @@ const OrganiserViewEventDetails = () => {
       </BreadcrumbOne>
 
       {/* product details */}
-      <div className="product-details space-pt--r100 space-pb--r100" style={{ zIndex: -1,
-    position:"relative" }}>
+      <div className="product-details space-pt--r100 space-pb--r100">
         <Container>
           <Row>
             <Col lg={6} className="space-mb-mobile-only--40">

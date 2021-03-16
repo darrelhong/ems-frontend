@@ -23,11 +23,11 @@ const NavigationEvntOrg = ({ positionClass }) => {
         </li>
 
         <li>
-          <Link href="/">
+        
             <a className="nav-link">
               BROWSE USERS <IoIosArrowDown />
             </a>
-          </Link>
+      
 
           <ul className="sub-menu sub-menu--one-column">
             <li>

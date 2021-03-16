@@ -453,8 +453,7 @@ const EventOrgProfile = ({ paraId_ }) => {
         </ol>
       </BreadcrumbOne>
       <br></br>
-      <div className="content" style={{ marginLeft: '8%', marginRight: '8%', zIndex: -1,
-    position:"relative" }}>
+      <div className="content" style={{ marginLeft: '8%', marginRight: '8%' }}>
         <Row>
           <Col md="4">
             <Card className="card-user">

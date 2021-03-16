@@ -37,8 +37,7 @@ export default function OrganiserHome() {
       </BreadcrumbOne>
 
       <Container>
-        <div style={{ zIndex: -1,
-    position:"relative" }}>
+        <div>
         {isLoading && <div className="spinner-grow" role="status" />}
         {isSuccess && (
           <>

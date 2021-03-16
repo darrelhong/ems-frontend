@@ -32,8 +32,7 @@ function AdminHome() {
         </ol>
       </BreadcrumbOne>
 
-      <Container className="space-pt--30 space-pb--30" style={{ zIndex: -1,
-    position:"relative" }}>
+      <Container className="space-pt--30 space-pb--30">
         {isLoading && <div className="spinner-grow" role="status" />}
         {isSuccess && (
           <p>
