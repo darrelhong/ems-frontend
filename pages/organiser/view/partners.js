@@ -1,6 +1,14 @@
 import { Fragment, useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Alert, Col, Container, Row, Spinner } from 'react-bootstrap';
+import {
+  Alert,
+  Col,
+  Container,
+  Row,
+  Spinner,
+  Modal,
+  Button,
+} from 'react-bootstrap';
 import { useInfiniteQuery, useQueryClient } from 'react-query';
 import debounce from 'lodash/debounce';
 
@@ -31,6 +39,10 @@ function OrganiserViewUsers() {
   const [category, setCategory] = useState('');
   const queryClient = useQueryClient();
   const [user, setUser] = useState();
+  //vip modal
+  const [show, setShow] = useState(false);
+  const [vipId, setVipId] = useState(null);
+  const handleClose = () => setShow(false);
 
   const {
     status,
@@ -91,9 +103,10 @@ function OrganiserViewUsers() {
     }
   };
 
-  const handleMarkVip = async (vip) => {
-    await addVip(vip.id);
+  const handleMarkVip = async () => {
+    await addVip(vipId);
     getEO();
+    setShow(false);
   };
 
   const handleChangeCategory = (e) => {
@@ -106,6 +119,12 @@ function OrganiserViewUsers() {
     }
   };
 
+  const markvip = async (vip) => {
+    console.log('vip hello');
+    console.log(vip);
+    setShow(true);
+    setVipId(vip.id);
+  };
   // search results automatically update, with debounced input
   const debouncedSearch = debounce((value) => setSearchTerm(value), 800);
 
@@ -135,6 +154,20 @@ function OrganiserViewUsers() {
           <li className="breadcrumb-item active">View All Business Partners</li>
         </ol>
       </BreadcrumbOne>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmation</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Confirm add as VIP?</Modal.Body>
+        <Modal.Footer>
+          <button className="btn btn-fill-out btn-sm" onClick={handleMarkVip}>
+            Yes
+          </button>
+          <Button variant="secondary" onClick={handleClose} className="btn-sm">
+            No
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       <Container className="my-4">
         {status === 'loading' ? (
@@ -143,7 +176,6 @@ function OrganiserViewUsers() {
           <Alert variant="danger">An error has occured</Alert>
         ) : (
           <>
-         
             <br></br>
             <Row>
               <Col md={8} lg={6}>
@@ -226,7 +258,7 @@ function OrganiserViewUsers() {
                         <UserEOCard
                           partner={partner}
                           user={user}
-                          handleMarkVip={handleMarkVip}
+                          handleMarkVip={markvip}
                           CheckVip={checkVIP(partner)}
                         />
                       </a>

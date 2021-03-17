@@ -27,6 +27,7 @@ import { isBpVip, addVip } from '../lib/query/useVip';
 import { BsPencilSquare, BsPlus } from 'react-icons/bs';
 import api from '../lib/ApiClient';
 import { FiPlus } from 'react-icons/fi';
+import Modal from 'react-bootstrap/Modal';
 
 const PartnerProfile = ({ localuser }) => {
   const [publicView, setPublicView] = useState();
@@ -42,6 +43,10 @@ const PartnerProfile = ({ localuser }) => {
   // const [unmarkVip, setUnmarkVip] = useState(false);
   const [checkIsBpVip, setCheckIsBpVip] = useState(null);
   //const { data: partner } = useUser(localuser);
+  // for vip modal
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+
   var followId;
 
   useEffect(() => {
@@ -207,12 +212,26 @@ const PartnerProfile = ({ localuser }) => {
       var result = await isBpVip(partner?.id);
       setCheckIsBpVip(result);
     };
-
+    setShow(false);
     checkIfBpIsVip_();
   };
 
   return (
     <>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmation</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Confirm add as VIP?</Modal.Body>
+        <Modal.Footer>
+          <button className="btn btn-fill-out btn-sm" onClick={handleAddVip}>
+            Yes
+          </button>
+          <Button variant="secondary" onClick={handleClose} className="btn-sm">
+            No
+          </Button>
+        </Modal.Footer>
+      </Modal>
       <BreadcrumbOne pageTitle="Profile Details">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
@@ -348,7 +367,7 @@ const PartnerProfile = ({ localuser }) => {
                           !checkIsBpVip && (
                             <button
                               className="btn btn-fill-out btn-sm"
-                              onClick={handleAddVip}
+                              onClick={() => setShow(true)}
                             >
                               <FiPlus />
                               VIP
