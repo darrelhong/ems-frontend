@@ -6,10 +6,11 @@ import { formatter } from 'lib/util/currency';
 
 import AttendeeWrapper from 'components/wrapper/AttendeeWrapper';
 import CenterSpinner from 'components/custom/CenterSpinner';
-import { Alert, Col, Container, Row } from 'react-bootstrap';
+import { Alert, Col, Container, Fade, Row } from 'react-bootstrap';
 import { BreadcrumbOne } from 'components/Breadcrumb';
 import Link from 'next/link';
 import { format, parseISO } from 'date-fns';
+import ButtonWithLoading from 'components/custom/ButtonWithLoading';
 
 export function getServerSideProps({ query }) {
   return {
@@ -19,7 +20,8 @@ export function getServerSideProps({ query }) {
 
 export default function AttendeeEventTicketing({ id }) {
   const { data, status } = useEvent(id);
-  const [numTickets, setNumTickets] = useState(1);
+  const [ticketQty, setTicketQty] = useState(1);
+  const [view, setView] = useState('summary');
 
   return (
     <AttendeeWrapper title="Get tickets">
@@ -48,106 +50,123 @@ export default function AttendeeEventTicketing({ id }) {
           <Container className="my-4">
             <Row className="justify-content-center">
               <Col lg={7}>
-                <Row>
-                  <Col>
-                    <h3>{data.name}</h3>
-                  </Col>
-                </Row>
+                {view == 'summary' ? (
+                  <>
+                    <Row>
+                      <Col>
+                        <h3>{data.name}</h3>
+                      </Col>
+                    </Row>
 
-                <Row className="mb-4">
-                  <Col>
-                    <p>
-                      Starts on:{' '}
-                      {format(
-                        parseISO(data.eventStartDate),
-                        'eee, dd MMM yy hh:mmbbb'
-                      )}
-                    </p>
-                  </Col>
-                </Row>
+                    <Row className="mb-4">
+                      <Col>
+                        <p>
+                          Starts on:{' '}
+                          {format(
+                            parseISO(data.eventStartDate),
+                            'eee, dd MMM yy hh:mmbbb'
+                          )}
+                        </p>
+                      </Col>
+                    </Row>
 
-                <Row>
-                  <Col xs={6} sm={8}>
-                    <p className="text-dark">
-                      <strong>Ticket Price: </strong>
-                      {formatter.format(data.ticketPrice)}
-                    </p>
-                  </Col>
-                  <Col>
-                    <div className="input-group input-group-sm">
-                      <select
-                        className="custom-select"
-                        id="quantity"
-                        value={numTickets}
-                        onChange={(e) => {
-                          setNumTickets(e.target.value);
-                        }}
-                      >
-                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
-                          <option key={i} value={i}>
-                            {i}
-                          </option>
-                        ))}
-                      </select>
-                      <div className="input-group-append">
-                        <label
-                          className="input-group-text"
-                          htmlFor="inputGroupSelect02"
+                    <Row>
+                      <Col xs={6} sm={8}>
+                        <p className="text-dark">
+                          <strong>Ticket Price: </strong>
+                          {formatter.format(data.ticketPrice)}
+                        </p>
+                      </Col>
+                      <Col>
+                        <div className="input-group input-group-sm">
+                          <select
+                            className="custom-select"
+                            id="quantity"
+                            value={ticketQty}
+                            onChange={(e) => {
+                              setTicketQty(e.target.value);
+                            }}
+                          >
+                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
+                              <option key={i} value={i}>
+                                {i}
+                              </option>
+                            ))}
+                          </select>
+                          <div className="input-group-append">
+                            <label
+                              className="input-group-text"
+                              htmlFor="inputGroupSelect02"
+                            >
+                              Qty
+                            </label>
+                          </div>
+                        </div>
+                      </Col>
+                    </Row>
+
+                    <Row className="mb-5">
+                      <Col>
+                        <p>
+                          Sales end on{' '}
+                          {format(
+                            parseISO(data.saleStartDate),
+                            'eee, dd MMM yy hh:mmbbb'
+                          )}
+                        </p>
+                      </Col>
+                    </Row>
+
+                    <Row>
+                      <Col>
+                        <h4>Order summary:</h4>
+                      </Col>
+                    </Row>
+
+                    <Row>
+                      <Col>
+                        <p className="text-dark">
+                          {ticketQty} x Standard ticket
+                        </p>
+                      </Col>
+                      <Col className="col-auto">
+                        <p className="text-dark">
+                          {formatter.format(data.ticketPrice * ticketQty)}
+                        </p>
+                      </Col>
+                    </Row>
+                    <hr></hr>
+                    <Row className="mb-4">
+                      <Col>
+                        <p className="h4 text-body">Total</p>
+                      </Col>
+                      <Col className="col-auto">
+                        <p className="h5 text-body">
+                          {formatter.format(data.ticketPrice * ticketQty)}
+                        </p>
+                      </Col>
+                    </Row>
+
+                    <Row>
+                      <Col>
+                        <ButtonWithLoading
+                          className="btn btn-fill-out btn-sm"
+                          onClick={() => setView('payment')}
                         >
-                          Qty
-                        </label>
-                      </div>
-                    </div>
-                  </Col>
-                </Row>
-
-                <Row className="mb-5">
-                  <Col>
-                    <p>
-                      Sales end on{' '}
-                      {format(
-                        parseISO(data.saleStartDate),
-                        'eee, dd MMM yy hh:mmbbb'
-                      )}
-                    </p>
-                  </Col>
-                </Row>
-
-                <Row>
-                  <Col>
-                    <h4>Order summary:</h4>
-                  </Col>
-                </Row>
-
-                <Row>
-                  <Col>
-                    <p className="text-dark">{numTickets} x Standard ticket</p>
-                  </Col>
-                  <Col className="col-auto">
-                    <p className="text-dark">
-                      {formatter.format(data.ticketPrice * numTickets)}
-                    </p>
-                  </Col>
-                </Row>
-                <hr></hr>
-                <Row className="mb-4">
-                  <Col>
-                    <p className="h4 text-body">Total</p>
-                  </Col>
-                  <Col className="col-auto">
-                    <p className="h5 text-body">
-                      {formatter.format(data.ticketPrice * numTickets)}
-                    </p>
-                  </Col>
-                </Row>
-
-                <Row>
-                  <Col>
-                    <button className="btn btn-fill-out btn-sm">
-                      Checkout
-                    </button>
-                  </Col>
-                </Row>
+                          Checkout
+                        </ButtonWithLoading>
+                      </Col>
+                    </Row>
+                  </>
+                ) : null}
+                <Fade in={view == 'payment'} timeout={2000}>
+                  <div id="example-fade-text">
+                    Anim pariatur cliche reprehenderit, enim eiusmod high life
+                    accusamus terry richardson ad squid. Nihil anim keffiyeh
+                    helvetica, craft beer labore wes anderson cred nesciunt
+                    sapiente ea proident.
+                  </div>
+                </Fade>
               </Col>
             </Row>
           </Container>
