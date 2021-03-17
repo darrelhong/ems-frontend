@@ -8,6 +8,7 @@ import PartnerHeaderTop from './PartnerHeaderTop';
 import NavigationPartner from './elements/NavigationPartner';
 import SearchOverlay from './elements/SearchOverlay';
 import MobileMenuPartner from './elements/MobileMenuPartner';
+import Head from 'next/head';
 
 const HeaderOne = ({ cartItems, navPositionClass }) => {
   const [scroll, setScroll] = useState(0);
@@ -43,7 +44,7 @@ const HeaderOne = ({ cartItems, navPositionClass }) => {
         {/* header top */}
         <PartnerHeaderTop />
 
-        <div className="bottom-header dark-skin">
+        <div className="bottom-header dark-skin" >
           <Container>
             <div className="bottom-header-container d-flex justify-content-between align-items-center position-relative">
               {/* logo */}

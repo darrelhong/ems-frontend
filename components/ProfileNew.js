@@ -1,4 +1,6 @@
 import React from 'react';
+import Head from 'next/head';
+import axios from 'axios';
 
 // reactstrap components
 import {
@@ -9,7 +11,7 @@ import {
   CardFooter,
   CardTitle,
   Row,
-  Col,
+  Col
 } from 'reactstrap';
 
 import { useMutation } from 'react-query';
@@ -26,6 +28,7 @@ import { getFollowers, getFollowing } from '../lib/query/getBPFollow';
 import { isBpVip, addVip } from '../lib/query/useVip';
 import { BsPencilSquare, BsPlus } from 'react-icons/bs';
 import api from '../lib/ApiClient';
+import { PermDataSettingTwoTone } from '@material-ui/icons';
 import { FiPlus } from 'react-icons/fi';
 import Modal from 'react-bootstrap/Modal';
 
@@ -39,6 +42,8 @@ const PartnerProfile = ({ localuser }) => {
   const [unfollowBtn, setUnfollowBtn] = useState();
   const [followBtn, setFollowBtn] = useState();
   const [partner, setPartner] = useState();
+  const [user, setUser] = useState(); 
+
   // const [markVip, setMarkVip] = useState(false);
   // const [unmarkVip, setUnmarkVip] = useState(false);
   const [checkIsBpVip, setCheckIsBpVip] = useState(null);
@@ -101,6 +106,7 @@ const PartnerProfile = ({ localuser }) => {
         // get currentUser
         await getUser(localStorage.getItem('userId')).then((data) => {
           console.log('current ' + data.id);
+          setUser(data?.name);
           if (data?.id !== localuser) {
             console.log('passed ');
 
@@ -147,6 +153,8 @@ const PartnerProfile = ({ localuser }) => {
       setEOView(false);
       setFollowBtn(false);
       setUnfollowBtn(false);
+      getFollowersData();
+            getFollowingData();
     }
   }, [localuser, followId]);
 
@@ -163,6 +171,13 @@ const PartnerProfile = ({ localuser }) => {
         setUnfollowBtn(true);
         setFollowBtn(false);
         getRefreshedFollowers();
+        console.log("parner id" + data.id);
+        console.log("user" + user);
+        let endpoint = "https://api.ravenhub.io/company/WLU2yLZw9d/subscribers/partner" + data.id + "/events/SyTpyGmjrT"
+ 
+        axios.post(endpoint, { "person" : user}, {
+        headers: {'Content-type': 'application/json'}
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -233,14 +248,17 @@ const PartnerProfile = ({ localuser }) => {
         </Modal.Footer>
       </Modal>
       <BreadcrumbOne pageTitle="Profile Details">
+     
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/partner/home">
               <a>Home</a>
             </Link>
+
           </li>
           <li className="breadcrumb-item active">Profile Details</li>
         </ol>
+
       </BreadcrumbOne>
       <br></br>
       <div className="content" style={{ marginLeft: '8%', marginRight: '8%' }}>
@@ -590,6 +608,7 @@ const PartnerProfile = ({ localuser }) => {
             </Card>
           </Col>
         </Row>
+        <br></br>
       </div>
     </>
   );

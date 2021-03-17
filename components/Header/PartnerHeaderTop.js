@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Container, Row, Col } from 'react-bootstrap';
+import Head from 'next/head';
 import {
   AiOutlineUser,
   AiOutlineSetting,
@@ -10,23 +11,27 @@ import { IoIosHeartEmpty } from 'react-icons/io';
 import useUser from '../../lib/query/useUser';
 import { logout } from '../../lib/auth';
 
+
 const PartnerHeaderTop = () => {
   const { data: localuser } = useUser(localStorage.getItem('userId'));
-  // console.log(JSON.stringify(localuser) );
+
   return (
+    
     <div className="top-header d-lg-block">
+        <Head>
+    <script src="https://embed.ravenhub.io/js/app.js"></script>
+    </Head>
       <Container>
         <Row>
           <Col>
             <div className="text-right">
-              <ul className="header-list">
+              <ul className="header-list" >
                 <li>
-                  <Link href="/other/wishlist">
+                
                     <a>
-                      <AiOutlineNotification />
-                      <span>Notification</span>
+                    <notification-center  appId="WLU2yLZw9d" subscriberId= {"partner" + localuser?.id} />
                     </a>
-                  </Link>
+                  
                 </li>
                 <li>
                   <Link href="/other/wishlist">

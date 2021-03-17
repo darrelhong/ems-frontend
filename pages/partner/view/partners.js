@@ -13,14 +13,21 @@ import OrganiserCard from '../../../components/OrganiserCard';
 import ButtonWithLoading from '../../../components/custom/ButtonWithLoading';
 
 
-const getPartners = async (page = 0, sort, sortDir, searchTerm, category) => {
+const getPartners = async (page = 0, sort, sortDir, searchTerm, category, clear) => {
     console.log("category " + category);
+    console.log("sort " + sortDir);
+    console.log("searchTerm " + searchTerm);
+    console.log("clear " + clear);
+
+
     let url = `/api/partner/get-partners-cat?page=${page}`;
     if (sort && sortDir) url += `&sort=${sort}&sortDir=${sortDir}`;
     if (searchTerm) url += `&keyword=${searchTerm}`;
     if (category) url += `&businessCategory=${category}`;
+    if (clear) url += `&clear=${clear}`;
+
     const { data } = await api.get(url);
-   
+
     return data;
 };
 
@@ -30,6 +37,8 @@ function PartnerViewUsers() {
     const [sortBy, setSortBy] = useState();
     const [searchTerm, setSearchTerm] = useState('');
     const [category, setCategory] = useState('');
+    const [clear, setClear] = useState('');
+    const [sortByName, setSortByName] = useState('Sort by');
     const queryClient = useQueryClient();
 
 
@@ -40,9 +49,9 @@ function PartnerViewUsers() {
         fetchNextPage,
         hasNextPage,
     } = useInfiniteQuery(
-        ['partners', sortBy?.sort, sortBy?.sortDir, searchTerm, category],
+        ['partners', sortBy?.sort, sortBy?.sortDir, searchTerm, category, clear],
         ({ pageParam = 0 }) =>
-            getPartners(pageParam, sortBy?.sort, sortBy?.sortDir, searchTerm, category),
+            getPartners(pageParam, sortBy?.sort, sortBy?.sortDir, searchTerm, category, clear),
         {
             getNextPageParam: (lastPage) =>
                 lastPage.last ? false : lastPage.number + 1,
@@ -57,32 +66,42 @@ function PartnerViewUsers() {
         switch (e.target.value) {
             case 'name-asc':
                 setSortBy({ sort: 'name', sortDir: 'asc' });
+                setClear("false");
+                setSortByName("Name - A to Z");
                 break;
             case 'name-desc':
                 setSortBy({ sort: 'name', sortDir: 'desc' });
+                setClear("false");
+                setSortByName("Name - Z to A");
                 break;
-            default:
-                setSortBy();
+            case 'all':
+                setSortBy({ sort: 'name', sortDir: 'all' });
+                setSortByName("Sort by");
+                setClear("true");
+                break;
+           
         }
     };
 
     const handleChangeCategory = (e) => {
-        console.log(e.target.value);
-        setCategory (e.target.value);
-        console.log("cat" + category);
-
-        if(e.target.value == ""){
+        setCategory(e.target.value);
+        setClear("false");
+        if (e.target.value == "all") {
             setCategory();
+            setClear("true");
+            console.log("passed" + clear);
         }
+
     };
 
 
 
     // search results automatically update, with debounced input
-    const debouncedSearch = debounce((value) => setSearchTerm(value), 800);
+    const debouncedSearch = debounce((value) => setSearchTerm(value), 1600);
 
     const handleOnSearchInput = (e) => {
         debouncedSearch(e.target.value);
+        setClear("false");
     };
 
     // invalidate queries to refetch data
@@ -92,7 +111,8 @@ function PartnerViewUsers() {
             sortBy?.sort,
             sortBy?.sortDir,
             searchTerm,
-            category
+            category,
+            clear
         ]);
 
 
@@ -101,7 +121,7 @@ function PartnerViewUsers() {
             <BreadcrumbOne pageTitle="View All Business Partners">
                 <ol className="breadcrumb justify-content-md-end">
                     <li className="breadcrumb-item">
-                        <Link href="/partner/home">
+                        <Link href="/attendee/home">
                             <a>Home</a>
                         </Link>
                     </li>
@@ -118,7 +138,7 @@ function PartnerViewUsers() {
                 ) : (
                     <>
                         <br></br>
-                        
+
                         <Row>
                             <Col md={8} lg={6}>
 
@@ -127,6 +147,7 @@ function PartnerViewUsers() {
                                         type="text"
                                         className="form-control "
                                         placeholder="Search User"
+                                        defaultValue = {searchTerm}
                                         onChange={handleOnSearchInput}
                                     />
                                     <div className="input-group-append">
@@ -145,15 +166,15 @@ function PartnerViewUsers() {
 
                         <Row className="mb-4">
                             <Col xs={4} sm={3}>
-                                <select className="custom-select" onChange={handleChange}>
-                                    <option value="">Sort by</option>
+                                <select className="custom-select" value={sortByName} onChange={handleChange}>
+                                    <option value="all">Sort by</option>
                                     <option value="name-asc">Name - A to Z</option>
                                     <option value="name-desc">Name - Z to A</option>
                                 </select>
                             </Col>
                             <Col xs={4} sm={3}>
-                                <select className="custom-select" onChange={handleChangeCategory}>
-                                    <option value="">Filter by Category</option>
+                                <select className="custom-select" defaultValue={category} onChange={handleChangeCategory}>
+                                    <option value="all">Filter by Category</option>
                                     <option value="Automotive">
                                         Automotive
                                     </option>
@@ -199,6 +220,9 @@ function PartnerViewUsers() {
                                     </option>
                                 </select>
                             </Col>
+                            <Col xs={4} sm={3}>
+
+                            </Col>
                         </Row>
                         <Row>
                             {data.pages.map((page, i) => (
@@ -212,7 +236,7 @@ function PartnerViewUsers() {
                                         >
                                             <Link href={{
                                                 pathname: '/partner/partner-profile',
-                                                query: { paraId: JSON.stringify(partner.id) },
+                                                query: { localuser: JSON.stringify(partner.id) },
                                             }}>
                                                 <a className="w-100">
                                                     <UserCard partner={partner} />

@@ -15,7 +15,7 @@ const AttendeeHeaderTop = () => {
         <Row>
           <Col>
             <div className="text-right">
-              <ul className="header-list">
+              <ul className="header-list" >
                 <li>
                   <Link href="/other/wishlist">
                     <a>

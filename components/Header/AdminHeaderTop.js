@@ -9,7 +9,7 @@ const AdminHeaderTop = () => {
         <Row className="align-items-end">
           <Col>
             <div className="text-right">
-              <ul className="header-list">
+              <ul className="header-list" >
                 <li>
                   <a onClick={() => logout({ redirectTo: '/admin/login' })}>
                     <AiOutlineUser />

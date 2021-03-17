@@ -43,9 +43,9 @@ const HeaderOne = ({ cartItems, navPositionClass }) => {
         {/* header top */}
         <OrganiserHeaderTop />
 
-        <div className="bottom-header dark-skin">
+        <div className="bottom-header dark-skin" >
           <Container>
-            <div className="bottom-header-container d-flex justify-content-between align-items-center position-relative">
+            <div className="bottom-header-container d-flex justify-content-between align-items-center position-relative" > 
               {/* logo */}
               <Link href="/">
                 <a className="navbar-brand">

@@ -37,6 +37,7 @@ export default function OrganiserHome() {
       </BreadcrumbOne>
 
       <Container>
+        <div>
         {isLoading && <div className="spinner-grow" role="status" />}
         {isSuccess && (
           <>
@@ -56,7 +57,9 @@ export default function OrganiserHome() {
         <Link href="/organiser/view/organisers">
           <button className="btn btn-fill-out btn-sm">View Organisers</button>
         </Link>
+        </div>
       </Container>
     </OrganiserWrapper>
+    
   );
 }

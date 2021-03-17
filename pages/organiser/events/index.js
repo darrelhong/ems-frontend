@@ -91,7 +91,7 @@ function myEvents() {
     } else {
       if (sortValue == 'past') {
         return listEvents.filter((e) => parseISO(e.eventEndDate) < new Date());
-      } else
+      } else{
         return listEvents.filter((e) => parseISO(e.eventEndDate) > new Date());
     }
   };

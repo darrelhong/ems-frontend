@@ -6,7 +6,7 @@ import debounce from 'lodash/debounce';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import { BreadcrumbOne } from '../../../components/Breadcrumb';
-import OrganiserWrapper from '../../../components/wrapper/OrganiserWrapper';
+import AttendeeWrapper from '../../../components/wrapper/AttendeeWrapper';
 import api from '../../../lib/ApiClient';
 import UserCard from '../../../components/UserCard';
 import OrganiserCard from '../../../components/OrganiserCard';
@@ -22,7 +22,7 @@ const getOrganisers = async (page = 0, sort, sortDir, searchTerm) => {
 };
 
 
-function OrganiserViewUsers() {
+function PartnerViewUsers() {
     const [sortBy, setSortBy] = useState();
     const [searchTerm, setSearchTerm] = useState('');
 
@@ -81,11 +81,11 @@ function OrganiserViewUsers() {
 
 
     return (
-        <OrganiserWrapper title="Event Organisers">
+        <AttendeeWrapper title="Event Organisers">
             <BreadcrumbOne pageTitle="View All Event Organisers">
                 <ol className="breadcrumb justify-content-md-end">
                     <li className="breadcrumb-item">
-                        <Link href="/organiser/home">
+                        <Link href="/attendee/home">
                             <a>Home</a>
                         </Link>
                     </li>
@@ -101,7 +101,7 @@ function OrganiserViewUsers() {
                     <Alert variant="danger">An error has occured</Alert>
                 ) : (
                     <>
-                       
+                     
                         <br></br>
                         <Row>
                             <Col md={8} lg={6}>
@@ -182,8 +182,8 @@ function OrganiserViewUsers() {
                     </>
                 )}
             </Container>
-        </OrganiserWrapper>
+        </AttendeeWrapper>
     );
 }
 
-export default OrganiserViewUsers;
+export default PartnerViewUsers;
