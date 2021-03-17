@@ -8,9 +8,58 @@ const ProductModal = ({
     closeProductModal
 }) => {
     const [removeModalShow, setRemoveModalShow] = useState(false);
+    const [removeProduct, setRemoveProduct] = useState(false);
+
+    const bodyComponent = () => (
+        <Modal.Body>
+            <Row>
+                <img
+                    src={product?.image}
+                />
+            </Row>
+            <Row
+                style={{
+                    marginTop: 10
+                }}>
+                {product?.description}
+            </Row>
+            {removeProduct && (
+                <Row
+                    style={{
+                        marginTop: 10,
+                        color: 'red'
+                    }}
+                >
+                    Are you sure you want to remove the product?
+                </Row>
+            )}
+        </Modal.Body>
+    );
+
+    const secondaryButton = () => {
+        if (removeProduct) {
+            return (
+                <Button variant="secondary" onClick={() => {
+                    setRemoveProduct(false);
+                }}>
+                    Cancel
+                </Button>
+            )
+        } else return (
+            <Button variant="secondary" onClick={() => {
+                closeProductModal();
+            }}>
+                Close
+            </Button>
+        )
+    };
 
     return (
-        <Modal show={productModalShow} onHide={closeProductModal} centered>
+        <Modal show={productModalShow} onHide={() => {
+            setRemoveProduct(false);
+            closeProductModal();
+        }}
+            centered>
             <RemoveProductModal
                 removeModalShow={removeModalShow}
                 closeModal={() => {
@@ -22,33 +71,19 @@ const ProductModal = ({
             <Modal.Header closeButton>
                 <Modal.Title>{product?.name ?? 'Product'}</Modal.Title>
             </Modal.Header>
-            <Modal.Body>
-                <Row>
-                    <img
-                        src={product?.image}
-                    />
-                </Row>
-                <Row
-                    style={{
-                        marginTop: 10
-                    }}>
-                    {product?.description}
-                </Row>
-            </Modal.Body>
+            {bodyComponent()}
             <Modal.Footer>
-                <Button variant="secondary" onClick={() => {
-                    console.log(product.name);
-                    closeProductModal();
-                }}>
-                    Close
-                </Button>
+                {secondaryButton()}
                 <Button
                     variant="danger"
                     onClick={() => {
-                        // closeProductModal();
-                        setRemoveModalShow(true);
+                        if (!removeProduct) {
+                            setRemoveProduct(true);
+                        } else {
+                            console.log('removing product!');
+                            // handleRemove();
+                        }
                     }}
-                // onClick={() => console.log('removing event!')}
                 >
                     Remove
                 </Button>
