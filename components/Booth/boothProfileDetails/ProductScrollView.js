@@ -91,7 +91,7 @@ const ProductScrollView = ({ paginatedProducts }) => {
     const imageComponent = (product) => (
         <img
             src={product.image}
-            height='150'
+            // height='150'
             // onClick={() => console.log('image clicked')}
             onClick={() => {
                 if (product.image != placeholderImage) {
@@ -107,7 +107,7 @@ const ProductScrollView = ({ paginatedProducts }) => {
             <ProductModal
                 product={productToShow}
                 productModalShow={productModalShow}
-                closeModal={() => {
+                closeProductModal={() => {
                     setProductModalShow(false);
                     // setProductToShow(null);
                 }}
