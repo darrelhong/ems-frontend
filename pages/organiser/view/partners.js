@@ -13,13 +13,15 @@ import ButtonWithLoading from '../../../components/custom/ButtonWithLoading';
 import { getUser } from '../../../lib/query/getUser';
 import { addVip } from '../../../lib/query/useVip';
 
-const getPartners = async (page = 0, sort, sortDir, searchTerm, category) => {
+const getPartners = async (page = 0, sort, sortDir, searchTerm, category,clear) => {
   console.log('call get partners');
   console.log('category ' + category);
   let url = `/api/partner/get-partners-cat?page=${page}`;
   if (sort && sortDir) url += `&sort=${sort}&sortDir=${sortDir}`;
   if (searchTerm) url += `&keyword=${searchTerm}`;
   if (category) url += `&businessCategory=${category}`;
+  if (clear) url += `&clear=${clear}`;
+
   const { data } = await api.get(url);
 
   return data;
@@ -31,6 +33,10 @@ function OrganiserViewUsers() {
   const [category, setCategory] = useState('');
   const queryClient = useQueryClient();
   const [user, setUser] = useState();
+  const [clear, setClear] = useState('');
+  const [sortByName, setSortByName] = useState('Sort by');
+
+
 
   const {
     status,
@@ -39,14 +45,15 @@ function OrganiserViewUsers() {
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery(
-    ['partners', sortBy?.sort, sortBy?.sortDir, searchTerm, category],
+    ['partners', sortBy?.sort, sortBy?.sortDir, searchTerm, category, clear],
     ({ pageParam = 0 }) =>
       getPartners(
         pageParam,
         sortBy?.sort,
         sortBy?.sortDir,
         searchTerm,
-        category
+        category,
+        clear
       ),
     {
       getNextPageParam: (lastPage) =>
@@ -82,11 +89,17 @@ function OrganiserViewUsers() {
     switch (e.target.value) {
       case 'name-asc':
         setSortBy({ sort: 'name', sortDir: 'asc' });
+        setClear("false");
+        setSortByName("Name - A to Z");
         break;
       case 'name-desc':
         setSortBy({ sort: 'name', sortDir: 'desc' });
+        setClear("false");
+        setSortByName("Name - Z to A");
         break;
       default:
+        setSortByName("Sort by");
+        setClear("true");
         setSortBy();
     }
   };
@@ -99,10 +112,11 @@ function OrganiserViewUsers() {
   const handleChangeCategory = (e) => {
     console.log(e.target.value);
     setCategory(e.target.value);
-    console.log('cat' + category);
+    setClear("false");
 
-    if (e.target.value == '') {
+    if (e.target.value == 'all') {
       setCategory();
+      setClear("true");
     }
   };
 
@@ -111,6 +125,8 @@ function OrganiserViewUsers() {
 
   const handleOnSearchInput = (e) => {
     debouncedSearch(e.target.value);
+    setClear("false");
+
   };
 
   // invalidate queries to refetch data
@@ -121,6 +137,7 @@ function OrganiserViewUsers() {
       sortBy?.sortDir,
       searchTerm,
       category,
+      clear
     ]);
 
   return (
@@ -153,6 +170,7 @@ function OrganiserViewUsers() {
                     className="form-control "
                     placeholder="Search User"
                     onChange={handleOnSearchInput}
+                    defaultValue = {searchTerm}
                   />
                   <div className="input-group-append">
                     <button
@@ -170,7 +188,7 @@ function OrganiserViewUsers() {
 
             <Row className="mb-4">
               <Col xs={4} sm={3}>
-                <select className="custom-select" onChange={handleChange}>
+                <select className="custom-select" value={sortByName} onChange={handleChange}>
                   <option value="">Sort by</option>
                   <option value="name-asc">Name - A to Z</option>
                   <option value="name-desc">Name - Z to A</option>
@@ -180,8 +198,9 @@ function OrganiserViewUsers() {
                 <select
                   className="custom-select"
                   onChange={handleChangeCategory}
+                  defaultValue={category}
                 >
-                  <option value="">Filter by Category</option>
+                  <option value="all">Filter by Category</option>
                   <option value="Automotive">Automotive</option>
                   <option value="Business Support & Supplies">
                     Business Support & Supplies

@@ -15,13 +15,36 @@ const NavigationAttendee = ({ positionClass }) => {
             <a className="nav-link">HOME</a>
           </Link>
         </li>
+        <li>
+          
+          <a className="nav-link">
+            BROWSE USERS <IoIosArrowDown />
+          </a>
+        
+
+        <ul className="sub-menu sub-menu--one-column">
+          <li>
+            <Link href="/attendee/view/partners">
+              <a>View All Business Partners</a>
+            </Link>
+          </li>
+          <li>
+            <Link href="/attendee/view/organisers">
+              <a>View All Event Organisers</a>
+            </Link>
+          </li>
+
+          </ul>
+      
+      </li>
+
 
         <li>
-          <Link href="/">
+         
             <a className="nav-link">
               TICKETS <IoIosArrowDown />
             </a>
-          </Link>
+       
 
           <ul className="sub-menu sub-menu--one-column">
             <li>

@@ -16,11 +16,11 @@ const NavigationPartner = ({ positionClass }) => {
           </Link>
         </li>
         <li>
-          <Link href="/">
+          
             <a className="nav-link">
               BROWSE USERS <IoIosArrowDown />
             </a>
-          </Link>
+          
 
           <ul className="sub-menu sub-menu--one-column">
             <li>
@@ -39,11 +39,11 @@ const NavigationPartner = ({ positionClass }) => {
         </li>
 
         <li>
-          <Link href="/">
+          
             <a className="nav-link">
               BOOTH <IoIosArrowDown />
             </a>
-          </Link>
+          
 
           <ul className="sub-menu sub-menu--one-column">
             <li>
