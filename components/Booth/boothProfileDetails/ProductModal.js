@@ -1,5 +1,4 @@
 import { Modal, Button, Row } from 'react-bootstrap';
-import RemoveProductModal from './RemoveProductModal';
 import { useState } from 'react';
 
 const ProductModal = ({
@@ -7,7 +6,6 @@ const ProductModal = ({
     productModalShow,
     closeProductModal
 }) => {
-    const [removeModalShow, setRemoveModalShow] = useState(false);
     const [removeProduct, setRemoveProduct] = useState(false);
 
     const bodyComponent = () => (
@@ -93,14 +91,6 @@ const ProductModal = ({
             closeProductModal();
         }}
             centered>
-            <RemoveProductModal
-                removeModalShow={removeModalShow}
-                closeModal={() => {
-                    setRemoveModalShow(false);
-                }}
-                product={product}
-            />
-
             <Modal.Header closeButton>
                 <Modal.Title>{product?.name ?? 'Product'}</Modal.Title>
             </Modal.Header>
