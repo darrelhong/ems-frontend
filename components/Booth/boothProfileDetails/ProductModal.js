@@ -54,6 +54,39 @@ const ProductModal = ({
         )
     };
 
+    const cancelButton = () => {
+
+        if (removeProduct) {
+            return (
+                <Button
+                    variant="danger"
+                    onClick={() => {
+                        console.log('removing product!');
+                    }
+                    }
+                >
+                    Yes, remove it
+                </Button>
+            )
+        } else {
+            return (
+                <Button
+                    variant="danger"
+                    onClick={() => {
+                        if (!removeProduct) {
+                            setRemoveProduct(true);
+                        } else {
+                            console.log('removing product!');
+                            // handleRemove();
+                        }
+                    }}
+                >
+                    Remove
+                </Button>
+            )
+        }
+    }
+
     return (
         <Modal show={productModalShow} onHide={() => {
             setRemoveProduct(false);
@@ -74,19 +107,7 @@ const ProductModal = ({
             {bodyComponent()}
             <Modal.Footer>
                 {secondaryButton()}
-                <Button
-                    variant="danger"
-                    onClick={() => {
-                        if (!removeProduct) {
-                            setRemoveProduct(true);
-                        } else {
-                            console.log('removing product!');
-                            // handleRemove();
-                        }
-                    }}
-                >
-                    Remove
-                </Button>
+                {cancelButton()}
             </Modal.Footer>
         </Modal>
     );
