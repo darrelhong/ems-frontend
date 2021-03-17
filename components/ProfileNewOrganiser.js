@@ -79,7 +79,6 @@ const EventOrgProfile = ({ paraId_ }) => {
   };
   //const { data: user } = useUser(localStorage.getItem('userId'));
   const loadOrgAttFollowerData = async () => {
-
     await getOrgAttendeeFollowers(paraId_).then((followers) => {
       setAttendeeFollowers(followers);
       console.log('type' + type + 'followId' + followId);
@@ -100,8 +99,6 @@ const EventOrgProfile = ({ paraId_ }) => {
           setFollowBtn(true);
           setUnfollowBtn(false);
         }
-
-
       }
     });
   };
@@ -111,32 +108,28 @@ const EventOrgProfile = ({ paraId_ }) => {
     await getReviews(paraId_).then((data) => {
       setReviews(data);
     });
-  }
+  };
 
   const getReviewsEvent = async (id) => {
     await getReviewsByEvent(id).then((data) => {
       setReviews(data);
     });
-  }
+  };
 
   const getReviewsEventFilter = async (id) => {
     var check;
     await getReviewsByEvent(id).then((data) => {
-      
-      if(data != undefined && data.length > 0){
-        console.log(data.length + "length");
+      if (data != undefined && data.length > 0) {
+        console.log(data.length + 'length');
         check = true;
       } else {
         check = false;
       }
     });
     return check;
-  }
-
-
+  };
 
   useEffect(() => {
-
     const getUserData = async () => {
       await getUser(paraId_).then((eventOrg) => {
         console.log('eo data');
@@ -154,7 +147,6 @@ const EventOrgProfile = ({ paraId_ }) => {
       });
     };
     getRatingData();
-
 
     if (localStorage.getItem('userId') != null) {
       const loadUserData = async () => {
@@ -178,7 +170,6 @@ const EventOrgProfile = ({ paraId_ }) => {
               followId = data.id;
               type = 'partner';
               loadOrgAttFollowerData();
-
 
               loadOrgPartnerFollowerData();
               //partner has no upcoming events
@@ -216,13 +207,12 @@ const EventOrgProfile = ({ paraId_ }) => {
               });
               followId = data.id;
               type = 'atn';
-              console.log(followId + "followId");
-              console.log(type + "type");
+              console.log(followId + 'followId');
+              console.log(type + 'type');
               setShowPublicView(true);
               setShowEoView(false);
               setUserRole('ATND');
               loadOrgAttFollowerData();
-
 
               loadOrgPartnerFollowerData();
             } else if (
@@ -251,7 +241,6 @@ const EventOrgProfile = ({ paraId_ }) => {
               setUnfollowBtn(false);
               loadOrgAttFollowerData();
 
-
               loadOrgPartnerFollowerData();
             } else if (
               data.roles[0].roleEnum === 'EVNTORG' &&
@@ -279,7 +268,6 @@ const EventOrgProfile = ({ paraId_ }) => {
                 'past'
               ).then((events) => {
                 setPastEventlist(events);
-
               });
 
               setShowPublicView(false);
@@ -287,7 +275,6 @@ const EventOrgProfile = ({ paraId_ }) => {
               setFollowBtn(false);
               setUnfollowBtn(false);
               loadOrgAttFollowerData();
-
 
               loadOrgPartnerFollowerData();
             }
@@ -311,7 +298,6 @@ const EventOrgProfile = ({ paraId_ }) => {
         await getEoEventsByIdRoleStatus(paraId_, 'guest', 'past').then(
           (events) => {
             setPastEventlist(events);
-
           }
         );
         setShowPublicView(true);
@@ -323,22 +309,15 @@ const EventOrgProfile = ({ paraId_ }) => {
       loadOrgAttFollowerData();
       loadOrgPartnerFollowerData();
     }
-
-
-
-
-
   }, []);
 
   const getRefreshedFollowers = async () => {
     await getOrgAttendeeFollowers(paraId_).then((followers) => {
       setAttendeeFollowers(followers);
-
     });
 
     await getOrgPartnerFollowers(paraId_).then((followers) => {
       setPartnerFollowers(followers);
-
     });
   };
 
@@ -432,11 +411,10 @@ const EventOrgProfile = ({ paraId_ }) => {
   };
 
   const handleChange = (e) => {
-    if (e.target.value == "all") {
+    if (e.target.value == 'all') {
       getReviewsEO();
     } else {
       getReviewsEvent(e.target.value);
-
     }
   };
 
@@ -514,7 +492,6 @@ const EventOrgProfile = ({ paraId_ }) => {
               </CardBody>
               <br></br>
               <CardFooter>
-                <hr />
                 <div className="button-container">
                   <Row>
                     <Col className="ml-auto" lg="4" md="6" xs="6">
@@ -530,7 +507,7 @@ const EventOrgProfile = ({ paraId_ }) => {
                                                 <small>Following</small>
                                             </h5>
                                         </Col> */}
-                    <Col className="mr-auto" lg="4">
+                    <Col className="ml-auto" lg="4" md="6" xs="6">
                       <h5>
                         {showEoView && (
                           <Link href="/organiser/profile-account">
@@ -566,13 +543,9 @@ const EventOrgProfile = ({ paraId_ }) => {
                             Unfollow
                           </button>
                         )}
-
-                        <br />
-                        {/* <small>Spent</small> */}
                       </h5>
                     </Col>
                   </Row>
-                  <br></br>
                 </div>
               </CardFooter>
             </Card>
@@ -644,67 +617,77 @@ const EventOrgProfile = ({ paraId_ }) => {
                             position: 'relative',
                           }}
                         >
-
                           {/* <div className="comments"> */}
                           <br></br>
 
                           <Row className="mb-4">
                             <Col xs={6} sm={6}>
-                              <select className="custom-select" onChange={handleChange}>
+                              <select
+                                className="custom-select"
+                                onChange={handleChange}
+                              >
                                 <option value="all">Filter By Events</option>
-                                {(pasteventlist != null || pasteventlist != undefined) && (
-
+                                {(pasteventlist != null ||
+                                  pasteventlist != undefined) &&
                                   pasteventlist.map((event) => {
-                                  //  console.log("event" + event.name);
-                                    if ( getReviewsEventFilter(event.eid)) {
-                                      // console.log("passed" + event.name);
+                                    console.log('event' + event.name);
+                                    if (getReviewsEventFilter(event.eid)) {
+                                      console.log('passed' + event.name);
                                       return (
-                                        <option value={event.eid}>{event.name}</option>
-                                      )
-                                    } 
-                                    
-                                  })
-                                )}
+                                        <option value={event.eid}>
+                                          {event.name}
+                                        </option>
+                                      );
+                                    }
+                                  })}
                               </select>
                             </Col>
                           </Row>
 
                           <ul className="list-none comment-list mt-8">
                             <li>
-                              {(reviews == null || reviews == undefined) && <span>There is no reviews.</span>}
-                              {(reviews != null || reviews != undefined) && reviews.map((review) => {
-                                return (
-                                  <>
-                                  <br></br>
-                                    <div className="comment-block">
-                                      <div className="rating-wrap">
-                                        <div className="rating">
-                                          <ProductRating ratingValue={review.rating} />
+                              {(reviews == null || reviews == undefined) && (
+                                <span>There is no reviews.</span>
+                              )}
+                              {(reviews != null || reviews != undefined) &&
+                                reviews.map((review) => {
+                                  return (
+                                    <>
+                                      <hr></hr>
+                                      <div className="comment-block">
+                                        <div className="rating-wrap">
+                                          <div className="rating">
+                                            <ProductRating
+                                              ratingValue={review.rating}
+                                            />
+                                          </div>
+                                        </div>
+                                        <p className="customer-meta">
+                                          {review.attendee != null && (
+                                            <span className="review-author">
+                                              {review.attendee.name}
+                                            </span>
+                                          )}
+                                          {review.partner != null && (
+                                            <span className="review-author">
+                                              {review.partner.name}
+                                            </span>
+                                          )}
+
+                                          <span className="comment-date">
+                                            {review.event.name}
+                                          </span>
+                                        </p>
+                                        <div className="description">
+                                          <p>{review.reviewText}</p>
                                         </div>
                                       </div>
-                                      <p className="customer-meta">
-                                        {review.attendee != null && (<span className="review-author">{review.attendee.name}</span>)}
-                                        {review.partner != null && (<span className="review-author">{review.partner.name}</span>)}
-
-                                        <span className="comment-date">
-                                          {review.event.name}
-                                        </span>
-                                      </p>
-                                      <div className="description">
-                                        <p>
-                                          {review.reviewText}
-                                        </p>
-                                      </div>
-                                    </div>
-                                  </>
-                                )
-                              })}
-
+                                    </>
+                                  );
+                                })}
                             </li>
-
                           </ul>
                         </div>
-
                       </div>
                       {/* </div> */}
                     </Tab.Pane>

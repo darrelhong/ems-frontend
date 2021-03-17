@@ -25,9 +25,11 @@ import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
 import Badge from 'react-bootstrap/Badge';
 import { getFollowers, getFollowing } from '../lib/query/getBPFollow';
-import { BsPencilSquare } from 'react-icons/bs';
+import { isBpVip, addVip } from '../lib/query/useVip';
+import { BsPencilSquare, BsPlus } from 'react-icons/bs';
 import api from '../lib/ApiClient';
 import { PermDataSettingTwoTone } from '@material-ui/icons';
+import { FiPlus } from 'react-icons/fi';
 
 const PartnerProfile = ({ localuser }) => {
   const [publicView, setPublicView] = useState();
@@ -40,50 +42,63 @@ const PartnerProfile = ({ localuser }) => {
   const [followBtn, setFollowBtn] = useState();
   const [partner, setPartner] = useState();
   const [user, setUser] = useState(); 
-  //const { data: partner } = useUser(localuser);
-  
-   var followId;
-  const getFollowersData = async () => {
-    await getFollowers(localuser).then((data) => {
-      setFollowers(data);
-      if (followId >= 0) {
-        var found = false;
-        for (var i = 0; i < data.length; i++) {
-          console.log('test' + data[i].id + ' ' + followId);
-          if (data[i].id === followId) {
-            found = true;
-            break;
-          }
-        }
-        if (found) {
-          setUnfollowBtn(true);
-          setFollowBtn(false);
-        } else {
-          setFollowBtn(true);
-          setUnfollowBtn(false);
-        }
-      }
-    });
-  };
-  
 
-  const getFollowingData = async () => {
-    await getFollowing(localuser).then((data) => {
-      setFollowing(data);
-    });
-  };
- 
+  // const [markVip, setMarkVip] = useState(false);
+  // const [unmarkVip, setUnmarkVip] = useState(false);
+  const [checkIsBpVip, setCheckIsBpVip] = useState(null);
+  //const { data: partner } = useUser(localuser);
+  var followId;
+
   useEffect(() => {
-    const getPartnerData = async () => {
+    // get the profile page bp's data
+    const getUserData = async () => {
       await getUser(localuser).then((data) => {
         setPartner(data);
       });
     };
-    getPartnerData();
+    getUserData();
 
-    
+    console.log('user ' + localuser);
+    // const getPartnerData = async () => {
+    //   await getUser(localuser).then((data) => {
+    //     setPartner(data);
+    //   });
+    // };
+    // getPartnerData();
+
+    const getFollowingData = async () => {
+      await getFollowing(localuser).then((data) => {
+        setFollowing(data);
+      });
+    };
+    getFollowingData();
+    const getFollowersData = async () => {
+      await getFollowers(localuser).then((data) => {
+        setFollowers(data);
+        if (followId >= 0) {
+          var found = false;
+          for (var i = 0; i < data.length; i++) {
+            console.log('test' + data[i].id + ' ' + followId);
+            if (data[i].id === followId) {
+              found = true;
+              break;
+            }
+          }
+          if (found) {
+            setUnfollowBtn(true);
+            setFollowBtn(false);
+          } else {
+            setFollowBtn(true);
+            setUnfollowBtn(false);
+          }
+        }
+      });
+    };
+    getFollowersData();
+
     if (localStorage.getItem('userId') != null) {
-      const getUserData = async () => {
+      const getCurrentUserData = async () => {
+        // get currentUser
         await getUser(localStorage.getItem('userId')).then((data) => {
           console.log('current ' + data.id);
           setUser(data?.name);
@@ -97,34 +112,36 @@ const PartnerProfile = ({ localuser }) => {
               setPublicView(false);
               setFollowBtn(false);
               setUnfollowBtn(false);
-              getFollowersData();
-              getFollowingData();
+
+              const checkIfBpIsVip = async () => {
+                console.log('hello');
+                console.log(localuser);
+                await isBpVip(localuser).then((vipresult) => {
+                  setCheckIsBpVip(vipresult);
+                });
+              };
+
+              checkIfBpIsVip();
             } else if (data.roles[0].roleEnum === 'ATND') {
               console.log('attendee ');
 
               setEOView(false);
               setPublicView(true);
               followId = data.id;
-              getFollowersData();
-              getFollowingData();
             } else {
               //bp view other bp, cannot follow
               setFollowBtn(false);
               setUnfollowBtn(false);
               setEOView(false);
               setPublicView(true);
-              getFollowersData();
-              getFollowingData();
             }
           } else {
             setPublicView(false);
             setEOView(false);
-            getFollowersData();
-            getFollowingData();
           }
         });
       };
-      getUserData();
+      getCurrentUserData();
     } else {
       //guest cannot follow bp
       setPublicView(true);
@@ -134,10 +151,7 @@ const PartnerProfile = ({ localuser }) => {
       getFollowersData();
             getFollowingData();
     }
-
-
-
-  }, []);
+  }, [localuser, followId]);
 
   const getRefreshedFollowers = async () => {
     await getFollowers(localuser).then((data) => {
@@ -200,6 +214,16 @@ const PartnerProfile = ({ localuser }) => {
         });
       }
     }
+  };
+
+  const handleAddVip = async () => {
+    await addVip(partner.id);
+    const checkIfBpIsVip_ = async () => {
+      var result = await isBpVip(partner?.id);
+      setCheckIsBpVip(result);
+    };
+
+    checkIfBpIsVip_();
   };
 
   return (
@@ -277,7 +301,6 @@ const PartnerProfile = ({ localuser }) => {
               </CardBody>
               <br></br>
               <CardFooter>
-                <hr />
                 <div className="button-container">
                   <Row>
                     <Col className="ml-auto" lg="4" md="6" xs="6">
@@ -292,7 +315,7 @@ const PartnerProfile = ({ localuser }) => {
                         <small>Following</small>
                       </h5>
                     </Col>
-                    <Col className="mr-auto" lg="4">
+                    <Col className="mr-auto  mr-auto" lg="4" md="6" xs="6">
                       <h5>
                         {!publicView && !eoView && (
                           <Link href="/partner/profile-account">
@@ -332,10 +355,29 @@ const PartnerProfile = ({ localuser }) => {
 
                         <br />
                         {/* <small>Spent</small> */}
+                        {localuser != undefined &&
+                          checkIsBpVip != null &&
+                          eoView &&
+                          checkIsBpVip && (
+                            <Badge variant="info">VIP Member</Badge>
+                          )}
+                        {localuser != undefined &&
+                          checkIsBpVip != null &&
+                          eoView &&
+                          !checkIsBpVip && (
+                            <button
+                              className="btn btn-fill-out btn-sm"
+                              onClick={handleAddVip}
+                            >
+                              <FiPlus />
+                              VIP
+                            </button>
+                          )}
+
+                        <br />
                       </h5>
                     </Col>
                   </Row>
-                  <br></br>
                 </div>
               </CardFooter>
             </Card>
@@ -382,7 +424,7 @@ const PartnerProfile = ({ localuser }) => {
                           followers.map((follower) => {
                             return (
                               <li>
-                                <br></br>
+                                <hr></hr>
                                 <Row>
                                   <Col md="1" xs="1">
                                     {' '}
@@ -444,22 +486,21 @@ const PartnerProfile = ({ localuser }) => {
                                         <i className="fa fa-envelope" />
                                        </Button>
                                     )} */}
-                                    
-                                      {!follower.categoryPreferences.isEmpty &&
-                                        follower.categoryPreferences.map(
-                                          (eventtype) => {
-                                            return (
-                                              <span>
-                                                {' '}
-                                                <Badge variant="primary">
-                                                  {eventtype}
-                                                </Badge>{' '}
-                                              </span>
-                                            );
-                                          }
-                                        )}
-                                   
-                                  </Col> 
+
+                                    {!follower.categoryPreferences.isEmpty &&
+                                      follower.categoryPreferences.map(
+                                        (eventtype) => {
+                                          return (
+                                            <span>
+                                              {' '}
+                                              <Badge variant="primary">
+                                                {eventtype}
+                                              </Badge>{' '}
+                                            </span>
+                                          );
+                                        }
+                                      )}
+                                  </Col>
                                 </Row>
                               </li>
                             );
@@ -474,7 +515,7 @@ const PartnerProfile = ({ localuser }) => {
                           following.map((follow) => {
                             return (
                               <li>
-                                <br></br>
+                                <hr></hr>
                                 <Row>
                                   <Col md="1" xs="1">
                                     {' '}
@@ -519,11 +560,11 @@ const PartnerProfile = ({ localuser }) => {
                                       </span>
                                     </div>
                                   </Col>
-                                 
-                                  <Col className="text-left" md="4" xs="4"> 
-                                  <span>Email:</span>
+
+                                  <Col className="text-left" md="4" xs="4">
+                                    <span>Email:</span>
                                     <br></br>
-                                    <span  className="text-muted">
+                                    <span className="text-muted">
                                       {follow.email}
                                     </span>
                                     {/* {!publicView && (
