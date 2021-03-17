@@ -19,6 +19,7 @@ import StarIcon from '@material-ui/icons/Star';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import ProductRating from '../../Product/ProductRating';
 import Link from 'next/link';
+import { Modal, Button } from 'react-bootstrap';
 import HidePopover from '../../Event/HidePopover';
 
 const EventDescription = ({
@@ -32,6 +33,15 @@ const EventDescription = ({
   handleDelete,
   createToast
 }) => {
+  
+  const [broadcastModalShow, setBroadcastModalShow] = useState(false);
+  const closeBroadcastModal = () => setBroadcastModalShow(false);
+  const openBroadcastModal = () => setBroadcastModalShow(true);
+
+  const [confirmBroadcastModalShow, setConfirmBroadcastModalShow] = useState(false);
+  const closeConfirmBroadcastModal = () => setConfirmBroadcastModalShow(false);
+  const openConfirmBroadcastModal = () => setConfirmBroadcastModalShow(true);
+
   const deleteCancelButton = () => {
     if (event.eventStatus == 'CANCELLED') {
       return (
@@ -87,6 +97,55 @@ const EventDescription = ({
 
   return (
     <div className="product-content">
+
+      {/* broadcast modal */}
+      <Modal show={broadcastModalShow} onHide={closeBroadcastModal} centered>
+
+        {/* confirm broadcast modal */}
+        <Modal show={confirmBroadcastModalShow} onHide={closeConfirmBroadcastModal} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>
+              Confirm Broadcast Message
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Are you sure you want to broadcast this message?
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={closeConfirmBroadcastModal}>
+              No
+            </Button>
+            <Button
+              variant="primary"
+              onClick={() => handleBroadcastNotification(event)}
+            >
+              Yes
+            </Button>
+          </Modal.Footer>
+        </Modal>
+        
+        <Modal.Header closeButton>
+          <Modal.Title>
+            Broadcast Message<br/>
+            <h6>{event.name}</h6>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <textarea style={{width: "100%", height: "10em"}} />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={closeBroadcastModal}>
+            Close
+          </Button>
+          <Button
+            variant="primary"
+            onClick={() => openConfirmBroadcastModal()}
+          >
+            Proceed
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      
       {/* event name originally here */}
       {/* <h2 className="product-content__title space-mb--10">{event.name}</h2> */}
       <div className="product-content__price-rating-wrapper space-mb--10">
@@ -223,6 +282,17 @@ const EventDescription = ({
                     <IoMdCreate />
                   </a>
                 </Link>
+              </li>
+              <li>
+                <IconButton
+                  onClick={() => openBroadcastModal()}
+                  aria-label="broadcast"
+                  color="secondary"
+                >
+                  <svg style={{width:"20px", height:"20px"}} viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M12,8H4A2,2 0 0,0 2,10V14A2,2 0 0,0 4,16H5V20A1,1 0 0,0 6,21H8A1,1 0 0,0 9,20V16H12L17,20V4L12,8M21.5,12C21.5,13.71 20.54,15.26 19,16V8C20.53,8.75 21.5,10.3 21.5,12Z" />
+                  </svg>
+                </IconButton>
               </li>
             </ul>
             {deleteCancelButton()}
