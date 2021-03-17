@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Fragment } from 'react';
 import Link from 'next/link';
-import { Col, ProgressBar, Modal, Button } from 'react-bootstrap';
+import { Col, ProgressBar, Modal, Button, Form } from 'react-bootstrap';
 import { formatDate } from '../../lib/formatDate';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -114,8 +114,37 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
             <h6>{currEvent.name}</h6>
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <textarea style={{width: "100%", height: "10em"}} />
+        <Modal.Body style={{display: "flex", flexDirection: "column", gap: "5px"}} >
+          <input
+            required
+            className="form-control"
+            name="broadcastTitle"
+            id="broadcastTitle"
+            placeholder="Title"
+            style={{width: "100%"}}
+          />
+          <textarea 
+            required
+            className="form-control"
+            name="broadcastMessage"
+            id="broadcastMessage"
+            placeholder="Type something here..."
+            style={{width: "100%", height: "10em"}}
+          />
+          <div style={{display: "flex"}}>
+            <div style={{display: "flex", width: "50%"}}>
+              <Form.Check id="chkBusinessPartner" />
+              <label htmlFor="chkBusinessPartner">
+                All Business Partners
+              </label>
+            </div>
+            <div style={{display: "flex", width: "50%"}}>
+              <Form.Check id="chkAttendee" />
+              <label htmlFor="chkAttendee">
+                All Attendees
+              </label>
+            </div>
+          </div>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={closeBroadcastModal}>

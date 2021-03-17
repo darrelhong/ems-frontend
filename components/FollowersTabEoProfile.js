@@ -1,21 +1,107 @@
-import { Container, Row, Col } from 'react-bootstrap';
+import { useState } from 'react';
+import { Modal, Button, Form, Container, Row, Col } from 'react-bootstrap';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
 import Badge from 'react-bootstrap/Badge';
 import Link from 'next/link';
-import { Button } from 'reactstrap';
 // import EventEoProfileSliderTen from './ProductSlider/EventEoProfileSliderTen';
 
 const FollowersTabEoProfile = ({ attendees, partners, showPublicView }) => {
+  
+  const [broadcastModalShow, setBroadcastModalShow] = useState(false);
+  const closeBroadcastModal = () => setBroadcastModalShow(false);
+  const openBroadcastModal = () => setBroadcastModalShow(true);
+
+  const [confirmBroadcastModalShow, setConfirmBroadcastModalShow] = useState(false);
+  const closeConfirmBroadcastModal = () => setConfirmBroadcastModalShow(false);
+  const openConfirmBroadcastModal = () => setConfirmBroadcastModalShow(true);
+
   if (attendees !== undefined && partners !== undefined) {
     return (
       <div className="product-tab-area space-pb--r70">
+
+        {/* broadcast modal */}
+        <Modal show={broadcastModalShow} onHide={closeBroadcastModal} centered>
+
+          {/* confirm broadcast modal */}
+          <Modal show={confirmBroadcastModalShow} onHide={closeConfirmBroadcastModal} centered>
+            <Modal.Header closeButton>
+              <Modal.Title>
+                Confirm Broadcast Message
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              Are you sure you want to broadcast this message?
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={closeConfirmBroadcastModal}>
+                No
+              </Button>
+              <Button
+                variant="primary"
+                onClick={() => handleBroadcastNotification(event)}
+              >
+                Yes
+              </Button>
+            </Modal.Footer>
+          </Modal>
+          
+          <Modal.Header closeButton>
+            <Modal.Title>
+              Broadcast Message
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body style={{display: "flex", flexDirection: "column", gap: "5px"}} >
+            <input
+              required
+              className="form-control"
+              name="broadcastTitle"
+              id="broadcastTitle"
+              placeholder="Title"
+              style={{width: "100%"}}
+            />
+            <textarea 
+              required
+              className="form-control"
+              name="broadcastMessage"
+              id="broadcastMessage"
+              placeholder="Type something here..."
+              style={{width: "100%", height: "10em"}}
+            />
+            <div style={{display: "flex"}}>
+              <div style={{display: "flex", width: "50%"}}>
+                <Form.Check id="chkBusinessPartner" />
+                <label htmlFor="chkBusinessPartner">
+                  All Business Partners
+                </label>
+              </div>
+              <div style={{display: "flex", width: "50%"}}>
+                <Form.Check id="chkAttendee" />
+                <label htmlFor="chkAttendee">
+                  All Attendees
+                </label>
+              </div>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={closeBroadcastModal}>
+              Close
+            </Button>
+            <Button
+              variant="primary"
+              onClick={() => openConfirmBroadcastModal()}
+            >
+              Proceed
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      
         <Container>
           <Tab.Container defaultActiveKey="attendees">
             <Nav
               variant="pills"
-              className="product-tab-navigation text-center justify-content-center space-mb--30"
+              className="product-tab-navigation text-center justify-content-left space-mb--30"
             >
               <Nav.Item>
                 <Nav.Link eventKey="attendees">Attendee</Nav.Link>
@@ -24,6 +110,13 @@ const FollowersTabEoProfile = ({ attendees, partners, showPublicView }) => {
                 <Nav.Link eventKey="partners">Partner</Nav.Link>
               </Nav.Item>
             </Nav>
+            <button
+              className="btn btn-fill-out"
+              style={{float: "right", marginTop: "-78px", paddingLeft: "25px", paddingRight: "25px"}}
+              onClick={() => openBroadcastModal()}
+            >
+              Broadcast
+            </button>
             <Tab.Content>
               <Tab.Pane eventKey="attendees">
                 <Row>
