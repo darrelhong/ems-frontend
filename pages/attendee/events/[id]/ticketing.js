@@ -1,22 +1,26 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 
 import { useEvent } from 'lib/query/events';
 import { formatter } from 'lib/util/currency';
 
 import AttendeeWrapper from 'components/wrapper/AttendeeWrapper';
 import CenterSpinner from 'components/custom/CenterSpinner';
-import { Alert, Col, Container, Fade, Row } from 'react-bootstrap';
+import { Alert, Col, Container, Row } from 'react-bootstrap';
 import { BreadcrumbOne } from 'components/Breadcrumb';
 import Link from 'next/link';
 import { format, parseISO } from 'date-fns';
 import ButtonWithLoading from 'components/custom/ButtonWithLoading';
+import PaymentView from 'components/custom/ticketing/PaymentView';
 
 export function getServerSideProps({ query }) {
   return {
     props: { ...query },
   };
 }
+const promise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY);
 
 export default function AttendeeEventTicketing({ id }) {
   const { data, status } = useEvent(id);
@@ -158,15 +162,11 @@ export default function AttendeeEventTicketing({ id }) {
                       </Col>
                     </Row>
                   </>
+                ) : view == 'payment' ? (
+                  <Elements stripe={promise}>
+                    <PaymentView />
+                  </Elements>
                 ) : null}
-                <Fade in={view == 'payment'} timeout={2000}>
-                  <div id="example-fade-text">
-                    Anim pariatur cliche reprehenderit, enim eiusmod high life
-                    accusamus terry richardson ad squid. Nihil anim keffiyeh
-                    helvetica, craft beer labore wes anderson cred nesciunt
-                    sapiente ea proident.
-                  </div>
-                </Fade>
               </Col>
             </Row>
           </Container>
