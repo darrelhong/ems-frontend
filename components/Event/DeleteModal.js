@@ -1,6 +1,6 @@
 import { Modal, Button } from 'react-bootstrap';
 
-const DeleteModal = ({currEvent, deleteModalShow, setDeleteModalShow, closeModal, openModal, deleteCancelEvent}) => {
+const DeleteModal = ({currEvent, deleteModalShow, closeModal, deleteCancelEvent}) => {
 
 
     // const [deleteModalShow, setDeleteModalShow] = useState(false);

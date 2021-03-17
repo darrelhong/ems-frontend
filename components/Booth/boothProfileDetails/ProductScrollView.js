@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react';
+import ProductModal from 'components/Booth/boothProfileDetails/ProductModal';
 
 const ProductScrollView = ({ paginatedProducts }) => {
+    const placeholderImage = "https://static.packt-cdn.com/products/9781849514804/graphics/4804_03_46.jpg";
     const [nextId, setNextId] = useState(0);
     const [backId, setBackId] = useState(0);
     const [firstId, setFirstId] = useState(0);
     const [lastId, setLastId] = useState(0);
     const [currentId, setCurrentId] = useState(0);
+    const [productToShow, setProductToShow] = useState();
+    const [productModalShow,setProductModalShow] = useState(false);
 
     // takes in data like
     // [
@@ -74,22 +78,40 @@ const ProductScrollView = ({ paginatedProducts }) => {
 
     const renderAppendedProducts = (products) => {
         while (products.length < 5) {
-            products.push({ "image": "https://static.packt-cdn.com/products/9781849514804/graphics/4804_03_46.jpg" })
+            products.push({ "image": placeholderImage })
         };
 
         return products.map((product) => (
             <div className="item">
-                <img
-                    src={product.image}
-                    height='150'
-                    // onClick={() => console.log('image clicked')}
-                    alt="Product Image" />
+                {imageComponent(product)}
             </div>
         ))
     };
 
+    const imageComponent = (product) => (
+        <img
+            src={product.image}
+            height='150'
+            // onClick={() => console.log('image clicked')}
+            onClick={() => {
+                if (product.image != placeholderImage) {
+                    setProductToShow(product);
+                    setProductModalShow(true);
+                }
+            }}
+            alt="Product Image" />
+    );
+
     return (
         <div className="wrapper">
+            <ProductModal
+                product={productToShow}
+                productModalShow={productModalShow}
+                closeModal={() => {
+                    setProductModalShow(false);
+                    // setProductToShow(null);
+                }}
+            />
             {paginatedProducts && paginatedProducts.length > 1 ? (
                 paginatedProducts.map((section, index) => (
                     <section id={section?.key}>
@@ -106,11 +128,7 @@ const ProductScrollView = ({ paginatedProducts }) => {
                         {section.products && section.products.length == 5 ? (
                             section.products.map((product) => (
                                 <div className="item">
-                                    <img
-                                        src={product.image}
-                                        height='150'
-                                        // onClick={() => console.log('image clicked')}
-                                        alt="Product Image" />
+                                    {imageComponent(product)}
                                 </div>
                             ))
                         ) : (renderAppendedProducts(section.products))}
@@ -132,11 +150,8 @@ const ProductScrollView = ({ paginatedProducts }) => {
                         {section.products && section.products.length == 5 ? (
                             section.products.map((product) => (
                                 <div className="item">
-                                    <img
-                                        src={product.image}
-                                        height='150'
-                                        // onClick={() => console.log('image clicked')}
-                                        alt="Product Image" />
+                                    {imageComponent(product)}
+
                                 </div>
                             ))
                         ) : (renderAppendedProducts(section.products))}

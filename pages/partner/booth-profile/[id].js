@@ -14,6 +14,7 @@ const BoothProfile = () => {
     const { id } = router.query;
     const [boothProfile, setBoothProfile] = useState(Object);
     const [booths, setBooths] = useState([]);
+    const [bpProducts,setBpProducts] = useState([]);
 
     useEffect(() => {
         const loadData = async () => {
@@ -21,6 +22,8 @@ const BoothProfile = () => {
             setBoothProfile(boothProfileData);
             const boothData = await getBoothsByBoothProfile(id);
             setBooths(boothData);
+            const products = boothProfileData?.businessPartner.products;
+            setBpProducts(products);
         }
         loadData();
     }, []);
