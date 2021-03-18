@@ -4,6 +4,7 @@ import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 
 import styles from './PaymentView.module.css';
 import { formatter } from 'lib/util/currency';
+import api from 'lib/ApiClient';
 
 export default function PaymentView({
   clientSecret,
@@ -35,6 +36,7 @@ export default function PaymentView({
         card: elements.getElement(CardElement),
       },
     });
+
     if (payload.error) {
       setError(`Payment failed ${payload.error.message}`);
       setProcessing(false);
@@ -42,7 +44,12 @@ export default function PaymentView({
       setError(null);
       setProcessing(false);
       setSucceeded(true);
-      setView('success');
+      const ticketTransactionIds = checkoutResponse.tickets.map(
+        (ticket) => ticket.id
+      );
+      await api
+        .post('/api/ticketing/payment-complete', { ticketTransactionIds })
+        .then(() => setView('success'));
     }
   };
 
