@@ -10,11 +10,22 @@ import {
 import { IoIosHeartEmpty } from 'react-icons/io';
 import useUser from '../../lib/query/useUser';
 import { logout } from '../../lib/auth';
-
+import { getUser } from '../../lib/query/getUser';
+import { useState, useEffect } from 'react';
 
 const PartnerHeaderTop = () => {
-  const { data: localuser } = useUser(localStorage.getItem('userId'));
+  const [user, setUser] = useState();
+  useEffect(() => {
+    const getUserData = async () => {
+      await getUser(localStorage.getItem('userId')).then((data) => {
 
+        console.log(data);
+
+        setUser(data.id);
+      });
+    };
+    getUserData();
+  }, []);
   return (
     
     <div className="top-header d-lg-block">
@@ -29,7 +40,7 @@ const PartnerHeaderTop = () => {
                 <li>
                 
                     <a>
-                    <notification-center  appId="WLU2yLZw9d" subscriberId= {"partner" + localuser?.id} />
+                    <notification-center  appId="WLU2yLZw9d" subscriberId= {"partner" + user} />
                     </a>
                   
                 </li>
@@ -47,7 +58,7 @@ const PartnerHeaderTop = () => {
                   <Link
                     href={{
                       pathname: '/partner/partner-profile',
-                      query: { localuser: JSON.stringify(localuser?.id) },
+                      query: { localuser: JSON.stringify(user) },
                     }}
                   >
                     <a>

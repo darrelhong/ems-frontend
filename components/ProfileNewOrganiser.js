@@ -28,6 +28,9 @@ import { getOrgAttendeeFollowers } from '../lib/query/getOrgAttendeeFollowers';
 import { getOrgPartnerFollowers } from '../lib/query/getOrgPartnerFollowers';
 import { useMutation } from 'react-query';
 import { BreadcrumbOne } from './Breadcrumb';
+import {
+  AiOutlineNotification,
+} from 'react-icons/ai';
 
 const EventOrgProfile = ({ paraId_ }) => {
   const [showEoView, setShowEoView] = useState(false);
@@ -418,6 +421,55 @@ const EventOrgProfile = ({ paraId_ }) => {
     }
   };
 
+  const sendNoti = () => {
+    var endpoint = 'https://api.ravenhub.io/company/WLU2yLZw9d/broadcasts/ziyDknTScF';
+/* 
+   The "data" key is optional within each notification
+   object in the notifications array below.
+*/
+    var postBody= {"notifications":[]};
+    console.log("organiser" + eventorganiser?.name);
+    for(var i=0; i<attendeeFollowers.length; i++){
+      console.log("attendee" + attendeeFollowers[i].id);
+      postBody.notifications.push({
+        "subscriberId" : "attendee" + attendeeFollowers[i].id,
+        "data": {
+          "organiser" : eventorganiser?.name,
+          "event" : "eventname" 
+        }
+      
+      })
+      console.log(postBody.notifications[i].subscriberId + "notification postbody");
+    }
+    console.log("postbody" + postBody.notifications);
+
+// var postBody =
+// {
+//   "notifications" : [
+//      {
+//        "subscriberId" : "foo1",
+//        "data" : {
+//                   "val1" : "hello again",
+//                   "val2" : "hi",
+//                   "urlvar" : "https://google.com"
+//                 }
+//      },
+//      {
+//        "subscriberId" : "foo2",
+//        "data" : {
+//                   "val1" : "hello again",
+//                   "val2" : "hi",
+//                   "urlvar" : "https://yahoo.com"
+//                 }
+//      }
+//   ]
+// }
+axios.post(endpoint, postBody, {
+  headers: {'Content-type': 'application/json'}
+});
+
+  };
+
   return (
     <>
       <BreadcrumbOne pageTitle="Profile Details">
@@ -595,6 +647,16 @@ const EventOrgProfile = ({ paraId_ }) => {
                     </Tab.Pane>
                     <Tab.Pane eventKey="Followers">
                       <br></br>
+                      <button
+                              className="btn btn-fill-out btn-sm"
+                              name="noti"
+                              onClick= {sendNoti}
+                              size="sm"
+                            >
+                              <AiOutlineNotification />
+                            
+                            </button>
+                      
                       <ul className="list-unstyled team-members">
                         <div className="product-description-tab__additional-info">
                           <FollowersTabEoProfile
@@ -630,9 +692,7 @@ const EventOrgProfile = ({ paraId_ }) => {
                                 {(pasteventlist != null ||
                                   pasteventlist != undefined) &&
                                   pasteventlist.map((event) => {
-                                    console.log('event' + event.name);
                                     if (getReviewsEventFilter(event.eid)) {
-                                      console.log('passed' + event.name);
                                       return (
                                         <option value={event.eid}>
                                           {event.name}

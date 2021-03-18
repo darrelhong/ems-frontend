@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Alert, Col, Container, Row } from 'react-bootstrap';
+import Head from 'next/head';
 
 import useUser from '../../lib/query/useUser';
 
@@ -9,7 +10,10 @@ import AttendeeWrapper from '../../components/wrapper/AttendeeWrapper';
 export default function PartnerHome() {
   const { data: user, status } = useUser(localStorage.getItem('userId'));
   return (
-    <AttendeeWrapper title="Attendee Home">
+    <AttendeeWrapper title="Home">
+      <Head>
+    <script src="https://embed.ravenhub.io/js/app.js"></script>
+    </Head>
       <BreadcrumbOne pageTitle={'Welcome ' + user?.name}>
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
