@@ -64,7 +64,12 @@ export default function AttendeeEventTicketing({ id }) {
                   <a>Events</a>
                 </Link>
               </li>
-              <li className="breadcrumb-item active">{data.name}</li>
+              <li className="breadcrumb-item">
+                <Link href={`/attendee/events/${id}`}>
+                  <a>{data.name}</a>
+                </Link>
+              </li>
+              <li className="breadcrumb-item active">Checkout</li>
             </ol>
           </BreadcrumbOne>
 
