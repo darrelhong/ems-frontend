@@ -83,7 +83,7 @@ export default function AttendeeEventPage({ id }) {
                   <br></br>
                   <br></br>
 
-                  <p className="text-dark d-inline">Sales period: </p>
+                  {/* <p className="text-dark d-inline">Sales period: </p>
                   <p className="text-default d-inline">
                     {`${format(
                       parseISO(data.saleStartDate),
@@ -95,7 +95,7 @@ export default function AttendeeEventPage({ id }) {
                   </p>
 
                   <br></br>
-                  <br></br>
+                  <br></br> */}
 
                   {data.sellingTicket && (
                     <>
