@@ -32,10 +32,12 @@ export default function AttendeeEventTicketing({ id }) {
   const [view, setView] = useState('summary');
 
   const [clientSecret, setClientSecret] = useState('');
+  const [checkoutResponse, setCheckoutResponse] = useState();
   const { mutate: checkout } = useMutation(
     (data) => api.post('/api/ticketing/checkout', data),
     {
       onSuccess: (resp) => {
+        setCheckoutResponse(resp.data);
         setClientSecret(resp.data.clientSecret);
         setView('payment');
       },
@@ -182,8 +184,18 @@ export default function AttendeeEventTicketing({ id }) {
                     <PaymentView
                       clientSecret={clientSecret}
                       attendee={attendee}
+                      setView={setView}
+                      checkoutResponse={checkoutResponse}
                     />
                   </Elements>
+                ) : view == 'success' ? (
+                  <>
+                    <Row>
+                      <Col>
+                        <h4>Order Confirmed</h4>
+                      </Col>
+                    </Row>
+                  </>
                 ) : null}
               </Col>
             </Row>

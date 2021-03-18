@@ -3,8 +3,14 @@ import { useState } from 'react';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 
 import styles from './PaymentView.module.css';
+import { formatter } from 'lib/util/currency';
 
-export default function PaymentView({ clientSecret, attendee }) {
+export default function PaymentView({
+  clientSecret,
+  attendee,
+  setView,
+  checkoutResponse,
+}) {
   const [succeeded, setSucceeded] = useState(false);
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState('');
@@ -21,11 +27,11 @@ export default function PaymentView({ clientSecret, attendee }) {
     ev.preventDefault();
     setProcessing(true);
     const payload = await stripe.confirmCardPayment(clientSecret, {
+      receipt_email:
+        process.env.NODE_ENV == 'development'
+          ? process.env.NEXT_PUBLIC_DEV_EMAIL
+          : attendee.email,
       payment_method: {
-        receipt_email:
-          process.env.NODE_ENV == 'development'
-            ? process.env.NEXT_PUBLIC_DEV_EMAIL
-            : attendee.email,
         card: elements.getElement(CardElement),
       },
     });
@@ -36,35 +42,43 @@ export default function PaymentView({ clientSecret, attendee }) {
       setError(null);
       setProcessing(false);
       setSucceeded(true);
+      setView('success');
     }
   };
 
   return (
-    <form id="payment-form" onSubmit={handleSubmit} className="my-5 py-5">
-      <CardElement className={styles.cardElement} onChange={handleChange} />
-      <button
-        disabled={processing || disabled || succeeded}
-        id="submit"
-        className={styles.payButton}
-      >
-        <span id="button-text">
-          {processing ? (
-            <div className="spinner-border spinner-border-sm"></div>
-          ) : (
-            'Pay now'
-          )}
-        </span>
-      </button>
-      {error && (
-        <div className="text-danger mt-1" role="alert">
-          {error}
-        </div>
-      )}
-    </form>
+    <div className="my-3">
+      <h5 className="mb-3">
+        Payment amount: {formatter.format(checkoutResponse.paymentAmount)}
+      </h5>
+      <form id="payment-form" onSubmit={handleSubmit} className="mb-5 pb-5">
+        <CardElement className={styles.cardElement} onChange={handleChange} />
+        <button
+          disabled={processing || disabled || succeeded}
+          id="submit"
+          className={styles.payButton}
+        >
+          <span id="button-text">
+            {processing ? (
+              <div className="spinner-border spinner-border-sm"></div>
+            ) : (
+              'Pay now'
+            )}
+          </span>
+        </button>
+        {error && (
+          <div className="text-danger mt-1" role="alert">
+            {error}
+          </div>
+        )}
+      </form>
+    </div>
   );
 }
 
 PaymentView.propTypes = {
   clientSecret: PropTypes.string,
   attendee: PropTypes.object,
+  setView: PropTypes.func,
+  checkoutResponse: PropTypes.object,
 };
