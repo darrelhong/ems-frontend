@@ -9,8 +9,8 @@ import api from 'lib/ApiClient';
 export default function PaymentView({
   clientSecret,
   attendee,
-  setView,
   checkoutResponse,
+  onPaymentCompleteResp,
 }) {
   const [succeeded, setSucceeded] = useState(false);
   const [error, setError] = useState(null);
@@ -49,7 +49,7 @@ export default function PaymentView({
       );
       await api
         .post('/api/ticketing/payment-complete', { ticketTransactionIds })
-        .then(() => setView('success'));
+        .then(onPaymentCompleteResp);
     }
   };
 
@@ -86,6 +86,6 @@ export default function PaymentView({
 PaymentView.propTypes = {
   clientSecret: PropTypes.string,
   attendee: PropTypes.object,
-  setView: PropTypes.func,
   checkoutResponse: PropTypes.object,
+  onPaymentCompleteResp: PropTypes.object,
 };

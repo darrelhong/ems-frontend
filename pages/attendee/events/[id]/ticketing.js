@@ -8,7 +8,7 @@ import { formatter } from 'lib/util/currency';
 
 import AttendeeWrapper from 'components/wrapper/AttendeeWrapper';
 import CenterSpinner from 'components/custom/CenterSpinner';
-import { Alert, Col, Container, Row } from 'react-bootstrap';
+import { Alert, Card, Col, Container, Row } from 'react-bootstrap';
 import { BreadcrumbOne } from 'components/Breadcrumb';
 import Link from 'next/link';
 import { format, parseISO } from 'date-fns';
@@ -33,6 +33,8 @@ export default function AttendeeEventTicketing({ id }) {
 
   const [clientSecret, setClientSecret] = useState('');
   const [checkoutResponse, setCheckoutResponse] = useState();
+  const [paymentCompleteResp, setPaymentCompleteResp] = useState();
+
   const { mutate: checkout } = useMutation(
     (data) => api.post('/api/ticketing/checkout', data),
     {
@@ -43,6 +45,11 @@ export default function AttendeeEventTicketing({ id }) {
       },
     }
   );
+
+  const onPaymentCompleteResp = (resp) => {
+    setPaymentCompleteResp(resp.data);
+    setView('success');
+  };
 
   return (
     <AttendeeWrapper title="Get tickets">
@@ -189,15 +196,43 @@ export default function AttendeeEventTicketing({ id }) {
                     <PaymentView
                       clientSecret={clientSecret}
                       attendee={attendee}
-                      setView={setView}
                       checkoutResponse={checkoutResponse}
+                      onPaymentCompleteResp={onPaymentCompleteResp}
                     />
                   </Elements>
                 ) : view == 'success' ? (
                   <>
                     <Row>
                       <Col>
-                        <h4>Order Confirmed</h4>
+                        <h3>Order Confirmed</h3>
+                        <p>Payment success! Your order has been completed.</p>
+
+                        <h4>Details</h4>
+                        <h5>
+                          {ticketQty} ticket{ticketQty > 1 ? 's' : null} to{' '}
+                          {data.name}
+                        </h5>
+
+                        <Row className="mt-3">
+                          {paymentCompleteResp.map((ticket) => (
+                            <Col md={6} key={ticket.id} className="mb-4">
+                              <Card>
+                                <Card.Body>
+                                  <Card.Title>{ticket.event.name}</Card.Title>
+                                  <Card.Subtitle className="mb-2 text-dark font-weight-normal">
+                                    Attendee: {ticket.attendee.name}
+                                  </Card.Subtitle>
+                                  <Card.Text>Ticket ID: {ticket.id}</Card.Text>
+                                </Card.Body>
+                              </Card>
+                            </Col>
+                          ))}
+                        </Row>
+
+                        <br></br>
+                        <button className="btn btn-fill-out btn-sm">
+                          View my tickets
+                        </button>
                       </Col>
                     </Row>
                   </>
