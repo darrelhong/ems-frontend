@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Fragment } from 'react';
 import Link from 'next/link';
-import { Col, ProgressBar, Modal, Button } from 'react-bootstrap';
+import { Col, ProgressBar, Modal, Button, Form } from 'react-bootstrap';
 import { formatDate } from '../../lib/formatDate';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -18,9 +18,22 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
   const closeModal = () => setDeleteModalShow(false);
   const openModal = () => setDeleteModalShow(true);
 
+  const [broadcastModalShow, setBroadcastModalShow] = useState(false);
+  const closeBroadcastModal = () => setBroadcastModalShow(false);
+  const openBroadcastModal = () => setBroadcastModalShow(true);
+
+  const [confirmBroadcastModalShow, setConfirmBroadcastModalShow] = useState(false);
+  const closeConfirmBroadcastModal = () => setConfirmBroadcastModalShow(false);
+  const openConfirmBroadcastModal = () => setConfirmBroadcastModalShow(true);
+
   const handleDeleteCancel = async (currEvent) => {
     await deleteCancelEvent(currEvent);
     closeModal();
+  };
+
+  const handleBroadcastNotification = async (currEvent) => {
+    await broadcastNotification(currEvent);
+    closeBroadcastModal();
   };
 
   const handleVipToggle = async (currEvent) => {
@@ -68,6 +81,84 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
           </Button>
         </Modal.Footer>
       </Modal>
+
+      {/* broadcast modal */}
+      <Modal show={broadcastModalShow} onHide={closeBroadcastModal} centered>
+
+        {/* confirm broadcast modal */}
+        <Modal show={confirmBroadcastModalShow} onHide={closeConfirmBroadcastModal} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>
+              Confirm Broadcast Message
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Are you sure you want to broadcast this message?
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={closeConfirmBroadcastModal}>
+              No
+            </Button>
+            <Button
+              variant="primary"
+              onClick={() => handleBroadcastNotification(currEvent)}
+            >
+              Yes
+            </Button>
+          </Modal.Footer>
+        </Modal>
+        
+        <Modal.Header closeButton>
+          <Modal.Title>
+            Broadcast Message<br/>
+            <h6>{currEvent.name}</h6>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body style={{display: "flex", flexDirection: "column", gap: "5px"}} >
+          <input
+            required
+            className="form-control"
+            name="broadcastTitle"
+            id="broadcastTitle"
+            placeholder="Title"
+            style={{width: "100%"}}
+          />
+          <textarea 
+            required
+            className="form-control"
+            name="broadcastMessage"
+            id="broadcastMessage"
+            placeholder="Type something here..."
+            style={{width: "100%", height: "10em"}}
+          />
+          <div style={{display: "flex"}}>
+            <div style={{display: "flex", width: "50%"}}>
+              <Form.Check id="chkBusinessPartner" />
+              <label htmlFor="chkBusinessPartner">
+                All Business Partners
+              </label>
+            </div>
+            <div style={{display: "flex", width: "50%"}}>
+              <Form.Check id="chkAttendee" />
+              <label htmlFor="chkAttendee">
+                All Attendees
+              </label>
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={closeBroadcastModal}>
+            Close
+          </Button>
+          <Button
+            variant="primary"
+            onClick={() => openConfirmBroadcastModal()}
+          >
+            Proceed
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
       <Col lg={4} sm={6} className="space-mb--50">
         <div className="product-list">
           <div className="product-list__image">
@@ -80,6 +171,15 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
 
           <div className="product-list__info">
             <span style={{ float: 'right' }}>
+              <IconButton
+                onClick={() => openBroadcastModal()}
+                aria-label="broadcast"
+                color="secondary"
+              >
+                <svg style={{width:"24px", height:"24px"}} viewBox="0 0 24 24">
+                  <path fill="currentColor" d="M12,8H4A2,2 0 0,0 2,10V14A2,2 0 0,0 4,16H5V20A1,1 0 0,0 6,21H8A1,1 0 0,0 9,20V16H12L17,20V4L12,8M21.5,12C21.5,13.71 20.54,15.26 19,16V8C20.53,8.75 21.5,10.3 21.5,12Z" />
+                </svg>
+              </IconButton>
               <IconButton
                 onClick={() => openModal()}
                 aria-label="delete"

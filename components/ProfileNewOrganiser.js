@@ -756,6 +756,38 @@ axios.post(endpoint, postBody, {
               </CardBody>
             </Card>
           </Col>
+          <Col xs="12" style={{marginTop: "30px", marginBottom: "30px"}}>
+            <Card className="card-user">
+              <CardHeader className="text-center">
+                <h4>Have some questions?</h4>
+              </CardHeader>
+              <CardBody className="d-flex justify-content-center">
+                <div className="d-flex flex-column text-center w-50" style={{gap: "10px"}}>
+                  <input
+                    id="enquiryTitle"
+                    className="form-control"
+                    placeholder="Title"
+                  />
+                  <input
+                    id="enquiryEventName"
+                    className="form-control"
+                    placeholder="Event Name"
+                  />
+                  <textarea
+                    id="enquiryMessage"
+                    className="form-control"
+                    placeholder="Type something here..."
+                    style={{height: "10em"}}
+                  />
+                  <button
+                    className="btn btn-fill-out"
+                  >
+                    Send Enquiry
+                  </button>
+                </div>
+              </CardBody>
+            </Card>
+          </Col>
         </Row>
         <br></br>
       </div>
