@@ -14,6 +14,9 @@ import Link from 'next/link';
 import { format, parseISO } from 'date-fns';
 import ButtonWithLoading from 'components/custom/ButtonWithLoading';
 import PaymentView from 'components/custom/ticketing/PaymentView';
+import useUser from 'lib/query/useUser';
+import { useMutation } from 'react-query';
+import api from 'lib/ApiClient';
 
 export function getServerSideProps({ query }) {
   return {
@@ -21,11 +24,23 @@ export function getServerSideProps({ query }) {
   };
 }
 const promise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY);
-
 export default function AttendeeEventTicketing({ id }) {
   const { data, status } = useEvent(id);
+  const { data: attendee } = useUser();
+
   const [ticketQty, setTicketQty] = useState(1);
   const [view, setView] = useState('summary');
+
+  const [clientSecret, setClientSecret] = useState('');
+  const { mutate: checkout } = useMutation(
+    (data) => api.post('/api/ticketing/checkout', data),
+    {
+      onSuccess: (resp) => {
+        setClientSecret(resp.data.clientSecret);
+        setView('payment');
+      },
+    }
+  );
 
   return (
     <AttendeeWrapper title="Get tickets">
@@ -155,7 +170,7 @@ export default function AttendeeEventTicketing({ id }) {
                       <Col>
                         <ButtonWithLoading
                           className="btn btn-fill-out btn-sm"
-                          onClick={() => setView('payment')}
+                          onClick={() => checkout({ eventId: id, ticketQty })}
                         >
                           Checkout
                         </ButtonWithLoading>
@@ -164,7 +179,10 @@ export default function AttendeeEventTicketing({ id }) {
                   </>
                 ) : view == 'payment' ? (
                   <Elements stripe={promise}>
-                    <PaymentView />
+                    <PaymentView
+                      clientSecret={clientSecret}
+                      attendee={attendee}
+                    />
                   </Elements>
                 ) : null}
               </Col>

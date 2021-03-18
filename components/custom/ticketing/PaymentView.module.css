@@ -14,6 +14,10 @@
   height: 38px;
 }
 
+.payButton:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
 .cardElement {
   border-radius: 4px 4px 0 0;
   padding: 14px 12px;

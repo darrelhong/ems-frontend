@@ -4,7 +4,7 @@ import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 
 import styles from './PaymentView.module.css';
 
-export default function PaymentView({ clientSecret }) {
+export default function PaymentView({ clientSecret, attendee }) {
   const [succeeded, setSucceeded] = useState(false);
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState('');
@@ -22,6 +22,10 @@ export default function PaymentView({ clientSecret }) {
     setProcessing(true);
     const payload = await stripe.confirmCardPayment(clientSecret, {
       payment_method: {
+        receipt_email:
+          process.env.NODE_ENV == 'development'
+            ? process.env.NEXT_PUBLIC_DEV_EMAIL
+            : attendee.email,
         card: elements.getElement(CardElement),
       },
     });
@@ -44,7 +48,7 @@ export default function PaymentView({ clientSecret }) {
         className={styles.payButton}
       >
         <span id="button-text">
-          {!processing ? (
+          {processing ? (
             <div className="spinner-border spinner-border-sm"></div>
           ) : (
             'Pay now'
@@ -62,4 +66,5 @@ export default function PaymentView({ clientSecret }) {
 
 PaymentView.propTypes = {
   clientSecret: PropTypes.string,
+  attendee: PropTypes.object,
 };
