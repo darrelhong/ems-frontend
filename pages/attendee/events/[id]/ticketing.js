@@ -35,7 +35,7 @@ export default function AttendeeEventTicketing({ id }) {
   const [checkoutResponse, setCheckoutResponse] = useState();
   const [paymentCompleteResp, setPaymentCompleteResp] = useState();
 
-  const { mutate: checkout } = useMutation(
+  const { mutate: checkout, isError, isLoading } = useMutation(
     (data) => api.post('/api/ticketing/checkout', data),
     {
       onSuccess: (resp) => {
@@ -182,9 +182,15 @@ export default function AttendeeEventTicketing({ id }) {
 
                     <Row>
                       <Col>
+                        {isError && (
+                          <Alert variant="danger" role="alert">
+                            An error has occured. Please refresh and try again.
+                          </Alert>
+                        )}
                         <ButtonWithLoading
                           className="btn btn-fill-out btn-sm"
                           onClick={() => checkout({ eventId: id, ticketQty })}
+                          isLoading={isLoading}
                         >
                           Checkout
                         </ButtonWithLoading>
