@@ -64,21 +64,20 @@ const FollowersTabEoProfile = ({ attendees, partners, showPublicView }) => {
         return "Both";
       }
       else if (chkBusinessPartner.checked) {
-        return "Allbp";
+        return "AllBpFollowers";
       }
       else if (chkAttendee.checked) {
-        return "Allatt";
+        return "AllAttFollowers";
       }
     }
 
     let data = {
       subject: broadcastTitle,
       content: broadcastMessage,
-      eventId: 1,
       broadcastOption: broadcastOption()
     }
 
-    api.post('/api/organiser/broadcast', data)
+    api.post('/api/organiser/broadcastEmailToFollowers', data)
     .then(() => {
       setBroadcastSuccess(true);
     })

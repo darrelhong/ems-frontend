@@ -114,7 +114,7 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
       broadcastOption: broadcastOption()
     }
 
-    api.post('/api/organiser/broadcast', data)
+    api.post('/api/organiser/broadcastEmailEnquiry', data)
     .then(() => {
       setBroadcastSuccess(true);
     })

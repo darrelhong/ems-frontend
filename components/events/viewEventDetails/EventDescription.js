@@ -130,7 +130,7 @@ const EventDescription = ({
 
   function broadcastNotification(currEvent) {
     closeConfirmBroadcastModal();
-    
+
     // get user inputs
     let broadcastTitle = document.getElementById("broadcastTitle").value;
     let broadcastMessage = document.getElementById("broadcastMessage").value;
@@ -156,7 +156,7 @@ const EventDescription = ({
       broadcastOption: broadcastOption()
     }
 
-    api.post('/api/organiser/broadcast', data)
+    api.post('/api/organiser/broadcastEmailEnquiry', data)
     .then(() => {
       setBroadcastSuccess(true);
     })
