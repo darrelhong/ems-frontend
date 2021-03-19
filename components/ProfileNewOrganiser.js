@@ -31,7 +31,8 @@ import { BreadcrumbOne } from './Breadcrumb';
 import {
   AiOutlineNotification,
 } from 'react-icons/ai';
-
+import ReactNotification from 'react-notifications-component'
+import 'react-notifications-component/dist/theme.css'
 const EventOrgProfile = ({ paraId_ }) => {
   const [showEoView, setShowEoView] = useState(false);
   const [showPublicView, setShowPublicView] = useState(false);
@@ -435,6 +436,7 @@ const EventOrgProfile = ({ paraId_ }) => {
           <li className="breadcrumb-item active">Profile Details</li>
         </ol>
       </BreadcrumbOne>
+      <ReactNotification />
       <br></br>
       <div className="content" style={{ marginLeft: '8%', marginRight: '8%' }}>
         <Row>

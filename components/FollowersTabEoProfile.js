@@ -11,7 +11,7 @@ import {
   AiOutlineNotification,
 } from 'react-icons/ai';
 // import EventEoProfileSliderTen from './ProductSlider/EventEoProfileSliderTen';
-
+import { store } from 'react-notifications-component';
 const FollowersTabEoProfile = ({ attendees, partners, showPublicView, organiser }) => {
 
   const [broadcastModalShow, setBroadcastModalShow] = useState(false);
@@ -118,6 +118,18 @@ const FollowersTabEoProfile = ({ attendees, partners, showPublicView, organiser 
     });
 closeConfirmBroadcastModal();
 closeBroadcastModal();
+
+store.addNotification({
+  title: "Success",
+  message: "The broadcast messages have been sent out successfully.",
+  type: "success",
+  insert: "top",
+  container: "top-left",
+  dismiss: {
+    duration: 5000,
+    onScreen: true
+  }
+});
   };
 
   if (attendees !== undefined && partners !== undefined) {

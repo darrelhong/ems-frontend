@@ -27,11 +27,12 @@ const PartnerHeaderTop = () => {
     getUserData();
   }, []);
   return (
-    
-    <div className="top-header d-lg-block">
-        <Head>
+    <>
+     <Head>
     <script src="https://embed.ravenhub.io/js/app.js"></script>
     </Head>
+    <div className="top-header d-lg-block">
+       
       <Container>
         <Row>
           <Col>
@@ -88,6 +89,7 @@ const PartnerHeaderTop = () => {
         </Row>
       </Container>
     </div>
+    </>
   );
 };
 

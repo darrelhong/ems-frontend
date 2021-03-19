@@ -30,6 +30,8 @@ const GuestHeader = ({ cartItems, navPositionClass }) => {
     setScroll(window.scrollY);
   };
 
+
+
   return (
     <>
       {scroll > headerHeight && (
@@ -47,8 +49,8 @@ const GuestHeader = ({ cartItems, navPositionClass }) => {
           <Container>
             <div className="bottom-header-container d-flex justify-content-between align-items-center position-relative">
               {/* logo */}
-              <Link href="/">
-                <a className="navbar-brand">
+              <Link href="/" >
+                <a className="navbar-brand" >
                   <img src="/assets/images/event-stop-logo.png" alt="logo" />
                 </a>
               </Link>
