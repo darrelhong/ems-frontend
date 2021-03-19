@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Fragment } from 'react';
 import Link from 'next/link';
-import { Col, ProgressBar, Modal, Button, Form } from 'react-bootstrap';
+import { Col, ProgressBar, Modal, Button, Form, Alert } from 'react-bootstrap';
 import { formatDate } from '../../lib/formatDate';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -10,6 +10,7 @@ import StarBorderIcon from '@material-ui/icons/StarBorder';
 import HidePopover from './HidePopover';
 import { vipToggle } from '../../lib/functions/eventOrganiser/eventFunctions';
 import { Unstable_TrapFocus } from '@material-ui/core';
+import api from '../../lib/ApiClient';
 
 const EventCard = ({ event, deleteCancelEvent, createToast }) => {
   const [currEvent, setCurrEvent] = useState(event);
@@ -25,15 +26,14 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
   const [confirmBroadcastModalShow, setConfirmBroadcastModalShow] = useState(false);
   const closeConfirmBroadcastModal = () => setConfirmBroadcastModalShow(false);
   const openConfirmBroadcastModal = () => setConfirmBroadcastModalShow(true);
+  
+  const [showRecipientError, setRecipientError] = useState(false);
+  const [showBroadcastError, setBroadcastError] = useState(false);
+  const [showBroadcastSuccess, setBroadcastSuccess] = useState(false);
 
   const handleDeleteCancel = async (currEvent) => {
     await deleteCancelEvent(currEvent);
     closeModal();
-  };
-
-  const handleBroadcastNotification = async (currEvent) => {
-    await broadcastNotification(currEvent);
-    closeBroadcastModal();
   };
 
   const handleVipToggle = async (currEvent) => {
@@ -57,6 +57,71 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
     }
     return false;
   };
+
+  function proceedBroadcast() {
+    let broadcastTitle = document.getElementById("broadcastTitle").value;
+    let broadcastMessage = document.getElementById("broadcastMessage").value;
+    let chkBusinessPartner = document.getElementById("chkBusinessPartner");
+    let chkAttendee = document.getElementById("chkAttendee")
+
+    if (!chkBusinessPartner.checked && !chkAttendee.checked) {
+      setRecipientError(true);
+    }
+    else {
+      setRecipientError(false);
+    }
+    if (broadcastTitle == "" || broadcastMessage == "") {
+      setBroadcastError(true);
+    }
+    else {
+      setBroadcastError(false);
+    }
+    if ((chkBusinessPartner.checked || chkAttendee.checked) &&
+      broadcastTitle != "" &&
+      broadcastMessage != ""
+    ) {
+      openConfirmBroadcastModal()
+      setRecipientError(false);
+      setBroadcastError(false);
+    }
+  }
+
+  function broadcastNotification(currEvent) {
+    closeConfirmBroadcastModal();
+    
+    // get user inputs
+    let broadcastTitle = document.getElementById("broadcastTitle").value;
+    let broadcastMessage = document.getElementById("broadcastMessage").value;
+    let chkBusinessPartner = document.getElementById("chkBusinessPartner");
+    let chkAttendee = document.getElementById("chkAttendee")
+
+    let broadcastOption = () => {
+      if (chkBusinessPartner.checked && chkAttendee.checked) {
+        return "Both";
+      }
+      else if (chkBusinessPartner.checked) {
+        return "Allbp";
+      }
+      else if (chkAttendee.checked) {
+        return "Allatt";
+      }
+    }
+
+    let data = {
+      subject: broadcastTitle,
+      content: broadcastMessage,
+      eventId: currEvent.eid,
+      broadcastOption: broadcastOption()
+    }
+
+    api.post('/api/organiser/broadcast', data)
+    .then(() => {
+      setBroadcastSuccess(true);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
 
   return (
     <Fragment>
@@ -101,7 +166,7 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
             </Button>
             <Button
               variant="primary"
-              onClick={() => handleBroadcastNotification(currEvent)}
+              onClick={() => broadcastNotification(currEvent)}
             >
               Yes
             </Button>
@@ -145,6 +210,30 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
               </label>
             </div>
           </div>
+          <Alert
+            show={showRecipientError}
+            variant="danger"
+            onClose={() => setRecipientError(false)}
+            dismissible
+          >
+            No recipients selected.
+          </Alert>
+          <Alert
+            show={showBroadcastError}
+            variant="danger"
+            onClose={() => setBroadcastError(false)}
+            dismissible
+          >
+            Please fill in all the fields.
+          </Alert>
+          <Alert
+            show={showBroadcastSuccess}
+            variant="success"
+            onClose={() => setBroadcastSuccess(false)}
+            dismissible
+          >
+            Broadcast sent!
+          </Alert>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={closeBroadcastModal}>
@@ -152,7 +241,7 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
           </Button>
           <Button
             variant="primary"
-            onClick={() => openConfirmBroadcastModal()}
+            onClick={() => proceedBroadcast()}
           >
             Proceed
           </Button>

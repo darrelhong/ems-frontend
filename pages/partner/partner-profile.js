@@ -50,19 +50,28 @@ const Profile = ({ router: { query } }) => {
     <div>
       {role === 'Partner' && (
         <PartnerWrapper>
-          <ProfileNew localuser={localuser} />
+          <ProfileNew
+            localuser={localuser}
+            currentUserId={user.id}
+            currentUserRole={role} />
         </PartnerWrapper>
       )}
 
       {role === 'Attendee' && (
         <AttendeeWrapper>
-          <ProfileNew localuser={localuser} />
+          <ProfileNew
+            localuser={localuser}
+            currentUserId={user.id}
+            currentUserRole={role} />
         </AttendeeWrapper>
       )}
 
       {role === 'Organiser' && (
         <OrganiserWrapper>
-          <ProfileNew localuser={localuser} />
+          <ProfileNew
+            localuser={localuser}
+            currentUserId={user.id}
+            currentUserRole={role} />
         </OrganiserWrapper>
       )}
 
@@ -75,7 +84,10 @@ const Profile = ({ router: { query } }) => {
 
       {role === 'Guest' && (
         <GuestWrapper>
-          <ProfileNew localuser={localuser} />
+          <ProfileNew
+            localuser={localuser}
+            currentUserId={user.id}
+            currentUserRole={role} />
         </GuestWrapper>
       )}
     </div>

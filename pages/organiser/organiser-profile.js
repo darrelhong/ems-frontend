@@ -47,25 +47,37 @@ const Profile = ({ router: { query } }) => {
     <div>
       {role === 'Partner' && (
         <PartnerWrapper>
-          <ProfileNewOrganiser paraId_={paraId_} />
+          <ProfileNewOrganiser
+            paraId_={paraId_}
+            currentUserId_={user.id}
+            currentUserRole_={role} />
         </PartnerWrapper>
       )}
 
       {role === 'Attendee' && (
         <AttendeeWrapper>
-          <ProfileNewOrganiser paraId_={paraId_} />
+          <ProfileNewOrganiser
+            paraId_={paraId_}
+            currentUserId_={user.id}
+            currentUserRole_={role} />
         </AttendeeWrapper>
       )}
 
       {role === 'Organiser' && (
         <OrganiserWrapper>
-          <ProfileNewOrganiser paraId_={paraId_} />
+          <ProfileNewOrganiser
+            paraId_={paraId_}
+            currentUserId_={user.id}
+            currentUserRole_={role} />
         </OrganiserWrapper>
       )}
 
       {role === 'Guest' && (
         <GuestWrapper>
-          <ProfileNewOrganiser paraId_={paraId_} />
+          <ProfileNewOrganiser
+            paraId_={paraId_}
+            currentUserId_={user.id}
+            currentUserRole_={role} />
         </GuestWrapper>
       )}
     </div>

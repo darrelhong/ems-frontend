@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Modal, Button, Form, Container, Row, Col } from 'react-bootstrap';
+import { Modal, Button, Form, Container, Row, Col, Alert } from 'react-bootstrap';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
 import Badge from 'react-bootstrap/Badge';
 import Link from 'next/link';
+import api from '../lib/ApiClient';
 // import EventEoProfileSliderTen from './ProductSlider/EventEoProfileSliderTen';
 
 const FollowersTabEoProfile = ({ attendees, partners, showPublicView }) => {
@@ -16,6 +17,75 @@ const FollowersTabEoProfile = ({ attendees, partners, showPublicView }) => {
   const [confirmBroadcastModalShow, setConfirmBroadcastModalShow] = useState(false);
   const closeConfirmBroadcastModal = () => setConfirmBroadcastModalShow(false);
   const openConfirmBroadcastModal = () => setConfirmBroadcastModalShow(true);
+  
+  const [showRecipientError, setRecipientError] = useState(false);
+  const [showBroadcastError, setBroadcastError] = useState(false);
+  const [showBroadcastSuccess, setBroadcastSuccess] = useState(false);
+
+  function proceedBroadcast() {
+    let broadcastTitle = document.getElementById("broadcastTitle").value;
+    let broadcastMessage = document.getElementById("broadcastMessage").value;
+    let chkBusinessPartner = document.getElementById("chkBusinessPartner");
+    let chkAttendee = document.getElementById("chkAttendee")
+
+    if (!chkBusinessPartner.checked && !chkAttendee.checked) {
+      setRecipientError(true);
+    }
+    else {
+      setRecipientError(false);
+    }
+    if (broadcastTitle == "" || broadcastMessage == "") {
+      setBroadcastError(true);
+    }
+    else {
+      setBroadcastError(false);
+    }
+    if ((chkBusinessPartner.checked || chkAttendee.checked) &&
+      broadcastTitle != "" &&
+      broadcastMessage != ""
+    ) {
+      openConfirmBroadcastModal()
+      setRecipientError(false);
+      setBroadcastError(false);
+    }
+  }
+
+  function broadcastNotification() {
+    closeConfirmBroadcastModal();
+
+    // get user inputs
+    let broadcastTitle = document.getElementById("broadcastTitle").value;
+    let broadcastMessage = document.getElementById("broadcastMessage").value;
+    let chkBusinessPartner = document.getElementById("chkBusinessPartner");
+    let chkAttendee = document.getElementById("chkAttendee")
+
+    let broadcastOption = () => {
+      if (chkBusinessPartner.checked && chkAttendee.checked) {
+        return "Both";
+      }
+      else if (chkBusinessPartner.checked) {
+        return "Allbp";
+      }
+      else if (chkAttendee.checked) {
+        return "Allatt";
+      }
+    }
+
+    let data = {
+      subject: broadcastTitle,
+      content: broadcastMessage,
+      eventId: 1,
+      broadcastOption: broadcastOption()
+    }
+
+    api.post('/api/organiser/broadcast', data)
+    .then(() => {
+      setBroadcastSuccess(true);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
 
   if (attendees !== undefined && partners !== undefined) {
     return (
@@ -40,7 +110,7 @@ const FollowersTabEoProfile = ({ attendees, partners, showPublicView }) => {
               </Button>
               <Button
                 variant="primary"
-                onClick={() => handleBroadcastNotification(event)}
+                onClick={() => broadcastNotification()}
               >
                 Yes
               </Button>
@@ -83,6 +153,30 @@ const FollowersTabEoProfile = ({ attendees, partners, showPublicView }) => {
                 </label>
               </div>
             </div>
+            <Alert
+              show={showRecipientError}
+              variant="danger"
+              onClose={() => setRecipientError(false)}
+              dismissible
+            >
+              No recipients selected.
+            </Alert>
+            <Alert
+              show={showBroadcastError}
+              variant="danger"
+              onClose={() => setBroadcastError(false)}
+              dismissible
+            >
+              Please fill in all the fields.
+            </Alert>
+            <Alert
+              show={showBroadcastSuccess}
+              variant="success"
+              onClose={() => setBroadcastSuccess(false)}
+              dismissible
+            >
+              Broadcast sent!
+            </Alert>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={closeBroadcastModal}>
@@ -90,7 +184,7 @@ const FollowersTabEoProfile = ({ attendees, partners, showPublicView }) => {
             </Button>
             <Button
               variant="primary"
-              onClick={() => openConfirmBroadcastModal()}
+              onClick={() => proceedBroadcast()}
             >
               Proceed
             </Button>

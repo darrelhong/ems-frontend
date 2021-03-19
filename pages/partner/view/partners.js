@@ -212,7 +212,7 @@ function PartnerViewUsers() {
                                         >
                                             <Link href={{
                                                 pathname: '/partner/partner-profile',
-                                                query: { paraId: JSON.stringify(partner.id) },
+                                                query: { localuser: JSON.stringify(partner.id) },
                                             }}>
                                                 <a className="w-100">
                                                     <UserCard partner={partner} />
