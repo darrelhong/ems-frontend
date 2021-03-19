@@ -421,54 +421,7 @@ const EventOrgProfile = ({ paraId_ }) => {
     }
   };
 
-  const sendNoti = () => {
-    var endpoint = 'https://api.ravenhub.io/company/WLU2yLZw9d/broadcasts/ziyDknTScF';
-/* 
-   The "data" key is optional within each notification
-   object in the notifications array below.
-*/
-    var postBody= {"notifications":[]};
-    console.log("organiser" + eventorganiser?.name);
-    for(var i=0; i<attendeeFollowers.length; i++){
-      console.log("attendee" + attendeeFollowers[i].id);
-      postBody.notifications.push({
-        "subscriberId" : "attendee" + attendeeFollowers[i].id,
-        "data": {
-          "organiser" : eventorganiser?.name,
-          "event" : "eventname" 
-        }
-      
-      })
-      console.log(postBody.notifications[i].subscriberId + "notification postbody");
-    }
-    console.log("postbody" + postBody.notifications);
 
-// var postBody =
-// {
-//   "notifications" : [
-//      {
-//        "subscriberId" : "foo1",
-//        "data" : {
-//                   "val1" : "hello again",
-//                   "val2" : "hi",
-//                   "urlvar" : "https://google.com"
-//                 }
-//      },
-//      {
-//        "subscriberId" : "foo2",
-//        "data" : {
-//                   "val1" : "hello again",
-//                   "val2" : "hi",
-//                   "urlvar" : "https://yahoo.com"
-//                 }
-//      }
-//   ]
-// }
-axios.post(endpoint, postBody, {
-  headers: {'Content-type': 'application/json'}
-});
-
-  };
 
   return (
     <>
@@ -647,7 +600,7 @@ axios.post(endpoint, postBody, {
                     </Tab.Pane>
                     <Tab.Pane eventKey="Followers">
                       <br></br>
-                      <button
+                      {/* <button
                               className="btn btn-fill-out btn-sm"
                               name="noti"
                               onClick= {sendNoti}
@@ -656,13 +609,14 @@ axios.post(endpoint, postBody, {
                               <AiOutlineNotification />
                             
                             </button>
-                      
+                       */}
                       <ul className="list-unstyled team-members">
                         <div className="product-description-tab__additional-info">
                           <FollowersTabEoProfile
                             attendees={attendeeFollowers}
                             partners={partnerFollowers}
                             showPublicView={showPublicView}
+                            organiser = {eventorganiser?.name}
                           />
                         </div>
                       </ul>
@@ -720,6 +674,13 @@ axios.post(endpoint, postBody, {
                                             <ProductRating
                                               ratingValue={review.rating}
                                             />
+                                            
+                                          </div>
+                                          <div className="rating">
+                                            
+                                          <span className="comment-date">
+                                            {review.reviewDateTime}
+                                          </span>
                                           </div>
                                         </div>
                                         <p className="customer-meta">
@@ -733,10 +694,11 @@ axios.post(endpoint, postBody, {
                                               {review.partner.name}
                                             </span>
                                           )}
-
-                                          <span className="comment-date">
+                                          <div className="rating">
+                                          <span >
                                             {review.event.name}
                                           </span>
+                                          </div>
                                         </p>
                                         <div className="description">
                                           <p>{review.reviewText}</p>

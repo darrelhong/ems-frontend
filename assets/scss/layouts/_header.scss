@@ -283,14 +283,14 @@
 
 
 
-.ravenhub-notification-wrapper{
+ .ravenhub-notification-wrapper{
   *[data-v-5b8e1db6] {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
 .unread-status[data-v-5b8e1db6] {
   float: right;
-  color: #516cf0;
+  color: transparent;
 }
 
 [data-v-5b8e1db6] *, [data-v-5b8e1db6] :after, [data-v-5b8e1db6] :before {
@@ -302,7 +302,10 @@
     fill: #000;
     color: #000;
 }
-
+.open-feed.show[data-v-5b8e1db6] {
+  -webkit-animation: scaleIn-data-v-5b8e1db6 .15s ease-in-out .15s 1 normal forwards;
+  animation: scaleIn-data-v-5b8e1db6 .15s ease-in-out .15s 1 normal forwards;
+}
 .open-feed.show[data-v-5b8e1db6] {
   -webkit-animation: scaleIn-data-v-5b8e1db6 .15s ease-in-out .15s 1 normal forwards;
   animation: scaleIn-data-v-5b8e1db6 .15s ease-in-out .15s 1 normal forwards;

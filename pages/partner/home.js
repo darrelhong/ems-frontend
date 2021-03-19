@@ -21,7 +21,7 @@ export default function PartnerHome() {
           </li>
         </ol>
       </BreadcrumbOne>
-
+      {/* test */}
       <Container className="my-4">
         {isLoading && <div className="spinner-grow" role="status" />}
         {isSuccess && (

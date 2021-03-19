@@ -39,7 +39,7 @@ const PartnerHeaderTop = () => {
               <ul className="header-list" >
                 <li>
                 
-                    <a>
+                    <a >
                     <notification-center  appId="WLU2yLZw9d" subscriberId= {"partner" + user} />
                     </a>
                   
@@ -54,6 +54,7 @@ const PartnerHeaderTop = () => {
                 </li>
                 {/* <Link href={`/partner/profile-public?id=${JSON.stringify(localuser?.id)}`}> */}
                 <li>
+                 
                   {/* <Link href={{ pathname: "/partner/profile-public", query: { localuser: JSON.stringify(localuser) } }}> */}
                   <Link
                     href={{

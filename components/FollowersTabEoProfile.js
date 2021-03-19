@@ -5,24 +5,127 @@ import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
 import Badge from 'react-bootstrap/Badge';
 import Link from 'next/link';
+import axios from 'axios';
+
+import {
+  AiOutlineNotification,
+} from 'react-icons/ai';
 // import EventEoProfileSliderTen from './ProductSlider/EventEoProfileSliderTen';
 
-const FollowersTabEoProfile = ({ attendees, partners, showPublicView }) => {
-  
+const FollowersTabEoProfile = ({ attendees, partners, showPublicView, organiser }) => {
+
   const [broadcastModalShow, setBroadcastModalShow] = useState(false);
   const closeBroadcastModal = () => setBroadcastModalShow(false);
   const openBroadcastModal = () => setBroadcastModalShow(true);
 
   const [confirmBroadcastModalShow, setConfirmBroadcastModalShow] = useState(false);
-  const closeConfirmBroadcastModal = () => setConfirmBroadcastModalShow(false);
-  const openConfirmBroadcastModal = () => setConfirmBroadcastModalShow(true);
+  const closeConfirmBroadcastModal = () => {setConfirmBroadcastModalShow(false);setBroadcastModalShow(true);}
+  const openConfirmBroadcastModal = () => {setConfirmBroadcastModalShow(true); setBroadcastModalShow(false);}
+  const [message, setMessage] = useState('');
+
+  // var checkAttendee;
+  // var checkPartner;
+  const [checkAttendee, setCheckAttendee] = useState(false);
+  const [checkPartner, setCheckPartner] = useState(false);
+
+
+  const handleMessage = (e) => {
+    setMessage(e.target.value);
+    console.log(e.target.value + "message");
+
+  };
+
+  // const handleUser = (user) => {
+  //   setCheckUser(user);
+  //   console.log(user + "user");
+
+  //   console.log(checkUser + "checkuser");
+
+  // };
+
+
+  const handlePartner = (e) => {
+    if (e.target.checked) {
+     console.log("checked");
+
+      setCheckPartner(true);
+    } else {
+      console.log("unchecked");
+
+      setCheckPartner(false);
+    }
+    console.log(checkPartner + "partner");
+  };
+  
+  const handleAttendee = (e) => {
+    if (e.target.checked) {
+      console.log("checked");
+
+
+      setCheckAttendee(true);
+    } else {
+      console.log("unchecked");
+
+      setCheckAttendee(false);
+    }
+    console.log(checkAttendee + "attendee");
+  };
+
+
+  const sendNoti = () => {
+    var endpoint = 'https://api.ravenhub.io/company/WLU2yLZw9d/broadcasts/ziyDknTScF';
+    /* 
+       The "data" key is optional within each notification
+       object in the notifications array below.
+    */
+   console.log("organiser" + organiser);
+   console.log("noti attendee" + checkAttendee);
+    var postBody = { "notifications": [] };
+    if(checkAttendee == true){
+      for (var i = 0; i < attendees.length; i++) {
+      console.log("attendee" + attendees[i].id);
+      postBody.notifications.push({
+        "subscriberId": "attendee" + attendees[i].id,
+        "data": {
+          "title" : organiser,
+          "message": message,
+        }
+
+      })
+      console.log(postBody.notifications[i].subscriberId + "notification postbody");
+
+    }
+    
+    }
+    if (checkPartner == true){
+      for (var i = 0; i < partners.length; i++) {
+        console.log("partner" + partners[i].id);
+        postBody.notifications.push({
+          "subscriberId": "partner" + partners[i].id,
+          "data": {
+            "title" : organiser,
+            "message": message,
+          }
+  
+        })
+        console.log(postBody.notifications[i].subscriberId + "notification postbody");
+      }
+    }
+    console.log("postbody" + postBody.notifications);
+
+    axios.post(endpoint, postBody, {
+      headers: { 'Content-type': 'application/json' }
+    });
+closeConfirmBroadcastModal();
+closeBroadcastModal();
+  };
 
   if (attendees !== undefined && partners !== undefined) {
     return (
       <div className="product-tab-area space-pb--r70">
 
         {/* broadcast modal */}
-        <Modal show={broadcastModalShow} onHide={closeBroadcastModal} centered>
+      
 
           {/* confirm broadcast modal */}
           <Modal show={confirmBroadcastModalShow} onHide={closeConfirmBroadcastModal} centered>
@@ -40,45 +143,50 @@ const FollowersTabEoProfile = ({ attendees, partners, showPublicView }) => {
               </Button>
               <Button
                 variant="primary"
-                onClick={() => handleBroadcastNotification(event)}
+                onClick={sendNoti}
               >
                 Yes
               </Button>
             </Modal.Footer>
           </Modal>
-          
+  <Modal show={broadcastModalShow} onHide={closeBroadcastModal} centered>
           <Modal.Header closeButton>
             <Modal.Title>
               Broadcast Message
             </Modal.Title>
           </Modal.Header>
-          <Modal.Body style={{display: "flex", flexDirection: "column", gap: "5px"}} >
-            <input
+          <Modal.Body style={{ display: "flex", flexDirection: "column", gap: "5px" }} >
+            {/* <input
               required
               className="form-control"
               name="broadcastTitle"
               id="broadcastTitle"
               placeholder="Title"
-              style={{width: "100%"}}
-            />
-            <textarea 
+              style={{ width: "100%" }}
+            /> */}
+            <textarea
               required
               className="form-control"
               name="broadcastMessage"
               id="broadcastMessage"
-              placeholder="Type something here..."
-              style={{width: "100%", height: "10em"}}
+              placeholder="Type your message here..."
+              style={{ width: "100%", height: "10em" }}
+              onChange={handleMessage}
             />
-            <div style={{display: "flex"}}>
-              <div style={{display: "flex", width: "50%"}}>
-                <Form.Check id="chkBusinessPartner" />
-                <label htmlFor="chkBusinessPartner">
+            <div style={{ display: "flex" }}>
+              <div style={{ display: "flex", width: "50%" }}>
+                <Form.Check id="chkBusinessPartner" 
+                onClick={handlePartner.bind(
+                                        this)}
+                />
+                <label htmlFor="chkBusinessPartner" >
                   All Business Partners
                 </label>
               </div>
-              <div style={{display: "flex", width: "50%"}}>
-                <Form.Check id="chkAttendee" />
-                <label htmlFor="chkAttendee">
+              <div style={{ display: "flex", width: "50%" }}>
+                <Form.Check id="chkAttendee" onClick={handleAttendee.bind(
+                                        this)}/>
+                <label htmlFor="chkAttendee" >
                   All Attendees
                 </label>
               </div>
@@ -96,12 +204,12 @@ const FollowersTabEoProfile = ({ attendees, partners, showPublicView }) => {
             </Button>
           </Modal.Footer>
         </Modal>
-      
+
         <Container>
           <Tab.Container defaultActiveKey="attendees">
             <Nav
               variant="pills"
-              className="product-tab-navigation text-center justify-content-left space-mb--30"
+              className="product-tab-navigation text-center justify-content-center space-mb--30"
             >
               <Nav.Item>
                 <Nav.Link eventKey="attendees">Attendee</Nav.Link>
@@ -109,14 +217,15 @@ const FollowersTabEoProfile = ({ attendees, partners, showPublicView }) => {
               <Nav.Item>
                 <Nav.Link eventKey="partners">Partner</Nav.Link>
               </Nav.Item>
+              <button
+                className="btn btn-fill-out btn-sm"
+                style={{ float: "right" }}
+                onClick={() => openBroadcastModal()}
+              >
+                <AiOutlineNotification />
+              </button>
             </Nav>
-            <button
-              className="btn btn-fill-out"
-              style={{float: "right", marginTop: "-78px", paddingLeft: "25px", paddingRight: "25px"}}
-              onClick={() => openBroadcastModal()}
-            >
-              Broadcast
-            </button>
+
             <Tab.Content>
               <Tab.Pane eventKey="attendees">
                 <Row>

@@ -22,7 +22,7 @@ const OrganiserHeaderTop = () => {
 
         console.log(data);
 
-        setUser(data);
+        setUser(data?.id);
       });
     };
     getUserData();
@@ -40,14 +40,14 @@ const OrganiserHeaderTop = () => {
                 <li>
                 
                     <a>
-                    <notification-center  appId="WLU2yLZw9d" subscriberId= {"organiser" + user?.id} />
+                    <notification-center  appId="WLU2yLZw9d" subscriberId= {"organiser" + user} />
                     </a>
                 </li>
                 <li>
                   <Link
                     href={{
                       pathname: '/organiser/organiser-profile',
-                      query: { paraId: JSON.stringify(user?.id) },
+                      query: { paraId: JSON.stringify(user) },
                     }}
                   >
                     <a>
