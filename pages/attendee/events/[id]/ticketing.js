@@ -223,13 +223,15 @@ export default function AttendeeEventTicketing({ id }) {
                           {paymentCompleteResp.map((ticket) => (
                             <Col md={6} key={ticket.id} className="mb-4">
                               <Card bg="light" border="light">
-                                <Card.Header>Ticket</Card.Header>
+                                <Card.Header>ID: {ticket.id}</Card.Header>
                                 <Card.Body>
                                   <Card.Title>{ticket.event.name}</Card.Title>
                                   <Card.Subtitle className="mb-2 text-dark font-weight-normal">
                                     Attendee: {ticket.attendee.name}
                                   </Card.Subtitle>
-                                  <Card.Text>Ticket ID: {ticket.id}</Card.Text>
+                                  <Card.Text>
+                                    Payment: {ticket.paymentStatus}
+                                  </Card.Text>
                                 </Card.Body>
                               </Card>
                             </Col>
