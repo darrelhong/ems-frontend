@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 
@@ -11,6 +12,7 @@ export default function PaymentView({
   attendee,
   checkoutResponse,
   onPaymentCompleteResp,
+  event,
 }) {
   const [succeeded, setSucceeded] = useState(false);
   const [error, setError] = useState(null);
@@ -18,6 +20,7 @@ export default function PaymentView({
   const [disabled, setDisabled] = useState(true);
   const stripe = useStripe();
   const elements = useElements();
+  const router = useRouter();
 
   const handleChange = async (event) => {
     setDisabled(event.empty);
@@ -37,16 +40,21 @@ export default function PaymentView({
       },
     });
 
+    const ticketTransactionIds = checkoutResponse.tickets.map(
+      (ticket) => ticket.id
+    );
+
     if (payload.error) {
-      setError(`Payment failed ${payload.error.message}`);
+      await api.post('/api/ticketing/cancel', { ticketTransactionIds });
+      router.push({
+        pathname: '/attendee/events/checkout-error',
+        query: { eventId: event.eid, error: payload.error.message },
+      });
       setProcessing(false);
     } else {
       setError(null);
       setProcessing(false);
       setSucceeded(true);
-      const ticketTransactionIds = checkoutResponse.tickets.map(
-        (ticket) => ticket.id
-      );
       await api
         .post('/api/ticketing/payment-complete', { ticketTransactionIds })
         .then(onPaymentCompleteResp);
@@ -88,4 +96,5 @@ PaymentView.propTypes = {
   attendee: PropTypes.object,
   checkoutResponse: PropTypes.object,
   onPaymentCompleteResp: PropTypes.object,
+  event: PropTypes.object,
 };

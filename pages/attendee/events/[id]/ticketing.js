@@ -204,6 +204,7 @@ export default function AttendeeEventTicketing({ id }) {
                       attendee={attendee}
                       checkoutResponse={checkoutResponse}
                       onPaymentCompleteResp={onPaymentCompleteResp}
+                      event={data}
                     />
                   </Elements>
                 ) : view == 'success' ? (
