@@ -5,6 +5,7 @@ import useUser from 'lib/query/useUser';
 
 import { BreadcrumbOne } from 'components/Breadcrumb';
 import AttendeeWrapper from 'components/wrapper/AttendeeWrapper';
+import CenterSpinner from 'components/custom/CenterSpinner';
 
 export default function PartnerHome() {
   const { data: user, status } = useUser(localStorage.getItem('userId'));
@@ -22,7 +23,7 @@ export default function PartnerHome() {
 
       <Container className="my-4">
         {status == 'loading' ? (
-          <div className="spinner-grow" role="status" />
+          <CenterSpinner />
         ) : status == 'error' ? (
           <Alert variant="danger">An error has occured</Alert>
         ) : (
