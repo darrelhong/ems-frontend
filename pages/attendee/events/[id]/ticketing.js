@@ -1,22 +1,22 @@
+import Link from 'next/link';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
+import { useMutation } from 'react-query';
+import { Alert, Card, Col, Container, Row } from 'react-bootstrap';
+import { format, parseISO } from 'date-fns';
 
 import { useEvent } from 'lib/query/events';
 import { formatter } from 'lib/util/currency';
+import api from 'lib/ApiClient';
+import useUser from 'lib/query/useUser';
 
 import AttendeeWrapper from 'components/wrapper/AttendeeWrapper';
 import CenterSpinner from 'components/custom/CenterSpinner';
-import { Alert, Card, Col, Container, Row } from 'react-bootstrap';
 import { BreadcrumbOne } from 'components/Breadcrumb';
-import Link from 'next/link';
-import { format, parseISO } from 'date-fns';
 import ButtonWithLoading from 'components/custom/ButtonWithLoading';
 import PaymentView from 'components/custom/ticketing/PaymentView';
-import useUser from 'lib/query/useUser';
-import { useMutation } from 'react-query';
-import api from 'lib/ApiClient';
 
 export function getServerSideProps({ query }) {
   return {
@@ -239,9 +239,11 @@ export default function AttendeeEventTicketing({ id }) {
                         </Row>
 
                         <br></br>
-                        <button className="btn btn-fill-out btn-sm">
-                          View my tickets
-                        </button>
+                        <Link href="/attendee/tickets">
+                          <button className="btn btn-fill-out btn-sm">
+                            View my tickets
+                          </button>
+                        </Link>
                       </Col>
                     </Row>
                   </>
