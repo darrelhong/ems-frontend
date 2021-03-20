@@ -5,12 +5,12 @@ import {
     Image
 } from 'react-bootstrap';
 
-const DetailContainer = ({ boothProfile, booths }) => {
+const DetailContainer = ({ sellerProfile, booths }) => {
     return (
         <Container>
             <Row>
                 <Col md={4}>
-                    {boothProfile?.businessPartner?.profilePic ? (
+                    {sellerProfile?.businessPartner?.profilePic ? (
                         <Image
                             className="profile-image"
                             src={partner?.profilePic}
@@ -27,7 +27,7 @@ const DetailContainer = ({ boothProfile, booths }) => {
                 <Col className="detailContainer">
                     <Row className="nameBoothRow">
                         <Col>
-                            <h2>{boothProfile?.businessPartner?.name ?? 'Name'}</h2>
+                            <h2>{sellerProfile?.businessPartner?.name ?? 'Name'}</h2>
                         </Col>
                         <Col>
                             <Row>
@@ -49,7 +49,7 @@ const DetailContainer = ({ boothProfile, booths }) => {
                         <h5>Booth Description:</h5>
                     </Row>
                     <Row>
-                        {boothProfile?.description ?? 'Empty Description still'}
+                        {sellerProfile?.description ?? 'Empty Description still'}
                     </Row>
 
                 </Col>

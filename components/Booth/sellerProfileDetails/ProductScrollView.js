@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import ProductModal from 'components/Booth/boothProfileDetails/ProductModal';
+import ProductModal from 'components/Booth/sellerProfileDetails/ProductModal';
 
 const ProductScrollView = ({ paginatedProducts }) => {
     const placeholderImage = "https://static.packt-cdn.com/products/9781849514804/graphics/4804_03_46.jpg";

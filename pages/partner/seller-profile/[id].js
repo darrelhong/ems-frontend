@@ -1,49 +1,49 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { getBoothProfile, getBoothsByBoothProfile } from 'lib/query/boothApi';
-import ProductScrollView from 'components/Booth/boothProfileDetails/ProductScrollView';
-import BoothProductComponent from 'components/Booth/boothProfileDetails/BoothProductComponent';
-import DetailContainer from 'components/Booth/boothProfileDetails/DetailContainer';
+import { getSellerProfile, getBoothsBySellerProfile } from 'lib/query/boothApi';
+import ProductScrollView from 'components/Booth/sellerProfileDetails/ProductScrollView';
+import BoothProductComponent from 'components/Booth/sellerProfileDetails/BoothProductComponent';
+import DetailContainer from 'components/Booth/sellerProfileDetails/DetailContainer';
 import { BreadcrumbOne } from 'components/Breadcrumb';
 import PartnerWrapper from 'components/wrapper/PartnerWrapper';
 import { Container, Row, Col, Image } from 'react-bootstrap';
 import Link from 'next/link';
 
-const BoothProfile = () => {
+const SellerProfile = () => {
     const router = useRouter();
     const { id } = router.query;
-    const [boothProfile, setBoothProfile] = useState(Object);
+    const [sellerProfile, setSellerProfile] = useState(Object);
     const [booths, setBooths] = useState([]);
     const [bpProducts,setBpProducts] = useState([]);
 
     useEffect(() => {
         const loadData = async () => {
-            const boothProfileData = await getBoothProfile(id);
-            setBoothProfile(boothProfileData);
-            const boothData = await getBoothsByBoothProfile(id);
+            const sellerProfileData = await getSellerProfile(id);
+            setSellerProfile(sellerProfileData);
+            const boothData = await getBoothsBySellerProfile(id);
             setBooths(boothData);
-            const products = boothProfileData?.businessPartner.products;
+            const products = sellerProfileData?.businessPartner.products;
             setBpProducts(products);
         }
         loadData();
     }, []);
 
     return (
-        <PartnerWrapper title={boothProfile ? `Profile for ${boothProfile?.event?.name}` : 'Booth Profile'} >
-            <BreadcrumbOne pageTitle="Booth Profile">
+        <PartnerWrapper title={sellerProfile ? `Profile for ${sellerProfile?.event?.name}` : 'Booth Profile'} >
+            <BreadcrumbOne pageTitle="Seller Profile">
                 <ol className="breadcrumb justify-content-md-end">
                     <li className="breadcrumb-item">
                         <Link href="/">
                             <a>Home</a>
                         </Link>
                     </li>
-                    <li className="breadcrumb-item active">{boothProfile ? `Profile for ${boothProfile?.event?.name}` : 'Booth Profile'}</li>
+                    <li className="breadcrumb-item active">{sellerProfile ? `Profile for ${sellerProfile?.event?.name}` : 'Booth Profile'}</li>
                 </ol>
             </BreadcrumbOne>
-            {booths && boothProfile && (
+            {booths && sellerProfile && (
                 <DetailContainer
                     booths={booths}
-                    boothProfile={boothProfile}
+                    sellerProfile={sellerProfile}
                 />
             )}
 
@@ -67,4 +67,4 @@ const BoothProfile = () => {
     )
 }
 
-export default BoothProfile;
+export default SellerProfile;
