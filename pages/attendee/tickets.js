@@ -1,13 +1,13 @@
 import Link from 'next/link';
 import { useQuery } from 'react-query';
-import { format, parseISO } from 'date-fns';
 
 import api from 'lib/ApiClient';
 
 import { BreadcrumbOne } from 'components/Breadcrumb';
 import AttendeeWrapper from 'components/wrapper/AttendeeWrapper';
-import { Alert, Card, Col, Container, Row } from 'react-bootstrap';
+import { Alert, Col, Container, Row } from 'react-bootstrap';
 import CenterSpinner from 'components/custom/CenterSpinner';
+import TicketCard from 'components/custom/ticketing/TicketCard';
 
 const getTickets = async () => {
   const { data } = await api.get('/api/ticketing/attendee');
@@ -40,25 +40,7 @@ export default function AttendeeTickets() {
             <Row className="mt-3">
               {data.map((ticket) => (
                 <Col md={6} key={ticket.id} className="mb-4">
-                  <Card bg="light" border="light">
-                    <Card.Header>ID: {ticket.id}</Card.Header>
-                    <Card.Body>
-                      <Card.Title>{ticket.event.name}</Card.Title>
-                      <Card.Subtitle className="mb-2 text-dark font-weight-normal">
-                        Attendee: {ticket.attendee.name}
-                      </Card.Subtitle>
-                      <Card.Text className="mb-0">
-                        Payment: {ticket.paymentStatus}
-                      </Card.Text>
-                      <Card.Text>
-                        Purchase Date:{' '}
-                        {format(
-                          parseISO(ticket.dateTimeOrdered),
-                          'dd MMM yyyy'
-                        )}
-                      </Card.Text>
-                    </Card.Body>
-                  </Card>
+                  <TicketCard ticket={ticket} />
                 </Col>
               ))}
             </Row>
