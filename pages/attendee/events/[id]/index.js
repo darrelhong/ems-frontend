@@ -106,7 +106,14 @@ export default function AttendeeEventPage({ id }) {
                         {formatter.format(data.ticketPrice)}
                       </p>
                       <Link href={`${id}/ticketing`}>
-                        <button className="btn btn-success">Get tickets</button>
+                        <button
+                          className="btn btn-success"
+                          disabled={
+                            Date.parse(data.eventStartDate) < Date.now()
+                          }
+                        >
+                          Get tickets
+                        </button>
                       </Link>
                     </>
                   )}
