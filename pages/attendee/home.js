@@ -38,6 +38,11 @@ export default function PartnerHome() {
               <button className="btn btn-fill-out">View events</button>
             </Link>
           </Col>
+          <Col>
+            <Link href="tickets">
+              <button className="btn btn-fill-out">View tickets</button>
+            </Link>
+          </Col>
         </Row>
       </Container>
     </AttendeeWrapper>
