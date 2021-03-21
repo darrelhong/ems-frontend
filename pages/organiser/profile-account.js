@@ -354,7 +354,7 @@ const MyAccount = () => {
           <li className="breadcrumb-item active">My Account Settings</li>
         </ol>
       </BreadcrumbOne>
-      <div className="my-account-content space-pt--r60 space-pb--r60" >
+      <div className="my-account-content space-pt--r60 space-pb--r60">
         <Container>
           <Tab.Container defaultActiveKey="accountDetails">
             <Row>
@@ -466,10 +466,13 @@ const MyAccount = () => {
                               {user?.approved == false &&
                                 user?.approvalMessage != null &&
                                 user?.supportDocsUrl != null && (
-                                  <h6>
-                                    Verification Status:{' '}
-                                    <span className="noteMsg">Rejected</span>
-                                  </h6>
+                                  <div>
+                                    <h6>
+                                      Verification Status:{' '}
+                                      <span className="noteMsg">Rejected</span>
+                                    </h6>
+                                    <p>Reason: {user?.approvalMessage} </p>
+                                  </div>
                                 )}
                             </div>
                             <div className="form-group col-md-12">
