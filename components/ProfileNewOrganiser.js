@@ -21,15 +21,20 @@ import { getReviews, getReviewsByEvent } from '../lib/query/getReviews';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
+import Alert from 'react-bootstrap/Alert';
 import { BsPencilSquare } from 'react-icons/bs';
 import api from '../lib/ApiClient';
-import { getRating, getEoEventsByIdRoleStatus } from '../lib/query/useEvent';
+import {
+  getRating,
+  getEoEventsByIdRoleStatus,
+  getEventByOrganiserId,
+} from '../lib/query/useEvent';
 import { getOrgAttendeeFollowers } from '../lib/query/getOrgAttendeeFollowers';
 import { getOrgPartnerFollowers } from '../lib/query/getOrgPartnerFollowers';
 import { useMutation } from 'react-query';
 import { BreadcrumbOne } from './Breadcrumb';
 
-const EventOrgProfile = ({ paraId_ }) => {
+const EventOrgProfile = ({ paraId_, currentUserId_, currentUserRole_ }) => {
   const [showEoView, setShowEoView] = useState(false);
   const [showPublicView, setShowPublicView] = useState(false);
   const [userRole, setUserRole] = useState('');
@@ -37,6 +42,7 @@ const EventOrgProfile = ({ paraId_ }) => {
   const [currenteventlist, setCurrenteventlist] = useState([]);
   const [upcomingeventlist, setUpcomingeventlist] = useState([]);
   const [pasteventlist, setPastEventlist] = useState([]);
+  const [eoeventlist, setEoEventList] = useState([]);
   const [eventorganiser, setEventOrganiser] = useState();
   const [attendeeFollowers, setAttendeeFollowers] = useState([]);
   const [partnerFollowers, setPartnerFollowers] = useState([]);
@@ -44,8 +50,10 @@ const EventOrgProfile = ({ paraId_ }) => {
   const [unfollowBtn, setUnfollowBtn] = useState();
   const [followBtn, setFollowBtn] = useState();
   const [reviews, setReviews] = useState();
-  const[user,setUser] = useState();
- 
+  const [user, setUser] = useState();
+
+  const [showEnquiryError, setEnquiryError] = useState(false);
+  const [showEnquirySuccess, setEnquirySuccess] = useState(false);
   // if there is user login credential
   //const paraId_ = JSON.parse(query.paraId);
 
@@ -102,7 +110,6 @@ const EventOrgProfile = ({ paraId_ }) => {
       }
     });
   };
-
 
   const getReviewsEO = async () => {
     await getReviews(paraId_).then((data) => {
@@ -278,6 +285,10 @@ const EventOrgProfile = ({ paraId_ }) => {
 
               loadOrgPartnerFollowerData();
             }
+
+            await getEventByOrganiserId(paraId_).then((events) => {
+              setEoEventList(events);
+            });
           }
         });
       };
@@ -328,12 +339,19 @@ const EventOrgProfile = ({ paraId_ }) => {
         setUnfollowBtn(true);
         setFollowBtn(false);
         getRefreshedFollowers();
-        console.log("user " + user);
-        let endpoint = "https://api.ravenhub.io/company/WLU2yLZw9d/subscribers/organiser" + data.id + "/events/SyTpyGmjrT"
- 
-  axios.post(endpoint, { "person" : user }, {
-  headers: {'Content-type': 'application/json'}
-  });
+        console.log('user ' + user);
+        let endpoint =
+          'https://api.ravenhub.io/company/WLU2yLZw9d/subscribers/organiser' +
+          data.id +
+          '/events/SyTpyGmjrT';
+
+        axios.post(
+          endpoint,
+          { person: user },
+          {
+            headers: { 'Content-type': 'application/json' },
+          }
+        );
       })
       .catch((error) => {
         console.log(error);
@@ -360,12 +378,19 @@ const EventOrgProfile = ({ paraId_ }) => {
         setUnfollowBtn(true);
         setFollowBtn(false);
         getRefreshedFollowers();
-        console.log("user " + user );
-        let endpoint = "https://api.ravenhub.io/company/WLU2yLZw9d/subscribers/organiser" + data.id + "/events/SyTpyGmjrT"
- 
-  axios.post(endpoint, { "person" : user }, {
-  headers: {'Content-type': 'application/json'}
-  });
+        console.log('user ' + user);
+        let endpoint =
+          'https://api.ravenhub.io/company/WLU2yLZw9d/subscribers/organiser' +
+          data.id +
+          '/events/SyTpyGmjrT';
+
+        axios.post(
+          endpoint,
+          { person: user },
+          {
+            headers: { 'Content-type': 'application/json' },
+          }
+        );
       })
       .catch((error) => {
         console.log(error);
@@ -417,6 +442,43 @@ const EventOrgProfile = ({ paraId_ }) => {
       getReviewsEvent(e.target.value);
     }
   };
+
+  function sendEnquiry() {
+    // get user inputs
+    let enquiryTitle = document.getElementById('enquiryTitle').value;
+    let enquiryEvent = document.getElementById('enquiryEvent').value;
+    let enquiryMessage = document.getElementById('enquiryMessage').value;
+
+    // validate
+    if (enquiryTitle == '' || enquiryEvent == 'none' || enquiryMessage == '') {
+      setEnquiryError(true);
+    } else {
+      setEnquiryError(false);
+
+      // get sender and receiver info
+      getUser(currentUserId_).then((user) => {
+        let enquiryReceiverEmail = eventorganiser.email;
+        let enquirySenderEmail = user.email;
+
+        let data = {
+          subject: enquiryTitle,
+          content: enquiryMessage,
+          eventId: enquiryEvent,
+          receiverEmail: enquiryReceiverEmail,
+          senderEmail: enquirySenderEmail,
+        };
+
+        api
+          .post('/api/user/enquiry', data)
+          .then(() => {
+            setEnquirySuccess(true);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      });
+    }
+  }
 
   return (
     <>
@@ -696,9 +758,79 @@ const EventOrgProfile = ({ paraId_ }) => {
               </CardBody>
             </Card>
           </Col>
+          {Boolean(
+            (currentUserId_ != paraId_) & (currentUserRole_ != 'Organiser')
+          ) && (
+            <Col xs={12} style={{ marginTop: '30px', marginBottom: '30px' }}>
+              <Card className="card-user">
+                <CardHeader className="text-center">
+                  <h4>Have some questions?</h4>
+                </CardHeader>
+                <CardBody className="d-flex justify-content-center">
+                  <Row className="w-100 d-flex justify-content-center">
+                    <Col
+                      xs={12}
+                      lg={6}
+                      className="d-flex flex-column"
+                      style={{ gap: '10px' }}
+                    >
+                      <input
+                        id="enquiryTitle"
+                        className="form-control"
+                        placeholder="Title"
+                      />
+                      <select className="custom-select" id="enquiryEvent">
+                        <option value="none">Event</option>
+                        {(eoeventlist != null || eoeventlist != undefined) &&
+                          eoeventlist.map((event) => {
+                            return (
+                              <option value={event.eid}>{event.name}</option>
+                            );
+                          })}
+                      </select>
+                      <textarea
+                        id="enquiryMessage"
+                        className="form-control"
+                        placeholder="Type something here..."
+                        style={{ height: '10em' }}
+                      />
+                      <Alert
+                        show={showEnquiryError}
+                        variant="danger"
+                        onClose={() => setEnquiryError(false)}
+                        dismissible
+                      >
+                        Please fill in all the fields.
+                      </Alert>
+                      <Alert
+                        show={showEnquirySuccess}
+                        variant="success"
+                        onClose={() => setEnquirySuccess(false)}
+                        dismissible
+                      >
+                        Success! A copy of the enquiry has been sent to your
+                        email.
+                      </Alert>
+                      <button
+                        className="btn btn-fill-out"
+                        onClick={() => sendEnquiry()}
+                      >
+                        Send Enquiry
+                      </button>
+                    </Col>
+                  </Row>
+                </CardBody>
+              </Card>
+            </Col>
+          )}
         </Row>
         <br></br>
       </div>
+      {/*
+        <div style={{display: "none"}}>
+          {setEoEventList(currenteventlist.concat(upcomingeventlist, pasteventlist))}
+        </div>
+      */}
     </>
   );
 };

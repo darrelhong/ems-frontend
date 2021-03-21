@@ -18,12 +18,14 @@ import { useMutation } from 'react-query';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { BreadcrumbOne } from '../components/Breadcrumb';
-import { Container } from 'react-bootstrap';
+import { Alert } from 'react-bootstrap';
 import { getUser } from '../lib/query/getUser';
+import getAllEventByBpId from '../lib/query/getEvents';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
 import Badge from 'react-bootstrap/Badge';
+import { getEventByOrganiserId } from '../lib/query/useEvent';
 import { getFollowers, getFollowing } from '../lib/query/getBPFollow';
 import { isBpVip, addVip } from '../lib/query/useVip';
 import { BsPencilSquare, BsPlus } from 'react-icons/bs';
@@ -32,7 +34,7 @@ import { PermDataSettingTwoTone } from '@material-ui/icons';
 import { FiPlus } from 'react-icons/fi';
 import Modal from 'react-bootstrap/Modal';
 
-const PartnerProfile = ({ localuser }) => {
+const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
   const [publicView, setPublicView] = useState();
   const [eoView, setEOView] = useState();
 
@@ -52,6 +54,9 @@ const PartnerProfile = ({ localuser }) => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
 
+  const [enquiryEventList, setEnquiryEventList] = useState([]);
+  const [showEnquiryError, setEnquiryError] = useState(false);
+  const [showEnquirySuccess, setEnquirySuccess] = useState(false);
   var followId;
 
   useEffect(() => {
@@ -145,6 +150,39 @@ const PartnerProfile = ({ localuser }) => {
             setEOView(false);
           }
         });
+          
+        if (currentUserRole == "Organiser") {
+          await getAllEventByBpId(
+            localuser
+          ).then(async (bpEventList) => {
+            await getEventByOrganiserId(
+              currentUserId
+            ).then((eoEventList) => {
+  
+              console.log(bpEventList);
+              console.log(eoEventList);
+              Array.prototype.unique = function() {
+                var arr = this.concat();
+                for (var i = 0; i < arr.length; ++i) {
+                    for (var j = i + 1; j < arr.length; ++j) {
+                        if (arr[i].eid == arr[j].eid)
+                        arr.splice(j--, 1);
+                    }
+                }
+                return arr;
+              };
+  
+              setEnquiryEventList(bpEventList.concat(eoEventList).unique());
+            });
+          });
+        }
+        else if (currentUserRole == "Attendee") {
+          await getAllEventByBpId(
+            localuser
+          ).then((bpEventList) => {
+            setEnquiryEventList(bpEventList);
+          });
+        }
       };
       getCurrentUserData();
     } else {
@@ -230,6 +268,43 @@ const PartnerProfile = ({ localuser }) => {
     setShow(false);
     checkIfBpIsVip_();
   };
+
+  function sendEnquiry() {
+    // get user inputs
+    let enquiryTitle = document.getElementById("enquiryTitle").value;
+    let enquiryEvent = document.getElementById("enquiryEvent").value;
+    let enquiryMessage = document.getElementById("enquiryMessage").value;
+
+    // validate
+    if (enquiryTitle == "" || enquiryEvent == "none" || enquiryMessage == "") {
+      setEnquiryError(true);
+    }
+    else {
+      setEnquiryError(false);
+
+      // get sender and receiver info
+      getUser(currentUserId).then((user) => {
+        let enquiryReceiverEmail = partner.email;
+        let enquirySenderEmail = user.email;
+  
+        let data = {
+          subject: enquiryTitle,
+          content: enquiryMessage,
+          eventId: enquiryEvent,
+          receiverEmail: enquiryReceiverEmail,
+          senderEmail: enquirySenderEmail
+        }
+  
+        api.post('/api/user/enquiry', data)
+        .then(() => {
+          setEnquirySuccess(true);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      });
+    }
+  }
 
   return (
     <>
@@ -607,6 +682,69 @@ const PartnerProfile = ({ localuser }) => {
               </CardBody>
             </Card>
           </Col>
+          {Boolean(currentUserId != localuser & currentUserRole != "Partner") && (
+            <Col xs={12} style={{marginTop: "30px", marginBottom: "30px"}}>
+              <Card className="card-user">
+                <CardHeader className="text-center">
+                  <h4>Have some questions?</h4>
+                </CardHeader>
+                <CardBody className="d-flex justify-content-center">
+                  <Row className="w-100 d-flex justify-content-center">
+                    <Col xs={12} lg={6} className="d-flex flex-column" style={{gap: "10px"}}>
+                      <input
+                        id="enquiryTitle"
+                        className="form-control"
+                        placeholder="Title"
+                      />
+                      <select
+                        className="custom-select"
+                        id="enquiryEvent"
+                      >
+                        <option value="none">Event</option>
+                        {(enquiryEventList != null ||
+                          enquiryEventList != undefined) &&
+                          enquiryEventList.map((event) => {
+                            return (
+                              <option value={event.eid}>
+                                {event.name}
+                              </option>
+                            );
+                          })}
+                      </select>
+                      <textarea
+                        id="enquiryMessage"
+                        className="form-control"
+                        placeholder="Type something here..."
+                        style={{height: "10em"}}
+                      />
+                      <Alert
+                        show={showEnquiryError}
+                        variant="danger"
+                        onClose={() => setEnquiryError(false)}
+                        dismissible
+                      >
+                        Please fill in all the fields.
+                      </Alert>
+                      <Alert
+                        show={showEnquirySuccess}
+                        variant="success"
+                        onClose={() => setEnquirySuccess(false)}
+                        dismissible
+                      >
+                        Success! A copy of the enquiry has been sent to your email.
+                      </Alert>
+                      <button
+                        className="btn btn-fill-out"
+                        onClick={() => sendEnquiry()}
+                      >
+                        Send Enquiry
+                      </button>
+                    </Col>
+                  </Row>
+                </CardBody>
+              </Card>
+            </Col>
+          )}
         </Row>
         <br></br>
       </div>
