@@ -10,6 +10,8 @@ import AttendeeWrapper from '../../components/wrapper/AttendeeWrapper';
 export default function AttendeeHome() {
   const { data: user, status } = useUser(localStorage.getItem('userId'));
   return (
+    <>
+
     <AttendeeWrapper title="Home">
       
       <BreadcrumbOne pageTitle={'Welcome ' + user?.name}>
@@ -38,8 +40,10 @@ export default function AttendeeHome() {
           <Col>
             <button className="btn btn-fill-out">View events</button>
           </Col>
+    
         </Row>
       </Container>
     </AttendeeWrapper>
+    </>
   );
 }

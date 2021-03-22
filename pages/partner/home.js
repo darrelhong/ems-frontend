@@ -5,12 +5,15 @@ import useUser from '../../lib/query/useUser';
 
 import { BreadcrumbOne } from '../../components/Breadcrumb';
 import PartnerWrapper from '../../components/wrapper/PartnerWrapper';
+import Head from 'next/head';
 
 export default function PartnerHome() {
   const { data: user, isLoading, isSuccess } = useUser(
     localStorage.getItem('userId')
   );
   return (
+    <>
+ 
     <PartnerWrapper title="Home">
       <BreadcrumbOne pageTitle="Home">
         <ol className="breadcrumb justify-content-md-end">
@@ -21,7 +24,7 @@ export default function PartnerHome() {
           </li>
         </ol>
       </BreadcrumbOne>
-      {/* test */}
+    
       <Container className="my-4">
         {isLoading && <div className="spinner-grow" role="status" />}
         {isSuccess && (
@@ -44,5 +47,6 @@ export default function PartnerHome() {
         </Link>
       </Container>
     </PartnerWrapper>
+    </>
   );
 }

@@ -15,18 +15,21 @@ import { useState, useEffect } from 'react';
 import { logout } from '../../lib/auth';
 
 const OrganiserHeaderTop = () => {
-  const [user, setUser] = useState();
-  useEffect(() => {
-    const getUserData = async () => {
-      await getUser(localStorage.getItem('userId')).then((data) => {
+  // const [user, setUser] = useState();
+  // useEffect(() => {
+  //   const getUserData = async () => {
+  //     await getUser(localStorage.getItem('userId')).then((data) => {
 
-        console.log(data);
+  //       console.log(data);
 
-        setUser(data?.id);
-      });
-    };
-    getUserData();
-  }, []);
+  //       setUser(data?.id);
+  //     });
+  //   };
+  //   getUserData();
+  // }, []);
+  const { data: user, isLoading, isSuccess } = useUser(
+    localStorage.getItem('userId')
+  );
   return (
     <div className="top-header d-lg-block">
        <Head>
@@ -40,14 +43,14 @@ const OrganiserHeaderTop = () => {
                 <li>
                 
                     <a>
-                    <notification-center  appId="WLU2yLZw9d" subscriberId= {"organiser" + user} />
+                    <notification-center  appId="WLU2yLZw9d" subscriberId= {"organiser" + user?.id} />
                     </a>
                 </li>
                 <li>
                   <Link
                     href={{
                       pathname: '/organiser/organiser-profile',
-                      query: { paraId: JSON.stringify(user) },
+                      query: { paraId: JSON.stringify(user?.id) },
                     }}
                   >
                     <a>

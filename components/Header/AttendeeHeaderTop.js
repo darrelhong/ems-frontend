@@ -23,27 +23,23 @@ const AttendeeHeaderTop = () => {
   // //   Cookies.set('_ga', 'GA1.2.1842973542.1615538128', {sameSite: 'Lax'});
   //   Cookies.set('_gid', 'GA1.2.1046676275.1615987060', {sameSite: 'Lax'});
   //   Cookies.set('amplitude_id_fef1e872c952688acd962d30aa545b9eravenhub', 'eyJkZXZpY2VJZCI6IjA3MTg4ZWUyLTZjMmEtNDAxOS05MjFkLTI5OWUyODRlODRjNVIiLCJ1c2VySWQiOm51bGwsIm9wdE91dCI6ZmFsc2UsInNlc3Npb25JZCI6MTYxNjA1Nzk0MzcyMSwibGFzdEV2ZW50VGltZSI6MTYxNjA1Nzk0NDU2OSwiZXZlbnRJZCI6MSwiaWRlbnRpZnlJZCI6MSwic2VxdWVuY2VOdW1iZXIiOjJ9', {sameSite: 'Lax'});
- const [user, setUser] = useState();
-    const getUserData = async () => {
-      await getUser(localStorage.getItem('userId')).then((data) => {
+//  const [user, setUser] = useState();
+//     const getUserData = async () => {
+//       await getUser(localStorage.getItem('userId')).then((data) => {
 
-        console.log(data);
+//         console.log(data);
 
-        setUser(data?.id);
-      }); 
+//         setUser(data?.id);
+//       }); 
       
-    };  
+//     };  
     
-    useEffect(() => {
 
-    getUserData();
-    
-  });
-
-  const trylogout = () =>{
-    window.location.reload();
-
-  }
+//     getUserData();
+const { data: user, isLoading, isSuccess } = useUser(
+  localStorage.getItem('userId')
+);
+ 
   return (
     <div className="top-header d-lg-block">
         <Head>
@@ -61,7 +57,7 @@ const AttendeeHeaderTop = () => {
                 <a>
                 {/* <notification-center  appId="WLU2yLZw9d" subscriberId= "foo1" /> */}
                 
-                <notification-center appId="WLU2yLZw9d" subscriberId= {"attendee" + user} />
+                <notification-center appId="WLU2yLZw9d" subscriberId= {"attendee" + user?.id} />
                 </a>
             </li>
                 <li>

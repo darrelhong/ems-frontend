@@ -14,18 +14,21 @@ import { getUser } from '../../lib/query/getUser';
 import { useState, useEffect } from 'react';
 
 const PartnerHeaderTop = () => {
-  const [user, setUser] = useState();
-  useEffect(() => {
-    const getUserData = async () => {
-      await getUser(localStorage.getItem('userId')).then((data) => {
+  // const [user, setUser] = useState();
+  // useEffect(() => {
+  //   const getUserData = async () => {
+  //     await getUser(localStorage.getItem('userId')).then((data) => {
 
-        console.log(data);
+  //       console.log(data);
 
-        setUser(data.id);
-      });
-    };
-    getUserData();
-  }, []);
+  //       setUser(data.id);
+  //     });
+  //   };
+  //   getUserData();
+  // }, []);
+  const { data: user, isLoading, isSuccess } = useUser(
+    localStorage.getItem('userId')
+  );
   return (
     <>
      <Head>
@@ -41,7 +44,7 @@ const PartnerHeaderTop = () => {
                 <li>
                 
                     <a >
-                    <notification-center  appId="WLU2yLZw9d" subscriberId= {"partner" + user} />
+                    <notification-center  appId="WLU2yLZw9d" subscriberId= {"partner" + user?.id} />
                     </a>
                   
                 </li>
@@ -60,7 +63,7 @@ const PartnerHeaderTop = () => {
                   <Link
                     href={{
                       pathname: '/partner/partner-profile',
-                      query: { localuser: JSON.stringify(user) },
+                      query: { localuser: JSON.stringify(user?.id) },
                     }}
                   >
                     <a>
