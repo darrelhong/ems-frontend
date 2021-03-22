@@ -12,7 +12,7 @@ import {
 } from 'react-icons/ai';
 // import EventEoProfileSliderTen from './ProductSlider/EventEoProfileSliderTen';
 import { store } from 'react-notifications-component';
-const FollowersTabEoProfile = ({ attendees, partners, showPublicView, organiser }) => {
+const FollowersTabEoProfile = ({ attendees, partners, showPublicView, organiser,  showEoView }) => {
 
   const [broadcastModalShow, setBroadcastModalShow] = useState(false);
   const closeBroadcastModal = () => setBroadcastModalShow(false);
@@ -229,13 +229,13 @@ store.addNotification({
               <Nav.Item>
                 <Nav.Link eventKey="partners">Partner</Nav.Link>
               </Nav.Item>
-              <button
+              {showEoView && !showPublicView && <button
                 className="btn btn-fill-out btn-sm"
                 style={{ float: "right" }}
                 onClick={() => openBroadcastModal()}
               >
                 <AiOutlineNotification />
-              </button>
+              </button>}
             </Nav>
 
             <Tab.Content>

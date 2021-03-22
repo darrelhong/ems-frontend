@@ -39,6 +39,11 @@ const AttendeeHeaderTop = () => {
     getUserData();
     
   });
+
+  const trylogout = () =>{
+    window.location.reload();
+
+  }
   return (
     <div className="top-header d-lg-block">
         <Head>

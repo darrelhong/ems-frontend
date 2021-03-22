@@ -619,6 +619,7 @@ const EventOrgProfile = ({ paraId_ }) => {
                             partners={partnerFollowers}
                             showPublicView={showPublicView}
                             organiser = {eventorganiser?.name}
+                            showEoView = {showEoView}
                           />
                         </div>
                       </ul>

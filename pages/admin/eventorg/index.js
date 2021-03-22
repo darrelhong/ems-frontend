@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { useQuery, useQueryClient } from 'react-query';
 import MaterialTable from '../../../lib/MaterialTable';
 import { Card, Col, Container, Row } from 'react-bootstrap';
+import axios from 'axios';
+
 import {
   CheckCircleOutline,
   RemoveCircleOutline,
@@ -81,7 +83,13 @@ function AdminEventOrg() {
                         .post(`/api/organiser/approve/${rowData.id}`)
                         .then(() => {
                           queryClient.invalidateQueries('eventOrganisers');
+                          let endpoint = "https://api.ravenhub.io/company/WLU2yLZw9d/subscribers/organiser" + rowData.id + "/events/dBiWblzj7S"
+
+                          axios.post(endpoint, { "message": "Your application has been approved. You may start creating events." }, {
+                            headers: { 'Content-type': 'application/json' }
+                          });
                         });
+
                     },
                     disabled: rowData.approved,
                   }),
@@ -95,6 +103,11 @@ function AdminEventOrg() {
                         })
                         .then(() => {
                           queryClient.invalidateQueries('eventOrganisers');
+                          let endpoint = "https://api.ravenhub.io/company/WLU2yLZw9d/subscribers/organiser" + rowData.id + "/events/dBiWblzj7S"
+
+                          axios.post(endpoint, { "message": "Your application has been rejected. Please re-submit your application." }, {
+                            headers: { 'Content-type': 'application/json' }
+                          });
                         });
                     },
                     disabled: !rowData.approved,

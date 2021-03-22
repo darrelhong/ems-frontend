@@ -11,7 +11,7 @@ const NavigationAttendee = ({ positionClass }) => {
         }`}
       >
         <li>
-          <Link href="/partner/home">
+          <Link href="/attendee/home">
             <a className="nav-link">HOME</a>
           </Link>
         </li>

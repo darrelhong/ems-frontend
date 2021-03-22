@@ -85,6 +85,7 @@ const PartnerProfile = ({ localuser }) => {
             }
           }
           if (found) {
+            console.log("found");
             setUnfollowBtn(true);
             setFollowBtn(false);
           } else {
@@ -94,7 +95,7 @@ const PartnerProfile = ({ localuser }) => {
         }
       });
     };
-    getFollowersData();
+    
 
     if (localStorage.getItem('userId') != null) {
       const getCurrentUserData = async () => {
@@ -142,6 +143,7 @@ const PartnerProfile = ({ localuser }) => {
         });
       };
       getCurrentUserData();
+      getFollowersData();
     } else {
       //guest cannot follow bp
       setPublicView(true);

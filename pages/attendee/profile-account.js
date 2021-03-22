@@ -321,7 +321,7 @@ export default function MyAccount() {
       <BreadcrumbOne pageTitle="My Account">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
-            <Link href="/">
+            <Link href="/attendee/home">
               <a>Home</a>
             </Link>
           </li>

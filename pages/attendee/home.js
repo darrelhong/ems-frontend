@@ -7,13 +7,11 @@ import useUser from '../../lib/query/useUser';
 import { BreadcrumbOne } from '../../components/Breadcrumb';
 import AttendeeWrapper from '../../components/wrapper/AttendeeWrapper';
 
-export default function PartnerHome() {
+export default function AttendeeHome() {
   const { data: user, status } = useUser(localStorage.getItem('userId'));
   return (
     <AttendeeWrapper title="Home">
-      <Head>
-    <script src="https://embed.ravenhub.io/js/app.js"></script>
-    </Head>
+      
       <BreadcrumbOne pageTitle={'Welcome ' + user?.name}>
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
