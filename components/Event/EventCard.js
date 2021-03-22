@@ -185,7 +185,7 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
             className="form-control"
             name="broadcastTitle"
             id="broadcastTitle"
-            placeholder="Title"
+            placeholder="Title *"
             style={{width: "100%"}}
           />
           <textarea 
@@ -193,9 +193,10 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
             className="form-control"
             name="broadcastMessage"
             id="broadcastMessage"
-            placeholder="Type something here..."
+            placeholder="Broadcast Message *"
             style={{width: "100%", height: "10em"}}
           />
+          <br/>Please select at least one *
           <div style={{display: "flex"}}>
             <div style={{display: "flex", width: "50%"}}>
               <Form.Check id="chkBusinessPartner" />

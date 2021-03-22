@@ -23,12 +23,13 @@ import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
 import Badge from 'react-bootstrap/Badge';
-import { getEventByOrganiserId } from '../lib/query/useEvent';
+import { getEoEventsByIdRoleStatus } from '../lib/query/useEvent';
 import { getFollowers, getFollowing } from '../lib/query/getBPFollow';
 import { isBpVip, addVip } from '../lib/query/useVip';
 import { BsPencilSquare, BsPlus } from 'react-icons/bs';
 import api from '../lib/ApiClient';
 import { FiPlus } from 'react-icons/fi';
+import ButtonWithLoading from './custom/ButtonWithLoading';
 
 const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
   const [publicView, setPublicView] = useState();
@@ -47,6 +48,7 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
   const [enquiryEventList, setEnquiryEventList] = useState([]);
   const [showEnquiryError, setEnquiryError] = useState(false);
   const [showEnquirySuccess, setEnquirySuccess] = useState(false);
+  const [sendEnquiryLoading, setSendEnquiryLoading] = useState(false);
   var followId;
 
   useEffect(() => {
@@ -141,27 +143,18 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
         });
           
         if (currentUserRole == "Organiser") {
-          await getAllEventByBpId(
-            localuser
-          ).then(async (bpEventList) => {
-            await getEventByOrganiserId(
-              currentUserId
-            ).then((eoEventList) => {
-  
-              console.log(bpEventList);
-              console.log(eoEventList);
-              Array.prototype.unique = function() {
-                var arr = this.concat();
-                for (var i = 0; i < arr.length; ++i) {
-                    for (var j = i + 1; j < arr.length; ++j) {
-                        if (arr[i].eid == arr[j].eid)
-                        arr.splice(j--, 1);
-                    }
-                }
-                return arr;
-              };
-  
-              setEnquiryEventList(bpEventList.concat(eoEventList).unique());
+          await getEoEventsByIdRoleStatus(
+            currentUserId,
+            "EVNTORG",
+            'current'
+          ).then(async (currentEvents) => {
+
+            await getEoEventsByIdRoleStatus(
+              currentUserId,
+              "EVNTORG",
+              'upcoming'
+            ).then((upcomingEvents) => {
+              setEnquiryEventList(currentEvents.concat(upcomingEvents));
             });
           });
         }
@@ -255,6 +248,10 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
     let enquiryEvent = document.getElementById("enquiryEvent").value;
     let enquiryMessage = document.getElementById("enquiryMessage").value;
 
+    if (enquiryEvent == "none") {
+      enquiryEvent = null;
+    }
+
     // validate
     if (enquiryTitle == "" || enquiryEvent == "none" || enquiryMessage == "") {
       setEnquiryError(true);
@@ -275,15 +272,30 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
           senderEmail: enquirySenderEmail
         }
   
+        setSendEnquiryLoading(true);
         api.post('/api/user/enquiry', data)
         .then(() => {
           setEnquirySuccess(true);
+          setSendEnquiryLoading(false);
+          clearEnquiryForm();
         })
         .catch((error) => {
           console.log(error);
+          setSendEnquiryLoading(false);
+          setEnquiryError(true);
         });
       });
     }
+  }
+
+  function clearEnquiryForm() {
+    let enquiryTitle = document.getElementById("enquiryTitle");
+    let enquiryEvent = document.getElementById("enquiryEvent");
+    let enquiryMessage = document.getElementById("enquiryMessage");
+
+    enquiryTitle.value = "";
+    enquiryEvent.selectedIndex = 0;
+    enquiryMessage.value = "";
   }
 
   return (
@@ -657,7 +669,7 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
                       <input
                         id="enquiryTitle"
                         className="form-control"
-                        placeholder="Title"
+                        placeholder="Title *"
                       />
                       <select
                         className="custom-select"
@@ -677,7 +689,7 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
                       <textarea
                         id="enquiryMessage"
                         className="form-control"
-                        placeholder="Type something here..."
+                        placeholder="Your Enquiry *"
                         style={{height: "10em"}}
                       />
                       <Alert
@@ -686,7 +698,7 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
                         onClose={() => setEnquiryError(false)}
                         dismissible
                       >
-                        Please fill in all the fields.
+                        Please fill in all the required fields.
                       </Alert>
                       <Alert
                         show={showEnquirySuccess}
@@ -696,12 +708,13 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
                       >
                         Success! A copy of the enquiry has been sent to your email.
                       </Alert>
-                      <button
+                      <ButtonWithLoading
                         className="btn btn-fill-out"
                         onClick={() => sendEnquiry()}
+                        isLoading={sendEnquiryLoading && !showEnquiryError}
                       >
                         Send Enquiry
-                      </button>
+                      </ButtonWithLoading>
                     </Col>
                   </Row>
                 </CardBody>

@@ -23,11 +23,12 @@ import Image from 'react-bootstrap/Image';
 import Alert from 'react-bootstrap/Alert';
 import { BsPencilSquare } from 'react-icons/bs';
 import api from '../lib/ApiClient';
-import { getRating, getEoEventsByIdRoleStatus, getEventByOrganiserId } from '../lib/query/useEvent';
+import { getRating, getEoEventsByIdRoleStatus } from '../lib/query/useEvent';
 import { getOrgAttendeeFollowers } from '../lib/query/getOrgAttendeeFollowers';
 import { getOrgPartnerFollowers } from '../lib/query/getOrgPartnerFollowers';
 import { useMutation } from 'react-query';
 import { BreadcrumbOne } from './Breadcrumb';
+import ButtonWithLoading from './custom/ButtonWithLoading';
 
 const EventOrgProfile = ({ paraId_, currentUserId_, currentUserRole_ }) => {
   const [showEoView, setShowEoView] = useState(false);
@@ -37,7 +38,6 @@ const EventOrgProfile = ({ paraId_, currentUserId_, currentUserRole_ }) => {
   const [currenteventlist, setCurrenteventlist] = useState([]);
   const [upcomingeventlist, setUpcomingeventlist] = useState([]);
   const [pasteventlist, setPastEventlist] = useState([]);
-  const [eoeventlist, setEoEventList] = useState([]);
   const [eventorganiser, setEventOrganiser] = useState();
   const [attendeeFollowers, setAttendeeFollowers] = useState([]);
   const [partnerFollowers, setPartnerFollowers] = useState([]);
@@ -47,6 +47,8 @@ const EventOrgProfile = ({ paraId_, currentUserId_, currentUserRole_ }) => {
   const [reviews, setReviews] = useState();
   const [showEnquiryError, setEnquiryError] = useState(false);
   const [showEnquirySuccess, setEnquirySuccess] = useState(false);
+  const [enquiryEventList, setEnquiryEventList] = useState([]);
+  const [sendEnquiryLoading, setSendEnquiryLoading] = useState(false);
   // if there is user login credential
   //const paraId_ = JSON.parse(query.paraId);
 
@@ -278,10 +280,19 @@ const EventOrgProfile = ({ paraId_, currentUserId_, currentUserRole_ }) => {
               loadOrgPartnerFollowerData();
             }
 
-            await getEventByOrganiserId(
-              paraId_
-            ).then((events) => {
-              setEoEventList(events);
+            await getEoEventsByIdRoleStatus(
+              paraId_,
+              data.roles[0].roleEnum,
+              'current'
+            ).then(async (currentEvents) => {
+
+              await getEoEventsByIdRoleStatus(
+                paraId_,
+                data.roles[0].roleEnum,
+                'upcoming'
+              ).then((upcomingEvents) => {
+                setEnquiryEventList(currentEvents.concat(upcomingEvents));
+              });
             });
           }
         });
@@ -417,8 +428,12 @@ const EventOrgProfile = ({ paraId_, currentUserId_, currentUserRole_ }) => {
     let enquiryEvent = document.getElementById("enquiryEvent").value;
     let enquiryMessage = document.getElementById("enquiryMessage").value;
 
+    if (enquiryEvent == "none") {
+      enquiryEvent = null;
+    }
+
     // validate
-    if (enquiryTitle == "" || enquiryEvent == "none" || enquiryMessage == "") {
+    if (enquiryTitle == "" || enquiryMessage == "") {
       setEnquiryError(true);
     }
     else {
@@ -437,15 +452,30 @@ const EventOrgProfile = ({ paraId_, currentUserId_, currentUserRole_ }) => {
           senderEmail: enquirySenderEmail
         }
 
+        setSendEnquiryLoading(true);
         api.post('/api/user/enquiry', data)
         .then(() => {
           setEnquirySuccess(true);
+          setSendEnquiryLoading(false);
+          clearEnquiryForm();
         })
         .catch((error) => {
           console.log(error);
+          setSendEnquiryLoading(false);
+          setEnquiryError(true);
         });
       });
     }
+  }
+
+  function clearEnquiryForm() {
+    let enquiryTitle = document.getElementById("enquiryTitle");
+    let enquiryEvent = document.getElementById("enquiryEvent");
+    let enquiryMessage = document.getElementById("enquiryMessage");
+
+    enquiryTitle.value = "";
+    enquiryEvent.selectedIndex = 0;
+    enquiryMessage.value = "";
   }
 
   return (
@@ -738,16 +768,16 @@ const EventOrgProfile = ({ paraId_, currentUserId_, currentUserRole_ }) => {
                       <input
                         id="enquiryTitle"
                         className="form-control"
-                        placeholder="Title"
+                        placeholder="Title *"
                       />
                       <select
                         className="custom-select"
                         id="enquiryEvent"
                       >
                         <option value="none">Event</option>
-                        {(eoeventlist != null ||
-                          eoeventlist != undefined) &&
-                          eoeventlist.map((event) => {
+                        {(enquiryEventList != null ||
+                          enquiryEventList != undefined) &&
+                          enquiryEventList.map((event) => {
                             return (
                               <option value={event.eid}>
                                 {event.name}
@@ -758,7 +788,7 @@ const EventOrgProfile = ({ paraId_, currentUserId_, currentUserRole_ }) => {
                       <textarea
                         id="enquiryMessage"
                         className="form-control"
-                        placeholder="Type something here..."
+                        placeholder="Your Enquiry *"
                         style={{height: "10em"}}
                       />
                       <Alert
@@ -767,7 +797,7 @@ const EventOrgProfile = ({ paraId_, currentUserId_, currentUserRole_ }) => {
                         onClose={() => setEnquiryError(false)}
                         dismissible
                       >
-                        Please fill in all the fields.
+                        Please fill in all the required fields.
                       </Alert>
                       <Alert
                         show={showEnquirySuccess}
@@ -777,12 +807,13 @@ const EventOrgProfile = ({ paraId_, currentUserId_, currentUserRole_ }) => {
                       >
                         Success! A copy of the enquiry has been sent to your email.
                       </Alert>
-                      <button
+                      <ButtonWithLoading
                         className="btn btn-fill-out"
                         onClick={() => sendEnquiry()}
+                        isLoading={sendEnquiryLoading && !showEnquiryError}
                       >
                         Send Enquiry
-                      </button>
+                      </ButtonWithLoading>
                     </Col>
                   </Row>
                 </CardBody>
