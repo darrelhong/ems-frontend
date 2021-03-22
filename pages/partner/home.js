@@ -11,8 +11,8 @@ export default function PartnerHome() {
     localStorage.getItem('userId')
   );
   return (
-    <PartnerWrapper title="Partner Home">
-      <BreadcrumbOne pageTitle="Partner Home">
+    <PartnerWrapper title="Home">
+      <BreadcrumbOne pageTitle="Home">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/partner/home">
@@ -33,6 +33,14 @@ export default function PartnerHome() {
 
         <Link href="/partner/events">
           <button className="btn btn-fill-out btn-sm">View events</button>
+        </Link>
+        &nbsp;
+        <Link href="/partner/view/partners">
+          <button className="btn btn-fill-out btn-sm">View Partners</button>
+        </Link>
+        &nbsp;
+        <Link href="/partner/view/organisers">
+          <button className="btn btn-fill-out btn-sm">View Organisers</button>
         </Link>
       </Container>
     </PartnerWrapper>

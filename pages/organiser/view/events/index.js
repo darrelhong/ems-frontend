@@ -1,24 +1,25 @@
 import { Fragment, useState } from 'react';
 import Link from 'next/link';
-import { Alert, Col, Container, Row } from 'react-bootstrap';
+import { Alert, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { useInfiniteQuery, useQueryClient } from 'react-query';
 import debounce from 'lodash/debounce';
 
-import { getEventsWithKeywordandSort } from 'lib/query/events';
-import { BreadcrumbOne } from '../../../components/Breadcrumb';
-import PartnerWrapper from '../../../components/wrapper/PartnerWrapper';
-import api from '../../../lib/ApiClient';
-import EventCard from '../../../components/events/partner/EventCard';
-import ButtonWithLoading from '../../../components/custom/ButtonWithLoading';
+import { BreadcrumbOne } from '../../../../components/Breadcrumb';
+import OrganiserWrapper from '../../../../components/wrapper/OrganiserWrapper';
+import api from '../../../../lib/ApiClient';
+import EventCard from '../../../../components/events/partner/EventCard';
+import ButtonWithLoading from '../../../../components/custom/ButtonWithLoading';
 import Nav from 'react-bootstrap/Nav';
 
-import { BreadcrumbOne } from 'components/Breadcrumb';
-import PartnerWrapper from 'components/wrapper/PartnerWrapper';
-import EventCard from 'components/events/partner/EventCard';
-import ButtonWithLoading from 'components/custom/ButtonWithLoading';
-import CenterSpinner from 'components/custom/CenterSpinner';
+const getEvents = async (page = 0, sort, sortDir, searchTerm) => {
+  let url = `/api/event/get-events?page=${page}`;
+  if (sort && sortDir) url += `&sort=${sort}&sortDir=${sortDir}`;
+  if (searchTerm) url += `&keyword=${searchTerm}`;
+  const { data } = await api.get(url);
+  return data;
+};
 
-export default function PartnerEvents() {
+function OrganiserHome() {
   const [sortBy, setSortBy] = useState();
   const [searchTerm, setSearchTerm] = useState('');
   const queryClient = useQueryClient();
@@ -31,12 +32,7 @@ export default function PartnerEvents() {
   } = useInfiniteQuery(
     ['events', sortBy?.sort, sortBy?.sortDir, searchTerm],
     ({ pageParam = 0 }) =>
-      getEventsWithKeywordandSort(
-        pageParam,
-        sortBy?.sort,
-        sortBy?.sortDir,
-        searchTerm
-      ),
+      getEvents(pageParam, sortBy?.sort, sortBy?.sortDir, searchTerm),
     {
       getNextPageParam: (lastPage) =>
         lastPage.last ? false : lastPage.number + 1,
@@ -50,9 +46,6 @@ export default function PartnerEvents() {
         break;
       case 'name-desc':
         setSortBy({ sort: 'name', sortDir: 'desc' });
-        break;
-      case 'date-asc':
-        setSortBy({ sort: 'eventStartDate', sortDir: 'asc' });
         break;
       default:
         setSortBy();
@@ -74,7 +67,7 @@ export default function PartnerEvents() {
     ]);
 
   return (
-    <PartnerWrapper title="Events">
+    <OrganiserWrapper title="Events">
       <BreadcrumbOne pageTitle="View All Events">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
@@ -87,8 +80,8 @@ export default function PartnerEvents() {
       </BreadcrumbOne>
 
       <Container className="my-4">
-    
-                        <br></br>
+      <br></br>
+                        
         <Row>
           <Col md={8} lg={6}>
             <div className="input-group mb-3">
@@ -118,12 +111,11 @@ export default function PartnerEvents() {
               <option value="">Sort by</option>
               <option value="name-asc">Name - A to Z</option>
               <option value="name-desc">Name - Z to A</option>
-              <option value="date-asc">Most recent</option>
             </select>
           </Col>
         </Row>
         {status === 'loading' ? (
-          <CenterSpinner />
+          <Spinner animation="grow" role="status" aria-hidden="true" />
         ) : status === 'error' ? (
           <Alert variant="danger">An error has occured</Alert>
         ) : (
@@ -138,7 +130,7 @@ export default function PartnerEvents() {
                       lg={4}
                       className="mb-5 d-flex align-items-stretch"
                     >
-                      <Link href={`/partner/events/${event.eid}`}>
+                      <Link href={`/organiser/view/events/${event.eid}`}>
                         <a className="w-100">
                           <EventCard event={event} />
                         </a>
@@ -164,6 +156,8 @@ export default function PartnerEvents() {
           </>
         )}
       </Container>
-    </PartnerWrapper>
+    </OrganiserWrapper>
   );
 }
+
+export default OrganiserHome;

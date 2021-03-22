@@ -81,6 +81,8 @@ const EventOrgProfile = ({ paraId_ }) => {
                 setCurrenteventlist(events);
               }
             );
+            setShowPublicView(true);
+            setShowEoView(false);
             //partner has no upcoming events
           } else if (
             data.roles[0].roleEnum === 'ATND' ||
@@ -149,6 +151,16 @@ const EventOrgProfile = ({ paraId_ }) => {
       });
 
       await getAttendeeUpcomingEventsByOrganiserId(paraId_).then((events) => {
+        //setUpcomingeventlist(events);
+      });
+
+      await newgetAttendeeUpcomingEventsByOrganiserId(
+        roles[0].roleEnum,
+        paraId_,
+        'upcoming'
+      ).then((events) => {
+        console.log('events');
+        console.log(events);
         setUpcomingeventlist(events);
       });
 
@@ -160,18 +172,12 @@ const EventOrgProfile = ({ paraId_ }) => {
     }
   }, []);
 
-  //console.log('update detected');
-  //console.log(localStorage);
-
-  // window.location.reload();
-  // localStorage.setItem('updateProfile', 'false');
-
   return (
     <div>
-      <BreadcrumbOne pageTitle="Organiser Profile Details">
+      <BreadcrumbOne pageTitle="Profile Details">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
-            <Link href="/">
+            <Link href="/organiser/home">
               <a>Home</a>
             </Link>
           </li>

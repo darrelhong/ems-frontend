@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import DropdownMultiselect from "react-multiselect-dropdown-bootstrap";
 import { BreadcrumbOne } from '../../components/Breadcrumb';
 import {
   Container,
@@ -117,22 +118,10 @@ export default function MyAccount() {
       })
   );
 
-  const toggleCategoryPreference = async (event) => {
-    if (event.target.checked) {
-      console.log('add ' + event.target.id);
-
-      categoryPreferences.push(event.target.id);
-    } else {
-      console.log('remove ' + event.target.id);
-
-      let removeIndex = categoryPreferences.indexOf(event.target.id);
-      categoryPreferences.splice(removeIndex, 1);
-    }
-    console.log(categoryPreferences);
-  };
   const onSubmit = async (data) => {
     console.log('data acc' + data['name']);
-    if (compareArrays(user?.categoryPreferences, categoryPreferences)) {
+    if (!compareArrays(user?.categoryPreferences, categoryPreferences)) {
+      console.log(categoryPreferences);
       mutateAccDetail.mutate({
         address: data.address,
         description: data.description,
@@ -477,7 +466,7 @@ export default function MyAccount() {
                             <Row>
                               <Col className="form-group" md={12}>
                                 <label>
-                                  Name <span className="required"></span>
+                                  Name <span className="required">*</span>
                                 </label>
                                 <input
                                   required
@@ -508,315 +497,19 @@ export default function MyAccount() {
                                   Event Category Preferences{' '}
                                   <span className="required"></span>
                                 </Form.Label>
-                                <Row>
-                                  <Col className="form-group" xl={4} lg={6}>
-                                    <input
-                                      type="checkbox"
-                                      id="Automotive"
-                                      name="catPrefOption"
-                                      onClick={toggleCategoryPreference.bind(
-                                        this
-                                      )}
-                                      defaultChecked={user?.categoryPreferences.find(
-                                        (e) => e == 'Automotive'
-                                      )}
-                                    />
-                                    <label
-                                      htmlFor="automotive"
-                                      style={{ marginLeft: '4px' }}
-                                    >
-                                      {' '}
-                                      Automotive
-                                    </label>
-                                  </Col>
-                                  <Col className="form-group" xl={4} lg={6}>
-                                    <input
-                                      type="checkbox"
-                                      id="Business"
-                                      name="catPrefOption"
-                                      onClick={toggleCategoryPreference.bind(
-                                        this
-                                      )}
-                                      defaultChecked={user?.categoryPreferences.find(
-                                        (e) => e == 'Business'
-                                      )}
-                                    />
-                                    <label
-                                      htmlFor="businessSupport&Supplies"
-                                      style={{ marginLeft: '4px' }}
-                                    >
-                                      {' '}
-                                      Business Support & Supplies
-                                    </label>
-                                  </Col>
-                                  <Col className="form-group" xl={4} lg={6}>
-                                    <input
-                                      type="checkbox"
-                                      id="Computers"
-                                      name="catPrefOption"
-                                      onClick={toggleCategoryPreference.bind(
-                                        this
-                                      )}
-                                      defaultChecked={user?.categoryPreferences.find(
-                                        (e) => e == 'Computers'
-                                      )}
-                                    />
-                                    <label
-                                      htmlFor="computers&Electronics"
-                                      style={{ marginLeft: '4px' }}
-                                    >
-                                      {' '}
-                                      Computers & Electronics
-                                    </label>
-                                  </Col>
-                                  <Col className="form-group" xl={4} lg={6}>
-                                    <input
-                                      type="checkbox"
-                                      id="Construction"
-                                      name="catPrefOption"
-                                      onClick={toggleCategoryPreference.bind(
-                                        this
-                                      )}
-                                      defaultChecked={user?.categoryPreferences.find(
-                                        (e) => e == 'Construction'
-                                      )}
-                                    />
-                                    <label
-                                      htmlFor="construction&Contractor"
-                                      style={{ marginLeft: '4px' }}
-                                    >
-                                      {' '}
-                                      Construction & Contractor
-                                    </label>
-                                  </Col>
-                                  <Col className="form-group" xl={4} lg={6}>
-                                    <input
-                                      type="checkbox"
-                                      id="Education"
-                                      name="catPrefOption"
-                                      onClick={toggleCategoryPreference.bind(
-                                        this
-                                      )}
-                                      defaultChecked={user?.categoryPreferences.find(
-                                        (e) => e == 'Education'
-                                      )}
-                                    />
-                                    <label
-                                      htmlFor="education"
-                                      style={{ marginLeft: '4px' }}
-                                    >
-                                      {' '}
-                                      Education
-                                    </label>
-                                  </Col>
-                                  <Col className="form-group" xl={4} lg={6}>
-                                    <input
-                                      type="checkbox"
-                                      id="Entertainment"
-                                      name="catPrefOption"
-                                      onClick={toggleCategoryPreference.bind(
-                                        this
-                                      )}
-                                      defaultChecked={user?.categoryPreferences.find(
-                                        (e) => e == 'Entertainment'
-                                      )}
-                                    />
-                                    <label
-                                      htmlFor="entertainment"
-                                      style={{ marginLeft: '4px' }}
-                                    >
-                                      {' '}
-                                      Entertainment
-                                    </label>
-                                  </Col>
-                                  <Col className="form-group" xl={4} lg={6}>
-                                    <input
-                                      type="checkbox"
-                                      id="Food"
-                                      name="catPrefOption"
-                                      onClick={toggleCategoryPreference.bind(
-                                        this
-                                      )}
-                                      defaultChecked={user?.categoryPreferences.find(
-                                        (e) => e == 'Food'
-                                      )}
-                                    />
-                                    <label
-                                      htmlFor="food&Dining"
-                                      style={{ marginLeft: '4px' }}
-                                    >
-                                      {' '}
-                                      Food & Dining
-                                    </label>
-                                  </Col>
-                                  <Col className="form-group" xl={4} lg={6}>
-                                    <input
-                                      type="checkbox"
-                                      id="Health"
-                                      name="catPrefOption"
-                                      onClick={toggleCategoryPreference.bind(
-                                        this
-                                      )}
-                                      defaultChecked={user?.categoryPreferences.find(
-                                        (e) => e == 'Health'
-                                      )}
-                                    />
-                                    <label
-                                      htmlFor="health&Medicine"
-                                      style={{ marginLeft: '4px' }}
-                                    >
-                                      {' '}
-                                      Health & Medicine
-                                    </label>
-                                  </Col>
-                                  <Col className="form-group" xl={4} lg={6}>
-                                    <input
-                                      type="checkbox"
-                                      id="Home"
-                                      name="catPrefOption"
-                                      onClick={toggleCategoryPreference.bind(
-                                        this
-                                      )}
-                                      defaultChecked={user?.categoryPreferences.find(
-                                        (e) => e == 'Home'
-                                      )}
-                                    />
-                                    <label
-                                      htmlFor="home&Garden"
-                                      style={{ marginLeft: '4px' }}
-                                    >
-                                      {' '}
-                                      Home & Garden
-                                    </label>
-                                  </Col>
-                                  <Col className="form-group" xl={4} lg={6}>
-                                    <input
-                                      type="checkbox"
-                                      id="Legal"
-                                      name="catPrefOption"
-                                      onClick={toggleCategoryPreference.bind(
-                                        this
-                                      )}
-                                      defaultChecked={user?.categoryPreferences.find(
-                                        (e) => e == 'Legal'
-                                      )}
-                                    />
-                                    <label
-                                      htmlFor="legal&Financial"
-                                      style={{ marginLeft: '4px' }}
-                                    >
-                                      {' '}
-                                      Legal & Financial
-                                    </label>
-                                  </Col>
-                                  <Col
-                                    className="form-group"
-                                    xl={4}
-                                    lg={6}
-                                    style={{ display: 'flex' }}
-                                  >
-                                    <input
-                                      type="checkbox"
-                                      id="Manufacturing"
-                                      name="catPrefOption"
-                                      onClick={toggleCategoryPreference.bind(
-                                        this
-                                      )}
-                                      defaultChecked={user?.categoryPreferences.find(
-                                        (e) => e == 'Manufacturing'
-                                      )}
-                                    />
-                                    <label
-                                      htmlFor="manufacturingWholesaleDistribution"
-                                      style={{
-                                        marginLeft: '4px',
-                                        marginTop: '-4px',
-                                      }}
-                                    >
-                                      Manufacturing, Wholesale, Distribution
-                                    </label>
-                                  </Col>
-                                  <Col className="form-group" xl={4} lg={6}>
-                                    <input
-                                      type="checkbox"
-                                      id="Merchants"
-                                      name="catPrefOption"
-                                      onClick={toggleCategoryPreference.bind(
-                                        this
-                                      )}
-                                      defaultChecked={user?.categoryPreferences.find(
-                                        (e) => e == 'Merchants'
-                                      )}
-                                    />
-                                    <label
-                                      htmlFor="retailMerchants"
-                                      style={{ marginLeft: '4px' }}
-                                    >
-                                      {' '}
-                                      Merchants (Retail)
-                                    </label>
-                                  </Col>
-                                  <Col className="form-group" xl={4} lg={6}>
-                                    <input
-                                      type="checkbox"
-                                      id="Personal"
-                                      name="catPrefOption"
-                                      onClick={toggleCategoryPreference.bind(
-                                        this
-                                      )}
-                                      defaultChecked={user?.categoryPreferences.find(
-                                        (e) => e == 'Personal'
-                                      )}
-                                    />
-                                    <label
-                                      htmlFor="personalCare&Services"
-                                      style={{ marginLeft: '4px' }}
-                                    >
-                                      {' '}
-                                      Personal Care & Services
-                                    </label>
-                                  </Col>
-                                  <Col className="form-group" xl={4} lg={6}>
-                                    <input
-                                      type="checkbox"
-                                      id="Real"
-                                      name="catPrefOption"
-                                      onClick={toggleCategoryPreference.bind(
-                                        this
-                                      )}
-                                      defaultChecked={user?.categoryPreferences.find(
-                                        (e) => e == 'Real'
-                                      )}
-                                    />
-                                    <label
-                                      htmlFor="realEstate"
-                                      style={{ marginLeft: '4px' }}
-                                    >
-                                      {' '}
-                                      Real Estate
-                                    </label>
-                                  </Col>
-                                  <Col className="form-group" xl={4} lg={6}>
-                                    <input
-                                      type="checkbox"
-                                      id="Travel"
-                                      name="catPrefOption"
-                                      onClick={toggleCategoryPreference.bind(
-                                        this
-                                      )}
-                                      defaultChecked={user?.categoryPreferences.find(
-                                        (e) => e == 'Travel'
-                                      )}
-                                    />
-                                    <label
-                                      htmlFor="travel&Transportation"
-                                      style={{ marginLeft: '4px' }}
-                                    >
-                                      {' '}
-                                      Travel & Transportation
-                                    </label>
-                                  </Col>
-                                </Row>
+                                <DropdownMultiselect
+                                  options={["Automotive", "Business Support & Supplies", "Computers & Electronics", 
+                                            "Construction & Contractor", "Education", "Entertainment", "Food & Dining",
+                                            "Health & Medicine", "Home & Garden", "Legal & Financial", 
+                                            "Manufacturing, Wholesale, Distribution", "Merchants (Retail)", 
+                                            "Personal Care & Services", "Real Estate", "Travel & Transportation"]}
+                                  selected={user?.categoryPreferences}
+                                  handleOnChange={(selected) => {
+                                    categoryPreferences = selected;
+                                    console.log(categoryPreferences);
+                                  }}
+                                  name="ddlCategoryPreferences"
+                                />
                               </Col>
                               <Col className="form-group" md={12}>
                                 <label>
@@ -836,7 +529,7 @@ export default function MyAccount() {
                               <Col className="form-group" md={12}>
                                 <label>
                                   Phone Number (+65){' '}
-                                  <span className="required"></span>
+                                  <span className="required">*</span>
                                 </label>
                                 <input
                                   required
@@ -1058,7 +751,11 @@ export default function MyAccount() {
           </Tab.Container>
         </Container>
       </div>
-      {(categoryPreferences = user?.categoryPreferences)}
+      <div style={{display: "none"}}>
+        { //initialise categoryPreferences
+          (categoryPreferences = user?.categoryPreferences)
+        }
+      </div>
     </AttendeeWrapper>
     // </LayoutOne>
   );

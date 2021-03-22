@@ -36,8 +36,15 @@ const PartnerProfile = ({ localuser }) => {
   // const [events, setEvents] = useState([]);
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
+  const [partner, setPartner] = useState();
 
   useEffect(async () => {
+    await getUser(localuser).then((partner_) => {
+      console.log('eo data');
+      console.log(partner_);
+      setPartner(partner_);
+    });
+
     if (localStorage.getItem('userId') != null) {
       await getUser(localStorage.getItem('userId')).then((data) => {
         if (data?.id !== localuser) {
@@ -58,7 +65,7 @@ const PartnerProfile = ({ localuser }) => {
     });
   }, []);
 
-  const { data: partner } = useUser(localuser);
+  //const { data: partner } = useUser(localuser);
 
   return (
     <div>

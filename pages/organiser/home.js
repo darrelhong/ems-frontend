@@ -11,8 +11,8 @@ export default function OrganiserHome() {
     localStorage.getItem('userId')
   );
   return (
-    <OrganiserWrapper title="Organiser Home">
-      <BreadcrumbOne pageTitle="Organiser Home">
+    <OrganiserWrapper title="Home">
+      <BreadcrumbOne pageTitle="Home">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/organiser/home">
@@ -21,7 +21,7 @@ export default function OrganiserHome() {
           </li>
         </ol>
 
-        <ol>
+        {/* <ol>
           <li>
             <Link href="/organiser/events">
               <a>View Events</a>
@@ -33,7 +33,7 @@ export default function OrganiserHome() {
               <a>Create Event</a>
             </Link>
           </li>
-        </ol>
+        </ol> */}
       </BreadcrumbOne>
 
       <Container>
@@ -44,6 +44,18 @@ export default function OrganiserHome() {
             <p>User ID: {user?.id}</p>
           </>
         )}
+
+<Link href="/organiser/events">
+          <button className="btn btn-fill-out btn-sm">View events</button>
+        </Link>
+        &nbsp;
+        <Link href="/organiser/view/partners">
+          <button className="btn btn-fill-out btn-sm">View Partners</button>
+        </Link>
+        &nbsp;
+        <Link href="/organiser/view/organisers">
+          <button className="btn btn-fill-out btn-sm">View Organisers</button>
+        </Link>
       </Container>
     </OrganiserWrapper>
   );

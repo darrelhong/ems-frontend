@@ -5,11 +5,11 @@ import { FooterOne } from '../Footer';
 
 import GuestHeader from '../Header/GuestHeader';
 
-function GuestWrapper({ title, children }) {
+function GuestWrapper({ children }) {
   return (
     <>
       <Head>
-        <title>{title}</title>
+        {/* <title>{title}</title> */}
       </Head>
 
       <GuestHeader />
@@ -22,7 +22,7 @@ function GuestWrapper({ title, children }) {
 }
 
 GuestWrapper.propTypes = {
-  title: PropTypes.string.isRequired,
+  // title: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
 };
 

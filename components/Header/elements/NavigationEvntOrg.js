@@ -6,8 +6,9 @@ const NavigationEvntOrg = ({ positionClass }) => {
   return (
     <nav className="navigation d-none d-lg-block">
       <ul
-        className={`d-flex ${positionClass ? positionClass : 'justify-content-end'
-          }`}
+        className={`d-flex ${
+          positionClass ? positionClass : 'justify-content-end'
+        }`}
       >
         <li>
           <Link href="/organiser/home">
@@ -19,6 +20,29 @@ const NavigationEvntOrg = ({ positionClass }) => {
           <Link href="/organiser/dashboard">
             <a className="nav-link">DASHBOARD</a>
           </Link>
+        </li>
+
+        <li>
+          <Link href="/">
+            <a className="nav-link">
+              BROWSE USERS <IoIosArrowDown />
+            </a>
+          </Link>
+
+          <ul className="sub-menu sub-menu--one-column">
+            <li>
+              <Link href="/organiser/view/partners">
+                <a>View All Business Partners</a>
+              </Link>
+            </li>
+            <li>
+              <Link href="/organiser/view/organisers">
+                <a>View All Event Organisers</a>
+              </Link>
+            </li>
+
+            </ul>
+        
         </li>
 
         <li>
@@ -45,7 +69,7 @@ const NavigationEvntOrg = ({ positionClass }) => {
               </Link>
             </li>
             <li>
-              <Link href="/home/furniture-two">
+              <Link href="/organiser/view-all-vip-partner-new">
                 <a>View All VIP Business Partner</a>
               </Link>
             </li>

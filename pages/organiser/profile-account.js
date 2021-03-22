@@ -21,61 +21,34 @@ import { FaRegEdit } from 'react-icons/fa';
 import OrganiserWrapper from '../../components/wrapper/OrganiserWrapper';
 import { BsFillInfoCircleFill } from 'react-icons/bs';
 import ButtonWithLoading from '../../components/custom/ButtonWithLoading';
+import { getUser } from '../../lib/query/getUser';
+
 //test
 import {
   IoIosCash,
   IoIosPerson,
   IoIosSettings,
   IoIosRadioButtonOn,
+  IoIosDocument,
 } from 'react-icons/io';
 
 import { useForm } from 'react-hook-form';
 import useUser from '../../lib/query/useUser';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient, useQuery } from 'react-query';
 import api from '../../lib/ApiClient';
 import { logout } from '../../lib/auth';
 
 const MyAccount = () => {
-  // const [show, setShow] = useState(false);
-  // const handleClose = () => setShow(false);
-  const [showSuccessMsg, setShowSuccessMsg] = useState(false);
-  const [showFailedMsg, setShowFailedMsg] = useState(false);
-  //const [updateAccDetailStatus, setUpdateAccDetailStatus, ] = useState(false);
-  //const [uploadSucess, setUploadSucess] = useState(false);
-  const [fileUpload, setfileUpload] = useState(false);
-  const [file, setFile] = useState('uploadfile');
+  // if multiple file, we ask them to zip
+  const [bizDocInputName, setBizDocInputName] = useState('Choose file');
+  const [bizDocfile, setBizDocfile] = useState(null);
+  const [proficpicfile, setProfilePicFile] = useState('uploadprofilepicfile');
 
   const [fileName, setFileName] = useState('Choose image');
   const [loginLoading, setLoginLoading] = useState(false);
-
-  const { data: user } = useUser(localStorage.getItem('userId'));
-  //const profiepicSrcUrl = user?.profilePic;
-  const [profilepicUrl, setProfilepicUrl] = useState(
-    '../../public/assets/images/defaultprofilepic.png'
-  );
-  // display the inital profile picture
-  //console.log(user?.profilePic);
-  // if (user?.profilePic != null) {
-  //   useEffect(() => {
-  //     setProfilepicUrl(user?.profilePic);
-  //   }, [user?.profilePic]);
-  // } else {
-  //   useEffect(() => {
-  //     setProfilepicUrl('../../assets/images/defaultprofilepic.png');
-  //   }, ['../../assets/images/defaultprofilepic.png']);
-  // }
-
-  useEffect(() => {
-    if (user?.profilePic != null) {
-      setProfilepicUrl(user?.profilePic);
-    } else {
-      setProfilepicUrl('../../assets/images/defaultprofilepic.png');
-    }
-  }, [user?.profilePic]);
-
-  useEffect(() => {
-    setFileName('Choose image');
-  }, ['Choose image']);
+  const [user, setUser] = useState();
+  //const { data: user } = useUser(localStorage.getItem('userId'));
+  const [profilepicUrl, setProfilepicUrl] = useState(null);
 
   //for modal of disabling account
   const [show, setShow] = useState(false);
@@ -94,12 +67,82 @@ const MyAccount = () => {
   //show pw error alert
   const [showPW, setShowPW] = useState(false);
   const [showFileSizeError, setShowFileSizeError] = useState(false);
+  //show successful upload of file alert
+  const [showSucessBizUpload, setShowSucessBizUpload] = useState(false);
+  const [showErrorBizUpload, setShowErrorBizUpload] = useState(false);
+  const [bizDocErrorMessage, setBizDocErrorMessage] = useState('');
+  const [ispicupdated, setIspicupdated] = useState(false);
 
-  const renderTooltip = (props) => (
-    <Tooltip id="button-tooltip" {...props}>
-      Support png and jpg image format.
-    </Tooltip>
-  );
+  useEffect(() => {
+    console.log('use effect');
+    const getUserData = async () => {
+      await getUser(localStorage.getItem('userId')).then((data) => {
+        setUser(data);
+      });
+    };
+    getUserData();
+
+    setBizDocInputName('Choose file');
+  }, []);
+  const uploadbiz = useMutation((data) => {
+    console.log(data);
+    var form_data = new FormData();
+    form_data.append('id', data['id']);
+    form_data.append('bizSupportDoc', bizDocfile);
+
+    api
+      .post('/api/organiser/uploadbizdoc', form_data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        if (response.status == 200) {
+          setFileName('Choose File');
+          setLoginLoading(false);
+          document.getElementById('biz-upload-custom-file').value = '';
+          //the message that is return
+          if (response.data['fileDownloadUri'] == 'success') {
+            setShowSucessBizUpload(true);
+            setShowErrorBizUpload(false);
+          } else {
+            setBizDocErrorMessage('An error has occured');
+            setShowSucessBizUpload(false);
+            setShowErrorBizUpload(true);
+          }
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
+
+  // upload biz document
+  const handleBizDocFileChange = async (e) => {
+    if (e.target.files[0] == undefined) {
+      setBizDocInputName('Choose file');
+    } else if (e.target.files[0].size / 1000000 > 5) {
+      // if size is more than 5mb, display error message
+      console.log('exceeded');
+
+      setBizDocErrorMessage('The zip file size must be less than 5 mb.');
+      setShowErrorBizUpload(true);
+      setShowSucessBizUpload(false);
+      document.getElementById('biz-upload-custom-file').value = '';
+    } else {
+      setShowErrorBizUpload(false);
+      setBizDocfile(e.target.files[0]);
+      setBizDocInputName(e.target.files[0].name);
+    }
+  };
+
+  const onSubmitBizDoc = async (data) => {
+    setLoginLoading(true);
+    uploadbiz.mutate({
+      id: user?.id,
+    });
+  };
 
   const mutateAccStatus = useMutation(
     (data) => api.post(`/api/user/disableStatus/${user?.id}`),
@@ -123,101 +166,67 @@ const MyAccount = () => {
     defaultValues: { name: user?.name },
   });
 
-  const mutateAccDetail = useMutation((data) =>
+  const mutateAccDetail = useMutation((data) => {
+    var form_data = new FormData();
+    form_data.append('address', data['address']);
+    form_data.append('description', data['description']);
+    form_data.append('name', data['name']);
+    form_data.append('phonenumber', data['phonenumber']);
+    if (fileName !== 'Choose image') {
+      form_data.append('profilepicfile', proficpicfile);
+    } else {
+      form_data.append('profilepicfile', null);
+    }
+
+    form_data.append('id', data['id']);
+
     api
-      .post('/api/user/update', data)
+      .post('/api/organiser/updateEoProfile', form_data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
       .then((response) => {
+        console.log('update profile response');
+        console.log(response);
+        console.log(response.data['fileDownloadUri']);
+        setProfilepicUrl(response.data['fileDownloadUri']);
+        setIspicupdated(true);
         setAccSaved(true);
         setAccSuccess(' Account details saved successfully! ');
         setLoginLoading(false);
-        window.location.reload();
-
-        //document.getElementById("account-details-form").reset();
       })
       .catch((error) => {
         console.log(error);
-      })
-  );
+      });
+  });
 
   const onSubmit = async (data) => {
-    console.log('data acc' + data['name']);
     setLoginLoading(true);
-
-    if (
-      user?.address != data.address ||
-      user?.description != data.description ||
-      user?.name != data.name ||
-      user?.phonenumber != data.phonenumber ||
-      fileUpload == true
-    ) {
-      mutateAccDetail.mutate({
-        address: data.address,
-        description: data.description,
-        name: data.name,
-        phonenumber: data.phonenumber,
-        id: user?.id,
-      });
-    }
-    if (fileUpload == true) {
-      console.log('fileupload is true');
-      submitFile();
-    }
+    setAccSaved(false);
+    mutateAccDetail.mutate({
+      address: data.address,
+      description: data.description,
+      name: data.name,
+      phonenumber: data.phonenumber,
+      id: user?.id,
+    });
   };
 
-  // const onSubmitPassword = async (data) => {
-  //   console.log('call change password' + data['newPassword']);
-
-  //   mutatePassword.mutate({
-  //     oldPassword: data.oldPassword,
-  //     newPassword: data.newPassword,
-  //   });
-  //   // console.log(data);
-  // };
-
+  // update profile pic
   const handleFileChange = async (e) => {
-    console.log('call handleFileChange');
-    console.log(e);
-    console.log(e.target.files[0].name);
-    console.log(e.target.files[0].size);
-    console.log(e.target.files[0].size / 1000000);
-
-    if (e.target.files[0].size / 1000000 > 1 || e.target.files[0].name == '') {
+    if (e.target.files[0] == undefined) {
+      setFileName('Choose image');
+    } else if (e.target.files[0].size / 1000000 > 1) {
       console.log('exceeded');
       setShowFileSizeError(true);
       document.getElementById('custom-file').value = '';
     } else {
       setShowFileSizeError(false);
-      setFile(e.target.files[0]);
-      setfileUpload(true);
+      setProfilePicFile(e.target.files[0]);
+      //setfileUpload(true);
       setFileName(e.target.files[0].name);
     }
-  };
-  const submitFile = async () => {
-    const data = new FormData();
-    //if(file name is not empty..... handle condition when no file is selected)
-    data.append('file', file);
-    api
-      .post('/api/uploadProfilePicFile', data, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        onSuccess: () => {
-          queryClient.invalidateQueries(['user', user?.id.toString()]);
-        },
-      })
-      .then((response) => {
-        console.log(response);
-        if (response.status == 200) {
-          console.log('file upload sucessfully');
-          console.log(response);
-          console.log(response.data['fileDownloadUri']);
-          var newlink = response.data['fileDownloadUri'];
-          setProfilepicUrl(newlink);
-        }
-      })
-      .catch(() => {
-        setShowFailedMsg(true);
-      });
   };
 
   const mutatePassword = useMutation((data) => {
@@ -259,6 +268,7 @@ const MyAccount = () => {
     setPWAlert('');
     setShowPW(false);
     setConfirmPW(false);
+    setLoginLoading(true);
 
     var result = validatePassword(
       data.oldPassword,
@@ -279,9 +289,11 @@ const MyAccount = () => {
     } else if (result == 'same as current') {
       setPWAlert('Your current password is the same as the new password.');
       setShowPW(true);
+      setLoginLoading(false);
     } else if (result == 'incorrect') {
       setPWAlert('Passwords do not match.');
       setShowPW(true);
+      setLoginLoading(false);
     }
   };
 
@@ -292,18 +304,27 @@ const MyAccount = () => {
       JSON.stringify(newPassword) === JSON.stringify(confirmPassword) &&
       JSON.stringify(oldPassword) != JSON.stringify(newPassword)
     ) {
-      // setConfirmPW(true);
       return 'correct';
     } else if (JSON.stringify(oldPassword) === JSON.stringify(newPassword)) {
       return 'same as current';
-      // setPWAlert("Your current password is the same as the new password.");
-      //setShowPW(true);
     } else {
       return 'incorrect';
-      //setPWAlert("Passwords do not match.");
-      //setShowPW(true);
     }
   }
+
+  const renderTooltip = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      Support png and jpg image format.
+    </Tooltip>
+  );
+
+  // upload biz document section
+
+  const renderTooltipBizDoc = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      Please upload business verification document(s) as a zip file.
+    </Tooltip>
+  );
 
   return (
     // <LayoutOne>
@@ -314,12 +335,12 @@ const MyAccount = () => {
         </Modal.Header>
         <Modal.Body>Are you sure you want to disable your account?</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleDisabled}>
+          <button className="btn btn-fill-out btn" onClick={handleDisabled}>
             Yes
-          </Button>
-          <button className="btn btn-fill-out" onClick={handleClose}>
-            No
           </button>
+          <Button variant="secondary" onClick={handleClose}>
+            No
+          </Button>
         </Modal.Footer>
       </Modal>
 
@@ -353,6 +374,11 @@ const MyAccount = () => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
+                    <Nav.Link eventKey="uploadBizDoc">
+                      <IoIosDocument /> Business Verification
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
                     <Nav.Link eventKey="notification">
                       <IoIosCash /> Notification
                     </Nav.Link>
@@ -371,6 +397,154 @@ const MyAccount = () => {
               </Col>
               <Col lg={9} md={8}>
                 <Tab.Content>
+                  <Tab.Pane eventKey="uploadBizDoc">
+                    <Card className="my-account-content__content">
+                      <Card.Header>
+                        <h3> Upload Business Verification Document</h3>
+                      </Card.Header>
+                      <Card.Body>
+                        <div className="account-details-form">
+                          <form
+                            id="uploadbizForm"
+                            onSubmit={handleSubmit(onSubmitBizDoc)}
+                          >
+                            <div
+                              style={{
+                                display: showSucessBizUpload ? 'block' : 'none',
+                              }}
+                            >
+                              {
+                                <Alert
+                                  show={showSucessBizUpload}
+                                  variant="success"
+                                  onClose={() => setShowSucessBizUpload(false)}
+                                  dismissible
+                                >
+                                  {' '}
+                                  Document uploaded sucessfully! We will email
+                                  you the outcome once the document is verified{' '}
+                                </Alert>
+                              }
+                            </div>
+                            <div
+                              style={{
+                                display: showErrorBizUpload ? 'block' : 'none',
+                              }}
+                            >
+                              {
+                                <Alert
+                                  show={showErrorBizUpload}
+                                  variant="danger"
+                                  onClose={() => setShowErrorBizUpload(false)}
+                                  dismissible
+                                >
+                                  {' '}
+                                  {bizDocErrorMessage}{' '}
+                                </Alert>
+                              }
+                            </div>
+
+                            <div className="form-group col-md-12">
+                              {user?.approved == false &&
+                                user?.approvalMessage == null &&
+                                user?.supportDocsUrl != null && (
+                                  <h6>
+                                    Verification Status:{' '}
+                                    <span className="noteMsg">Pending</span>
+                                  </h6>
+                                )}
+                            </div>
+                            <div className="form-group col-md-12">
+                              {user?.supportDocsUrl == null && (
+                                <h6>
+                                  Verification Status:{' '}
+                                  <span className="noteMsg">No Submission</span>
+                                </h6>
+                              )}
+                            </div>
+                            <div className="form-group col-md-12">
+                              {user?.approved == false &&
+                                user?.approvalMessage != null &&
+                                user?.supportDocsUrl != null && (
+                                  <h6>
+                                    Verification Status:{' '}
+                                    <span className="noteMsg">Rejected</span>
+                                  </h6>
+                                )}
+                            </div>
+                            <div className="form-group col-md-12">
+                              {user?.approved == true && (
+                                <h6>
+                                  Verification Status:
+                                  <span className="greenMsg">Approved</span>
+                                </h6>
+                              )}
+                            </div>
+
+                            <Form.Label className="uploadFileLabel">
+                              Business Verification Document &nbsp;
+                              <OverlayTrigger
+                                placement="right"
+                                delay={{ show: 250, hide: 400 }}
+                                overlay={renderTooltipBizDoc}
+                              >
+                                <BsFillInfoCircleFill></BsFillInfoCircleFill>
+                              </OverlayTrigger>
+                            </Form.Label>
+
+                            <Col className="form-group" md={12}>
+                              <Form.Group>
+                                <Form.File
+                                  id="biz-upload-custom-file"
+                                  type="file"
+                                  accept=".zip"
+                                  onChange={handleBizDocFileChange}
+                                  required
+                                  custom
+                                />
+                                <Form.Label
+                                  className="form-group custom-file-label"
+                                  md={12}
+                                  for="custom-file"
+                                >
+                                  {bizDocInputName}
+                                </Form.Label>
+
+                                <div>
+                                  <br></br>
+                                  <p className="saved-message">
+                                    <b className="noteMsg">Note</b>
+                                    <br></br>
+                                    <b className="noteMsg">*</b>You need to
+                                    upload document(s) to verify your business
+                                    before you can create any events on
+                                    EventStop.
+                                    <br></br>
+                                    <b className="noteMsg">*</b> If your
+                                    previous submission is incomplete, you can
+                                    zip and re-upload all the verfication
+                                    document(s).
+                                  </p>
+                                </div>
+
+                                <br></br>
+                                {user?.approved != true && (
+                                  <ButtonWithLoading
+                                    type="submit"
+                                    className="btn btn-fill-out"
+                                    name="submit"
+                                    isLoading={loginLoading}
+                                  >
+                                    Upload
+                                  </ButtonWithLoading>
+                                )}
+                              </Form.Group>
+                            </Col>
+                          </form>
+                        </div>
+                      </Card.Body>
+                    </Card>
+                  </Tab.Pane>
                   <Tab.Pane eventKey="payment">
                     <Card className="my-account-content__content">
                       <Card.Header>
@@ -383,6 +557,7 @@ const MyAccount = () => {
                       </Card.Body>
                     </Card>
                   </Tab.Pane>
+
                   <Tab.Pane eventKey="address">
                     <Card className="my-account-content__content">
                       <Card.Header>
@@ -426,30 +601,87 @@ const MyAccount = () => {
                       </Card.Header>
                       <Card.Body>
                         <div className="account-details-form">
-                          <label>
-                            Profile Picture &nbsp;
-                            <OverlayTrigger
-                              placement="right"
-                              delay={{ show: 250, hide: 400 }}
-                              overlay={renderTooltip}
+                          <div
+                            style={{
+                              display: showFileSizeError ? 'block' : 'none',
+                            }}
+                          >
+                            {
+                              <Alert
+                                show={showFileSizeError}
+                                variant="danger"
+                                onClose={() => setShowFileSizeError(false)}
+                                dismissible
+                              >
+                                {' '}
+                                The image size must be less than 3 mb.{' '}
+                              </Alert>
+                            }
+                          </div>
+
+                          <Alert
+                            show={showAccSaved}
+                            variant="success"
+                            onClose={() => setAccSaved(false)}
+                            dismissible
+                          >
+                            {accSuccess}
+                            <Link
+                              href={{
+                                pathname: '/organiser/organiser-profile',
+                                query: { paraId: JSON.stringify(user?.id) },
+                              }}
                             >
-                              <BsFillInfoCircleFill></BsFillInfoCircleFill>
-                            </OverlayTrigger>
-                          </label>
-                          <Row>
-                            <Col className="form-group" xs={10} md={6}>
-                              <Image
-                                className="profile-image"
-                                src={profilepicUrl}
-                                thumbnail
-                              />
-                            </Col>
-                          </Row>
+                              <a>
+                                <span>View Profile</span>
+                              </a>
+                            </Link>
+                          </Alert>
 
                           <form
                             id="account-details-form"
                             onSubmit={handleSubmit(onSubmit)}
                           >
+                            <label>
+                              Profile Picture &nbsp;
+                              <OverlayTrigger
+                                placement="right"
+                                delay={{ show: 250, hide: 400 }}
+                                overlay={renderTooltip}
+                              >
+                                <BsFillInfoCircleFill></BsFillInfoCircleFill>
+                              </OverlayTrigger>
+                            </label>
+                            <Row>
+                              <Col className="form-group" xs={10} md={6}>
+                                {user?.profilePic != null &&
+                                  profilepicUrl == null && (
+                                    <Image
+                                      className="profile-image"
+                                      src={user?.profilePic}
+                                      thumbnail
+                                    />
+                                  )}
+
+                                {user?.profilePic == null &&
+                                  ispicupdated == false && (
+                                    <Image
+                                      className="profile-image"
+                                      src="../../assets/images/defaultprofilepic.png"
+                                      thumbnail
+                                    />
+                                  )}
+                                {profilepicUrl != null &&
+                                  ispicupdated == true && (
+                                    <Image
+                                      className="profile-image"
+                                      src={profilepicUrl}
+                                      thumbnail
+                                    />
+                                  )}
+                              </Col>
+                            </Row>
+
                             <Row>
                               <Col className="form-group" md={12}>
                                 <Form.Group>
@@ -477,28 +709,6 @@ const MyAccount = () => {
                                   </button>
                                   </div> */}
                                 </Form.Group>
-
-                                <div
-                                  style={{
-                                    display: showFileSizeError
-                                      ? 'block'
-                                      : 'none',
-                                  }}
-                                >
-                                  {
-                                    <Alert
-                                      show={showFileSizeError}
-                                      variant="danger"
-                                      onClose={() =>
-                                        setShowFileSizeError(false)
-                                      }
-                                      dismissible
-                                    >
-                                      {' '}
-                                      The image size must be less than 3 mb.{' '}
-                                    </Alert>
-                                  }
-                                </div>
                               </Col>
                             </Row>
 
@@ -506,7 +716,7 @@ const MyAccount = () => {
                               <Col className="form-group" md={12}>
                                 <label>
                                   Company Name{' '}
-                                  <span className="required"></span>
+                                  <span className="required">*</span>
                                 </label>
                                 <input
                                   required
@@ -536,7 +746,7 @@ const MyAccount = () => {
                               <Col className="form-group" md={12}>
                                 <label>
                                   Email Address{' '}
-                                  <span className="required"></span>
+                                  <span className="required">*</span>
                                 </label>
                                 <input
                                   required
@@ -551,7 +761,7 @@ const MyAccount = () => {
                               <Col className="form-group" md={12}>
                                 <label>
                                   Phone Number (+65){' '}
-                                  <span className="required"></span>
+                                  <span className="required">*</span>
                                 </label>
                                 <input
                                   required
@@ -592,15 +802,6 @@ const MyAccount = () => {
                                 </ButtonWithLoading>
                               </Col>
                             </Row>
-                            <div>&nbsp;</div>
-                            <Alert
-                              show={showAccSaved}
-                              variant="success"
-                              onClose={() => setAccSaved(false)}
-                              dismissible
-                            >
-                              {accSuccess}
-                            </Alert>
                           </form>
                         </div>
                       </Card.Body>
@@ -663,65 +864,6 @@ const MyAccount = () => {
                             id="change-password-form"
                             onSubmit={handleSubmit(onSubmitPassword)}
                           >
-                            <Col className="form-group" md={12}>
-                              <label>
-                                Current Password{' '}
-                                <span className="required"></span>
-                              </label>
-                              <input
-                                required
-                                className="form-control"
-                                name="oldPassword"
-                                type="password"
-                                placeholder="Enter password"
-                                ref={register()}
-                              />
-                            </Col>
-                            <Col className="form-group" md={12}>
-                              <label>
-                                New Password <span className="required"></span>
-                              </label>
-                              <input
-                                required
-                                className="form-control"
-                                name="newPassword"
-                                type="password"
-                                placeholder="Enter new password"
-                                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                                title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
-                                ref={register()}
-                              />
-                            </Col>
-
-                            <Col className="form-group" md={12}>
-                              <label>
-                                Confirm Password{' '}
-                                <span className="required"></span>
-                              </label>
-                              <input
-                                required
-                                className="form-control"
-                                name="confirmPassword"
-                                type="password"
-                                placeholder="Re-enter your new password"
-                                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                                title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
-                                ref={register()}
-                              />
-                            </Col>
-
-                            <Col>
-                              <button
-                                type="submit"
-                                className="btn btn-fill-out"
-                                name="submit"
-                                value="Submit"
-                              >
-                                Save
-                              </button>
-                            </Col>
-
-                            <div>&nbsp;</div>
                             <Alert
                               show={confirmPW}
                               variant="success"
@@ -738,6 +880,72 @@ const MyAccount = () => {
                             >
                               {pwAlert}
                             </Alert>
+                            <Col className="form-group" md={12}>
+                              <label>
+                                Current Password{' '}
+                                <span className="required">*</span>
+                              </label>
+                              <input
+                                required
+                                className="form-control"
+                                name="oldPassword"
+                                type="password"
+                                placeholder="Enter password"
+                                ref={register()}
+                              />
+                            </Col>
+                            <Col className="form-group" md={12}>
+                              <label>
+                                New Password <span className="required">*</span>
+                              </label>
+                              <input
+                                required
+                                className="form-control"
+                                name="newPassword"
+                                type="password"
+                                placeholder="Enter new password"
+                                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                                title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                                ref={register()}
+                              />
+                            </Col>
+
+                            <Col className="form-group" md={12}>
+                              <label>
+                                Confirm Password{' '}
+                                <span className="required">*</span>
+                              </label>
+                              <input
+                                required
+                                className="form-control"
+                                name="confirmPassword"
+                                type="password"
+                                placeholder="Re-enter your new password"
+                                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                                title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                                ref={register()}
+                              />
+                            </Col>
+
+                            <Col>
+                              <ButtonWithLoading
+                                type="submit"
+                                className="btn btn-fill-out"
+                                name="submit"
+                                value="Submit"
+                                isLoading={loginLoading}
+                              >
+                                Save
+                              </ButtonWithLoading>
+                              {/* <button
+                                type="submit"
+                                className="btn btn-fill-out"
+                                name="submit"
+                                value="Submit"
+                              >
+                                Save
+                              </button> */}
+                            </Col>
                           </form>
                         </div>
                       </Card.Body>
@@ -749,24 +957,25 @@ const MyAccount = () => {
                         <h3>Account Status</h3>
                       </Card.Header>
                       <Card.Body>
-                        <p className="saved-message">
-                          Your account is active now.<br></br>
-                          <b className="noteMsg">Note</b>: Once you disabled
-                          your account, you are unable to login or sign up with
-                          the registered email. If you like to do so, please
-                          contact us at{' '}
-                          <a className="eventstopEmailText">
-                            enquiry@eventstop.com
-                          </a>
-                        </p>
-                        <Button
-                          variant="secondary"
-                          size="sm"
-                          onClick={() => setShow(true)}
-                        >
-                          Disabled
-                        </Button>{' '}
-                        <Col md={12}></Col>
+                        <div className="account-details-form">
+                          <p className="saved-message">
+                            Your account is active now.<br></br>
+                            <b className="noteMsg">Note</b>: Once you disabled
+                            your account, you are unable to login or sign up
+                            with the registered email. If you like to do so,
+                            please contact us at{' '}
+                            <a className="eventstopEmailText">
+                              enquiry@eventstop.com
+                            </a>
+                          </p>
+                          <button
+                            className="btn btn-fill-out btn"
+                            size="sm"
+                            onClick={() => setShow(true)}
+                          >
+                            Disabled
+                          </button>{' '}
+                        </div>
                       </Card.Body>
                     </Card>
                   </Tab.Pane>
