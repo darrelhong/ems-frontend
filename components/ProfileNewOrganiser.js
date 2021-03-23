@@ -661,6 +661,7 @@ const EventOrgProfile = ({ paraId_, currentUserId_, currentUserRole_ }) => {
                             attendees={attendeeFollowers}
                             partners={partnerFollowers}
                             showPublicView={showPublicView}
+                            paraId={paraId_}
                           />
                         </div>
                       </ul>

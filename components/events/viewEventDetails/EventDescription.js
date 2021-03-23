@@ -162,10 +162,23 @@ const EventDescription = ({
     api.post('/api/organiser/broadcastEmailEnquiry', data)
     .then(() => {
       setBroadcastSuccess(true);
+      clearBroadcastForm();
     })
     .catch((error) => {
       console.log(error);
     });
+  }
+
+  function clearBroadcastForm() {
+    let broadcastTitle = document.getElementById("broadcastTitle");
+    let broadcastMessage = document.getElementById("broadcastMessage");
+    let chkBusinessPartner = document.getElementById("chkBusinessPartner");
+    let chkAttendee = document.getElementById("chkAttendee")
+
+    broadcastTitle.value = "";
+    broadcastMessage.value = "";
+    chkBusinessPartner.checked = false;
+    chkAttendee.checked = false;
   }
 
   return (

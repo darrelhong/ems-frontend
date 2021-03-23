@@ -270,6 +270,11 @@ export default function MyAccount() {
   return (
     // <LayoutOne>
     <AttendeeWrapper title="Attendee Home">
+      <div style={{display: "none"}}>
+        { //initialise categoryPreferences
+          (categoryPreferences = user?.categoryPreferences)
+        }
+      </div>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Confirmation</Modal.Title>
@@ -750,11 +755,6 @@ export default function MyAccount() {
             </Row>
           </Tab.Container>
         </Container>
-      </div>
-      <div style={{display: "none"}}>
-        { //initialise categoryPreferences
-          (categoryPreferences = user?.categoryPreferences)
-        }
       </div>
     </AttendeeWrapper>
     // </LayoutOne>

@@ -1,14 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Modal, Button, Form, Container, Row, Col, Alert } from 'react-bootstrap';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
 import Badge from 'react-bootstrap/Badge';
 import Link from 'next/link';
+import { getUser } from '../lib/query/getUser';
 import api from '../lib/ApiClient';
 // import EventEoProfileSliderTen from './ProductSlider/EventEoProfileSliderTen';
 
-const FollowersTabEoProfile = ({ attendees, partners, showPublicView }) => {
+const FollowersTabEoProfile = ({ attendees, partners, showPublicView, paraId }) => {
   
   const [broadcastModalShow, setBroadcastModalShow] = useState(false);
   const closeBroadcastModal = () => setBroadcastModalShow(false);
@@ -21,6 +22,33 @@ const FollowersTabEoProfile = ({ attendees, partners, showPublicView }) => {
   const [showRecipientError, setRecipientError] = useState(false);
   const [showBroadcastError, setBroadcastError] = useState(false);
   const [showBroadcastSuccess, setBroadcastSuccess] = useState(false);
+
+  const [user, setUser] = useState(Object);
+  const [role, setRole] = useState();
+
+  useEffect(async () => {
+    if (localStorage.getItem('userId') != null) {
+      await getUser(localStorage.getItem('userId')).then((data) => {
+        setUser(data);
+        setRole(getRole(data));
+      });
+    } else {
+      setRole('Guest');
+    }
+  }, []);
+
+  const getRole = (user) => {
+    var check = '';
+    if (user.roles[0].description === 'Attendee') {
+      check = 'Attendee';
+    } else if (user.roles[0].description === 'Event Organiser') {
+      check = 'Organiser';
+    } else {
+      check = 'Partner';
+    }
+
+    return check;
+  };
 
   function proceedBroadcast() {
     let broadcastTitle = document.getElementById("broadcastTitle").value;
@@ -80,10 +108,23 @@ const FollowersTabEoProfile = ({ attendees, partners, showPublicView }) => {
     api.post('/api/organiser/broadcastEmailToFollowers', data)
     .then(() => {
       setBroadcastSuccess(true);
+      clearBroadcastForm();
     })
     .catch((error) => {
       console.log(error);
     });
+  }
+
+  function clearBroadcastForm() {
+    let broadcastTitle = document.getElementById("broadcastTitle");
+    let broadcastMessage = document.getElementById("broadcastMessage");
+    let chkBusinessPartner = document.getElementById("chkBusinessPartner");
+    let chkAttendee = document.getElementById("chkAttendee")
+
+    broadcastTitle.value = "";
+    broadcastMessage.value = "";
+    chkBusinessPartner.checked = false;
+    chkAttendee.checked = false;
   }
 
   if (attendees !== undefined && partners !== undefined) {
@@ -204,13 +245,15 @@ const FollowersTabEoProfile = ({ attendees, partners, showPublicView }) => {
                 <Nav.Link eventKey="partners">Partner</Nav.Link>
               </Nav.Item>
             </Nav>
-            <button
-              className="btn btn-fill-out"
-              style={{float: "right", marginTop: "-78px", paddingLeft: "25px", paddingRight: "25px"}}
-              onClick={() => openBroadcastModal()}
-            >
-              Broadcast
-            </button>
+            {Boolean(paraId == user?.id && role == "Organiser") && (
+              <button
+                className="btn btn-fill-out"
+                style={{float: "right", marginTop: "-78px", paddingLeft: "25px", paddingRight: "25px"}}
+                onClick={() => openBroadcastModal()}
+              >
+                Broadcast
+              </button>
+            )}
             <Tab.Content>
               <Tab.Pane eventKey="attendees">
                 <Row>
