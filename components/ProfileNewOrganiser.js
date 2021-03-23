@@ -108,11 +108,7 @@ const EventOrgProfile = ({ paraId_ }) => {
   };
 
 
-  const getReviewsEO = async () => {
-    await getReviews(paraId_).then((data) => {
-      setReviews(data);
-    });
-  };
+ 
 
   const getReviewsEvent = async (id) => {
     await getReviewsByEvent(id).then((data) => {
@@ -142,7 +138,14 @@ const EventOrgProfile = ({ paraId_ }) => {
         setEventOrganiser(eventOrg);
       });
     };
-    getUserData();
+    getUserData(); 
+    
+    const getReviewsEO = async () => {
+    await getReviews(paraId_).then((data) => {
+      console.log("reviews" + reviews);
+      setReviews(data);
+    });
+  };
     getReviewsEO();
     const getRatingData = async () => {
       await getRating(paraId_).then((rate) => {
@@ -281,6 +284,7 @@ const EventOrgProfile = ({ paraId_ }) => {
               loadOrgAttFollowerData();
 
               loadOrgPartnerFollowerData();
+              // getReviewsEO();
             }
           }
         });
@@ -336,7 +340,7 @@ const EventOrgProfile = ({ paraId_ }) => {
         let endpoint = "https://api.ravenhub.io/company/WLU2yLZw9d/subscribers/organiser" + data.id + "/events/SyTpyGmjrT"
  
   axios.post(endpoint, { "person" : user }, {
-  headers: {'Content-type': 'application/json'}
+  headers: {'Content-type': 'applircation/json'}
   });
       })
       .catch((error) => {

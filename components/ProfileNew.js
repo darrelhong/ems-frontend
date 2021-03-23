@@ -25,12 +25,13 @@ import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
 import Badge from 'react-bootstrap/Badge';
 import { getFollowers, getFollowing } from '../lib/query/getBPFollow';
+import { getBpEventsByIdRoleStatus } from '../lib/query/getEventsBPProfile';
 import { isBpVip, addVip } from '../lib/query/useVip';
 import { BsPencilSquare, BsPlus } from 'react-icons/bs';
 import api from '../lib/ApiClient';
 import { PermDataSettingTwoTone } from '@material-ui/icons';
 import { FiPlus } from 'react-icons/fi';
-
+import EventTabOne from '../components/EventTabBpProfile';
 const PartnerProfile = ({ localuser }) => {
   const [publicView, setPublicView] = useState();
   const [eoView, setEOView] = useState();
@@ -41,8 +42,9 @@ const PartnerProfile = ({ localuser }) => {
   const [unfollowBtn, setUnfollowBtn] = useState();
   const [followBtn, setFollowBtn] = useState();
   const [partner, setPartner] = useState();
-  const [user, setUser] = useState(); 
-
+  const [user, setUser] = useState();
+  const [currenteventlist, setCurrenteventlist] = useState([]);
+  const [pasteventlist, setPastEventlist] = useState([]);
   // const [markVip, setMarkVip] = useState(false);
   // const [unmarkVip, setUnmarkVip] = useState(false);
   const [checkIsBpVip, setCheckIsBpVip] = useState(null);
@@ -57,14 +59,6 @@ const PartnerProfile = ({ localuser }) => {
       });
     };
     getUserData();
-
-    console.log('user ' + localuser);
-    // const getPartnerData = async () => {
-    //   await getUser(localuser).then((data) => {
-    //     setPartner(data);
-    //   });
-    // };
-    // getPartnerData();
 
     const getFollowingData = async () => {
       await getFollowing(localuser).then((data) => {
@@ -95,24 +89,31 @@ const PartnerProfile = ({ localuser }) => {
         }
       });
     };
-    
+
 
     if (localStorage.getItem('userId') != null) {
       const getCurrentUserData = async () => {
         // get currentUser
-        await getUser(localStorage.getItem('userId')).then((data) => {
+        await getUser(localStorage.getItem('userId')).then(async (data) => {
           console.log('current ' + data.id);
           setUser(data?.name);
           if (data?.id !== localuser) {
-            console.log('passed ');
 
             if (data.roles[0].roleEnum === 'EVNTORG') {
-              console.log('eventorg ');
+              await getBpEventsByIdRoleStatus(localuser, data.roles[0].roleEnum, 'current')
+                .then((events) => {
+                  setCurrenteventlist(events);
+                });
+              await getBpEventsByIdRoleStatus(localuser, data.roles[0].roleEnum, 'past')
+                .then((events) => {
+                  setPastEventlist(events);
+                });
 
               setEOView(true);
               setPublicView(false);
               setFollowBtn(false);
               setUnfollowBtn(false);
+
 
               const checkIfBpIsVip = async () => {
                 console.log('hello');
@@ -129,16 +130,43 @@ const PartnerProfile = ({ localuser }) => {
               setEOView(false);
               setPublicView(true);
               followId = data.id;
+              await getBpEventsByIdRoleStatus(localuser, data.roles[0].roleEnum, 'current')
+                .then((events) => {
+                  setCurrenteventlist(events);
+                });
+              await getBpEventsByIdRoleStatus(localuser, data.roles[0].roleEnum, 'past')
+                .then((events) => {
+                  setPastEventlist(events);
+                });
             } else {
               //bp view other bp, cannot follow
               setFollowBtn(false);
               setUnfollowBtn(false);
               setEOView(false);
               setPublicView(true);
+              await getBpEventsByIdRoleStatus(localuser, data.roles[0].roleEnum, 'current')
+                .then((events) => {
+                  setCurrenteventlist(events);
+                });
+              await getBpEventsByIdRoleStatus(localuser, data.roles[0].roleEnum, 'past')
+                .then((events) => {
+                  setPastEventlist(events);
+                });
             }
           } else {
             setPublicView(false);
             setEOView(false);
+            setFollowBtn(false);
+            setUnfollowBtn(false);
+            await getBpEventsByIdRoleStatus(localuser, data.roles[0].roleEnum, 'current')
+              .then((events) => {
+                setCurrenteventlist(events);
+              });
+            await getBpEventsByIdRoleStatus(localuser, data.roles[0].roleEnum, 'past')
+              .then((events) => {
+                setPastEventlist(events);
+              });
+
           }
         });
       };
@@ -146,14 +174,31 @@ const PartnerProfile = ({ localuser }) => {
       getFollowersData();
     } else {
       //guest cannot follow bp
+      const getEvents = async () => {
+          await getBpEventsByIdRoleStatus(localuser, 'guest', 'current')
+        .then((events) => {
+          setCurrenteventlist(events);
+        });
+      await getBpEventsByIdRoleStatus(localuser, 'guest', 'past')
+        .then((events) => {
+          setPastEventlist(events);
+        });
+      };
+      getEvents();
       setPublicView(true);
       setEOView(false);
       setFollowBtn(false);
       setUnfollowBtn(false);
       getFollowersData();
-            getFollowingData();
+      getFollowingData();
+
+    
     }
-  }, [localuser, followId]);
+
+    console.log(currenteventlist + "current");
+    console.log(pasteventlist + "past");
+
+  }, []);
 
   const getRefreshedFollowers = async () => {
     await getFollowers(localuser).then((data) => {
@@ -171,9 +216,9 @@ const PartnerProfile = ({ localuser }) => {
         console.log("parner id" + data.id);
         console.log("user" + user);
         let endpoint = "https://api.ravenhub.io/company/WLU2yLZw9d/subscribers/partner" + data.id + "/events/SyTpyGmjrT"
- 
-        axios.post(endpoint, { "person" : user}, {
-        headers: {'Content-type': 'application/json'}
+
+        axios.post(endpoint, { "person": user }, {
+          headers: { 'Content-type': 'application/json' }
         });
       })
       .catch((error) => {
@@ -230,9 +275,9 @@ const PartnerProfile = ({ localuser }) => {
 
   return (
     <>
-    
+
       <BreadcrumbOne pageTitle="Profile Details">
-     
+
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/partner/home">
@@ -386,9 +431,7 @@ const PartnerProfile = ({ localuser }) => {
           </Col>
           <Col md="8">
             <Card className="card-user">
-              <CardHeader>
-                <CardTitle tag="h5">Profile Details</CardTitle>
-              </CardHeader>
+
               <CardBody>
                 <Tab.Container defaultActiveKey="Events">
                   <Nav
@@ -409,15 +452,13 @@ const PartnerProfile = ({ localuser }) => {
                   <Tab.Content>
                     <Tab.Pane eventKey="Events">
                       <br></br>
-                      <span>There are currently no events.</span>
-                      {/* <div className="product-description-tab__details">
-                  
-                    <EventsProfile
-                      current={events}
-                    //   upcoming="bestSellerProducts"
-                    //  past="featuredProducts"
-                    />
-                  </div> */}
+                      <div className="product-description-tab__additional-info">
+                            <EventTabOne
+                              current={currenteventlist}
+                             
+                              past={pasteventlist}
+                            />
+                          </div>
                     </Tab.Pane>
                     <Tab.Pane eventKey="Followers">
                       <br></br>
@@ -591,13 +632,13 @@ const PartnerProfile = ({ localuser }) => {
               </CardBody>
             </Card>
           </Col>
-          <Col xs="12" style={{marginTop: "30px", marginBottom: "30px"}}>
+          <Col xs="12" style={{ marginTop: "30px", marginBottom: "30px" }}>
             <Card className="card-user">
               <CardHeader className="text-center">
                 <h4>Have some questions?</h4>
               </CardHeader>
               <CardBody className="d-flex justify-content-center">
-                <div className="d-flex flex-column text-center w-50" style={{gap: "10px"}}>
+                <div className="d-flex flex-column text-center w-50" style={{ gap: "10px" }}>
                   <input
                     id="enquiryTitle"
                     className="form-control"
@@ -612,7 +653,7 @@ const PartnerProfile = ({ localuser }) => {
                     id="enquiryMessage"
                     className="form-control"
                     placeholder="Type something here..."
-                    style={{height: "10em"}}
+                    style={{ height: "10em" }}
                   />
                   <button
                     className="btn btn-fill-out"
