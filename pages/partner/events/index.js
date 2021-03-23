@@ -5,12 +5,6 @@ import { useInfiniteQuery, useQueryClient } from 'react-query';
 import debounce from 'lodash/debounce';
 
 import { getEventsWithKeywordandSort } from 'lib/query/events';
-import { BreadcrumbOne } from '../../../components/Breadcrumb';
-import PartnerWrapper from '../../../components/wrapper/PartnerWrapper';
-import api from '../../../lib/ApiClient';
-import EventCard from '../../../components/events/partner/EventCard';
-import ButtonWithLoading from '../../../components/custom/ButtonWithLoading';
-import Nav from 'react-bootstrap/Nav';
 
 import { BreadcrumbOne } from 'components/Breadcrumb';
 import PartnerWrapper from 'components/wrapper/PartnerWrapper';
@@ -87,8 +81,7 @@ export default function PartnerEvents() {
       </BreadcrumbOne>
 
       <Container className="my-4">
-    
-                        <br></br>
+        <br></br>
         <Row>
           <Col md={8} lg={6}>
             <div className="input-group mb-3">
