@@ -63,6 +63,7 @@ const MyAccount = () => {
   //show pw error alert
   const [showPW, setShowPW] = useState(false);
   const [showFileSizeError, setShowFileSizeError] = useState(false);
+  const [ispicupdated, setIspicupdated] = useState(false);
 
   useEffect(() => {
     const getUserData = async () => {
@@ -113,6 +114,7 @@ const MyAccount = () => {
       .then((response) => {
         setProfilepicUrl(response.data['fileDownloadUri']);
         setAccSaved(true);
+        setIspicupdated(true);
         setAccSuccess('Account details saved successfully! ');
         setLoginLoading(false);
       })
@@ -429,20 +431,22 @@ const MyAccount = () => {
                                     />
                                   )}
 
-                                {user?.profilePic == null && (
-                                  <Image
-                                    className="profile-image"
-                                    src="../../assets/images/defaultprofilepic.png"
-                                    thumbnail
-                                  />
-                                )}
-                                {profilepicUrl != null && (
-                                  <Image
-                                    className="profile-image"
-                                    src={profilepicUrl}
-                                    thumbnail
-                                  />
-                                )}
+                                {user?.profilePic == null &&
+                                  ispicupdated == false && (
+                                    <Image
+                                      className="profile-image"
+                                      src="../../assets/images/defaultprofilepic.png"
+                                      thumbnail
+                                    />
+                                  )}
+                                {profilepicUrl != null &&
+                                  ispicupdated == true && (
+                                    <Image
+                                      className="profile-image"
+                                      src={profilepicUrl}
+                                      thumbnail
+                                    />
+                                  )}
                               </Col>
                             </Row>
 
