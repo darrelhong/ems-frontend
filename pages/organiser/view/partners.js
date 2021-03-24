@@ -174,7 +174,7 @@ function OrganiserViewUsers() {
                   />
                   <div className="input-group-append">
                     <button
-                      className="btn btn-outline-primary btn-sm"
+                      className="view btn-outline-primary btn-sm"
                       type="button"
                       style={{ height: 38 }}
                       onClick={handleSearchButtonClicked}

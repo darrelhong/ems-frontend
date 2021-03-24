@@ -44,11 +44,14 @@ export default function UserEOCard({ partner, user, handleMarkVip, CheckVip }) {
         {partner.description != null && (
           <Card.Text className="line-clamp">{partner.description}</Card.Text>
         )}
-
-        <Card.Text className="text-default mt-auto">
-          Category: &nbsp;
+        {partner?.businessCategory != null && (<Card.Text >
+         Category: &nbsp;
           <Badge variant="primary">{partner?.businessCategory}</Badge>
-        </Card.Text>
+        </Card.Text>) }
+        {partner?.businessCategory == null && (<Card.Text >
+        
+        </Card.Text>) }
+        
         {isVip && (
           <Card.Text className="line-clamp">
             {' '}
@@ -59,7 +62,7 @@ export default function UserEOCard({ partner, user, handleMarkVip, CheckVip }) {
           <Card.Text>
             {' '}
             <button
-              className="btn btn-outline-primary btn-sm"
+              className="view btn-outline-primary btn-sm"
               type="button"
               onClick={() => addVip(partner)}
             >

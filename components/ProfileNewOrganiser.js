@@ -685,7 +685,7 @@ const EventOrgProfile = ({ paraId_ }) => {
                                           </div>
                                           <div className="rating">
                                             
-                                          <span className="comment-date">
+                                          <span className="review-author">
                                             {review.reviewDateTime}
                                           </span>
                                           </div>
@@ -725,37 +725,59 @@ const EventOrgProfile = ({ paraId_ }) => {
               </CardBody>
             </Card>
           </Col>
-          <Col xs="12" style={{marginTop: "30px", marginBottom: "30px"}}>
-            <Card className="card-user">
-              <CardHeader className="text-center">
+         
+        </Row>
+        <br></br>
+        <Row xs="12" style={{ marginTop: "30px", marginBottom: "30px" }}>
+          {/* <Card className="card-user"> */}
+          {/* <CardHeader className="text-center">
                 <h4>Have some questions?</h4>
-              </CardHeader>
-              <CardBody className="d-flex justify-content-center">
-                <div className="d-flex flex-column text-center w-50" style={{gap: "10px"}}>
-                  <input
-                    id="enquiryTitle"
-                    className="form-control"
-                    placeholder="Title"
-                  />
-                  <input
-                    id="enquiryEventName"
-                    className="form-control"
-                    placeholder="Event Name"
-                  />
-                  <textarea
-                    id="enquiryMessage"
-                    className="form-control"
-                    placeholder="Type something here..."
-                    style={{height: "10em"}}
-                  />
-                  <button
-                    className="btn btn-fill-out"
-                  >
-                    Send Enquiry
+              </CardHeader> */}
+          {/* <CardBody className="d-flex justify-content-center"> */}
+          
+          <Col xs="5" className=" justify-content-center" >
+            <br></br>
+            <div className="d-flex justify-content-center">
+              <h2>Have some questions?</h2>
+          </div>
+          <br></br>
+          
+            <div className="d-flex justify-content-center">
+              <img
+                // src="https://cdn1.iconfinder.com/data/icons/contact-us-honey-series/64/ONLINE_QUESTION-512.png"
+                src= "https://img.icons8.com/bubbles/2x/email.png"
+                 className="img-responsive"
+                 style={{maxWidth:"70%"}}
+              />
+            </div>
+
+          </Col>
+          <Col xs="7" className="d-flex justify-content-center">
+            <div className="d-flex flex-column text-center " style={{ gap: "10px", width:"70%" }}>
+              <input
+                id="enquiryTitle"
+                className="form-control"
+                placeholder="Title"
+              />
+              <input
+                id="enquiryEventName"
+                className="form-control"
+                placeholder="Event Name"
+              />
+              <textarea
+                id="enquiryMessage"
+                className="form-control"
+                placeholder="Type something here..."
+                style={{ height: "10em" }}
+              />
+              <button
+                className="btn btn-fill-out"
+              >
+                Send Enquiry
                   </button>
-                </div>
-              </CardBody>
-            </Card>
+            </div>
+            {/* </CardBody> */}
+            {/* </Card> */}
           </Col>
         </Row>
         <br></br>

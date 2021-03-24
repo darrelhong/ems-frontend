@@ -130,6 +130,7 @@ const PartnerProfile = ({ localuser }) => {
               setEOView(false);
               setPublicView(true);
               followId = data.id;
+              getFollowersData();
               await getBpEventsByIdRoleStatus(localuser, data.roles[0].roleEnum, 'current')
                 .then((events) => {
                   setCurrenteventlist(events);
@@ -175,14 +176,14 @@ const PartnerProfile = ({ localuser }) => {
     } else {
       //guest cannot follow bp
       const getEvents = async () => {
-          await getBpEventsByIdRoleStatus(localuser, 'guest', 'current')
-        .then((events) => {
-          setCurrenteventlist(events);
-        });
-      await getBpEventsByIdRoleStatus(localuser, 'guest', 'past')
-        .then((events) => {
-          setPastEventlist(events);
-        });
+        await getBpEventsByIdRoleStatus(localuser, 'guest', 'current')
+          .then((events) => {
+            setCurrenteventlist(events);
+          });
+        await getBpEventsByIdRoleStatus(localuser, 'guest', 'past')
+          .then((events) => {
+            setPastEventlist(events);
+          });
       };
       getEvents();
       setPublicView(true);
@@ -192,7 +193,7 @@ const PartnerProfile = ({ localuser }) => {
       getFollowersData();
       getFollowingData();
 
-    
+
     }
 
     console.log(currenteventlist + "current");
@@ -323,15 +324,17 @@ const PartnerProfile = ({ localuser }) => {
                         thumbnail
                       />
                     )}
+                    &nbsp;
                     <h5 className="title">{partner?.name}</h5>
                   </a>
-                  <p className="description">{partner?.email}</p>
-                </div>
+                  <div >
+                  <h7 className="description">{partner?.email}</h7>
+                </div></div>
                 <p className="description text-center">
                   {partner?.description}
                 </p>
                 <p className="description text-center">
-                  Address :{partner?.address}
+                  Address : {partner?.address}
                 </p>
 
                 <div className="description text-center">
@@ -453,12 +456,12 @@ const PartnerProfile = ({ localuser }) => {
                     <Tab.Pane eventKey="Events">
                       <br></br>
                       <div className="product-description-tab__additional-info">
-                            <EventTabOne
-                              current={currenteventlist}
-                             
-                              past={pasteventlist}
-                            />
-                          </div>
+                        <EventTabOne
+                          current={currenteventlist}
+
+                          past={pasteventlist}
+                        />
+                      </div>
                     </Tab.Pane>
                     <Tab.Pane eventKey="Followers">
                       <br></br>
@@ -632,37 +635,59 @@ const PartnerProfile = ({ localuser }) => {
               </CardBody>
             </Card>
           </Col>
-          <Col xs="12" style={{ marginTop: "30px", marginBottom: "30px" }}>
-            <Card className="card-user">
-              <CardHeader className="text-center">
+
+        </Row>
+        <br></br>
+        <Row xs="12" style={{ marginTop: "30px", marginBottom: "30px" }}>
+          {/* <Card className="card-user"> */}
+          {/* <CardHeader className="text-center">
                 <h4>Have some questions?</h4>
-              </CardHeader>
-              <CardBody className="d-flex justify-content-center">
-                <div className="d-flex flex-column text-center w-50" style={{ gap: "10px" }}>
-                  <input
-                    id="enquiryTitle"
-                    className="form-control"
-                    placeholder="Title"
-                  />
-                  <input
-                    id="enquiryEventName"
-                    className="form-control"
-                    placeholder="Event Name"
-                  />
-                  <textarea
-                    id="enquiryMessage"
-                    className="form-control"
-                    placeholder="Type something here..."
-                    style={{ height: "10em" }}
-                  />
-                  <button
-                    className="btn btn-fill-out"
-                  >
-                    Send Enquiry
+              </CardHeader> */}
+          {/* <CardBody className="d-flex justify-content-center"> */}
+          
+          <Col xs="5" className=" justify-content-center" >
+            <br></br>
+            <div className="d-flex justify-content-center">
+              <h2>Have some questions?</h2>
+          </div>
+          <br></br>
+          
+            <div className="d-flex justify-content-center">
+              <img
+                // src="https://cdn1.iconfinder.com/data/icons/contact-us-honey-series/64/ONLINE_QUESTION-512.png"
+                src= "https://img.icons8.com/bubbles/2x/email.png"
+                 className="img-responsive"
+                 style={{maxWidth:"70%"}}
+              />
+            </div>
+
+          </Col>
+          <Col xs="7" className="d-flex justify-content-center">
+            <div className="d-flex flex-column text-center " style={{ gap: "10px", width:"70%" }}>
+              <input
+                id="enquiryTitle"
+                className="form-control"
+                placeholder="Title"
+              />
+              <input
+                id="enquiryEventName"
+                className="form-control"
+                placeholder="Event Name"
+              />
+              <textarea
+                id="enquiryMessage"
+                className="form-control"
+                placeholder="Type something here..."
+                style={{ height: "10em" }}
+              />
+              <button
+                className="btn btn-fill-out"
+              >
+                Send Enquiry
                   </button>
-                </div>
-              </CardBody>
-            </Card>
+            </div>
+            {/* </CardBody> */}
+            {/* </Card> */}
           </Col>
         </Row>
         <br></br>
