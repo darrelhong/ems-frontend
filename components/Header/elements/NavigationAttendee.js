@@ -1,6 +1,5 @@
 import Link from 'next/link';
-import { Col } from 'react-bootstrap';
-import { IoIosArrowDown, IoIosArrowForward } from 'react-icons/io';
+import { IoIosArrowDown } from 'react-icons/io';
 
 const NavigationAttendee = ({ positionClass }) => {
   return (
@@ -11,7 +10,7 @@ const NavigationAttendee = ({ positionClass }) => {
         }`}
       >
         <li>
-          <Link href="/partner/home">
+          <Link href="/attendee/home">
             <a className="nav-link">HOME</a>
           </Link>
         </li>
