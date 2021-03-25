@@ -12,6 +12,7 @@ import AdminHeaderTop from 'components/Header/AdminHeaderTop';
 import { BreadcrumbOne } from 'components/Breadcrumb';
 import MaterialTable from 'lib/MaterialTable';
 import { FooterOne } from 'components/Footer';
+import CenterSpinner from 'components/custom/CenterSpinner';
 
 const getBusinessPartners = async () => {
   const { data } = await api.get('/api/partner/all');
@@ -50,11 +51,7 @@ function AdminBusinessParters() {
       </BreadcrumbOne>
 
       <Container className="space-pt--r70 space-pb--r70">
-        {isLoading && (
-          <div className="spinner-grow" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
-        )}
+        {isLoading && <CenterSpinner />}
 
         {data && (
           <Row>

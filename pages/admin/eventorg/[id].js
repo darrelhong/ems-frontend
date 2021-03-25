@@ -15,6 +15,7 @@ import withProtectRoute from 'components/ProtectRouteWrapper';
 import { BreadcrumbOne } from 'components/Breadcrumb';
 import ButtonWithLoading from 'components/custom/ButtonWithLoading';
 import RejectButton from 'components/custom/admin/RejectButton';
+import CenterSpinner from 'components/custom/CenterSpinner';
 
 const getEventOrganiser = async (id) => {
   const { data } = await api.get(`/api/organiser/${id}`);
@@ -106,11 +107,7 @@ function EventOrganiserDetails({ id }) {
       </BreadcrumbOne>
 
       <Container className="space-pt--r70 space-pb--r70">
-        {isLoading && (
-          <div className="spinner-grow" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
-        )}
+        {isLoading && <CenterSpinner />}
 
         {eo && (
           <>

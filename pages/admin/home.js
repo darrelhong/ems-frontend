@@ -8,6 +8,7 @@ import withProtectRoute from 'components/ProtectRouteWrapper';
 import { BreadcrumbOne } from 'components/Breadcrumb';
 import { FooterOne } from 'components/Footer';
 import AdminHeaderTop from 'components/Header/AdminHeaderTop';
+import CenterSpinner from 'components/custom/CenterSpinner';
 
 function AdminHome() {
   const { data: user, isSuccess, isLoading } = useUser(
@@ -33,7 +34,7 @@ function AdminHome() {
       </BreadcrumbOne>
 
       <Container className="space-pt--30 space-pb--30">
-        {isLoading && <div className="spinner-grow" role="status" />}
+        {isLoading && <CenterSpinner />}
         {isSuccess && (
           <p>
             Your are logged in as {user?.name}. ID: {user?.id}

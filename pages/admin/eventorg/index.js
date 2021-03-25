@@ -12,6 +12,7 @@ import { FooterOne } from 'components/Footer';
 import AdminHeaderTop from 'components/Header/AdminHeaderTop';
 import { BreadcrumbOne } from 'components/Breadcrumb';
 import withProtectRoute from 'components/ProtectRouteWrapper';
+import CenterSpinner from 'components/custom/CenterSpinner';
 
 const getEventOrganisers = async () => {
   const { data } = await api.get('/api/organiser/all');
@@ -51,11 +52,7 @@ function AdminEventOrg() {
       </BreadcrumbOne>
 
       <Container className="space-pt--30 space-pb--30">
-        {isLoading && (
-          <div className="spinner-grow" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
-        )}
+        {isLoading && <CenterSpinner />}
         {data && (
           <Row>
             <Col>

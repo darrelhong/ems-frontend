@@ -14,6 +14,7 @@ import { FooterOne } from 'components/Footer';
 import AdminHeaderTop from 'components/Header/AdminHeaderTop';
 import withProtectRoute from 'components/ProtectRouteWrapper';
 import ButtonWithLoading from 'components/custom/ButtonWithLoading';
+import CenterSpinner from 'components/custom/CenterSpinner';
 
 const getAttendee = async (id) => {
   const { data } = await api.get(`/api/attendee/${id}`);
@@ -90,11 +91,7 @@ function AttendeeDetails({ id }) {
       </BreadcrumbOne>
 
       <Container className="space-pt--r70 space-pb--r70">
-        {isLoading && (
-          <div className="spinner-grow" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
-        )}
+        {isLoading && <CenterSpinner />}
 
         {atnd && (
           <>
