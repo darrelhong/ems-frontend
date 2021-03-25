@@ -17,7 +17,8 @@ const getTickets = async (period) => {
 
 export default function AttendeeTickets() {
   const [period, setPeriod] = useState('upcoming');
-  const { data, status } = useQuery(['tickets', period], () =>
+  const [eventFilter, setEventFilter] = useState();
+  const { data, status, isSuccess } = useQuery(['tickets', period], () =>
     getTickets(period)
   );
 
@@ -35,13 +36,34 @@ export default function AttendeeTickets() {
       </BreadcrumbOne>
 
       <Container className="my-4">
-        <Row className="mb-3" onChange={(e) => setPeriod(e.target.value)}>
+        <Row className="mb-3">
           <Col sm={4}>
-            <select className="custom-select">
+            <select
+              className="custom-select"
+              onChange={(e) => {
+                setEventFilter();
+                setPeriod(e.target.value);
+              }}
+            >
               <option value="upcoming">Upcoming</option>
               <option value="previous">Previous</option>
             </select>
           </Col>
+          {isSuccess && (
+            <Col sm={8}>
+              <select
+                className="custom-select"
+                onChange={(e) => setEventFilter(e.target.value)}
+              >
+                <option value="">Filter by event</option>
+                {data.events.map((event) => (
+                  <option key={event.eid} value={event.eid}>
+                    {event.name}
+                  </option>
+                ))}
+              </select>
+            </Col>
+          )}
         </Row>
 
         {status == 'loading' ? (
@@ -52,11 +74,15 @@ export default function AttendeeTickets() {
           <>
             <Row>
               {data.tickets.length > 0 ? (
-                data.tickets.map((ticket) => (
-                  <Col md={6} key={ticket.id} className="mb-4">
-                    <TicketCard ticket={ticket} />
-                  </Col>
-                ))
+                data.tickets
+                  .filter((ticket) =>
+                    eventFilter ? ticket.event.eid == eventFilter : true
+                  )
+                  .map((ticket) => (
+                    <Col md={6} key={ticket.id} className="mb-4">
+                      <TicketCard ticket={ticket} />
+                    </Col>
+                  ))
               ) : (
                 <Col>
                   <Alert variant="warning">No events found</Alert>
