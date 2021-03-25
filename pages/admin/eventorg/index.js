@@ -1,14 +1,10 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery } from 'react-query';
 import MaterialTable from 'lib/MaterialTable';
 import { Card, Col, Container, Row } from 'react-bootstrap';
-import {
-  CheckCircleOutline,
-  RemoveCircleOutline,
-  InfoOutlined,
-} from '@material-ui/icons';
+import { InfoOutlined } from '@material-ui/icons';
 
 import api from 'lib/ApiClient';
 
@@ -25,7 +21,6 @@ const getEventOrganisers = async () => {
 function AdminEventOrg() {
   const router = useRouter();
 
-  const queryClient = useQueryClient();
   const { data, isLoading } = useQuery('eventOrganisers', getEventOrganisers);
 
   const columns = [
@@ -73,32 +68,6 @@ function AdminEventOrg() {
                   actionsColumnIndex: -1,
                 }}
                 actions={[
-                  (rowData) => ({
-                    icon: CheckCircleOutline,
-                    tooltip: 'Approve organiser',
-                    onClick: (event, rowData) => {
-                      api
-                        .post(`/api/organiser/approve/${rowData.id}`)
-                        .then(() => {
-                          queryClient.invalidateQueries('eventOrganisers');
-                        });
-                    },
-                    disabled: rowData.approved,
-                  }),
-                  (rowData) => ({
-                    icon: RemoveCircleOutline,
-                    tooltip: 'Reject organiser',
-                    onClick: (event, rowData) => {
-                      api
-                        .post(`/api/organiser/reject/${rowData.id}`, {
-                          message: 'Default message',
-                        })
-                        .then(() => {
-                          queryClient.invalidateQueries('eventOrganisers');
-                        });
-                    },
-                    disabled: !rowData.approved,
-                  }),
                   {
                     icon: InfoOutlined,
                     tooltip: 'View event organiser',
