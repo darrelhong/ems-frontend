@@ -51,11 +51,17 @@ export default function AttendeeTickets() {
         ) : (
           <>
             <Row>
-              {data.map((ticket) => (
-                <Col md={6} key={ticket.id} className="mb-4">
-                  <TicketCard ticket={ticket} />
+              {data.tickets.length > 0 ? (
+                data.tickets.map((ticket) => (
+                  <Col md={6} key={ticket.id} className="mb-4">
+                    <TicketCard ticket={ticket} />
+                  </Col>
+                ))
+              ) : (
+                <Col>
+                  <Alert variant="warning">No events found</Alert>
                 </Col>
-              ))}
+              )}
             </Row>
           </>
         )}
