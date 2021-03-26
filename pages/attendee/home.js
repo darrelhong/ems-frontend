@@ -7,7 +7,7 @@ import { BreadcrumbOne } from 'components/Breadcrumb';
 import AttendeeWrapper from 'components/wrapper/AttendeeWrapper';
 import CenterSpinner from 'components/custom/CenterSpinner';
 
-export default function PartnerHome() {
+export default function AttendeeHome() {
   const { data: user, status } = useUser(localStorage.getItem('userId'));
   return (
     <AttendeeWrapper title="Attendee Home">
