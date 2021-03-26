@@ -1,25 +1,21 @@
 import PropTypes from 'prop-types';
 import { format, parseISO } from 'date-fns';
 import { Card } from 'react-bootstrap';
-import styles from './EventCard.module.css';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
-import api from 'lib/ApiClient';
-import { useMutation, useQueryClient } from 'react-query';
+import { useQueryClient } from 'react-query';
 
+import useFavouriteEventMutation from 'lib/query/useFavouriteEventMutation';
+
+import styles from './EventCard.module.css';
 export default function EventCard({ event }) {
   const queryClient = useQueryClient();
-  const { mutate } = useMutation(
-    (id) => api.post(`/api/attendee/favourite-event?eventId=${id}`),
-    {
-      onSuccess: (resp) =>
-        queryClient.setQueryData('attendeeFavEvents', resp.data),
-    }
-  );
+  const { mutate } = useFavouriteEventMutation(queryClient);
 
   const onFavouriteClick = (e) => {
     e.preventDefault();
     mutate(event.eid);
   };
+
   return (
     <Card
       className={`h-100 ${styles.eventCard}`}

@@ -2,9 +2,14 @@ import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { Alert, Col, Container, Row } from 'react-bootstrap';
 import { format, parseISO } from 'date-fns';
+import { FaHeart } from 'react-icons/fa';
+import { useQueryClient } from 'react-query';
 
 import { useEvent } from 'lib/query/events';
 import { formatter } from 'lib/util/currency';
+import useAttendeeFavouriteEvents from 'lib/query/useAttendeeFavouriteEvents';
+import { isFavouriteEvent } from 'lib/functions/isFavouriteEvent';
+import useFavouriteEventMutation from 'lib/query/useFavouriteEventMutation';
 
 import { BreadcrumbOne } from 'components/Breadcrumb';
 import EventImageGallery from 'components/events/partner/EventImageGallery';
@@ -20,7 +25,14 @@ export function getServerSideProps({ query }) {
 }
 
 export default function AttendeeEventPage({ id }) {
+  const queryClient = useQueryClient();
   const { data, status } = useEvent(id);
+  const { data: favouriteEvents } = useAttendeeFavouriteEvents();
+  const { mutate } = useFavouriteEventMutation(queryClient);
+
+  const onFavouriteClick = () => {
+    mutate(id);
+  };
 
   return (
     <AttendeeWrapper title={data?.name || 'Event page'}>
@@ -121,12 +133,29 @@ export default function AttendeeEventPage({ id }) {
               </Col>
             </Row>
 
-            <Row>
-              <Col className="col-auto mt-3">
+            <Row className="mt-3">
+              <Col className="col-auto">
                 <ShareButton
                   title={data.name}
                   url={`${process.env.HOSTNAME}/public/events/${id}`}
                 />
+              </Col>
+              <Col className="col-auto">
+                {isFavouriteEvent(favouriteEvents, data.eid) ? (
+                  <button
+                    className="btn btn-sm btn-pink"
+                    onClick={onFavouriteClick}
+                  >
+                    Unfavourite <FaHeart />
+                  </button>
+                ) : (
+                  <button
+                    className="btn btn-sm btn-outline-pink"
+                    onClick={onFavouriteClick}
+                  >
+                    Favourite <FaHeart color="#e83e8c" />
+                  </button>
+                )}
               </Col>
             </Row>
 

@@ -7,6 +7,7 @@ import { Alert, Col, Container, Row } from 'react-bootstrap';
 
 import { getEventsWithKeywordandSort } from 'lib/query/events';
 import useAttendeeFavouriteEvents from 'lib/query/useAttendeeFavouriteEvents';
+import { isFavouriteEvent } from 'lib/functions/isFavouriteEvent';
 
 import AttendeeWrapper from 'components/wrapper/AttendeeWrapper';
 import EventCard from 'components/events/partner/EventCard';
@@ -130,9 +131,7 @@ export default function AttendeeEvents() {
                     // check if event is part of favourites list
                     event = {
                       ...event,
-                      isFavourite: favouriteEvents
-                        .map(({ eid }) => eid)
-                        .includes(event.eid),
+                      isFavourite: isFavouriteEvent(favouriteEvents, event.eid),
                     };
                     return (
                       <Col
