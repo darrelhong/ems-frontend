@@ -6,6 +6,7 @@ import { BreadcrumbOne } from 'components/Breadcrumb';
 import { Alert, Col, Container, Row } from 'react-bootstrap';
 
 import { getEventsWithKeywordandSort } from 'lib/query/events';
+import useAttendeeFavouriteEvents from 'lib/query/useAttendeeFavouriteEvents';
 
 import AttendeeWrapper from 'components/wrapper/AttendeeWrapper';
 import EventCard from 'components/events/partner/EventCard';
@@ -36,6 +37,8 @@ export default function AttendeeEvents() {
         lastPage.last ? false : lastPage.number + 1,
     }
   );
+
+  const { data: favouriteEvents } = useAttendeeFavouriteEvents();
 
   const handleChange = (e) => {
     switch (e.target.value) {
@@ -123,20 +126,29 @@ export default function AttendeeEvents() {
             <Row>
               {data.pages.map((page, i) => (
                 <Fragment key={i}>
-                  {page.content.map((event) => (
-                    <Col
-                      key={event.eid}
-                      sm={6}
-                      lg={4}
-                      className="mb-5 d-flex align-items-stretch"
-                    >
-                      <Link href={`/attendee/events/${event.eid}`}>
-                        <a className="w-100">
-                          <EventCard event={event} />
-                        </a>
-                      </Link>
-                    </Col>
-                  ))}
+                  {page.content.map((event) => {
+                    // check if event is part of favourites list
+                    event = {
+                      ...event,
+                      isFavourite: favouriteEvents
+                        .map(({ eid }) => eid)
+                        .includes(event.eid),
+                    };
+                    return (
+                      <Col
+                        key={event.eid}
+                        sm={6}
+                        lg={4}
+                        className="mb-5 d-flex align-items-stretch"
+                      >
+                        <Link href={`/attendee/events/${event.eid}`}>
+                          <a className="w-100">
+                            <EventCard event={event} />
+                          </a>
+                        </Link>
+                      </Col>
+                    );
+                  })}
                 </Fragment>
               ))}
             </Row>
