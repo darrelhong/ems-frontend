@@ -131,7 +131,9 @@ export default function AttendeeEvents() {
                     // check if event is part of favourites list
                     event = {
                       ...event,
-                      isFavourite: isFavouriteEvent(favouriteEvents, event.eid),
+                      isFavourite:
+                        favouriteEvents &&
+                        isFavouriteEvent(favouriteEvents, event.eid),
                     };
                     return (
                       <Col

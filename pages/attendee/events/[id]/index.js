@@ -141,7 +141,8 @@ export default function AttendeeEventPage({ id }) {
                 />
               </Col>
               <Col className="col-auto">
-                {isFavouriteEvent(favouriteEvents, data.eid) ? (
+                {favouriteEvents &&
+                isFavouriteEvent(favouriteEvents, data.eid) ? (
                   <button
                     className="btn btn-sm btn-pink"
                     onClick={onFavouriteClick}
