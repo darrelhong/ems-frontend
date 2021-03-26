@@ -16,7 +16,7 @@ const NavigationAttendee = ({ positionClass }) => {
         </li>
 
         <li>
-          <Link href="/">
+          <Link href="/attendee/tickets">
             <a className="nav-link">
               TICKETS <IoIosArrowDown />
             </a>
@@ -24,15 +24,15 @@ const NavigationAttendee = ({ positionClass }) => {
 
           <ul className="sub-menu sub-menu--one-column">
             <li>
-              <Link href="/home/fashion-one">
+              <Link href="/attendee/tickets">
                 <a>Manage My Tickets</a>
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link href="/home/fashion-two">
                 <a>Manage Participated Events</a>
               </Link>
-            </li>
+            </li> */}
           </ul>
         </li>
       </ul>
