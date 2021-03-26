@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
@@ -8,18 +7,16 @@ import { InfoOutlined } from '@material-ui/icons';
 
 import api from 'lib/ApiClient';
 
-import { FooterOne } from 'components/Footer';
-import AdminHeaderTop from 'components/Header/AdminHeaderTop';
 import { BreadcrumbOne } from 'components/Breadcrumb';
-import withProtectRoute from 'components/ProtectRouteWrapper';
 import CenterSpinner from 'components/custom/CenterSpinner';
+import AdminWrapper from 'components/wrapper/AdminWrapper';
 
 const getEventOrganisers = async () => {
   const { data } = await api.get('/api/organiser/all');
   return data;
 };
 
-function AdminEventOrg() {
+export default function AdminEventOrg() {
   const router = useRouter();
 
   const { data, isLoading } = useQuery('eventOrganisers', getEventOrganisers);
@@ -33,13 +30,7 @@ function AdminEventOrg() {
   ];
 
   return (
-    <>
-      <Head>
-        <title>Event Organisers</title>
-      </Head>
-
-      <AdminHeaderTop />
-
+    <AdminWrapper title="Event Organisers">
       <BreadcrumbOne pageTitle="Event Organisers">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
@@ -91,12 +82,6 @@ function AdminEventOrg() {
           </Col>
         </Row>
       </Container>
-
-      <FooterOne />
-    </>
+    </AdminWrapper>
   );
 }
-
-export default withProtectRoute(AdminEventOrg, {
-  redirectTo: '/admin/login',
-});

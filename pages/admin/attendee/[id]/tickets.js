@@ -1,15 +1,15 @@
+import PropTypes from 'prop-types';
+import Link from 'next/link';
+import { useQuery } from 'react-query';
+import { format, parseISO } from 'date-fns';
+import { Alert, Container } from 'react-bootstrap';
+
+import api from 'lib/ApiClient';
+import MaterialTable from 'lib/MaterialTable';
+
 import { BreadcrumbOne } from 'components/Breadcrumb';
 import CenterSpinner from 'components/custom/CenterSpinner';
-import AdminHeaderTop from 'components/Header/AdminHeaderTop';
-import withProtectRoute from 'components/ProtectRouteWrapper';
-import api from 'lib/ApiClient';
-import Head from 'next/head';
-import Link from 'next/link';
-import PropTypes from 'prop-types';
-import { Alert, Container } from 'react-bootstrap';
-import { useQuery } from 'react-query';
-import MaterialTable from 'lib/MaterialTable';
-import { format, parseISO } from 'date-fns';
+import AdminWrapper from 'components/wrapper/AdminWrapper';
 
 const getAttendeeTickets = async (id) => {
   const { data } = await api.get(`/api/ticketing/attendee/${id}`);
@@ -37,19 +37,13 @@ const columns = [
   { field: 'name', title: 'Event Name' },
 ];
 
-function AdminAttendeeTickets({ id }) {
+export default function AdminAttendeeTickets({ id }) {
   const { data, status } = useQuery(['attendee', id], () =>
     getAttendeeTickets(id)
   );
 
   return (
-    <>
-      <Head>
-        <title>Attendee Tickets</title>
-      </Head>
-
-      <AdminHeaderTop />
-
+    <AdminWrapper title="Attendee Tickets">
       <BreadcrumbOne pageTitle="Attendee Details">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
@@ -91,14 +85,10 @@ function AdminAttendeeTickets({ id }) {
           />
         )}
       </Container>
-    </>
+    </AdminWrapper>
   );
 }
 
 AdminAttendeeTickets.propTypes = {
   id: PropTypes.string,
 };
-
-export default withProtectRoute(AdminAttendeeTickets, {
-  redirectTo: '/admin/login',
-});

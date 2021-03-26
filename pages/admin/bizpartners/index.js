@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
@@ -7,19 +6,17 @@ import { Card, Col, Container, Row } from 'react-bootstrap';
 
 import api from 'lib/ApiClient';
 
-import withProtectRoute from 'components/ProtectRouteWrapper';
-import AdminHeaderTop from 'components/Header/AdminHeaderTop';
 import { BreadcrumbOne } from 'components/Breadcrumb';
 import MaterialTable from 'lib/MaterialTable';
-import { FooterOne } from 'components/Footer';
 import CenterSpinner from 'components/custom/CenterSpinner';
+import AdminWrapper from 'components/wrapper/AdminWrapper';
 
 const getBusinessPartners = async () => {
   const { data } = await api.get('/api/partner/all');
   return data;
 };
 
-function AdminBusinessParters() {
+export default function AdminBusinessParters() {
   const router = useRouter();
 
   const { data, isLoading } = useQuery('businessPartners', getBusinessPartners);
@@ -32,13 +29,7 @@ function AdminBusinessParters() {
   ];
 
   return (
-    <>
-      <Head>
-        <title>Business Partners</title>
-      </Head>
-
-      <AdminHeaderTop />
-
+    <AdminWrapper title="Business Partners">
       <BreadcrumbOne pageTitle="Business Partners">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
@@ -91,12 +82,6 @@ function AdminBusinessParters() {
           </Col>
         </Row>
       </Container>
-
-      <FooterOne />
-    </>
+    </AdminWrapper>
   );
 }
-
-export default withProtectRoute(AdminBusinessParters, {
-  redirectTo: '/admin/login',
-});

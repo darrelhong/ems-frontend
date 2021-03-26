@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import Head from 'next/head';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 import { Alert, Col, Container, Row } from 'react-bootstrap';
@@ -10,11 +9,9 @@ import cx from 'classnames';
 import api from 'lib/ApiClient';
 
 import { BreadcrumbOne } from 'components/Breadcrumb';
-import { FooterOne } from 'components/Footer';
-import AdminHeaderTop from 'components/Header/AdminHeaderTop';
-import withProtectRoute from 'components/ProtectRouteWrapper';
 import ButtonWithLoading from 'components/custom/ButtonWithLoading';
 import CenterSpinner from 'components/custom/CenterSpinner';
+import AdminWrapper from 'components/wrapper/AdminWrapper';
 
 const getAttendee = async (id) => {
   const { data } = await api.get(`/api/attendee/${id}`);
@@ -29,7 +26,7 @@ export async function getServerSideProps({ query }) {
   };
 }
 
-function AttendeeDetails({ id }) {
+export default function AttendeeDetails({ id }) {
   // data fetching
   const { data: atnd, isLoading } = useQuery(['attendee', id], () =>
     getAttendee(id)
@@ -67,13 +64,7 @@ function AttendeeDetails({ id }) {
   const [showForm, setShowForm] = useState(false);
 
   return (
-    <>
-      <Head>
-        <title>Attendee details</title>
-      </Head>
-
-      <AdminHeaderTop />
-
+    <AdminWrapper title="Attendee details">
       <BreadcrumbOne pageTitle="Attendee Details">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
@@ -190,19 +181,13 @@ function AttendeeDetails({ id }) {
           </>
         )}
       </Container>
-
-      <FooterOne />
-    </>
+    </AdminWrapper>
   );
 }
 
 AttendeeDetails.propTypes = {
   id: PropTypes.string,
 };
-
-export default withProtectRoute(AttendeeDetails, {
-  redirectTo: '/admin/login',
-});
 
 function UpdateAttendeeForm({ atnd }) {
   const queryClient = useQueryClient();

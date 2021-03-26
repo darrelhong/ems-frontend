@@ -1,28 +1,19 @@
-import Head from 'next/head';
 import Link from 'next/link';
 import { Card, Col, Container, Row } from 'react-bootstrap';
 
 import useUser from 'lib/query/useUser';
 
-import withProtectRoute from 'components/ProtectRouteWrapper';
 import { BreadcrumbOne } from 'components/Breadcrumb';
-import { FooterOne } from 'components/Footer';
-import AdminHeaderTop from 'components/Header/AdminHeaderTop';
 import CenterSpinner from 'components/custom/CenterSpinner';
+import AdminWrapper from 'components/wrapper/AdminWrapper';
 
-function AdminHome() {
+export default function AdminHome() {
   const { data: user, isSuccess, isLoading } = useUser(
     localStorage.getItem('userId')
   );
 
   return (
-    <>
-      <Head>
-        <title>Admin Dasboard</title>
-      </Head>
-
-      <AdminHeaderTop />
-
+    <AdminWrapper title="Admin Dasboard">
       <BreadcrumbOne pageTitle="Admin Home">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
@@ -76,10 +67,6 @@ function AdminHome() {
           </Col>
         </Row>
       </Container>
-
-      <FooterOne />
-    </>
+    </AdminWrapper>
   );
 }
-
-export default withProtectRoute(AdminHome, { redirectTo: '/admin/login' });

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import Head from 'next/head';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
@@ -9,13 +8,11 @@ import { Alert, Col, Container, Row } from 'react-bootstrap';
 
 import api from 'lib/ApiClient';
 
-import { FooterOne } from 'components/Footer';
-import AdminHeaderTop from 'components/Header/AdminHeaderTop';
-import withProtectRoute from 'components/ProtectRouteWrapper';
 import { BreadcrumbOne } from 'components/Breadcrumb';
 import ButtonWithLoading from 'components/custom/ButtonWithLoading';
 import RejectButton from 'components/custom/admin/RejectButton';
 import CenterSpinner from 'components/custom/CenterSpinner';
+import AdminWrapper from 'components/wrapper/AdminWrapper';
 
 const getEventOrganiser = async (id) => {
   const { data } = await api.get(`/api/organiser/${id}`);
@@ -30,7 +27,7 @@ export async function getServerSideProps({ query }) {
   };
 }
 
-function EventOrganiserDetails({ id }) {
+export default function EventOrganiserDetails({ id }) {
   // onClick handlers
   const queryClient = useQueryClient();
   const useMutationInvalidate = (fn, options) =>
@@ -83,13 +80,7 @@ function EventOrganiserDetails({ id }) {
   const [showForm, setShowForm] = useState(false);
 
   return (
-    <>
-      <Head>
-        <title>Event Organiser details</title>
-      </Head>
-
-      <AdminHeaderTop />
-
+    <AdminWrapper title="Event Organiser details">
       <BreadcrumbOne pageTitle="Event Organiser Details">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
@@ -243,19 +234,13 @@ function EventOrganiserDetails({ id }) {
           </>
         )}
       </Container>
-
-      <FooterOne />
-    </>
+    </AdminWrapper>
   );
 }
 
 EventOrganiserDetails.propTypes = {
   id: PropTypes.string,
 };
-
-export default withProtectRoute(EventOrganiserDetails, {
-  redirectTo: '/admin/login',
-});
 
 function UpdateEventOrganiserForm({ eo }) {
   const queryClient = useQueryClient();
