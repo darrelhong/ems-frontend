@@ -165,6 +165,16 @@ function AttendeeDetails({ id }) {
               </Col>
             </Row>
 
+            <Row className="mb-4">
+              <Col>
+                <Link href={`${id}/tickets`}>
+                  <button className="btn btn-fill-out btn-sm">
+                    View ticket transactions
+                  </button>
+                </Link>
+              </Col>
+            </Row>
+
             <Row>
               <Col>
                 <button
