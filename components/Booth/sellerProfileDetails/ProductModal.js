@@ -1,10 +1,14 @@
 import { Modal, Button, Row } from 'react-bootstrap';
 import { useState } from 'react';
+import { removeBoothProduct } from 'lib/query/productApi';
 
 const ProductModal = ({
     product,
     productModalShow,
-    closeProductModal
+    closeProductModal,
+    boothId,
+    setBooth,
+    createToast
 }) => {
     const [removeProduct, setRemoveProduct] = useState(false);
 
@@ -52,14 +56,25 @@ const ProductModal = ({
         )
     };
 
-    const cancelButton = () => {
+    const handleRemove = async () => {
+        try {
+            const updatedBoothData = await removeBoothProduct(product.pid, boothId);
+            setBooth(updatedBoothData);
+            closeProductModal();
+            createToast('Product successfully removed!', 'success');
+        } catch (e) {
+            closeProductModal();
+            createToast('Could not be removed, please try again later!', 'error')
+        }
+    };
 
+    const removeButton = () => {
         if (removeProduct) {
             return (
                 <Button
                     variant="danger"
                     onClick={() => {
-                        console.log('removing product!');
+                        handleRemove();
                     }
                     }
                 >
@@ -75,7 +90,6 @@ const ProductModal = ({
                             setRemoveProduct(true);
                         } else {
                             console.log('removing product!');
-                            // handleRemove();
                         }
                     }}
                 >
@@ -97,7 +111,7 @@ const ProductModal = ({
             {bodyComponent()}
             <Modal.Footer>
                 {secondaryButton()}
-                {cancelButton()}
+                {removeButton()}
             </Modal.Footer>
         </Modal>
     );

@@ -1,114 +1,116 @@
 import { Modal, Button, Row } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
+import { Col } from 'react-bootstrap';
+import { getProductsByBpId, addProduct, getProductsByBoothId } from 'lib/query/productApi';
 
 const AddProductModal = ({
+    sellerProfile,
+    setSellerProfile,
+    createToast,
+    closeAddProductModal,
+    showAddProductModal,
     booth,
-    bpProducts,
-    addProductModalShow,
-    closeAddProductModal
+    setBooth
 }) => {
-    const [removeProduct, setRemoveProduct] = useState(false);
-    const [booth,setBooth] = useState(Object);
-    const [boothProducts,setBoothProducts] = useState([]);
+    const [bpProducts, setBpProducts] = useState([]);
+    const [boothProducts, setBoothProducts] = useState([]);
 
-    useEffect(()=>{
-        const loadData = () => {
-            
-        };
-        if (booth) loadData();
-    },[]);
+    useEffect(() => {
+        if (booth) {
+            loadBpProducts();
+            loadBoothProducts();
+        }
+    }, [booth]);
 
-    const bodyComponent = () => (
-        <Modal.Body>
-            <Row>
-                <img
-                    src={product?.image}
-                />
-            </Row>
-            <Row
-                style={{
-                    marginTop: 10
-                }}>
-                {product?.description}
-            </Row>
-            {removeProduct && (
-                <Row
-                    style={{
-                        marginTop: 10,
-                        color: 'red'
-                    }}
-                >
-                    Are you sure you want to remove the product?
-                </Row>
-            )}
-        </Modal.Body>
-    );
-
-    const secondaryButton = () => {
-        if (removeProduct) {
-            return (
-                <Button variant="secondary" onClick={() => {
-                    setRemoveProduct(false);
-                }}>
-                    Cancel
-                </Button>
-            )
-        } else return (
-            <Button variant="secondary" onClick={() => {
-                closeAddProductModal();
-            }}>
-                Close
-            </Button>
-        )
+    const loadBpProducts = async () => {
+        const products = await getProductsByBpId(sellerProfile.businessPartner.id);
+        setBpProducts(products);
     };
 
-    const cancelButton = () => {
+    const loadBoothProducts = async () => {
+        const products = await getProductsByBoothId(booth?.id);
+        setBoothProducts(products);
+    }
 
-        if (removeProduct) {
-            return (
-                <Button
-                    variant="danger"
-                    onClick={() => {
-                        console.log('removing product!');
-                    }
-                    }
-                >
-                    Yes, remove it
-                </Button>
-            )
-        } else {
-            return (
-                <Button
-                    variant="danger"
-                    onClick={() => {
-                        if (!removeProduct) {
-                            setRemoveProduct(true);
-                        } else {
-                            console.log('removing product!');
-                            // handleRemove();
-                        }
-                    }}
-                >
-                    Remove
-                </Button>
-            )
+    const handleAddProduct = async (pid) => {
+        try {
+            const updatedBooth = await addProduct(pid, booth.id);
+            setBooth(updatedBooth);
+            createToast('Product Added!', 'success');
+        } catch (e) {
+            createToast('Error adding product', 'error');
         }
     }
 
+    const checkAlreadyAdded = (product) => {
+        const boothProductIds = boothProducts.map((product) => product.pid);
+        return boothProductIds.indexOf(product.pid) < 0;
+    }
+
+    const bodyComponent = () => (
+        <Modal.Body>
+            {/* {booth?.products && booth?.products.map((product) => ( */}
+            {bpProducts && bpProducts.map((product) => (
+                <Col
+                    key={product.pid}
+                    className="space-mb--50"
+                >
+                    <div className="product-list">
+                        <div className="product-list__image">
+                            <img src={product?.image ?? 'https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png'} alt="event_image" />
+                        </div>
+
+                        <div className="product-list__info">
+                            <h6 className="product-title">
+                                {/* <Link href={`/partner/seller-profile/${sellerProfile.id}`}> */}
+                                {/* <a>{product?.name}</a> */}
+                                {product?.name}
+                                {/* </Link> */}
+                            </h6>
+
+                            <div className="product-description">{product.description}</div>
+                        </div>
+                        {checkAlreadyAdded(product) ? (
+                            <Button
+                                variant="danger"
+                                onClick={() => handleAddProduct(product.pid)}
+                                style={{
+                                    height: '10%',
+                                }}
+                            >
+                                Add
+                            </Button>
+                        ) : (
+                            <Button
+                                variant="danger"
+                                onClick={() => handleAddProduct(product.pid)}
+                                style={{
+                                    height: '10%',
+                                }}
+                                disabled
+                            >
+                                Added
+                            </Button>
+                        )}
+                    </div>
+                </Col>
+            ))}
+
+        </Modal.Body>
+    );
+
     return (
-        <Modal show={addProductModalShow} onHide={() => {
-            setRemoveProduct(false);
-            closeAddProductModal();
-        }}
-            centered>
+        <Modal
+            show={showAddProductModal}
+            onHide={closeAddProductModal}
+            centered
+            scrollable
+            size='xl'
+        >
             <Modal.Header closeButton>
-                <Modal.Title>{product?.name ?? 'Product'}</Modal.Title>
+                <Modal.Title>Adding Products to booth {booth?.boothNumber} </Modal.Title>
             </Modal.Header>
             {bodyComponent()}
-            <Modal.Footer>
-                {secondaryButton()}
-                {cancelButton()}
-            </Modal.Footer>
         </Modal>
     );
 };

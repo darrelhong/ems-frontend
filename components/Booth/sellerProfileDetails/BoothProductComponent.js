@@ -1,61 +1,97 @@
 import { useState, useEffect } from 'react';
 import ProductScrollView from './ProductScrollView';
-import { Container, Row } from 'react-bootstrap';
+import { Container, Row, Button } from 'react-bootstrap';
+import { IoIosAddCircleOutline } from 'react-icons/io';
+import IconButton from '@material-ui/core/IconButton';
+import AddProductModal from './AddProductModal';
 
-const BoothProductComponent = ({ booth }) => {
+const BoothProductComponent = ({ booth, createToast, sellerProfile, setSellerProfile }) => {
     const [products, setProducts] = useState([]);
-    const [boothData, setBooth] = useState(Object);
+    const [boothData, setBooth] = useState();
     // const [slicedProducts,setSlicedProducts] = useState([[]]);
     // const [productsWithKeys,setProductsWithKeys] = useState([]);
     const [paginatedProducts, setPaginatedProducts] = useState([]);
+    const [showAddProductModal, setShowAddProductModal] = useState(false);
 
     useEffect(() => {
-        console.log('checking booth products');
-        console.log(booth?.products?.forEach((prod)=>console.log(prod?.name)));
-        const loadData = () => {
-            setBooth(booth);
-            const boothProducts = booth.products;
-            let slicedProducts = [[]];
-            let productsWithKeys = [];
-            // let productsWithKeys = [1,2,3,4,5,6,7,8,9];
-            while (boothProducts.length) {
-                slicedProducts.push(boothProducts.splice(0,5));
-            }
-            let counter = 0;
-            for (const productSet of slicedProducts) {
-                console.log('appending');
-                console.log(productSet);
-                const input = {
-                    "key": booth.boothNumber + '' + counter,
-                    "products": productSet
-                };
-                //idk why first array is always empty 
-                if (counter != 0) productsWithKeys.push(input);
-                counter += 1;
-            }
-            setPaginatedProducts(productsWithKeys);
-            console.log('checking prods');
-            console.log(productsWithKeys);
-            // for (const products in productsWithKeys) {
-            //     console.log(products);
-            // }
-        };
-        if (booth) loadData();
-    }, [booth]);
+        setBooth(booth);
+    }, []);
+
+    useEffect(() => {
+        if (boothData) setProductFunction(boothData);
+    }, [boothData])
+
+    const setProductFunction = (booth) => {
+        const boothProducts = booth?.products;
+        let slicedProducts = [[]];
+        let productsWithKeys = [];
+        // let productsWithKeys = [1,2,3,4,5,6,7,8,9];
+        while (boothProducts?.length) {
+            slicedProducts.push(boothProducts.splice(0, 5));
+        }
+        let counter = 0;
+        for (const productSet of slicedProducts) {
+            const input = {
+                "key": booth.boothNumber + '' + counter,
+                "products": productSet
+            };
+            //idk why first array is always empty 
+            if (counter != 0) productsWithKeys.push(input);
+            counter += 1;
+        }
+        setPaginatedProducts(productsWithKeys);
+    };
 
     return (
         <Container
-        style={{
-            marginTop:'10%'
-        }}
+            style={{
+                marginTop: '10%'
+            }}
         >
-            <Row>
-            <h4>Booth {booth?.boothNumber}</h4>
-            {
-                paginatedProducts && (
-                    <ProductScrollView paginatedProducts={paginatedProducts} />
-                )
-            }
+            {booth && (
+                <AddProductModal
+                    sellerProfile={sellerProfile}
+                    setSellerProfile={setSellerProfile}
+                    createToast={createToast}
+                    closeAddProductModal={() => setShowAddProductModal(false)}
+                    showAddProductModal={showAddProductModal}
+                    booth={boothData}
+                    // booth={booth}
+                    setBooth={setBooth}
+                />
+            )}
+            <Row
+                style={{ 
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent:'space-between'
+                }}
+            >
+                <h4>Booth {booth?.boothNumber}</h4>
+                {/* <IconButton
+                    color="secondary"
+                    onClick={() => setShowAddProductModal(true)}
+                >
+                    <IoIosAddCircleOutline
+                        style={{ marginBottom: 10 }}
+                    />
+                </IconButton> */}
+                <Button
+                    variant="danger"
+                    onClick={() => setShowAddProductModal(true)}
+                    >
+                    Add another product to booth {booth?.boothNumber}
+                </Button>
+                {
+                    paginatedProducts && (
+                        <ProductScrollView
+                            boothId={booth.id}
+                            setBooth={setBooth}
+                            paginatedProducts={paginatedProducts}
+                            createToast={createToast}
+                        />
+                    )
+                }
             </Row>
         </Container>
     )

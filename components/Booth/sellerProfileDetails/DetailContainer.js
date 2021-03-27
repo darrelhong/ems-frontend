@@ -1,13 +1,27 @@
+import { useState } from 'react';
 import {
     Container,
     Row,
     Col,
     Image
 } from 'react-bootstrap';
+import { IoMdCreate } from 'react-icons/io';
+import IconButton from '@material-ui/core/IconButton';
+import EditDescriptionModal from './EditDescriptionModal';
 
-const DetailContainer = ({ sellerProfile, booths }) => {
+
+const DetailContainer = ({ sellerProfile, booths, createToast, setSellerProfile }) => {
+    const [showEditDescriptionModal,setShowEditDescriptionModal] = useState(false);
+
     return (
         <Container>
+            <EditDescriptionModal 
+            sellerProfile={sellerProfile}
+            showEditDescriptionModal={showEditDescriptionModal}
+            closeEditDescriptionModal={()=>setShowEditDescriptionModal(false)}
+            createToast={createToast}
+            setSellerProfile={setSellerProfile}
+            />
             <Row>
                 <Col md={4}>
                     {sellerProfile?.businessPartner?.profilePic ? (
@@ -44,9 +58,18 @@ const DetailContainer = ({ sellerProfile, booths }) => {
                     </Row>
                     <Row
                         style={{
-                            marginTop: '10%'
+                            marginTop: '10%',
+                            flexDirection:'row',
+                            justifyContent:'space-between',
                         }}>
                         <h5>Booth Description:</h5>
+                            <IconButton
+                                color="secondary"
+                                onClick={()=> setShowEditDescriptionModal(true)}
+                                // onClick={()=> console.log('lets change the description')}
+                            >
+                                <IoMdCreate />
+                            </IconButton>
                     </Row>
                     <Row>
                         {sellerProfile?.description ?? 'Empty Description still'}

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
+import { Badge } from 'react-bootstrap';
 import {
   IoMdCalendar,
   IoMdRestaurant,
@@ -8,15 +9,19 @@ import {
   IoMdTrophy,
 } from 'react-icons/io';
 import TicketingModal from '../../Event/TicketingModal';
+import TicketingTab from './DescriptionTabs/TicketingTab';
+import BusinessPartnerTab from './DescriptionTabs/BusinessPartnerTab';
 
 // import { format, parseISO } from 'date-fns';
 
-const EventDescriptionTab = ({
+const EventDescriptionTabGroup = ({
   event,
   setEvent,
   prettySaleStartDate,
   prettySalesEndDate,
-  createToast
+  createToast,
+  newSellerApplications,
+  sellerProfiles
 }) => {
   const [showModal, setShowModal] = useState(false);
 
@@ -45,82 +50,57 @@ const EventDescriptionTab = ({
       //render the normal page with count, capacity and button
       return (
         <div
-          className="product-content__sort-info space-mb--20"
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            flexDirection: 'row',
-          }}
-        >
+          className="product-content__sort-info space-mb--20">
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              flexDirection: 'row',
+            }}
+          >
+            {newSellerApplications.length != 0 ? (
+              <ul>
+                <li
+                  style={{
+                    color: 'red'
+                  }}>
+                  <IoMdTrophy />
+                  {newSellerApplications.length} {' '}new applications
+                </li>
+              </ul>
+            )
+              : (
+                <ul>
+                  <li>
+                    <IoMdTrophy />
+                  No new applications
+                </li>
+                </ul>
+              )}
+            <ul>
+              <button
+                onClick={() => console.log('hello')}
+                className="btn btn-fill-out btn-addtocart space-ml--10"
+                style={{ textAlign: 'right' }}
+              >
+                <i className="icon-basket-loaded" /> Manage Event Booths
+            </button>
+            </ul>
+          </div>
           <ul>
             <li>
               <IoMdTrophy />
-              Confirmed booths for your event:{' '}
-              {event.eventBoothTransactions?.length ?? 0} / {event.boothCapacity}
+              {/* STILL WRONG */}
+              Confirmed partners for your event:{' '}
+              {/* {event.sellerApplications?.length ?? 0} / {event.boothCapacity} */}
+              {sellerProfiles.length ?? 0} / {event.boothCapacity}
+              {/* {event.eventBoothTransactions?.length ?? 0} / {event.boothCapacity} */}
             </li>
-          </ul>
-          <ul>
-            <button
-              onClick={() => console.log('hello')}
-              className="btn btn-fill-out btn-addtocart space-ml--10"
-              style={{ textAlign: 'right' }}
-            >
-              <i className="icon-basket-loaded" /> Manage Event Booths
-            </button>
           </ul>
         </div>
       );
     }
   };
-
-  const renderTicketingSection = () => (
-    <div className="product-content__sort-info space-mb--20"
-      style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-      }}
-    >
-      { event && event.sellingTicket ? (
-        <div>
-          <ul>
-            <li>
-              <IoMdCash /> Ticket Price:{' '}{event.ticketPrice ? '$' + event.ticketPrice : 'Not set yet'}
-            </li>
-            <li>
-              <IoMdRestaurant />
-              {event.ticketCapacity
-                ? `Tickets Sold: ${event?.ticketTransactions?.length ?? 0} / ${event.ticketCapacity}`
-                : 'Ticket Capacity not set yet!'}
-            </li>
-            <li>
-              <IoMdCalendar /> Ticket Sale Start Date:{' '} {prettySaleStartDate ? prettySaleStartDate : 'Not set yet'}
-              {/* <IoMdLocate />{format(parseISO(event.eventStartDate), 'eee, dd MMM yy hh:mmbbb')} */}
-            </li>
-            <li>
-              <IoMdCalendar /> Ticket Sale End Date:{' '} {prettySalesEndDate ? prettySalesEndDate : 'Not set yet'}
-            </li>
-          </ul>
-        </div>
-      ) : (
-        <ul>
-          <li>
-            <IoMdCash />
-    No Ticket Sales for this event!
-  </li>
-        </ul>
-      )}
-      <ul>
-        <button
-          onClick={() => setShowModal(true)}
-          className="btn btn-fill-out btn-addtocart space-ml--10"
-          style={{ textAlign: 'right' }}
-        >
-          <i className="icon-basket-loaded" /> {event.sellingTicket ? 'Manage ticketing details' : 'Activate Ticket Sales'}
-        </button>
-      </ul>
-    </div>
-  );
 
   return (
     <div className="product-description-tab space-pt--r100 space-pb--50">
@@ -135,7 +115,9 @@ const EventDescriptionTab = ({
             <Nav.Link eventKey="ticketing">TICKETING</Nav.Link>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link eventKey="businessPartners">BUSINESS PARTNERS</Nav.Link>
+            <Nav.Link eventKey="businessPartners">BUSINESS PARTNERS {' '}
+            {newSellerApplications.length > 0 && (<Badge pill variant="danger">{newSellerApplications.length}</Badge>)}
+            </Nav.Link>
           </Nav.Item>
           <Nav.Item>
             <Nav.Link eventKey="reviews">
@@ -145,11 +127,21 @@ const EventDescriptionTab = ({
         </Nav>
         <Tab.Content>
           <Tab.Pane eventKey="ticketing">
-            {renderTicketingSection()}
+            {event && (
+              <TicketingTab
+                event={event}
+                prettySaleStartDate={prettySaleStartDate}
+                prettySalesEndDate={prettySalesEndDate} />
+            )}
           </Tab.Pane>
 
           <Tab.Pane eventKey="businessPartners">
-            {renderBoothSection()}
+            {/* {renderBoothSection()} */}
+            <BusinessPartnerTab
+            event={event}
+            newSellerApplications={newSellerApplications}
+            sellerProfiles={sellerProfiles}
+            />
           </Tab.Pane>
 
           <Tab.Pane eventKey="reviews">
@@ -166,4 +158,4 @@ const EventDescriptionTab = ({
   );
 };
 
-export default EventDescriptionTab;
+export default EventDescriptionTabGroup;
