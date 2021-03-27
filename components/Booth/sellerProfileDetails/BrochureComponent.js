@@ -1,17 +1,28 @@
 import { useState } from 'react';
 import { Container, Button, Col, Image } from 'react-bootstrap';
 import AddBrochureModal from './AddBrochureModal';
+import ViewBrochureModal from './ViewBrochureModal';
 
 const BrochureComponent = ({ sellerProfile, isPartner }) => {
     const [showModal, setShowModal] = useState(false);
-
+    const [viewBrochureModalShow, setViewBrochureModalShow] = useState(false);
+    const [imageUrlToShow, setImageUrlToShow] = useState('');
+    
     return (
         <Container>
             <AddBrochureModal
                 sellerProfileId={sellerProfile.id}
                 showModal={showModal}
                 closeModal={() => setShowModal(false)}
+                image={imageUrlToShow}
             />
+
+            <ViewBrochureModal 
+            image={imageUrlToShow}
+            closeViewBrochureModal={()=>setViewBrochureModalShow(false)}
+            viewBrochureModalShow={viewBrochureModalShow}
+            />
+            
             {isPartner && (
                 <Col
                     style={{
@@ -48,6 +59,10 @@ const BrochureComponent = ({ sellerProfile, isPartner }) => {
                             style={{ height: "230px", width: "250px" }}
                             thumbnail
                             src={image}
+                            onClick={()=>{
+                             setImageUrlToShow(image);
+                             setViewBrochureModalShow(true);
+                            }}
                         />
                     </div>
                 ))}
