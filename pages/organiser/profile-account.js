@@ -21,7 +21,7 @@ import { FaRegEdit } from 'react-icons/fa';
 import OrganiserWrapper from '../../components/wrapper/OrganiserWrapper';
 import { BsFillInfoCircleFill } from 'react-icons/bs';
 import ButtonWithLoading from '../../components/custom/ButtonWithLoading';
-import { getUser } from '../../lib/query/getUser';
+import { getUser, getUserPaymentMethod } from '../../lib/query/getUser';
 
 //test
 import {
@@ -57,7 +57,10 @@ const MyAccount = () => {
   //for modal of disabling account
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+
+  // for card modal
+  const [showCardModal, setShowCardModal] = useState(false);
+  const handleCloseCardModal = () => setShowCardModal(false);
   const queryClient = useQueryClient();
   // success message for update account details
   const [accSuccess, setAccSuccess] = useState('');
@@ -87,21 +90,33 @@ const MyAccount = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
   const [expMth, setExpMth] = useState('');
-  const [issuer, setIssuer] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState(null);
 
   useEffect(() => {
     console.log('use effect');
-    const getUserData = async () => {
-      await getUser(localStorage.getItem('userId')).then((data) => {
-        setUser(data);
-      });
-    };
+
     getUserData();
+    if (user?.paymentMethodId != null) {
+      getUserPayment();
+    }
+    // }else{
+    //   setPaymentMethod(null);
+    // }
 
     setBizDocInputName('Choose file');
-  }, []);
+  }, [user?.paymentMethodId]);
 
-  // card
+  const getUserData = async () => {
+    await getUser(localStorage.getItem('userId')).then((data) => {
+      setUser(data);
+    });
+  };
+  const getUserPayment = async () => {
+    await getUserPaymentMethod().then((data) => {
+      console.log(data);
+      setPaymentMethod(data);
+    });
+  };
 
   const handleNameInputFocus = (e) => {
     setFocus(e.target.cardholdername);
@@ -218,12 +233,29 @@ const MyAccount = () => {
     }
   );
 
+  const mutatePaymentCard = useMutation(() =>
+    api.post(`/api/user/deleteCardPayment`).then((response) => {
+      console.log('delete');
+      console.log(response);
+      if (response.status == '200') {
+        getUserPayment();
+        getUserData();
+      }
+    })
+  );
+
   const handleDisabled = async () => {
     mutateAccStatus.mutate({
       id: user?.id,
     });
     // close the modal once yes click.
     setShow(false);
+  };
+
+  const handleDeleteCard = async () => {
+    mutatePaymentCard.mutate();
+    // close the modal once yes click.
+    setShowCardModal(false);
   };
 
   const { register, handleSubmit, errors } = useForm({
@@ -312,6 +344,8 @@ const MyAccount = () => {
           } else if (message == 'success_added') {
             setShowcardinfoErrorMsg(false);
             setCardinfoSucessMsg(true);
+            getUserPayment();
+            getUserData();
             //document.getElementById('payment-method-form').reset();
           } else if (message == 'dbError') {
             setCardErrorMsg('An error has occured');
@@ -336,7 +370,7 @@ const MyAccount = () => {
     setCardinfoSucessMsg(false);
     setLoginLoading(true);
     mutateCardPaymentMethod.mutate({
-      //cardholdername: data.cardholdername,
+      cardholdername: data.cardholdername,
       cardnumber: data.cardnumber,
       expMth: data.expMth,
       expYear: data.expYear,
@@ -469,6 +503,23 @@ const MyAccount = () => {
             Yes
           </button>
           <Button variant="secondary" onClick={handleClose}>
+            No
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={showCardModal} onHide={handleCloseCardModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmation</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete the payment method?
+        </Modal.Body>
+        <Modal.Footer>
+          <button className="btn btn-fill-out btn" onClick={handleDeleteCard}>
+            Yes
+          </button>
+          <Button variant="secondary" onClick={handleCloseCardModal}>
             No
           </Button>
         </Modal.Footer>
@@ -684,8 +735,7 @@ const MyAccount = () => {
                         <h3>Card Payment Method</h3>
                       </Card.Header>
                       <Card.Body>
-                        {/* should be == null */}
-                        {user?.paymentMethodId != null && (
+                        {user?.paymentMethodId == null && (
                           <div className="account-details-form">
                             <form
                               id="payment-method-form"
@@ -736,9 +786,10 @@ const MyAccount = () => {
                                   focused={focus}
                                   name={name}
                                   number={number}
-                                  preview={true}
                                 />
+
                                 <Col className="form-group" md={12}>
+                                  <br></br>
                                   <label>
                                     Card Holder Name{' '}
                                     <span className="required">*</span>
@@ -803,8 +854,8 @@ const MyAccount = () => {
                                     className="form-control"
                                     name="expYear"
                                     type="text"
-                                    placeholder="Eg.2023"
-                                    maxLength="4"
+                                    placeholder="Eg.23"
+                                    maxLength="2"
                                     ref={register()}
                                     onChange={handleExpYearInputChange}
                                     onFocus={handleExpYearInputFocus}
@@ -853,18 +904,62 @@ const MyAccount = () => {
                           </div>
                         )}
 
-                        {user?.paymentMethodId != null && (
-                          <div className="account-details-form">
-                            <Cards
-                              cvc={'***'}
-                              expiry={expiry}
-                              focused={focus}
-                              name={'LIN LILI'}
-                              number={'5264********1234'}
-                              preview={true}
-                            />
-                          </div>
-                        )}
+                        {user?.paymentMethodId != null &&
+                          paymentMethod != null &&
+                          paymentMethod.card != null &&
+                          paymentMethod.card.brand != null &&
+                          paymentMethod.card.brand == 'visa' && (
+                            <div className="account-details-form">
+                              <Cards
+                                cvc={'***'}
+                                expiry={expiry}
+                                focused={focus}
+                                name={'LIN LILI'}
+                                number={
+                                  '4***********' + paymentMethod.card.last4
+                                }
+                                preview={true}
+                              />
+                              <br></br>
+                              <ButtonWithLoading
+                                type="submit"
+                                className="btn btn-fill-out"
+                                name="deleteCard"
+                                isLoading={loginLoading}
+                                onClick={() => setShowCardModal(true)}
+                              >
+                                Delete Payment Method
+                              </ButtonWithLoading>
+                            </div>
+                          )}
+                        {user?.paymentMethodId != null &&
+                          paymentMethod != null &&
+                          paymentMethod.card != null &&
+                          paymentMethod.card.brand != null &&
+                          paymentMethod.card.brand == 'mastercard' && (
+                            <div className="account-details-form">
+                              <Cards
+                                cvc={'***'}
+                                expiry={expiry}
+                                focused={focus}
+                                name={paymentMethod.billing_details.name}
+                                number={
+                                  '5***********' + paymentMethod.card.last4
+                                }
+                                preview={true}
+                              />
+                              <br></br>
+                              <ButtonWithLoading
+                                type="submit"
+                                className="btn btn-fill-out"
+                                name="deleteCard"
+                                isLoading={loginLoading}
+                                onClick={() => setShowCardModal(true)}
+                              >
+                                Delete Payment Method
+                              </ButtonWithLoading>
+                            </div>
+                          )}
                       </Card.Body>
                     </Card>
                   </Tab.Pane>
