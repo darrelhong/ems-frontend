@@ -10,17 +10,17 @@ import IconButton from '@material-ui/core/IconButton';
 import EditDescriptionModal from './EditDescriptionModal';
 
 
-const DetailContainer = ({ sellerProfile, booths, createToast, setSellerProfile }) => {
-    const [showEditDescriptionModal,setShowEditDescriptionModal] = useState(false);
+const DetailContainer = ({ sellerProfile, booths, createToast, setSellerProfile, isPartner }) => {
+    const [showEditDescriptionModal, setShowEditDescriptionModal] = useState(false);
 
     return (
         <Container>
-            <EditDescriptionModal 
-            sellerProfile={sellerProfile}
-            showEditDescriptionModal={showEditDescriptionModal}
-            closeEditDescriptionModal={()=>setShowEditDescriptionModal(false)}
-            createToast={createToast}
-            setSellerProfile={setSellerProfile}
+            <EditDescriptionModal
+                sellerProfile={sellerProfile}
+                showEditDescriptionModal={showEditDescriptionModal}
+                closeEditDescriptionModal={() => setShowEditDescriptionModal(false)}
+                createToast={createToast}
+                setSellerProfile={setSellerProfile}
             />
             <Row>
                 <Col md={4}>
@@ -59,17 +59,19 @@ const DetailContainer = ({ sellerProfile, booths, createToast, setSellerProfile 
                     <Row
                         style={{
                             marginTop: '10%',
-                            flexDirection:'row',
-                            justifyContent:'space-between',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
                         }}>
                         <h5>Booth Description:</h5>
+                        {isPartner && (
                             <IconButton
                                 color="secondary"
-                                onClick={()=> setShowEditDescriptionModal(true)}
-                                // onClick={()=> console.log('lets change the description')}
+                                onClick={() => setShowEditDescriptionModal(true)}
+                            // onClick={()=> console.log('lets change the description')}
                             >
                                 <IoMdCreate />
                             </IconButton>
+                        )}
                     </Row>
                     <Row>
                         {sellerProfile?.description ?? 'Empty Description still'}

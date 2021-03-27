@@ -5,7 +5,7 @@ import { IoIosAddCircleOutline } from 'react-icons/io';
 import IconButton from '@material-ui/core/IconButton';
 import AddProductModal from './AddProductModal';
 
-const BoothProductComponent = ({ booth, createToast, sellerProfile, setSellerProfile }) => {
+const BoothProductComponent = ({ booth, createToast, sellerProfile, setSellerProfile, isPartner }) => {
     const [products, setProducts] = useState([]);
     const [boothData, setBooth] = useState();
     // const [slicedProducts,setSlicedProducts] = useState([[]]);
@@ -61,10 +61,10 @@ const BoothProductComponent = ({ booth, createToast, sellerProfile, setSellerPro
                 />
             )}
             <Row
-                style={{ 
+                style={{
                     flexDirection: 'row',
                     alignItems: 'center',
-                    justifyContent:'space-between'
+                    justifyContent: 'space-between'
                 }}
             >
                 <h4>Booth {booth?.boothNumber}</h4>
@@ -76,12 +76,14 @@ const BoothProductComponent = ({ booth, createToast, sellerProfile, setSellerPro
                         style={{ marginBottom: 10 }}
                     />
                 </IconButton> */}
-                <Button
-                    variant="danger"
-                    onClick={() => setShowAddProductModal(true)}
+                {isPartner && (
+                    <Button
+                        variant="danger"
+                        onClick={() => setShowAddProductModal(true)}
                     >
-                    Add another product to booth {booth?.boothNumber}
-                </Button>
+                        Add another product to booth {booth?.boothNumber}
+                    </Button>
+                )}
                 {
                     paginatedProducts && (
                         <ProductScrollView
@@ -89,6 +91,7 @@ const BoothProductComponent = ({ booth, createToast, sellerProfile, setSellerPro
                             setBooth={setBooth}
                             paginatedProducts={paginatedProducts}
                             createToast={createToast}
+                            isPartner={isPartner}
                         />
                     )
                 }

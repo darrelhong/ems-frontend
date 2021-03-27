@@ -59,8 +59,7 @@ const SellerProfile = () => {
                     sellerProfile={sellerProfile}
                     createToast={createToast}
                     setSellerProfile={setSellerProfile}
-                    isPartner={true}
-                    />
+                />
             )}
             <Container
                 style={{
@@ -87,9 +86,7 @@ const SellerProfile = () => {
                             <Tab.Pane eventKey="brochures">
                                 {sellerProfile ? (
                                     <BrochureComponent
-                                        sellerProfile={sellerProfile} 
-                                        isPartner={true}
-                                        />
+                                        sellerProfile={sellerProfile} />
                                 ) : (
                                     // {sellerProfile ? renderBrochureComponent() : (
                                     <div
@@ -108,7 +105,6 @@ const SellerProfile = () => {
                                         createToast={createToast}
                                         sellerProfile={sellerProfile}
                                         setSellerProfile={setSellerProfile}
-                                        isPartner={true}
                                     />
                                 ))}
                             </Tab.Pane>

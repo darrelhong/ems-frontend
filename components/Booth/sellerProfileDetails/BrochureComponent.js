@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Container, Button, Col, Image } from 'react-bootstrap';
 import AddBrochureModal from './AddBrochureModal';
 
-const BrochureComponent = ({ sellerProfile }) => {
+const BrochureComponent = ({ sellerProfile, isPartner }) => {
     const [showModal, setShowModal] = useState(false);
 
     return (
@@ -12,24 +12,26 @@ const BrochureComponent = ({ sellerProfile }) => {
                 showModal={showModal}
                 closeModal={() => setShowModal(false)}
             />
-            <Col
-            // xs={10} md={12}
-            style={{
-                display:'flex',
-                flexDirection:'row-reverse',
-                alignContent:'flex-end',
-                marginBottom:'2%'
-            }}
-            >
-                <Button
-                    variant="danger"
-                    onClick={() => setShowModal(true)}
+            {isPartner && (
+                <Col
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row-reverse',
+                        alignContent: 'flex-end',
+                        marginBottom: '2%'
+                    }}
+                >
+                    <Button
+                        variant="danger"
+                        onClick={() => setShowModal(true)}
                     >
-                    Add a new Brochure
-                </Button>
-            </Col>
-            <Col className="form-group" 
-            xs={10} md={12}
+                        Add a new Brochure
+                    </Button>
+                </Col>
+            )}
+
+            <Col className="form-group"
+                xs={10} md={12}
                 style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}
             >
                 {sellerProfile.brochureImages && sellerProfile.brochureImages.map((image) => (

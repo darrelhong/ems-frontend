@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import ProductModal from 'components/Booth/sellerProfileDetails/ProductModal';
 
-const ProductScrollView = ({ paginatedProducts, boothId, setBooth, createToast}) => {
+const ProductScrollView = ({ paginatedProducts, boothId, setBooth, createToast, isPartner }) => {
     const placeholderImage = "https://static.packt-cdn.com/products/9781849514804/graphics/4804_03_46.jpg";
     const [nextId, setNextId] = useState(0);
     const [backId, setBackId] = useState(0);
@@ -114,6 +114,7 @@ const ProductScrollView = ({ paginatedProducts, boothId, setBooth, createToast})
                 boothId={boothId}
                 setBooth={setBooth}
                 createToast={createToast}
+                isPartner={isPartner}
             />
             {paginatedProducts && paginatedProducts.length > 1 ? (
                 paginatedProducts.map((section, index) => (

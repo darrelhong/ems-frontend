@@ -8,7 +8,8 @@ const ProductModal = ({
     closeProductModal,
     boothId,
     setBooth,
-    createToast
+    createToast,
+    isPartner
 }) => {
     const [removeProduct, setRemoveProduct] = useState(false);
 
@@ -111,7 +112,7 @@ const ProductModal = ({
             {bodyComponent()}
             <Modal.Footer>
                 {secondaryButton()}
-                {removeButton()}
+                {isPartner && removeButton()}
             </Modal.Footer>
         </Modal>
     );
