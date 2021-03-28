@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Alert, Col, Container, Row } from 'react-bootstrap';
+import { Alert, Card, Col, Container, Row } from 'react-bootstrap';
 
 import useUser from 'lib/query/useUser';
 
@@ -32,8 +32,42 @@ export default function AttendeeHome() {
             <p>User ID: {user.id}</p>
           </>
         )}
-
         <Row>
+          <Col md={4}>
+            <Link href="events">
+              <a>
+                <Card
+                  bg="border-white"
+                  text="white"
+                  style={{ background: '#ff3e00', border: 'none' }}
+                >
+                  <Card.Body>
+                    <Card.Title>View events</Card.Title>
+                    <Card.Text>Discover new and exciting events ➜</Card.Text>
+                  </Card.Body>
+                </Card>
+              </a>
+            </Link>
+          </Col>
+          <Col md={4} className="mt-3">
+            <Link href="tickets">
+              <a>
+                <Card
+                  bg="border-white"
+                  text="white"
+                  style={{ background: '#40b3ff', border: 'none' }}
+                >
+                  <Card.Body>
+                    <Card.Title>View tickets</Card.Title>
+                    <Card.Text>See tickets and upcoming events ➜</Card.Text>
+                  </Card.Body>
+                </Card>
+              </a>
+            </Link>
+          </Col>
+        </Row>
+
+        {/* <Row>
           <Col>
             <Link href="events">
               <button className="btn btn-fill-out">View events</button>
@@ -44,7 +78,7 @@ export default function AttendeeHome() {
               <button className="btn btn-fill-out">View tickets</button>
             </Link>
           </Col>
-        </Row>
+        </Row> */}
       </Container>
     </AttendeeWrapper>
   );
