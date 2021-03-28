@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { Alert, Col, Container, Row } from 'react-bootstrap';
@@ -12,6 +13,9 @@ import AddToCalendar from 'components/custom/AddToCalendar';
 import ShareButton from 'components/custom/ShareButton';
 import CenterSpinner from 'components/custom/CenterSpinner';
 
+import RegisterModal from 'components/events/registration/RegisterModal';
+import { getBoothTotalFromEvent } from 'lib/functions/boothFunctions';
+
 export function getServerSideProps({ query }) {
   return {
     props: { ...query },
@@ -20,9 +24,25 @@ export function getServerSideProps({ query }) {
 
 export default function PartnerEventPage({ id }) {
   const { data, status } = useEvent(id);
+  const [showRegisterModal,setShowRegisterModal] = useState(false);
+  const [boothTotal, setBoothTotal] = useState(0);
+
+  useEffect(()=>{
+    const loadBoothTotal = async () => {
+        const total = await getBoothTotalFromEvent(id);
+        setBoothTotal(total);
+    }
+    loadBoothTotal();
+},[]);
 
   return (
     <PartnerWrapper title={data?.name || 'Event page'}>
+      <RegisterModal 
+          showRegisterModal={showRegisterModal}
+          closeRegisterModal={()=>setShowRegisterModal(false)}
+          event={data}
+          boothTotal = {boothTotal}
+      />
       {status === 'loading' ? (
         <CenterSpinner />
       ) : status === 'error' ? (
@@ -100,12 +120,16 @@ export default function PartnerEventPage({ id }) {
                   <div className="d-flex align-items-center">
                     <button
                       className="btn btn-fill-out mr-2"
-                      disabled={!data.availableForSale}
+                      disabled={boothTotal >= data.boothCapacity}
+                      // disabled={!data.availableForSale}
+                      onClick={()=>setShowRegisterModal(true)}
                     >
                       Register Now
                     </button>
-                    {!data.availableForSale && (
-                      <p className="text-dark">Sale period has not started</p>
+                    {boothTotal >= data.boothCapacity ? (
+                      <p className="text-dark">Capacity of {data.boothCapacity} booths has been reached!</p>
+                    ) : (
+                      <p className="text-primary">{boothTotal} / {data.boothCapacity} booths already taken!</p>
                     )}
                   </div>
                 </div>
