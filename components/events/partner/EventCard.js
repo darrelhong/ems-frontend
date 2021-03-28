@@ -7,13 +7,17 @@ import { useQueryClient } from 'react-query';
 import useFavouriteEventMutation from 'lib/query/useFavouriteEventMutation';
 
 import styles from './EventCard.module.css';
-export default function EventCard({ event }) {
+export default function EventCard({ event, isPublic }) {
   const queryClient = useQueryClient();
   const { mutate } = useFavouriteEventMutation(queryClient);
 
   const onFavouriteClick = (e) => {
     e.preventDefault();
-    mutate(event.eid);
+    if (!isPublic) {
+      mutate(event.eid);
+    } else {
+      alert('Please login or create and account to save events');
+    }
   };
 
   return (
@@ -60,4 +64,5 @@ export default function EventCard({ event }) {
 
 EventCard.propTypes = {
   event: PropTypes.object,
+  isPublic: PropTypes.bool,
 };

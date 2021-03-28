@@ -11,6 +11,7 @@ import EventImageGallery from 'components/events/partner/EventImageGallery';
 import AddToCalendar from 'components/custom/AddToCalendar';
 import ShareButton from 'components/custom/ShareButton';
 import CenterSpinner from 'components/custom/CenterSpinner';
+import { FaHeart } from 'react-icons/fa';
 
 export function getServerSideProps({ query }) {
   return {
@@ -99,12 +100,22 @@ export default function PublicEventPage({ id }) {
               </Col>
             </Row>
 
-            <Row>
-              <Col className="col-auto mt-3">
+            <Row className="mt-3">
+              <Col className="col-auto">
                 <ShareButton
                   title={data.name}
                   url={`${process.env.HOSTNAME}/public/events/${id}`}
                 />
+              </Col>
+              <Col className="col-auto">
+                <button
+                  className="btn btn-sm btn-outline-pink"
+                  onClick={() =>
+                    alert('Please login or create and account to save events')
+                  }
+                >
+                  Favourite <FaHeart color="#e83e8c" />
+                </button>
               </Col>
             </Row>
 
