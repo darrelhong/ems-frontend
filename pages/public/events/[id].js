@@ -12,6 +12,7 @@ import AddToCalendar from 'components/custom/AddToCalendar';
 import ShareButton from 'components/custom/ShareButton';
 import CenterSpinner from 'components/custom/CenterSpinner';
 import { FaHeart } from 'react-icons/fa';
+import { formatter } from 'lib/util/currency';
 
 export function getServerSideProps({ query }) {
   return {
@@ -96,6 +97,28 @@ export default function PublicEventPage({ id }) {
 
                   <br></br>
                   <br></br>
+
+                  {data.sellingTicket && (
+                    <>
+                      <p
+                        className="text-body"
+                        style={{ fontSize: 20, marginBottom: 8 }}
+                      >
+                        {formatter.format(data.ticketPrice)}
+                      </p>
+                      <button
+                        onClick={() =>
+                          alert(
+                            'Please login or create and account buy tickets'
+                          )
+                        }
+                        className="btn btn-success"
+                        disabled={Date.parse(data.eventStartDate) < Date.now()}
+                      >
+                        Get tickets
+                      </button>
+                    </>
+                  )}
                 </div>
               </Col>
             </Row>
