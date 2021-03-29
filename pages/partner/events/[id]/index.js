@@ -5,6 +5,7 @@ import { Alert, Col, Container, Row } from 'react-bootstrap';
 import { format, parseISO } from 'date-fns';
 
 import { useEvent } from 'lib/query/events';
+import { getSellerApplicationsFromBpId } from 'lib/query/eventApi';
 
 import { BreadcrumbOne } from 'components/Breadcrumb';
 import PartnerWrapper from 'components/wrapper/PartnerWrapper';
@@ -15,6 +16,7 @@ import CenterSpinner from 'components/custom/CenterSpinner';
 
 import RegisterModal from 'components/events/registration/RegisterModal';
 import { getBoothTotalFromEvent } from 'lib/functions/boothFunctions';
+import { useToasts } from 'react-toast-notifications';
 
 export function getServerSideProps({ query }) {
   return {
@@ -24,24 +26,42 @@ export function getServerSideProps({ query }) {
 
 export default function PartnerEventPage({ id }) {
   const { data, status } = useEvent(id);
-  const [showRegisterModal,setShowRegisterModal] = useState(false);
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [boothTotal, setBoothTotal] = useState(0);
+  const bpId = localStorage.getItem('userId');
+  const [alreadyRegistered, setAlreadyRegistered] = useState(false);
 
-  useEffect(()=>{
+  useEffect(() => {
     const loadBoothTotal = async () => {
-        const total = await getBoothTotalFromEvent(id);
-        setBoothTotal(total);
+      const total = await getBoothTotalFromEvent(id);
+      setBoothTotal(total);
+    }
+    const loadApplications = async () => {
+      let applications = await getSellerApplicationsFromBpId(bpId);
+      applications = applications.map((application) => application.event?.eid);
+      setAlreadyRegistered(applications.includes(parseInt(id)));
     }
     loadBoothTotal();
-},[]);
+    loadApplications();
+  }, []);
+
+  const { addToast, removeToast } = useToasts();
+
+  const createToast = (message, appearanceStyle) => {
+    const toastId = addToast(message, { appearance: appearanceStyle });
+    setTimeout(() => removeToast(toastId), 3000);
+  };
 
   return (
     <PartnerWrapper title={data?.name || 'Event page'}>
-      <RegisterModal 
-          showRegisterModal={showRegisterModal}
-          closeRegisterModal={()=>setShowRegisterModal(false)}
-          event={data}
-          boothTotal = {boothTotal}
+      <RegisterModal
+        showRegisterModal={showRegisterModal}
+        closeRegisterModal={() => setShowRegisterModal(false)}
+        event={data}
+        boothTotal={boothTotal}
+        bpId={bpId}
+        createToast={createToast}
+        setAlreadyRegistered={setAlreadyRegistered}
       />
       {status === 'loading' ? (
         <CenterSpinner />
@@ -118,17 +138,29 @@ export default function PartnerEventPage({ id }) {
                   <br></br>
                   <br></br>
                   <div className="d-flex align-items-center">
-                    <button
-                      className="btn btn-fill-out mr-2"
-                      disabled={boothTotal >= data.boothCapacity}
-                      // disabled={!data.availableForSale}
-                      onClick={()=>setShowRegisterModal(true)}
-                    >
-                      Register Now
-                    </button>
-                    {boothTotal >= data.boothCapacity ? (
-                      <p className="text-dark">Capacity of {data.boothCapacity} booths has been reached!</p>
+                    {alreadyRegistered ? (
+                      <button
+                        className="btn btn-fill-out mr-2"
+                        disabled
+                        // disabled={!data.availableForSale}
+                      >
+                        Application Submitted
+                      </button>
                     ) : (
+                      <button
+                        className="btn btn-fill-out mr-2"
+                        disabled={boothTotal >= data.boothCapacity}
+                        // disabled={!data.availableForSale}
+                        onClick={() => setShowRegisterModal(true)}
+                      >
+                        Register Now
+                      </button>
+                    )}
+
+                    {boothTotal >= data.boothCapacity && !alreadyRegistered && (
+                      <p className="text-dark">Capacity of {data.boothCapacity} booths has been reached!</p>
+                    )}
+                    {boothTotal < data.boothCapacity && !alreadyRegistered && (
                       <p className="text-primary">{boothTotal} / {data.boothCapacity} booths already taken!</p>
                     )}
                   </div>
@@ -153,8 +185,9 @@ export default function PartnerEventPage({ id }) {
             </Row>
           </Container>
         </>
-      )}
-    </PartnerWrapper>
+      )
+      }
+    </PartnerWrapper >
   );
 }
 

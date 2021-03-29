@@ -7,10 +7,12 @@ import { createSellerApplication } from 'lib/query/eventApi';
 
 const RegisterModal = ({
     event,
-    businessPartner,
+    bpId,
     showRegisterModal,
     closeRegisterModal,
-    boothTotal
+    boothTotal,
+    createToast,
+    setAlreadyRegistered
 }) => {
 
     const [boothQuantity, setBoothQuantity] = useState(1);
@@ -123,7 +125,7 @@ const RegisterModal = ({
                     </Col>
                 </Row>
                 <Row className="mb-4">
-                <Col xs={6} sm={8}>
+                    <Col xs={6} sm={8}>
                         <p>Each booth at the event costs {formatter.format(event?.boothPrice)}</p>
                     </Col>
                     <Col>
@@ -306,13 +308,16 @@ const RegisterModal = ({
         </Button>
     );
 
-    const handleRegister = (data) => {
-        console.log('registering, printing erors and data');
-        console.log(errors);
-        console.log(data);
-        console.log(event.eid);
-        console.log(businessPartner.id);
-        // const response = await createSellerApplication(data,event.eid,businessPartner.id);
+    const handleRegister = async (data) => {
+        try {
+            await createSellerApplication(data, event.eid, bpId);
+            setAlreadyRegistered(true);
+            closeRegisterModal();
+            createToast('Registered Successfully', 'success');
+        } catch (e) {
+            closeRegisterModal();
+            createToast('Error, please try again later', 'error');
+        }
     }
 
     const getCheckoutTotal = () => {
