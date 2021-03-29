@@ -78,13 +78,16 @@ const EventDescriptionTabGroup = ({
                 </ul>
               )}
             <ul>
-              <button
-                onClick={() => console.log('hello')}
-                className="btn btn-fill-out btn-addtocart space-ml--10"
-                style={{ textAlign: 'right' }}
-              >
-                <i className="icon-basket-loaded" /> Manage Event Booths
-            </button>
+              <Link href={`/organiser/events/applications/${event.eid}`}>
+                <button
+                  // onClick={() => console.log('hello')}
+                  className="btn btn-fill-out btn-addtocart space-ml--10"
+                  style={{ textAlign: 'right' }}
+                >
+                  <i className="icon-basket-loaded" /> Manage Event Booths
+               </button>
+              </Link>
+
             </ul>
           </div>
           <ul>
@@ -116,7 +119,7 @@ const EventDescriptionTabGroup = ({
           </Nav.Item>
           <Nav.Item>
             <Nav.Link eventKey="businessPartners">BUSINESS PARTNERS {' '}
-            {newSellerApplications.length > 0 && (<Badge pill variant="danger">{newSellerApplications.length}</Badge>)}
+              {newSellerApplications.length > 0 && (<Badge pill variant="danger">{newSellerApplications.length}</Badge>)}
             </Nav.Link>
           </Nav.Item>
           <Nav.Item>
@@ -138,9 +141,9 @@ const EventDescriptionTabGroup = ({
           <Tab.Pane eventKey="businessPartners">
             {/* {renderBoothSection()} */}
             <BusinessPartnerTab
-            event={event}
-            newSellerApplications={newSellerApplications}
-            sellerProfiles={sellerProfiles}
+              event={event}
+              newSellerApplications={newSellerApplications}
+              sellerProfiles={sellerProfiles}
             />
           </Tab.Pane>
 

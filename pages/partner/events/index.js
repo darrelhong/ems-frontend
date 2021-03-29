@@ -42,7 +42,7 @@ export default function PartnerEvents() {
     }
   );
   console.log(data)
-  console.log("test", queryClient.getQueryData('events'))
+  // console.log("test", queryClient.getQueryData('events'))
 
   // front end filtering of event
   const getSortParams = (sortType, sortValue) => {
