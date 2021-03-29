@@ -8,7 +8,8 @@ import {
 const TicketingTab = ({
     event,
     prettySaleStartDate,
-    prettySalesEndDate
+    prettySalesEndDate,
+    setShowModal
 }
 ) => {
     return (

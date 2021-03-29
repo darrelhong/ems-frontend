@@ -134,7 +134,8 @@ const EventDescriptionTabGroup = ({
               <TicketingTab
                 event={event}
                 prettySaleStartDate={prettySaleStartDate}
-                prettySalesEndDate={prettySalesEndDate} />
+                prettySalesEndDate={prettySalesEndDate}
+                setShowModal={setShowModal}/>
             )}
           </Tab.Pane>
 
