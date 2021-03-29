@@ -5,7 +5,8 @@ import { BreadcrumbOne } from 'components/Breadcrumb';
 import PartnerWrapper from 'components/wrapper/PartnerWrapper';
 import { useState, useEffect } from 'react';
 import { getAllApplicationsForEvent } from "../../../../lib/query/eventApi"
-
+import ApplicationCard from "../../../../components/events/registration/ApplicationCard"
+import { Container, Row, Col } from 'react-bootstrap';
 
 export default function Applications() {
 
@@ -36,6 +37,30 @@ export default function Applications() {
                 </ol>
             </BreadcrumbOne>
 
+            <div className="shop-content space-pt--r100 space-pb--r100">
+                <Container>
+                    <Row>
+                        <Col lg={9}>
+                            <div className="shop-products">
+                                {applications.length != 0 ? (
+                                    applications.map((app) => {
+                                        return (
+                                            <ApplicationCard key={app.id} app={app} />
+                                        )
+                                    })
+                                ) : (
+                                    <div
+                                        className="product-description-tab__details"
+                                        style={{ textAlign: 'center' }}
+                                    >
+                                        No Applications Found
+                                    </div>
+                                )}
+                            </div>
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
 
 
         </PartnerWrapper>
