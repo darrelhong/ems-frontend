@@ -33,7 +33,7 @@ export default function AttendeeHome() {
           </>
         )}
         <Row>
-          <Col md={4}>
+          <Col md={4} className="mb-3">
             <Link href="events">
               <a>
                 <Card
@@ -49,7 +49,7 @@ export default function AttendeeHome() {
               </a>
             </Link>
           </Col>
-          <Col md={4} className="mt-3">
+          <Col md={4} className="mb-3">
             <Link href="tickets">
               <a>
                 <Card

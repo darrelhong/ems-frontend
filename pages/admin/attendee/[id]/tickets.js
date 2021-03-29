@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useQuery } from 'react-query';
 import { format, parseISO } from 'date-fns';
 import { Alert, Container } from 'react-bootstrap';
+import { Receipt } from '@material-ui/icons';
 
 import api from 'lib/ApiClient';
 import MaterialTable from 'lib/MaterialTable';
@@ -81,7 +82,19 @@ export default function AdminAttendeeTickets({ id }) {
             options={{
               filtering: true,
               sorting: true,
+              actionsColumnIndex: -1,
             }}
+            actions={[
+              {
+                icon: Receipt,
+                tooltip: 'View transaction details',
+                onClick: (event, rowData) => {
+                  window.open(
+                    `https://dashboard.stripe.com/payments/${rowData.stripePaymentId}`
+                  );
+                },
+              },
+            ]}
           />
         )}
       </Container>
