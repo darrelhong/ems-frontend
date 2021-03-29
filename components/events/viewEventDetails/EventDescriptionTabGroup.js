@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import { Badge } from 'react-bootstrap';
@@ -11,6 +11,8 @@ import {
 import TicketingModal from '../../Event/TicketingModal';
 import TicketingTab from './DescriptionTabs/TicketingTab';
 import BusinessPartnerTab from './DescriptionTabs/BusinessPartnerTab';
+import RecommendedPartnersTab from './DescriptionTabs/RecommendedPartnersTab';
+import { getRecommendedPartners } from 'lib/query/eventApi';
 
 // import { format, parseISO } from 'date-fns';
 
@@ -24,6 +26,19 @@ const EventDescriptionTabGroup = ({
   sellerProfiles
 }) => {
   const [showModal, setShowModal] = useState(false);
+  const [recommendedPartners,setRecommendedPartners] = useState([]);
+
+  useEffect(()=>{
+      const loadPartners = async () => {
+        console.log('loading');
+        console.log(event);
+        const response = await getRecommendedPartners(event.eid);
+          console.log('loaded partners');
+          console.log(response);
+          setRecommendedPartners(response);
+      };
+      if (event.eid) loadPartners();
+  },[event]);
 
   const renderBoothSection = () => {
     if (event.boothCapacity == 0) {
@@ -127,6 +142,12 @@ const EventDescriptionTabGroup = ({
               REVIEWS {event.ratingCount ? `(${event.ratingCount})` : ''}
             </Nav.Link>
           </Nav.Item>
+          <Nav.Item>
+            <Nav.Link eventKey="recommendedPartners">
+              SUGGESTED PARTNERS{' '}
+              {recommendedPartners?.length > 0 && (<Badge pill variant="danger">{recommendedPartners.length}</Badge>)}
+            </Nav.Link>
+          </Nav.Item>
         </Nav>
         <Tab.Content>
           <Tab.Pane eventKey="ticketing">
@@ -135,7 +156,7 @@ const EventDescriptionTabGroup = ({
                 event={event}
                 prettySaleStartDate={prettySaleStartDate}
                 prettySalesEndDate={prettySalesEndDate}
-                setShowModal={setShowModal}/>
+                setShowModal={setShowModal} />
             )}
           </Tab.Pane>
 
@@ -155,6 +176,14 @@ const EventDescriptionTabGroup = ({
             >
               No reviews yet!
             </div>
+          </Tab.Pane>
+          <Tab.Pane eventKey="recommendedPartners">
+            {event?.eid && (
+              <RecommendedPartnersTab
+                eventId={event.eid}
+                recommendedPartners={recommendedPartners}
+              />
+            )}
           </Tab.Pane>
         </Tab.Content>
       </Tab.Container>

@@ -34,6 +34,7 @@ const EventDescription = ({
   createToast
 }) => {
 
+  const testCategories = ['Computers', 'Legal & Financial', 'Automotive', 'Computers', 'Legal & Financial', 'Automotive', 'Computers', 'Legal & Financial', 'Automotive']
   const [deleteModalShow, setDeleteModalShow] = useState(false);
   const closeModal = () => setDeleteModalShow(false);
   const openModal = () => setDeleteModalShow(true);
@@ -152,11 +153,11 @@ const EventDescription = ({
               Physical Event
             </li>
           ) : (
-              <li>
-                <IoMdWifi />
+            <li>
+              <IoMdWifi />
               Online Event
-              </li>
-            )}
+            </li>
+          )}
           <li>
             <IoMdLocate />
             Event Location:{' '}
@@ -169,29 +170,34 @@ const EventDescription = ({
               : '(Add Event Start Date)'} to{' '}
             {prettyEndDate ? prettyEndDate : '(Add Event End Date)'}
           </li>
-          {/* {event.vip && (
-            <li>
-              < IoMdStar onClick={vipToggle} />VIP event
-            </li>
-          )}
-          {event.hidden ? (
-            <li>
-              <IoMdEye title="Unhide your event from attendees!" onClick={hideToggle} />Hidden from attendees
-            </li>
-          ) : (
-              <li>
-                <IoMdEyeOff title="Temporarily hide your event from attendees" onClick={hideToggle} />Open for attendees to view!
-              </li>
-            )}
-          {event.published ? (
-            <li>
-              <IoMdCloudDownload title="Temporarily unpublish your event from business partners!" onClick={publishToggle} />Open for business partners to view!
-            </li>
-          ) : (
-              <li>
-                <IoMdCloudUpload title="Publish your event for business partners to see!" onClick={publishToggle} />Event is unpublished, business partners won't find your event
-              </li>
-            )} */}
+          <div style={{
+            marginTop: '5%'
+          }}>
+            <p>Event Categories:</p>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                overflow:'auto',
+                flexWrap:'wrap'
+              }}>
+              {/* {testCategories.map((category) => ( */}
+                {event?.categories && event.categories.map((category) => (
+                <text
+                  style={{
+                    borderStyle: 'solid',
+                    borderColor: '#c9c9c9',
+                    backgroundColor: '#c9c9c9',
+                    color: 'blue',
+                    borderRadius: 10,
+                    marginRight: '5%',
+                    marginTop:'2%',
+                    whiteSpace:'initial',
+                    // display:'block'
+                  }}>{category}</text>
+              ))}
+            </div>
+          </div>
         </ul>
       </div>
       <hr />
