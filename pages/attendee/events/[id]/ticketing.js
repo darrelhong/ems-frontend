@@ -93,13 +93,7 @@ export default function AttendeeEventTicketing({ id }) {
 
                     <Row className="mb-4">
                       <Col>
-                        <p>
-                          Starts on:{' '}
-                          {format(
-                            parseISO(data.eventStartDate),
-                            'eee, dd MMM yy hh:mmbbb'
-                          )}
-                        </p>
+                        <p>by {data.eventOrganiser.name}</p>
                       </Col>
                     </Row>
 
@@ -141,7 +135,7 @@ export default function AttendeeEventTicketing({ id }) {
                     <Row className="mb-5">
                       <Col>
                         <p>
-                          Sales end on{' '}
+                          Sales start on{' '}
                           {format(
                             parseISO(data.saleStartDate),
                             'eee, dd MMM yy hh:mmbbb'
