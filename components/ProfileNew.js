@@ -11,7 +11,7 @@ import {
   CardFooter,
   CardTitle,
   Row,
-  Col
+  Col,
 } from 'reactstrap';
 
 import { useMutation } from 'react-query';
@@ -25,7 +25,7 @@ import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
 import Badge from 'react-bootstrap/Badge';
-import { getEventByOrganiserId } from '../lib/query/useEvent';
+import { getEoEventsByIdRoleStatus } from '../lib/query/useEvent';
 import { getFollowers, getFollowing } from '../lib/query/getBPFollow';
 import { isBpVip, addVip } from '../lib/query/useVip';
 import { BsPencilSquare, BsPlus } from 'react-icons/bs';
@@ -33,6 +33,7 @@ import api from '../lib/ApiClient';
 import { PermDataSettingTwoTone } from '@material-ui/icons';
 import { FiPlus } from 'react-icons/fi';
 import Modal from 'react-bootstrap/Modal';
+import ButtonWithLoading from './custom/ButtonWithLoading';
 
 const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
   const [publicView, setPublicView] = useState();
@@ -44,7 +45,7 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
   const [unfollowBtn, setUnfollowBtn] = useState();
   const [followBtn, setFollowBtn] = useState();
   const [partner, setPartner] = useState();
-  const [user, setUser] = useState(); 
+  const [user, setUser] = useState();
 
   // const [markVip, setMarkVip] = useState(false);
   // const [unmarkVip, setUnmarkVip] = useState(false);
@@ -57,6 +58,7 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
   const [enquiryEventList, setEnquiryEventList] = useState([]);
   const [showEnquiryError, setEnquiryError] = useState(false);
   const [showEnquirySuccess, setEnquirySuccess] = useState(false);
+  const [sendEnquiryLoading, setSendEnquiryLoading] = useState(false);
   var followId;
 
   useEffect(() => {
@@ -150,36 +152,23 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
             setEOView(false);
           }
         });
-          
-        if (currentUserRole == "Organiser") {
-          await getAllEventByBpId(
-            localuser
-          ).then(async (bpEventList) => {
-            await getEventByOrganiserId(
-              currentUserId
-            ).then((eoEventList) => {
-  
-              console.log(bpEventList);
-              console.log(eoEventList);
-              Array.prototype.unique = function() {
-                var arr = this.concat();
-                for (var i = 0; i < arr.length; ++i) {
-                    for (var j = i + 1; j < arr.length; ++j) {
-                        if (arr[i].eid == arr[j].eid)
-                        arr.splice(j--, 1);
-                    }
-                }
-                return arr;
-              };
-  
-              setEnquiryEventList(bpEventList.concat(eoEventList).unique());
+
+        if (currentUserRole == 'Organiser') {
+          await getEoEventsByIdRoleStatus(
+            currentUserId,
+            'EVNTORG',
+            'current'
+          ).then(async (currentEvents) => {
+            await getEoEventsByIdRoleStatus(
+              currentUserId,
+              'EVNTORG',
+              'upcoming'
+            ).then((upcomingEvents) => {
+              setEnquiryEventList(currentEvents.concat(upcomingEvents));
             });
           });
-        }
-        else if (currentUserRole == "Attendee") {
-          await getAllEventByBpId(
-            localuser
-          ).then((bpEventList) => {
+        } else if (currentUserRole == 'Attendee') {
+          await getAllEventByBpId(localuser).then((bpEventList) => {
             setEnquiryEventList(bpEventList);
           });
         }
@@ -192,7 +181,7 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
       setFollowBtn(false);
       setUnfollowBtn(false);
       getFollowersData();
-            getFollowingData();
+      getFollowingData();
     }
   }, [localuser, followId]);
 
@@ -209,13 +198,20 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
         setUnfollowBtn(true);
         setFollowBtn(false);
         getRefreshedFollowers();
-        console.log("parner id" + data.id);
-        console.log("user" + user);
-        let endpoint = "https://api.ravenhub.io/company/WLU2yLZw9d/subscribers/partner" + data.id + "/events/SyTpyGmjrT"
- 
-        axios.post(endpoint, { "person" : user}, {
-        headers: {'Content-type': 'application/json'}
-        });
+        console.log('parner id' + data.id);
+        console.log('user' + user);
+        let endpoint =
+          'https://api.ravenhub.io/company/WLU2yLZw9d/subscribers/partner' +
+          data.id +
+          '/events/SyTpyGmjrT';
+
+        axios.post(
+          endpoint,
+          { person: user },
+          {
+            headers: { 'Content-type': 'application/json' },
+          }
+        );
       })
       .catch((error) => {
         console.log(error);
@@ -271,39 +267,58 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
 
   function sendEnquiry() {
     // get user inputs
-    let enquiryTitle = document.getElementById("enquiryTitle").value;
-    let enquiryEvent = document.getElementById("enquiryEvent").value;
-    let enquiryMessage = document.getElementById("enquiryMessage").value;
+    let enquiryTitle = document.getElementById('enquiryTitle').value;
+    let enquiryEvent = document.getElementById('enquiryEvent').value;
+    let enquiryMessage = document.getElementById('enquiryMessage').value;
+
+    if (enquiryEvent == 'none') {
+      enquiryEvent = null;
+    }
 
     // validate
-    if (enquiryTitle == "" || enquiryEvent == "none" || enquiryMessage == "") {
+    if (enquiryTitle == '' || enquiryEvent == 'none' || enquiryMessage == '') {
       setEnquiryError(true);
-    }
-    else {
+    } else {
       setEnquiryError(false);
 
       // get sender and receiver info
       getUser(currentUserId).then((user) => {
         let enquiryReceiverEmail = partner.email;
         let enquirySenderEmail = user.email;
-  
+
         let data = {
           subject: enquiryTitle,
           content: enquiryMessage,
           eventId: enquiryEvent,
           receiverEmail: enquiryReceiverEmail,
-          senderEmail: enquirySenderEmail
-        }
-  
-        api.post('/api/user/enquiry', data)
-        .then(() => {
-          setEnquirySuccess(true);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+          senderEmail: enquirySenderEmail,
+        };
+
+        setSendEnquiryLoading(true);
+        api
+          .post('/api/user/enquiry', data)
+          .then(() => {
+            setEnquirySuccess(true);
+            setSendEnquiryLoading(false);
+            clearEnquiryForm();
+          })
+          .catch((error) => {
+            console.log(error);
+            setSendEnquiryLoading(false);
+            setEnquiryError(true);
+          });
       });
     }
+  }
+
+  function clearEnquiryForm() {
+    let enquiryTitle = document.getElementById('enquiryTitle');
+    let enquiryEvent = document.getElementById('enquiryEvent');
+    let enquiryMessage = document.getElementById('enquiryMessage');
+
+    enquiryTitle.value = '';
+    enquiryEvent.selectedIndex = 0;
+    enquiryMessage.value = '';
   }
 
   return (
@@ -323,17 +338,14 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
         </Modal.Footer>
       </Modal>
       <BreadcrumbOne pageTitle="Profile Details">
-     
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/partner/home">
               <a>Home</a>
             </Link>
-
           </li>
           <li className="breadcrumb-item active">Profile Details</li>
         </ol>
-
       </BreadcrumbOne>
       <br></br>
       <div className="content" style={{ marginLeft: '8%', marginRight: '8%' }}>
@@ -682,40 +694,42 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
               </CardBody>
             </Card>
           </Col>
-          {Boolean(currentUserId != localuser & currentUserRole != "Partner") && (
-            <Col xs={12} style={{marginTop: "30px", marginBottom: "30px"}}>
+          {Boolean(
+            (currentUserId != localuser) & (currentUserRole != 'Partner')
+          ) && (
+            <Col xs={12} style={{ marginTop: '30px', marginBottom: '30px' }}>
               <Card className="card-user">
                 <CardHeader className="text-center">
                   <h4>Have some questions?</h4>
                 </CardHeader>
                 <CardBody className="d-flex justify-content-center">
                   <Row className="w-100 d-flex justify-content-center">
-                    <Col xs={12} lg={6} className="d-flex flex-column" style={{gap: "10px"}}>
+                    <Col
+                      xs={12}
+                      lg={6}
+                      className="d-flex flex-column"
+                      style={{ gap: '10px' }}
+                    >
                       <input
                         id="enquiryTitle"
                         className="form-control"
-                        placeholder="Title"
+                        placeholder="Title *"
                       />
-                      <select
-                        className="custom-select"
-                        id="enquiryEvent"
-                      >
+                      <select className="custom-select" id="enquiryEvent">
                         <option value="none">Event</option>
                         {(enquiryEventList != null ||
                           enquiryEventList != undefined) &&
                           enquiryEventList.map((event) => {
                             return (
-                              <option value={event.eid}>
-                                {event.name}
-                              </option>
+                              <option value={event.eid}>{event.name}</option>
                             );
                           })}
                       </select>
                       <textarea
                         id="enquiryMessage"
                         className="form-control"
-                        placeholder="Type something here..."
-                        style={{height: "10em"}}
+                        placeholder="Your Enquiry *"
+                        style={{ height: '10em' }}
                       />
                       <Alert
                         show={showEnquiryError}
@@ -723,7 +737,7 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
                         onClose={() => setEnquiryError(false)}
                         dismissible
                       >
-                        Please fill in all the fields.
+                        Please fill in all the required fields.
                       </Alert>
                       <Alert
                         show={showEnquirySuccess}
@@ -731,14 +745,16 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
                         onClose={() => setEnquirySuccess(false)}
                         dismissible
                       >
-                        Success! A copy of the enquiry has been sent to your email.
+                        Success! A copy of the enquiry has been sent to your
+                        email.
                       </Alert>
-                      <button
+                      <ButtonWithLoading
                         className="btn btn-fill-out"
                         onClick={() => sendEnquiry()}
+                        isLoading={sendEnquiryLoading && !showEnquiryError}
                       >
                         Send Enquiry
-                      </button>
+                      </ButtonWithLoading>
                     </Col>
                   </Row>
                 </CardBody>
