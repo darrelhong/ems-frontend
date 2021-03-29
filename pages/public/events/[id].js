@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Alert, Col, Container, Row } from 'react-bootstrap';
 import { format, parseISO } from 'date-fns';
 
-import { useEvent } from 'lib/query/events';
+import { useEventDetails } from 'lib/query/events';
 
 import GuestWrapper from 'components/wrapper/GuestWrapper';
 import { BreadcrumbOne } from 'components/Breadcrumb';
@@ -21,7 +21,7 @@ export function getServerSideProps({ query }) {
 }
 
 export default function PublicEventPage({ id }) {
-  const { data, status } = useEvent(id, { isPublic: true });
+  const { data, status } = useEventDetails(id, { isPublic: true });
 
   return (
     <GuestWrapper title={data?.name || 'Event page'}>

@@ -7,7 +7,7 @@ import { useMutation } from 'react-query';
 import { Alert, Card, Col, Container, Row } from 'react-bootstrap';
 import { format, parseISO } from 'date-fns';
 
-import { useEvent } from 'lib/query/events';
+import { useEventDetails } from 'lib/query/events';
 import { formatter } from 'lib/util/currency';
 import api from 'lib/ApiClient';
 import useUser from 'lib/query/useUser';
@@ -25,7 +25,7 @@ export function getServerSideProps({ query }) {
 }
 const promise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY);
 export default function AttendeeEventTicketing({ id }) {
-  const { data, status } = useEvent(id);
+  const { data, status } = useEventDetails(id);
   const { data: attendee } = useUser();
 
   const [ticketQty, setTicketQty] = useState(1);

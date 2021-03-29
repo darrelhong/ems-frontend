@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Alert, Col, Container, Row } from 'react-bootstrap';
 import { format, parseISO } from 'date-fns';
 
-import { useEvent } from 'lib/query/events';
+import { useEventDetails } from 'lib/query/events';
 
 import { BreadcrumbOne } from 'components/Breadcrumb';
 import PartnerWrapper from 'components/wrapper/PartnerWrapper';
@@ -19,7 +19,7 @@ export function getServerSideProps({ query }) {
 }
 
 export default function PartnerEventPage({ id }) {
-  const { data, status } = useEvent(id);
+  const { data, status } = useEventDetails(id);
 
   return (
     <PartnerWrapper title={data?.name || 'Event page'}>

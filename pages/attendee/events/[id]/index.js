@@ -5,7 +5,7 @@ import { format, parseISO } from 'date-fns';
 import { FaHeart } from 'react-icons/fa';
 import { useQueryClient } from 'react-query';
 
-import { useEvent } from 'lib/query/events';
+import { useEventDetails } from 'lib/query/events';
 import { formatter } from 'lib/util/currency';
 import useAttendeeFavouriteEvents from 'lib/query/useAttendeeFavouriteEvents';
 import { isFavouriteEvent } from 'lib/functions/isFavouriteEvent';
@@ -26,7 +26,7 @@ export function getServerSideProps({ query }) {
 
 export default function AttendeeEventPage({ id }) {
   const queryClient = useQueryClient();
-  const { data, status } = useEvent(id);
+  const { data, status } = useEventDetails(id);
   const { data: favouriteEvents } = useAttendeeFavouriteEvents();
   const { mutate } = useFavouriteEventMutation(queryClient);
 
