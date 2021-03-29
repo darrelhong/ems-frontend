@@ -68,13 +68,13 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
           </Button>
         </Modal.Footer>
       </Modal> */}
-      <DeleteModal 
-      currEvent = {currEvent}
-      deleteModalShow = {deleteModalShow}
-      setDeleteModalShow = {setDeleteModalShow}
-      closeModal = {closeModal}
-      openModal = {openModal}
-      deleteCancelEvent = {deleteCancelEvent}
+      <DeleteModal
+        currEvent={currEvent}
+        deleteModalShow={deleteModalShow}
+        setDeleteModalShow={setDeleteModalShow}
+        closeModal={closeModal}
+        openModal={openModal}
+        deleteCancelEvent={deleteCancelEvent}
       />
       <Col lg={4} sm={6} className="space-mb--50">
         <div className="product-list">
@@ -169,7 +169,6 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
                 </li>
 
                 <ProgressBar
-                  animated
                   now={60}
                   label="60%"
                   style={{ width: '50%', float: 'right' }}

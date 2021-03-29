@@ -1,9 +1,40 @@
 import PropTypes from 'prop-types';
+import { useState } from "react";
 import { format, parseISO } from 'date-fns';
+import { likeEvent, unlikeEvent } from '../../../lib/query/events'
 import { Card } from 'react-bootstrap';
 import styles from './EventCard.module.css';
+import IconButton from '@material-ui/core/IconButton';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import { useMutation, useQueryClient } from "react-query";
 
-export default function EventCard({ event }) {
+export default function EventCard({ event, user }) {
+
+  // function inFav(event, user) {
+  //   return user.favouriteEventList.some(e => e.eid === event.eid)
+  // }
+
+  const queryClient = useQueryClient();
+  const [inFav, setinFav] = useState(user?.favouriteEventList.some(e => e.eid === event.eid))
+
+  const toggleLike = async (e) => {
+    e.preventDefault()
+    if (!inFav) {
+      // user?.favouriteEventList.push(event)
+      likeEvent(user.id, event.eid)
+      // console.log(user.favouriteEventList)
+    }
+    else {
+      unlikeEvent(user.id, event.eid)
+    }
+    setinFav(!inFav)
+    queryClient.invalidateQueries("events")
+  }
+
+  // const { mutateAsync } = useMutation(toggleLike)
+
+
   return (
     <Card
       className={`h-100 ${styles.eventCard}`}
@@ -24,6 +55,15 @@ export default function EventCard({ event }) {
         <Card.Text className="line-clamp">{event?.descriptions}</Card.Text>
         <Card.Text className="text-default mt-auto">
           {format(parseISO(event.eventStartDate), 'eee, dd MMM yy hh:mmbbb')}
+          <span style={{ float: 'right' }}>
+            <IconButton aria-label="fav" color="secondary"
+              onClick={(e) => { toggleLike(e) }}>
+              {inFav ?
+                (<FavoriteIcon />) :
+                (<FavoriteBorderIcon />)
+              }
+            </IconButton>
+          </span>
         </Card.Text>
       </Card.Body>
     </Card>
