@@ -38,7 +38,7 @@ const columns = [
 ];
 
 export default function AdminAttendeeTickets({ id }) {
-  const { data, status } = useQuery(['attendee', id], () =>
+  const { data, status } = useQuery(['attendeeTickets', id], () =>
     getAttendeeTickets(id)
   );
 

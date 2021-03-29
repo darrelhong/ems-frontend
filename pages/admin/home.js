@@ -58,7 +58,7 @@ export default function AdminHome() {
             <Card>
               <Card.Header>Attendee</Card.Header>
               <Card.Body>
-                <Card.Text>View Attendee</Card.Text>
+                <Card.Text>View attendees</Card.Text>
                 <Link href="/admin/attendee">
                   <button className="btn btn-fill-out btn-sm">View</button>
                 </Link>
