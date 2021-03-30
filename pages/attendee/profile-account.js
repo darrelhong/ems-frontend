@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import DropdownMultiselect from "react-multiselect-dropdown-bootstrap";
+import DropdownMultiselect from 'react-multiselect-dropdown-bootstrap';
 import { BreadcrumbOne } from '../../components/Breadcrumb';
 import {
   Container,
@@ -53,7 +53,11 @@ export default function MyAccount() {
     } else {
       setProfilepicUrl('../../assets/images/defaultprofilepic.png');
     }
-  }, [user?.profilePic]);
+    if (user != undefined) {
+      setEoEventBroadcast(user.eoEmailNoti);
+      setAllEmailNoti(user.systemEmailNoti);
+    }
+  }, [user?.profilePic, user]);
 
   useEffect(() => {
     setFileName('Choose image');
@@ -76,9 +80,27 @@ export default function MyAccount() {
   const [showPW, setShowPW] = useState(false);
   const [showFileSizeError, setShowFileSizeError] = useState(false);
 
+  //Email Notification Setting
+  const [allEmailNoti, setAllEmailNoti] = useState(true);
+  const [eoEventBroadcast, setEoEventBroadcast] = useState(true);
+  const [showNotiSuccess, setShowNotiSuccess] = useState(false);
+  const [showNotiError, setShowNotiError] = useState(false);
+
   const renderTooltip = (props) => (
     <Tooltip id="button-tooltip" {...props}>
       Support png and jpg image format.
+    </Tooltip>
+  );
+
+  const renderAllNotiTooltip = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      Notification includes Enquiry
+    </Tooltip>
+  );
+
+  const renderEoEmailNotiTooltip = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      Notification includes message from event organiser
     </Tooltip>
   );
 
@@ -267,6 +289,55 @@ export default function MyAccount() {
     return true;
   }
 
+  const onSubmitEmailNotification = async () => {
+    mutateEmailNotiSetting.mutate({
+      systemEmailNoti: allEmailNoti,
+      eoEmailNoti: eoEventBroadcast,
+    });
+  };
+
+  const handleAllEmailNoti = async () => {
+    console.log('check handleAllEmailNoti');
+
+    if (allEmailNoti == true) {
+      setAllEmailNoti(false);
+    } else if (allEmailNoti == false) {
+      setAllEmailNoti(true);
+    }
+  };
+
+  const handleEoEventBroadcast = async () => {
+    console.log('check handleEoEventBroadcast');
+    if (eoEventBroadcast == true) {
+      setEoEventBroadcast(false);
+    } else if (eoEventBroadcast == false) {
+      setEoEventBroadcast(true);
+    }
+  };
+
+  const mutateEmailNotiSetting = useMutation((data) => {
+    console.log(data);
+    api
+      .post('/api/user/updateEmailNoti', data)
+      .then((response) => {
+        if (response.status == '200') {
+          if (data != null) {
+            setShowNotiSuccess(true);
+            setShowNotiError(false);
+          } else {
+            setShowNotiError(true);
+            setShowNotiSuccess(false);
+          }
+        } else {
+          setShowNotiError(true);
+          setShowNotiSuccess(false);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
+
   return (
     // <LayoutOne>
     <AttendeeWrapper title="Attendee Home">
@@ -388,6 +459,14 @@ export default function MyAccount() {
                       </Card.Header>
                       <Card.Body>
                         <div className="account-details-form">
+                          <Alert
+                            show={showAccSaved}
+                            variant="success"
+                            onClose={() => setAccSaved(false)}
+                            dismissible
+                          >
+                            {accSuccess}
+                          </Alert>
                           <label>
                             Profile Picture &nbsp;
                             <OverlayTrigger
@@ -498,11 +577,23 @@ export default function MyAccount() {
                                   <span className="required"></span>
                                 </Form.Label>
                                 <DropdownMultiselect
-                                  options={["Automotive", "Business Support & Supplies", "Computers & Electronics", 
-                                            "Construction & Contractor", "Education", "Entertainment", "Food & Dining",
-                                            "Health & Medicine", "Home & Garden", "Legal & Financial", 
-                                            "Manufacturing, Wholesale, Distribution", "Merchants (Retail)", 
-                                            "Personal Care & Services", "Real Estate", "Travel & Transportation"]}
+                                  options={[
+                                    'Automotive',
+                                    'Business Support & Supplies',
+                                    'Computers & Electronics',
+                                    'Construction & Contractor',
+                                    'Education',
+                                    'Entertainment',
+                                    'Food & Dining',
+                                    'Health & Medicine',
+                                    'Home & Garden',
+                                    'Legal & Financial',
+                                    'Manufacturing, Wholesale, Distribution',
+                                    'Merchants (Retail)',
+                                    'Personal Care & Services',
+                                    'Real Estate',
+                                    'Travel & Transportation',
+                                  ]}
                                   selected={user?.categoryPreferences}
                                   handleOnChange={(selected) => {
                                     categoryPreferences = selected;
@@ -570,14 +661,6 @@ export default function MyAccount() {
                               </Col>
                             </Row>
                             <div>&nbsp;</div>
-                            <Alert
-                              show={showAccSaved}
-                              variant="success"
-                              onClose={() => setAccSaved(false)}
-                              dismissible
-                            >
-                              {accSuccess}
-                            </Alert>
                           </form>
                         </div>
                       </Card.Body>
@@ -590,40 +673,126 @@ export default function MyAccount() {
                       </Card.Header>
                       <Card.Body>
                         <div className="account-details-form">
-                          {/* <form
-                            id="notifcation-setting-form"
-                            onSubmit={handleSubmit(onSubmitNotification)}
+                          <form
+                            id="notification-setting-form"
+                            onSubmit={handleSubmit(onSubmitEmailNotification)}
                           >
-                            <Col className="form-group" md={12}>
-                              <Form>
-                                {['checkbox'].map((type) => (
-                                  <div key={default-${type}} className="mb-3">
-                                    <Form.Check
-                                      type={type}
-                                      id={default-${type}}
-                                      label={'Receive updates for upcoming events [need discuss eo receive what?]'}
-                                    />
+                            <Alert
+                              show={showNotiSuccess}
+                              variant="success"
+                              onClose={() => setShowNotiSuccess(false)}
+                              dismissible
+                            >
+                              {
+                                'You have sucessfully update your notification settings'
+                              }
+                            </Alert>
 
-                                    <Form.Check
-                                      type={type}
-                                      id={default-${type}}
-                                      label={default ${type}}
-                                    />
-                                  </div>
-                                ))}
-                              </Form>
-                            </Col>
-<Col>
-                              <button
-                                type="submit"
-                                className="btn btn-fill-out"
-                                name="submit"
-                                value="Submit"
+                            <Alert
+                              show={showNotiError}
+                              variant="success"
+                              onClose={() => setShowNotiError(false)}
+                              dismissible
+                            >
+                              {'An Error has occured'}
+                            </Alert>
+                            <Row>
+                              <Col className="form-group" lg={8} xs={6}></Col>
+                              <Col
+                                className="form-group"
+                                lg={2}
+                                xs={3}
+                                style={{ textAlign: 'center' }}
                               >
-                                Save
-                              </button>
-                            </Col>
-                          </form> */}
+                                Email
+                              </Col>
+                              {/* <Col
+                                className="form-group"
+                                lg={2}
+                                xs={3}
+                                style={{ textAlign: 'center' }}
+                              >
+                                System
+                              </Col> */}
+                            </Row>
+                            <Row>
+                              <Col className="form-group" lg={8} xs={6}>
+                                All notifications &nbsp;
+                                <OverlayTrigger
+                                  placement="right"
+                                  delay={{ show: 250, hide: 400 }}
+                                  overlay={renderAllNotiTooltip}
+                                >
+                                  <BsFillInfoCircleFill></BsFillInfoCircleFill>
+                                </OverlayTrigger>
+                              </Col>
+                              <Col
+                                className="form-group"
+                                lg={2}
+                                xs={3}
+                                style={{ textAlign: 'center' }}
+                              >
+                                {/* <Form.Check id="chkAllNotificationsEmail" /> */}
+                                <input
+                                  type="checkbox"
+                                  checked={allEmailNoti}
+                                  defaultChecked={user?.systemEmailNoti}
+                                  onChange={handleAllEmailNoti}
+                                />
+                              </Col>
+                              {/* <Col
+                                className="form-group"
+                                lg={2}
+                                xs={3}
+                                style={{ textAlign: 'center' }}
+                              >
+                                <Form.Check id="chkAllNotifications" />
+                              </Col> */}
+                            </Row>
+                            <Row>
+                              <Col className="form-group" lg={8} xs={6}>
+                                Event broadcasts from Event Organisers &nbsp;
+                                <OverlayTrigger
+                                  placement="right"
+                                  delay={{ show: 250, hide: 400 }}
+                                  overlay={renderEoEmailNotiTooltip}
+                                >
+                                  <BsFillInfoCircleFill></BsFillInfoCircleFill>
+                                </OverlayTrigger>
+                              </Col>
+                              <Col
+                                className="form-group"
+                                lg={2}
+                                xs={3}
+                                style={{ textAlign: 'center' }}
+                              >
+                                <input
+                                  type="checkbox"
+                                  checked={eoEventBroadcast}
+                                  defaultChecked={user?.eoEmailNoti}
+                                  onChange={handleEoEventBroadcast}
+                                />
+                                {/* <Form.Check id="chkEventBroadcastsEmail" /> */}
+                              </Col>
+                              {/* <Col
+                                className="form-group"
+                                lg={2}
+                                xs={3}
+                                style={{ textAlign: 'center' }}
+                              >
+                                <Form.Check id="chkEventBroadcasts" />
+                              </Col> */}
+                            </Row>
+
+                            <button
+                              type="submit"
+                              className="btn btn-fill-out"
+                              name="submit"
+                              value="Submit"
+                            >
+                              Save
+                            </button>
+                          </form>
                         </div>
                       </Card.Body>
                     </Card>
@@ -751,8 +920,9 @@ export default function MyAccount() {
           </Tab.Container>
         </Container>
       </div>
-      <div style={{display: "none"}}>
-        { //initialise categoryPreferences
+      <div style={{ display: 'none' }}>
+        {
+          //initialise categoryPreferences
           (categoryPreferences = user?.categoryPreferences)
         }
       </div>
