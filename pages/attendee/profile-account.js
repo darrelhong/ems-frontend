@@ -31,7 +31,7 @@ import {
 } from 'react-icons/io';
 
 import { useForm } from 'react-hook-form';
-//import useUser from '../../lib/query/useUser';
+import useUser from '../../lib/query/useUser';
 import { useMutation, useQueryClient } from 'react-query';
 import api from '../../lib/ApiClient';
 import { logout } from '../../lib/auth';
@@ -42,7 +42,7 @@ import 'react-credit-cards/es/styles-compiled.css';
 
 const MyAccount = () => {
   // const [setShowFailedMsg] = useState(false);
-  var categoryPreferences = [];
+  //var categoryPreferences = [];
   const [loginLoading, setLoginLoading] = useState(false);
 
   // const [fileUpload, setfileUpload] = useState(false);
@@ -51,32 +51,10 @@ const MyAccount = () => {
   const [fileName, setFileName] = useState('Choose image');
 
   //const { data: user } = useUser(localStorage.getItem('userId'));
-  const [user, setUser] = useState();
-  
+
   const [proficpicfile, setProfilePicFile] = useState('uploadprofilepicfile');
   const [profilepicUrl, setProfilepicUrl] = useState(null);
   const [ispicupdated, setIspicupdated] = useState(false);
-
-
-  const getUserData = async () => {
-    await getUser(localStorage.getItem('userId')).then((data) => {
-      console.log(data);
-      setUser(data);
-      setEoEventBroadcast(data.eoEmailNoti);
-      //setAllEmailNoti(data.systemEmailNoti);
-      if (data != undefined && data.paymentMethodId != null) {
-        console.log('getPay1');
-        getUserPayment();
-      }
-    });
-  };
-  useEffect(() => {
-    getUserData();
-
-    // if (user != undefined && user?.paymentMethodId != null) {
-    //   getUserPayment();
-    // }
-  }, []);
 
   //for modal of disabling account
   const [show, setShow] = useState(false);
@@ -116,6 +94,53 @@ const MyAccount = () => {
   const [number, setNumber] = useState('');
   const [expMth, setExpMth] = useState('');
   const [paymentMethod, setPaymentMethod] = useState(null);
+  const [user, setUser] = useState('');
+  //const { data: user } = useUser(localStorage.getItem('userId'));
+  const [categoryPreferences, setCategoryPreferences] = useState([]);
+  // useEffect(() => {
+  //   // if (user != undefined && user?.paymentMethodId != null) {
+  //   //   getUserPayment();
+  //   // }
+
+  //   const getUserData = async () => {
+  //     await getUser(localStorage.getItem('userId')).then((data) => {
+  //       console.log(data);
+  //       console.log(user);
+  //       if (user != undefined && data != undefined) {
+  //         console.log('hello');
+  //         //setUser(data);
+  //       }
+  //       setEoEventBroadcast(data.eoEmailNoti);
+  //       //setAllEmailNoti(data.systemEmailNoti);
+
+  //       if (data != undefined && data.paymentMethodId != null) {
+  //         console.log('getPay1');
+  //         getUserPayment();
+  //       }
+  //     });
+  //   };
+  //   getUserData();
+  // });
+
+  const getUserData = async () => {
+    await getUser(localStorage.getItem('userId')).then((data) => {
+      if (data != undefined) {
+        setUser(data);
+        setEoEventBroadcast(data.eoEmailNoti);
+      }
+      //setAllEmailNoti(data.systemEmailNoti);
+      if (data != undefined && data.paymentMethodId != null) {
+        getUserPayment();
+      }
+    });
+  };
+  useEffect(() => {
+    //console.log(user);
+    getUserData();
+    // if (user != undefined && user?.paymentMethodId != null) {
+    //   getUserPayment();
+    // }
+  }, []);
 
   const renderTooltip = (props) => (
     <Tooltip id="button-tooltip" {...props}>
@@ -343,7 +368,6 @@ const MyAccount = () => {
       });
   });
 
-
   const onSubmit = async (data) => {
     setLoginLoading(true);
     setAccSaved(false);
@@ -390,7 +414,6 @@ const MyAccount = () => {
       setFileName(e.target.files[0].name);
     }
   };
-
 
   const mutatePassword = useMutation((data) => {
     api
@@ -477,6 +500,14 @@ const MyAccount = () => {
       //systemEmailNoti: allEmailNoti,
       eoEmailNoti: eoEventBroadcast,
     });
+  };
+
+  const onPreferenceChange = async (selected) => {
+    // categoryPreferences = selected;
+    console.log('call on preference change');
+    console.log(selected);
+    setCategoryPreferences(selected);
+    console.log(categoryPreferences);
   };
 
   // const handleAllEmailNoti = async () => {
@@ -1048,11 +1079,9 @@ const MyAccount = () => {
                                         'Travel & Transportation',
                                       ]}
                                       selected={user?.categoryPreferences}
-                                      handleOnChange={(selected) => {
-                                        categoryPreferences = selected;
-                                        console.log(categoryPreferences);
-                                      }}
+                                      handleOnChange={onPreferenceChange}
                                       name="ddlCategoryPreferences"
+                                      optionalLabel="label"
                                     />
                                   </Col>
                                 </div>
@@ -1367,16 +1396,14 @@ const MyAccount = () => {
           </Tab.Container>
         </Container>
       </div>
-      <div style={{ display: 'none' }}>
-        user != null &&
-        {
+      {/* <div style={{ display: 'none' }}>
+        {user != null &&
           //initialise categoryPreferences
-          (categoryPreferences = user?.categoryPreferences)
-        }
-      </div>
+          (categoryPreferences = user?.categoryPreferences)}
+      </div> */}
     </AttendeeWrapper>
     //{' '}
-    //</LayoutOne>
+    //    </LayoutOne>
   );
 };
 export default MyAccount;
