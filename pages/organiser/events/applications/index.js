@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { BreadcrumbOne } from 'components/Breadcrumb';
 import PartnerWrapper from 'components/wrapper/PartnerWrapper';
 import { useState, useEffect } from 'react';
-import { getAllApplicationsForEvent } from "../../../../lib/query/eventApi"
+import { getSellerApplicationsForEO } from "../../../../lib/query/eventApi"
 import ApplicationCard from "../../../../components/events/registration/ApplicationCard"
 import { Container, Row, Col } from 'react-bootstrap';
 
@@ -12,16 +12,18 @@ export default function Applications() {
 
     // const { data: user } = useUser(localStorage.getItem('userId'));
     const [applications, setApplications] = useState([]);
+    const { data: user } = useUser(localStorage.getItem('userId'))
     const router = useRouter();
-    const { eid } = router.query;
 
     useEffect(() => {
-        const getApplications = async () => {
-            const data = await getAllApplicationsForEvent(eid);
-            setApplications(data);
+        if (user != null) {
+            const getApplications = async () => {
+                const data = await getSellerApplicationsForEO(user.id);
+                setApplications(data);
+            };
+            getApplications();
         }
-        getApplications();
-    }, []);
+    }, [user]);
 
     console.log(applications);
     return (
