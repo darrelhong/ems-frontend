@@ -3,7 +3,7 @@ import { Col } from "react-bootstrap";
 
 const ApplicationCard = ({ app }) => {
 
-    console.log(app);
+    // console.log(app);
     return (
         <Col lg={4} sm={6} className="space-mb--50">
             <div className="product-list">

@@ -14,18 +14,26 @@ export default function Applications() {
     const [applications, setApplications] = useState([]);
     const { data: user } = useUser(localStorage.getItem('userId'))
     const router = useRouter();
+    const { eid } = router.query
+    // console.log(eid)
 
     useEffect(() => {
         if (user != null) {
             const getApplications = async () => {
                 const data = await getSellerApplicationsForEO(user.id);
-                setApplications(data);
+                if (eid != null) {
+                    setApplications(data.filter((d) => d.event.eid == eid))
+                }
+                else {
+                    setApplications(data);
+                }
             };
             getApplications();
         }
-    }, [user]);
+    }, [user, eid]);
 
-    console.log(applications);
+    // console.log(applications);
+
     return (
         <PartnerWrapper title="Event Applications">
             <BreadcrumbOne pageTitle="View All Event Applications">
