@@ -95,14 +95,17 @@ const MyAccount = () => {
       setUser(data);
       setEoEventBroadcast(data.eoEmailNoti);
       setAllEmailNoti(data.systemEmailNoti);
+      if (data != undefined && data.paymentMethodId != null) {
+        getUserPayment();
+      }
     });
   };
   useEffect(() => {
     getUserData();
-    console.log(user);
-    if (user?.paymentMethodId != null) {
-      getUserPayment();
-    }
+
+    // if (user != undefined && user?.paymentMethodId != null) {
+    //   getUserPayment();
+    // }
   }, []);
 
   const renderAllNotiTooltip = (props) => (
