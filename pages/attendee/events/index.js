@@ -8,6 +8,7 @@ import { Alert, Col, Container, Row } from 'react-bootstrap';
 import { getEventsWithKeywordandSort } from 'lib/query/events';
 import useAttendeeFavouriteEvents from 'lib/query/useAttendeeFavouriteEvents';
 import { isFavouriteEvent } from 'lib/functions/isFavouriteEvent';
+import useEventCategories from 'lib/query/useEventCategories';
 
 import AttendeeWrapper from 'components/wrapper/AttendeeWrapper';
 import EventCard from 'components/events/partner/EventCard';
@@ -17,6 +18,7 @@ import CenterSpinner from 'components/custom/CenterSpinner';
 export default function AttendeeEvents() {
   const [sortBy, setSortBy] = useState();
   const [searchTerm, setSearchTerm] = useState('');
+  const [category, setCategory] = useState()
   const queryClient = useQueryClient();
   const {
     status,
@@ -25,19 +27,22 @@ export default function AttendeeEvents() {
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery(
-    ['events', sortBy?.sort, sortBy?.sortDir, searchTerm],
+    ['events', sortBy?.sort, sortBy?.sortDir, searchTerm, category],
     ({ pageParam = 0 }) =>
       getEventsWithKeywordandSort(
         pageParam,
         sortBy?.sort,
         sortBy?.sortDir,
-        searchTerm
+        searchTerm,
+        false,
+        category
       ),
     {
       getNextPageParam: (lastPage) =>
         lastPage.last ? false : lastPage.number + 1,
     }
   );
+
 
   const { data: favouriteEvents } = useAttendeeFavouriteEvents();
 
@@ -55,6 +60,12 @@ export default function AttendeeEvents() {
       default:
         setSortBy();
     }
+  };
+
+  const { data: eventCategories, isSuccess: eventCategoriesSuccess } = useEventCategories();
+
+  const handleCategoryChange = (e) => {
+    setCategory(e.target.value)
   };
 
   // search results automatically update, with debounced input
@@ -117,6 +128,13 @@ export default function AttendeeEvents() {
               <option value="date-asc">Most recent</option>
             </select>
           </Col>
+          {eventCategoriesSuccess &&
+            <Col xs={4} sm={3}>
+              <select className="custom-select" onChange={handleCategoryChange}>
+                <option value="">Categories</option>
+                {eventCategories.map((category, i) => <option key={i} value={category}>{category}</option>)}
+              </select>
+            </Col>}
         </Row>
         {status === 'loading' ? (
           <CenterSpinner />
