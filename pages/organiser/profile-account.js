@@ -238,8 +238,15 @@ const MyAccount = () => {
       console.log('delete');
       console.log(response);
       if (response.status == '200') {
-        getUserPayment();
         getUserData();
+        setShowcardinfoErrorMsg(false);
+        setCardinfoSucessMsg(false);
+        setCvc('');
+        setExpiry('');
+        setFocus('');
+        setName('');
+        setNumber('');
+        setExpMth('');
       }
     })
   );
@@ -559,11 +566,11 @@ const MyAccount = () => {
                       <IoIosDocument /> Business Verification
                     </Nav.Link>
                   </Nav.Item>
-                  <Nav.Item>
+                  {/* <Nav.Item>
                     <Nav.Link eventKey="notification">
                       <IoIosCash /> Notification
                     </Nav.Link>
-                  </Nav.Item>
+                  </Nav.Item> */}
                   <Nav.Item>
                     <Nav.Link eventKey="accountStatus">
                       <IoIosRadioButtonOn /> Account Status

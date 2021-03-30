@@ -69,7 +69,7 @@ const MyAccount = () => {
   const [ispicupdated, setIspicupdated] = useState(false);
 
   //Email Notification Setting
-  const [allEmailNoti, setAllEmailNoti] = useState();
+  //const [allEmailNoti, setAllEmailNoti] = useState();
   const [eoEventBroadcast, setEoEventBroadcast] = useState();
   const [showNotiSuccess, setShowNotiSuccess] = useState(false);
   const [showNotiError, setShowNotiError] = useState(false);
@@ -94,7 +94,7 @@ const MyAccount = () => {
     await getUser(localStorage.getItem('userId')).then((data) => {
       setUser(data);
       setEoEventBroadcast(data.eoEmailNoti);
-      setAllEmailNoti(data.systemEmailNoti);
+      //setAllEmailNoti(data.systemEmailNoti);
       if (data != undefined && data.paymentMethodId != null) {
         getUserPayment();
       }
@@ -246,8 +246,15 @@ const MyAccount = () => {
       console.log('delete');
       console.log(response);
       if (response.status == '200') {
-        getUserPayment();
         getUserData();
+        setShowcardinfoErrorMsg(false);
+        setCardinfoSucessMsg(false);
+        setCvc('');
+        setExpiry('');
+        setFocus('');
+        setName('');
+        setNumber('');
+        setExpMth('');
       }
     })
   );
@@ -260,20 +267,20 @@ const MyAccount = () => {
 
   const onSubmitEmailNotification = async () => {
     mutateEmailNotiSetting.mutate({
-      systemEmailNoti: allEmailNoti,
+      //systemEmailNoti: allEmailNoti,
       eoEmailNoti: eoEventBroadcast,
     });
   };
 
-  const handleAllEmailNoti = async () => {
-    console.log('check handleAllEmailNoti');
+  // const handleAllEmailNoti = async () => {
+  //   console.log('check handleAllEmailNoti');
 
-    if (allEmailNoti == true) {
-      setAllEmailNoti(false);
-    } else if (allEmailNoti == false) {
-      setAllEmailNoti(true);
-    }
-  };
+  //   if (allEmailNoti == true) {
+  //     setAllEmailNoti(false);
+  //   } else if (allEmailNoti == false) {
+  //     setAllEmailNoti(true);
+  //   }
+  // };
 
   const handleEoEventBroadcast = async () => {
     console.log('check handleEoEventBroadcast');
@@ -1165,7 +1172,7 @@ const MyAccount = () => {
                                 System
                               </Col> */}
                             </Row>
-                            <Row>
+                            {/* <Row>
                               <Col className="form-group" lg={8} xs={6}>
                                 All notifications &nbsp;
                                 <OverlayTrigger
@@ -1183,14 +1190,14 @@ const MyAccount = () => {
                                 style={{ textAlign: 'center' }}
                               >
                                 {/* <Form.Check id="chkAllNotificationsEmail" /> */}
-                                <input
+                            {/* <input
                                   type="checkbox"
                                   checked={allEmailNoti}
                                   // defaultChecked={user?.systemEmailNoti}
                                   onChange={handleAllEmailNoti}
                                 />
-                              </Col>
-                              {/* <Col
+                              </Col> */}
+                            {/* <Col
                                 className="form-group"
                                 lg={2}
                                 xs={3}
@@ -1198,7 +1205,7 @@ const MyAccount = () => {
                               >
                                 <Form.Check id="chkAllNotifications" />
                               </Col> */}
-                            </Row>
+                            {/* </Row> */}
                             <Row>
                               <Col className="form-group" lg={8} xs={6}>
                                 Event broadcasts from Event Organisers &nbsp;
