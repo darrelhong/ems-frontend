@@ -97,30 +97,6 @@ const MyAccount = () => {
   const [user, setUser] = useState('');
   //const { data: user } = useUser(localStorage.getItem('userId'));
   const [categoryPreferences, setCategoryPreferences] = useState([]);
-  // useEffect(() => {
-  //   // if (user != undefined && user?.paymentMethodId != null) {
-  //   //   getUserPayment();
-  //   // }
-
-  //   const getUserData = async () => {
-  //     await getUser(localStorage.getItem('userId')).then((data) => {
-  //       console.log(data);
-  //       console.log(user);
-  //       if (user != undefined && data != undefined) {
-  //         console.log('hello');
-  //         //setUser(data);
-  //       }
-  //       setEoEventBroadcast(data.eoEmailNoti);
-  //       //setAllEmailNoti(data.systemEmailNoti);
-
-  //       if (data != undefined && data.paymentMethodId != null) {
-  //         console.log('getPay1');
-  //         getUserPayment();
-  //       }
-  //     });
-  //   };
-  //   getUserData();
-  // });
 
   const getUserData = async () => {
     await getUser(localStorage.getItem('userId')).then((data) => {
