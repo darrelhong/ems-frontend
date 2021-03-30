@@ -13,15 +13,25 @@ import {
 // import EventEoProfileSliderTen from './ProductSlider/EventEoProfileSliderTen';
 import { store } from 'react-notifications-component';
 const FollowersTabEoProfile = ({ attendees, partners, showPublicView, organiser,  showEoView }) => {
-
+const [message, setMessage] = useState('');
   const [broadcastModalShow, setBroadcastModalShow] = useState(false);
-  const closeBroadcastModal = () => setBroadcastModalShow(false);
+  const closeBroadcastModal = () => {setBroadcastModalShow(false); setMessage("null");}
   const openBroadcastModal = () => setBroadcastModalShow(true);
-
+  const [errorMessage, setErrorMessage] = useState('')
   const [confirmBroadcastModalShow, setConfirmBroadcastModalShow] = useState(false);
   const closeConfirmBroadcastModal = () => {setConfirmBroadcastModalShow(false);setBroadcastModalShow(true);}
-  const openConfirmBroadcastModal = () => {setConfirmBroadcastModalShow(true); setBroadcastModalShow(false);}
-  const [message, setMessage] = useState('');
+  const openConfirmBroadcastModal = () => {
+    
+    if(message === "" || (checkAttendee == false && checkPartner ==false)){
+      setErrorMessage("Please ensure that all fields are filled.");
+      
+    }else{
+      setErrorMessage("null");
+      setConfirmBroadcastModalShow(true); 
+    setBroadcastModalShow(false);
+    }
+  }
+  
 
   // var checkAttendee;
   // var checkPartner;
@@ -155,6 +165,7 @@ store.addNotification({
               </Button>
               <Button
                 variant="primary"
+                className="btnView btn-primary"
                 onClick={sendNoti}
               >
                 Yes
@@ -182,8 +193,10 @@ store.addNotification({
               name="broadcastMessage"
               id="broadcastMessage"
               placeholder="Type your message here..."
+              defaultValue={message}
               style={{ width: "100%", height: "10em" }}
               onChange={handleMessage}
+              
             />
             <div style={{ display: "flex" }}>
               <div style={{ display: "flex", width: "50%" }}>
@@ -191,17 +204,21 @@ store.addNotification({
                 onClick={handlePartner.bind(
                                         this)}
                 />
-                <label htmlFor="chkBusinessPartner" >
+                {partners.length > 0 && (<label htmlFor="chkBusinessPartner" >
                   All Business Partners
-                </label>
+                </label>) }
               </div>
               <div style={{ display: "flex", width: "50%" }}>
                 <Form.Check id="chkAttendee" onClick={handleAttendee.bind(
                                         this)}/>
-                <label htmlFor="chkAttendee" >
+                {attendees.length > 0 && (<label htmlFor="chkAttendee" >
                   All Attendees
-                </label>
+                </label>) }
+                
               </div>
+            </div>
+            <div className="error">
+              {errorMessage != "null" && <span>{errorMessage}</span>}
             </div>
           </Modal.Body>
           <Modal.Footer>
@@ -210,6 +227,7 @@ store.addNotification({
             </Button>
             <Button
               variant="primary"
+              className="btnView btn-primary"
               onClick={() => openConfirmBroadcastModal()}
             >
               Proceed
@@ -229,7 +247,7 @@ store.addNotification({
               <Nav.Item>
                 <Nav.Link eventKey="partners">Partner</Nav.Link>
               </Nav.Item>
-              {showEoView && !showPublicView && <button
+              {showEoView && !showPublicView && attendees.length>0 && partners.length > 0 && <button
                 className="btn btn-fill-out btn-sm"
                 style={{ float: "right" }}
                 onClick={() => openBroadcastModal()}

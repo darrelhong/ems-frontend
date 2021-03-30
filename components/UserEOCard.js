@@ -49,7 +49,7 @@ export default function UserEOCard({ partner, user, handleMarkVip, CheckVip }) {
           <Badge variant="primary">{partner?.businessCategory}</Badge>
         </Card.Text>) }
         {partner?.businessCategory == null && (<Card.Text >
-        
+          There is no category.
         </Card.Text>) }
         
         {isVip && (
@@ -62,7 +62,7 @@ export default function UserEOCard({ partner, user, handleMarkVip, CheckVip }) {
           <Card.Text>
             {' '}
             <button
-              className="view btn-outline-primary btn-sm"
+              className="view btn-outline-primaryTest btn-sm"
               type="button"
               onClick={() => addVip(partner)}
             >
