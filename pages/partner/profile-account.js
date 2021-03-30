@@ -30,11 +30,14 @@ import {
 } from 'react-icons/io';
 
 import { useForm } from 'react-hook-form';
-import { getUser } from '../../lib/query/getUser';
+import { getUser, getUserPaymentMethod } from '../../lib/query/getUser';
 import { useMutation, useQueryClient } from 'react-query';
 import api from '../../lib/ApiClient';
 import { logout } from '../../lib/auth';
 
+// cards
+import Cards from 'react-credit-cards';
+import 'react-credit-cards/es/styles-compiled.css';
 const MyAccount = () => {
   const [businessCategory, setBusinessCategory] = useState('');
   const [loginLoading, setLoginLoading] = useState(false);
@@ -71,6 +74,37 @@ const MyAccount = () => {
   const [showNotiSuccess, setShowNotiSuccess] = useState(false);
   const [showNotiError, setShowNotiError] = useState(false);
 
+  // for card modal
+  const [showCardModal, setShowCardModal] = useState(false);
+  const handleCloseCardModal = () => setShowCardModal(false);
+
+  // for payment api
+  const [cardinfoSucessMsg, setCardinfoSucessMsg] = useState(false);
+  const [showcardinfoErrorMsg, setShowcardinfoErrorMsg] = useState('');
+  const [cardinfoErrorMsg, setCardErrorMsg] = useState(false);
+  const [cvc, setCvc] = useState('');
+  const [expiry, setExpiry] = useState('');
+  const [focus, setFocus] = useState('');
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
+  const [expMth, setExpMth] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState(null);
+
+  const getUserData = async () => {
+    await getUser(localStorage.getItem('userId')).then((data) => {
+      setUser(data);
+      setEoEventBroadcast(data.eoEmailNoti);
+      setAllEmailNoti(data.systemEmailNoti);
+    });
+  };
+  useEffect(() => {
+    getUserData();
+    console.log(user);
+    if (user?.paymentMethodId != null) {
+      getUserPayment();
+    }
+  }, []);
+
   const renderAllNotiTooltip = (props) => (
     <Tooltip id="button-tooltip" {...props}>
       Notification includes Enquiry
@@ -82,17 +116,144 @@ const MyAccount = () => {
       Notification includes message from event organiser
     </Tooltip>
   );
+  const getUserPayment = async () => {
+    await getUserPaymentMethod().then((data) => {
+      console.log(data);
+      setPaymentMethod(data);
+    });
+  };
 
-  useEffect(() => {
-    const getUserData = async () => {
-      await getUser(localStorage.getItem('userId')).then((data) => {
-        setUser(data);
-        setEoEventBroadcast(data.eoEmailNoti);
-        setAllEmailNoti(data.systemEmailNoti);
+  const handleNameInputFocus = (e) => {
+    setFocus(e.target.cardholdername);
+  };
+
+  const handleCardnumberInputFocus = (e) => {
+    setFocus(e.target.cardnumber);
+  };
+
+  const handleExpMthInputFocus = (e) => {
+    setFocus(e.target.expMth);
+  };
+  const handleExpYearInputFocus = (e) => {
+    setFocus(e.target.expYear);
+  };
+  const handleCvcInputFocus = (e) => {
+    setFocus(e.target.cvc);
+  };
+  const handleNameInputChange = (e) => {
+    //cardholdername: data.cardholdername,
+    // cardnumber: data.cardnumber,
+    // expMth: data.expMth,
+    // expYear: data.expYear,
+    // cvc: data.cvc,
+    const { cardholdername, value } = e.target;
+    setName(value);
+  };
+  const handleCardNumberInputChange = (e) => {
+    const { cardnumber, value } = e.target;
+    setNumber(value);
+  };
+
+  const handleExpYearInputChange = (e) => {
+    const { expYr, value } = e.target;
+    console.log('value');
+    console.log(value);
+    setExpiry(expMth + value);
+  };
+  const handleExpMthInputChange = (e) => {
+    const { expDate, value } = e.target;
+    setExpMth(value);
+  };
+  const handleCvcInputChange = (e) => {
+    const { cvc, value } = e.target;
+    setCvc(value);
+  };
+
+  const onSubmitCardPaymentMethod = async (data) => {
+    console.log('submit card payment');
+    console.log(data);
+    setShowcardinfoErrorMsg(false);
+    setCardinfoSucessMsg(false);
+    setLoginLoading(true);
+    mutateCardPaymentMethod.mutate({
+      cardholdername: data.cardholdername,
+      cardnumber: data.cardnumber,
+      expMth: data.expMth,
+      expYear: data.expYear,
+      cvc: data.cvc,
+    });
+  };
+
+  const mutateCardPaymentMethod = useMutation((data) => {
+    console.log('data');
+    console.log(data);
+    api
+      .post(`/api/user/addCardPayment`, data, {
+        onSuccess: () => {
+          // queryClient.invalidateQueries(['user', user?.id.toString()]);
+          // logout({ redirectTo: '/organiser/login' });
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        if (response.status == 200) {
+          setLoginLoading(false);
+          console.log(response.data.message);
+          var message = response.data.message;
+          if (message.includes('incorrect_number')) {
+            setCardErrorMsg('Your card number is incorrect');
+            setCardinfoSucessMsg(false);
+            setShowcardinfoErrorMsg(true);
+          } else if (message.includes('invalid_expiry_year')) {
+            setCardErrorMsg("Your card's expiration year is invalid.");
+            setCardinfoSucessMsg(false);
+            setShowcardinfoErrorMsg(true);
+          } else if (message.includes('invalid_expiry_month')) {
+            setCardErrorMsg("Your card's expiration month is invalid.");
+            setCardinfoSucessMsg(false);
+            setShowcardinfoErrorMsg(true);
+          } else if (message.includes('invalid_cvc')) {
+            setCardErrorMsg("Your card's security code is invalid.");
+            setCardinfoSucessMsg(false);
+            setShowcardinfoErrorMsg(true);
+          } else if (message == 'success_added') {
+            setShowcardinfoErrorMsg(false);
+            setCardinfoSucessMsg(true);
+            getUserPayment();
+            getUserData();
+            //document.getElementById('payment-method-form').reset();
+          } else if (message == 'dbError') {
+            setCardErrorMsg('An error has occured');
+            setCardinfoSucessMsg(false);
+            setShowcardinfoErrorMsg(true);
+          } else {
+            setCardErrorMsg('An error has occured');
+            setCardinfoSucessMsg(false);
+            setShowcardinfoErrorMsg(true);
+          }
+        }
+      })
+      .catch((error) => {
+        console.log(error);
       });
-    };
-    getUserData();
-  }, []);
+  });
+
+  const mutatePaymentCard = useMutation(() =>
+    api.post(`/api/user/deleteCardPayment`).then((response) => {
+      console.log('delete');
+      console.log(response);
+      if (response.status == '200') {
+        getUserPayment();
+        getUserData();
+      }
+    })
+  );
+
+  const handleDeleteCard = async () => {
+    mutatePaymentCard.mutate();
+    // close the modal once yes click.
+    setShowCardModal(false);
+  };
 
   const onSubmitEmailNotification = async () => {
     mutateEmailNotiSetting.mutate({
@@ -354,6 +515,23 @@ const MyAccount = () => {
         </Modal.Footer>
       </Modal>
 
+      <Modal show={showCardModal} onHide={handleCloseCardModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmation</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete the payment method?
+        </Modal.Body>
+        <Modal.Footer>
+          <button className="btn btn-fill-out btn" onClick={handleDeleteCard}>
+            Yes
+          </button>
+          <Button variant="secondary" onClick={handleCloseCardModal}>
+            No
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
       <BreadcrumbOne pageTitle="My Account">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
@@ -405,12 +583,234 @@ const MyAccount = () => {
                   <Tab.Pane eventKey="payment">
                     <Card className="my-account-content__content">
                       <Card.Header>
-                        <h3>Payment Method</h3>
+                        <h3>Card Payment Method</h3>
                       </Card.Header>
                       <Card.Body>
-                        <p className="saved-message">
-                          {"You Can't Saved Your Payment Method yet."}
-                        </p>
+                        {user?.paymentMethodId == null && (
+                          <div className="account-details-form">
+                            <form
+                              id="payment-method-form"
+                              onSubmit={handleSubmit(onSubmitCardPaymentMethod)}
+                            >
+                              <div
+                                style={{
+                                  display: cardinfoSucessMsg ? 'block' : 'none',
+                                }}
+                              >
+                                {
+                                  <Alert
+                                    show={cardinfoSucessMsg}
+                                    variant="success"
+                                    onClose={() => setCardinfoSucessMsg(false)}
+                                    dismissible
+                                  >
+                                    {' '}
+                                    Card Added Sucessfully{' '}
+                                  </Alert>
+                                }
+                              </div>
+                              <div
+                                style={{
+                                  display: showcardinfoErrorMsg
+                                    ? 'block'
+                                    : 'none',
+                                }}
+                              >
+                                {
+                                  <Alert
+                                    show={showcardinfoErrorMsg}
+                                    variant="danger"
+                                    onClose={() =>
+                                      setShowcardinfoErrorMsg(false)
+                                    }
+                                    dismissible
+                                  >
+                                    {' '}
+                                    {cardinfoErrorMsg}{' '}
+                                  </Alert>
+                                }
+                              </div>
+                              <Row>
+                                <Cards
+                                  cvc={cvc}
+                                  expiry={expiry}
+                                  focused={focus}
+                                  name={name}
+                                  number={number}
+                                />
+
+                                <Col className="form-group" md={12}>
+                                  <br></br>
+                                  <label>
+                                    Card Holder Name{' '}
+                                    <span className="required">*</span>
+                                  </label>
+                                  <input
+                                    required
+                                    className="form-control"
+                                    name="cardholdername"
+                                    type="text"
+                                    placeholder="Name"
+                                    ref={register()}
+                                    onChange={handleNameInputChange}
+                                    onFocus={handleNameInputFocus}
+                                  />
+                                </Col>
+                                <Col className="form-group" md={12}>
+                                  <label>
+                                    Card Number{' '}
+                                    <span className="required">*</span>
+                                  </label>
+                                  <input
+                                    required
+                                    className="form-control"
+                                    name="cardnumber"
+                                    type="text"
+                                    placeholder="Enter card number"
+                                    // pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                                    // title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                                    maxLength="16"
+                                    ref={register()}
+                                    onChange={handleCardNumberInputChange}
+                                    onFocus={handleCardnumberInputFocus}
+                                  />
+                                </Col>
+                              </Row>
+
+                              <Row>
+                                <Col className="form-group" md={4}>
+                                  <label>
+                                    Expiry Month
+                                    <span className="required">*</span>
+                                  </label>
+                                  <input
+                                    required
+                                    className="form-control"
+                                    name="expMth"
+                                    type="text"
+                                    placeholder="Eg. 01"
+                                    maxLength="2"
+                                    ref={register()}
+                                    onChange={handleExpMthInputChange}
+                                    onFocus={handleExpMthInputFocus}
+                                  />
+                                </Col>
+                                <Col className="form-group" md={4}>
+                                  <label>
+                                    Expiry Year
+                                    <span className="required">*</span>
+                                  </label>
+                                  <input
+                                    required
+                                    className="form-control"
+                                    name="expYear"
+                                    type="text"
+                                    placeholder="Eg.23"
+                                    maxLength="2"
+                                    ref={register()}
+                                    onChange={handleExpYearInputChange}
+                                    onFocus={handleExpYearInputFocus}
+                                  />
+                                </Col>
+                                <Col className="form-group" md={4}>
+                                  <label>
+                                    CVC
+                                    <span className="required">*</span>
+                                  </label>
+                                  <input
+                                    required
+                                    className="form-control"
+                                    name="cvc"
+                                    type="text"
+                                    placeholder="CVC"
+                                    maxLength="3"
+                                    ref={register()}
+                                    onChange={handleCvcInputChange}
+                                    onFocus={handleCvcInputFocus}
+                                  />
+                                </Col>
+                              </Row>
+                              <Row>
+                                <Col>
+                                  <ButtonWithLoading
+                                    type="submit"
+                                    className="btn btn-fill-out"
+                                    name="submit"
+                                    value="Submit"
+                                    isLoading={loginLoading}
+                                  >
+                                    Submit
+                                  </ButtonWithLoading>
+                                  {/* <button
+                                type="submit"
+                                className="btn btn-fill-out"
+                                name="submit"
+                                value="Submit"
+                              >
+                                Save
+                              </button> */}
+                                </Col>
+                              </Row>
+                            </form>
+                          </div>
+                        )}
+
+                        {user?.paymentMethodId != null &&
+                          paymentMethod != null &&
+                          paymentMethod.card != null &&
+                          paymentMethod.card.brand != null &&
+                          paymentMethod.card.brand == 'visa' && (
+                            <div className="account-details-form">
+                              <Cards
+                                cvc={'***'}
+                                expiry={expiry}
+                                focused={focus}
+                                name={'LIN LILI'}
+                                number={
+                                  '4***********' + paymentMethod.card.last4
+                                }
+                                preview={true}
+                              />
+                              <br></br>
+                              <ButtonWithLoading
+                                type="submit"
+                                className="btn btn-fill-out"
+                                name="deleteCard"
+                                isLoading={loginLoading}
+                                onClick={() => setShowCardModal(true)}
+                              >
+                                Delete Payment Method
+                              </ButtonWithLoading>
+                            </div>
+                          )}
+                        {user?.paymentMethodId != null &&
+                          paymentMethod != null &&
+                          paymentMethod.card != null &&
+                          paymentMethod.card.brand != null &&
+                          paymentMethod.card.brand == 'mastercard' && (
+                            <div className="account-details-form">
+                              <Cards
+                                cvc={'***'}
+                                expiry={expiry}
+                                focused={focus}
+                                name={paymentMethod.billing_details.name}
+                                number={
+                                  '5***********' + paymentMethod.card.last4
+                                }
+                                preview={true}
+                              />
+                              <br></br>
+                              <ButtonWithLoading
+                                type="submit"
+                                className="btn btn-fill-out"
+                                name="deleteCard"
+                                isLoading={loginLoading}
+                                onClick={() => setShowCardModal(true)}
+                              >
+                                Delete Payment Method
+                              </ButtonWithLoading>
+                            </div>
+                          )}
                       </Card.Body>
                     </Card>
                   </Tab.Pane>
