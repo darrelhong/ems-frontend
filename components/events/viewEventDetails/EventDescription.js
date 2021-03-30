@@ -217,6 +217,30 @@ const EventDescription = ({
           </Modal.Title>
         </Modal.Header>
         <Modal.Body style={{display: "flex", flexDirection: "column", gap: "5px"}} >
+          <Alert
+            show={showRecipientError}
+            variant="danger"
+            onClose={() => setRecipientError(false)}
+            dismissible
+          >
+            No recipients selected.
+          </Alert>
+          <Alert
+            show={showBroadcastError}
+            variant="danger"
+            onClose={() => setBroadcastError(false)}
+            dismissible
+          >
+            Please fill in all the fields.
+          </Alert>
+          <Alert
+            show={showBroadcastSuccess}
+            variant="success"
+            onClose={() => setBroadcastSuccess(false)}
+            dismissible
+          >
+            Broadcast sent!
+          </Alert>
           <input
             required
             className="form-control"
@@ -248,30 +272,6 @@ const EventDescription = ({
               </label>
             </div>
           </div>
-          <Alert
-            show={showRecipientError}
-            variant="danger"
-            onClose={() => setRecipientError(false)}
-            dismissible
-          >
-            No recipients selected.
-          </Alert>
-          <Alert
-            show={showBroadcastError}
-            variant="danger"
-            onClose={() => setBroadcastError(false)}
-            dismissible
-          >
-            Please fill in all the fields.
-          </Alert>
-          <Alert
-            show={showBroadcastSuccess}
-            variant="success"
-            onClose={() => setBroadcastSuccess(false)}
-            dismissible
-          >
-            Broadcast sent!
-          </Alert>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={closeBroadcastModal}>

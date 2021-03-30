@@ -666,6 +666,22 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
                 <CardBody className="d-flex justify-content-center">
                   <Row className="w-100 d-flex justify-content-center">
                     <Col xs={12} lg={6} className="d-flex flex-column" style={{gap: "10px"}}>
+                      <Alert
+                        show={showEnquiryError}
+                        variant="danger"
+                        onClose={() => setEnquiryError(false)}
+                        dismissible
+                      >
+                        Please fill in all the required fields.
+                      </Alert>
+                      <Alert
+                        show={showEnquirySuccess}
+                        variant="success"
+                        onClose={() => setEnquirySuccess(false)}
+                        dismissible
+                      >
+                        Success! A copy of the enquiry has been sent to your email.
+                      </Alert>
                       <input
                         id="enquiryTitle"
                         className="form-control"
@@ -692,22 +708,6 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
                         placeholder="Your Enquiry *"
                         style={{height: "10em"}}
                       />
-                      <Alert
-                        show={showEnquiryError}
-                        variant="danger"
-                        onClose={() => setEnquiryError(false)}
-                        dismissible
-                      >
-                        Please fill in all the required fields.
-                      </Alert>
-                      <Alert
-                        show={showEnquirySuccess}
-                        variant="success"
-                        onClose={() => setEnquirySuccess(false)}
-                        dismissible
-                      >
-                        Success! A copy of the enquiry has been sent to your email.
-                      </Alert>
                       <ButtonWithLoading
                         className="btn btn-fill-out"
                         onClick={() => sendEnquiry()}

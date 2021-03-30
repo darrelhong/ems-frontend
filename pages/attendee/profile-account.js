@@ -33,8 +33,10 @@ import useUser from '../../lib/query/useUser';
 import { useMutation, useQueryClient } from 'react-query';
 import api from '../../lib/ApiClient';
 import { logout } from '../../lib/auth';
+import ButtonWithLoading from '../../components/custom/ButtonWithLoading';
 
 export default function MyAccount() {
+  const [saveAccLoading, setSaveAccLoading] = useState(false);
   const [setShowFailedMsg] = useState(false);
   var categoryPreferences = [];
 
@@ -111,15 +113,24 @@ export default function MyAccount() {
       .then(() => {
         setAccSaved(true);
         setAccSuccess(' Account details saved successfully! ');
+        setSaveAccLoading(false);
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: 'smooth'
+        });
         //document.getElementById("account-details-form").reset();
       })
       .catch((error) => {
+        setSaveAccLoading(false);
         console.log(error);
       })
   );
 
   const onSubmit = async (data) => {
     console.log('data acc' + data['name']);
+
+    setSaveAccLoading(true);
     if (!compareArrays(user?.categoryPreferences, categoryPreferences)) {
       console.log(categoryPreferences);
       mutateAccDetail.mutate({
@@ -146,6 +157,9 @@ export default function MyAccount() {
         id: user?.id,
         categoryPreferences: user?.categoryPreferences,
       });
+    }
+    else {
+      setSaveAccLoading(false);
     }
     if (fileUpload == true) {
       submitFile();
@@ -392,6 +406,14 @@ export default function MyAccount() {
                         <h3>Account Details</h3>
                       </Card.Header>
                       <Card.Body>
+                        <Alert
+                          show={showAccSaved}
+                          variant="success"
+                          onClose={() => setAccSaved(false)}
+                          dismissible
+                        >
+                          {accSuccess}
+                        </Alert>
                         <div className="account-details-form">
                           <label>
                             Profile Picture &nbsp;
@@ -564,25 +586,18 @@ export default function MyAccount() {
                               </Col>
 
                               <Col md={12}>
-                                <button
+                                <ButtonWithLoading
                                   type="submit"
                                   className="btn btn-fill-out"
                                   name="submit"
                                   value="Submit"
+                                  isLoading={saveAccLoading}
                                 >
                                   Save
-                                </button>
+                                </ButtonWithLoading>
                               </Col>
                             </Row>
                             <div>&nbsp;</div>
-                            <Alert
-                              show={showAccSaved}
-                              variant="success"
-                              onClose={() => setAccSaved(false)}
-                              dismissible
-                            >
-                              {accSuccess}
-                            </Alert>
                           </form>
                         </div>
                       </Card.Body>
