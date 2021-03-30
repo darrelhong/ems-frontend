@@ -6,9 +6,9 @@ import { connect } from 'react-redux';
 import { IoIosSearch, IoIosMenu } from 'react-icons/io';
 import { AiOutlineShoppingCart } from 'react-icons/ai';
 import OrganiserHeaderTop from './OrganiserHeaderTop';
-import Navigation from './elements/Navigation';
+import NavigationEvntOrg from './elements/NavigationEvntOrg';
 import SearchOverlay from './elements/SearchOverlay';
-import MobileMenu from './elements/MobileMenu';
+import MobileMenuEvntOrg from './elements/MobileMenuEvntOrg';
 import MiniCart from './elements/MiniCart';
 
 const HeaderOne = ({ cartItems, navPositionClass }) => {
@@ -65,7 +65,7 @@ const HeaderOne = ({ cartItems, navPositionClass }) => {
               </Link>
 
               {/* navigation */}
-              <Navigation positionClass={navPositionClass} />
+              <NavigationEvntOrg positionClass={navPositionClass} />
 
               {/* icons */}
               <ul className="header-icons d-flex">

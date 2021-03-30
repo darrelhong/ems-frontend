@@ -24,7 +24,7 @@ export default function LoginPage({
   const { register, handleSubmit } = useForm();
 
   return (
-    <LayoutOne>
+    <GuestWrapper>
       <Head>
         <title>{heading}</title>
       </Head>
@@ -145,7 +145,7 @@ export default function LoginPage({
           </Row>
         </Container>
       </div>
-    </LayoutOne>
+    </GuestWrapper>
   );
 }
 

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { LayoutOne } from '../layouts';
+import GuestWrapper from '../components/wrapper/GuestWrapper';
 import { BreadcrumbOne } from '../components/Breadcrumb';
 import { Container, Row, Col } from 'react-bootstrap';
 import { FaFacebookF, FaGooglePlusG } from 'react-icons/fa';
@@ -22,7 +22,7 @@ export default function LoginPage({
   };
 
   return (
-    <LayoutOne>
+    <GuestWrapper>
       {/* breadcrumb */}
       <BreadcrumbOne pageTitle="Login">
         <ol className="breadcrumb justify-content-md-end">
@@ -126,7 +126,7 @@ export default function LoginPage({
           </Row>
         </Container>
       </div>
-    </LayoutOne>
+    </GuestWrapper>
   );
 }
 

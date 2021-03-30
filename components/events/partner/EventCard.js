@@ -16,16 +16,28 @@ import {
   AiOutlineNotification,
 } from 'react-icons/ai';
 export default function EventCard({ event }) {
+  const [errorMessage, setErrorMessage] = useState('')
 
   const [reviewModalShow, setReviewModalShow] = useState(false);
-  const closeReviewModal = () => {setReviewModalShow(false); setRating(0);}
+  const closeReviewModal = () => {setReviewModalShow(false); setRating(0); setErrorMessage("null"); setMessage("");}
   const openReviewModal = () => setReviewModalShow(true);
-
-  const [confirmReviewModalShow, setConfirmReviewModalShow] = useState(false);
-  const closeConfirmReviewModal = () => { setConfirmReviewModalShow(false); setReviewModalShow(true);}
-  const openConfirmReviewModal = () => { setConfirmReviewModalShow(true); setReviewModalShow(false); }
   const [message, setMessage] = useState('');
   const [rating, setRating] = useState(0);
+  const [confirmReviewModalShow, setConfirmReviewModalShow] = useState(false);
+  const closeConfirmReviewModal = () => { setConfirmReviewModalShow(false); setReviewModalShow(true);}
+  const openConfirmReviewModal = () => { 
+    if(message === ""){
+      setErrorMessage("Please ensure that all fields are filled.");
+      
+    }else{
+      setErrorMessage("null"); 
+      setConfirmReviewModalShow(true);
+     setReviewModalShow(false); 
+     
+    }
+   
+    }
+
 
     const[user, setUser] = useState();
     const[role, setRole] = useState('');
@@ -183,6 +195,10 @@ export default function EventCard({ event }) {
       
     
     </div> */}
+
+<div className="error">
+              {errorMessage != "null" && <span>{errorMessage}</span>}
+            </div>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={closeReviewModal}>
@@ -190,6 +206,7 @@ export default function EventCard({ event }) {
     </Button>
           <Button
             variant="primary"
+            className="btnView"
             onClick={() => openConfirmReviewModal()}
           >
             Proceed
@@ -213,7 +230,7 @@ export default function EventCard({ event }) {
           <Card.Text>
             {' '}
             <button
-              className="btn btn-outline-primary btn-sm"
+              className="view btn-outline-primary btn-sm"
               type="button"
               onClick={() => openReviewModal()}
             >

@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { IoIosSearch, IoIosMenu } from 'react-icons/io';
 import { AiOutlineShoppingCart } from 'react-icons/ai';
 import PartnerHeaderTop from './PartnerHeaderTop';
-import Navigation from './elements/Navigation';
+import NavigationPartner from './elements/NavigationPartner';
 import SearchOverlay from './elements/SearchOverlay';
 import MobileMenuPartner from './elements/MobileMenuPartner';
 import Head from 'next/head';

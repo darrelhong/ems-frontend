@@ -1,17 +1,17 @@
 import { Fragment } from 'react';
 
-// import { connect } from "react-redux";
-// import { useToasts } from "react-toast-notifications";
-// import { getDiscountPrice } from "../../lib/product";
-// import { addToCart } from "../../redux/actions/cartActions";
-// import {
-//   addToWishlist,
-//   deleteFromWishlist
-// } from "../../redux/actions/wishlistActions";
-// import {
-//   addToCompare,
-//   deleteFromCompare
-// } from "../../redux/actions/compareActions";
+import { connect } from "react-redux";
+import { useToasts } from "react-toast-notifications";
+import { getDiscountPrice } from "../../lib/product";
+import { addToCart } from "../../redux/actions/cartActions";
+import {
+  addToWishlist,
+  deleteFromWishlist
+} from "../../redux/actions/wishlistActions";
+import {
+  addToCompare,
+  deleteFromCompare
+} from "../../redux/actions/compareActions";
 import ProductGridFive from './ProductGridFive';
 
 const ProductGridWrapperFive = ({

@@ -13,11 +13,12 @@ import {
 // import EventEoProfileSliderTen from './ProductSlider/EventEoProfileSliderTen';
 import { store } from 'react-notifications-component';
 const FollowersTabEoProfile = ({ attendees, partners, showPublicView, organiser,  showEoView }) => {
-const [message, setMessage] = useState('');
+const [message, setMessage] = useState('');  
+const [errorMessage, setErrorMessage] = useState('')
+
   const [broadcastModalShow, setBroadcastModalShow] = useState(false);
-  const closeBroadcastModal = () => {setBroadcastModalShow(false); setMessage("null");}
+  const closeBroadcastModal = () => {setBroadcastModalShow(false); setErrorMessage("null"); setMessage("");}
   const openBroadcastModal = () => setBroadcastModalShow(true);
-  const [errorMessage, setErrorMessage] = useState('')
   const [confirmBroadcastModalShow, setConfirmBroadcastModalShow] = useState(false);
   const closeConfirmBroadcastModal = () => {setConfirmBroadcastModalShow(false);setBroadcastModalShow(true);}
   const openConfirmBroadcastModal = () => {

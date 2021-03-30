@@ -6,9 +6,10 @@ import {
   AiOutlineSetting,
   AiOutlineLogout,
 } from 'react-icons/ai';
+import { IoIosHeartEmpty } from 'react-icons/io';
 
 import { logout } from '../../lib/auth';
-import { getUser } from '../../lib/query/getUser';
+import  useUser  from '../../lib/query/useUser';
 import { useState, useEffect } from 'react';
 
 const PartnerHeaderTop = () => {

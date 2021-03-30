@@ -49,7 +49,7 @@ export default function UserEOCard({ partner, user, handleMarkVip, CheckVip }) {
           <Badge variant="primary">{partner?.businessCategory}</Badge>
         </Card.Text>) }
         {partner?.businessCategory == null && (<Card.Text >
-          There is no category.
+          Category: &nbsp;
         </Card.Text>) }
         
         {isVip && (

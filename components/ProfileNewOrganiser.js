@@ -128,6 +128,13 @@ const EventOrgProfile = ({ paraId_ }) => {
     });
     return check;
   };
+  const getRefreshReviewsEO = async () => {
+    await getReviews(paraId_).then((data) => {
+      console.log("reviews" + reviews);
+      setReviews(data);
+    });
+   
+  };
 
   useEffect(() => {
     const getUserData = async () => {
@@ -145,6 +152,7 @@ const EventOrgProfile = ({ paraId_ }) => {
       console.log("reviews" + reviews);
       setReviews(data);
     });
+   
   };
     getReviewsEO();
     const getRatingData = async () => {
@@ -420,7 +428,7 @@ const EventOrgProfile = ({ paraId_ }) => {
 
   const handleChange = (e) => {
     if (e.target.value == 'all') {
-      getReviewsEO();
+      getRefreshReviewsEO();
     } else {
       getReviewsEvent(e.target.value);
     }
@@ -683,7 +691,7 @@ const EventOrgProfile = ({ paraId_ }) => {
                                             />
                                             
                                           </div>
-                                          <div className="rating">
+                                          <div className="customer-meta">
                                             
                                           <span className="review-author">
                                             {review.reviewDateTime}

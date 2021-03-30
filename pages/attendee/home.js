@@ -1,26 +1,24 @@
 import Link from 'next/link';
 import { Alert, Col, Container, Row } from 'react-bootstrap';
-import Head from 'next/head';
 
 import useUser from '../../lib/query/useUser';
+import AttendeeWrapper from '../../components/wrapper/AttendeeWrapper';
 
-import withProtectRoute from '../../components/ProtectRouteWrapper';
 import { BreadcrumbOne } from '../../components/Breadcrumb';
-import { FooterOne } from '../../components/Footer';
-import AdminHeaderTop from '../../components/Header/AdminHeaderTop';
+
 
 export default function AttendeeHome() {
   const { data: user, status } = useUser(localStorage.getItem('userId'));
   return (
-    <>
+    
 
     <AttendeeWrapper title="Home">
       
-      <BreadcrumbOne pageTitle={'Welcome ' + user?.name}>
+      <BreadcrumbOne pageTitle='Home'>
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/attendee/home">
-              <a>Participant Home</a>
+              <a>Home</a>
             </Link>
           </li>
         </ol>
@@ -38,14 +36,8 @@ export default function AttendeeHome() {
           </>
         )}
 
-        <Row>
-          <Col>
-            <button className="btn btn-fill-out">View events</button>
-          </Col>
-    
-        </Row>
       </Container>
     </AttendeeWrapper>
-    </>
+    
   );
 }
