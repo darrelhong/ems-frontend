@@ -5,7 +5,7 @@ import { Alert, Col, Container, Row } from 'react-bootstrap';
 import { format, parseISO } from 'date-fns';
 
 import { useEvent } from 'lib/query/events';
-import { getSellerApplicationsFromBpId } from 'lib/query/eventApi';
+import { getSellerApplicationsFromBpId } from 'lib/query/sellerApplicationApi';
 
 import { BreadcrumbOne } from 'components/Breadcrumb';
 import PartnerWrapper from 'components/wrapper/PartnerWrapper';

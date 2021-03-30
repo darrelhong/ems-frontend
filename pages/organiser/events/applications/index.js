@@ -1,12 +1,14 @@
-import useUser from '../../../../lib/query/useUser';
+import useUser from 'lib/query/useUser';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { BreadcrumbOne } from 'components/Breadcrumb';
-import PartnerWrapper from 'components/wrapper/PartnerWrapper';
+import OrganiserWrapper from 'components/wrapper/OrganiserWrapper';
 import { useState, useEffect } from 'react';
-import { getSellerApplicationsForEO } from "../../../../lib/query/eventApi"
-import ApplicationCard from "../../../../components/events/registration/ApplicationCard"
-import { Container, Row, Col } from 'react-bootstrap';
+import { getSellerApplicationsForEO, approveRejectApplication } from "lib/query/sellerApplicationApi"
+import ApplicationCard from "components/events/organiser/applications/ApplicationCard"
+import { Row } from 'react-bootstrap';
+import ApproveRejectModal from 'components/events/organiser/applications/ApproveRejectModal';
+import { useToasts } from 'react-toast-notifications';
 
 export default function Applications() {
 
@@ -16,26 +18,62 @@ export default function Applications() {
     const router = useRouter();
     const { eid } = router.query
     // console.log(eid)
+    const [showApproveRejectModal, setShowApproveRejectModal] = useState(false);
+    const [action, setAction] = useState('approve');
+    const [application,setApplication] = useState(Object);
+    const { addToast, removeToast } = useToasts();
 
     useEffect(() => {
-        if (user != null) {
-            const getApplications = async () => {
-                const data = await getSellerApplicationsForEO(user.id);
-                if (eid != null) {
-                    setApplications(data.filter((d) => d.event.eid == eid))
-                }
-                else {
-                    setApplications(data);
-                }
-            };
-            getApplications();
-        }
+        if (user != null) getApplications();
     }, [user, eid]);
 
-    // console.log(applications);
+    const getApplications = async () => {
+        const data = await getSellerApplicationsForEO(user.id);
+        if (eid != null) {
+            setApplications(data.filter((d) => d.event.eid == eid))
+        }
+        else {
+            setApplications(data);
+        }
+    };
+
+
+    const handleSubmit = async () => {
+        try {
+            await approveRejectApplication(application.id,action);
+            action == 'approve' ? createToast('Application successfully approved!', 'success') : createToast('Application successfully rejected', 'success');
+            await getApplications(); //to reload
+        } catch (e) {
+            createToast('Error, please try again later', 'error');
+        }
+        setShowApproveRejectModal(false);
+    }
+
+    const approveAction = () => {
+        setAction('approve');
+        setShowApproveRejectModal(true);
+    };
+
+    const rejectAction = () => {
+        setAction('reject');
+        setShowApproveRejectModal(true);
+    };
+
+    const createToast = (message, appearanceStyle) => {
+        const toastId = addToast(message, { appearance: appearanceStyle });
+        setTimeout(() => removeToast(toastId), 3000);
+      };
+    
 
     return (
-        <PartnerWrapper title="Event Applications">
+        <OrganiserWrapper title="Event Applications">
+            <ApproveRejectModal
+                showApproveRejectModal={showApproveRejectModal}
+                closeApproveRejectModal={() => setShowApproveRejectModal(false)}
+                action={action}
+                handleSubmit={handleSubmit}
+                application={application}
+            />
             <BreadcrumbOne pageTitle="View All Event Applications">
                 <ol className="breadcrumb justify-content-md-end">
                     <li className="breadcrumb-item">
@@ -47,7 +85,37 @@ export default function Applications() {
                 </ol>
             </BreadcrumbOne>
 
-            <div className="shop-content space-pt--r100 space-pb--r100">
+            <div className="shop-products"
+                style={{
+                    marginTop: '10%'
+                }}
+            >
+                <Row className="list">
+                    {applications.length != 0 ? (
+                        applications.map((app) => {
+                            return (
+                                <ApplicationCard
+                                    key={app.id}
+                                    app={app}
+                                    approveAction={approveAction}
+                                    rejectAction={rejectAction}
+                                    setApplication={setApplication}
+                                    renderAppRejButton={true}
+                                />
+                            )
+                        })
+                    ) : (
+                        <div
+                            className="product-description-tab__details"
+                            style={{ textAlign: 'center' }}
+                        >
+                            No Applications Found
+                        </div>
+                    )}
+                </Row>
+            </div>
+
+            {/* <div className="shop-content space-pt--r100 space-pb--r100">
                 <Container>
                     <Row>
                         <Col lg={9}>
@@ -70,9 +138,9 @@ export default function Applications() {
                         </Col>
                     </Row>
                 </Container>
-            </div>
+            </div> */}
 
 
-        </PartnerWrapper>
+        </OrganiserWrapper>
     )
 }

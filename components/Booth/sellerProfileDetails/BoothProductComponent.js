@@ -85,7 +85,7 @@ const BoothProductComponent = ({ booth, createToast, sellerProfile, setSellerPro
                     </Button>
                 )}
                 {
-                    paginatedProducts && (
+                    paginatedProducts[0] && (
                         <ProductScrollView
                             boothId={booth.id}
                             setBooth={setBooth}
@@ -96,6 +96,14 @@ const BoothProductComponent = ({ booth, createToast, sellerProfile, setSellerPro
                     )
                 }
             </Row>
+            {!paginatedProducts[0] && (
+                <div
+                className="product-description-tab__details"
+                style={{ textAlign: 'center' }}
+                >
+                    No products added yet!
+                </div>
+            )}
         </Container>
     )
 };

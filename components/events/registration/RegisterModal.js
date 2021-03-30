@@ -3,7 +3,7 @@ import { Modal, Button, Row, Col } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { formatter } from 'lib/util/currency';
 import { format, parseISO } from 'date-fns';
-import { createSellerApplication } from 'lib/query/eventApi';
+import { createSellerApplication } from 'lib/query/sellerApplicationApi';
 
 const RegisterModal = ({
     event,

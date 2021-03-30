@@ -21,6 +21,7 @@ import ProductRating from '../../Product/ProductRating';
 import Link from 'next/link';
 import HidePopover from '../../Event/HidePopover';
 import DeleteModal from '../../Event/DeleteModal';
+import { Badge } from 'react-bootstrap';
 
 const EventDescription = ({
   event,
@@ -121,9 +122,6 @@ const EventDescription = ({
         <h2 className="product-content__title space-mb--10">
           {event.name ? event.name : '(Add event name)'}
         </h2>
-        {/* <div className="product-content__price d-flex-align-items-center">
-          <span className="price">{prettyStartDate}</span>
-        </div> */}
 
         {/* CONDITIONAL RENDERING CHECK WHETHER EVENT IS COMPLETED THEN SHOW THIS */}
         {/* {event.rating && event.rating == 0 ? ( */}
@@ -195,6 +193,12 @@ const EventDescription = ({
                     whiteSpace:'initial',
                     // display:'block'
                   }}>{category}</text>
+                  // <span>
+                  //       {' '}
+                  //       <Badge variant="primary">
+                  //         {category}
+                  //       </Badge>{' '}
+                  //     </span>
               ))}
             </div>
           </div>
@@ -208,16 +212,7 @@ const EventDescription = ({
             className="product-content__product-share space-mt--15"
             style={{ display: 'flex', justifyContent: 'flex-end' }}
           >
-            {/* <span>Actions:</span> */}
             <ul className="social-icons">
-              {/* <li>
-                <a href="javascript:void(0);" onClick={() => vipToggle(event)}>
-                  {event.vip ? (
-                    <IoMdStarOutline title="Unlist event from VIP" />
-                  ) :
-                    (<IoMdStar title="Make this a VIP-only event!" />)}
-                </a>
-              </li> */}
               <li>
                 <IconButton
                   aria-label="vip"
@@ -232,24 +227,6 @@ const EventDescription = ({
                   <HidePopover event={event} createToast={createToast} />
                 </li>
               )}
-              {/* <li>
-                <a href="javascript:void(0);" onClick={() => hideToggle(event)}>
-                  {event.hidden ? (
-                    <IoMdEye title="Unhide your event from attendees!" />
-                  ) : (
-                      <IoMdEyeOff title="Temporarily hide your event from attendees" />
-                    )}
-                </a>
-              </li>
-              <li>
-                <a href="javascript:void(0);" onClick={() => publishToggle(event)}>
-                  {event.published ? (
-                    <IoMdCloudDownload title="Temporarily unpublish your event from business partners!" />
-                  ) : (
-                      <IoMdCloudUpload title="Publish your event for business partners to see!" />
-                    )}
-                </a>
-              </li> */}
               <li>
                 <Link href={`/organiser/events/create?eid=${event.eid}`}>
                   <a>
@@ -260,92 +237,9 @@ const EventDescription = ({
             </ul>
             {deleteCancelButton()}
           </div>
-
-          {/* three ugly ass buttons */}
-          {/* {event.published ?
-
-            (<button
-              onClick={publishToggle}
-              className="btn btn-fill-out btn-addtocart space-ml--10"
-            >
-              <i className="icon-basket-loaded" /> Unpublish Event
-            </button>
-          ) : (
-            <button
-              onClick={publishToggle}
-              className="btn btn-fill-out btn-addtocart space-ml--10"
-            >
-              <i className="icon-basket-loaded" /> Publish Event
-            </button>
-          )}
-
-          {event.hidden ? (
-            <button
-              onClick={hideToggle}
-              title="Unhide your event from attendees!"
-              className="btn btn-fill-out btn-addtocart space-ml--10"
-            >
-              <i className="icon-basket-loaded" /> Unhide Event
-            </button>
-          ) : (
-            <button
-              onClick={hideToggle}
-              title="Hide your event from attendees from now"
-              className="btn btn-fill-out btn-addtocart space-ml--10"
-            >
-              <i className="icon-basket-loaded" /> Hide Event
-            </button>
-          )}
-
-          {event.vip ? (
-            <button
-              onClick={vipToggle}
-              className="btn btn-fill-out btn-addtocart space-ml--10"
-            >
-              <i className="icon-basket-loaded" /> Unlist from VIP
-            </button>
-          ) : (
-              <button
-                onClick={vipToggle}
-                className="btn btn-fill-out btn-addtocart space-ml--10"
-              >
-                <i className="icon-basket-loaded" /> Make VIP
-              </button>
-            )
-          } */}
         </div>
       </Fragment>
       <hr />
-      {/* <div className="product-content__product-share space-mt--15">
-        <span>Share:</span>
-        <ul className="social-icons">
-          <li>
-            <a href="#">
-              <IoLogoFacebook />
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <IoLogoTwitter />
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <IoLogoGoogleplus />
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <IoLogoYoutube />
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <IoLogoInstagram />
-            </a>
-          </li>
-        </ul>
-      </div> */}
     </div>
   );
 };

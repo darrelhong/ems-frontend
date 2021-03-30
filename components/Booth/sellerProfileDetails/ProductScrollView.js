@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import ProductModal from 'components/Booth/sellerProfileDetails/ProductModal';
 
 const ProductScrollView = ({ paginatedProducts, boothId, setBooth, createToast, isPartner }) => {
-    const placeholderImage = "https://static.packt-cdn.com/products/9781849514804/graphics/4804_03_46.jpg";
+    // const placeholderImage = "https://static.packt-cdn.com/products/9781849514804/graphics/4804_03_46.jpg";
+    const placeholderImage = "https://us.123rf.com/450wm/daksun/daksun1804/daksun180400006/99999388-plain-grey-textured-painted-wall-empty-grey-painted-wall-with-texture.jpg?ver=6"
     const [nextId, setNextId] = useState(0);
     const [backId, setBackId] = useState(0);
     const [firstId, setFirstId] = useState(0);
