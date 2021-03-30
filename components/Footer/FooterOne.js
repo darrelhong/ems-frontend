@@ -37,7 +37,7 @@ const FooterOne = () => {
 
   return (
     <Fragment>
-      {/* <div className="bg--default space-pt--60 space-pb--60">
+      <div className="bg--default space-pt--60 space-pb--60">
         <Container>
           <Row className="align-items-center">
             <Col md={6}>
@@ -53,10 +53,10 @@ const FooterOne = () => {
             </Col>
           </Row>
         </Container>
-      </div> */}
+      </div>
 
       <footer className="footer-dark">
-        <div className="footer-top ">
+        <div className="footer-top">
           <Container>
             <Row>
               <Col lg={3} md={6} sm={12}>
@@ -71,7 +71,7 @@ const FooterOne = () => {
                   </div> */}
                   <p>Discover new events or Create your own event!</p>
                 </div>
-                {/* <div className="widget">
+                <div className="widget">
                   <ul className="social-icons">
                     <li>
                       <a href="#">
@@ -99,7 +99,7 @@ const FooterOne = () => {
                       </a>
                     </li>
                   </ul>
-                </div> */}
+                </div>
               </Col>
               <Col lg={2} md={3} sm={6}>
                 <div className="widget">
@@ -141,7 +141,6 @@ const FooterOne = () => {
             </Row>
           </Container>
         </div>
-
         <button
           className={`scroll-top ${scroll > top ? 'show' : ''}`}
           onClick={() => scrollToTop()}

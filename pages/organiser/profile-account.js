@@ -2,21 +2,7 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 // import { LayoutOne } from '../../layouts';
 import { BreadcrumbOne } from '../../components/Breadcrumb';
-import {
-  Container,
-  Row,
-  Col,
-  OverlayTrigger,
-  Tooltip,
-  Tab,
-  Nav,
-  Card,
-  Form,
-  Button,
-  Modal,
-  Image,
-  Alert,
-} from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import { FaRegEdit } from 'react-icons/fa';
 import OrganiserWrapper from '../../components/wrapper/OrganiserWrapper';
 import { BsFillInfoCircleFill } from 'react-icons/bs';
@@ -31,12 +17,19 @@ import {
   IoIosRadioButtonOn,
   IoIosDocument,
 } from 'react-icons/io';
-
+import Tab from 'react-bootstrap/Tab';
+import Nav from 'react-bootstrap/Nav';
+import Card from 'react-bootstrap/Card';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 import { useForm } from 'react-hook-form';
 import useUser from '../../lib/query/useUser';
 import { useMutation, useQueryClient, useQuery } from 'react-query';
 import api from '../../lib/ApiClient';
 import { logout } from '../../lib/auth';
+import Image from 'react-bootstrap/Image';
+import Alert from 'react-bootstrap/Alert';
 
 const MyAccount = () => {
   // if multiple file, we ask them to zip
@@ -162,6 +155,35 @@ const MyAccount = () => {
     setShow(false);
   };
 
+  // const mutateAccDetail = useMutation((data) =>
+  //   api.post('/api/user/update', data, {
+  //       onSuccess: () => {
+  //         queryClient.invalidateQueries(['user', user?.id.toString()]);
+  //       },
+  //     })
+  //     .then((response) => {
+  //       console.log(response);
+  //       if (response.status == 200) {
+  //         // show update sucess message
+  //         setShowSuccessMsg(true);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       // show error message
+  //       setShowFailedMsg(true);
+  //     })
+  // );
+
+  // const mutatePassword = useMutation(
+  //   (data) => api.post('/api/user/change-password', data),
+  //   {
+  //     onSuccess: () => {
+  //       queryClient.invalidateQueries(['user', user?.id.toString()]);
+  //     },
+  //   logout({ redirectTo: '/organiser/login' });
+  // };
+
   const { register, handleSubmit, errors } = useForm({
     defaultValues: { name: user?.name },
   });
@@ -229,9 +251,9 @@ const MyAccount = () => {
     }
   };
 
-  const mutatePassword = useMutation((data) => {
+  const mutatePassword = useMutation((data) =>
     api
-      .post('/api/user/change-password', data, {})
+      .post('/api/user/change-password', data)
       .then((response) => {
         console.log(response.data['message']);
         if (response.data['message'] == 'Success') {
@@ -249,12 +271,12 @@ const MyAccount = () => {
       })
       .catch((error) => {
         console.log(error);
-
+        setConfirmPW(false);
         setPWAlert('An error has occured.');
         setShowPW(true);
         setLoginLoading(false);
-      });
-  });
+      })
+ );
 
   const mutateNotificationSetting = useMutation((data) =>
     api
@@ -263,8 +285,19 @@ const MyAccount = () => {
       .catch((error) => {})
   );
 
+  // const onSubmit = async (data) => {
+  //   console.log('data acc' + data["name"]);
+  //   mutateAccDetail.mutate({
+  //     address: data.address,
+  //     description: data.description,
+  //     name: data.name,
+  //     phonenumber: data.phonenumber,
+  //     id: user?.id,
+  //   });
+
+  // };
+
   const onSubmitPassword = async (data) => {
-    console.log('onsubmit password1');
     setPWAlert('');
     setShowPW(false);
     setConfirmPW(false);
@@ -296,8 +329,6 @@ const MyAccount = () => {
       setLoginLoading(false);
     }
   };
-
-  const onSubmitNotification = async (data) => {};
 
   function validatePassword(oldPassword, newPassword, confirmPassword) {
     if (
@@ -581,7 +612,7 @@ const MyAccount = () => {
                     </Card>
                   </Tab.Pane>
                   <Tab.Pane eventKey="accountDetails">
-                    {/* <div
+                    <div
                       style={{
                         display: showSuccessMsg ? 'block' : 'none',
                       }}
@@ -594,7 +625,7 @@ const MyAccount = () => {
                       }}
                     >
                       <Alert variant="danger">Error Occured</Alert>
-                    </div>*/}
+                    </div>
                     <Card className="my-account-content__content">
                       <Card.Header>
                         <h3>Account Details</h3>
@@ -690,11 +721,11 @@ const MyAccount = () => {
                                     type="file"
                                     onChange={handleFileChange}
                                     custom
-                                    accept=".png,.jpg"
                                   />
                                   <Form.Label
                                     className="form-group custom-file-label"
                                     md={12}
+                                    for="custom-file"
                                   >
                                     {fileName}
                                   </Form.Label>
@@ -742,7 +773,6 @@ const MyAccount = () => {
                                   />
                                 </Form.Group>
                               </Col>
-
                               <Col className="form-group" md={12}>
                                 <label>
                                   Email Address{' '}
@@ -803,52 +833,6 @@ const MyAccount = () => {
                               </Col>
                             </Row>
                           </form>
-                        </div>
-                      </Card.Body>
-                    </Card>
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="notification">
-                    <Card className="my-account-content__content">
-                      <Card.Header>
-                        <h3>Notification Settings</h3>
-                      </Card.Header>
-                      <Card.Body>
-                        <div className="account-details-form">
-                          {/* <form
-                            id="notifcation-setting-form"
-                            onSubmit={handleSubmit(onSubmitNotification)}
-                          >
-                            <Col className="form-group" md={12}>
-                              <Form>
-                                {['checkbox'].map((type) => (
-                                  <div key={`default-${type}`} className="mb-3">
-                                    <Form.Check
-                                      type={type}
-                                      id={`default-${type}`}
-                                      label={'Receive updates for upcoming events [need discuss eo receive what?]'}
-                                    />
-
-                                    <Form.Check
-                                      type={type}
-                                      id={`default-${type}`}
-                                      label={`default ${type}`}
-                                    />
-                                  </div>
-                                ))}
-                              </Form>
-                            </Col>
-
-                            <Col>
-                              <button
-                                type="submit"
-                                className="btn btn-fill-out"
-                                name="submit"
-                                value="Submit"
-                              >
-                                Save
-                              </button>
-                            </Col>
-                          </form> */}
                         </div>
                       </Card.Body>
                     </Card>
@@ -947,6 +931,23 @@ const MyAccount = () => {
                               </button> */}
                             </Col>
                           </form>
+                          <div>&nbsp;</div>
+                          <Alert
+                            show={confirmPW}
+                            variant="success"
+                            onClose={() => setConfirmPW(false)}
+                            dismissible
+                          >
+                            {pwAlert}
+                          </Alert>
+                          <Alert
+                            show={!confirmPW && showPW}
+                            onClose={() => setShowPW(false)}
+                            variant="danger"
+                            dismissible
+                          >
+                            {pwAlert}
+                          </Alert>
                         </div>
                       </Card.Body>
                     </Card>

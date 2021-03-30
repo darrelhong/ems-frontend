@@ -48,7 +48,7 @@ const MobileMenuWidgets = () => {
         </ul>
       </div>
 
-      {/* <div className="social-widget">
+      <div className="social-widget">
         <a href="https://www.twitter.com" target="_blank">
           <IoLogoTwitter />
         </a>
@@ -61,7 +61,7 @@ const MobileMenuWidgets = () => {
         <a href="https://www.pinterest.com" target="_blank">
           <IoLogoPinterest />
         </a>
-      </div>  */}
+      </div>
     </div>
   );
 };

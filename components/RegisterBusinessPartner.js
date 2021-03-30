@@ -75,7 +75,7 @@ export default function RegisterBusinessPartner({ title, registerApiUrl }) {
   };
 
   return (
-    <GuestWrapper>
+    <LayoutOne>
       <Head>
         <title>{title}</title>
       </Head>
@@ -226,7 +226,7 @@ export default function RegisterBusinessPartner({ title, registerApiUrl }) {
           </Row>
         </Container>
       </div>
-    </GuestWrapper>
+    </LayoutOne>
   );
 }
 

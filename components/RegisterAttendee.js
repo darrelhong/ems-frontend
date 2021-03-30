@@ -72,7 +72,7 @@ export default function RegisterAttendee({ title, registerApiUrl }) {
   };
 
   return (
-    <GuestWrapper>
+    <LayoutOne>
       <Head>
         <title>{title}</title>
       </Head>
@@ -230,7 +230,7 @@ export default function RegisterAttendee({ title, registerApiUrl }) {
           </Row>
         </Container>
       </div>
-    </GuestWrapper>
+    </LayoutOne>
   );
 }
 

@@ -3,11 +3,10 @@ import { Container } from 'react-bootstrap';
 
 import useUser from '../../lib/query/useUser';
 
-import { BreadcrumbOne } from '../../components/Breadcrumb';
 import PartnerWrapper from '../../components/wrapper/PartnerWrapper';
 import Head from 'next/head';
 
-export default function PartnerHome() {
+function PartnerHome() {
   const { data: user, isLoading, isSuccess } = useUser(
     localStorage.getItem('userId')
   );
@@ -19,7 +18,7 @@ export default function PartnerHome() {
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/partner/home">
-              <a>Home</a>
+              <a>Partner Home</a>
             </Link>
           </li>
         </ol>
@@ -50,3 +49,5 @@ export default function PartnerHome() {
     </>
   );
 }
+
+export default PartnerHome;

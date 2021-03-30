@@ -3,7 +3,7 @@ import RegisterPage from '../../components/RegisterBusinessPartner';
 
 //import RegisterPage from '../../components/RegisterPage';
 
-export default function BusinessPartnerRegister() {
+export default function OrganiserRegister() {
   return (
     <RegisterPage
       title="Join as Business Partner"

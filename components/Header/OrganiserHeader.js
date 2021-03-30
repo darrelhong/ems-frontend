@@ -4,10 +4,12 @@ import Link from 'next/link';
 import { Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { IoIosSearch, IoIosMenu } from 'react-icons/io';
+import { AiOutlineShoppingCart } from 'react-icons/ai';
 import OrganiserHeaderTop from './OrganiserHeaderTop';
-import Navigation from './elements/NavigationEvntOrg';
+import Navigation from './elements/Navigation';
 import SearchOverlay from './elements/SearchOverlay';
-import MobileMenuEvntOrg from './elements/MobileMenuEvntOrg';
+import MobileMenu from './elements/MobileMenu';
+import MiniCart from './elements/MiniCart';
 
 const HeaderOne = ({ cartItems, navPositionClass }) => {
   const [scroll, setScroll] = useState(0);

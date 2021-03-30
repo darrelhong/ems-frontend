@@ -5,10 +5,8 @@ import {
   AiOutlineUser,
   AiOutlineSetting,
   AiOutlineLogout,
-  AiOutlineNotification,
 } from 'react-icons/ai';
-import { IoIosHeartEmpty } from 'react-icons/io';
-import useUser from '../../lib/query/useUser';
+
 import { logout } from '../../lib/auth';
 import { getUser } from '../../lib/query/getUser';
 import { useState, useEffect } from 'react';
@@ -73,7 +71,7 @@ const PartnerHeaderTop = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/partner/profile-account/">
+                  <Link href="/partner/profile-account">
                     <a>
                       <AiOutlineSetting />
                       <span>Settings</span>
