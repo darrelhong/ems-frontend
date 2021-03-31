@@ -121,7 +121,7 @@ export default function Applications() {
                             className="product-description-tab__details"
                             style={{ textAlign: 'center' }}
                         >
-                            No Applications Found
+                            <img src="https://cdn.dribbble.com/users/888330/screenshots/2653750/empty_data_set.png" alt="No Events Found" />
                         </div>
                     )}
                 </Row>

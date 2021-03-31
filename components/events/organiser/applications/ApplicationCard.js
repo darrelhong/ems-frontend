@@ -5,10 +5,10 @@ import Link from 'next/link';
 
 const ApplicationCard = ({ app, approveAction, rejectAction, setApplication, renderAppRejButton }) => {
 
-    const [sellerProfileId,setSellerProfileId] = useState(0);
+    const [sellerProfileId, setSellerProfileId] = useState(0);
 
-    useEffect(()=>{
-        
+    useEffect(() => {
+
         const loadSellerProfileId = async () => {
             const id = await getSellerProfileIdFromApplication(app.id);
             setSellerProfileId(id);
@@ -17,7 +17,7 @@ const ApplicationCard = ({ app, approveAction, rejectAction, setApplication, ren
         if (app?.sellerApplicationStatus === 'CONFIRMED') {
             loadSellerProfileId();
         }
-    },[])
+    }, [])
 
     const renderAppRejButtonComponent = () => {
         switch (app?.sellerApplicationStatus) {
@@ -89,13 +89,13 @@ const ApplicationCard = ({ app, approveAction, rejectAction, setApplication, ren
                             float: 'right'
                         }}>
                         <Link href={`seller-profile/${sellerProfileId}`}>
-                        <button
-                            // variant="primary"
-                            className="btn btn-fill-out btn-addtocart space-ml--10"
-                        >
-                            View Seller Profile
+                            <button
+                                // variant="primary"
+                                className="btn btn-fill-out btn-addtocart space-ml--10"
+                            >
+                                View Seller Profile
                         </button>
-                    </Link>
+                        </Link>
                     </div>
                 );
                 break;
@@ -159,12 +159,12 @@ const ApplicationCard = ({ app, approveAction, rejectAction, setApplication, ren
 
     return (
         <Col
-        lg={getLg()}
+            lg={getLg()}
             sm={getSm()}
             className="space-mb--50">
             <div className="product-list">
                 <div className="product-list__image">
-                    <img src={app?.businessPartner?.profilePic ?? "https://i.pinimg.com/originals/ca/20/61/ca2061c17d6f4a32978dd541bafed0e4.jpg"} alt="BP_image" />
+                    <img src={app?.businessPartner?.profilePic ?? "https://thumbs.dreamstime.com/b/no-image-available-icon-flat-vector-no-image-available-icon-flat-vector-illustration-132482953.jpg"} alt="BP_image" />
                     <Badge
                         pill
                         variant={getVariant()}
