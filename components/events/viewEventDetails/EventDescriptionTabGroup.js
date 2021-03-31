@@ -26,19 +26,19 @@ const EventDescriptionTabGroup = ({
   sellerProfiles
 }) => {
   const [showModal, setShowModal] = useState(false);
-  const [recommendedPartners,setRecommendedPartners] = useState([]);
+  const [recommendedPartners, setRecommendedPartners] = useState([]);
 
-  useEffect(()=>{
-      const loadPartners = async () => {
-        console.log('loading');
-        console.log(event);
-        const response = await getRecommendedPartners(event.eid);
-          console.log('loaded partners');
-          console.log(response);
-          setRecommendedPartners(response);
-      };
-      if (event.eid) loadPartners();
-  },[event]);
+  useEffect(() => {
+    const loadPartners = async () => {
+      console.log('loading');
+      console.log(event);
+      const response = await getRecommendedPartners(event.eid);
+      console.log('loaded partners');
+      console.log(response);
+      setRecommendedPartners(response);
+    };
+    if (event.eid) loadPartners();
+  }, [event]);
 
   const renderBoothSection = () => {
     if (event.boothCapacity == 0) {
@@ -93,7 +93,7 @@ const EventDescriptionTabGroup = ({
                 </ul>
               )}
             <ul>
-              <Link href={`/organiser/events/applications/${event.eid}`}>
+              <Link href={`/organiser/events/applications?eid=${event.eid}`}>
                 <button
                   // onClick={() => console.log('hello')}
                   className="btn btn-fill-out btn-addtocart space-ml--10"

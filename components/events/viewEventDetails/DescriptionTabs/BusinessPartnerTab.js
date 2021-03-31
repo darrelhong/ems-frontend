@@ -46,7 +46,7 @@ const BusinessPartnerTab = ({
                         </ul>
                     )}
                 <ul>
-                    <Link href={`/organiser/events/applications/${event.eid}`} >
+                    <Link href={`/organiser/events/applications?eid=${event.eid}`} >
                         <button
                             // onClick={() => console.log('hello')}
                             className="btn btn-fill-out btn-addtocart space-ml--10"
