@@ -1322,8 +1322,8 @@ const MyAccount = () => {
                                   />
                                 </Form.Group>
                               </Col>
-                              {user?.id != null && (
-                                <div>
+                              {/* {user?.id != null && ( */}
+                                <div className="col-12 d-md-flex">
                                   <Col className="form-group" md={12}>
                                     <Form.Label htmlFor="categorypreference">
                                       Event Category Preferences{' '}
@@ -1332,30 +1332,31 @@ const MyAccount = () => {
 
                                     <DropdownMultiselect
                                       options={[
-                                        'Automotive',
-                                        'Business Support & Supplies',
-                                        'Computers & Electronics',
-                                        'Construction & Contractor',
-                                        'Education',
-                                        'Entertainment',
-                                        'Food & Dining',
-                                        'Health & Medicine',
-                                        'Home & Garden',
-                                        'Legal & Financial',
-                                        'Manufacturing, Wholesale, Distribution',
-                                        'Merchants (Retail)',
-                                        'Personal Care & Services',
-                                        'Real Estate',
-                                        'Travel & Transportation',
+                                       { key:'Automotive', label:'Automotive'},
+                                       { key:'Business Support & Supplies', label:'Business Support & Supplies'},
+                                       { key:'Computers & Electronics', label:'Computers & Electronics'},
+                                       { key:'Construction & Contractor', label:'Construction & Contractor'},
+                                       { key:'Education', label:'Education'},
+                                       { key:'Entertainment', label:'Entertainment'},
+                                       { key:'Food & Dining', label:'Food & Dining'},
+                                       { key:'Health & Medicine', label:'Health & Medicine'},
+                                       { key:'Home & Garden', label:'Home & Garden'},
+                                       { key:'Legal & Financial', label:'Legal & Financial'},
+                                       { key:'Manufacturing, Wholesale, Distribution', label:'Manufacturing, Wholesale, Distribution'},
+                                       { key:'Merchants (Retail)', label:'Merchants (Retail)'},
+                                       { key:'Personal Care & Services', label:'Personal Care & Services'},
+                                       { key:'Real Estate', label:'Real Estate'},
+                                       { key:'Travel & Transportation', label:'Travel & Transportation'},                                   
+                       
                                       ]}
                                       selected={user?.categoryPreferences}
                                       handleOnChange={onPreferenceChange}
                                       name="ddlCategoryPreferences"
-                                      optionalLabel="label"
+                                      // className="displayBlock mt10"
                                     />
                                   </Col>
                                 </div>
-                              )}
+                              {/* )} */}
                               <Col className="form-group" md={12}>
                                 <label>
                                   Email Address{' '}
