@@ -122,7 +122,7 @@ export default function AttendeeEvents() {
         </Row>
 
         <Row className="mb-4">
-          <Col xs={4} sm={3}>
+          <Col xs={6} sm={5} md={3}>
             <select className="custom-select" onChange={handleChange}>
               <option value="">Sort by</option>
               <option value="name-asc">Name - A to Z</option>
@@ -131,7 +131,7 @@ export default function AttendeeEvents() {
             </select>
           </Col>
           {eventCategoriesSuccess && (
-            <Col xs={4} sm={3}>
+            <Col xs={6} sm={5} md={3}>
               <select className="custom-select" onChange={handleCategoryChange}>
                 <option value="">Categories</option>
                 {eventCategories.map((category, i) => (
