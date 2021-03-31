@@ -7,9 +7,9 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 // import IconButton from '@material-ui/core/IconButton';
 import Link from "next/link";
 
-const EventSideBar = ({ getSortParams, sortValue }) => {
+const EventSideBar = ({ getSortParams, filterValue }) => {
     const checkActive = (value) => {
-        return value == sortValue;
+        return value == filterValue;
     };
     // console.log("Sort value sidebar:", sortValue);
 

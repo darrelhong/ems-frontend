@@ -16,7 +16,7 @@ import EventSideBar from '../../../components/Event/partner/EventSideBar';
 
 export default function PartnerEvents() {
   const [sortType, setSortType] = useState('');
-  const [sortValue, setSortValue] = useState('all');
+  const [filterValue, setFilterValue] = useState('all');
   const [sortBy, setSortBy] = useState();
   const [searchTerm, setSearchTerm] = useState('');
   const { data: user } = useUser(localStorage.getItem('userId'));
@@ -45,9 +45,9 @@ export default function PartnerEvents() {
   // console.log("test", queryClient.getQueryData('events'))
 
   // front end filtering of event
-  const getSortParams = (sortType, sortValue) => {
+  const getSortParams = (sortType, filterValue) => {
     setSortType(sortType);
-    setSortValue(sortValue);
+    setFilterValue(filterValue);
   }
 
   const handleChange = (e) => {
@@ -96,7 +96,7 @@ export default function PartnerEvents() {
       <Col lg={3} className="order-lg-first mt-4 pt-2 mt-lg-0 pt-lg-0">
         <EventSideBar
           getSortParams={getSortParams}
-          sortValue={sortValue}
+          filterValue={filterValue}
         />
       </Col>
 
