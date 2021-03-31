@@ -689,7 +689,7 @@ const MyAccount = () => {
                                         {followingEo != null &&
                                           followingEo.map((follow) => {
                                             return (
-                                              <li>
+                                              <ul>
                                                 <hr></hr>
                                                 <Row>
                                                   <Col md="1" xs="1">
@@ -769,7 +769,7 @@ const MyAccount = () => {
                                   )} */}
                                                   </Col>
                                                 </Row>
-                                              </li>
+                                              </ul>
                                             );
                                           })}
                                       </div>
@@ -1322,39 +1322,84 @@ const MyAccount = () => {
                                   />
                                 </Form.Group>
                               </Col>
-                              {user?.id != null && (
-                                <div>
-                                  <Col className="form-group" md={12}>
-                                    {/* <Form.Label htmlFor="categorypreference">
-                                      Event Category Preferences{' '}
-                                      <span className="required"></span>
-                                    </Form.Label> */}
+                              {/* {user?.id != null && ( */}
+                              <div className="col-12 d-md-flex">
+                                <Col className="form-group" md={12}>
+                                  <Form.Label htmlFor="categorypreference">
+                                    Event Category Preferences{' '}
+                                    <span className="required"></span>
+                                  </Form.Label>
 
-                                    {/* <DropdownMultiselect
-                                      options={[
-                                        'Automotive',
-                                        'Business Support & Supplies',
-                                        'Computers & Electronics',
-                                        'Construction & Contractor',
-                                        'Education',
-                                        'Entertainment',
-                                        'Food & Dining',
-                                        'Health & Medicine',
-                                        'Home & Garden',
-                                        'Legal & Financial',
-                                        'Manufacturing, Wholesale, Distribution',
-                                        'Merchants (Retail)',
-                                        'Personal Care & Services',
-                                        'Real Estate',
-                                        'Travel & Transportation',
-                                      ]}
-                                      selected={user?.categoryPreferences}
-                                      handleOnChange={onPreferenceChange}
-                                      name="ddlCategoryPreferences"
-                                    /> */}
-                                  </Col>
-                                </div>
-                              )}
+                                  <DropdownMultiselect
+                                    options={[
+                                      {
+                                        key: 'Automotive',
+                                        label: 'Automotive',
+                                      },
+                                      {
+                                        key: 'Business Support & Supplies',
+                                        label: 'Business Support & Supplies',
+                                      },
+                                      {
+                                        key: 'Computers & Electronics',
+                                        label: 'Computers & Electronics',
+                                      },
+                                      {
+                                        key: 'Construction & Contractor',
+                                        label: 'Construction & Contractor',
+                                      },
+                                      { key: 'Education', label: 'Education' },
+                                      {
+                                        key: 'Entertainment',
+                                        label: 'Entertainment',
+                                      },
+                                      {
+                                        key: 'Food & Dining',
+                                        label: 'Food & Dining',
+                                      },
+                                      {
+                                        key: 'Health & Medicine',
+                                        label: 'Health & Medicine',
+                                      },
+                                      {
+                                        key: 'Home & Garden',
+                                        label: 'Home & Garden',
+                                      },
+                                      {
+                                        key: 'Legal & Financial',
+                                        label: 'Legal & Financial',
+                                      },
+                                      {
+                                        key:
+                                          'Manufacturing, Wholesale, Distribution',
+                                        label:
+                                          'Manufacturing, Wholesale, Distribution',
+                                      },
+                                      {
+                                        key: 'Merchants (Retail)',
+                                        label: 'Merchants (Retail)',
+                                      },
+                                      {
+                                        key: 'Personal Care & Services',
+                                        label: 'Personal Care & Services',
+                                      },
+                                      {
+                                        key: 'Real Estate',
+                                        label: 'Real Estate',
+                                      },
+                                      {
+                                        key: 'Travel & Transportation',
+                                        label: 'Travel & Transportation',
+                                      },
+                                    ]}
+                                    selected={user?.categoryPreferences}
+                                    handleOnChange={onPreferenceChange}
+                                    name="ddlCategoryPreferences"
+                                    // className="displayBlock mt10"
+                                  />
+                                </Col>
+                              </div>
+
                               <Col className="form-group" md={12}>
                                 <label>
                                   Email Address{' '}

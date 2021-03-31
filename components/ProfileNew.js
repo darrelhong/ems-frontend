@@ -65,6 +65,7 @@ const PartnerProfile = ({ localuser }) => {
   const [showEnquiryError, setEnquiryError] = useState(false);
   const [showEnquirySuccess, setEnquirySuccess] = useState(false);
   const [sendEnquiryLoading, setSendEnquiryLoading] = useState(false);
+  const [showEnquiry, setShowEnquiry] = useState(false);
   var followId;
 
   useEffect(() => {
@@ -120,6 +121,7 @@ const PartnerProfile = ({ localuser }) => {
                 'current'
               ).then((events) => {
                 setCurrenteventlist(events);
+                setEnquiryEventList(events);
               });
               await getBpEventsByIdRoleStatus(
                 localuser,
@@ -133,7 +135,7 @@ const PartnerProfile = ({ localuser }) => {
               setPublicView(false);
               setFollowBtn(false);
               setUnfollowBtn(false);
-
+              setShowEnquiry(true);
               const checkIfBpIsVip = async () => {
                 console.log('hello');
                 console.log(localuser);
@@ -148,6 +150,8 @@ const PartnerProfile = ({ localuser }) => {
 
               setEOView(false);
               setPublicView(true);
+              setShowEnquiry(true);
+
               followId = data.id;
               getFollowersData();
               await getBpEventsByIdRoleStatus(
@@ -156,6 +160,7 @@ const PartnerProfile = ({ localuser }) => {
                 'current'
               ).then((events) => {
                 setCurrenteventlist(events);
+                setEnquiryEventList(events);
               });
               await getBpEventsByIdRoleStatus(
                 localuser,
@@ -170,12 +175,15 @@ const PartnerProfile = ({ localuser }) => {
               setUnfollowBtn(false);
               setEOView(false);
               setPublicView(true);
+              setShowEnquiry(true);
+
               await getBpEventsByIdRoleStatus(
                 localuser,
                 data.roles[0].roleEnum,
                 'current'
               ).then((events) => {
                 setCurrenteventlist(events);
+                setEnquiryEventList(events);
               });
               await getBpEventsByIdRoleStatus(
                 localuser,
@@ -190,6 +198,8 @@ const PartnerProfile = ({ localuser }) => {
             setEOView(false);
             setFollowBtn(false);
             setUnfollowBtn(false);
+            setShowEnquiry(false);
+
             await getBpEventsByIdRoleStatus(
               localuser,
               data.roles[0].roleEnum,
@@ -246,6 +256,7 @@ const PartnerProfile = ({ localuser }) => {
       getEvents();
       setPublicView(true);
       setEOView(false);
+      setShowEnquiry(false);
       setFollowBtn(false);
       setUnfollowBtn(false);
       getFollowersData();
@@ -338,54 +349,57 @@ const PartnerProfile = ({ localuser }) => {
 
   function sendEnquiry() {
     // get user inputs
-    // let enquiryTitle = document.getElementById('enquiryTitle').value;
-    // let enquiryEvent = document.getElementById('enquiryEvent').value;
-    // let enquiryMessage = document.getElementById('enquiryMessage').value;
-    // if (enquiryEvent == 'none') {
-    //   enquiryEvent = null;
-    // }
-    // // validate
-    // if (enquiryTitle == '' || enquiryEvent == 'none' || enquiryMessage == '') {
-    //   setEnquiryError(true);
-    // } else {
-    //   setEnquiryError(false);
+    let enquiryTitle = document.getElementById('enquiryTitle').value;
+    let enquiryEvent = document.getElementById('enquiryEvent').value;
+    let enquiryMessage = document.getElementById('enquiryMessage').value;
+    if (enquiryEvent == 'none') {
+      enquiryEvent = null;
+    }
+    // validate
+    if (enquiryTitle == '' ||  enquiryMessage == '') {
+      setEnquiryError(true);
+    } else {
+      setEnquiryError(false);
     // get sender and receiver info
-    // getUser(currentUserId).then((user) => {
-    //   let enquiryReceiverEmail = partner.email;
-    //   let enquirySenderEmail = user.email;
-    //   let data = {
-    //     subject: enquiryTitle,
-    //     content: enquiryMessage,
-    //     eventId: enquiryEvent,
-    //     receiverEmail: enquiryReceiverEmail,
-    //     senderEmail: enquirySenderEmail,
-    //   };
-    //   setSendEnquiryLoading(true);
-    //   api
-    //     .post('/api/user/enquiry', data)
-    //     .then(() => {
-    //       setEnquirySuccess(true);
-    //       setSendEnquiryLoading(false);
-    //       clearEnquiryForm();
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //       setSendEnquiryLoading(false);
-    //       setEnquiryError(true);
-    //     });
-    // });
-    // }
+    if(localStorage.getItem('userId') != null){
+      getUser(localStorage.getItem('userId')).then((user) => {
+            let enquiryReceiverEmail = partner.email;
+            let enquirySenderEmail = user.email;
+            let data = {
+              subject: enquiryTitle,
+              content: enquiryMessage,
+              eventId: enquiryEvent,
+              receiverEmail: enquiryReceiverEmail,
+              senderEmail: enquirySenderEmail,
+            };
+            setSendEnquiryLoading(true);
+            api
+              .post('/api/user/enquiry', data)
+              .then(() => {
+                setEnquirySuccess(true);
+                setSendEnquiryLoading(false);
+                clearEnquiryForm();
+              })
+              .catch((error) => {
+                console.log(error);
+                setSendEnquiryLoading(false);
+                setEnquiryError(true);
+              });
+          });
+          }
+          
+    }
   }
 
-  // function clearEnquiryForm() {
-  //   let enquiryTitle = document.getElementById('enquiryTitle');
-  //   let enquiryEvent = document.getElementById('enquiryEvent');
-  //   let enquiryMessage = document.getElementById('enquiryMessage');
+  function clearEnquiryForm() {
+    let enquiryTitle = document.getElementById('enquiryTitle');
+    let enquiryEvent = document.getElementById('enquiryEvent');
+    let enquiryMessage = document.getElementById('enquiryMessage');
 
-  //   enquiryTitle.value = '';
-  //   enquiryEvent.selectedIndex = 0;
-  //   enquiryMessage.value = '';
-  // }
+    enquiryTitle.value = '';
+    enquiryEvent.selectedIndex = 0;
+    enquiryMessage.value = '';
+  }
 
   return (
     <>
@@ -829,7 +843,7 @@ const PartnerProfile = ({ localuser }) => {
 //======= */}
         </Row>
         <br></br>
-        <Row xs="12" style={{ marginTop: '30px', marginBottom: '30px' }}>
+        {showEnquiry && (        <Row xs="12" style={{ marginTop: '30px', marginBottom: '30px' }}>
           {/* <Card className="card-user"> */}
           {/* <CardHeader className="text-center">
                 <h4>Have some questions?</h4>
@@ -860,29 +874,56 @@ const PartnerProfile = ({ localuser }) => {
               style={{ gap: '10px', width: '70%' }}
             >
                           <br></br>
+                          <input
+                        id="enquiryTitle"
+                        className="form-control"
+                        placeholder="Title *"
+                      />
+                      <select className="custom-select" id="enquiryEvent">
+                        <option value="none">Event</option>
+                        {(enquiryEventList != null ||
+                          enquiryEventList != undefined) &&
+                          enquiryEventList.map((event) => {
+                            return (
+                              <option value={event.eid}>{event.name}</option>
+                            );
+                          })}
+                      </select>
+                      <textarea
+                        id="enquiryMessage"
+                        className="form-control"
+                        placeholder="Your Enquiry *"
+                        style={{ height: '10em' }}
+                      />
+                      <Alert
+                        show={showEnquiryError}
+                        variant="danger"
+                        onClose={() => setEnquiryError(false)}
+                        dismissible
+                      >
+                        Please fill in all the required fields.
+                      </Alert>
+                      <Alert
+                        show={showEnquirySuccess}
+                        variant="success"
+                        onClose={() => setEnquirySuccess(false)}
+                        dismissible
+                      >
+                        Success! A copy of the enquiry has been sent to your
+                        email.
+                      </Alert>
+                      <ButtonWithLoading
+                        className="btn btn-fill-out"
+                        onClick={() => sendEnquiry()}
+                        isLoading={sendEnquiryLoading && !showEnquiryError}
+                      >
+                        Send Enquiry
+                      </ButtonWithLoading>
 
-              <input
-                id="enquiryTitle"
-                className="form-control"
-                placeholder="Title"
-              />
-              <input
-                id="enquiryEventName"
-                className="form-control"
-                placeholder="Event Name"
-              />
-              <textarea
-                id="enquiryMessage"
-                className="form-control"
-                placeholder="Type something here..."
-                style={{ height: '10em' }}
-              />
-              <button className="btn btn-fill-out">Send Enquiry</button>
             </div>
-            {/* </CardBody> */}
-            {/* </Card> */}
           </Col>
-        </Row>
+        </Row>)}
+
         <br></br>
       </div>
     </>
