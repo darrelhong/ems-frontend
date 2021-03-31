@@ -15,6 +15,7 @@ import ShareButton from 'components/custom/ShareButton';
 import CenterSpinner from 'components/custom/CenterSpinner';
 
 import RegisterModal from 'components/events/registration/RegisterModal';
+import WithdrawModal from 'components/events/registration/WithdrawModal';
 import { getBoothTotalFromEvent } from 'lib/functions/boothFunctions';
 import { useToasts } from 'react-toast-notifications';
 
@@ -27,9 +28,10 @@ export function getServerSideProps({ query }) {
 export default function PartnerEventPage({ id }) {
   const { data, status } = useEvent(id);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
+  const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [boothTotal, setBoothTotal] = useState(0);
   const bpId = localStorage.getItem('userId');
-  const [alreadyRegistered, setAlreadyRegistered] = useState(false);
+  const [applicationMade, setApplicationMade] = useState();
 
   useEffect(() => {
     const loadBoothTotal = async () => {
@@ -38,8 +40,14 @@ export default function PartnerEventPage({ id }) {
     }
     const loadApplications = async () => {
       let applications = await getSellerApplicationsFromBpId(bpId);
-      applications = applications.map((application) => application.event?.eid);
-      setAlreadyRegistered(applications.includes(parseInt(id)));
+      applications = applications.filter(function (application) {
+        return application?.event?.eid == id;
+        //added filtering done on the backend side 
+        // return application?.event?.eid == id && application.sellerApplicationStatus != 'CANCELLED';
+      });
+      if (applications.length == 1) {
+        setApplicationMade(applications[0]);
+      }
     }
     loadBoothTotal();
     loadApplications();
@@ -61,7 +69,15 @@ export default function PartnerEventPage({ id }) {
         boothTotal={boothTotal}
         bpId={bpId}
         createToast={createToast}
-        setAlreadyRegistered={setAlreadyRegistered}
+        setApplicationMade={setApplicationMade}
+        applicationMade={applicationMade}
+      />
+      <WithdrawModal
+        showWithdrawModal={showWithdrawModal}
+        closeWithdrawModal={() => setShowWithdrawModal(false)}
+        createToast={createToast}
+        applicationMade={applicationMade}
+        setApplicationMade={setApplicationMade}
       />
       {status === 'loading' ? (
         <CenterSpinner />
@@ -138,17 +154,20 @@ export default function PartnerEventPage({ id }) {
                   <br></br>
                   <br></br>
                   <div className="d-flex align-items-center">
-                    {alreadyRegistered ? (
+                    {applicationMade ? (
                       <button
-                        className="btn btn-fill-out mr-2"
-                        disabled
-                        // disabled={!data.availableForSale}
+                        // className="btn btn-fill-out mr-2"
+                        className="btn btn-border-fill btn-sm mr-2"
+                        onClick={() => setShowRegisterModal(true)}
+                      // disabled
+                      // disabled={!data.availableForSale}
                       >
-                        Application Submitted
+                        View Submitted Application
                       </button>
                     ) : (
                       <button
-                        className="btn btn-fill-out mr-2"
+                        // className="btn btn-fill-out mr-2"
+                        className="btn btn-fill-out btn-sm mr-2"
                         disabled={boothTotal >= data.boothCapacity}
                         // disabled={!data.availableForSale}
                         onClick={() => setShowRegisterModal(true)}
@@ -156,11 +175,22 @@ export default function PartnerEventPage({ id }) {
                         Register Now
                       </button>
                     )}
+                    {applicationMade && (
+                      <button
+                        className="btn btn-fill-out btn-sm mr-2"
+                        // className="btn btn-fill-out mr-2"
+                        disabled={boothTotal >= data.boothCapacity}
+                        // disabled={!data.availableForSale}
+                        onClick={() => setShowWithdrawModal(true)}
+                      >
+                        Withdraw Application
+                      </button>
+                    )}
 
-                    {boothTotal >= data.boothCapacity && !alreadyRegistered && (
+                    {boothTotal >= data.boothCapacity && !applicationMade && (
                       <p className="text-dark">Capacity of {data.boothCapacity} booths has been reached!</p>
                     )}
-                    {boothTotal < data.boothCapacity && !alreadyRegistered && (
+                    {boothTotal < data.boothCapacity && !applicationMade && (
                       <p className="text-primary">{boothTotal} / {data.boothCapacity} booths already taken!</p>
                     )}
                   </div>

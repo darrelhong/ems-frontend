@@ -27,14 +27,11 @@ const EventDescriptionTabGroup = ({
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [recommendedPartners, setRecommendedPartners] = useState([]);
+  const [inviteCount,setInviteCount] = useState(0);
 
   useEffect(() => {
     const loadPartners = async () => {
-      console.log('loading');
-      console.log(event);
       const response = await getRecommendedPartners(event.eid);
-      console.log('loaded partners');
-      console.log(response);
       setRecommendedPartners(response);
     };
     if (event.eid) loadPartners();
@@ -145,7 +142,7 @@ const EventDescriptionTabGroup = ({
           <Nav.Item>
             <Nav.Link eventKey="recommendedPartners">
               SUGGESTED PARTNERS{' '}
-              {recommendedPartners?.length > 0 && (<Badge pill variant="danger">{recommendedPartners.length}</Badge>)}
+              {recommendedPartners?.length > 0 && (<Badge pill variant="danger">{recommendedPartners.length - inviteCount}</Badge>)}
             </Nav.Link>
           </Nav.Item>
         </Nav>
@@ -182,6 +179,7 @@ const EventDescriptionTabGroup = ({
               <RecommendedPartnersTab
                 eventId={event.eid}
                 recommendedPartners={recommendedPartners}
+                increaseInviteCount={()=>setInviteCount(inviteCount+1)}
               />
             )}
           </Tab.Pane>

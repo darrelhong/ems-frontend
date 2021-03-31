@@ -1,8 +1,35 @@
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Col } from 'react-bootstrap';
+import { checkIfRsvpSent, sendRsvp } from 'lib/query/eventApi';
+import { useToasts } from 'react-toast-notifications';
 
-const PartnerCard = ({ partner }) => {
+const PartnerCard = ({ partner, eid, increaseInviteCount }) => {
 
+    const [rsvpSent, setRsvpSent] = useState(false);
+    const { addToast, removeToast } = useToasts();
+
+    const handleSendRsvp = async () => {
+        try {
+            console.log('sending rsvp');
+            console.log('eid is ' + eid);
+            console.log('partner id is ' + partner?.id);
+            await sendRsvp(eid, partner?.id);
+            createToast('Invitation Sent!', 'success');
+            increaseInviteCount();
+            console.log('sent');
+            setRsvpSent(true);
+        } catch (e) {
+            console.log('error send rsvp');
+            console.log(e);
+            createToast('Error with sending, try again later', 'error');
+        }
+    }
+
+    const createToast = (message, appearanceStyle) => {
+        const toastId = addToast(message, { appearance: appearanceStyle });
+        setTimeout(() => removeToast(toastId), 3000);
+    };
 
     return (
         <Col lg={4} sm={6} className="space-mb--50">
@@ -24,19 +51,31 @@ const PartnerCard = ({ partner }) => {
                     </h6>
                     <p>{partner.businessCategory}</p>
                 </div>
-                <button
-                    onClick={() => console.log('hello')}
-                    className="btn btn-fill-out btn-addtocart space-ml--10"
-                    style={{ 
-                        // textAlign: 'right',
-                        // height:'10%',
-                        position:'absolute',
-                        right:10,
-                        bottom:10
-                    }}
-                >
-                    Invite Partner
-          </button>
+                {rsvpSent ? (
+                    <button
+                        className="btn btn-fill-out btn-addtocart space-ml--10"
+                        disabled
+                        style={{
+                            position: 'absolute',
+                            right: 10,
+                            bottom: 10
+                        }}
+                    >
+                        Invite Sent
+                    </button>
+                ) : (
+                    <button
+                        onClick={handleSendRsvp}
+                        className="btn btn-fill-out btn-addtocart space-ml--10"
+                        style={{
+                            position: 'absolute',
+                            right: 10,
+                            bottom: 10
+                        }}
+                    >
+                        Invite Partner
+                    </button>
+                )}
             </div>
         </Col>
     );
