@@ -28,18 +28,19 @@ export default function Applications() {
 
     useEffect(() => {
         if (user != null) getApplications();
-    }, [user, eid]);
-    console.log(filterValue)
+    }, [user, eid, filterValue]);
+    // console.log(filterValue)
+    // console.log(applications)
 
     const getApplications = async () => {
         const data = await getSellerApplicationsForEO(user.id);
         if (eid != null) {
             const tempData = data.filter((d) => d.event.eid == eid)
-            console.log(tempData)
+            // console.log("temp", tempData)
             setApplications(tempData.filter((d) => d.sellerApplicationStatus == filterValue))
         }
         else {
-            console.log(data)
+            // console.log("data", data[0].sellerApplicationStatus)
             setApplications(data.filter((d) => d.sellerApplicationStatus == filterValue));
         }
     };
