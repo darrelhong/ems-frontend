@@ -6,41 +6,48 @@ import OrganiserWrapper from 'components/wrapper/OrganiserWrapper';
 import { useState, useEffect } from 'react';
 import { getSellerApplicationsForEO, approveRejectApplication } from "lib/query/sellerApplicationApi"
 import ApplicationCard from "components/events/organiser/applications/ApplicationCard"
-import { Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import ApproveRejectModal from 'components/events/organiser/applications/ApproveRejectModal';
 import { useToasts } from 'react-toast-notifications';
+import ApplicationSideBar from 'components/events/organiser/applications/ApplicationSideBar'
 
 export default function Applications() {
 
     // const { data: user } = useUser(localStorage.getItem('userId'));
     const [applications, setApplications] = useState([]);
+    // const [currData, setCurrData] = ([]);
     const { data: user } = useUser(localStorage.getItem('userId'))
     const router = useRouter();
     const { eid } = router.query
     // console.log(eid)
     const [showApproveRejectModal, setShowApproveRejectModal] = useState(false);
     const [action, setAction] = useState('approve');
-    const [application,setApplication] = useState(Object);
+    const [application, setApplication] = useState(Object);
     const { addToast, removeToast } = useToasts();
+    const [filterValue, setFilterValue] = useState("PENDING")
 
     useEffect(() => {
         if (user != null) getApplications();
     }, [user, eid]);
+    console.log(filterValue)
 
     const getApplications = async () => {
         const data = await getSellerApplicationsForEO(user.id);
         if (eid != null) {
-            setApplications(data.filter((d) => d.event.eid == eid))
+            const tempData = data.filter((d) => d.event.eid == eid)
+            console.log(tempData)
+            setApplications(tempData.filter((d) => d.sellerApplicationStatus == filterValue))
         }
         else {
-            setApplications(data);
+            console.log(data)
+            setApplications(data.filter((d) => d.sellerApplicationStatus == filterValue));
         }
     };
 
 
     const handleSubmit = async () => {
         try {
-            await approveRejectApplication(application.id,action);
+            await approveRejectApplication(application.id, action);
             action == 'approve' ? createToast('Application successfully approved!', 'success') : createToast('Application successfully rejected', 'success');
             await getApplications(); //to reload
         } catch (e) {
@@ -62,8 +69,8 @@ export default function Applications() {
     const createToast = (message, appearanceStyle) => {
         const toastId = addToast(message, { appearance: appearanceStyle });
         setTimeout(() => removeToast(toastId), 3000);
-      };
-    
+    };
+
 
     return (
         <OrganiserWrapper title="Event Applications">
@@ -84,6 +91,10 @@ export default function Applications() {
                     <li className="breadcrumb-item active">Event Applications</li>
                 </ol>
             </BreadcrumbOne>
+
+            <Col lg={3} className="order-lg-first mt-4 pt-2 mt-lg-0 pt-lg-0">
+                <ApplicationSideBar filterValue={filterValue} setFilterValue={setFilterValue} />
+            </Col>
 
             <div className="shop-products"
                 style={{
