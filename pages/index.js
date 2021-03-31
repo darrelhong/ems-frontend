@@ -15,7 +15,7 @@ export default function Home() {
         {/* <LayoutOne> */}
 
         <Container className="space-mt--40 space-mb--40">
-          {/* <h2 className="space-mb--40">Event Management System</h2> */}
+          <h2 className="space-mb--40">Event Management System</h2>
 
           <Row className="justify-content-center mt-10">
             <Col lg={4} className="mb-3">

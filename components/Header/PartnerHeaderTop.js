@@ -5,22 +5,36 @@ import {
   AiOutlineUser,
   AiOutlineSetting,
   AiOutlineLogout,
-  AiOutlineNotification,
 } from 'react-icons/ai';
 import { IoIosHeartEmpty } from 'react-icons/io';
-import useUser from '../../lib/query/useUser';
-import { logout } from '../../lib/auth';
 
+import { logout } from '../../lib/auth';
+import  useUser  from '../../lib/query/useUser';
+import { useState, useEffect } from 'react';
 
 const PartnerHeaderTop = () => {
-  const { data: localuser } = useUser(localStorage.getItem('userId'));
+  // const [user, setUser] = useState();
+  // useEffect(() => {
+  //   const getUserData = async () => {
+  //     await getUser(localStorage.getItem('userId')).then((data) => {
 
+  //       console.log(data);
+
+  //       setUser(data.id);
+  //     });
+  //   };
+  //   getUserData();
+  // }, []);
+  const { data: user, isLoading, isSuccess } = useUser(
+    localStorage.getItem('userId')
+  );
   return (
-    
-    <div className="top-header d-lg-block">
-        <Head>
+    <>
+     <Head>
     <script src="https://embed.ravenhub.io/js/app.js"></script>
     </Head>
+    <div className="top-header d-lg-block">
+       
       <Container>
         <Row>
           <Col>
@@ -28,8 +42,8 @@ const PartnerHeaderTop = () => {
               <ul className="header-list" >
                 <li>
                 
-                    <a>
-                    <notification-center  appId="WLU2yLZw9d" subscriberId= {"partner" + localuser?.id} />
+                    <a >
+                    <notification-center  appId="WLU2yLZw9d" subscriberId= {"partner" + user?.id} />
                     </a>
                   
                 </li>
@@ -43,11 +57,12 @@ const PartnerHeaderTop = () => {
                 </li>
                 {/* <Link href={`/partner/profile-public?id=${JSON.stringify(localuser?.id)}`}> */}
                 <li>
+                 
                   {/* <Link href={{ pathname: "/partner/profile-public", query: { localuser: JSON.stringify(localuser) } }}> */}
                   <Link
                     href={{
                       pathname: '/partner/partner-profile',
-                      query: { localuser: JSON.stringify(localuser?.id) },
+                      query: { localuser: JSON.stringify(user?.id) },
                     }}
                   >
                     <a>
@@ -57,7 +72,7 @@ const PartnerHeaderTop = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/partner/profile-account/">
+                  <Link href="/partner/profile-account">
                     <a>
                       <AiOutlineSetting />
                       <span>Settings</span>
@@ -76,6 +91,7 @@ const PartnerHeaderTop = () => {
         </Row>
       </Container>
     </div>
+    </>
   );
 };
 

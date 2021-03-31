@@ -9,6 +9,46 @@
   outline: medium none;
   box-shadow: none;
 }
+
+
+.view:focus,
+.view:hover,
+.view.active {
+  outline: medium none;
+  box-shadow: none;
+  color: white;
+  border-color: #ff324d;
+  background-color: #ff324d;
+}
+
+.btnView:focus,
+.btnView:hover,
+.btnView.active {
+  outline: medium none;
+  box-shadow: none;
+  color: #ff324d;
+  border-color: #ff324d;
+  background-color: white;
+}
+
+.btn-outline-primaryTest {
+  color: #ff324d;
+  border-color: #ff324d;
+  background-color: transparent;
+}
+
+
+.btn-outline-primary {
+  color: #ff324d;
+  border-color: #ff324d;
+  background-color: transparent;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #ff324d;
+  border-color: #ff324d;
+}
 button:focus {
   outline: none;
 }
@@ -62,6 +102,7 @@ button:focus {
 .btn-fill-out:hover:before,
 .btn-fill-out:hover:after {
   width: 0;
+  
 }
 .btn-fill-out:hover {
   color: $theme-color--default !important;

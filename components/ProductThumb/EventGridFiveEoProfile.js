@@ -2,11 +2,11 @@ import { Fragment, useState } from 'react';
 import Link from 'next/link';
 import EventModal from './elements/EventModalEoProfile';
 import { ProductRating } from '../Product';
+import Badge from 'react-bootstrap/Badge';
 
 const EventGridFiveEOProfile = ({ event, bottomSpace, sliderClass }) => {
   const [modalShow, setModalShow] = useState(false);
   const [colorImage, setColorImage] = useState('');
-
   return (
     <Fragment>
       <div
@@ -62,6 +62,10 @@ const EventGridFiveEOProfile = ({ event, bottomSpace, sliderClass }) => {
               <ProductRating ratingValue={event.rating} />
               <span className="rating-num">({event.rating})</span>
             </div>
+            {/* <div className="rating-wrap">
+              {!event.isPhysical && (<Badge variant="info">Virtual</Badge>)}
+            
+            </div> */}
           </div>
         </div>
       </div>

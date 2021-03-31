@@ -2,26 +2,29 @@ import Link from 'next/link';
 import { Container } from 'react-bootstrap';
 
 import useUser from '../../lib/query/useUser';
-
 import { BreadcrumbOne } from '../../components/Breadcrumb';
-import PartnerWrapper from '../../components/wrapper/PartnerWrapper';
 
-export default function PartnerHome() {
+import PartnerWrapper from '../../components/wrapper/PartnerWrapper';
+import Head from 'next/head';
+
+function PartnerHome() {
   const { data: user, isLoading, isSuccess } = useUser(
     localStorage.getItem('userId')
   );
   return (
+    <>
+ 
     <PartnerWrapper title="Home">
       <BreadcrumbOne pageTitle="Home">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/partner/home">
-              <a>Home</a>
+              <a>Partner Home</a>
             </Link>
           </li>
         </ol>
       </BreadcrumbOne>
-
+    
       <Container className="my-4">
         {isLoading && <div className="spinner-grow" role="status" />}
         {isSuccess && (
@@ -44,5 +47,8 @@ export default function PartnerHome() {
         </Link>
       </Container>
     </PartnerWrapper>
+    </>
   );
 }
+
+export default PartnerHome;

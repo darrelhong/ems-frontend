@@ -2,15 +2,19 @@ import Link from 'next/link';
 import { Alert, Col, Container, Row } from 'react-bootstrap';
 
 import useUser from '../../lib/query/useUser';
-
-import { BreadcrumbOne } from '../../components/Breadcrumb';
 import AttendeeWrapper from '../../components/wrapper/AttendeeWrapper';
 
-export default function PartnerHome() {
+import { BreadcrumbOne } from '../../components/Breadcrumb';
+
+
+export default function AttendeeHome() {
   const { data: user, status } = useUser(localStorage.getItem('userId'));
   return (
-    <AttendeeWrapper title="Attendee Home">
-      <BreadcrumbOne pageTitle={'Welcome ' + user?.name}>
+    
+
+    <AttendeeWrapper title="Home">
+      
+      <BreadcrumbOne pageTitle='Home'>
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/attendee/home">
@@ -32,12 +36,8 @@ export default function PartnerHome() {
           </>
         )}
 
-        <Row>
-          <Col>
-            <button className="btn btn-fill-out">View events</button>
-          </Col>
-        </Row>
       </Container>
     </AttendeeWrapper>
+    
   );
 }

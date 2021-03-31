@@ -97,7 +97,7 @@ export default function LoginPage({
                           </label> */}
                         </div>
                       </div>
-                      <a href="/register/forgot-password">Forgot password?</a>
+                      <a href="#">Forgot password?</a>
                     </div>
                     {loginError && (
                       <div className="alert alert-danger" role="alert">

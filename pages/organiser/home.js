@@ -16,7 +16,7 @@ export default function OrganiserHome() {
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/organiser/home">
-              <a>Home</a>
+              <a>Organiser Home</a>
             </Link>
           </li>
         </ol>

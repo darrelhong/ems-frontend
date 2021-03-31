@@ -5,11 +5,11 @@ import { ProductRating } from '../Product';
 import Image from 'react-bootstrap/Image';
 const ProductGridFive = ({
   product,
-  // discountedPrice,
-  // productPrice,
-  // cartItem,
-  // wishlistItem,
-  // compareItem,
+  discountedPrice,
+  productPrice,
+  cartItem,
+  wishlistItem,
+  compareItem,
   bottomSpace,
   // addToCart,
   // addToWishlist,
@@ -59,7 +59,7 @@ const ProductGridFive = ({
               </a>
             </Link>
             <div className="product-grid__badge-wrapper">
-              {/* {product.new ? <span className="pr-flash">NEW</span> : ""}
+              {product.new ? <span className="pr-flash">NEW</span> : ''}
               {product.featured ? (
                 <span className="pr-flash bg-danger">HOT</span>
               ) : (
@@ -144,8 +144,8 @@ const ProductGridFive = ({
               <h6 className="product-title">
                 {/* <Link
                 href={`/shop/product-basic/[slug]?slug=${product.slug}`}
-                as={"/shop/product-basic/" + product.slug}
-              > */}
+                as={'/shop/product-basic/' + product.slug}
+              >
                 <a>{product.name}</a>
                 {/* </Link> */}
               </h6>
@@ -160,7 +160,7 @@ const ProductGridFive = ({
                 {/* </Link> */}
               </h6>
             </div>
-
+</div>
             {/* <div className="product-price">
               {product.discount ? (
                 <Fragment>
@@ -171,16 +171,16 @@ const ProductGridFive = ({
               ) : (
                 <span className="price">${productPrice}</span>
               )}
-            </div> */}
-            {/* <div className="rating-wrap">
+            </div>
+            <div className="rating-wrap">
               <ProductRating ratingValue={product.rating} />
               <span className="rating-num">({product.ratingCount})</span>
-            </div> */}
+            </div>
           </div>
         </div>
       </div>
       {/* product modal */}
-      {/* <ProductModal
+      <ProductModal
         show={modalShow}
         onHide={() => setModalShow(false)}
         product={product}
@@ -196,7 +196,9 @@ const ProductGridFive = ({
         addtocompare={addToCompare}
         deletefromcompare={deleteFromCompare}
         addtoast={addToast}
-      /> */}
+      />
+      </div>
+      </div>
     </Fragment>
   );
 };

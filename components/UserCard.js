@@ -16,7 +16,7 @@ export default function UserCard({ partner }) {
                 <Card.Title>{partner.name}</Card.Title>
                 {(partner.description == null) && (<Card.Text className="line-clamp">There is no description.</Card.Text>)}
                 {(partner.description != null) && <Card.Text className="line-clamp">{partner.description}</Card.Text>}
-                <Card.Text className="text-default mt-auto">
+                <Card.Text >
                     Category: 
                     &nbsp;
                     <Badge variant="primary">

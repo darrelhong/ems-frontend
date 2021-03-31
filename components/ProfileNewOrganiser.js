@@ -21,21 +21,19 @@ import { getReviews, getReviewsByEvent } from '../lib/query/getReviews';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
-import Alert from 'react-bootstrap/Alert';
 import { BsPencilSquare } from 'react-icons/bs';
 import api from '../lib/ApiClient';
-import {
-  getRating,
-  getEoEventsByIdRoleStatus,
-  getEventByOrganiserId,
-} from '../lib/query/useEvent';
+import { getRating, getEoEventsByIdRoleStatus } from '../lib/query/useEvent';
 import { getOrgAttendeeFollowers } from '../lib/query/getOrgAttendeeFollowers';
 import { getOrgPartnerFollowers } from '../lib/query/getOrgPartnerFollowers';
 import { useMutation } from 'react-query';
 import { BreadcrumbOne } from './Breadcrumb';
-import ButtonWithLoading from './custom/ButtonWithLoading';
-
-const EventOrgProfile = ({ paraId_, currentUserId_, currentUserRole_ }) => {
+import {
+  AiOutlineNotification,
+} from 'react-icons/ai';
+import ReactNotification from 'react-notifications-component'
+import 'react-notifications-component/dist/theme.css'
+const EventOrgProfile = ({ paraId_ }) => {
   const [showEoView, setShowEoView] = useState(false);
   const [showPublicView, setShowPublicView] = useState(false);
   const [userRole, setUserRole] = useState('');
@@ -50,12 +48,8 @@ const EventOrgProfile = ({ paraId_, currentUserId_, currentUserRole_ }) => {
   const [unfollowBtn, setUnfollowBtn] = useState();
   const [followBtn, setFollowBtn] = useState();
   const [reviews, setReviews] = useState();
-  const [user, setUser] = useState();
-
-  const [showEnquiryError, setEnquiryError] = useState(false);
-  const [showEnquirySuccess, setEnquirySuccess] = useState(false);
-  const [enquiryEventList, setEnquiryEventList] = useState([]);
-  const [sendEnquiryLoading, setSendEnquiryLoading] = useState(false);
+  const[user,setUser] = useState();
+ 
   // if there is user login credential
   //const paraId_ = JSON.parse(query.paraId);
 
@@ -113,11 +107,8 @@ const EventOrgProfile = ({ paraId_, currentUserId_, currentUserRole_ }) => {
     });
   };
 
-  const getReviewsEO = async () => {
-    await getReviews(paraId_).then((data) => {
-      setReviews(data);
-    });
-  };
+
+ 
 
   const getReviewsEvent = async (id) => {
     await getReviewsByEvent(id).then((data) => {
@@ -137,6 +128,13 @@ const EventOrgProfile = ({ paraId_, currentUserId_, currentUserRole_ }) => {
     });
     return check;
   };
+  const getRefreshReviewsEO = async () => {
+    await getReviews(paraId_).then((data) => {
+      console.log("reviews" + reviews);
+      setReviews(data);
+    });
+   
+  };
 
   useEffect(() => {
     const getUserData = async () => {
@@ -147,7 +145,15 @@ const EventOrgProfile = ({ paraId_, currentUserId_, currentUserRole_ }) => {
         setEventOrganiser(eventOrg);
       });
     };
-    getUserData();
+    getUserData(); 
+    
+    const getReviewsEO = async () => {
+    await getReviews(paraId_).then((data) => {
+      console.log("reviews" + reviews);
+      setReviews(data);
+    });
+   
+  };
     getReviewsEO();
     const getRatingData = async () => {
       await getRating(paraId_).then((rate) => {
@@ -286,24 +292,8 @@ const EventOrgProfile = ({ paraId_, currentUserId_, currentUserRole_ }) => {
               loadOrgAttFollowerData();
 
               loadOrgPartnerFollowerData();
+              // getReviewsEO();
             }
-
-            await getEventByOrganiserId(paraId_).then((events) => {
-              setEoEventList(events);
-            await getEoEventsByIdRoleStatus(
-              paraId_,
-              data.roles[0].roleEnum,
-              'current'
-            ).then(async (currentEvents) => {
-
-              await getEoEventsByIdRoleStatus(
-                paraId_,
-                data.roles[0].roleEnum,
-                'upcoming'
-              ).then((upcomingEvents) => {
-                setEnquiryEventList(currentEvents.concat(upcomingEvents));
-              });
-            });
           }
         });
       };
@@ -354,19 +344,12 @@ const EventOrgProfile = ({ paraId_, currentUserId_, currentUserRole_ }) => {
         setUnfollowBtn(true);
         setFollowBtn(false);
         getRefreshedFollowers();
-        console.log('user ' + user);
-        let endpoint =
-          'https://api.ravenhub.io/company/WLU2yLZw9d/subscribers/organiser' +
-          data.id +
-          '/events/SyTpyGmjrT';
-
-        axios.post(
-          endpoint,
-          { person: user },
-          {
-            headers: { 'Content-type': 'application/json' },
-          }
-        );
+        console.log("user " + user);
+        let endpoint = "https://api.ravenhub.io/company/WLU2yLZw9d/subscribers/organiser" + data.id + "/events/SyTpyGmjrT"
+ 
+  axios.post(endpoint, { "person" : user }, {
+  headers: {'Content-type': 'applircation/json'}
+  });
       })
       .catch((error) => {
         console.log(error);
@@ -393,19 +376,12 @@ const EventOrgProfile = ({ paraId_, currentUserId_, currentUserRole_ }) => {
         setUnfollowBtn(true);
         setFollowBtn(false);
         getRefreshedFollowers();
-        console.log('user ' + user);
-        let endpoint =
-          'https://api.ravenhub.io/company/WLU2yLZw9d/subscribers/organiser' +
-          data.id +
-          '/events/SyTpyGmjrT';
-
-        axios.post(
-          endpoint,
-          { person: user },
-          {
-            headers: { 'Content-type': 'application/json' },
-          }
-        );
+        console.log("user " + user );
+        let endpoint = "https://api.ravenhub.io/company/WLU2yLZw9d/subscribers/organiser" + data.id + "/events/SyTpyGmjrT"
+ 
+  axios.post(endpoint, { "person" : user }, {
+  headers: {'Content-type': 'application/json'}
+  });
       })
       .catch((error) => {
         console.log(error);
@@ -452,66 +428,13 @@ const EventOrgProfile = ({ paraId_, currentUserId_, currentUserRole_ }) => {
 
   const handleChange = (e) => {
     if (e.target.value == 'all') {
-      getReviewsEO();
+      getRefreshReviewsEO();
     } else {
       getReviewsEvent(e.target.value);
     }
   };
 
-  function sendEnquiry() {
-    // get user inputs
-    let enquiryTitle = document.getElementById('enquiryTitle').value;
-    let enquiryEvent = document.getElementById('enquiryEvent').value;
-    let enquiryMessage = document.getElementById('enquiryMessage').value;
 
-    if (enquiryEvent == "none") {
-      enquiryEvent = null;
-    }
-
-    // validate
-    if (enquiryTitle == "" || enquiryMessage == "") {
-      setEnquiryError(true);
-    } else {
-      setEnquiryError(false);
-
-      // get sender and receiver info
-      getUser(currentUserId_).then((user) => {
-        let enquiryReceiverEmail = eventorganiser.email;
-        let enquirySenderEmail = user.email;
-
-        let data = {
-          subject: enquiryTitle,
-          content: enquiryMessage,
-          eventId: enquiryEvent,
-          receiverEmail: enquiryReceiverEmail,
-          senderEmail: enquirySenderEmail
-        }
-
-        setSendEnquiryLoading(true);
-        api.post('/api/user/enquiry', data)
-        .then(() => {
-          setEnquirySuccess(true);
-          setSendEnquiryLoading(false);
-          clearEnquiryForm();
-        })
-        .catch((error) => {
-          console.log(error);
-          setSendEnquiryLoading(false);
-          setEnquiryError(true);
-        });
-      });
-    }
-  }
-
-  function clearEnquiryForm() {
-    let enquiryTitle = document.getElementById("enquiryTitle");
-    let enquiryEvent = document.getElementById("enquiryEvent");
-    let enquiryMessage = document.getElementById("enquiryMessage");
-
-    enquiryTitle.value = "";
-    enquiryEvent.selectedIndex = 0;
-    enquiryMessage.value = "";
-  }
 
   return (
     <>
@@ -525,6 +448,7 @@ const EventOrgProfile = ({ paraId_, currentUserId_, currentUserRole_ }) => {
           <li className="breadcrumb-item active">Profile Details</li>
         </ol>
       </BreadcrumbOne>
+      <ReactNotification />
       <br></br>
       <div className="content" style={{ marginLeft: '8%', marginRight: '8%' }}>
         <Row>
@@ -690,12 +614,24 @@ const EventOrgProfile = ({ paraId_, currentUserId_, currentUserRole_ }) => {
                     </Tab.Pane>
                     <Tab.Pane eventKey="Followers">
                       <br></br>
+                      {/* <button
+                              className="btn btn-fill-out btn-sm"
+                              name="noti"
+                              onClick= {sendNoti}
+                              size="sm"
+                            >
+                              <AiOutlineNotification />
+                            
+                            </button>
+                       */}
                       <ul className="list-unstyled team-members">
                         <div className="product-description-tab__additional-info">
                           <FollowersTabEoProfile
                             attendees={attendeeFollowers}
                             partners={partnerFollowers}
                             showPublicView={showPublicView}
+                            organiser = {eventorganiser?.name}
+                            showEoView = {showEoView}
                           />
                         </div>
                       </ul>
@@ -725,9 +661,7 @@ const EventOrgProfile = ({ paraId_, currentUserId_, currentUserRole_ }) => {
                                 {(pasteventlist != null ||
                                   pasteventlist != undefined) &&
                                   pasteventlist.map((event) => {
-                                    console.log('event' + event.name);
                                     if (getReviewsEventFilter(event.eid)) {
-                                      console.log('passed' + event.name);
                                       return (
                                         <option value={event.eid}>
                                           {event.name}
@@ -755,6 +689,13 @@ const EventOrgProfile = ({ paraId_, currentUserId_, currentUserRole_ }) => {
                                             <ProductRating
                                               ratingValue={review.rating}
                                             />
+                                            
+                                          </div>
+                                          <div className="description">
+                                            
+                                          <p>
+                                            {review.reviewDateTime}
+                                          </p>
                                           </div>
                                         </div>
                                         <p className="customer-meta">
@@ -768,10 +709,11 @@ const EventOrgProfile = ({ paraId_, currentUserId_, currentUserRole_ }) => {
                                               {review.partner.name}
                                             </span>
                                           )}
-
-                                          <span className="comment-date">
+                                          <div className="rating">
+                                          <span >
                                             {review.event.name}
                                           </span>
+                                          </div>
                                         </p>
                                         <div className="description">
                                           <p>{review.reviewText}</p>
@@ -791,81 +733,63 @@ const EventOrgProfile = ({ paraId_, currentUserId_, currentUserRole_ }) => {
               </CardBody>
             </Card>
           </Col>
-          {Boolean(
-            (currentUserId_ != paraId_) & (currentUserRole_ != 'Organiser')
-          ) && (
-            <Col xs={12} style={{ marginTop: '30px', marginBottom: '30px' }}>
-              <Card className="card-user">
-                <CardHeader className="text-center">
-                  <h4>Have some questions?</h4>
-                </CardHeader>
-                <CardBody className="d-flex justify-content-center">
-                  <Row className="w-100 d-flex justify-content-center">
-                    <Col
-                      xs={12}
-                      lg={6}
-                      className="d-flex flex-column"
-                      style={{ gap: '10px' }}
-                    >
-                      <input
-                        id="enquiryTitle"
-                        className="form-control"
-                        placeholder="Title *"
-                      />
-                      <select className="custom-select" id="enquiryEvent">
-                        <option value="none">Event</option>
-                        {(enquiryEventList != null ||
-                          enquiryEventList != undefined) &&
-                          enquiryEventList.map((event) => {
-                            return (
-                              <option value={event.eid}>{event.name}</option>
-                            );
-                          })}
-                      </select>
-                      <textarea
-                        id="enquiryMessage"
-                        className="form-control"
-                        placeholder="Your Enquiry *"
-                        style={{height: "10em"}}
-                      />
-                      <Alert
-                        show={showEnquiryError}
-                        variant="danger"
-                        onClose={() => setEnquiryError(false)}
-                        dismissible
-                      >
-                        Please fill in all the required fields.
-                      </Alert>
-                      <Alert
-                        show={showEnquirySuccess}
-                        variant="success"
-                        onClose={() => setEnquirySuccess(false)}
-                        dismissible
-                      >
-                        Success! A copy of the enquiry has been sent to your
-                        email.
-                      </Alert>
-                      <ButtonWithLoading
-                        className="btn btn-fill-out"
-                        onClick={() => sendEnquiry()}
-                        isLoading={sendEnquiryLoading && !showEnquiryError}
-                      >
-                        Send Enquiry
-                      </ButtonWithLoading>
-                    </Col>
-                  </Row>
-                </CardBody>
-              </Card>
-            </Col>
-          )}
+         
+        </Row>
+        <br></br>
+        <Row xs="12" style={{ marginTop: "30px", marginBottom: "30px" }}>
+          {/* <Card className="card-user"> */}
+          {/* <CardHeader className="text-center">
+                <h4>Have some questions?</h4>
+              </CardHeader> */}
+          {/* <CardBody className="d-flex justify-content-center"> */}
+          
+          <Col xs="5" className=" justify-content-center" >
+            <br></br>
+            <div className="d-flex justify-content-center">
+              <h2>Have some questions?</h2>
+          </div>
+          <br></br>
+          
+            <div className="d-flex justify-content-center">
+              <img
+                // src="https://cdn1.iconfinder.com/data/icons/contact-us-honey-series/64/ONLINE_QUESTION-512.png"
+                src= "https://img.icons8.com/bubbles/2x/email.png"
+                 className="img-responsive"
+                 style={{maxWidth:"70%"}}
+              />
+            </div>
+
+          </Col>
+          <Col xs="7" className="d-flex justify-content-center">
+            <div className="d-flex flex-column text-center " style={{ gap: "10px", width:"70%" }}>
+              <input
+                id="enquiryTitle"
+                className="form-control"
+                placeholder="Title"
+              />
+              <input
+                id="enquiryEventName"
+                className="form-control"
+                placeholder="Event Name"
+              />
+              <textarea
+                id="enquiryMessage"
+                className="form-control"
+                placeholder="Type something here..."
+                style={{ height: "10em" }}
+              />
+              <button
+                className="btn btn-fill-out"
+              >
+                Send Enquiry
+                  </button>
+            </div>
+            {/* </CardBody> */}
+            {/* </Card> */}
+          </Col>
         </Row>
         <br></br>
       </div>
-      {/*
-        <div style={{display: "none"}}>
-          {setEoEventList(currenteventlist.concat(upcomingeventlist, pasteventlist))}
-        </div>
-      */}
     </>
   );
 };

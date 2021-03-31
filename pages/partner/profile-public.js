@@ -3,10 +3,8 @@ import { LayoutOne } from '../../layouts';
 import { BreadcrumbOne } from '../../components/Breadcrumb';
 import { Container, Row, Col } from 'react-bootstrap';
 import { ProductRating } from '../../components/Product';
-import EventsProfile from '../../components/ProductTab/EventsProfile';
-import PartnerWrapper from '../../components/wrapper/PartnerWrapper';
-import useUser from '../../lib/query/useUser';
-import { useState, useEffect } from 'react';
+import { ProductTabFour } from '../../components/ProductTab';
+
 //import {
 //IoIosList,
 //IoIosClipboard,
@@ -65,10 +63,11 @@ const PartnerProfile = ({ router: { query } }) => {
   const localuser = JSON.parse(query.localuser);
   const { data: partner } = useUser(localuser);
 
+const EventOrgProfile = () => {
   return (
-    <PartnerWrapper>
+    <LayoutOne>
       {/* breadcrumb */}
-      <BreadcrumbOne pageTitle="Partner Profile Details">
+      <BreadcrumbOne pageTitle="Business Partner Profile Details">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/">
@@ -152,18 +151,13 @@ const PartnerProfile = ({ router: { query } }) => {
                   </Row>
                 </div>
                 <div>
-                  &nbsp;
-                  <Row>
-                    <h5>
-                      Category :
-                      <span>
-                        {' '}
-                        <Badge variant="primary">
-                          {partner?.businessCategory}
-                        </Badge>{' '}
-                      </span>
-                    </h5>
-                  </Row>
+                  <p>
+                    Category:
+                    <span>
+                      {' '}
+                      <Badge variant="primary">Technology</Badge>{' '}
+                    </span>
+                  </p>
                 </div>
                 <div style={{ display: !publicView ? 'block' : 'none' }}>
                   &nbsp;
@@ -178,16 +172,14 @@ const PartnerProfile = ({ router: { query } }) => {
                   </Link>
                 </div>
                 <br></br>
-                {publicView && (
-                  <button
-                    type="submit"
-                    className="btn btn-fill-out"
-                    name="submit"
-                    value="Submit"
-                  >
-                    Follow
-                  </button>
-                )}
+                <button
+                  type="submit"
+                  className="btn btn-fill-out"
+                  name="submit"
+                  value="Submit"
+                >
+                  Follow
+                </button>
               </Col>
             </Row>
           </Container>
@@ -200,16 +192,10 @@ const PartnerProfile = ({ router: { query } }) => {
                 className="product-description-tab__navigation"
               >
                 <Nav.Item>
-                  <Nav.Link eventKey="Events">EVENTS</Nav.Link>
+                  <Nav.Link eventKey="Events">PARTICIPATED EVENTS</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
                   <Nav.Link eventKey="Description">DESCRIPTION</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="Followers">FOLLOWERS</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="Following">FOLLOWING</Nav.Link>
                 </Nav.Item>
               </Nav>
 
@@ -354,8 +340,21 @@ const PartnerProfile = ({ router: { query } }) => {
           </Col>
         </Row>
       </div>
-    </PartnerWrapper>
+    </LayoutOne>
   );
 };
+/*
+const mapStateToProps = (state) => {
+  const products = state.productData;
+  return {
+    trendingProducts: getProducts(products, "electronics", "popular", 10),
+    featuredProducts: getProducts(products, "electronics", "featured", 8),
+    newProducts: getProducts(products, "electronics", "new", 8),
+    bestSellerProducts: getProducts(products, "electronics", "popular", 8),
+    saleProducts: getProducts(products, "electronics", "sale", 8),
+  };
+ 
+};
+ */
 
-export default withRouter(PartnerProfile);
+export default EventOrgProfile;

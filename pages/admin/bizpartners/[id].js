@@ -73,7 +73,7 @@ function BusinessPartnerDetails({ id }) {
 
       <AdminHeaderTop />
 
-      <BreadcrumbOne pageTitle="Event Organiser Details">
+      <BreadcrumbOne pageTitle="Business Partner Details">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/admin/home">
@@ -82,7 +82,7 @@ function BusinessPartnerDetails({ id }) {
           </li>
           <li className="breadcrumb-item">
             <Link href="/admin/bizpartners">
-              <a>Event Organisers</a>
+              <a>Business Partner</a>
             </Link>
           </li>
           <li className="breadcrumb-item active">Details</li>

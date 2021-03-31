@@ -96,12 +96,12 @@ export default function AdminLogin({ info }) {
                             id="exampleCheckbox1"
                             defaultValue
                           />
-                          <label
+                          {/* <label
                             className="form-check-label"
                             htmlFor="exampleCheckbox1"
                           >
                             <span>Remember me</span>
-                          </label>
+                          </label> */}
                         </div>
                       </div>
                       <a href="#">Forgot password?</a>
@@ -122,7 +122,7 @@ export default function AdminLogin({ info }) {
                       </ButtonWithLoading>
                     </div>
                   </form>
-                  <div className="different-login">
+                  {/* <div className="different-login">
                     <span> or</span>
                   </div>
                   <ul className="btn-login text-center">
@@ -144,7 +144,7 @@ export default function AdminLogin({ info }) {
                     <Link href="/other/register">
                       <a>Sign up now</a>
                     </Link>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </Col>

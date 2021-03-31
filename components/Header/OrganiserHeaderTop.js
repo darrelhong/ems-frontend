@@ -10,7 +10,8 @@ import {
 } from 'react-icons/ai';
 
 import useUser from '../../lib/query/useUser';
-
+import { getUser } from '../../lib/query/getUser';
+import { useState, useEffect } from 'react';
 import { logout } from '../../lib/auth';
 
 const OrganiserHeaderTop = () => {

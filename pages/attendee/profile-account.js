@@ -23,15 +23,20 @@ import { FaRegEdit } from 'react-icons/fa';
 import AttendeeWrapper from '../../components/wrapper/AttendeeWrapper';
 import { BsFillInfoCircleFill } from 'react-icons/bs';
 import { AiOutlineNotification } from 'react-icons/ai';
+import Badge from 'react-bootstrap/Badge';
+
 import {
   IoIosCash,
   IoIosPerson,
   IoIosSettings,
   IoIosRadioButtonOn,
+  IoIosContacts
 } from 'react-icons/io';
 
 import { useForm } from 'react-hook-form';
 import useUser from '../../lib/query/useUser';
+import {getFollowingEo, getFollowingBp} from '../../lib/query/getAttendeeFollowing';
+
 import { useMutation, useQueryClient } from 'react-query';
 import api from '../../lib/ApiClient';
 import { logout } from '../../lib/auth';
@@ -72,6 +77,16 @@ const MyAccount = () => {
   //show pw error alert
   const [showPW, setShowPW] = useState(false);
   const [showFileSizeError, setShowFileSizeError] = useState(false);
+  const[followingBp, setFollowingBp] = useState([]);
+  const[followingEo, setFollowingEo] = useState([]);
+
+  useEffect(() => {
+    const getFollowingPartner = async () => {
+      await getFollowingBp(localStorage.getItem('userId')).then((data) => {
+        setFollowingBp(data);
+      });
+    };
+    getFollowingPartner();
 
   //Email Notification Setting
   //const [allEmailNoti, setAllEmailNoti] = useState(true);
@@ -118,6 +133,13 @@ const MyAccount = () => {
     // }
   }, []);
 
+    const getFollowingOrganiser = async () => {
+      await getFollowingEo(localStorage.getItem('userId')).then((data) => {
+        setFollowingEo(data);
+      });
+    };
+    getFollowingOrganiser();
+  }, []);
   const renderTooltip = (props) => (
     <Tooltip id="button-tooltip" {...props}>
       Support png and jpg image format.
@@ -564,7 +586,7 @@ const MyAccount = () => {
       <BreadcrumbOne pageTitle="My Account">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
-            <Link href="/">
+            <Link href="/attendee/home">
               <a>Home</a>
             </Link>
           </li>
@@ -591,6 +613,11 @@ const MyAccount = () => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
+                    <Nav.Link eventKey="following">
+                      <IoIosContacts /> Following
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
                     <Nav.Link eventKey="notification">
                       <AiOutlineNotification /> Notification
                     </Nav.Link>
@@ -609,6 +636,230 @@ const MyAccount = () => {
               </Col>
               <Col lg={9} md={8}>
                 <Tab.Content>
+                  <Tab.Pane eventKey="following">
+                    <Card className="my-account-content__content">
+                      <Card.Header>
+                        <h3>List of Following</h3>
+                      </Card.Header>
+                      <Card.Body>
+                      <Container>
+          <Tab.Container defaultActiveKey="organiser">
+            <Nav
+              variant="pills"
+              className="product-tab-navigation text-center justify-content-center space-mb--30"
+            >
+              <Nav.Item>
+                <Nav.Link eventKey="organiser">Event Organiser</Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="partners">Partner</Nav.Link>
+              </Nav.Item>
+            </Nav>
+
+            <Tab.Content>
+              <Tab.Pane eventKey="organiser">
+                <Row>
+                  <Col md={12}>
+                    <div
+                      style={{
+                        overflowY: 'auto',
+                        // border:'1px solid red',
+                        // width:'500px',
+                        overflowX: 'hidden',
+                        height: '40vh',
+                        position: 'relative',
+                      }}
+                    >
+                      <div className="product-description-tab__additional-info">
+                        {followingEo != null &&
+                          followingEo.map((follow) => {
+                            return (
+                              <li>
+                              <hr></hr>
+                              <Row>
+                                <Col md="1" xs="1">
+                                  {' '}
+                                  &nbsp;
+                                </Col>
+                                <Col md="2" xs="2">
+                                  <div className="avatar">
+                                    {follow?.profilePic == null && (
+                                      <img
+                                        src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
+                                        className="img-circle img-no-padding img-responsive"
+                                      />
+                                    )}
+                                    {follow?.profilePic != null && (
+                                      <Image
+                                        className="img-circle img-no-padding img-responsive"
+                                        src={follow?.profilePic}
+                                      />
+                                    )}
+                                  </div>
+                                </Col>
+                                <Col md="5" xs="5">
+                                  {/* <br></br> */}
+                                  <Link
+                                    href={{
+                                      pathname:
+                                        '/organiser/organiser-profile',
+                                      query: {
+                                        paraId: JSON.stringify(follow?.id),
+                                      },
+                                    }}
+                                  >
+                                    {follow.name}
+                                  </Link>{' '}
+                                  <br />
+                                  {/* <span className="text-muted">
+                                    {follow.email}
+                                  </span> */}
+                                  <div>
+                                    <span className="text-muted">
+                                      {follow.description != null && follow.description}
+                                      {follow.description == null && "There is no description yet."}
+                                    </span>
+                                  </div>
+                                </Col>
+
+                                <Col className="text-left" md="4" xs="4">
+                                  <span>Email:</span>
+                                  <br></br>
+                                  <span className="text-muted">
+                                    {follow.email}
+                                  </span>
+                                  {/* {!publicView && (
+                                    <Button
+                                      className="btn-round btn-icon"
+                                      color="success"
+                                      outline
+                                      size="sm"
+                                    >
+                                      Select
+                                    </Button>
+                                  )} */}
+                                </Col>
+                              </Row>
+                            </li>
+                            );
+                          })}
+                      </div>
+                    </div>
+                  </Col>
+                </Row>
+              </Tab.Pane>
+              <Tab.Pane eventKey="partners">
+                <Row>
+                  <Col md={12}>
+                    <div
+                      style={{
+                        overflowY: 'auto',
+                        // border:'1px solid red',
+                        // width:'500px',
+                        overflowX: 'hidden',
+                        height: '40vh',
+                        position: 'relative',
+                      }}
+                    >
+                      <div className="product-description-tab__additional-info">
+                        <ul className="list-unstyled team-members">
+                          {followingBp != null &&
+                            followingBp.map((partner) => {
+                              return (
+                                <li>
+                                  <hr></hr>
+                                  <Row>
+                                    <Col md="1" xs="1">
+                                      {' '}
+                                      &nbsp;
+                                    </Col>
+                                    <Col md="2" xs="2">
+                                      <div className="avatar">
+                                        {/* <img
+                              alt="..."
+                              className="img-circle img-no-padding img-responsive"
+                              src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
+                            /> */}
+                                        {partner?.profilePic == null && (
+                                          <img
+                                            src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
+                                            className="img-circle img-no-padding img-responsive"
+                                          />
+                                        )}
+                                        {partner?.profilePic != null && (
+                                          <Image
+                                            className="img-circle img-no-padding img-responsive"
+                                            src={partner?.profilePic}
+                                          />
+                                        )}
+                                      </div>
+                                    </Col>
+                                    <Col md="4" xs="4">
+                                      {/* <br></br> */}
+                                      <Link
+                                        href={{
+                                          pathname: '/partner/partner-profile',
+                                          query: {
+                                            paraId: JSON.stringify(partner?.id),
+                                          },
+                                        }}
+                                      >
+                                        {partner.name}
+                                      </Link>{' '}
+                                      <br />
+                                      <span className="text-muted">
+                                        {partner.email}
+                                      </span>
+                                      {/* <div>
+                                        {partner.businessCategory !== null &&
+                                          (
+                                            <span>
+                                              {' '}
+                                              <Badge variant="primary">
+                                                {partner.businessCategory}
+                                              </Badge>{' '}
+                                            </span>
+
+
+                                          )}
+                                      </div> */}
+                                    </Col>
+                                    <Col className="text-center" md="4" xs="4">
+                                      <br></br>
+                                      {partner.businessCategory !== null && (
+                                        <span>
+                                          {' '}
+                                          <Badge variant="primary">
+                                            {partner.businessCategory}
+                                          </Badge>{' '}
+                                        </span>
+                                      )}
+                                      {/* {!showPublicView && (<Button
+                                        className="btn-round btn-icon"
+                                        color="success"
+                                        outline
+                                        size="sm"
+                                      >
+                                        Select
+                                       <i className="fa fa-envelope" /> */}
+                                      {/* </Button>)}  */}
+                                    </Col>
+                                  </Row>
+                                </li>
+                              );
+                            })}
+                        </ul>
+                      </div>
+                    </div>
+                  </Col>
+                </Row>
+              </Tab.Pane>
+            </Tab.Content>
+          </Tab.Container>
+        </Container>
+                      </Card.Body>
+                    </Card>
+                  </Tab.Pane>
                   <Tab.Pane eventKey="payment">
                     <Card className="my-account-content__content">
                       <Card.Header>

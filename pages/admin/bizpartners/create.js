@@ -25,7 +25,7 @@ function CreateBusinessPartner() {
   return (
     <>
       <Head>
-        <title>Event Organisers</title>
+        <title>Business Partner</title>
       </Head>
 
       <AdminHeaderTop />

@@ -4,13 +4,14 @@ import Link from 'next/link';
 import { Container } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { IoIosSearch, IoIosMenu } from 'react-icons/io';
+import { AiOutlineShoppingCart } from 'react-icons/ai';
 import PartnerHeaderTop from './PartnerHeaderTop';
 import NavigationPartner from './elements/NavigationPartner';
 import SearchOverlay from './elements/SearchOverlay';
 import MobileMenuPartner from './elements/MobileMenuPartner';
 import Head from 'next/head';
 
-const HeaderOne = ({ cartItems, navPositionClass }) => {
+const PartnerHeader = ({ cartItems, navPositionClass }) => {
   const [scroll, setScroll] = useState(0);
   const [headerHeight, setHeaderHeight] = useState(0);
   const [offCanvasSearchActive, setOffCanvasSearchActive] = useState(false);
@@ -110,7 +111,7 @@ const HeaderOne = ({ cartItems, navPositionClass }) => {
   );
 };
 
-HeaderOne.propTypes = {
+PartnerHeader.propTypes = {
   cartItems: PropTypes.array,
   navPositionClass: PropTypes.string,
 };
@@ -121,4 +122,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(HeaderOne);
+export default connect(mapStateToProps)(PartnerHeader);

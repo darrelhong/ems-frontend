@@ -27,15 +27,21 @@ import Image from 'react-bootstrap/Image';
 import Badge from 'react-bootstrap/Badge';
 import { getEoEventsByIdRoleStatus } from '../lib/query/useEvent';
 import { getFollowers, getFollowing } from '../lib/query/getBPFollow';
+import { getBpEventsByIdRoleStatus } from '../lib/query/getEventsBPProfile';
 import { isBpVip, addVip } from '../lib/query/useVip';
 import { BsPencilSquare, BsPlus } from 'react-icons/bs';
 import api from '../lib/ApiClient';
 import { PermDataSettingTwoTone } from '@material-ui/icons';
 import { FiPlus } from 'react-icons/fi';
+// <<<<<<< HEAD
 import Modal from 'react-bootstrap/Modal';
 import ButtonWithLoading from './custom/ButtonWithLoading';
 
-const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
+// const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
+// =======
+import EventTabOne from '../components/EventTabBpProfile';
+const PartnerProfile = ({ localuser }) => {
+
   const [publicView, setPublicView] = useState();
   const [eoView, setEOView] = useState();
 
@@ -46,7 +52,8 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
   const [followBtn, setFollowBtn] = useState();
   const [partner, setPartner] = useState();
   const [user, setUser] = useState();
-
+  const [currenteventlist, setCurrenteventlist] = useState([]);
+  const [pasteventlist, setPastEventlist] = useState([]);
   // const [markVip, setMarkVip] = useState(false);
   // const [unmarkVip, setUnmarkVip] = useState(false);
   const [checkIsBpVip, setCheckIsBpVip] = useState(null);
@@ -70,14 +77,6 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
     };
     getUserData();
 
-    console.log('user ' + localuser);
-    // const getPartnerData = async () => {
-    //   await getUser(localuser).then((data) => {
-    //     setPartner(data);
-    //   });
-    // };
-    // getPartnerData();
-
     const getFollowingData = async () => {
       await getFollowing(localuser).then((data) => {
         setFollowing(data);
@@ -97,6 +96,7 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
             }
           }
           if (found) {
+            console.log("found");
             setUnfollowBtn(true);
             setFollowBtn(false);
           } else {
@@ -106,24 +106,31 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
         }
       });
     };
-    getFollowersData();
+
 
     if (localStorage.getItem('userId') != null) {
       const getCurrentUserData = async () => {
         // get currentUser
-        await getUser(localStorage.getItem('userId')).then((data) => {
+        await getUser(localStorage.getItem('userId')).then(async (data) => {
           console.log('current ' + data.id);
           setUser(data?.name);
           if (data?.id !== localuser) {
-            console.log('passed ');
 
             if (data.roles[0].roleEnum === 'EVNTORG') {
-              console.log('eventorg ');
+              await getBpEventsByIdRoleStatus(localuser, data.roles[0].roleEnum, 'current')
+                .then((events) => {
+                  setCurrenteventlist(events);
+                });
+              await getBpEventsByIdRoleStatus(localuser, data.roles[0].roleEnum, 'past')
+                .then((events) => {
+                  setPastEventlist(events);
+                });
 
               setEOView(true);
               setPublicView(false);
               setFollowBtn(false);
               setUnfollowBtn(false);
+
 
               const checkIfBpIsVip = async () => {
                 console.log('hello');
@@ -140,16 +147,44 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
               setEOView(false);
               setPublicView(true);
               followId = data.id;
+              getFollowersData();
+              await getBpEventsByIdRoleStatus(localuser, data.roles[0].roleEnum, 'current')
+                .then((events) => {
+                  setCurrenteventlist(events);
+                });
+              await getBpEventsByIdRoleStatus(localuser, data.roles[0].roleEnum, 'past')
+                .then((events) => {
+                  setPastEventlist(events);
+                });
             } else {
               //bp view other bp, cannot follow
               setFollowBtn(false);
               setUnfollowBtn(false);
               setEOView(false);
               setPublicView(true);
+              await getBpEventsByIdRoleStatus(localuser, data.roles[0].roleEnum, 'current')
+                .then((events) => {
+                  setCurrenteventlist(events);
+                });
+              await getBpEventsByIdRoleStatus(localuser, data.roles[0].roleEnum, 'past')
+                .then((events) => {
+                  setPastEventlist(events);
+                });
             }
           } else {
             setPublicView(false);
             setEOView(false);
+            setFollowBtn(false);
+            setUnfollowBtn(false);
+            await getBpEventsByIdRoleStatus(localuser, data.roles[0].roleEnum, 'current')
+              .then((events) => {
+                setCurrenteventlist(events);
+              });
+            await getBpEventsByIdRoleStatus(localuser, data.roles[0].roleEnum, 'past')
+              .then((events) => {
+                setPastEventlist(events);
+              });
+
           }
         });
 
@@ -174,8 +209,20 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
         }
       };
       getCurrentUserData();
+      getFollowersData();
     } else {
       //guest cannot follow bp
+      const getEvents = async () => {
+        await getBpEventsByIdRoleStatus(localuser, 'guest', 'current')
+          .then((events) => {
+            setCurrenteventlist(events);
+          });
+        await getBpEventsByIdRoleStatus(localuser, 'guest', 'past')
+          .then((events) => {
+            setPastEventlist(events);
+          });
+      };
+      getEvents();
       setPublicView(true);
       setEOView(false);
       setFollowBtn(false);
@@ -183,7 +230,11 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
       getFollowersData();
       getFollowingData();
     }
-  }, [localuser, followId]);
+
+    console.log(currenteventlist + "current");
+    console.log(pasteventlist + "past");
+
+  }, []);
 
   const getRefreshedFollowers = async () => {
     await getFollowers(localuser).then((data) => {
@@ -198,20 +249,13 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
         setUnfollowBtn(true);
         setFollowBtn(false);
         getRefreshedFollowers();
-        console.log('parner id' + data.id);
-        console.log('user' + user);
-        let endpoint =
-          'https://api.ravenhub.io/company/WLU2yLZw9d/subscribers/partner' +
-          data.id +
-          '/events/SyTpyGmjrT';
+        console.log("parner id" + data.id);
+        console.log("user" + user);
+        let endpoint = "https://api.ravenhub.io/company/WLU2yLZw9d/subscribers/partner" + data.id + "/events/SyTpyGmjrT"
 
-        axios.post(
-          endpoint,
-          { person: user },
-          {
-            headers: { 'Content-type': 'application/json' },
-          }
-        );
+        axios.post(endpoint, { "person": user }, {
+          headers: { 'Content-type': 'application/json' }
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -381,15 +425,17 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
                         thumbnail
                       />
                     )}
+                    &nbsp;
                     <h5 className="title">{partner?.name}</h5>
                   </a>
-                  <p className="description">{partner?.email}</p>
-                </div>
+                  <div >
+                  <h7 className="description">{partner?.email}</h7>
+                </div></div>
                 <p className="description text-center">
                   {partner?.description}
                 </p>
                 <p className="description text-center">
-                  Address :{partner?.address}
+                  Address : {partner?.address}
                 </p>
 
                 <div className="description text-center">
@@ -489,9 +535,7 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
           </Col>
           <Col md="8">
             <Card className="card-user">
-              <CardHeader>
-                <CardTitle tag="h5">Profile Details</CardTitle>
-              </CardHeader>
+
               <CardBody>
                 <Tab.Container defaultActiveKey="Events">
                   <Nav
@@ -512,15 +556,13 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
                   <Tab.Content>
                     <Tab.Pane eventKey="Events">
                       <br></br>
-                      <span>There are currently no events.</span>
-                      {/* <div className="product-description-tab__details">
-                  
-                    <EventsProfile
-                      current={events}
-                    //   upcoming="bestSellerProducts"
-                    //  past="featuredProducts"
-                    />
-                  </div> */}
+                      <div className="product-description-tab__additional-info">
+                        <EventTabOne
+                          current={currenteventlist}
+
+                          past={pasteventlist}
+                        />
+                      </div>
                     </Tab.Pane>
                     <Tab.Pane eventKey="Followers">
                       <br></br>
@@ -694,6 +736,7 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
               </CardBody>
             </Card>
           </Col>
+{/* <<<<<<< HEAD
           {Boolean(
             (currentUserId != localuser) & (currentUserRole != 'Partner')
           ) && (
@@ -760,7 +803,64 @@ const PartnerProfile = ({ localuser, currentUserId, currentUserRole }) => {
                 </CardBody>
               </Card>
             </Col>
-          )}
+          )} */}
+{/* JUSTIN
+//======= */}
+
+        </Row>
+        <br></br>
+        <Row xs="12" style={{ marginTop: "30px", marginBottom: "30px" }}>
+          {/* <Card className="card-user"> */}
+          {/* <CardHeader className="text-center">
+                <h4>Have some questions?</h4>
+              </CardHeader> */}
+          {/* <CardBody className="d-flex justify-content-center"> */}
+          
+          <Col xs="5" className=" justify-content-center" >
+            <br></br>
+            <div className="d-flex justify-content-center">
+              <h2>Have some questions?</h2>
+          </div>
+          <br></br>
+          
+            <div className="d-flex justify-content-center">
+              <img
+                // src="https://cdn1.iconfinder.com/data/icons/contact-us-honey-series/64/ONLINE_QUESTION-512.png"
+                src= "https://img.icons8.com/bubbles/2x/email.png"
+                 className="img-responsive"
+                 style={{maxWidth:"70%"}}
+              />
+            </div>
+
+          </Col>
+          <Col xs="7" className="d-flex justify-content-center">
+            <div className="d-flex flex-column text-center " style={{ gap: "10px", width:"70%" }}>
+              <input
+                id="enquiryTitle"
+                className="form-control"
+                placeholder="Title"
+              />
+              <input
+                id="enquiryEventName"
+                className="form-control"
+                placeholder="Event Name"
+              />
+              <textarea
+                id="enquiryMessage"
+                className="form-control"
+                placeholder="Type something here..."
+                style={{ height: "10em" }}
+              />
+              <button
+                className="btn btn-fill-out"
+              >
+                Send Enquiry
+                  </button>
+            </div>
+            {/* </CardBody> */}
+            {/* </Card> */}
+          </Col>
+
         </Row>
         <br></br>
       </div>

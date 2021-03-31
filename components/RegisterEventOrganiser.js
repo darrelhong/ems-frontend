@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -18,19 +18,17 @@ import { BsFillInfoCircleFill } from 'react-icons/bs';
 import api from '../lib/ApiClient';
 import ButtonWithLoading from './custom/ButtonWithLoading';
 
+import { Col, Container, Row } from 'react-bootstrap';
 import { BreadcrumbOne } from './Breadcrumb';
 import { LayoutOne } from '../layouts';
 import Alert from 'react-bootstrap/Alert';
 import { useMutation } from 'react-query';
-
 import GuestWrapper from '../components/wrapper/GuestWrapper';
 
 export default function RegisterEvnOrg({ title, registerApiUrl }) {
   const router = useRouter();
   const { register, handleSubmit, errors, watch } = useForm();
   const [show, setShow] = useState(true);
-  const [showFileSizeError, setShowFileSizeError] = useState(false);
-  const [showUserAlrExistError, setShowUserAlrExistError] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const password = useRef({});
   password.current = watch('password', '');
@@ -171,12 +169,13 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
                     </label>
 
                     <div className="form-group">
+                      <label htmlFor="email">Email</label>
                       <input
-                        type="text"
+                        type="email"
                         required
                         className="form-control"
-                        name="name"
-                        placeholder="Your Name"
+                        name="email"
+                        placeholder="Your Email"
                         ref={register()}
                       />
                     </div>
