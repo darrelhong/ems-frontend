@@ -18,7 +18,7 @@ import CenterSpinner from 'components/custom/CenterSpinner';
 export default function AttendeeEvents() {
   const [sortBy, setSortBy] = useState();
   const [searchTerm, setSearchTerm] = useState('');
-  const [category, setCategory] = useState()
+  const [category, setCategory] = useState('');
   const queryClient = useQueryClient();
   const {
     status,
@@ -43,7 +43,6 @@ export default function AttendeeEvents() {
     }
   );
 
-
   const { data: favouriteEvents } = useAttendeeFavouriteEvents();
 
   const handleChange = (e) => {
@@ -62,10 +61,13 @@ export default function AttendeeEvents() {
     }
   };
 
-  const { data: eventCategories, isSuccess: eventCategoriesSuccess } = useEventCategories();
+  const {
+    data: eventCategories,
+    isSuccess: eventCategoriesSuccess,
+  } = useEventCategories();
 
   const handleCategoryChange = (e) => {
-    setCategory(e.target.value)
+    setCategory(e.target.value);
   };
 
   // search results automatically update, with debounced input
@@ -128,13 +130,18 @@ export default function AttendeeEvents() {
               <option value="date-asc">Most recent</option>
             </select>
           </Col>
-          {eventCategoriesSuccess &&
+          {eventCategoriesSuccess && (
             <Col xs={4} sm={3}>
               <select className="custom-select" onChange={handleCategoryChange}>
                 <option value="">Categories</option>
-                {eventCategories.map((category, i) => <option key={i} value={category}>{category}</option>)}
+                {eventCategories.map((category, i) => (
+                  <option key={i} value={category}>
+                    {category}
+                  </option>
+                ))}
               </select>
-            </Col>}
+            </Col>
+          )}
         </Row>
         {status === 'loading' ? (
           <CenterSpinner />
