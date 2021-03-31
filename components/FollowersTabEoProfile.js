@@ -204,28 +204,32 @@ const FollowersTabEoProfile = ({
               style={{ width: '100%', height: '10em' }}
               onChange={handleMessage}
             />
+
             <div style={{ display: 'flex' }}>
-              <div style={{ display: 'flex', width: '50%' }}>
-                <Form.Check
-                  id="chkBusinessPartner"
-                  onClick={handlePartner.bind(this)}
-                />
-                {partners.length > 0 && (
+              {partners.length > 0 && (
+                <div style={{ display: 'flex', width: '50%' }}>
+                  <Form.Check
+                    id="chkBusinessPartner"
+                    onClick={handlePartner.bind(this)}
+                  />
+
                   <label htmlFor="chkBusinessPartner">
                     All Business Partners
                   </label>
-                )}
-              </div>
-              <div style={{ display: 'flex', width: '50%' }}>
-                <Form.Check
-                  id="chkAttendee"
-                  onClick={handleAttendee.bind(this)}
-                />
-                {attendees.length > 0 && (
+                </div>
+              )}
+              {attendees.length > 0 && (
+                <div style={{ display: 'flex', width: '50%' }}>
+                  <Form.Check
+                    id="chkAttendee"
+                    onClick={handleAttendee.bind(this)}
+                  />
+
                   <label htmlFor="chkAttendee">All Attendees</label>
-                )}
-              </div>
+                </div>
+              )}
             </div>
+
             <div className="error">
               {errorMessage != 'null' && <span>{errorMessage}</span>}
             </div>
@@ -256,18 +260,16 @@ const FollowersTabEoProfile = ({
               <Nav.Item>
                 <Nav.Link eventKey="partners">Partner</Nav.Link>
               </Nav.Item>
-              {showEoView &&
-                !showPublicView &&
-                attendees.length > 0 &&
-                partners.length > 0 && (
-                  <button
-                    className="btn btn-fill-out btn-sm"
-                    style={{ float: 'right' }}
-                    onClick={() => openBroadcastModal()}
-                  >
-                    <AiOutlineNotification />
-                  </button>
-                )}
+              {((showEoView && !showPublicView && attendees.length > 0) ||
+                (showEoView && !showPublicView && partners.length > 0)) && (
+                <button
+                  className="btn btn-fill-out btn-sm"
+                  style={{ float: 'right' }}
+                  onClick={() => openBroadcastModal()}
+                >
+                  <AiOutlineNotification />
+                </button>
+              )}
             </Nav>
 
             <Tab.Content>

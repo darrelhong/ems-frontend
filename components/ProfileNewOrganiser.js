@@ -618,17 +618,16 @@ const EventOrgProfile = ({ paraId_ }) => {
                       </div>
                     </Tab.Pane>
                     <Tab.Pane eventKey="Followers">
-                      <br></br>
-                      {/* <button
-                              className="btn btn-fill-out btn-sm"
-                              name="noti"
-                              onClick= {sendNoti}
-                              size="sm"
-                            >
-                              <AiOutlineNotification />
-                            
-                            </button>
-                       */}
+                      {/* <br></br>
+                      <button
+                        className="btn btn-fill-out btn-sm"
+                        name="noti"
+                        // onClick= {sendNoti}
+                        size="sm"
+                      >
+                        <AiOutlineNotification />
+                      </button> */}
+
                       <ul className="list-unstyled team-members">
                         <div className="product-description-tab__additional-info">
                           <FollowersTabEoProfile
