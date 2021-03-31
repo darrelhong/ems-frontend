@@ -17,6 +17,7 @@ import AddToCalendar from 'components/custom/AddToCalendar';
 import AttendeeWrapper from 'components/wrapper/AttendeeWrapper';
 import ShareButton from 'components/custom/ShareButton';
 import CenterSpinner from 'components/custom/CenterSpinner';
+import EventCategoryList from 'components/custom/events/EventCategoryList';
 
 export function getServerSideProps({ query }) {
   return {
@@ -160,10 +161,16 @@ export default function AttendeeEventPage({ id }) {
               </Col>
             </Row>
 
-            <Row className="mt-3">
+            <Row className="mt-3" style={{ minHeight: 150 }}>
               <Col>
                 <h5>About this event</h5>
                 <p>{data.descriptions}</p>
+              </Col>
+            </Row>
+
+            <Row>
+              <Col>
+                <EventCategoryList categories={data.categories} />
               </Col>
             </Row>
           </Container>

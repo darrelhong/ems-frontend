@@ -1,0 +1,16 @@
+.container {
+  padding: 5px 0;
+}
+
+.badge {
+  font-weight: 400;
+  font-size: 12px;
+  background-color: #9ca3af;
+  margin: 5px 0;
+}
+
+@media (min-width: 600px) {
+  .badge {
+    font-size: 14px;
+  }
+}
