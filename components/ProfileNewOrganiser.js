@@ -28,11 +28,9 @@ import { getOrgAttendeeFollowers } from '../lib/query/getOrgAttendeeFollowers';
 import { getOrgPartnerFollowers } from '../lib/query/getOrgPartnerFollowers';
 import { useMutation } from 'react-query';
 import { BreadcrumbOne } from './Breadcrumb';
-import {
-  AiOutlineNotification,
-} from 'react-icons/ai';
-import ReactNotification from 'react-notifications-component'
-import 'react-notifications-component/dist/theme.css'
+import { AiOutlineNotification } from 'react-icons/ai';
+import ReactNotification from 'react-notifications-component';
+import 'react-notifications-component/dist/theme.css';
 const EventOrgProfile = ({ paraId_ }) => {
   const [showEoView, setShowEoView] = useState(false);
   const [showPublicView, setShowPublicView] = useState(false);
@@ -48,8 +46,8 @@ const EventOrgProfile = ({ paraId_ }) => {
   const [unfollowBtn, setUnfollowBtn] = useState();
   const [followBtn, setFollowBtn] = useState();
   const [reviews, setReviews] = useState();
-  const[user,setUser] = useState();
- 
+  const [user, setUser] = useState();
+
   // if there is user login credential
   //const paraId_ = JSON.parse(query.paraId);
 
@@ -107,9 +105,6 @@ const EventOrgProfile = ({ paraId_ }) => {
     });
   };
 
-
- 
-
   const getReviewsEvent = async (id) => {
     await getReviewsByEvent(id).then((data) => {
       setReviews(data);
@@ -130,10 +125,9 @@ const EventOrgProfile = ({ paraId_ }) => {
   };
   const getRefreshReviewsEO = async () => {
     await getReviews(paraId_).then((data) => {
-      console.log("reviews" + reviews);
+      console.log('reviews' + reviews);
       setReviews(data);
     });
-   
   };
 
   useEffect(() => {
@@ -145,15 +139,14 @@ const EventOrgProfile = ({ paraId_ }) => {
         setEventOrganiser(eventOrg);
       });
     };
-    getUserData(); 
-    
+    getUserData();
+
     const getReviewsEO = async () => {
-    await getReviews(paraId_).then((data) => {
-      console.log("reviews" + reviews);
-      setReviews(data);
-    });
-   
-  };
+      await getReviews(paraId_).then((data) => {
+        console.log('reviews' + reviews);
+        setReviews(data);
+      });
+    };
     getReviewsEO();
     const getRatingData = async () => {
       await getRating(paraId_).then((rate) => {
@@ -344,12 +337,19 @@ const EventOrgProfile = ({ paraId_ }) => {
         setUnfollowBtn(true);
         setFollowBtn(false);
         getRefreshedFollowers();
-        console.log("user " + user);
-        let endpoint = "https://api.ravenhub.io/company/WLU2yLZw9d/subscribers/organiser" + data.id + "/events/SyTpyGmjrT"
- 
-  axios.post(endpoint, { "person" : user }, {
-  headers: {'Content-type': 'applircation/json'}
-  });
+        console.log('user ' + user);
+        let endpoint =
+          'https://api.ravenhub.io/company/WLU2yLZw9d/subscribers/organiser' +
+          data.id +
+          '/events/SyTpyGmjrT';
+
+        axios.post(
+          endpoint,
+          { person: user },
+          {
+            headers: { 'Content-type': 'applircation/json' },
+          }
+        );
       })
       .catch((error) => {
         console.log(error);
@@ -376,12 +376,19 @@ const EventOrgProfile = ({ paraId_ }) => {
         setUnfollowBtn(true);
         setFollowBtn(false);
         getRefreshedFollowers();
-        console.log("user " + user );
-        let endpoint = "https://api.ravenhub.io/company/WLU2yLZw9d/subscribers/organiser" + data.id + "/events/SyTpyGmjrT"
- 
-  axios.post(endpoint, { "person" : user }, {
-  headers: {'Content-type': 'application/json'}
-  });
+        console.log('user ' + user);
+        let endpoint =
+          'https://api.ravenhub.io/company/WLU2yLZw9d/subscribers/organiser' +
+          data.id +
+          '/events/SyTpyGmjrT';
+
+        axios.post(
+          endpoint,
+          { person: user },
+          {
+            headers: { 'Content-type': 'application/json' },
+          }
+        );
       })
       .catch((error) => {
         console.log(error);
@@ -433,8 +440,6 @@ const EventOrgProfile = ({ paraId_ }) => {
       getReviewsEvent(e.target.value);
     }
   };
-
-
 
   return (
     <>
@@ -630,8 +635,8 @@ const EventOrgProfile = ({ paraId_ }) => {
                             attendees={attendeeFollowers}
                             partners={partnerFollowers}
                             showPublicView={showPublicView}
-                            organiser = {eventorganiser?.name}
-                            showEoView = {showEoView}
+                            organiser={eventorganiser?.name}
+                            showEoView={showEoView}
                           />
                         </div>
                       </ul>
@@ -689,13 +694,9 @@ const EventOrgProfile = ({ paraId_ }) => {
                                             <ProductRating
                                               ratingValue={review.rating}
                                             />
-                                            
                                           </div>
                                           <div className="description">
-                                            
-                                          <p>
-                                            {review.reviewDateTime}
-                                          </p>
+                                            <p>{review.reviewDateTime}</p>
                                           </div>
                                         </div>
                                         <p className="customer-meta">
@@ -710,9 +711,7 @@ const EventOrgProfile = ({ paraId_ }) => {
                                             </span>
                                           )}
                                           <div className="rating">
-                                          <span >
-                                            {review.event.name}
-                                          </span>
+                                            <span>{review.event.name}</span>
                                           </div>
                                         </p>
                                         <div className="description">
@@ -733,35 +732,36 @@ const EventOrgProfile = ({ paraId_ }) => {
               </CardBody>
             </Card>
           </Col>
-         
         </Row>
         <br></br>
-        <Row xs="12" style={{ marginTop: "30px", marginBottom: "30px" }}>
+        <Row xs="12" style={{ marginTop: '30px', marginBottom: '30px' }}>
           {/* <Card className="card-user"> */}
           {/* <CardHeader className="text-center">
                 <h4>Have some questions?</h4>
               </CardHeader> */}
           {/* <CardBody className="d-flex justify-content-center"> */}
-          
-          <Col xs="5" className=" justify-content-center" >
+
+          <Col xs="5" className=" justify-content-center">
             <br></br>
             <div className="d-flex justify-content-center">
               <h2>Have some questions?</h2>
-          </div>
-          <br></br>
-          
+            </div>
+            <br></br>
+
             <div className="d-flex justify-content-center">
               <img
                 // src="https://cdn1.iconfinder.com/data/icons/contact-us-honey-series/64/ONLINE_QUESTION-512.png"
-                src= "https://img.icons8.com/bubbles/2x/email.png"
-                 className="img-responsive"
-                 style={{maxWidth:"70%"}}
+                src="https://img.icons8.com/bubbles/2x/email.png"
+                className="img-responsive"
+                style={{ maxWidth: '70%' }}
               />
             </div>
-
           </Col>
           <Col xs="7" className="d-flex justify-content-center">
-            <div className="d-flex flex-column text-center " style={{ gap: "10px", width:"70%" }}>
+            <div
+              className="d-flex flex-column text-center "
+              style={{ gap: '10px', width: '70%' }}
+            >
               <input
                 id="enquiryTitle"
                 className="form-control"
@@ -776,13 +776,9 @@ const EventOrgProfile = ({ paraId_ }) => {
                 id="enquiryMessage"
                 className="form-control"
                 placeholder="Type something here..."
-                style={{ height: "10em" }}
+                style={{ height: '10em' }}
               />
-              <button
-                className="btn btn-fill-out"
-              >
-                Send Enquiry
-                  </button>
+              <button className="btn btn-fill-out">Send Enquiry</button>
             </div>
             {/* </CardBody> */}
             {/* </Card> */}

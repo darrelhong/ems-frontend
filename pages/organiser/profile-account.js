@@ -23,6 +23,7 @@ import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import { useForm } from 'react-hook-form';
 import useUser from '../../lib/query/useUser';
 import { useMutation, useQueryClient, useQuery } from 'react-query';
@@ -418,7 +419,7 @@ const MyAccount = () => {
         setShowPW(true);
         setLoginLoading(false);
       })
- );
+  );
 
   const mutateNotificationSetting = useMutation((data) =>
     api
@@ -996,20 +997,6 @@ const MyAccount = () => {
                     </Card>
                   </Tab.Pane>
                   <Tab.Pane eventKey="accountDetails">
-                    <div
-                      style={{
-                        display: showSuccessMsg ? 'block' : 'none',
-                      }}
-                    >
-                      <Alert variant="success">Update Sucessfully</Alert>
-                    </div>
-                    <div
-                      style={{
-                        display: showFailedMsg ? 'block' : 'none',
-                      }}
-                    >
-                      <Alert variant="danger">Error Occured</Alert>
-                    </div>
                     <Card className="my-account-content__content">
                       <Card.Header>
                         <h3>Account Details</h3>

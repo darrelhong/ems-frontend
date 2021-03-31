@@ -41,7 +41,6 @@ import ButtonWithLoading from './custom/ButtonWithLoading';
 // =======
 import EventTabOne from '../components/EventTabBpProfile';
 const PartnerProfile = ({ localuser }) => {
-
   const [publicView, setPublicView] = useState();
   const [eoView, setEOView] = useState();
 
@@ -96,7 +95,7 @@ const PartnerProfile = ({ localuser }) => {
             }
           }
           if (found) {
-            console.log("found");
+            console.log('found');
             setUnfollowBtn(true);
             setFollowBtn(false);
           } else {
@@ -107,7 +106,6 @@ const PartnerProfile = ({ localuser }) => {
       });
     };
 
-
     if (localStorage.getItem('userId') != null) {
       const getCurrentUserData = async () => {
         // get currentUser
@@ -115,22 +113,26 @@ const PartnerProfile = ({ localuser }) => {
           console.log('current ' + data.id);
           setUser(data?.name);
           if (data?.id !== localuser) {
-
             if (data.roles[0].roleEnum === 'EVNTORG') {
-              await getBpEventsByIdRoleStatus(localuser, data.roles[0].roleEnum, 'current')
-                .then((events) => {
-                  setCurrenteventlist(events);
-                });
-              await getBpEventsByIdRoleStatus(localuser, data.roles[0].roleEnum, 'past')
-                .then((events) => {
-                  setPastEventlist(events);
-                });
+              await getBpEventsByIdRoleStatus(
+                localuser,
+                data.roles[0].roleEnum,
+                'current'
+              ).then((events) => {
+                setCurrenteventlist(events);
+              });
+              await getBpEventsByIdRoleStatus(
+                localuser,
+                data.roles[0].roleEnum,
+                'past'
+              ).then((events) => {
+                setPastEventlist(events);
+              });
 
               setEOView(true);
               setPublicView(false);
               setFollowBtn(false);
               setUnfollowBtn(false);
-
 
               const checkIfBpIsVip = async () => {
                 console.log('hello');
@@ -148,79 +150,98 @@ const PartnerProfile = ({ localuser }) => {
               setPublicView(true);
               followId = data.id;
               getFollowersData();
-              await getBpEventsByIdRoleStatus(localuser, data.roles[0].roleEnum, 'current')
-                .then((events) => {
-                  setCurrenteventlist(events);
-                });
-              await getBpEventsByIdRoleStatus(localuser, data.roles[0].roleEnum, 'past')
-                .then((events) => {
-                  setPastEventlist(events);
-                });
+              await getBpEventsByIdRoleStatus(
+                localuser,
+                data.roles[0].roleEnum,
+                'current'
+              ).then((events) => {
+                setCurrenteventlist(events);
+              });
+              await getBpEventsByIdRoleStatus(
+                localuser,
+                data.roles[0].roleEnum,
+                'past'
+              ).then((events) => {
+                setPastEventlist(events);
+              });
             } else {
               //bp view other bp, cannot follow
               setFollowBtn(false);
               setUnfollowBtn(false);
               setEOView(false);
               setPublicView(true);
-              await getBpEventsByIdRoleStatus(localuser, data.roles[0].roleEnum, 'current')
-                .then((events) => {
-                  setCurrenteventlist(events);
-                });
-              await getBpEventsByIdRoleStatus(localuser, data.roles[0].roleEnum, 'past')
-                .then((events) => {
-                  setPastEventlist(events);
-                });
+              await getBpEventsByIdRoleStatus(
+                localuser,
+                data.roles[0].roleEnum,
+                'current'
+              ).then((events) => {
+                setCurrenteventlist(events);
+              });
+              await getBpEventsByIdRoleStatus(
+                localuser,
+                data.roles[0].roleEnum,
+                'past'
+              ).then((events) => {
+                setPastEventlist(events);
+              });
             }
           } else {
             setPublicView(false);
             setEOView(false);
             setFollowBtn(false);
             setUnfollowBtn(false);
-            await getBpEventsByIdRoleStatus(localuser, data.roles[0].roleEnum, 'current')
-              .then((events) => {
-                setCurrenteventlist(events);
-              });
-            await getBpEventsByIdRoleStatus(localuser, data.roles[0].roleEnum, 'past')
-              .then((events) => {
-                setPastEventlist(events);
-              });
-
+            await getBpEventsByIdRoleStatus(
+              localuser,
+              data.roles[0].roleEnum,
+              'current'
+            ).then((events) => {
+              setCurrenteventlist(events);
+            });
+            await getBpEventsByIdRoleStatus(
+              localuser,
+              data.roles[0].roleEnum,
+              'past'
+            ).then((events) => {
+              setPastEventlist(events);
+            });
           }
         });
 
-        if (currentUserRole == 'Organiser') {
-          await getEoEventsByIdRoleStatus(
-            currentUserId,
-            'EVNTORG',
-            'current'
-          ).then(async (currentEvents) => {
-            await getEoEventsByIdRoleStatus(
-              currentUserId,
-              'EVNTORG',
-              'upcoming'
-            ).then((upcomingEvents) => {
-              setEnquiryEventList(currentEvents.concat(upcomingEvents));
-            });
-          });
-        } else if (currentUserRole == 'Attendee') {
-          await getAllEventByBpId(localuser).then((bpEventList) => {
-            setEnquiryEventList(bpEventList);
-          });
-        }
+        // if (currentUserRole == 'Organiser') {
+        //   await getEoEventsByIdRoleStatus(
+        //     currentUserId,
+        //     'EVNTORG',
+        //     'current'
+        //   ).then(async (currentEvents) => {
+        //     await getEoEventsByIdRoleStatus(
+        //       currentUserId,
+        //       'EVNTORG',
+        //       'upcoming'
+        //     ).then((upcomingEvents) => {
+        //       setEnquiryEventList(currentEvents.concat(upcomingEvents));
+        //     });
+        //   });
+        // } else if (currentUserRole == 'Attendee') {
+        //   await getAllEventByBpId(localuser).then((bpEventList) => {
+        //     setEnquiryEventList(bpEventList);
+        //   });
+        // }
       };
       getCurrentUserData();
       getFollowersData();
     } else {
       //guest cannot follow bp
       const getEvents = async () => {
-        await getBpEventsByIdRoleStatus(localuser, 'guest', 'current')
-          .then((events) => {
+        await getBpEventsByIdRoleStatus(localuser, 'guest', 'current').then(
+          (events) => {
             setCurrenteventlist(events);
-          });
-        await getBpEventsByIdRoleStatus(localuser, 'guest', 'past')
-          .then((events) => {
+          }
+        );
+        await getBpEventsByIdRoleStatus(localuser, 'guest', 'past').then(
+          (events) => {
             setPastEventlist(events);
-          });
+          }
+        );
       };
       getEvents();
       setPublicView(true);
@@ -231,9 +252,8 @@ const PartnerProfile = ({ localuser }) => {
       getFollowingData();
     }
 
-    console.log(currenteventlist + "current");
-    console.log(pasteventlist + "past");
-
+    console.log(currenteventlist + 'current');
+    console.log(pasteventlist + 'past');
   }, []);
 
   const getRefreshedFollowers = async () => {
@@ -249,13 +269,20 @@ const PartnerProfile = ({ localuser }) => {
         setUnfollowBtn(true);
         setFollowBtn(false);
         getRefreshedFollowers();
-        console.log("parner id" + data.id);
-        console.log("user" + user);
-        let endpoint = "https://api.ravenhub.io/company/WLU2yLZw9d/subscribers/partner" + data.id + "/events/SyTpyGmjrT"
+        console.log('parner id' + data.id);
+        console.log('user' + user);
+        let endpoint =
+          'https://api.ravenhub.io/company/WLU2yLZw9d/subscribers/partner' +
+          data.id +
+          '/events/SyTpyGmjrT';
 
-        axios.post(endpoint, { "person": user }, {
-          headers: { 'Content-type': 'application/json' }
-        });
+        axios.post(
+          endpoint,
+          { person: user },
+          {
+            headers: { 'Content-type': 'application/json' },
+          }
+        );
       })
       .catch((error) => {
         console.log(error);
@@ -311,59 +338,54 @@ const PartnerProfile = ({ localuser }) => {
 
   function sendEnquiry() {
     // get user inputs
-    let enquiryTitle = document.getElementById('enquiryTitle').value;
-    let enquiryEvent = document.getElementById('enquiryEvent').value;
-    let enquiryMessage = document.getElementById('enquiryMessage').value;
-
-    if (enquiryEvent == 'none') {
-      enquiryEvent = null;
-    }
-
-    // validate
-    if (enquiryTitle == '' || enquiryEvent == 'none' || enquiryMessage == '') {
-      setEnquiryError(true);
-    } else {
-      setEnquiryError(false);
-
-      // get sender and receiver info
-      getUser(currentUserId).then((user) => {
-        let enquiryReceiverEmail = partner.email;
-        let enquirySenderEmail = user.email;
-
-        let data = {
-          subject: enquiryTitle,
-          content: enquiryMessage,
-          eventId: enquiryEvent,
-          receiverEmail: enquiryReceiverEmail,
-          senderEmail: enquirySenderEmail,
-        };
-
-        setSendEnquiryLoading(true);
-        api
-          .post('/api/user/enquiry', data)
-          .then(() => {
-            setEnquirySuccess(true);
-            setSendEnquiryLoading(false);
-            clearEnquiryForm();
-          })
-          .catch((error) => {
-            console.log(error);
-            setSendEnquiryLoading(false);
-            setEnquiryError(true);
-          });
-      });
-    }
+    // let enquiryTitle = document.getElementById('enquiryTitle').value;
+    // let enquiryEvent = document.getElementById('enquiryEvent').value;
+    // let enquiryMessage = document.getElementById('enquiryMessage').value;
+    // if (enquiryEvent == 'none') {
+    //   enquiryEvent = null;
+    // }
+    // // validate
+    // if (enquiryTitle == '' || enquiryEvent == 'none' || enquiryMessage == '') {
+    //   setEnquiryError(true);
+    // } else {
+    //   setEnquiryError(false);
+    // get sender and receiver info
+    // getUser(currentUserId).then((user) => {
+    //   let enquiryReceiverEmail = partner.email;
+    //   let enquirySenderEmail = user.email;
+    //   let data = {
+    //     subject: enquiryTitle,
+    //     content: enquiryMessage,
+    //     eventId: enquiryEvent,
+    //     receiverEmail: enquiryReceiverEmail,
+    //     senderEmail: enquirySenderEmail,
+    //   };
+    //   setSendEnquiryLoading(true);
+    //   api
+    //     .post('/api/user/enquiry', data)
+    //     .then(() => {
+    //       setEnquirySuccess(true);
+    //       setSendEnquiryLoading(false);
+    //       clearEnquiryForm();
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //       setSendEnquiryLoading(false);
+    //       setEnquiryError(true);
+    //     });
+    // });
+    // }
   }
 
-  function clearEnquiryForm() {
-    let enquiryTitle = document.getElementById('enquiryTitle');
-    let enquiryEvent = document.getElementById('enquiryEvent');
-    let enquiryMessage = document.getElementById('enquiryMessage');
+  // function clearEnquiryForm() {
+  //   let enquiryTitle = document.getElementById('enquiryTitle');
+  //   let enquiryEvent = document.getElementById('enquiryEvent');
+  //   let enquiryMessage = document.getElementById('enquiryMessage');
 
-    enquiryTitle.value = '';
-    enquiryEvent.selectedIndex = 0;
-    enquiryMessage.value = '';
-  }
+  //   enquiryTitle.value = '';
+  //   enquiryEvent.selectedIndex = 0;
+  //   enquiryMessage.value = '';
+  // }
 
   return (
     <>
@@ -428,9 +450,10 @@ const PartnerProfile = ({ localuser }) => {
                     &nbsp;
                     <h5 className="title">{partner?.name}</h5>
                   </a>
-                  <div >
-                  <h7 className="description">{partner?.email}</h7>
-                </div></div>
+                  <div>
+                    <h7 className="description">{partner?.email}</h7>
+                  </div>
+                </div>
                 <p className="description text-center">
                   {partner?.description}
                 </p>
@@ -535,7 +558,6 @@ const PartnerProfile = ({ localuser }) => {
           </Col>
           <Col md="8">
             <Card className="card-user">
-
               <CardBody>
                 <Tab.Container defaultActiveKey="Events">
                   <Nav
@@ -559,7 +581,6 @@ const PartnerProfile = ({ localuser }) => {
                       <div className="product-description-tab__additional-info">
                         <EventTabOne
                           current={currenteventlist}
-
                           past={pasteventlist}
                         />
                       </div>
@@ -736,7 +757,7 @@ const PartnerProfile = ({ localuser }) => {
               </CardBody>
             </Card>
           </Col>
-{/* <<<<<<< HEAD
+          {/* <<<<<<< HEAD
           {Boolean(
             (currentUserId != localuser) & (currentUserRole != 'Partner')
           ) && (
@@ -804,37 +825,38 @@ const PartnerProfile = ({ localuser }) => {
               </Card>
             </Col>
           )} */}
-{/* JUSTIN
+          {/* JUSTIN
 //======= */}
-
         </Row>
         <br></br>
-        <Row xs="12" style={{ marginTop: "30px", marginBottom: "30px" }}>
+        <Row xs="12" style={{ marginTop: '30px', marginBottom: '30px' }}>
           {/* <Card className="card-user"> */}
           {/* <CardHeader className="text-center">
                 <h4>Have some questions?</h4>
               </CardHeader> */}
           {/* <CardBody className="d-flex justify-content-center"> */}
-          
-          <Col xs="5" className=" justify-content-center" >
+
+          <Col xs="5" className=" justify-content-center">
             <br></br>
             <div className="d-flex justify-content-center">
               <h2>Have some questions?</h2>
-          </div>
-          <br></br>
-          
+            </div>
+            <br></br>
+
             <div className="d-flex justify-content-center">
               <img
                 // src="https://cdn1.iconfinder.com/data/icons/contact-us-honey-series/64/ONLINE_QUESTION-512.png"
-                src= "https://img.icons8.com/bubbles/2x/email.png"
-                 className="img-responsive"
-                 style={{maxWidth:"70%"}}
+                src="https://img.icons8.com/bubbles/2x/email.png"
+                className="img-responsive"
+                style={{ maxWidth: '70%' }}
               />
             </div>
-
           </Col>
           <Col xs="7" className="d-flex justify-content-center">
-            <div className="d-flex flex-column text-center " style={{ gap: "10px", width:"70%" }}>
+            <div
+              className="d-flex flex-column text-center "
+              style={{ gap: '10px', width: '70%' }}
+            >
               <input
                 id="enquiryTitle"
                 className="form-control"
@@ -849,18 +871,13 @@ const PartnerProfile = ({ localuser }) => {
                 id="enquiryMessage"
                 className="form-control"
                 placeholder="Type something here..."
-                style={{ height: "10em" }}
+                style={{ height: '10em' }}
               />
-              <button
-                className="btn btn-fill-out"
-              >
-                Send Enquiry
-                  </button>
+              <button className="btn btn-fill-out">Send Enquiry</button>
             </div>
             {/* </CardBody> */}
             {/* </Card> */}
           </Col>
-
         </Row>
         <br></br>
       </div>

@@ -255,17 +255,22 @@ const MyAccount = () => {
         setName('');
         setNumber('');
         setExpMth('');
+        setLoginLoading(false);
       }
     })
   );
 
   const handleDeleteCard = async () => {
+    setLoginLoading(true);
     mutatePaymentCard.mutate();
     // close the modal once yes click.
     setShowCardModal(false);
   };
 
   const onSubmitEmailNotification = async () => {
+    setShowNotiError(false);
+    setShowNotiSuccess(false);
+    setLoginLoading(true);
     mutateEmailNotiSetting.mutate({
       //systemEmailNoti: allEmailNoti,
       eoEmailNoti: eoEventBroadcast,
@@ -300,13 +305,16 @@ const MyAccount = () => {
           if (data != null) {
             setShowNotiSuccess(true);
             setShowNotiError(false);
+            setLoginLoading(false);
           } else {
             setShowNotiError(true);
             setShowNotiSuccess(false);
+            setLoginLoading(false);
           }
         } else {
           setShowNotiError(true);
           setShowNotiSuccess(false);
+          setLoginLoading(false);
         }
         // setAccSaved(true);
         // setAccSuccess(' Account details saved successfully! ');
@@ -1241,14 +1249,15 @@ const MyAccount = () => {
                               </Col> */}
                             </Row>
 
-                            <button
+                            <ButtonWithLoading
                               type="submit"
                               className="btn btn-fill-out"
                               name="submit"
                               value="Submit"
+                              isLoading={loginLoading}
                             >
                               Save
-                            </button>
+                            </ButtonWithLoading>
                           </form>
                         </div>
                       </Card.Body>

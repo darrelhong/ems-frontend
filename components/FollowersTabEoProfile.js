@@ -7,43 +7,51 @@ import Badge from 'react-bootstrap/Badge';
 import Link from 'next/link';
 import axios from 'axios';
 
-import {
-  AiOutlineNotification,
-} from 'react-icons/ai';
+import { AiOutlineNotification } from 'react-icons/ai';
 // import EventEoProfileSliderTen from './ProductSlider/EventEoProfileSliderTen';
 import { store } from 'react-notifications-component';
-const FollowersTabEoProfile = ({ attendees, partners, showPublicView, organiser,  showEoView }) => {
-const [message, setMessage] = useState('');  
-const [errorMessage, setErrorMessage] = useState('')
+const FollowersTabEoProfile = ({
+  attendees,
+  partners,
+  showPublicView,
+  organiser,
+  showEoView,
+}) => {
+  const [message, setMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const [broadcastModalShow, setBroadcastModalShow] = useState(false);
-  const closeBroadcastModal = () => {setBroadcastModalShow(false); setErrorMessage("null"); setMessage("");}
-  const openBroadcastModal = () => setBroadcastModalShow(true);
-  const [confirmBroadcastModalShow, setConfirmBroadcastModalShow] = useState(false);
-  const closeConfirmBroadcastModal = () => {setConfirmBroadcastModalShow(false);setBroadcastModalShow(true);}
-  const openConfirmBroadcastModal = () => {
-    
-    if(message === "" || (checkAttendee == false && checkPartner ==false)){
-      setErrorMessage("Please ensure that all fields are filled.");
-      
-    }else{
-      setErrorMessage("null");
-      setConfirmBroadcastModalShow(true); 
+  const closeBroadcastModal = () => {
     setBroadcastModalShow(false);
+    setErrorMessage('null');
+    setMessage('');
+  };
+  const openBroadcastModal = () => setBroadcastModalShow(true);
+  const [confirmBroadcastModalShow, setConfirmBroadcastModalShow] = useState(
+    false
+  );
+  const closeConfirmBroadcastModal = () => {
+    setConfirmBroadcastModalShow(false);
+    setBroadcastModalShow(true);
+  };
+  const openConfirmBroadcastModal = () => {
+    if (message === '' || (checkAttendee == false && checkPartner == false)) {
+      setErrorMessage('Please ensure that all fields are filled.');
+    } else {
+      setErrorMessage('null');
+      setConfirmBroadcastModalShow(true);
+      setBroadcastModalShow(false);
     }
-  }
-  
+  };
 
   // var checkAttendee;
   // var checkPartner;
   const [checkAttendee, setCheckAttendee] = useState(false);
   const [checkPartner, setCheckPartner] = useState(false);
 
-
   const handleMessage = (e) => {
     setMessage(e.target.value);
-    console.log(e.target.value + "message");
-
+    console.log(e.target.value + 'message');
   };
 
   // const handleUser = (user) => {
@@ -54,132 +62,130 @@ const [errorMessage, setErrorMessage] = useState('')
 
   // };
 
-
   const handlePartner = (e) => {
     if (e.target.checked) {
-     console.log("checked");
+      console.log('checked');
 
       setCheckPartner(true);
     } else {
-      console.log("unchecked");
+      console.log('unchecked');
 
       setCheckPartner(false);
     }
-    console.log(checkPartner + "partner");
+    console.log(checkPartner + 'partner');
   };
-  
+
   const handleAttendee = (e) => {
     if (e.target.checked) {
-      console.log("checked");
-
+      console.log('checked');
 
       setCheckAttendee(true);
     } else {
-      console.log("unchecked");
+      console.log('unchecked');
 
       setCheckAttendee(false);
     }
-    console.log(checkAttendee + "attendee");
+    console.log(checkAttendee + 'attendee');
   };
 
-
   const sendNoti = () => {
-    var endpoint = 'https://api.ravenhub.io/company/WLU2yLZw9d/broadcasts/ziyDknTScF';
+    var endpoint =
+      'https://api.ravenhub.io/company/WLU2yLZw9d/broadcasts/ziyDknTScF';
     /* 
        The "data" key is optional within each notification
        object in the notifications array below.
     */
-   console.log("organiser" + organiser);
-   console.log("noti attendee" + checkAttendee);
-    var postBody = { "notifications": [] };
-    if(checkAttendee == true){
+    console.log('organiser' + organiser);
+    console.log('noti attendee' + checkAttendee);
+    var postBody = { notifications: [] };
+    if (checkAttendee == true) {
       for (var i = 0; i < attendees.length; i++) {
-      console.log("attendee" + attendees[i].id);
-      postBody.notifications.push({
-        "subscriberId": "attendee" + attendees[i].id,
-        "data": {
-          "title" : organiser,
-          "message": message,
-        }
-
-      })
-      console.log(postBody.notifications[i].subscriberId + "notification postbody");
-
-    }
-    
-    }
-    if (checkPartner == true){
-      for (var i = 0; i < partners.length; i++) {
-        console.log("partner" + partners[i].id);
+        console.log('attendee' + attendees[i].id);
         postBody.notifications.push({
-          "subscriberId": "partner" + partners[i].id,
-          "data": {
-            "title" : organiser,
-            "message": message,
-          }
-  
-        })
-        console.log(postBody.notifications[i].subscriberId + "notification postbody");
+          subscriberId: 'attendee' + attendees[i].id,
+          data: {
+            title: organiser,
+            message: message,
+          },
+        });
+        console.log(
+          postBody.notifications[i].subscriberId + 'notification postbody'
+        );
       }
     }
-    console.log("postbody" + postBody.notifications);
+    if (checkPartner == true) {
+      for (var i = 0; i < partners.length; i++) {
+        console.log('partner' + partners[i].id);
+        postBody.notifications.push({
+          subscriberId: 'partner' + partners[i].id,
+          data: {
+            title: organiser,
+            message: message,
+          },
+        });
+        console.log(
+          postBody.notifications[i].subscriberId + 'notification postbody'
+        );
+      }
+    }
+    console.log('postbody' + postBody.notifications);
 
     axios.post(endpoint, postBody, {
-      headers: { 'Content-type': 'application/json' }
+      headers: { 'Content-type': 'application/json' },
     });
-closeConfirmBroadcastModal();
-closeBroadcastModal();
+    closeConfirmBroadcastModal();
+    closeBroadcastModal();
 
-store.addNotification({
-  title: "Success",
-  message: "The broadcast messages have been sent out successfully.",
-  type: "success",
-  insert: "top",
-  container: "top-left",
-  dismiss: {
-    duration: 5000,
-    onScreen: true
-  }
-});
+    store.addNotification({
+      title: 'Success',
+      message: 'The broadcast messages have been sent out successfully.',
+      type: 'success',
+      insert: 'top',
+      container: 'top-left',
+      dismiss: {
+        duration: 5000,
+        onScreen: true,
+      },
+    });
   };
 
   if (attendees !== undefined && partners !== undefined) {
     return (
       <div className="product-tab-area space-pb--r70">
-
         {/* broadcast modal */}
-      
 
-          {/* confirm broadcast modal */}
-          <Modal show={confirmBroadcastModalShow} onHide={closeConfirmBroadcastModal} centered>
-            <Modal.Header closeButton>
-              <Modal.Title>
-                Confirm Broadcast Message
-              </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              Are you sure you want to broadcast this message?
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={closeConfirmBroadcastModal}>
-                No
-              </Button>
-              <button
-                variant="primary"
-                className="btn btn-fill-out"
-                onClick={sendNoti}
-              >
-                Yes
-              </button>
-            </Modal.Footer>
-          </Modal>
-  <Modal show={broadcastModalShow} onHide={closeBroadcastModal} centered>
+        {/* confirm broadcast modal */}
+        <Modal
+          show={confirmBroadcastModalShow}
+          onHide={closeConfirmBroadcastModal}
+          centered
+        >
           <Modal.Header closeButton>
-            <Modal.Title>
-              Broadcast Message
-            </Modal.Title>
+            <Modal.Title>Confirm Broadcast Message</Modal.Title>
           </Modal.Header>
-          <Modal.Body style={{ display: "flex", flexDirection: "column", gap: "5px" }} >
+          <Modal.Body>
+            Are you sure you want to broadcast this message?
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={closeConfirmBroadcastModal}>
+              No
+            </Button>
+            <button
+              variant="primary"
+              className="btn btn-fill-out"
+              onClick={sendNoti}
+            >
+              Yes
+            </button>
+          </Modal.Footer>
+        </Modal>
+        <Modal show={broadcastModalShow} onHide={closeBroadcastModal} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>Broadcast Message</Modal.Title>
+          </Modal.Header>
+          <Modal.Body
+            style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}
+          >
             {/* <input
               required
               className="form-control"
@@ -195,31 +201,33 @@ store.addNotification({
               id="broadcastMessage"
               placeholder="Type your message here..."
               defaultValue={message}
-              style={{ width: "100%", height: "10em" }}
+              style={{ width: '100%', height: '10em' }}
               onChange={handleMessage}
-              
             />
-            <div style={{ display: "flex" }}>
-              <div style={{ display: "flex", width: "50%" }}>
-                <Form.Check id="chkBusinessPartner" 
-                onClick={handlePartner.bind(
-                                        this)}
+            <div style={{ display: 'flex' }}>
+              <div style={{ display: 'flex', width: '50%' }}>
+                <Form.Check
+                  id="chkBusinessPartner"
+                  onClick={handlePartner.bind(this)}
                 />
-                {partners.length > 0 && (<label htmlFor="chkBusinessPartner" >
-                  All Business Partners
-                </label>) }
+                {partners.length > 0 && (
+                  <label htmlFor="chkBusinessPartner">
+                    All Business Partners
+                  </label>
+                )}
               </div>
-              <div style={{ display: "flex", width: "50%" }}>
-                <Form.Check id="chkAttendee" onClick={handleAttendee.bind(
-                                        this)}/>
-                {attendees.length > 0 && (<label htmlFor="chkAttendee" >
-                  All Attendees
-                </label>) }
-                
+              <div style={{ display: 'flex', width: '50%' }}>
+                <Form.Check
+                  id="chkAttendee"
+                  onClick={handleAttendee.bind(this)}
+                />
+                {attendees.length > 0 && (
+                  <label htmlFor="chkAttendee">All Attendees</label>
+                )}
               </div>
             </div>
             <div className="error">
-              {errorMessage != "null" && <span>{errorMessage}</span>}
+              {errorMessage != 'null' && <span>{errorMessage}</span>}
             </div>
           </Modal.Body>
           <Modal.Footer>
@@ -248,13 +256,18 @@ store.addNotification({
               <Nav.Item>
                 <Nav.Link eventKey="partners">Partner</Nav.Link>
               </Nav.Item>
-              {showEoView && !showPublicView && attendees.length>0 && partners.length > 0 && <button
-                className="btn btn-fill-out btn-sm"
-                style={{ float: "right" }}
-                onClick={() => openBroadcastModal()}
-              >
-                <AiOutlineNotification />
-              </button>}
+              {showEoView &&
+                !showPublicView &&
+                attendees.length > 0 &&
+                partners.length > 0 && (
+                  <button
+                    className="btn btn-fill-out btn-sm"
+                    style={{ float: 'right' }}
+                    onClick={() => openBroadcastModal()}
+                  >
+                    <AiOutlineNotification />
+                  </button>
+                )}
             </Nav>
 
             <Tab.Content>

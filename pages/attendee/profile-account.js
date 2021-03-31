@@ -30,12 +30,15 @@ import {
   IoIosPerson,
   IoIosSettings,
   IoIosRadioButtonOn,
-  IoIosContacts
+  IoIosContacts,
 } from 'react-icons/io';
 
 import { useForm } from 'react-hook-form';
-import useUser from '../../lib/query/useUser';
-import {getFollowingEo, getFollowingBp} from '../../lib/query/getAttendeeFollowing';
+//import useUser from '../../lib/query/useUser';
+import {
+  getFollowingEo,
+  getFollowingBp,
+} from '../../lib/query/getAttendeeFollowing';
 
 import { useMutation, useQueryClient } from 'react-query';
 import api from '../../lib/ApiClient';
@@ -77,16 +80,8 @@ const MyAccount = () => {
   //show pw error alert
   const [showPW, setShowPW] = useState(false);
   const [showFileSizeError, setShowFileSizeError] = useState(false);
-  const[followingBp, setFollowingBp] = useState([]);
-  const[followingEo, setFollowingEo] = useState([]);
-
-  useEffect(() => {
-    const getFollowingPartner = async () => {
-      await getFollowingBp(localStorage.getItem('userId')).then((data) => {
-        setFollowingBp(data);
-      });
-    };
-    getFollowingPartner();
+  const [followingBp, setFollowingBp] = useState([]);
+  const [followingEo, setFollowingEo] = useState([]);
 
   //Email Notification Setting
   //const [allEmailNoti, setAllEmailNoti] = useState(true);
@@ -131,8 +126,12 @@ const MyAccount = () => {
     // if (user != undefined && user?.paymentMethodId != null) {
     //   getUserPayment();
     // }
-  }, []);
-
+    const getFollowingPartner = async () => {
+      await getFollowingBp(localStorage.getItem('userId')).then((data) => {
+        setFollowingBp(data);
+      });
+    };
+    getFollowingPartner();
     const getFollowingOrganiser = async () => {
       await getFollowingEo(localStorage.getItem('userId')).then((data) => {
         setFollowingEo(data);
@@ -140,6 +139,7 @@ const MyAccount = () => {
     };
     getFollowingOrganiser();
   }, []);
+
   const renderTooltip = (props) => (
     <Tooltip id="button-tooltip" {...props}>
       Support png and jpg image format.
@@ -297,11 +297,13 @@ const MyAccount = () => {
         setName('');
         setNumber('');
         setExpMth('');
+        setLoginLoading(false);
       }
     })
   );
 
   const handleDeleteCard = async () => {
+    setLoginLoading(true);
     mutatePaymentCard.mutate();
     // close the modal once yes click.
     setShowCardModal(false);
@@ -423,9 +425,11 @@ const MyAccount = () => {
 
           setConfirmPW(true);
           setShowPW(true);
+          setLoginLoading(false);
         } else if (response.data['message'] == 'Old password is incorrect.') {
           setPWAlert('Old password is incorrect.');
           setShowPW(true);
+          setLoginLoading(false);
         }
       })
       .catch((error) => {
@@ -433,6 +437,7 @@ const MyAccount = () => {
 
         setPWAlert('An error has occured.');
         setShowPW(true);
+        setLoginLoading(false);
       });
   });
 
@@ -440,6 +445,7 @@ const MyAccount = () => {
     setPWAlert('');
     setShowPW(false);
     setConfirmPW(false);
+    setLoginLoading(true);
 
     var result = validatePassword(
       data.oldPassword,
@@ -494,6 +500,10 @@ const MyAccount = () => {
   }
 
   const onSubmitEmailNotification = async () => {
+    setShowNotiSuccess(false);
+    setShowNotiError(false);
+    setLoginLoading(true);
+
     mutateEmailNotiSetting.mutate({
       //systemEmailNoti: allEmailNoti,
       eoEmailNoti: eoEventBroadcast,
@@ -536,13 +546,16 @@ const MyAccount = () => {
           if (data != null) {
             setShowNotiSuccess(true);
             setShowNotiError(false);
+            setLoginLoading(false);
           } else {
             setShowNotiError(true);
             setShowNotiSuccess(false);
+            setLoginLoading(false);
           }
         } else {
           setShowNotiError(true);
           setShowNotiSuccess(false);
+          setLoginLoading(false);
         }
       })
       .catch((error) => {
@@ -642,93 +655,109 @@ const MyAccount = () => {
                         <h3>List of Following</h3>
                       </Card.Header>
                       <Card.Body>
-                      <Container>
-          <Tab.Container defaultActiveKey="organiser">
-            <Nav
-              variant="pills"
-              className="product-tab-navigation text-center justify-content-center space-mb--30"
-            >
-              <Nav.Item>
-                <Nav.Link eventKey="organiser">Event Organiser</Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey="partners">Partner</Nav.Link>
-              </Nav.Item>
-            </Nav>
+                        <Container>
+                          <Tab.Container defaultActiveKey="organiser">
+                            <Nav
+                              variant="pills"
+                              className="product-tab-navigation text-center justify-content-center space-mb--30"
+                            >
+                              <Nav.Item>
+                                <Nav.Link eventKey="organiser">
+                                  Event Organiser
+                                </Nav.Link>
+                              </Nav.Item>
+                              <Nav.Item>
+                                <Nav.Link eventKey="partners">Partner</Nav.Link>
+                              </Nav.Item>
+                            </Nav>
 
-            <Tab.Content>
-              <Tab.Pane eventKey="organiser">
-                <Row>
-                  <Col md={12}>
-                    <div
-                      style={{
-                        overflowY: 'auto',
-                        // border:'1px solid red',
-                        // width:'500px',
-                        overflowX: 'hidden',
-                        height: '40vh',
-                        position: 'relative',
-                      }}
-                    >
-                      <div className="product-description-tab__additional-info">
-                        {followingEo != null &&
-                          followingEo.map((follow) => {
-                            return (
-                              <li>
-                              <hr></hr>
-                              <Row>
-                                <Col md="1" xs="1">
-                                  {' '}
-                                  &nbsp;
-                                </Col>
-                                <Col md="2" xs="2">
-                                  <div className="avatar">
-                                    {follow?.profilePic == null && (
-                                      <img
-                                        src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
-                                        className="img-circle img-no-padding img-responsive"
-                                      />
-                                    )}
-                                    {follow?.profilePic != null && (
-                                      <Image
-                                        className="img-circle img-no-padding img-responsive"
-                                        src={follow?.profilePic}
-                                      />
-                                    )}
-                                  </div>
-                                </Col>
-                                <Col md="5" xs="5">
-                                  {/* <br></br> */}
-                                  <Link
-                                    href={{
-                                      pathname:
-                                        '/organiser/organiser-profile',
-                                      query: {
-                                        paraId: JSON.stringify(follow?.id),
-                                      },
-                                    }}
-                                  >
-                                    {follow.name}
-                                  </Link>{' '}
-                                  <br />
-                                  {/* <span className="text-muted">
+                            <Tab.Content>
+                              <Tab.Pane eventKey="organiser">
+                                <Row>
+                                  <Col md={12}>
+                                    <div
+                                      style={{
+                                        overflowY: 'auto',
+                                        // border:'1px solid red',
+                                        // width:'500px',
+                                        overflowX: 'hidden',
+                                        height: '40vh',
+                                        position: 'relative',
+                                      }}
+                                    >
+                                      <div className="product-description-tab__additional-info">
+                                        {followingEo != null &&
+                                          followingEo.map((follow) => {
+                                            return (
+                                              <li>
+                                                <hr></hr>
+                                                <Row>
+                                                  <Col md="1" xs="1">
+                                                    {' '}
+                                                    &nbsp;
+                                                  </Col>
+                                                  <Col md="2" xs="2">
+                                                    <div className="avatar">
+                                                      {follow?.profilePic ==
+                                                        null && (
+                                                        <img
+                                                          src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
+                                                          className="img-circle img-no-padding img-responsive"
+                                                        />
+                                                      )}
+                                                      {follow?.profilePic !=
+                                                        null && (
+                                                        <Image
+                                                          className="img-circle img-no-padding img-responsive"
+                                                          src={
+                                                            follow?.profilePic
+                                                          }
+                                                        />
+                                                      )}
+                                                    </div>
+                                                  </Col>
+                                                  <Col md="5" xs="5">
+                                                    {/* <br></br> */}
+                                                    <Link
+                                                      href={{
+                                                        pathname:
+                                                          '/organiser/organiser-profile',
+                                                        query: {
+                                                          paraId: JSON.stringify(
+                                                            follow?.id
+                                                          ),
+                                                        },
+                                                      }}
+                                                    >
+                                                      {follow.name}
+                                                    </Link>{' '}
+                                                    <br />
+                                                    {/* <span className="text-muted">
                                     {follow.email}
                                   </span> */}
-                                  <div>
-                                    <span className="text-muted">
-                                      {follow.description != null && follow.description}
-                                      {follow.description == null && "There is no description yet."}
-                                    </span>
-                                  </div>
-                                </Col>
+                                                    <div>
+                                                      <span className="text-muted">
+                                                        {follow.description !=
+                                                          null &&
+                                                          follow.description}
+                                                        {follow.description ==
+                                                          null &&
+                                                          'There is no description yet.'}
+                                                      </span>
+                                                    </div>
+                                                  </Col>
 
-                                <Col className="text-left" md="4" xs="4">
-                                  <span>Email:</span>
-                                  <br></br>
-                                  <span className="text-muted">
-                                    {follow.email}
-                                  </span>
-                                  {/* {!publicView && (
+                                                  <Col
+                                                    className="text-left"
+                                                    md="4"
+                                                    xs="4"
+                                                  >
+                                                    <span>Email:</span>
+                                                    <br></br>
+                                                    <span className="text-muted">
+                                                      {follow.email}
+                                                    </span>
+                                                    {/* {!publicView && (
                                     <Button
                                       className="btn-round btn-icon"
                                       color="success"
@@ -738,79 +767,86 @@ const MyAccount = () => {
                                       Select
                                     </Button>
                                   )} */}
-                                </Col>
-                              </Row>
-                            </li>
-                            );
-                          })}
-                      </div>
-                    </div>
-                  </Col>
-                </Row>
-              </Tab.Pane>
-              <Tab.Pane eventKey="partners">
-                <Row>
-                  <Col md={12}>
-                    <div
-                      style={{
-                        overflowY: 'auto',
-                        // border:'1px solid red',
-                        // width:'500px',
-                        overflowX: 'hidden',
-                        height: '40vh',
-                        position: 'relative',
-                      }}
-                    >
-                      <div className="product-description-tab__additional-info">
-                        <ul className="list-unstyled team-members">
-                          {followingBp != null &&
-                            followingBp.map((partner) => {
-                              return (
-                                <li>
-                                  <hr></hr>
-                                  <Row>
-                                    <Col md="1" xs="1">
-                                      {' '}
-                                      &nbsp;
-                                    </Col>
-                                    <Col md="2" xs="2">
-                                      <div className="avatar">
-                                        {/* <img
+                                                  </Col>
+                                                </Row>
+                                              </li>
+                                            );
+                                          })}
+                                      </div>
+                                    </div>
+                                  </Col>
+                                </Row>
+                              </Tab.Pane>
+                              <Tab.Pane eventKey="partners">
+                                <Row>
+                                  <Col md={12}>
+                                    <div
+                                      style={{
+                                        overflowY: 'auto',
+                                        // border:'1px solid red',
+                                        // width:'500px',
+                                        overflowX: 'hidden',
+                                        height: '40vh',
+                                        position: 'relative',
+                                      }}
+                                    >
+                                      <div className="product-description-tab__additional-info">
+                                        <ul className="list-unstyled team-members">
+                                          {followingBp != null &&
+                                            followingBp.map((partner) => {
+                                              return (
+                                                <li>
+                                                  <hr></hr>
+                                                  <Row>
+                                                    <Col md="1" xs="1">
+                                                      {' '}
+                                                      &nbsp;
+                                                    </Col>
+                                                    <Col md="2" xs="2">
+                                                      <div className="avatar">
+                                                        {/* <img
                               alt="..."
                               className="img-circle img-no-padding img-responsive"
                               src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
                             /> */}
-                                        {partner?.profilePic == null && (
-                                          <img
-                                            src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
-                                            className="img-circle img-no-padding img-responsive"
-                                          />
-                                        )}
-                                        {partner?.profilePic != null && (
-                                          <Image
-                                            className="img-circle img-no-padding img-responsive"
-                                            src={partner?.profilePic}
-                                          />
-                                        )}
-                                      </div>
-                                    </Col>
-                                    <Col md="4" xs="4">
-                                      {/* <br></br> */}
-                                      <Link
-                                        href={{
-                                          pathname: '/partner/partner-profile',
-                                          query: {
-                                            paraId: JSON.stringify(partner?.id),
-                                          },
-                                        }}
-                                      >
-                                        {partner.name}
-                                      </Link>{' '}
-                                      <br />
-                                      <span className="text-muted">
-                                        {partner.email}
-                                      </span>
-                                      {/* <div>
+                                                        {partner?.profilePic ==
+                                                          null && (
+                                                          <img
+                                                            src="https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png"
+                                                            className="img-circle img-no-padding img-responsive"
+                                                          />
+                                                        )}
+                                                        {partner?.profilePic !=
+                                                          null && (
+                                                          <Image
+                                                            className="img-circle img-no-padding img-responsive"
+                                                            src={
+                                                              partner?.profilePic
+                                                            }
+                                                          />
+                                                        )}
+                                                      </div>
+                                                    </Col>
+                                                    <Col md="4" xs="4">
+                                                      {/* <br></br> */}
+                                                      <Link
+                                                        href={{
+                                                          pathname:
+                                                            '/partner/partner-profile',
+                                                          query: {
+                                                            paraId: JSON.stringify(
+                                                              partner?.id
+                                                            ),
+                                                          },
+                                                        }}
+                                                      >
+                                                        {partner.name}
+                                                      </Link>{' '}
+                                                      <br />
+                                                      <span className="text-muted">
+                                                        {partner.email}
+                                                      </span>
+                                                      {/* <div>
                                         {partner.businessCategory !== null &&
                                           (
                                             <span>
@@ -823,18 +859,25 @@ const MyAccount = () => {
 
                                           )}
                                       </div> */}
-                                    </Col>
-                                    <Col className="text-center" md="4" xs="4">
-                                      <br></br>
-                                      {partner.businessCategory !== null && (
-                                        <span>
-                                          {' '}
-                                          <Badge variant="primary">
-                                            {partner.businessCategory}
-                                          </Badge>{' '}
-                                        </span>
-                                      )}
-                                      {/* {!showPublicView && (<Button
+                                                    </Col>
+                                                    <Col
+                                                      className="text-center"
+                                                      md="4"
+                                                      xs="4"
+                                                    >
+                                                      <br></br>
+                                                      {partner.businessCategory !==
+                                                        null && (
+                                                        <span>
+                                                          {' '}
+                                                          <Badge variant="primary">
+                                                            {
+                                                              partner.businessCategory
+                                                            }
+                                                          </Badge>{' '}
+                                                        </span>
+                                                      )}
+                                                      {/* {!showPublicView && (<Button
                                         className="btn-round btn-icon"
                                         color="success"
                                         outline
@@ -842,21 +885,21 @@ const MyAccount = () => {
                                       >
                                         Select
                                        <i className="fa fa-envelope" /> */}
-                                      {/* </Button>)}  */}
-                                    </Col>
-                                  </Row>
-                                </li>
-                              );
-                            })}
-                        </ul>
-                      </div>
-                    </div>
-                  </Col>
-                </Row>
-              </Tab.Pane>
-            </Tab.Content>
-          </Tab.Container>
-        </Container>
+                                                      {/* </Button>)}  */}
+                                                    </Col>
+                                                  </Row>
+                                                </li>
+                                              );
+                                            })}
+                                        </ul>
+                                      </div>
+                                    </div>
+                                  </Col>
+                                </Row>
+                              </Tab.Pane>
+                            </Tab.Content>
+                          </Tab.Container>
+                        </Container>
                       </Card.Body>
                     </Card>
                   </Tab.Pane>
@@ -1487,14 +1530,15 @@ const MyAccount = () => {
                               </Col> */}
                             </Row>
 
-                            <button
+                            <ButtonWithLoading
                               type="submit"
                               className="btn btn-fill-out"
                               name="submit"
                               value="Submit"
+                              isLoading={loginLoading}
                             >
                               Save
-                            </button>
+                            </ButtonWithLoading>
                           </form>
                         </div>
                       </Card.Body>
@@ -1511,6 +1555,22 @@ const MyAccount = () => {
                             id="change-password-form"
                             onSubmit={handleSubmit(onSubmitPassword)}
                           >
+                            <Alert
+                              show={confirmPW}
+                              variant="success"
+                              onClose={() => setConfirmPW(false)}
+                              dismissible
+                            >
+                              {pwAlert}
+                            </Alert>
+                            <Alert
+                              show={!confirmPW && showPW}
+                              onClose={() => setShowPW(false)}
+                              variant="danger"
+                              dismissible
+                            >
+                              {pwAlert}
+                            </Alert>
                             <Col className="form-group" md={12}>
                               <label>
                                 Current Password{' '}
@@ -1559,32 +1619,17 @@ const MyAccount = () => {
                             </Col>
 
                             <Col>
-                              <button
+                              <ButtonWithLoading
                                 type="submit"
                                 className="btn btn-fill-out"
                                 name="submit"
                                 value="Submit"
+                                isLoading={loginLoading}
                               >
                                 Save
-                              </button>
+                              </ButtonWithLoading>
                             </Col>
                             <div>&nbsp;</div>
-                            <Alert
-                              show={confirmPW}
-                              variant="success"
-                              onClose={() => setConfirmPW(false)}
-                              dismissible
-                            >
-                              {pwAlert}
-                            </Alert>
-                            <Alert
-                              show={!confirmPW && showPW}
-                              onClose={() => setShowPW(false)}
-                              variant="danger"
-                              dismissible
-                            >
-                              {pwAlert}
-                            </Alert>
                           </form>
                         </div>
                       </Card.Body>
@@ -1623,11 +1668,6 @@ const MyAccount = () => {
           </Tab.Container>
         </Container>
       </div>
-      {/* <div style={{ display: 'none' }}>
-        {user != null &&
-          //initialise categoryPreferences
-          (categoryPreferences = user?.categoryPreferences)}
-      </div> */}
     </AttendeeWrapper>
     //{' '}
     //    </LayoutOne>
