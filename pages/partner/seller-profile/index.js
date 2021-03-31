@@ -4,25 +4,36 @@ import { BreadcrumbOne } from 'components/Breadcrumb';
 import PartnerWrapper from 'components/wrapper/PartnerWrapper';
 import { useState, useEffect } from 'react';
 import { getAllSellerProfilesByPartner } from "../../../lib/query/boothApi"
+import GeneralSideBar from "components/events/GeneralSideBar"
+import { Col, Row } from "react-bootstrap";
+import EventBoothCard from "components/events/partner/EventBoothCard";
+import { parseISO } from 'date-fns';
 
 export default function AllSellerProfiles() {
 
     const { data: user } = useUser(localStorage.getItem('userId'));
     const [sellerProfiles, setSellerProfiles] = useState([]);
+    const [filterValue, setFilterValue] = useState("upcoming");
 
-    console.log(user)
+    const filterStatus = ["upcoming", "completed"];
 
     useEffect(() => {
         if (user) {
             const getSPs = async () => {
                 const data = await getAllSellerProfilesByPartner(user.id);
-                setSellerProfiles(data);
+                if (filterValue == "upcoming") {
+                    setSellerProfiles(data.filter((d) => parseISO(d.event.eventStartDate) > new Date()));
+                }
+                else {
+                    setSellerProfiles(data.filter((d) => parseISO(d.event.eventStartDate) < new Date()));
+                }
+
             }
             getSPs()
         }
-    }, [user]);
+    }, [user, filterValue]);
 
-    console.log(sellerProfiles)
+    // console.log(sellerProfiles)
 
     return (
         <PartnerWrapper title="Seller Profiles">
@@ -37,8 +48,33 @@ export default function AllSellerProfiles() {
                 </ol>
             </BreadcrumbOne>
 
+            <div>
+                <GeneralSideBar filterValue={filterValue} setFilterValue={setFilterValue} statuses={filterStatus} />
+            </div>
 
+            <div className="shop-products"
+                style={{
+                    marginTop: '10%'
+                }}
+            >
+                <Row className="list">
+                    {sellerProfiles?.length != 0 ? (
+                        sellerProfiles.map((prof) => {
+                            return (
+                                <EventBoothCard sellerProfile={prof} key={prof.id} />
+                            )
+                        })
+                    ) : (
+                        <div
+                            className="product-description-tab__details"
+                            style={{ textAlign: 'center' }}
+                        >
+                            <img src="https://cdn.dribbble.com/users/888330/screenshots/2653750/empty_data_set.png" alt="No Events Found" />
+                        </div>
+                    )}
+                </Row>
+            </div>
 
-        </PartnerWrapper>
+        </PartnerWrapper >
     )
 }

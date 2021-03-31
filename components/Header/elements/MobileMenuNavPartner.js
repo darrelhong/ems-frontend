@@ -58,7 +58,7 @@ const MobileMenuNavPartner = ({ getActiveStatus }) => {
 
           <ul className="sub-menu sub-menu--one-column">
             <li>
-              <Link href="/home/fashion-one">
+              <Link href="/partner/seller-profile">
                 <a>Manage Booths</a>
               </Link>
             </li>
