@@ -15,7 +15,6 @@ import {
   updateEvent,
   deleteEvent,
   getSellerProfilesFromEvent,
-  returnNewSellerApplications
 } from '../../../lib/query/eventApi';
 import {
   publishToggle,
@@ -27,6 +26,7 @@ import {
 import { dbDateToPretty } from '../../../lib/util/functions';
 import { format, parseISO, parseJSON } from 'date-fns';
 import { useToasts } from 'react-toast-notifications';
+import { returnNewSellerApplications } from "lib/query/sellerApplicationApi"
 
 const OrganiserViewEventDetails = () => {
   const [event, setEvent] = useState(Object);
@@ -34,8 +34,8 @@ const OrganiserViewEventDetails = () => {
   const [prettyEndDate, setPrettyEndDate] = useState('');
   const [prettySaleStartDate, setPrettySaleStartDate] = useState('');
   const [prettySalesEndDate, setPrettySalesEndDate] = useState('');
-  const [newSellerApplications,setNewSellerApplications] = useState([]);
-  const [sellerProfiles,setSellerProfiles] = useState([]);
+  const [newSellerApplications, setNewSellerApplications] = useState([]);
+  const [sellerProfiles, setSellerProfiles] = useState([]);
   const router = useRouter();
   const { eid } = router.query;
   const { addToast, removeToast } = useToasts();
