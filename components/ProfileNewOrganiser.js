@@ -10,6 +10,9 @@ import {
   Row,
   Col,
 } from 'reactstrap';
+import { Alert } from 'react-bootstrap';
+import ButtonWithLoading from './custom/ButtonWithLoading';
+
 import axios from 'axios';
 import EventTabOne from '../components/EventTabEoProfile';
 import FollowersTabEoProfile from '../components/FollowersTabEoProfile';
@@ -47,7 +50,11 @@ const EventOrgProfile = ({ paraId_ }) => {
   const [followBtn, setFollowBtn] = useState();
   const [reviews, setReviews] = useState();
   const [user, setUser] = useState();
-
+  const [enquiryEventList, setEnquiryEventList] = useState([]);
+  const [showEnquiryError, setEnquiryError] = useState(false);
+  const [showEnquirySuccess, setEnquirySuccess] = useState(false);
+  const [sendEnquiryLoading, setSendEnquiryLoading] = useState(false);
+  const [showEnquiry, setShowEnquiry] = useState(false);
   // if there is user login credential
   //const paraId_ = JSON.parse(query.paraId);
 
@@ -171,6 +178,7 @@ const EventOrgProfile = ({ paraId_ }) => {
                 'current'
               ).then((events) => {
                 setCurrenteventlist(events);
+                setEnquiryEventList(events);
               });
 
               setShowPublicView(true);
@@ -178,7 +186,7 @@ const EventOrgProfile = ({ paraId_ }) => {
               followId = data.id;
               type = 'partner';
               loadOrgAttFollowerData();
-
+              setShowEnquiry(true);
               loadOrgPartnerFollowerData();
               //partner has no upcoming events
 
@@ -213,6 +221,20 @@ const EventOrgProfile = ({ paraId_ }) => {
               ).then((events) => {
                 setPastEventlist(events);
               });
+
+              await getEoEventsByIdRoleStatus(
+                paraId_,
+                data.roles[0].roleEnum,
+                    'current'
+                  ).then(async (currentEvents) => {
+                    await getEoEventsByIdRoleStatus(
+                      paraId_,
+                      data.roles[0].roleEnum,
+                      'upcoming'
+                    ).then((upcomingEvents) => {
+                      setEnquiryEventList(currentEvents.concat(upcomingEvents));
+                    });
+                  });
               followId = data.id;
               type = 'atn';
               console.log(followId + 'followId');
@@ -221,7 +243,7 @@ const EventOrgProfile = ({ paraId_ }) => {
               setShowEoView(false);
               setUserRole('ATND');
               loadOrgAttFollowerData();
-
+              setShowEnquiry(true);
               loadOrgPartnerFollowerData();
             } else if (
               data.roles[0].roleEnum === 'EVNTORG' &&
@@ -242,13 +264,27 @@ const EventOrgProfile = ({ paraId_ }) => {
               ).then((events) => {
                 setUpcomingeventlist(events);
               });
+
+              await getEoEventsByIdRoleStatus(
+                paraId_,
+                data.roles[0].roleEnum,
+                    'current'
+                  ).then(async (currentEvents) => {
+                    await getEoEventsByIdRoleStatus(
+                      paraId_,
+                      data.roles[0].roleEnum,
+                      'upcoming'
+                    ).then((upcomingEvents) => {
+                      setEnquiryEventList(currentEvents.concat(upcomingEvents));
+                    });
+                  });
               followId = data.id;
               setShowPublicView(true);
               setShowEoView(false);
               setFollowBtn(false);
               setUnfollowBtn(false);
               loadOrgAttFollowerData();
-
+              setShowEnquiry(true);
               loadOrgPartnerFollowerData();
             } else if (
               data.roles[0].roleEnum === 'EVNTORG' &&
@@ -283,6 +319,7 @@ const EventOrgProfile = ({ paraId_ }) => {
               setFollowBtn(false);
               setUnfollowBtn(false);
               loadOrgAttFollowerData();
+              setShowEnquiry(false);
 
               loadOrgPartnerFollowerData();
               // getReviewsEO();
@@ -313,6 +350,8 @@ const EventOrgProfile = ({ paraId_ }) => {
         setShowEoView(false);
         setFollowBtn(false);
         setUnfollowBtn(false);
+        setShowEnquiry(false);
+
       };
       loadGuestData();
       loadOrgAttFollowerData();
@@ -440,6 +479,60 @@ const EventOrgProfile = ({ paraId_ }) => {
       getReviewsEvent(e.target.value);
     }
   };
+
+  function sendEnquiry() {
+    // get user inputs
+    let enquiryTitle = document.getElementById('enquiryTitle').value;
+    let enquiryEvent = document.getElementById('enquiryEvent').value;
+    let enquiryMessage = document.getElementById('enquiryMessage').value;
+    if (enquiryEvent == 'none') {
+      enquiryEvent = null;
+    }
+    // validate
+    if (enquiryTitle == '' ||  enquiryMessage == '') {
+      setEnquiryError(true);
+    } else {
+      setEnquiryError(false);
+    // get sender and receiver info
+    if(localStorage.getItem('userId') != null){
+      getUser(localStorage.getItem('userId')).then((user) => {
+            let enquiryReceiverEmail = eventorganiser.email;
+            let enquirySenderEmail = user.email;
+            let data = {
+              subject: enquiryTitle,
+              content: enquiryMessage,
+              eventId: enquiryEvent,
+              receiverEmail: enquiryReceiverEmail,
+              senderEmail: enquirySenderEmail,
+            };
+            setSendEnquiryLoading(true);
+            api
+              .post('/api/user/enquiry', data)
+              .then(() => {
+                setEnquirySuccess(true);
+                setSendEnquiryLoading(false);
+                clearEnquiryForm();
+              })
+              .catch((error) => {
+                console.log(error);
+                setSendEnquiryLoading(false);
+                setEnquiryError(true);
+              });
+          });
+          }
+          
+    }
+  }
+
+  function clearEnquiryForm() {
+    let enquiryTitle = document.getElementById('enquiryTitle');
+    let enquiryEvent = document.getElementById('enquiryEvent');
+    let enquiryMessage = document.getElementById('enquiryMessage');
+
+    enquiryTitle.value = '';
+    enquiryEvent.selectedIndex = 0;
+    enquiryMessage.value = '';
+  }
 
   return (
     <>
@@ -733,7 +826,8 @@ const EventOrgProfile = ({ paraId_ }) => {
           </Col>
         </Row>
         <br></br>
-        <Row xs="12" style={{ marginTop: '30px', marginBottom: '30px' }}>
+        {showEnquiry && (       
+           <Row xs="12" style={{ marginTop: '30px', marginBottom: '30px' }}>
           {/* <Card className="card-user"> */}
           {/* <CardHeader className="text-center">
                 <h4>Have some questions?</h4>
@@ -757,36 +851,63 @@ const EventOrgProfile = ({ paraId_ }) => {
             </div>
           </Col>
           <Col xs="7" className="d-flex justify-content-center">
-            <br></br>
+             <br></br>
             <br></br>
             <div
               className="d-flex flex-column text-center "
               style={{ gap: '10px', width: '70%' }}
             >
-                                        <br></br>
+                          <br></br>
+                          <input
+                        id="enquiryTitle"
+                        className="form-control"
+                        placeholder="Title *"
+                      />
+                      <select className="custom-select" id="enquiryEvent">
+                        <option value="none">Event</option>
+                        {(enquiryEventList != null ||
+                          enquiryEventList != undefined) &&
+                          enquiryEventList.map((event) => {
+                            return (
+                              <option value={event.eid}>{event.name}</option>
+                            );
+                          })}
+                      </select>
+                      <textarea
+                        id="enquiryMessage"
+                        className="form-control"
+                        placeholder="Your Enquiry *"
+                        style={{ height: '10em' }}
+                      />
+                      <Alert
+                        show={showEnquiryError}
+                        variant="danger"
+                        onClose={() => setEnquiryError(false)}
+                        dismissible
+                      >
+                        Please fill in all the required fields.
+                      </Alert>
+                      <Alert
+                        show={showEnquirySuccess}
+                        variant="success"
+                        onClose={() => setEnquirySuccess(false)}
+                        dismissible
+                      >
+                        Success! A copy of the enquiry has been sent to your
+                        email.
+                      </Alert>
+                      <ButtonWithLoading
+                        className="btn btn-fill-out"
+                        onClick={() => sendEnquiry()}
+                        isLoading={sendEnquiryLoading && !showEnquiryError}
+                      >
+                        Send Enquiry
+                      </ButtonWithLoading>
 
-              <input
-                id="enquiryTitle"
-                className="form-control"
-                placeholder="Title"
-              />
-              <input
-                id="enquiryEventName"
-                className="form-control"
-                placeholder="Event Name"
-              />
-              <textarea
-                id="enquiryMessage"
-                className="form-control"
-                placeholder="Type something here..."
-                style={{ height: '10em' }}
-              />
-              <button className="btn btn-fill-out">Send Enquiry</button>
             </div>
-            {/* </CardBody> */}
-            {/* </Card> */}
           </Col>
-        </Row>
+        </Row>)}
+
         <br></br>
       </div>
     </>
