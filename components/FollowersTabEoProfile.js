@@ -1,5 +1,14 @@
 import { useState } from 'react';
-import { Modal, Button, Form, Container, Row, Col } from 'react-bootstrap';
+import {
+  Modal,
+  Button,
+  Form,
+  Container,
+  Row,
+  Col,
+  Tooltip,
+  OverlayTrigger,
+} from 'react-bootstrap';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
@@ -11,6 +20,7 @@ import { useMutation } from 'react-query';
 import { AiOutlineNotification } from 'react-icons/ai';
 // import EventEoProfileSliderTen from './ProductSlider/EventEoProfileSliderTen';
 import { store } from 'react-notifications-component';
+import { BsFillInfoCircleFill } from 'react-icons/bs';
 
 const FollowersTabEoProfile = ({
   attendees,
@@ -142,7 +152,8 @@ const FollowersTabEoProfile = ({
 
     store.addNotification({
       title: 'Success',
-      message: 'The broadcast messages have been sent out successfully.',
+      message:
+        'The broadcast message has been sent out as both system notification and email successfully.',
       type: 'success',
       insert: 'top',
       container: 'top-left',
@@ -183,6 +194,12 @@ const FollowersTabEoProfile = ({
       });
   });
 
+  const broadcastMsgToolTip = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      The message will be sent out as both system notification and email.
+    </Tooltip>
+  );
+
   if (attendees !== undefined && partners !== undefined) {
     return (
       <div className="product-tab-area space-pb--r70">
@@ -215,7 +232,16 @@ const FollowersTabEoProfile = ({
         </Modal>
         <Modal show={broadcastModalShow} onHide={closeBroadcastModal} centered>
           <Modal.Header closeButton>
-            <Modal.Title>Broadcast Message</Modal.Title>
+            <Modal.Title>
+              Broadcast Message &nbsp;
+              <OverlayTrigger
+                placement="right"
+                delay={{ show: 250, hide: 400 }}
+                overlay={broadcastMsgToolTip}
+              >
+                <BsFillInfoCircleFill></BsFillInfoCircleFill>
+              </OverlayTrigger>
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body
             style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}

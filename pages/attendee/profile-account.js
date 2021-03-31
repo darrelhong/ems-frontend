@@ -1325,12 +1325,12 @@ const MyAccount = () => {
                               {user?.id != null && (
                                 <div>
                                   <Col className="form-group" md={12}>
-                                    <Form.Label htmlFor="categorypreference">
+                                    {/* <Form.Label htmlFor="categorypreference">
                                       Event Category Preferences{' '}
                                       <span className="required"></span>
-                                    </Form.Label>
+                                    </Form.Label> */}
 
-                                    <DropdownMultiselect
+                                    {/* <DropdownMultiselect
                                       options={[
                                         'Automotive',
                                         'Business Support & Supplies',
@@ -1351,8 +1351,7 @@ const MyAccount = () => {
                                       selected={user?.categoryPreferences}
                                       handleOnChange={onPreferenceChange}
                                       name="ddlCategoryPreferences"
-                                      optionalLabel="label"
-                                    />
+                                    /> */}
                                   </Col>
                                 </div>
                               )}

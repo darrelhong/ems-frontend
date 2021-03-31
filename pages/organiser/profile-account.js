@@ -23,6 +23,7 @@ import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import Tooltip from 'react-bootstrap/Tooltip';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import { useForm } from 'react-hook-form';
 import useUser from '../../lib/query/useUser';
