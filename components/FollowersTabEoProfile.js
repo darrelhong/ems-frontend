@@ -6,10 +6,12 @@ import Image from 'react-bootstrap/Image';
 import Badge from 'react-bootstrap/Badge';
 import Link from 'next/link';
 import axios from 'axios';
-
+import api from '../lib/ApiClient';
+import { useMutation } from 'react-query';
 import { AiOutlineNotification } from 'react-icons/ai';
 // import EventEoProfileSliderTen from './ProductSlider/EventEoProfileSliderTen';
 import { store } from 'react-notifications-component';
+
 const FollowersTabEoProfile = ({
   attendees,
   partners,
@@ -19,6 +21,9 @@ const FollowersTabEoProfile = ({
 }) => {
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [checkAttendee, setCheckAttendee] = useState(false);
+  const [checkPartner, setCheckPartner] = useState(false);
+  //const [emailbroadcastoption, setEmailbroadcastoption] = useState('');
 
   const [broadcastModalShow, setBroadcastModalShow] = useState(false);
   const closeBroadcastModal = () => {
@@ -46,8 +51,6 @@ const FollowersTabEoProfile = ({
 
   // var checkAttendee;
   // var checkPartner;
-  const [checkAttendee, setCheckAttendee] = useState(false);
-  const [checkPartner, setCheckPartner] = useState(false);
 
   const handleMessage = (e) => {
     setMessage(e.target.value);
@@ -133,6 +136,7 @@ const FollowersTabEoProfile = ({
     axios.post(endpoint, postBody, {
       headers: { 'Content-type': 'application/json' },
     });
+
     closeConfirmBroadcastModal();
     closeBroadcastModal();
 
@@ -147,7 +151,37 @@ const FollowersTabEoProfile = ({
         onScreen: true,
       },
     });
+
+    console.log('broadcastOption');
+    console.log(checkAttendee);
+    console.log(checkPartner);
+
+    var emailbroadcastoption = '';
+    if (checkAttendee == true && checkPartner == true) {
+      emailbroadcastoption = 'Both';
+    } else if (checkPartner == true && checkAttendee == false) {
+      emailbroadcastoption = 'AllBpFollowers';
+    } else if (checkAttendee == true && checkPartner == false) {
+      emailbroadcastoption = 'AllAttFollowers';
+    }
+    console.log(emailbroadcastoption);
+    console.log(message);
+    mutateEmailNoti.mutate({
+      content: message,
+      broadcastOption: emailbroadcastoption,
+    });
   };
+
+  const mutateEmailNoti = useMutation((data) => {
+    api
+      .post('/api/organiser/broadcastEmailToFollowers', data)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
 
   if (attendees !== undefined && partners !== undefined) {
     return (
