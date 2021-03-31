@@ -743,24 +743,28 @@ const EventOrgProfile = ({ paraId_ }) => {
           <Col xs="5" className=" justify-content-center">
             <br></br>
             <div className="d-flex justify-content-center">
-              <h2>Have some questions?</h2>
+              <h2>Have some questions for us?</h2>
             </div>
-            <br></br>
+            {/* <br></br> */}
 
             <div className="d-flex justify-content-center">
               <img
                 // src="https://cdn1.iconfinder.com/data/icons/contact-us-honey-series/64/ONLINE_QUESTION-512.png"
-                src="https://img.icons8.com/bubbles/2x/email.png"
+                src="https://icons-for-free.com/iconfiles/png/512/app+email+emailing+galaxy+mobile+open+line+icon-1320183043200419856.png"
                 className="img-responsive"
-                style={{ maxWidth: '70%' }}
+                style={{ maxWidth: '60%' }}
               />
             </div>
           </Col>
           <Col xs="7" className="d-flex justify-content-center">
+            <br></br>
+            <br></br>
             <div
               className="d-flex flex-column text-center "
               style={{ gap: '10px', width: '70%' }}
             >
+                                        <br></br>
+
               <input
                 id="enquiryTitle"
                 className="form-control"
