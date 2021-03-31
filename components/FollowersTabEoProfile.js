@@ -164,13 +164,13 @@ store.addNotification({
               <Button variant="secondary" onClick={closeConfirmBroadcastModal}>
                 No
               </Button>
-              <Button
+              <button
                 variant="primary"
-                className="btnView btn-primary"
+                className="btn btn-fill-out"
                 onClick={sendNoti}
               >
                 Yes
-              </Button>
+              </button>
             </Modal.Footer>
           </Modal>
   <Modal show={broadcastModalShow} onHide={closeBroadcastModal} centered>
@@ -226,13 +226,13 @@ store.addNotification({
             <Button variant="secondary" onClick={closeBroadcastModal}>
               Close
             </Button>
-            <Button
+            <button
               variant="primary"
-              className="btnView btn-primary"
+              className="btn btn-fill-out"
               onClick={() => openConfirmBroadcastModal()}
             >
               Proceed
-            </Button>
+            </button>
           </Modal.Footer>
         </Modal>
 

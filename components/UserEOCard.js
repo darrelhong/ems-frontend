@@ -62,7 +62,7 @@ export default function UserEOCard({ partner, user, handleMarkVip, CheckVip }) {
           <Card.Text>
             {' '}
             <button
-              className="view btn-outline-primaryTest btn-sm"
+              className="btn btn-border-fill btn-sm"
               type="button"
               onClick={() => addVip(partner)}
             >

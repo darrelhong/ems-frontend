@@ -147,12 +147,13 @@ export default function EventCard({ event }) {
             No
            
       </Button>
-          <Button
+          <button
             variant="primary"
+            className="btn btn-fill-out "
           onClick={createReview}
           >
             Yes
-      </Button>
+      </button>
         </Modal.Footer>
       </Modal>
       <Modal show={reviewModalShow} onHide={closeReviewModal} centered>
@@ -204,13 +205,13 @@ export default function EventCard({ event }) {
           <Button variant="secondary" onClick={closeReviewModal}>
             Close
     </Button>
-          <Button
+          <button
             variant="primary"
-            className="btnView"
+            className="btn btn-fill-out"
             onClick={() => openConfirmReviewModal()}
           >
             Proceed
-    </Button>
+    </button>
         </Modal.Footer>
       </Modal>
       <Card className="h-100">
@@ -230,7 +231,7 @@ export default function EventCard({ event }) {
           <Card.Text>
             {' '}
             <button
-              className="view btn-outline-primary btn-sm"
+              className="btn btn-border-fill btn-sm"
               type="button"
               onClick={() => openReviewModal()}
             >

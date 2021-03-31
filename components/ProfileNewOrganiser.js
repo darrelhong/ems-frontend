@@ -691,11 +691,11 @@ const EventOrgProfile = ({ paraId_ }) => {
                                             />
                                             
                                           </div>
-                                          <div className="customer-meta">
+                                          <div className="description">
                                             
-                                          <span className="review-author">
+                                          <p>
                                             {review.reviewDateTime}
-                                          </span>
+                                          </p>
                                           </div>
                                         </div>
                                         <p className="customer-meta">
