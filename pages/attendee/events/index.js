@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import debounce from 'lodash/debounce';
 import Link from 'next/link';
 import { Fragment, useState } from 'react';
@@ -15,10 +16,16 @@ import EventCard from 'components/events/partner/EventCard';
 import ButtonWithLoading from 'components/custom/ButtonWithLoading';
 import CenterSpinner from 'components/custom/CenterSpinner';
 
-export default function AttendeeEvents() {
+export function getServerSideProps({ query }) {
+  return {
+    props: { ...query },
+  };
+}
+
+export default function AttendeeEvents({ category }) {
   const [sortBy, setSortBy] = useState();
   const [searchTerm, setSearchTerm] = useState('');
-  const [category, setCategory] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState(category);
   const queryClient = useQueryClient();
   const {
     status,
@@ -27,7 +34,7 @@ export default function AttendeeEvents() {
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery(
-    ['events', sortBy?.sort, sortBy?.sortDir, searchTerm, category],
+    ['events', sortBy?.sort, sortBy?.sortDir, searchTerm, selectedCategory],
     ({ pageParam = 0 }) =>
       getEventsWithKeywordandSort(
         pageParam,
@@ -35,7 +42,7 @@ export default function AttendeeEvents() {
         sortBy?.sortDir,
         searchTerm,
         false,
-        category
+        selectedCategory
       ),
     {
       getNextPageParam: (lastPage) =>
@@ -67,7 +74,7 @@ export default function AttendeeEvents() {
   } = useEventCategories();
 
   const handleCategoryChange = (e) => {
-    setCategory(e.target.value);
+    setSelectedCategory(e.target.value);
   };
 
   // search results automatically update, with debounced input
@@ -135,7 +142,11 @@ export default function AttendeeEvents() {
               <select className="custom-select" onChange={handleCategoryChange}>
                 <option value="">Categories</option>
                 {eventCategories.map((category, i) => (
-                  <option key={i} value={category}>
+                  <option
+                    key={i}
+                    value={category}
+                    selected={category == selectedCategory}
+                  >
                     {category}
                   </option>
                 ))}
@@ -197,3 +208,7 @@ export default function AttendeeEvents() {
     </AttendeeWrapper>
   );
 }
+
+AttendeeEvents.propTypes = {
+  category: PropTypes.string,
+};
