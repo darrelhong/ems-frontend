@@ -115,7 +115,7 @@ function PartnerViewUsers() {
                                     />
                                     <div className="input-group-append">
                                         <button
-                                            className="btn btn-outline-primary btn-sm"
+                                            className="btn btn-border-fill btn-sm"
                                             type="button"
                                             style={{ height: 38 }}
                                             onClick={handleSearchButtonClicked}
