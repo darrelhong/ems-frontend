@@ -28,13 +28,14 @@ export default function PartnerEvents() {
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery(
-    ['events', sortBy?.sort, sortBy?.sortDir, searchTerm],
+    ['events', sortBy?.sort, sortBy?.sortDir, searchTerm, filterValue],
     ({ pageParam = 0 }) =>
       getEventsWithKeywordandSort(
         pageParam,
         sortBy?.sort,
         sortBy?.sortDir,
-        searchTerm
+        searchTerm,
+        filterValue
       ),
     {
       getNextPageParam: (lastPage) =>
