@@ -28,21 +28,29 @@ export default function PartnerEvents() {
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery(
-    ['events', sortBy?.sort, sortBy?.sortDir, searchTerm, filterValue],
+    ['events', sortBy?.sort, sortBy?.sortDir, searchTerm, filterValue, user?.id],
     ({ pageParam = 0 }) =>
       getEventsWithKeywordandSort(
         pageParam,
+        filterValue,
         sortBy?.sort,
         sortBy?.sortDir,
         searchTerm,
-        filterValue
+        user.id
       ),
     {
       getNextPageParam: (lastPage) =>
         lastPage.last ? false : lastPage.number + 1,
     }
   );
-  console.log(data)
+
+  // if (!user) {
+  //   queryClient.invalidateQueries("events");
+  // }
+
+  console.log("data: ", data)
+  console.log(user)
+  // console.log(filterValue)
   // console.log("test", queryClient.getQueryData('events'))
 
   // front end filtering of event
@@ -78,7 +86,7 @@ export default function PartnerEvents() {
       'events',
       sortBy?.sort,
       sortBy?.sortDir,
-      searchTerm,
+      searchTerm
     ]);
 
   return (
