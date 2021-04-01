@@ -2,8 +2,10 @@ import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { Alert, Col, Container, Row } from 'react-bootstrap';
 import { format, parseISO } from 'date-fns';
+import { FaHeart } from 'react-icons/fa';
 
 import { useEventDetails } from 'lib/query/events';
+import { formatter } from 'lib/util/currency';
 
 import GuestWrapper from 'components/wrapper/GuestWrapper';
 import { BreadcrumbOne } from 'components/Breadcrumb';
@@ -11,8 +13,7 @@ import EventImageGallery from 'components/events/partner/EventImageGallery';
 import AddToCalendar from 'components/custom/AddToCalendar';
 import ShareButton from 'components/custom/ShareButton';
 import CenterSpinner from 'components/custom/CenterSpinner';
-import { FaHeart } from 'react-icons/fa';
-import { formatter } from 'lib/util/currency';
+import EventCategoryList from 'components/custom/events/EventCategoryList';
 
 export function getServerSideProps({ query }) {
   return {
@@ -142,10 +143,16 @@ export default function PublicEventPage({ id }) {
               </Col>
             </Row>
 
-            <Row className="mt-3">
+            <Row className="mt-3" style={{ minHeight: 150 }}>
               <Col>
                 <h5>About this event</h5>
                 <p>{data.descriptions}</p>
+              </Col>
+            </Row>
+
+            <Row>
+              <Col>
+                <EventCategoryList categories={data.categories} />
               </Col>
             </Row>
           </Container>

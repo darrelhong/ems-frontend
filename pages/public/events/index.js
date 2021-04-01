@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import debounce from 'lodash/debounce';
 import Link from 'next/link';
 import { Fragment, useState } from 'react';
@@ -5,6 +6,7 @@ import { useInfiniteQuery, useQueryClient } from 'react-query';
 import { BreadcrumbOne } from 'components/Breadcrumb';
 import { Alert, Col, Container, Row } from 'react-bootstrap';
 
+import useEventCategories from 'lib/query/useEventCategories';
 import { getEventsWithKeywordandSort } from 'lib/query/events';
 
 import EventCard from 'components/events/partner/EventCard';
@@ -12,9 +14,16 @@ import ButtonWithLoading from 'components/custom/ButtonWithLoading';
 import CenterSpinner from 'components/custom/CenterSpinner';
 import GuestWrapper from 'components/wrapper/GuestWrapper';
 
-export default function PublicEvents() {
+export function getServerSideProps({ query }) {
+  return {
+    props: { ...query },
+  };
+}
+
+export default function PublicEvents({ category }) {
   const [sortBy, setSortBy] = useState();
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState(category);
   const queryClient = useQueryClient();
   const {
     status,
@@ -23,14 +32,21 @@ export default function PublicEvents() {
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery(
-    ['eventsPublic', sortBy?.sort, sortBy?.sortDir, searchTerm],
+    [
+      'eventsPublic',
+      sortBy?.sort,
+      sortBy?.sortDir,
+      searchTerm,
+      selectedCategory,
+    ],
     ({ pageParam = 0 }) =>
       getEventsWithKeywordandSort(
         pageParam,
         sortBy?.sort,
         sortBy?.sortDir,
         searchTerm,
-        true
+        true,
+        selectedCategory
       ),
     {
       getNextPageParam: (lastPage) =>
@@ -52,6 +68,15 @@ export default function PublicEvents() {
       default:
         setSortBy();
     }
+  };
+
+  const {
+    data: eventCategories,
+    isSuccess: eventCategoriesSuccess,
+  } = useEventCategories();
+
+  const handleCategoryChange = (e) => {
+    setSelectedCategory(e.target.value);
   };
 
   // search results automatically update, with debounced input
@@ -106,7 +131,7 @@ export default function PublicEvents() {
         </Row>
 
         <Row className="mb-4">
-          <Col xs={4} sm={3}>
+          <Col xs={6} sm={5} md={3}>
             <select className="custom-select" onChange={handleChange}>
               <option value="">Sort by</option>
               <option value="name-asc">Name - A to Z</option>
@@ -114,6 +139,22 @@ export default function PublicEvents() {
               <option value="date-asc">Most recent</option>
             </select>
           </Col>
+          {eventCategoriesSuccess && (
+            <Col xs={6} sm={5} md={3}>
+              <select className="custom-select" onChange={handleCategoryChange}>
+                <option value="">Categories</option>
+                {eventCategories.map((category, i) => (
+                  <option
+                    key={i}
+                    value={category}
+                    selected={category == selectedCategory}
+                  >
+                    {category}
+                  </option>
+                ))}
+              </select>
+            </Col>
+          )}
         </Row>
         {status === 'loading' ? (
           <CenterSpinner />
@@ -166,3 +207,7 @@ export default function PublicEvents() {
     </GuestWrapper>
   );
 }
+
+PublicEvents.propTypes = {
+  category: PropTypes.string,
+};
