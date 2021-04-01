@@ -12,11 +12,13 @@ const EventBoothCard = ({ sellerProfile }) => {
                 </div>
 
                 <div className="product-list__info">
-                    <h6 className="product-title">
-                        <a>{sellerProfile.event.name}</a>
-                    </h6>
+                    <Link href={`/partner/seller-profile/${sellerProfile.id}`} >
+                        <h6 className="product-title">
+                            <a>{sellerProfile.event.name}</a>
+                        </h6>
+                    </Link>
 
-                    <div className="product-description">{sellerProfile.description}</div>
+                    <div className="product-description">Seller Profile: {sellerProfile.description}</div>
                 </div>
             </div>
         </Col>
