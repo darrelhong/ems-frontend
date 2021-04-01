@@ -12,10 +12,11 @@ const RegisterModal = ({
     closeRegisterModal,
     boothTotal,
     createToast,
-    setAlreadyRegistered
+    setApplicationMade,
+    applicationMade
 }) => {
 
-    const [boothQuantity, setBoothQuantity] = useState(1);
+    const [boothQuantity, setBoothQuantity] = useState(applicationMade?.boothQuantity ?? 1);
 
     const {
         register,
@@ -23,31 +24,15 @@ const RegisterModal = ({
         errors,
         getValues,
     } = useForm();
+
     const maxBoothAllowable = event?.boothCapacity - boothTotal;
 
     const bodyComponent = () => (
         <Modal.Body>
             <form>
-
-                {/* <Row className="mb-4">
-                      <Col>
-                        <p>
-                          Starts on:{' '}
-                          {format(
-                            parseISO(event?.eventStartDate),
-                            'eee, dd MMM yy hh:mmbbb'
-                          )}
-                        </p>
-                      </Col>
-                    </Row> */}
-
                 <Row className="mb-4">
                     <Col>
-                        <p className="text-dark">
-                            Thank you for your interest in this event. Kindly add some details in the application and
-                            <strong>{' '}{event?.eventOrganiser?.name}{' '}</strong>
-                            will get back to you on whether your application is successful.
-                        </p>
+                    {introComponent()}
                         {/* <br/> */}
                     </Col>
                 </Row>
@@ -70,9 +55,10 @@ const RegisterModal = ({
                 <Row>
                     <Col>
                         <textarea
-                            // required
                             className="form-control"
                             name="description"
+                            disabled={applicationMade}
+                            defaultValue={applicationMade?.description}
                             ref={register({ required: true })}
                             style={{
                                 marginBottom: '5%'
@@ -105,7 +91,9 @@ const RegisterModal = ({
                                 className="form-control"
                                 name="boothQuantity"
                                 type="number"
-                                defaultValue={1}
+                                disabled={applicationMade}
+                                defaultValue={applicationMade?.description}
+                                defaultValue={applicationMade?.boothQuantity ?? 1}
                                 min={1}
                                 onChange={(e) => setBoothQuantity(e.target.value)}
                                 ref={register({
@@ -183,6 +171,8 @@ const RegisterModal = ({
                         <textarea
                             className="form-control"
                             name="comments"
+                            disabled={applicationMade}
+                            defaultValue={applicationMade?.comments}
                             ref={register()}
                             style={{
                                 marginBottom: '5%'
@@ -190,168 +180,101 @@ const RegisterModal = ({
                         />
                     </Col>
                 </Row>
-                {/* 
-                    
-                <Col className="form-group" md={12}>
-                    <label>
-                        Description<span className="required">*</span>
-                    </label>
-
-                    <br />
-                    <small>
-                        A short description of what you will be offering in the event!
-                </small>
-                    <textarea
-                        // required
-                        className="form-control"
-                        name="description"
-                        ref={register({ required: true })}
-                    />
-                    {errors.description && (
-                        <div
-                            className="alert alert-danger"
-                            role="alert"
-                            style={{
-                                marginTop: '3%'
-                            }}
-                        >
-                            Please leave a short description
-                        </div>
-                    )}
-                </Col>
-
-                <Col className="form-group" md={12}>
-                    <label>
-                        How many booths would you like at the event?<span className="required">*</span>
-                    </label>
-                    <br />
-                    {event?.boothPrice && event?.boothCapacity && (
-                        <small
-                            style={{
-                                color: 'blue'
-                            }}
-                        >
-                            Each booth is ${event?.boothPrice}
-                            <br />
-                            {event.boothCapacity - boothTotal} booths remaining!
-                        </small>
-                    )}
-                    <input
-                        className="form-control"
-                        name="boothQuantity"
-                        type="number"
-                        defaultValue={boothQuantity}
-                        onChange={(e) => setBoothQuantity(e.target.value)}
-                        ref={register({
-                            validate: (value) => value > 0 && value <= (event.boothCapacity - boothTotal)
-                        })}
-                    />
-                    {errors.boothQuantity && getValues('boothQuantity') < 1 && (
-                        <div
-                            className="alert alert-danger"
-                            role="alert"
-                            style={{
-                                marginTop: '3%'
-                            }}
-                        >
-                            Minimum of 1 booth!
-                        </div>
-                    )}
-
-                    {errors.boothQuantity && getValues('boothQuantity') > maxBoothAllowable && (
-                        <div
-                            className="alert alert-danger"
-                            role="alert"
-                            style={{
-                                marginTop: '3%'
-                            }}
-                        >
-                            Maximum of {maxBoothAllowable} allowed!
-                        </div>
-                    )}
-                </Col>
-
-                <Col className="form-group" md={12}>
-                    <label>
-                        Any additional comments? <span className="required">*</span>
-                    </label>
-                    <br />
-                    <small>
-                        eg. you would like your booths next to each other (if more than one)
-                </small>
-                    <textarea
-                        // required
-                        className="form-control"
-                        name="comments"
-                        ref={register()}
-                    />
-                </Col> */}
             </form>
         </Modal.Body>
     );
 
-    const closeButton = () => (
-        <Button variant="secondary" onClick={() => {
-            closeRegisterModal();
-        }}>
-            Cancel
-        </Button>
-    );
-
-
-    const registerButton = () => (
-        <Button
-            variant="danger"
-            onClick={handleSubmit(handleRegister)}
-        >
-            Register
-        </Button>
-    );
-
-    const handleRegister = async (data) => {
-        try {
-            await createSellerApplication(data, event.eid, bpId);
-            setAlreadyRegistered(true);
-            closeRegisterModal();
-            createToast('Registered Successfully', 'success');
-        } catch (e) {
-            closeRegisterModal();
-            createToast('Error, please try again later', 'error');
+    const introComponent = () => {
+        if (applicationMade) {
+            return (
+                <p className="text-dark">
+                Thank you for your interest in this event.
+                <strong>{' '}{event?.eventOrganiser?.name}{' '}</strong>
+                will get back to you shortly on whether your application is successful.
+            </p>
+            )
+        } else {
+            return (
+            <p className="text-dark">
+                Thank you for your interest in this event. Kindly add some details in the application and
+                <strong>{' '}{event?.eventOrganiser?.name}{' '}</strong>
+                will get back to you shortly on whether your application is successful.
+            </p>
+            )
         }
     }
 
-    const getCheckoutTotal = () => {
-        // return getValues('boothQuantity');
-        if (event?.boothPrice) {
-            return event.boothPrice * boothQuantity;
-        }
-        else return 0;
-        // return event.boothPrice * getValues('boothQuantity');
+const closeButton = () => (
+    <Button variant="danger" onClick={() => {
+        closeRegisterModal();
+    }}>
+        Close
+    </Button>
+);
+
+
+const registerButton = () => (
+    <Button
+        variant="danger"
+        onClick={handleSubmit(handleRegister)}
+    >
+        Register
+    </Button>
+);
+
+const handleRegister = async (data) => {
+    try {
+        const application = await createSellerApplication(data, event.eid, bpId);
+        // setAlreadyRegistered(true);
+        setApplicationMade(application);
+        closeRegisterModal();
+        createToast('Registered Successfully', 'success');
+    } catch (e) {
+        closeRegisterModal();
+        createToast('Error, please try again later', 'error');
     }
-    return (
-        <Modal
-            show={showRegisterModal}
-            onHide={closeRegisterModal}
-            size="xl"
-            centered>
-            <Modal.Header closeButton>
-                <Modal.Title>Registering for {event?.name}</Modal.Title>
-            </Modal.Header>
-            {bodyComponent()}
-            <Modal.Footer>
-                {/* {closeButton()} */}
-                <Col
-                    style={{
-                        textAlign: 'right'
-                    }}>
-                    <text>Total:{' '}</text>
-                    <text style={{ color: 'red' }}>{formatter.format(getCheckoutTotal())}</text>
-                    {/* Total Registration price: $79 */}
-                </Col>
-                {registerButton()}
-            </Modal.Footer>
-        </Modal>
-    );
+}
+
+const getCheckoutTotal = () => {
+    // return getValues('boothQuantity');
+    if (event?.boothPrice) {
+        return event.boothPrice * boothQuantity;
+    }
+    else return 0;
+    // return event.boothPrice * getValues('boothQuantity');
+}
+
+const getTitle = () => {
+    if (applicationMade) {
+        return `Applying for ${event?.name}`;
+    } else {
+        return `Registering for ${event?.name}`;
+    }
+};
+
+return (
+    <Modal
+        show={showRegisterModal}
+        onHide={closeRegisterModal}
+        size="xl"
+        centered>
+        <Modal.Header closeButton>
+            <Modal.Title>{getTitle()}</Modal.Title>
+        </Modal.Header>
+        {bodyComponent()}
+        <Modal.Footer>
+            {/* {closeButton()} */}
+            <Col
+                style={{
+                    textAlign: 'right'
+                }}>
+                <text>Total:{' '}</text>
+                <text style={{ color: 'red' }}>{formatter.format(getCheckoutTotal())}</text>
+            </Col>
+            { applicationMade ? closeButton(): registerButton()}
+        </Modal.Footer>
+    </Modal>
+);
 };
 
 export default RegisterModal;
