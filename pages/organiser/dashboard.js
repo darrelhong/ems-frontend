@@ -5,7 +5,9 @@ import useUser from '../../lib/query/useUser';
 
 import { BreadcrumbOne } from '../../components/Breadcrumb';
 import OrganiserWrapper from '../../components/wrapper/OrganiserWrapper';
-
+import OrgDashboard from '../../components/OrgDashboard';
+import PieBasicChart from '../../components/PieBasicChart';
+import getAllPendingBoothApplication from '../../lib/query/analytics';
 export default function OrganiserDashboard() {
   const { data: user, isLoading, isSuccess } = useUser(
     localStorage.getItem('userId')
@@ -24,20 +26,12 @@ export default function OrganiserDashboard() {
       </BreadcrumbOne>
 
       <Container>
-        
         {isLoading && <div className="spinner-grow" role="status" />}
         {isSuccess && (
           <>
-            <p>{user?.name}</p>
-            <p>User ID: {user?.id}</p>
-            <p>{user?.name}</p>
-            <p>User ID: {user?.id}</p>
-            <p>{user?.name}</p>
-            <p>User ID: {user?.id}</p>
-            <p>{user?.name}</p>
-            <p>User ID: {user?.id}</p>
-            <p>{user?.name}</p>
-            <p>User ID: {user?.id}</p>
+            <br></br>
+            <OrgDashboard></OrgDashboard>
+            <PieBasicChart></PieBasicChart>
           </>
         )}
       </Container>

@@ -16,11 +16,9 @@ const NavigationPartner = ({ positionClass }) => {
           </Link>
         </li>
         <li>
-          
-            <a className="nav-link">
-              BROWSE USERS <IoIosArrowDown />
-            </a>
-          
+          <a className="nav-link">
+            BROWSE USERS <IoIosArrowDown />
+          </a>
 
           <ul className="sub-menu sub-menu--one-column">
             <li>
@@ -33,17 +31,13 @@ const NavigationPartner = ({ positionClass }) => {
                 <a>View All Event Organisers</a>
               </Link>
             </li>
-
-            </ul>
-        
+          </ul>
         </li>
 
         <li>
-          
-            <a className="nav-link">
-              BOOTH <IoIosArrowDown />
-            </a>
-          
+          <a className="nav-link">
+            BOOTH <IoIosArrowDown />
+          </a>
 
           <ul className="sub-menu sub-menu--one-column">
             <li>
