@@ -12,22 +12,24 @@ const NavigationEvntOrg = ({ positionClass }) => {
       >
         <li>
           <Link href="/organiser/home">
-            <a className="nav-link">HOME</a>
+            <a className="nav-link" style={{ color: '#292b2c' }}>
+              HOME
+            </a>
           </Link>
         </li>
 
         <li>
           <Link href="/organiser/dashboard">
-            <a className="nav-link">DASHBOARD</a>
+            <a className="nav-link" style={{ color: '#292b2c' }}>
+              DASHBOARD
+            </a>
           </Link>
         </li>
 
         <li>
-        
-            <a className="nav-link">
-              BROWSE USERS <IoIosArrowDown />
-            </a>
-      
+          <a className="nav-link" style={{ color: '#292b2c' }}>
+            BROWSE USERS <IoIosArrowDown />
+          </a>
 
           <ul className="sub-menu sub-menu--one-column">
             <li>
@@ -40,17 +42,13 @@ const NavigationEvntOrg = ({ positionClass }) => {
                 <a>View All Event Organisers</a>
               </Link>
             </li>
-
-            </ul>
-        
+          </ul>
         </li>
 
         <li>
-         
-            <a className="nav-link">
-              EVENT <IoIosArrowDown />
-            </a>
-    
+          <a className="nav-link" style={{ color: '#292b2c' }}>
+            EVENT <IoIosArrowDown />
+          </a>
 
           <ul className="sub-menu sub-menu--one-column">
             <li>
