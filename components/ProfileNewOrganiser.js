@@ -584,9 +584,12 @@ const EventOrgProfile = ({ paraId_ }) => {
                     <h5 className="title">{eventorganiser?.name}</h5>
                   </a>
                   <p className="description">{eventorganiser?.email}</p>
+                  {eventorganiser?.phonenumber != null && (<p className="description" style={{marginBottom:"-5px"}}>+65 {eventorganiser?.phonenumber}</p>)}
+                  {eventorganiser?.address != null && (<p className="description" > {eventorganiser?.address}</p>)}
+
                 </div>
                 <p className="description text-center">
-                  {(eventorganiser?.description === null &&
+                  {((eventorganiser?.description === null || eventorganiser?.description === "")&&
                     'There is no description.') ||
                     eventorganiser?.description}
                 </p>

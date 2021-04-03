@@ -1216,6 +1216,7 @@ const MyAccount = () => {
                                     className="profile-image"
                                     src={user?.profilePic}
                                     thumbnail
+                                    style = {{width:'60%'}}
                                   />
                                 )}
 
@@ -1225,6 +1226,7 @@ const MyAccount = () => {
                                     className="profile-image"
                                     src="../../assets/images/defaultprofilepic.png"
                                     thumbnail
+                                    style = {{width:'60%'}}
                                   />
                                 )}
                               {profilepicUrl != null &&
@@ -1233,6 +1235,7 @@ const MyAccount = () => {
                                     className="profile-image"
                                     src={profilepicUrl}
                                     thumbnail
+                                    style = {{width:'60%'}}
                                   />
                                 )}
                             </Col>

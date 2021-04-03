@@ -466,14 +466,16 @@ const PartnerProfile = ({ localuser }) => {
                   </a>
                   <div>
                     <h7 className="description">{partner?.email}</h7>
+                    {partner?.phonenumber != null && (<p className="description" style={{marginBottom:"-5px"}}>+65 {partner?.phonenumber}</p>)}
+                  {partner?.address != null && (<p className="description" > {partner?.address}</p>)}
                   </div>
                 </div>
                 <p className="description text-center">
                   {partner?.description}
                 </p>
-                <p className="description text-center">
+                {/* <p className="description text-center">
                   Address : {partner?.address}
-                </p>
+                </p> */}
 
                 <div className="description text-center">
                   <p>

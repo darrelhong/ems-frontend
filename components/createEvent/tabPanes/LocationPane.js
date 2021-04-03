@@ -150,11 +150,14 @@ function handleScriptLoad(updateQuery) {
               )}
             </Col>
             <Col className="form-group" md={12}>
-            <span>Website: {website} </span>
+              {physical && (            <span>Website: {website} </span>
+)}
             </Col>
+
             <Col className="form-group" md={12}>
             {/* <span>{website}</span> */}
-            <span>Phone Number: {phone}</span>
+            {physical && (<span>Phone Number: {phone}</span>)}
+            
             {/* <span>{phone}</span> */}
 
             </Col>
