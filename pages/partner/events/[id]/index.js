@@ -179,8 +179,7 @@ export default function PartnerEventPage({ id }) {
                       <button
                         className="btn btn-fill-out btn-sm mr-2"
                         // className="btn btn-fill-out mr-2"
-                        disabled={boothTotal >= data.boothCapacity}
-                        // disabled={!data.availableForSale}
+                        // disabled={boothTotal >= data.boothCapacity}
                         onClick={() => setShowWithdrawModal(true)}
                       >
                         Withdraw Application
