@@ -99,7 +99,7 @@ const CreateEvent = () => {
     setValue('salesEndDate', salesEndDate);
     setVip(vip);
     setPhysical(physical);
-    setHideOptions(getHiddenStatus(eventData));
+     setHideOptions(getHiddenStatus(eventData));
   };
 
   const createToast = (message, appearanceStyle) => {
@@ -407,6 +407,7 @@ const CreateEvent = () => {
                         watch={watch}
                         physical={physical}
                         setPhysical={setPhysical}
+                  
                       />
                     </Tab.Pane>
                     <Tab.Pane eventKey="publishingOptions">

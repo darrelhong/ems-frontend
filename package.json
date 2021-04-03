@@ -41,6 +41,7 @@
     "react-icons": "^4.1.0",
     "react-id-swiper": "3.0.0",
     "react-lightgallery": "0.9.0",
+    "react-load-script": "0.0.6",
     "react-mailchimp-subscribe": "^2.1.0",
     "react-multiple-image-uploader": "^1.0.3",
     "react-multiselect-dropdown-bootstrap": "^1.1.0",
