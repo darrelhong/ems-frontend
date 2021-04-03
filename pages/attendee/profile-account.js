@@ -1324,7 +1324,7 @@ const MyAccount = () => {
                               </Col>
                               {/* {user?.id != null && ( */}
                               <div className="col-12 d-md-flex">
-                                <Col className="form-group" md={12}>
+                                <div className="form-group w-100">
                                   <Form.Label htmlFor="categorypreference">
                                     Event Category Preferences{' '}
                                     <span className="required"></span>
@@ -1397,7 +1397,7 @@ const MyAccount = () => {
                                     name="ddlCategoryPreferences"
                                     // className="displayBlock mt10"
                                   />
-                                </Col>
+                                </div>
                               </div>
 
                               <Col className="form-group" md={12}>

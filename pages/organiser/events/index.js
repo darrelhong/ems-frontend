@@ -93,6 +93,7 @@ function myEvents() {
         return listEvents.filter((e) => parseISO(e.eventEndDate) < new Date());
       } else{
         return listEvents.filter((e) => parseISO(e.eventEndDate) > new Date());
+      }
     }
   };
 

@@ -175,7 +175,7 @@ const PartnerProfile = ({ localuser }) => {
               setUnfollowBtn(false);
               setEOView(false);
               setPublicView(true);
-              setShowEnquiry(true);
+              setShowEnquiry(false);
 
               await getBpEventsByIdRoleStatus(
                 localuser,
