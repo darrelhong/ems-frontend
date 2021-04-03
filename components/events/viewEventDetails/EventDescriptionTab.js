@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+import Link from 'next/link';
 import { useState } from 'react';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
@@ -16,7 +18,7 @@ const EventDescriptionTab = ({
   setEvent,
   prettySaleStartDate,
   prettySalesEndDate,
-  createToast
+  createToast,
 }) => {
   const [showModal, setShowModal] = useState(false);
 
@@ -56,7 +58,8 @@ const EventDescriptionTab = ({
             <li>
               <IoMdTrophy />
               Confirmed booths for your event:{' '}
-              {event.eventBoothTransactions?.length ?? 0} / {event.boothCapacity}
+              {event.eventBoothTransactions?.length ?? 0} /{' '}
+              {event.boothCapacity}
             </li>
           </ul>
           <ul>
@@ -74,31 +77,37 @@ const EventDescriptionTab = ({
   };
 
   const renderTicketingSection = () => (
-    <div className="product-content__sort-info space-mb--20"
+    <div
+      className="product-content__sort-info space-mb--20"
       style={{
         display: 'flex',
         justifyContent: 'space-between',
         flexDirection: 'row',
       }}
     >
-      { event && event.sellingTicket ? (
+      {event && event.sellingTicket ? (
         <div>
           <ul>
             <li>
-              <IoMdCash /> Ticket Price:{' '}{event.ticketPrice ? '$' + event.ticketPrice : 'Not set yet'}
+              <IoMdCash /> Ticket Price:{' '}
+              {event.ticketPrice ? '$' + event.ticketPrice : 'Not set yet'}
             </li>
             <li>
               <IoMdRestaurant />
               {event.ticketCapacity
-                ? `Tickets Sold: ${event?.ticketTransactions?.length ?? 0} / ${event.ticketCapacity}`
+                ? `Tickets Sold: ${event?.ticketTransactions?.length ?? 0} / ${
+                    event.ticketCapacity
+                  }`
                 : 'Ticket Capacity not set yet!'}
             </li>
             <li>
-              <IoMdCalendar /> Ticket Sale Start Date:{' '} {prettySaleStartDate ? prettySaleStartDate : 'Not set yet'}
+              <IoMdCalendar /> Ticket Sale Start Date:{' '}
+              {prettySaleStartDate ? prettySaleStartDate : 'Not set yet'}
               {/* <IoMdLocate />{format(parseISO(event.eventStartDate), 'eee, dd MMM yy hh:mmbbb')} */}
             </li>
             <li>
-              <IoMdCalendar /> Ticket Sale End Date:{' '} {prettySalesEndDate ? prettySalesEndDate : 'Not set yet'}
+              <IoMdCalendar /> Ticket Sale End Date:{' '}
+              {prettySalesEndDate ? prettySalesEndDate : 'Not set yet'}
             </li>
           </ul>
         </div>
@@ -106,18 +115,30 @@ const EventDescriptionTab = ({
         <ul>
           <li>
             <IoMdCash />
-    No Ticket Sales for this event!
-  </li>
+            No Ticket Sales for this event!
+          </li>
         </ul>
       )}
       <ul>
         <button
           onClick={() => setShowModal(true)}
-          className="btn btn-fill-out btn-addtocart space-ml--10"
+          className="btn btn-fill-out btn-sm btn-addtocart space-ml--10"
           style={{ textAlign: 'right' }}
         >
-          <i className="icon-basket-loaded" /> {event.sellingTicket ? 'Manage ticketing details' : 'Activate Ticket Sales'}
+          <i className="icon-basket-loaded" />{' '}
+          {event.sellingTicket
+            ? 'Manage ticketing details'
+            : 'Activate Ticket Sales'}
         </button>
+
+        <br></br>
+        <br></br>
+
+        <Link href={`${event.eid}/ticketing`} passHref>
+          <button className="btn btn-fill-out btn-sm space-ml--10">
+            View tickets sold
+          </button>
+        </Link>
       </ul>
     </div>
   );
@@ -125,7 +146,15 @@ const EventDescriptionTab = ({
   return (
     <div className="product-description-tab space-pt--r100 space-pb--50">
       {/* event.name here is dumb but to make sure we load the event before rendering the ticket modal */}
-      {event.name && <TicketingModal event={event} setEvent={setEvent} createToast={createToast} showModal={showModal} setShowModal={setShowModal} />}
+      {event.name && (
+        <TicketingModal
+          event={event}
+          setEvent={setEvent}
+          createToast={createToast}
+          showModal={showModal}
+          setShowModal={setShowModal}
+        />
+      )}
       <Tab.Container defaultActiveKey="ticketing">
         <Nav
           variant="pills"
@@ -144,9 +173,7 @@ const EventDescriptionTab = ({
           </Nav.Item>
         </Nav>
         <Tab.Content>
-          <Tab.Pane eventKey="ticketing">
-            {renderTicketingSection()}
-          </Tab.Pane>
+          <Tab.Pane eventKey="ticketing">{renderTicketingSection()}</Tab.Pane>
 
           <Tab.Pane eventKey="businessPartners">
             {renderBoothSection()}
@@ -164,6 +191,10 @@ const EventDescriptionTab = ({
       </Tab.Container>
     </div>
   );
+};
+
+EventDescriptionTab.propTypes = {
+  event: PropTypes.object,
 };
 
 export default EventDescriptionTab;
