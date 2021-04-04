@@ -134,7 +134,7 @@ const EventDescriptionTab = ({
         <br></br>
         <br></br>
 
-        <Link href={`${event.eid}/ticketing`} passHref>
+        <Link href={`/organiser/events/ticketing/${event.eid}`} passHref>
           <button className="btn btn-fill-out btn-sm space-ml--10">
             View tickets sold
           </button>
