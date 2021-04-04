@@ -2,17 +2,25 @@ import React from 'react';
 import { Row, Col, Card, Table, Tabs, Tab } from 'react-bootstrap';
 import Aux from '../hoc/_Aux';
 import DEMO from '../store/constant';
-import { getAllPendingBoothApplication } from '../lib/query/analytics';
+import {
+  getAllPendingBoothApplication,
+  getBoothMonthlySales,
+  getBoothYearlySales,
+  getBoothDailySales,
+} from '../lib/query/analytics';
 //import { getUser } from '../../lib/query/getUser';
 import { useState, useEffect } from 'react';
-
+import { parseISO } from 'date-fns';
 // import avatar1 from '../assets/images/avatar-1.jpg';
 // import avatar2 from '../assets/images/avatar-2.jpg';
 // import avatar3 from '../assets/images/avatar-3.jpg';
 
-const OrgDashboard = () => {
+const OrgBoothDashboard = () => {
   // const [user, setUser] = useState();
   const [boothAppList, setBoothAppList] = useState([]);
+  const [boothDaily, setBoothDaily] = useState();
+  const [boothMonthly, setBoothMonthly] = useState();
+  const [boothYearly, setBoothYearly] = useState();
 
   // const getUserData = async () => {
   //   await getUser(localStorage.getItem('userId')).then((data) => {
@@ -22,14 +30,38 @@ const OrgDashboard = () => {
   // getUserData();
   useEffect(() => {
     getAllPendingBoothApplis();
-  });
+    getBoothDailySalesData();
+    getBoothMonthlySalesData();
+    getBoothYearlySalesData();
+  }, []);
   const getAllPendingBoothApplis = async () => {
     await getAllPendingBoothApplication().then((data) => {
       setBoothAppList(data);
     });
   };
 
-  const tabContent = (
+  const getBoothDailySalesData = async () => {
+    await getBoothDailySales().then((data) => {
+      setBoothDaily(JSON.stringify(data).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+    });
+  };
+
+  const getBoothMonthlySalesData = async () => {
+    await getBoothMonthlySales().then((data) => {
+      setBoothMonthly(
+        JSON.stringify(data).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+      );
+    });
+  };
+  const getBoothYearlySalesData = async () => {
+    await getBoothYearlySales().then((data) => {
+      setBoothYearly(
+        JSON.stringify(data).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+      );
+    });
+  };
+
+  const mostPopularTabContent = (
     <Aux>
       <div className="media friendlist-box align-items-center justify-content-center m-b-20">
         <div className="m-r-10 photo-table">
@@ -158,16 +190,16 @@ const OrgDashboard = () => {
               <div className="row d-flex align-items-center">
                 <div className="col-9">
                   <h3 className="f-w-300 d-flex align-items-center m-b-0">
-                    <i className="feather icon-arrow-up text-c-green f-30 m-r-5" />{' '}
-                    $249.95
+                    {/* <i className="feather icon-arrow-up text-c-green f-30 m-r-5" />{' '} */}
+                    ${boothDaily}
                   </h3>
                 </div>
 
-                <div className="col-3 text-right">
+                {/* <div className="col-3 text-right">
                   <p className="m-b-0">50%</p>
-                </div>
+                </div> */}
               </div>
-              <div className="progress m-t-30" style={{ height: '7px' }}>
+              {/* <div className="progress m-t-30" style={{ height: '7px' }}>
                 <div
                   className="progress-bar progress-c-theme"
                   role="progressbar"
@@ -176,7 +208,7 @@ const OrgDashboard = () => {
                   aria-valuemin="0"
                   aria-valuemax="100"
                 />
-              </div>
+              </div> */}
             </Card.Body>
           </Card>
         </Col>
@@ -187,16 +219,16 @@ const OrgDashboard = () => {
               <div className="row d-flex align-items-center">
                 <div className="col-9">
                   <h3 className="f-w-300 d-flex align-items-center m-b-0">
-                    <i className="feather icon-arrow-down text-c-red f-30 m-r-5" />{' '}
-                    $2.942.32
+                    {/* <i className="feather icon-arrow-down text-c-red f-30 m-r-5" />{' '} */}
+                    ${boothMonthly}
                   </h3>
                 </div>
 
-                <div className="col-3 text-right">
+                {/* <div className="col-3 text-right">
                   <p className="m-b-0">36%</p>
-                </div>
+                </div> */}
               </div>
-              <div className="progress m-t-30" style={{ height: '7px' }}>
+              {/* <div className="progress m-t-30" style={{ height: '7px' }}>
                 <div
                   className="progress-bar progress-c-theme2"
                   role="progressbar"
@@ -205,7 +237,7 @@ const OrgDashboard = () => {
                   aria-valuemin="0"
                   aria-valuemax="100"
                 />
-              </div>
+              </div> */}
             </Card.Body>
           </Card>
         </Col>
@@ -216,25 +248,25 @@ const OrgDashboard = () => {
               <div className="row d-flex align-items-center">
                 <div className="col-9">
                   <h3 className="f-w-300 d-flex align-items-center m-b-0">
-                    <i className="feather icon-arrow-up text-c-green f-30 m-r-5" />{' '}
-                    $8.638.32
+                    {/* <i className="feather icon-arrow-up text-c-green f-30 m-r-5" />{' '} */}
+                    ${boothYearly}
                   </h3>
                 </div>
 
-                <div className="col-3 text-right">
+                {/* <div className="col-3 text-right">
                   <p className="m-b-0">70%</p>
-                </div>
+                </div> */}
               </div>
-              <div className="progress m-t-30" style={{ height: '7px' }}>
-                <div
+              {/* <div className="progress m-t-30" style={{ height: '7px' }}>
+               <div
                   className="progress-bar progress-c-theme"
                   role="progressbar"
                   style={{ width: '70%' }}
                   aria-valuenow="70"
                   aria-valuemin="0"
                   aria-valuemax="100"
-                />
-              </div>
+                /> 
+              </div> */}
             </Card.Body>
           </Card>
         </Col>
@@ -277,21 +309,32 @@ const OrgDashboard = () => {
                               <td>
                                 <h6 className="text-muted">
                                   <i className="fa fa-circle text-c-green f-10 m-r-15" />
-                                  11 MAY 12:56
+                                  <span>
+                                    {new Date(
+                                      boothApplication.applicationDate
+                                    ).toLocaleDateString()}
+                                  </span>
+                                  {/* {boothApplication.applicationDate} */}
                                 </h6>
                               </td>
                               <td>
-                                <a
+                                {/* <a
                                   href={DEMO.BLANK_LINK}
-                                  className="label theme-bg2 text-white f-12"
+                                  className="label theme-bg3 text-white f-12"
                                 >
-                                  Reject
-                                </a>
+                                  VIEW
+                                </a> */}
                                 <a
                                   href={DEMO.BLANK_LINK}
                                   className="label theme-bg text-white f-12"
                                 >
                                   Approve
+                                </a>
+                                <a
+                                  href={DEMO.BLANK_LINK}
+                                  className="label theme-bg2 text-white f-12"
+                                >
+                                  Reject
                                 </a>
                               </td>
                             </tr>
@@ -630,14 +673,14 @@ const OrgDashboard = () => {
         </Col>
         <Col md={6} xl={8} className="m-b-30">
           <Tabs defaultActiveKey="today" id="uncontrolled-tab-example">
-            <Tab eventKey="today" title="Today">
-              {tabContent}
+            <Tab eventKey="today" title="Most Popular Event">
+              {mostPopularTabContent}
             </Tab>
             <Tab eventKey="week" title="This Week">
-              {tabContent}
+              {mostPopularTabContent}
             </Tab>
             <Tab eventKey="all" title="All">
-              {tabContent}
+              {mostPopularTabContent}
             </Tab>
           </Tabs>
         </Col>
@@ -646,4 +689,4 @@ const OrgDashboard = () => {
   );
 };
 
-export default OrgDashboard;
+export default OrgBoothDashboard;

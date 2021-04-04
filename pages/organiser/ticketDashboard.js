@@ -5,7 +5,7 @@ import useUser from '../../lib/query/useUser';
 
 import { BreadcrumbOne } from '../../components/Breadcrumb';
 import OrganiserWrapper from '../../components/wrapper/OrganiserWrapper';
-import OrgBoothDashboard from '../../components/OrgBoothDashboard';
+import OrgTicketDashboard from '../../components/OrgTicketDashboard';
 import PieBasicChart from '../../components/PieBasicChart';
 import getAllPendingBoothApplication from '../../lib/query/analytics';
 export default function OrganiserDashboard() {
@@ -30,24 +30,12 @@ export default function OrganiserDashboard() {
         {isSuccess && (
           <>
             <br></br>
-            <h4>Event Applications Dashboard</h4>
-            <OrgBoothDashboard></OrgBoothDashboard>
+            <h4>Event Ticket Dashboard</h4>
+            <OrgTicketDashboard></OrgTicketDashboard>
             <PieBasicChart></PieBasicChart>
           </>
         )}
       </Container>
     </OrganiserWrapper>
-    // <ChakraWrapper>
-    //   <OrganiserPageWrapper title="Organiser Dashboard">
-    //     <Heading>Organiser Home</Heading>
-    //     {isLoading && <Skeleton height="40px" />}
-    //     {isSuccess && (
-    //       <>
-    //         <Text>Name: {user?.name}</Text>
-    //         <Text>User ID: {user?.id}</Text>
-    //       </>
-    //     )}
-    //   </OrganiserPageWrapper>
-    // </ChakraWrapper>
   );
 }
