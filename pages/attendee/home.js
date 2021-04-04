@@ -14,29 +14,29 @@ import {
   getAllEventsByAtnCategoryPreferences, 
   getAllEventsThisWeekend, 
   getAllEventsNextWeek,
-  getMostPopularEvent,
   getTopTenEvents
 } from '../../lib/query/getEvents';
 import ButtonWithLoading from '../../components/custom/ButtonWithLoading';
+import HeroSliderPopularEvents from '../../components/HeroSlider/HeroSliderPopularEvents';
 
 export default function AttendeeHome() {
   const { data: user, status } = useUser(localStorage.getItem('userId'));
   const [events, setEvents] = useState([]);
-  const [mostPopularEvent, setMostPopularEvent] = useState();
+  const [mostPopularEvents, setMostPopularEvents] = useState([]);
   const [nextPage, setNextPage] = useState(1);
   const [currentTab, setCurrentTab] = useState("following");
   
   useEffect(() => {
     if (user != null) {
-      loadEventMostPopular();
+      loadEventsMostPopular();
       loadEventsFollowing();
     }
   }, [user]);
 
-  function loadEventMostPopular() {
+  function loadEventsMostPopular() {
     const getEvent = async () => {
-      const data = await getMostPopularEvent(user?.id);
-      setMostPopularEvent(data);
+      const data = await getTopTenEvents(user?.id);
+      setMostPopularEvents(data.slice(0, 5));
     };
     getEvent();
   }
@@ -59,6 +59,11 @@ export default function AttendeeHome() {
   function fetchNextPageFollowing() {
     const getEvents = async () => {
       const data = await getEventsByAtnFollowers(user?.id, nextPage);
+      if (data.length < 10) {
+        var btnSeeMore = document.getElementById("btnSeeMore");
+        btnSeeMore.innerHTML = "No more events";
+        btnSeeMore.disabled = true;
+      }
       setEvents(events.concat(data));
     };
     getEvents();
@@ -119,23 +124,11 @@ export default function AttendeeHome() {
           <Alert variant="danger">An error has occured</Alert>
         ) : (
           <>
+            <h1 className="font-weight-bold">Popular Events</h1>
+            <HeroSliderPopularEvents
+              heroSliderData={mostPopularEvents}
+            />
             <Container>
-              <Row style={{marginBottom: "20px", backgroundColor: "#fff5f5", borderRadius: "12px", boxShadow: "5px 4px 8px rgba(0,0,0,0.3)"}}>
-                <Col className="d-flex align-items-center" style={{padding: "30px 50px"}} lg={6} xs={12}>
-                  <div className="d-flex flex-column justify-content-between" style={{minHeight: "180px"}}>
-                    <h3>Come join us at our most popular event!</h3>
-                    <h2><strong>{mostPopularEvent?.name}</strong></h2>
-                    <a href={`/partner/events/${mostPopularEvent?.eid}`}>
-                      <button className="btn btn-fill-out w-100">
-                        View Event Details
-                      </button>
-                    </a>
-                  </div>
-                </Col>
-                <Col style={{padding: "0", borderRadius: "inherit"}} xs={12} lg={6}>
-                  <img style={{borderRadius: "inherit"}} src={mostPopularEvent?.images?.[0] || '/assets/images/img-placeholder.jpg'} />
-                </Col>
-              </Row>
               <Row>
                 <h2 className="mt-5 mb-3 font-weight-bold">Browse Events</h2>
                 <Tab.Container defaultActiveKey="following">
@@ -222,6 +215,7 @@ export default function AttendeeHome() {
                 <Col className="d-flex align-items-center">
                   <ButtonWithLoading
                     className="btn btn-fill-out btn-sm"
+                    id="btnSeeMore"
                     onClick={() => fetchNextPage()}
                   >
                     See More

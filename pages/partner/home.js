@@ -7,7 +7,7 @@ import {
   getAllEventsByBpFollowers,
   getAllEventsByBpBusinessCategory,
   getAllEventsInNext30Days,
-  getMostPopularEvent,
+  getMostPopularEvents,
   getTopTenEvents
 } from '../../lib/query/getEvents';
 
@@ -21,7 +21,7 @@ function PartnerHome() {
     localStorage.getItem('userId')
   );
   const [events, setEvents] = useState([]);
-  const [mostPopularEvent, setMostPopularEvent] = useState();
+  const [mostPopularEvents, setMostPopularEvents] = useState();
   
   useEffect(() => {
     if (user != null) {
@@ -32,8 +32,8 @@ function PartnerHome() {
 
   function loadEventMostPopular() {
     const getEvent = async () => {
-      const data = await getMostPopularEvent(user?.id);
-      setMostPopularEvent(data);
+      const data = await getMostPopularEvents(user?.id);
+      setMostPopularEvents(data);
     };
     getEvent();
   }
@@ -93,8 +93,8 @@ function PartnerHome() {
                 <Col className="d-flex align-items-center" style={{padding: "30px 50px"}} lg={6} xs={12}>
                   <div className="d-flex flex-column justify-content-between" style={{minHeight: "180px"}}>
                     <h3>Come join us at our most popular event!</h3>
-                    <h2><strong>{mostPopularEvent?.name}</strong></h2>
-                    <a href={`/partner/events/${mostPopularEvent?.eid}`}>
+                    <h2><strong>{mostPopularEvents?.name}</strong></h2>
+                    <a href={`/partner/events/${mostPopularEvents?.eid}`}>
                       <button className="btn btn-fill-out w-100">
                         View Event Details
                       </button>
@@ -102,7 +102,7 @@ function PartnerHome() {
                   </div>
                 </Col>
                 <Col style={{padding: "0", borderRadius: "inherit"}} xs={12} lg={6}>
-                  <img style={{borderRadius: "inherit"}} src={mostPopularEvent?.images?.[0] || '/assets/images/img-placeholder.jpg'} />
+                  <img style={{borderRadius: "inherit"}} src={mostPopularEvents?.images?.[0] || '/assets/images/img-placeholder.jpg'} />
                 </Col>
               </Row>
               <Row>
