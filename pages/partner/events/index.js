@@ -49,7 +49,7 @@ export default function PartnerEvents() {
   // }
 
   console.log("data: ", data)
-  console.log(user)
+  console.log("user: ", user)
   // console.log(filterValue)
   // console.log("test", queryClient.getQueryData('events'))
 

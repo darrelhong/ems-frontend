@@ -17,6 +17,8 @@ export default function EventCard({ event, user }) {
 
   const queryClient = useQueryClient();
   const [inFav, setinFav] = useState(user?.favouriteEventList.some(e => e.eid === event.eid))
+  // const [applied, setApplied] = useState(user?.sellerAppplications.some(e => e.event.eid === event.eid))
+  const applied = true
 
   const toggleLike = async (e) => {
     e.preventDefault()
@@ -51,6 +53,7 @@ export default function EventCard({ event, user }) {
         style={{ height: 200 }}
       />
       <Card.Body className="d-flex flex-column">
+        {applied && <h1>Test</h1>}
         <Card.Title>{event.name}</Card.Title>
         <Card.Text className="line-clamp">{event?.descriptions}</Card.Text>
         <Card.Text className="text-default mt-auto">
