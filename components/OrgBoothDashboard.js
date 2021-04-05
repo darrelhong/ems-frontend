@@ -11,15 +11,11 @@ import {
   getBoothDashboardMonthlyMostPopularEventList,
   getBoothDashboardYearlyMostPopularEventList,
 } from '../lib/query/analytics';
-//import { getUser } from '../../lib/query/getUser';
 import { useState, useEffect } from 'react';
 import { parseISO } from 'date-fns';
-// import avatar1 from '../assets/images/avatar-1.jpg';
-// import avatar2 from '../assets/images/avatar-2.jpg';
-// import avatar3 from '../assets/images/avatar-3.jpg';
+import PieBasicChart from '../components/PieBasicChart';
 
 const OrgBoothDashboard = () => {
-  // const [user, setUser] = useState();
   const [boothAppList, setBoothAppList] = useState([]);
   const [boothDaily, setBoothDaily] = useState();
   const [boothMonthly, setBoothMonthly] = useState();
@@ -28,12 +24,6 @@ const OrgBoothDashboard = () => {
   const [monthlyMostPopular, setMonthlyMostPopular] = useState([]);
   const [yearlyMostPopular, setYearlyMostPopular] = useState([]);
 
-  // const getUserData = async () => {
-  //   await getUser(localStorage.getItem('userId')).then((data) => {
-  //     setUser(data);
-  //   });
-  // };
-  // getUserData();
   useEffect(() => {
     getAllPendingBoothApplis();
     getBoothDailySalesData();
@@ -505,15 +495,16 @@ const OrgBoothDashboard = () => {
                   <i className="fa fa-facebook text-primary f-36" />
                 </div>
                 <div className="col text-right">
-                  <h3>12,281</h3>
+                  <PieBasicChart></PieBasicChart>
+                  {/* <h3>12,281</h3>
                   <h5 className="text-c-green mb-0">
                     +7.2% <span className="text-muted">Total Likes</span>
-                  </h5>
+                  </h5> */}
                 </div>
               </div>
             </Card.Body>
-            <Card.Body>
-              <div className="row align-items-center justify-content-center card-active">
+            {/* <Card.Body> */}
+            {/* <div className="row align-items-center justify-content-center card-active">
                 <div className="col-6">
                   <h6 className="text-center m-b-10">
                     <span className="text-muted m-r-5">Target:</span>35,098
@@ -544,8 +535,8 @@ const OrgBoothDashboard = () => {
                     />
                   </div>
                 </div>
-              </div>
-            </Card.Body>
+              </div> */}
+            {/* </Card.Body> */}
           </Card>
         </Col>
         <Col md={6} xl={4}>
