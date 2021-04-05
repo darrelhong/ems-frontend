@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { Alert, Card, Col, Container, Row } from 'react-bootstrap';
 import { format, parseISO } from 'date-fns';
 
@@ -17,6 +17,12 @@ import CenterSpinner from 'components/custom/CenterSpinner';
 import { BreadcrumbOne } from 'components/Breadcrumb';
 import ButtonWithLoading from 'components/custom/ButtonWithLoading';
 import PaymentView from 'components/custom/ticketing/PaymentView';
+import CreditCardIcon from 'components/custom/CreditCardIcon';
+
+const getPaymentMethods = async () => {
+  const { data } = await api.get('/api/ticketing/payment-methods');
+  return data;
+};
 
 export function getServerSideProps({ query }) {
   return {
@@ -27,6 +33,12 @@ const promise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY);
 export default function AttendeeEventTicketing({ id }) {
   const { data, status } = useEventDetails(id);
   const { data: attendee } = useUser();
+  const { data: paymentMethods, status: pmStatus } = useQuery(
+    'paymentMethods',
+    getPaymentMethods
+  );
+
+  const [pmId, setPmId] = useState();
 
   const [ticketQty, setTicketQty] = useState(1);
   const [view, setView] = useState('summary');
@@ -39,12 +51,21 @@ export default function AttendeeEventTicketing({ id }) {
     (data) => api.post('/api/ticketing/checkout', data),
     {
       onSuccess: (resp) => {
-        setCheckoutResponse(resp.data);
-        setClientSecret(resp.data.clientSecret);
-        setView('payment');
+        if (resp.data.clientSecret) {
+          setCheckoutResponse(resp.data);
+          setClientSecret(resp.data.clientSecret);
+          setView('payment');
+        } else {
+          setPaymentCompleteResp(resp.data.tickets);
+          setView('success');
+        }
       },
     }
   );
+
+  const handleCardChange = (value) => {
+    setPmId(value);
+  };
 
   const onPaymentCompleteResp = (resp) => {
     setPaymentCompleteResp(resp.data);
@@ -53,9 +74,9 @@ export default function AttendeeEventTicketing({ id }) {
 
   return (
     <AttendeeWrapper title="Get tickets">
-      {status === 'loading' ? (
+      {status === 'loading' || pmStatus === 'loading' ? (
         <CenterSpinner />
-      ) : status === 'error' ? (
+      ) : status === 'error' || pmStatus === 'error' ? (
         <Alert variant="danger">An error has occured</Alert>
       ) : (
         <>
@@ -174,6 +195,47 @@ export default function AttendeeEventTicketing({ id }) {
                       </Col>
                     </Row>
 
+                    <h5 className="mb-3">Payment method:</h5>
+                    <Row>
+                      <Col>
+                        {paymentMethods.map((pm) => (
+                          <div className="form-check mb-3" key={pm.id}>
+                            <input
+                              className="form-check-input"
+                              type="radio"
+                              name="paymentCard"
+                              id="newCard"
+                              checked={pmId === pm.id}
+                              onChange={() => handleCardChange(pm.id)}
+                            />
+                            <label
+                              className="form-check-label"
+                              htmlFor="exampleRadios1"
+                            >
+                              <CreditCardIcon type={pm.card.brand} />
+                              Card ending in {pm.card.last4}
+                            </label>
+                          </div>
+                        ))}
+                        <div className="form-check mb-4">
+                          <input
+                            className="form-check-input"
+                            type="radio"
+                            onChange={() => handleCardChange(null)}
+                            name="paymentCard"
+                            id="newCard"
+                            checked={!pmId}
+                          />
+                          <label
+                            className="form-check-label"
+                            htmlFor="exampleRadios1"
+                          >
+                            Use new card
+                          </label>
+                        </div>
+                      </Col>
+                    </Row>
+
                     <Row>
                       <Col>
                         {isError && (
@@ -183,7 +245,13 @@ export default function AttendeeEventTicketing({ id }) {
                         )}
                         <ButtonWithLoading
                           className="btn btn-fill-out btn-sm"
-                          onClick={() => checkout({ eventId: id, ticketQty })}
+                          onClick={() =>
+                            checkout({
+                              eventId: id,
+                              ticketQty,
+                              paymentMethodId: pmId,
+                            })
+                          }
                           isLoading={isLoading}
                         >
                           Checkout

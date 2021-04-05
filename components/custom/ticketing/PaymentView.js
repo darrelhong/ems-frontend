@@ -18,6 +18,7 @@ export default function PaymentView({
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState('');
   const [disabled, setDisabled] = useState(true);
+  const [saveCard, setSaveCard] = useState(false);
   const stripe = useStripe();
   const elements = useElements();
   const router = useRouter();
@@ -38,6 +39,7 @@ export default function PaymentView({
       payment_method: {
         card: elements.getElement(CardElement),
       },
+      setup_future_usage: saveCard ? 'off_session' : null,
     });
 
     const ticketTransactionIds = checkoutResponse.tickets.map(
@@ -63,10 +65,26 @@ export default function PaymentView({
 
   return (
     <div className="my-3">
-      <h5 className="mb-3">
+      <h5 className="mb-2">
         Payment amount: {formatter.format(checkoutResponse.paymentAmount)}
       </h5>
       <form id="payment-form" onSubmit={handleSubmit} className="mb-5 pb-5">
+        <div className="form-check mb-2">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            checked={saveCard}
+            id="saveCard"
+            onClick={() => setSaveCard((prev) => !prev)}
+          />
+          <label
+            className="form-check-label text-small"
+            htmlFor="saveCard"
+            style={{ fontSize: 15 }}
+          >
+            Save card for future payments
+          </label>
+        </div>
         <CardElement className={styles.cardElement} onChange={handleChange} />
         <button
           disabled={processing || disabled || succeeded}
