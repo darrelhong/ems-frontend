@@ -21,12 +21,9 @@ import ProductRating from '../../Product/ProductRating';
 import Link from 'next/link';
 import { Modal, Button, Form, Alert } from 'react-bootstrap';
 import HidePopover from '../../Event/HidePopover';
-<<<<<<< HEAD
 import DeleteModal from '../../Event/DeleteModal';
 import { Badge } from 'react-bootstrap';
-=======
 import api from '../../../lib/ApiClient';
->>>>>>> main
 
 const EventDescription = ({
   event,
@@ -39,25 +36,22 @@ const EventDescription = ({
   handleDelete,
   createToast
 }) => {
-  
+
   const [broadcastModalShow, setBroadcastModalShow] = useState(false);
   const closeBroadcastModal = () => setBroadcastModalShow(false);
   const openBroadcastModal = () => setBroadcastModalShow(true);
 
-<<<<<<< HEAD
   const testCategories = ['Computers', 'Legal & Financial', 'Automotive', 'Computers', 'Legal & Financial', 'Automotive', 'Computers', 'Legal & Financial', 'Automotive']
   const [deleteModalShow, setDeleteModalShow] = useState(false);
   const closeModal = () => setDeleteModalShow(false);
   const openModal = () => setDeleteModalShow(true);
-=======
   const [confirmBroadcastModalShow, setConfirmBroadcastModalShow] = useState(false);
   const closeConfirmBroadcastModal = () => setConfirmBroadcastModalShow(false);
   const openConfirmBroadcastModal = () => setConfirmBroadcastModalShow(true);
-  
+
   const [showRecipientError, setRecipientError] = useState(false);
   const [showBroadcastError, setBroadcastError] = useState(false);
   const [showBroadcastSuccess, setBroadcastSuccess] = useState(false);
->>>>>>> main
 
   const deleteCancelButton = () => {
     if (event.eventStatus == 'CANCELLED') {
@@ -172,13 +166,13 @@ const EventDescription = ({
     }
 
     api.post('/api/organiser/broadcastEmailEnquiry', data)
-    .then(() => {
-      setBroadcastSuccess(true);
-      clearBroadcastForm();
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+      .then(() => {
+        setBroadcastSuccess(true);
+        clearBroadcastForm();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   function clearBroadcastForm() {
@@ -221,14 +215,14 @@ const EventDescription = ({
             </Button>
           </Modal.Footer>
         </Modal>
-        
+
         <Modal.Header closeButton>
           <Modal.Title>
-            Broadcast Message<br/>
+            Broadcast Message<br />
             <h6>{event.name}</h6>
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{display: "flex", flexDirection: "column", gap: "5px"}} >
+        <Modal.Body style={{ display: "flex", flexDirection: "column", gap: "5px" }} >
           <Alert
             show={showRecipientError}
             variant="danger"
@@ -259,25 +253,25 @@ const EventDescription = ({
             name="broadcastTitle"
             id="broadcastTitle"
             placeholder="Title *"
-            style={{width: "100%"}}
+            style={{ width: "100%" }}
           />
-          <textarea 
+          <textarea
             required
             className="form-control"
             name="broadcastMessage"
             id="broadcastMessage"
             placeholder="Broadcast Message *"
-            style={{width: "100%", height: "10em"}}
+            style={{ width: "100%", height: "10em" }}
           />
-          <br/>Please select at least one *
-          <div style={{display: "flex"}}>
-            <div style={{display: "flex", width: "50%"}}>
+          <br />Please select at least one *
+          <div style={{ display: "flex" }}>
+            <div style={{ display: "flex", width: "50%" }}>
               <Form.Check id="chkBusinessPartner" />
               <label htmlFor="chkBusinessPartner">
                 All Business Partners
               </label>
             </div>
-            <div style={{display: "flex", width: "50%"}}>
+            <div style={{ display: "flex", width: "50%" }}>
               <Form.Check id="chkAttendee" />
               <label htmlFor="chkAttendee">
                 All Attendees
@@ -297,7 +291,7 @@ const EventDescription = ({
           </Button>
         </Modal.Footer>
       </Modal>
-      
+
       {/* event name originally here */}
       {/* <h2 className="product-content__title space-mb--10">{event.name}</h2> */}
       <div className="product-content__price-rating-wrapper space-mb--10">
@@ -358,11 +352,11 @@ const EventDescription = ({
               style={{
                 display: 'flex',
                 flexDirection: 'row',
-                overflow:'auto',
-                flexWrap:'wrap'
+                overflow: 'auto',
+                flexWrap: 'wrap'
               }}>
               {/* {testCategories.map((category) => ( */}
-                {event?.categories && event.categories.map((category) => (
+              {event?.categories && event.categories.map((category) => (
                 <text
                   style={{
                     borderStyle: 'solid',
@@ -371,16 +365,16 @@ const EventDescription = ({
                     color: 'blue',
                     borderRadius: 10,
                     marginRight: '5%',
-                    marginTop:'2%',
-                    whiteSpace:'initial',
+                    marginTop: '2%',
+                    whiteSpace: 'initial',
                     // display:'block'
                   }}>{category}</text>
-                  // <span>
-                  //       {' '}
-                  //       <Badge variant="primary">
-                  //         {category}
-                  //       </Badge>{' '}
-                  //     </span>
+                // <span>
+                //       {' '}
+                //       <Badge variant="primary">
+                //         {category}
+                //       </Badge>{' '}
+                //     </span>
               ))}
             </div>
           </div>
@@ -422,7 +416,7 @@ const EventDescription = ({
                   aria-label="broadcast"
                   color="secondary"
                 >
-                  <svg style={{width:"20px", height:"20px"}} viewBox="0 0 24 24">
+                  <svg style={{ width: "20px", height: "20px" }} viewBox="0 0 24 24">
                     <path fill="currentColor" d="M12,8H4A2,2 0 0,0 2,10V14A2,2 0 0,0 4,16H5V20A1,1 0 0,0 6,21H8A1,1 0 0,0 9,20V16H12L17,20V4L12,8M21.5,12C21.5,13.71 20.54,15.26 19,16V8C20.53,8.75 21.5,10.3 21.5,12Z" />
                   </svg>
                 </IconButton>

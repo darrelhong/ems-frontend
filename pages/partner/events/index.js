@@ -3,9 +3,7 @@ import Link from 'next/link';
 import { Alert, Col, Container, Row } from 'react-bootstrap';
 import { useInfiniteQuery, useQueryClient } from 'react-query';
 import debounce from 'lodash/debounce';
-
-import { getEventsWithKeywordandSort } from 'lib/query/events';
-
+import { getEventsWithKeywordandSortFilter } from 'lib/query/events';
 import { BreadcrumbOne } from 'components/Breadcrumb';
 import PartnerWrapper from 'components/wrapper/PartnerWrapper';
 import EventCard from 'components/events/partner/EventCard';

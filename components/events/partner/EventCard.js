@@ -4,10 +4,7 @@ import { format, parseISO } from 'date-fns';
 import { likeEvent, unlikeEvent } from '../../../lib/query/events'
 import { Card } from 'react-bootstrap';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
-import { useQueryClient } from 'react-query';
-
 import useFavouriteEventMutation from 'lib/query/useFavouriteEventMutation';
-
 import styles from './EventCard.module.css';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteIcon from '@material-ui/icons/Favorite';
