@@ -91,14 +91,14 @@ export default function PartnerEvents() {
 
   return (
     <PartnerWrapper title="Events">
-      <BreadcrumbOne pageTitle="View events">
+      <BreadcrumbOne pageTitle="View All Events">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/partner/home">
-              <a>Partner Home</a>
+              <a>Home</a>
             </Link>
           </li>
-          <li className="breadcrumb-item active">Events</li>
+          <li className="breadcrumb-item active">View All Events</li>
         </ol>
       </BreadcrumbOne>
 
@@ -110,6 +110,7 @@ export default function PartnerEvents() {
       </Col>
 
       <Container className="my-4">
+        <br></br>
         <Row>
           <Col md={8} lg={6}>
             <div className="input-group mb-3">

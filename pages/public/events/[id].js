@@ -2,8 +2,10 @@ import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { Alert, Col, Container, Row } from 'react-bootstrap';
 import { format, parseISO } from 'date-fns';
+import { FaHeart } from 'react-icons/fa';
 
-import { useEvent } from 'lib/query/events';
+import { useEventDetails } from 'lib/query/events';
+import { formatter } from 'lib/util/currency';
 
 import GuestWrapper from 'components/wrapper/GuestWrapper';
 import { BreadcrumbOne } from 'components/Breadcrumb';
@@ -11,6 +13,7 @@ import EventImageGallery from 'components/events/partner/EventImageGallery';
 import AddToCalendar from 'components/custom/AddToCalendar';
 import ShareButton from 'components/custom/ShareButton';
 import CenterSpinner from 'components/custom/CenterSpinner';
+import EventCategoryList from 'components/custom/events/EventCategoryList';
 
 export function getServerSideProps({ query }) {
   return {
@@ -19,7 +22,7 @@ export function getServerSideProps({ query }) {
 }
 
 export default function PublicEventPage({ id }) {
-  const { data, status } = useEvent(id, { isPublic: true });
+  const { data, status } = useEventDetails(id, { isPublic: true });
 
   return (
     <GuestWrapper title={data?.name || 'Event page'}>
@@ -95,23 +98,61 @@ export default function PublicEventPage({ id }) {
 
                   <br></br>
                   <br></br>
+
+                  {data.sellingTicket && (
+                    <>
+                      <p
+                        className="text-body"
+                        style={{ fontSize: 20, marginBottom: 8 }}
+                      >
+                        {formatter.format(data.ticketPrice)}
+                      </p>
+                      <button
+                        onClick={() =>
+                          alert(
+                            'Please login or create and account buy tickets'
+                          )
+                        }
+                        className="btn btn-success"
+                        disabled={Date.parse(data.eventStartDate) < Date.now()}
+                      >
+                        Get tickets
+                      </button>
+                    </>
+                  )}
                 </div>
               </Col>
             </Row>
 
-            <Row>
-              <Col className="col-auto mt-3">
+            <Row className="mt-3">
+              <Col className="col-auto">
                 <ShareButton
                   title={data.name}
                   url={`${process.env.HOSTNAME}/public/events/${id}`}
                 />
               </Col>
+              <Col className="col-auto">
+                <button
+                  className="btn btn-sm btn-outline-pink"
+                  onClick={() =>
+                    alert('Please login or create and account to save events')
+                  }
+                >
+                  Favourite <FaHeart color="#e83e8c" />
+                </button>
+              </Col>
             </Row>
 
-            <Row className="mt-3">
+            <Row className="mt-3" style={{ minHeight: 150 }}>
               <Col>
                 <h5>About this event</h5>
                 <p>{data.descriptions}</p>
+              </Col>
+            </Row>
+
+            <Row>
+              <Col>
+                <EventCategoryList categories={data.categories} />
               </Col>
             </Row>
           </Container>

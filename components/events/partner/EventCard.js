@@ -3,6 +3,11 @@ import { useState } from "react";
 import { format, parseISO } from 'date-fns';
 import { likeEvent, unlikeEvent } from '../../../lib/query/events'
 import { Card } from 'react-bootstrap';
+import { FaHeart, FaRegHeart } from 'react-icons/fa';
+import { useQueryClient } from 'react-query';
+
+import useFavouriteEventMutation from 'lib/query/useFavouriteEventMutation';
+
 import styles from './EventCard.module.css';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteIcon from '@material-ui/icons/Favorite';
@@ -36,6 +41,18 @@ export default function EventCard({ event, user }) {
 
   // const { mutateAsync } = useMutation(toggleLike)
 
+  // export default function EventCard({ event, isPublic }) {
+  //   const queryClient = useQueryClient();
+  //   const { mutate } = useFavouriteEventMutation(queryClient);
+
+  //   const onFavouriteClick = (e) => {
+  //     e.preventDefault();
+  //     if (!isPublic) {
+  //       mutate(event.eid);
+  //     } else {
+  //       alert('Please login or create and account to save events');
+  //     }
+  //   };
 
   return (
     <Card
@@ -68,6 +85,25 @@ export default function EventCard({ event, user }) {
             </IconButton>
           </span>
         </Card.Text>
+        {/* <div className="d-flex align-items-baseline mt-auto">
+          <Card.Text className="text-default mb-0">
+            {format(parseISO(event.eventStartDate), 'eee, dd MMM yy hh:mmbbb')}
+          </Card.Text>
+
+          {event.isFavourite ? (
+            <FaHeart
+              className="ml-auto"
+              color="#e83e8c"
+              onClick={onFavouriteClick}
+            />
+          ) : (
+            <FaRegHeart
+              className="ml-auto"
+              color="black"
+              onClick={onFavouriteClick}
+            />
+          )}
+        </div> */}
       </Card.Body>
     </Card>
   );
@@ -75,4 +111,5 @@ export default function EventCard({ event, user }) {
 
 EventCard.propTypes = {
   event: PropTypes.object,
+  isPublic: PropTypes.bool,
 };

@@ -14,6 +14,28 @@ const NavigationPartner = ({ positionClass }) => {
             <a className="nav-link">HOME</a>
           </Link>
         </li>
+        <li>
+          <Link href="/">
+            <a className="nav-link">
+              BROWSE USERS <IoIosArrowDown />
+            </a>
+          </Link>
+
+          <ul className="sub-menu sub-menu--one-column">
+            <li>
+              <Link href="/partner/view/partners">
+                <a>View All Business Partners</a>
+              </Link>
+            </li>
+            <li>
+              <Link href="/partner/view/organisers">
+                <a>View All Event Organisers</a>
+              </Link>
+            </li>
+
+            </ul>
+        
+        </li>
 
         <li>
           <Link href="/partner/seller-profile">

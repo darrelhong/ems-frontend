@@ -1,5 +1,4 @@
 import { useRef } from 'react';
-import Head from 'next/head';
 import Link from 'next/link';
 import { useMutation } from 'react-query';
 import { useForm } from 'react-hook-form';
@@ -9,11 +8,9 @@ import cx from 'classnames';
 import api from 'lib/ApiClient';
 
 import { BreadcrumbOne } from 'components/Breadcrumb';
-import { FooterOne } from 'components/Footer';
-import AdminHeaderTop from 'components/Header/AdminHeaderTop';
-import withProtectRoute from 'components/ProtectRouteWrapper';
+import AdminWrapper from 'components/wrapper/AdminWrapper';
 
-function CreateEventOrganiser() {
+export default function CreateEventOrganiser() {
   const { register, handleSubmit, errors, watch } = useForm();
   const password = useRef({});
   password.current = watch('password', '');
@@ -23,13 +20,7 @@ function CreateEventOrganiser() {
   );
 
   return (
-    <>
-      <Head>
-        <title>Event Organisers</title>
-      </Head>
-
-      <AdminHeaderTop />
-
+    <AdminWrapper title="Event Organisers">
       <BreadcrumbOne pageTitle="Create event organiser">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
@@ -161,12 +152,6 @@ function CreateEventOrganiser() {
           </div>
         )}
       </Container>
-
-      <FooterOne />
-    </>
+    </AdminWrapper>
   );
 }
-
-export default withProtectRoute(CreateEventOrganiser, {
-  redirectTo: '/admin/login',
-});

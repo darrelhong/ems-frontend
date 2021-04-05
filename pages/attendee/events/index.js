@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import debounce from 'lodash/debounce';
 import Link from 'next/link';
 import { Fragment, useState } from 'react';
@@ -6,15 +7,25 @@ import { BreadcrumbOne } from 'components/Breadcrumb';
 import { Alert, Col, Container, Row } from 'react-bootstrap';
 
 import { getEventsWithKeywordandSort } from 'lib/query/events';
+import useAttendeeFavouriteEvents from 'lib/query/useAttendeeFavouriteEvents';
+import { isFavouriteEvent } from 'lib/functions/isFavouriteEvent';
+import useEventCategories from 'lib/query/useEventCategories';
 
 import AttendeeWrapper from 'components/wrapper/AttendeeWrapper';
 import EventCard from 'components/events/partner/EventCard';
 import ButtonWithLoading from 'components/custom/ButtonWithLoading';
 import CenterSpinner from 'components/custom/CenterSpinner';
 
-export default function AttendeeEvents() {
+export function getServerSideProps({ query }) {
+  return {
+    props: { ...query },
+  };
+}
+
+export default function AttendeeEvents({ category }) {
   const [sortBy, setSortBy] = useState();
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState(category);
   const queryClient = useQueryClient();
   const {
     status,
@@ -23,19 +34,23 @@ export default function AttendeeEvents() {
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery(
-    ['events', sortBy?.sort, sortBy?.sortDir, searchTerm],
+    ['events', sortBy?.sort, sortBy?.sortDir, searchTerm, selectedCategory],
     ({ pageParam = 0 }) =>
       getEventsWithKeywordandSort(
         pageParam,
         sortBy?.sort,
         sortBy?.sortDir,
-        searchTerm
+        searchTerm,
+        false,
+        selectedCategory
       ),
     {
       getNextPageParam: (lastPage) =>
         lastPage.last ? false : lastPage.number + 1,
     }
   );
+
+  const { data: favouriteEvents } = useAttendeeFavouriteEvents();
 
   const handleChange = (e) => {
     switch (e.target.value) {
@@ -51,6 +66,15 @@ export default function AttendeeEvents() {
       default:
         setSortBy();
     }
+  };
+
+  const {
+    data: eventCategories,
+    isSuccess: eventCategoriesSuccess,
+  } = useEventCategories();
+
+  const handleCategoryChange = (e) => {
+    setSelectedCategory(e.target.value);
   };
 
   // search results automatically update, with debounced input
@@ -105,7 +129,7 @@ export default function AttendeeEvents() {
         </Row>
 
         <Row className="mb-4">
-          <Col xs={4} sm={3}>
+          <Col xs={6} sm={5} md={3}>
             <select className="custom-select" onChange={handleChange}>
               <option value="">Sort by</option>
               <option value="name-asc">Name - A to Z</option>
@@ -113,6 +137,22 @@ export default function AttendeeEvents() {
               <option value="date-asc">Most recent</option>
             </select>
           </Col>
+          {eventCategoriesSuccess && (
+            <Col xs={6} sm={5} md={3}>
+              <select className="custom-select" onChange={handleCategoryChange}>
+                <option value="">Categories</option>
+                {eventCategories.map((category, i) => (
+                  <option
+                    key={i}
+                    value={category}
+                    selected={category == selectedCategory}
+                  >
+                    {category}
+                  </option>
+                ))}
+              </select>
+            </Col>
+          )}
         </Row>
         {status === 'loading' ? (
           <CenterSpinner />
@@ -123,20 +163,29 @@ export default function AttendeeEvents() {
             <Row>
               {data.pages.map((page, i) => (
                 <Fragment key={i}>
-                  {page.content.map((event) => (
-                    <Col
-                      key={event.eid}
-                      sm={6}
-                      lg={4}
-                      className="mb-5 d-flex align-items-stretch"
-                    >
-                      <Link href={`/attendee/events/${event.eid}`}>
-                        <a className="w-100">
-                          <EventCard event={event} />
-                        </a>
-                      </Link>
-                    </Col>
-                  ))}
+                  {page.content.map((event) => {
+                    // check if event is part of favourites list
+                    event = {
+                      ...event,
+                      isFavourite:
+                        favouriteEvents &&
+                        isFavouriteEvent(favouriteEvents, event.eid),
+                    };
+                    return (
+                      <Col
+                        key={event.eid}
+                        sm={6}
+                        lg={4}
+                        className="mb-5 d-flex align-items-stretch"
+                      >
+                        <Link href={`/attendee/events/${event.eid}`}>
+                          <a className="w-100">
+                            <EventCard event={event} />
+                          </a>
+                        </Link>
+                      </Col>
+                    );
+                  })}
                 </Fragment>
               ))}
             </Row>
@@ -159,3 +208,7 @@ export default function AttendeeEvents() {
     </AttendeeWrapper>
   );
 }
+
+AttendeeEvents.propTypes = {
+  category: PropTypes.string,
+};

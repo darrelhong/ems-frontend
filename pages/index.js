@@ -19,7 +19,10 @@ export default function Home() {
 
           <Row className="justify-content-center mt-10">
             <Col lg={4} className="mb-3">
-              <Card style={{ maxWidth: '20em' }} className="mx-auto">
+              <Card
+                style={{ maxWidth: '20em' }}
+                className="mx-auto border-danger"
+              >
                 <Card.Body>
                   <h5>For Event Organisers ➜</h5>
                   <p>Create/host events</p>
@@ -39,7 +42,10 @@ export default function Home() {
               </Card>
             </Col>
             <Col lg={4} className="mb-3">
-              <Card style={{ maxWidth: '20em' }} className="mx-auto">
+              <Card
+                style={{ maxWidth: '20em' }}
+                className="mx-auto border-success"
+              >
                 <Card.Body>
                   <h5>For Business Partners ➜</h5>
                   <p>Register for events</p>
@@ -60,7 +66,10 @@ export default function Home() {
             </Col>
 
             <Col lg={4}>
-              <Card style={{ maxWidth: '20em' }} className="mx-auto">
+              <Card
+                style={{ maxWidth: '20em' }}
+                className="mx-auto border-primary"
+              >
                 <Card.Body>
                   <h5>For Attendees ➜</h5>
                   <p>Buy tickets for events</p>

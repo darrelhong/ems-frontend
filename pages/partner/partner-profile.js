@@ -1,4 +1,6 @@
 import PartnerProfile from '../../components/PartnerProfile';
+import ProfileNew from '../../components/ProfileNew';
+
 import { useState, useEffect } from 'react';
 import { withRouter } from 'next/router';
 import PartnerWrapper from '../../components/wrapper/PartnerWrapper';
@@ -13,15 +15,18 @@ const Profile = ({ router: { query } }) => {
   const [role, setRole] = useState();
   const [user, setUser] = useState(Object);
 
-  useEffect(async () => {
+  useEffect(() => {
     console.log('test');
     if (localStorage.getItem('userId') != null) {
-      await getUser(localStorage.getItem('userId')).then((data) => {
-        setUser(data);
-        console.log(data);
-        console.log(user);
-        setRole(getRole(data));
-      });
+      const getUserData = async () => {
+        await getUser(localStorage.getItem('userId')).then((data) => {
+          setUser(data);
+          console.log(data);
+          console.log(user);
+          setRole(getRole(data));
+        });
+      };
+      getUserData();
     } else {
       setRole('Guest');
     }
@@ -45,25 +50,44 @@ const Profile = ({ router: { query } }) => {
     <div>
       {role === 'Partner' && (
         <PartnerWrapper>
-          <PartnerProfile localuser={localuser} />
+          <ProfileNew
+            localuser={localuser}
+            currentUserId={user.id}
+            currentUserRole={role} />
         </PartnerWrapper>
       )}
 
       {role === 'Attendee' && (
         <AttendeeWrapper>
-          <PartnerProfile localuser={localuser} />
+          <ProfileNew
+            localuser={localuser}
+            currentUserId={user.id}
+            currentUserRole={role} />
         </AttendeeWrapper>
       )}
 
       {role === 'Organiser' && (
         <OrganiserWrapper>
-          <PartnerProfile localuser={localuser} />
+          <ProfileNew
+            localuser={localuser}
+            currentUserId={user.id}
+            currentUserRole={role} />
         </OrganiserWrapper>
       )}
 
+      {/* {role === 'Guest' && (
+        <GuestWrapper>
+          <PartnerProfile
+            localuser={localuser}
+          />
+        </GuestWrapper>)} */}
+
       {role === 'Guest' && (
         <GuestWrapper>
-          <PartnerProfile localuser={localuser} />
+          <ProfileNew
+            localuser={localuser}
+            currentUserId={user.id}
+            currentUserRole={role} />
         </GuestWrapper>
       )}
     </div>

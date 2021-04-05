@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Alert, Col, Container, Row } from 'react-bootstrap';
 import { format, parseISO } from 'date-fns';
 
-import { useEvent } from 'lib/query/events';
+import { useEvent, useEventDetails } from 'lib/query/events';
 import { getSellerApplicationsFromBpId } from 'lib/query/sellerApplicationApi';
 
 import { BreadcrumbOne } from 'components/Breadcrumb';
@@ -59,6 +59,7 @@ export default function PartnerEventPage({ id }) {
     const toastId = addToast(message, { appearance: appearanceStyle });
     setTimeout(() => removeToast(toastId), 3000);
   };
+  const { data, status } = useEventDetails(id);
 
   return (
     <PartnerWrapper title={data?.name || 'Event page'}>
