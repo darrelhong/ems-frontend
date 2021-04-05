@@ -7,7 +7,8 @@ const BrochureComponent = ({ sellerProfile, isPartner }) => {
     const [showModal, setShowModal] = useState(false);
     const [viewBrochureModalShow, setViewBrochureModalShow] = useState(false);
     const [imageUrlToShow, setImageUrlToShow] = useState('');
-    
+    const [brochureIndex,setBrochureIndex] = useState(1);
+
     return (
         <Container>
             <AddBrochureModal
@@ -21,6 +22,7 @@ const BrochureComponent = ({ sellerProfile, isPartner }) => {
             image={imageUrlToShow}
             closeViewBrochureModal={()=>setViewBrochureModalShow(false)}
             viewBrochureModalShow={viewBrochureModalShow}
+            brochureIndex={brochureIndex}
             />
             
             {isPartner && (
@@ -45,7 +47,7 @@ const BrochureComponent = ({ sellerProfile, isPartner }) => {
                 xs={10} md={12}
                 style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}
             >
-                {sellerProfile.brochureImages && sellerProfile.brochureImages.map((image) => (
+                {sellerProfile.brochureImages && sellerProfile.brochureImages.map((image,index) => (
                     <div
                         style={{
                             display: 'flex',
@@ -61,6 +63,7 @@ const BrochureComponent = ({ sellerProfile, isPartner }) => {
                             src={image}
                             onClick={()=>{
                              setImageUrlToShow(image);
+                             setBrochureIndex(index+1);
                              setViewBrochureModalShow(true);
                             }}
                         />
