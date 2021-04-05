@@ -11,9 +11,9 @@ import HomeEventCard from '../../components/events/HomeEventCard';
 import { useEffect, useState } from 'react';
 import { 
   getEventsByAtnFollowers, 
-  getAllEventsByAtnCategoryPreferences, 
-  getAllEventsThisWeekend, 
-  getAllEventsNextWeek,
+  getEventsByAtnCategoryPreferences, 
+  getEventsThisWeekend, 
+  getEventsNextWeek,
   getTopTenEvents
 } from '../../lib/query/getEvents';
 import ButtonWithLoading from '../../components/custom/ButtonWithLoading';
@@ -21,15 +21,24 @@ import HeroSliderPopularEvents from '../../components/HeroSlider/HeroSliderPopul
 
 export default function AttendeeHome() {
   const { data: user, status } = useUser(localStorage.getItem('userId'));
-  const [events, setEvents] = useState([]);
+  const [eventsFollowing, setEventsFollowing] = useState([]);
+  const [eventsForYou, setEventsForYou] = useState([]);
+  const [eventsThisWeekend, setEventsThisWeekend] = useState([]);
+  const [eventsNextWeek, setEventsNextWeek] = useState([]);
   const [mostPopularEvents, setMostPopularEvents] = useState([]);
-  const [nextPage, setNextPage] = useState(1);
-  const [currentTab, setCurrentTab] = useState("following");
+
+  const [nextPageFollowing, setNextPageFollowing] = useState(1);
+  const [nextPageForYou, setNextPageForYou] = useState(1);
+  const [nextPageThisWeekend, setNextPageThisWeekend] = useState(1);
+  const [nextPageNextWeek, setNextPageNextWeek] = useState(1);
   
   useEffect(() => {
     if (user != null) {
       loadEventsMostPopular();
       loadEventsFollowing();
+      loadEventsForYou();
+      loadEventsThisWeekend();
+      loadEventsNextWeek();
     }
   }, [user]);
 
@@ -41,65 +50,99 @@ export default function AttendeeHome() {
     getEvent();
   }
 
-  function fetchNextPage() {
-    if (currentTab == "following") {
-      fetchNextPageFollowing();
+  function fetchNextPage(tab) {
+    if (tab == "following") {
+      loadEventsFollowing(true);
+    }
+    else if (tab == "for-you") {
+      loadEventsForYou(true);
+    }
+    else if (tab == "this-weekend") {
+      loadEventsThisWeekend(true);
+    }
+    else if (tab == "next-week") {
+      loadEventsNextWeek(true);
     }
   }
 
-  function loadEventsFollowing() {
+  function loadEventsFollowing(isFetchNextPage=false) {
     const getEvents = async () => {
-      const data = await getEventsByAtnFollowers(user?.id, nextPage);
-      setEvents(data);
-    };
-    getEvents();
-    setNextPage(nextPage + 1);
-  }
-
-  function fetchNextPageFollowing() {
-    const getEvents = async () => {
-      const data = await getEventsByAtnFollowers(user?.id, nextPage);
+      const data = await getEventsByAtnFollowers(user?.id, nextPageFollowing);
       if (data.length < 10) {
-        var btnSeeMore = document.getElementById("btnSeeMore");
+        var btnSeeMore = document.getElementById("btnSeeMoreFollowing");
         btnSeeMore.innerHTML = "No more events";
         btnSeeMore.disabled = true;
       }
-      setEvents(events.concat(data));
+
+      if (isFetchNextPage) {
+        setEventsFollowing(eventsFollowing.concat(data));
+      }
+      else {
+        setEventsFollowing(data);
+      }
     };
     getEvents();
-    setNextPage(nextPage + 1);
+    setNextPageFollowing(nextPageFollowing + 1);
   }
 
-  function loadEventsForYou() {
+  function loadEventsForYou(isFetchNextPage=false) {
     const getEvents = async () => {
-      const data = await getAllEventsByAtnCategoryPreferences(user?.id);
-      setEvents(data);
+      const data = await getEventsByAtnCategoryPreferences(user?.id, nextPageForYou);
+      if (data.length < 10) {
+        var btnSeeMore = document.getElementById("btnSeeMoreForYou");
+        btnSeeMore.innerHTML = "No more events";
+        btnSeeMore.disabled = true;
+      }
+
+      if (isFetchNextPage) {
+        setEventsForYou(eventsForYou.concat(data));
+      }
+      else {
+        setEventsForYou(data);
+      }
     };
     getEvents();
+    setNextPageForYou(nextPageForYou + 1);
   }
 
-  function loadEventsThisWeekend() {
+  function loadEventsThisWeekend(isFetchNextPage=false) {
     const getEvents = async () => {
-      const data = await getAllEventsThisWeekend(user?.id);
-      setEvents(data);
+      const data = await getEventsThisWeekend(nextPageThisWeekend);
+      if (data.length < 10) {
+        var btnSeeMore = document.getElementById("btnSeeMoreThisWeekend");
+        btnSeeMore.innerHTML = "No more events";
+        btnSeeMore.disabled = true;
+      }
+
+      if (isFetchNextPage) {
+        setEventsThisWeekend(eventsThisWeekend.concat(data));
+      }
+      else {
+        setEventsThisWeekend(data);
+      }
     };
     getEvents();
+    setNextPageThisWeekend(nextPageThisWeekend + 1);
   }
 
-  function loadEventsNextWeek() {
+  function loadEventsNextWeek(isFetchNextPage=false) {
     const getEvents = async () => {
-      const data = await getAllEventsNextWeek(user?.id);
-      setEvents(data);
-    };
-    getEvents();
-  }
+      const data = await getEventsNextWeek(nextPageNextWeek);
+      if (data.length < 10) {
+        var btnSeeMore = document.getElementById("btnSeeMoreNextWeek");
+        btnSeeMore.innerHTML = "No more events";
+        btnSeeMore.disabled = true;
+      }
 
-  function loadEventsTopTen() {
-    const getEvents = async () => {
-      const data = await getTopTenEvents(user?.id);
-      setEvents(data);
+      if (isFetchNextPage) {
+        setEventsNextWeek(eventsNextWeek.concat(data));
+      }
+      else {
+        setEventsNextWeek(data);
+      }
     };
     getEvents();
+    setNextPageNextWeek(nextPageNextWeek + 1);
   }
   
   return (
@@ -137,29 +180,24 @@ export default function AttendeeHome() {
                       variant="tabs"
                       className="w-100"
                     >
-                      <Nav.Item onClick={() => loadEventsFollowing()}>
+                      <Nav.Item>
                         <Nav.Link eventKey="following">
                           Following
                         </Nav.Link>
                       </Nav.Item>
-                      <Nav.Item onClick={() => loadEventsForYou()}>
+                      <Nav.Item>
                         <Nav.Link eventKey="for-you">
                           For you
                         </Nav.Link>
                       </Nav.Item>
-                      <Nav.Item onClick={() => loadEventsThisWeekend()}>
+                      <Nav.Item>
                         <Nav.Link eventKey="this-weekend">
                           This weekend
                         </Nav.Link>
                       </Nav.Item>
-                      <Nav.Item onClick={() => loadEventsNextWeek()}>
+                      <Nav.Item>
                         <Nav.Link eventKey="next-week">
                           Next week
-                        </Nav.Link>
-                      </Nav.Item>
-                      <Nav.Item onClick={() => loadEventsTopTen()}>
-                        <Nav.Link eventKey="top-ten">
-                          Popular Events
                         </Nav.Link>
                       </Nav.Item>
                     </Nav>
@@ -170,57 +208,133 @@ export default function AttendeeHome() {
                         <div className="mt-3">
                           <h3 className="mb-4">Events by event organisers and business partners you're following</h3>
                         </div>
+                        <Row>
+                          {eventsFollowing.map((event) => (
+                            <Col
+                              key={event.eid}
+                              sm={6}
+                              lg={4}
+                              className="mb-5 d-flex align-items-stretch"
+                            >
+                              {/* <Link href={`/partner/events/${event.eid}`}> */}
+                              <a className="w-100">
+                                <HomeEventCard event={event} />
+                              </a>
+                              {/* </Link> */}
+                            </Col>
+                          ))}
+                        </Row>
+                        <Row>
+                          <Col className="d-flex align-items-center">
+                            <ButtonWithLoading
+                              className="btn btn-fill-out btn-sm"
+                              id="btnSeeMoreFollowing"
+                              onClick={() => fetchNextPage("following")}
+                            >
+                              See More
+                            </ButtonWithLoading>
+                          </Col>
+                        </Row>
                       </Tab.Pane>
                       <Tab.Pane eventKey="for-you">
                         <div className="mt-3">
                           <h3 className="mb-4">Recommended events</h3>
                         </div>
+                        <Row>
+                          {eventsForYou.map((event) => (
+                            <Col
+                              key={event.eid}
+                              sm={6}
+                              lg={4}
+                              className="mb-5 d-flex align-items-stretch"
+                            >
+                              {/* <Link href={`/partner/events/${event.eid}`}> */}
+                              <a className="w-100">
+                                <HomeEventCard event={event} />
+                              </a>
+                              {/* </Link> */}
+                            </Col>
+                          ))}
+                        </Row>
+                        <Row>
+                          <Col className="d-flex align-items-center">
+                            <ButtonWithLoading
+                              className="btn btn-fill-out btn-sm"
+                              id="btnSeeMoreForYou"
+                              onClick={() => fetchNextPage("for-you")}
+                            >
+                              See More
+                            </ButtonWithLoading>
+                          </Col>
+                        </Row>
                       </Tab.Pane>
                       <Tab.Pane eventKey="this-weekend">
                         <div className="mt-3">
                           <h3 className="mb-4">Events this weekend</h3>
                         </div>
+                        <Row>
+                          {eventsThisWeekend.map((event) => (
+                            <Col
+                              key={event.eid}
+                              sm={6}
+                              lg={4}
+                              className="mb-5 d-flex align-items-stretch"
+                            >
+                              {/* <Link href={`/partner/events/${event.eid}`}> */}
+                              <a className="w-100">
+                                <HomeEventCard event={event} />
+                              </a>
+                              {/* </Link> */}
+                            </Col>
+                          ))}
+                        </Row>
+                        <Row>
+                          <Col className="d-flex align-items-center">
+                            <ButtonWithLoading
+                              className="btn btn-fill-out btn-sm"
+                              id="btnSeeMoreThisWeekend"
+                              onClick={() => fetchNextPage("this-weekend")}
+                            >
+                              See More
+                            </ButtonWithLoading>
+                          </Col>
+                        </Row>
                       </Tab.Pane>
                       <Tab.Pane eventKey="next-week">
                         <div className="mt-3">
                           <h3 className="mb-4">Events next week</h3>
                         </div>
-                      </Tab.Pane>
-                      <Tab.Pane eventKey="top-ten">
-                        <div className="mt-3">
-                          <h3 className="mb-4">Top 10 events by ticket sales</h3>
-                        </div>
+                        <Row>
+                          {eventsNextWeek.map((event) => (
+                            <Col
+                              key={event.eid}
+                              sm={6}
+                              lg={4}
+                              className="mb-5 d-flex align-items-stretch"
+                            >
+                              {/* <Link href={`/partner/events/${event.eid}`}> */}
+                              <a className="w-100">
+                                <HomeEventCard event={event} />
+                              </a>
+                              {/* </Link> */}
+                            </Col>
+                          ))}
+                        </Row>
+                        <Row>
+                          <Col className="d-flex align-items-center">
+                            <ButtonWithLoading
+                              className="btn btn-fill-out btn-sm"
+                              id="btnSeeMoreNextWeek"
+                              onClick={() => fetchNextPage("next-week")}
+                            >
+                              See More
+                            </ButtonWithLoading>
+                          </Col>
+                        </Row>
                       </Tab.Pane>
                     </Tab.Content>
                   </Col>
                 </Tab.Container>
-              </Row>
-              <Row>
-                {events.map((event) => (
-                  <Col
-                    key={event.eid}
-                    sm={6}
-                    lg={4}
-                    className="mb-5 d-flex align-items-stretch"
-                  >
-                    {/* <Link href={`/partner/events/${event.eid}`}> */}
-                    <a className="w-100">
-                      <HomeEventCard event={event} />
-                    </a>
-                    {/* </Link> */}
-                  </Col>
-                ))}
-              </Row>
-              <Row>
-                <Col className="d-flex align-items-center">
-                  <ButtonWithLoading
-                    className="btn btn-fill-out btn-sm"
-                    id="btnSeeMore"
-                    onClick={() => fetchNextPage()}
-                  >
-                    See More
-                  </ButtonWithLoading>
-                </Col>
               </Row>
             </Container>
           </>

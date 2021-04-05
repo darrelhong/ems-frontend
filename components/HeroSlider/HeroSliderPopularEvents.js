@@ -2,7 +2,6 @@ import { format, parseISO } from 'date-fns';
 import { Container, Row, Col } from 'react-bootstrap';
 import Swiper from 'react-id-swiper';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
-import { useState } from 'react';
 
 const HeroSliderPopularEvents = ({ heroSliderData }) => {
 
@@ -18,6 +17,7 @@ const HeroSliderPopularEvents = ({ heroSliderData }) => {
       nextEl: '.swiper-button-next',
       prevEl: '.swiper-button-prev',
     },
+    observer: true,
     renderPrevButton: () => (
       <button className="swiper-button-prev ht-swiper-button-nav">
         <FiChevronLeft />

@@ -571,7 +571,7 @@ const PartnerProfile = ({ localuser }) => {
             </Card>
           </Col>
           <Col md="8">
-            <Card className="card-user">
+            <Card className="card-user" style={{minHeight: "100%"}}>
               <CardBody>
                 <Tab.Container defaultActiveKey="Events">
                   <Nav
