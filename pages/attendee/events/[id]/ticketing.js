@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation } from 'react-query';
 import { Alert, Card, Col, Container, Row } from 'react-bootstrap';
 import { format, parseISO } from 'date-fns';
 
@@ -11,6 +11,7 @@ import { useEventDetails } from 'lib/query/events';
 import { formatter } from 'lib/util/currency';
 import api from 'lib/ApiClient';
 import useUser from 'lib/query/useUser';
+import usePaymentMethods from 'lib/query/usePaymentMethods';
 
 import AttendeeWrapper from 'components/wrapper/AttendeeWrapper';
 import CenterSpinner from 'components/custom/CenterSpinner';
@@ -18,11 +19,6 @@ import { BreadcrumbOne } from 'components/Breadcrumb';
 import ButtonWithLoading from 'components/custom/ButtonWithLoading';
 import PaymentView from 'components/custom/ticketing/PaymentView';
 import CreditCardIcon from 'components/custom/CreditCardIcon';
-
-const getPaymentMethods = async () => {
-  const { data } = await api.get('/api/ticketing/payment-methods');
-  return data;
-};
 
 export function getServerSideProps({ query }) {
   return {
@@ -33,10 +29,7 @@ const promise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY);
 export default function AttendeeEventTicketing({ id }) {
   const { data, status } = useEventDetails(id);
   const { data: attendee } = useUser();
-  const { data: paymentMethods, status: pmStatus } = useQuery(
-    'paymentMethods',
-    getPaymentMethods
-  );
+  const { data: paymentMethods, status: pmStatus } = usePaymentMethods();
 
   const [pmId, setPmId] = useState();
 

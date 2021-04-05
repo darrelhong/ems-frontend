@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import DropdownMultiselect from "react-multiselect-dropdown-bootstrap";
+import DropdownMultiselect from 'react-multiselect-dropdown-bootstrap';
 import { BreadcrumbOne } from '../../components/Breadcrumb';
 import {
   Container,
@@ -34,6 +34,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import api from '../../lib/ApiClient';
 import { logout } from '../../lib/auth';
 import ButtonWithLoading from '../../components/custom/ButtonWithLoading';
+import PaymentMethods from 'components/custom/PaymentMethods';
 
 export default function MyAccount() {
   const [saveAccLoading, setSaveAccLoading] = useState(false);
@@ -117,7 +118,7 @@ export default function MyAccount() {
         window.scrollTo({
           top: 0,
           left: 0,
-          behavior: 'smooth'
+          behavior: 'smooth',
         });
         //document.getElementById("account-details-form").reset();
       })
@@ -157,8 +158,7 @@ export default function MyAccount() {
         id: user?.id,
         categoryPreferences: user?.categoryPreferences,
       });
-    }
-    else {
+    } else {
       setSaveAccLoading(false);
     }
     if (fileUpload == true) {
@@ -284,8 +284,9 @@ export default function MyAccount() {
   return (
     // <LayoutOne>
     <AttendeeWrapper title="Attendee Home">
-      <div style={{display: "none"}}>
-        { //initialise categoryPreferences
+      <div style={{ display: 'none' }}>
+        {
+          //initialise categoryPreferences
           (categoryPreferences = user?.categoryPreferences)
         }
       </div>
@@ -355,12 +356,10 @@ export default function MyAccount() {
                   <Tab.Pane eventKey="payment">
                     <Card className="my-account-content__content">
                       <Card.Header>
-                        <h3>Payment Method</h3>
+                        <h3>Payment Methods</h3>
                       </Card.Header>
                       <Card.Body>
-                        <p className="saved-message">
-                          {"You Can't Saved Your Payment Method yet."}
-                        </p>
+                        <PaymentMethods />
                       </Card.Body>
                     </Card>
                   </Tab.Pane>
@@ -524,7 +523,7 @@ export default function MyAccount() {
                                   Event Category Preferences{' '}
                                   <span className="required"></span>
                                 </Form.Label>
-                                <DropdownMultiselect
+                                {/* <DropdownMultiselect
                                   options={["Automotive", "Business Support & Supplies", "Computers & Electronics", 
                                             "Construction & Contractor", "Education", "Entertainment", "Food & Dining",
                                             "Health & Medicine", "Home & Garden", "Legal & Financial", 
@@ -536,7 +535,7 @@ export default function MyAccount() {
                                     console.log(categoryPreferences);
                                   }}
                                   name="ddlCategoryPreferences"
-                                />
+                                /> */}
                               </Col>
                               <Col className="form-group" md={12}>
                                 <label>
