@@ -3,7 +3,7 @@ import { Modal, Button, Col, Row, Form, Image } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { createProduct, updateProduct } from 'lib/query/productApi';
 
-const AddNewProdModal = ({ showAddProdModal, closeAddProdModal }) => {
+const AddNewProdModal = ({ showAddProdModal, closeAddProdModal, createToast, loadProducts }) => {
     const [fileName, setFileName] = useState();
     const [tempImageUrl, setTempImageUrl] = useState(null);
     const id = localStorage.getItem('userId');
@@ -40,8 +40,14 @@ const AddNewProdModal = ({ showAddProdModal, closeAddProdModal }) => {
         }
         //can proceed to create / update
         else {
-            console.log('ready to submit');
-            await createProduct(id, data, file);
+            try {
+                await createProduct(id, data, file);
+                createToast('Product created successfully', 'success');
+                loadProducts();
+            } catch (e) {
+                createToast('Erorr creating the prouduct, try again later!', 'error');
+            }
+            closeModal();
         }
     };
 
@@ -153,7 +159,7 @@ const AddNewProdModal = ({ showAddProdModal, closeAddProdModal }) => {
                             ref={register()}
                         // multiple
                         />
-                            <Form.Label
+                        <Form.Label
                             className="form-group custom-file-label"
                             md={12}
                             for="custom-file"
@@ -196,9 +202,9 @@ const AddNewProdModal = ({ showAddProdModal, closeAddProdModal }) => {
         </Modal.Body>
     )
     return (
-        <Modal show={showAddProdModal} 
-        onHide={() => closeModal()}
-        centered>
+        <Modal show={showAddProdModal}
+            onHide={() => closeModal()}
+            centered>
             <Modal.Header closeButton>
                 <Modal.Title>Adding a new Product</Modal.Title>
             </Modal.Header>
@@ -214,15 +220,15 @@ const AddNewProdModal = ({ showAddProdModal, closeAddProdModal }) => {
                 </Col>
             </Modal.Body> */}
             <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setEditMode(false)}>
-                        Cancel
+                <Button variant="secondary" onClick={() => setEditMode(false)}>
+                    Cancel
                     </Button>
-              
-                    <Button
-                        variant="danger"
-                        onClick={handleSubmit(onSubmit)}
-                    >
-                        Save
+
+                <Button
+                    variant="danger"
+                    onClick={handleSubmit(onSubmit)}
+                >
+                    Save
                     </Button>
             </Modal.Footer>
         </Modal>

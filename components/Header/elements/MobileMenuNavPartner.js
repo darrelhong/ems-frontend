@@ -50,7 +50,7 @@ const MobileMenuNavPartner = ({ getActiveStatus }) => {
         </li>
 
         <li>
-          <Link href="/">
+          <Link href="/partner/seller-profile">
             <a className="nav-link">
               BOOTH <IoIosArrowDown />
             </a>
@@ -63,12 +63,12 @@ const MobileMenuNavPartner = ({ getActiveStatus }) => {
               </Link>
             </li>
             <li>
-              <Link href="/home/fashion-two">
+              <Link href="/partner/products">
                 <a>Manage Products</a>
               </Link>
             </li>
             <li>
-              <Link href="/home/furniture-one">
+              <Link href="/partner/events/applications">
                 <a>Manage Applications</a>
               </Link>
             </li>

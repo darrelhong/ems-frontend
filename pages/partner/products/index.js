@@ -15,26 +15,33 @@ import MaterialTable from 'lib/MaterialTable';
 import { InfoOutlined } from '@material-ui/icons';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { useToasts } from 'react-toast-notifications';
 
 const PartnerProductsView = () => {
+    const { addToast, removeToast } = useToasts();
     const [products, setProducts] = useState([]);
-    const [user, setUser] = useState(Object);
+    // const [user, setUser] = useState(Object);
     const userId = localStorage.getItem('userId');
 
     const [showAddProdModal, setShowAddProdModal] = useState(false);
     const [productToShow, setProductToShow] = useState(false);
     // const [showProdDetailModal, setShowProdDetailModal] = useState(false);
     const [showEditProdModal, setShowEditProdModal] = useState(false);
-    const [showDeleteModal,setShowDeleteModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     useEffect(() => {
-        const loadProducts = async () => {
-            const productData = await getProductsByBpId(userId);
-            setProducts(productData);
-        };
-
         if (userId) loadProducts();
     }, []);
+
+    const loadProducts = async () => {
+        const productData = await getProductsByBpId(userId);
+        setProducts(productData);
+    };
+
+    const createToast = (message, appearanceStyle) => {
+        const toastId = addToast(message, { appearance: appearanceStyle });
+        setTimeout(() => removeToast(toastId), 3000);
+    };
 
     const handleProdClick = (rowData) => {
         setProductToShow(rowData);
@@ -54,12 +61,14 @@ const PartnerProductsView = () => {
 
     const columns = [
         // { field: 'pid', title: 'ID' },
-        { title: 'Image', field: 'image', render: rowData => <img src={rowData?.image} 
-        // style={{ width: 40, borderRadius: '50%' }} 
-        /> },
+        {
+            title: 'Image', field: 'image', render: rowData => <img src={rowData?.image}
+            // style={{ width: 40, borderRadius: '50%' }} 
+            />
+        },
         { field: 'name', title: 'Name' },
         { field: 'description', title: 'Product Description' },
-      ];
+    ];
 
     return (
         <PartnerWrapper title="Products">
@@ -68,20 +77,26 @@ const PartnerProductsView = () => {
                 showProdDetailModal={showProdDetailModal}
                 closeShowProdDetailModal={() => setShowProdDetailModal(false)}
             /> */}
-            <EditProdModal 
-            product={productToShow}
-            showEditProdModal={showEditProdModal}
-            closeShowEditProdModal={()=>setShowEditProdModal(false)}
+            <EditProdModal
+                product={productToShow}
+                showEditProdModal={showEditProdModal}
+                closeShowEditProdModal={() => setShowEditProdModal(false)}
+                createToast={createToast}
+                loadProducts={loadProducts}
             />
             <AddNewProdModal
                 showAddProdModal={showAddProdModal}
-                closeAddProdModal={()=>closeAddProdModal()}
+                closeAddProdModal={() => closeAddProdModal()}
                 product={productToShow}
+                createToast={createToast}
+                loadProducts={loadProducts}
             />
-            <DeleteProdModal 
-            product={productToShow}
-            showDeleteModal={showDeleteModal}
-            closeModal={()=>setShowDeleteModal(false)}
+            <DeleteProdModal
+                product={productToShow}
+                showDeleteModal={showDeleteModal}
+                closeModal={() => setShowDeleteModal(false)}
+                createToast={createToast}
+                loadProducts={loadProducts}
             />
             <BreadcrumbOne pageTitle="View products">
                 <ol className="breadcrumb justify-content-md-end">
@@ -113,33 +128,37 @@ const PartnerProductsView = () => {
                     </Col>
                 </Row>
                 <Row className="mb-4">
-                {products && (
-                    <MaterialTable
-                        title="Business Partners"
-                        columns={columns}
-                        data={products}
-                        options={{
-                            filtering: true,
-                            actionsColumnIndex: -1,
-                        }}
-                        actions={[
-                            {
-                                icon: EditIcon,
-                                tooltip: 'Edit Product Details',
-                                onClick: (event,rowData) => handleProdClick(rowData)
-                                // onClick: (event, rowData) => {
-                                //     router.push(`bizpartners/${rowData.id}`);
-                                // },
-                            },
-                            {
-                                icon: DeleteIcon,
-                                tooltip: 'Delete Product',
-                                onClick: (event,rowData) => handleDelete(rowData)
-                            }
-                        ]}
-                    />
-                )}
-                    
+                    {products && (
+                        <MaterialTable
+                            title="Business Partners"
+                            columns={columns}
+                            data={products}
+                            hover
+                            options={{
+                                filtering: true,
+                                actionsColumnIndex: -1,
+                            }}
+                            style={{
+                                width:'100%'
+                            }}
+                            actions={[
+                                {
+                                    icon: EditIcon,
+                                    tooltip: 'Edit Product Details',
+                                    onClick: (event, rowData) => handleProdClick(rowData)
+                                    // onClick: (event, rowData) => {
+                                    //     router.push(`bizpartners/${rowData.id}`);
+                                    // },
+                                },
+                                {
+                                    icon: DeleteIcon,
+                                    tooltip: 'Delete Product',
+                                    onClick: (event, rowData) => handleDelete(rowData)
+                                }
+                            ]}
+                        />
+                    )}
+
                     {/*               
                     {products.map((product) => (
                         <Col

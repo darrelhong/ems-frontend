@@ -16,7 +16,7 @@ const NavigationPartner = ({ positionClass }) => {
         </li>
 
         <li>
-          <Link href="/">
+          <Link href="/partner/seller-profile">
             <a className="nav-link">
               BOOTH <IoIosArrowDown />
             </a>

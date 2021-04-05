@@ -1,14 +1,20 @@
 import { Modal, Button } from 'react-bootstrap';
 import { deleteProduct } from 'lib/query/productApi';
 
-const DeleteProdModal = ({product, showDeleteModal, closeModal}) => {
+const DeleteProdModal = ({ product, showDeleteModal, closeModal, createToast, loadProducts }) => {
 
 
     // const [showDeleteModal, setshowDeleteModal] = useState(false);
     // const closeModal = () => setshowDeleteModal(false);
 
     const handleDelete = async () => {
-        await deleteProduct(product?.pid);
+        try {
+            await deleteProduct(product?.pid);
+            loadProducts();
+            createToast('Product Deleted successfully', 'success');
+        } catch (e) {
+            createToast('Error deleting, try again later!', 'error');
+        }
         closeModal();
     };
 

@@ -3,7 +3,7 @@ import { Modal, Button, Col, Row, Form, Image } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { createProduct, updateProduct } from 'lib/query/productApi';
 
-const EditProdModal = ({ showEditProdModal, closeShowEditProdModal, product }) => {
+const EditProdModal = ({ showEditProdModal, closeShowEditProdModal, product, createToast, loadProducts }) => {
     const [fileName, setFileName] = useState();
     const [tempImageUrl, setTempImageUrl] = useState(null);
     const id = localStorage.getItem('userId');
@@ -30,7 +30,7 @@ const EditProdModal = ({ showEditProdModal, closeShowEditProdModal, product }) =
         setFileName(null);
         setEditMode(false);
         setValue('name', product.name);
-        setValue('description',product.description);
+        setValue('description', product.description);
     };
 
     const handleFileChange = async (e) => {
@@ -48,12 +48,16 @@ const EditProdModal = ({ showEditProdModal, closeShowEditProdModal, product }) =
         }
         //can proceed to create / update
         else {
-            if (product) { //updating
-                console.log('check prod');
-                // console.log(product.pid);
-                await updateProduct(data, file, product.pid);
-            }
-            // await createProduct(id, data, file);
+            if (product) {
+                try {
+                    await updateProduct(data, file, product.pid);
+                    loadProducts();
+                    createToast('Producted updated successfully!', 'success');
+                } catch (e) {
+                    createToast('Product could not be updated, try again later!', 'error');
+                }
+            } else createToast('Product could not be updated, try again later!', 'error');
+            closeModal();
         }
     };
 

@@ -103,7 +103,8 @@ const SellerProfile = () => {
                             </Tab.Pane>
 
                             <Tab.Pane eventKey="products">
-                                {booths && booths.map((booth) => (
+                                {booths && booths.length > 0 ?
+                                booths.map((booth) => (
                                     <BoothProductComponent
                                         booth={booth}
                                         createToast={createToast}
@@ -112,7 +113,14 @@ const SellerProfile = () => {
                                         isPartner={bpid == sellerProfile?.businessPartner?.id}
                                     // isPartner={true}
                                     />
-                                ))}
+                                )) : (
+                                    <div
+                                        className="product-description-tab__details"
+                                        style={{ textAlign: 'center' }}
+                                    >
+                                        Booths have not been allocated yet! Unable to list products
+                                    </div>
+                                )}
                             </Tab.Pane>
                         </Tab.Content>
                     </Tab.Container>
