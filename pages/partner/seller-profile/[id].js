@@ -21,7 +21,7 @@ const SellerProfile = () => {
     const [sellerProfile, setSellerProfile] = useState(Object);
     const [booths, setBooths] = useState([]);
     const [bpProducts, setBpProducts] = useState([]);
-
+    const bpid = localStorage.getItem('userId');
     const { addToast, removeToast } = useToasts();
 
     useEffect(() => {
@@ -59,8 +59,8 @@ const SellerProfile = () => {
                     sellerProfile={sellerProfile}
                     createToast={createToast}
                     setSellerProfile={setSellerProfile}
-                    isPartner={true}
-                    />
+                    isPartner={bpid == sellerProfile?.businessPartner?.id}
+                />
             )}
             <Container
                 style={{
@@ -87,9 +87,10 @@ const SellerProfile = () => {
                             <Tab.Pane eventKey="brochures">
                                 {sellerProfile ? (
                                     <BrochureComponent
-                                        sellerProfile={sellerProfile} 
-                                        isPartner={true}
-                                        />
+                                        sellerProfile={sellerProfile}
+                                        isPartner={bpid == sellerProfile?.businessPartner?.id}
+                                    // isPartner={true}
+                                    />
                                 ) : (
                                     // {sellerProfile ? renderBrochureComponent() : (
                                     <div
@@ -108,7 +109,8 @@ const SellerProfile = () => {
                                         createToast={createToast}
                                         sellerProfile={sellerProfile}
                                         setSellerProfile={setSellerProfile}
-                                        isPartner={true}
+                                        isPartner={bpid == sellerProfile?.businessPartner?.id}
+                                    // isPartner={true}
                                     />
                                 ))}
                             </Tab.Pane>

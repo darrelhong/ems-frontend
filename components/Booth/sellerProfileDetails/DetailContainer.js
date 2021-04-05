@@ -62,7 +62,7 @@ const DetailContainer = ({ sellerProfile, booths, createToast, setSellerProfile,
                             flexDirection: 'row',
                             justifyContent: 'space-between',
                         }}>
-                        <h5>Booth Description:</h5>
+                        <h5>Profile Description:</h5>
                         {isPartner && (
                             <IconButton
                                 color="secondary"
