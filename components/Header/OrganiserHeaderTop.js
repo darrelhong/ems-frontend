@@ -42,7 +42,7 @@ const OrganiserHeaderTop = () => {
                       query: { paraId: JSON.stringify(user?.id) },
                     }}
                   >
-                    <a>
+                    <a style={{ color: '#292b2c' }}>
                       <AiOutlineUser />
                       <span>Profile</span>
                     </a>
@@ -50,7 +50,7 @@ const OrganiserHeaderTop = () => {
                 </li>
                 <li>
                   <Link href="/organiser/profile-account">
-                    <a>
+                    <a style={{ color: '#292b2c' }}>
                       <AiOutlineSetting />
                       <span>Settings</span>
                     </a>

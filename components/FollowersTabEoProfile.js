@@ -1,15 +1,27 @@
 import { useState } from 'react';
-import { Modal, Button, Form, Container, Row, Col } from 'react-bootstrap';
+import {
+  Modal,
+  Button,
+  Form,
+  Container,
+  Row,
+  Col,
+  Tooltip,
+  OverlayTrigger,
+} from 'react-bootstrap';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
 import Badge from 'react-bootstrap/Badge';
 import Link from 'next/link';
 import axios from 'axios';
-
+import api from '../lib/ApiClient';
+import { useMutation } from 'react-query';
 import { AiOutlineNotification } from 'react-icons/ai';
 // import EventEoProfileSliderTen from './ProductSlider/EventEoProfileSliderTen';
 import { store } from 'react-notifications-component';
+import { BsFillInfoCircleFill } from 'react-icons/bs';
+
 const FollowersTabEoProfile = ({
   attendees,
   partners,
@@ -19,6 +31,9 @@ const FollowersTabEoProfile = ({
 }) => {
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [checkAttendee, setCheckAttendee] = useState(false);
+  const [checkPartner, setCheckPartner] = useState(false);
+  //const [emailbroadcastoption, setEmailbroadcastoption] = useState('');
 
   const [broadcastModalShow, setBroadcastModalShow] = useState(false);
   const closeBroadcastModal = () => {
@@ -46,8 +61,6 @@ const FollowersTabEoProfile = ({
 
   // var checkAttendee;
   // var checkPartner;
-  const [checkAttendee, setCheckAttendee] = useState(false);
-  const [checkPartner, setCheckPartner] = useState(false);
 
   const handleMessage = (e) => {
     setMessage(e.target.value);
@@ -133,12 +146,14 @@ const FollowersTabEoProfile = ({
     axios.post(endpoint, postBody, {
       headers: { 'Content-type': 'application/json' },
     });
+
     closeConfirmBroadcastModal();
     closeBroadcastModal();
 
     store.addNotification({
       title: 'Success',
-      message: 'The broadcast messages have been sent out successfully.',
+      message:
+        'The broadcast message has been sent out as both system notification and email successfully.',
       type: 'success',
       insert: 'top',
       container: 'top-left',
@@ -147,7 +162,43 @@ const FollowersTabEoProfile = ({
         onScreen: true,
       },
     });
+
+    console.log('broadcastOption');
+    console.log(checkAttendee);
+    console.log(checkPartner);
+
+    var emailbroadcastoption = '';
+    if (checkAttendee == true && checkPartner == true) {
+      emailbroadcastoption = 'Both';
+    } else if (checkPartner == true && checkAttendee == false) {
+      emailbroadcastoption = 'AllBpFollowers';
+    } else if (checkAttendee == true && checkPartner == false) {
+      emailbroadcastoption = 'AllAttFollowers';
+    }
+    console.log(emailbroadcastoption);
+    console.log(message);
+    mutateEmailNoti.mutate({
+      content: message,
+      broadcastOption: emailbroadcastoption,
+    });
   };
+
+  const mutateEmailNoti = useMutation((data) => {
+    api
+      .post('/api/organiser/broadcastEmailToFollowers', data)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
+
+  const broadcastMsgToolTip = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      The message will be sent out as both system notification and email.
+    </Tooltip>
+  );
 
   if (attendees !== undefined && partners !== undefined) {
     return (
@@ -181,7 +232,16 @@ const FollowersTabEoProfile = ({
         </Modal>
         <Modal show={broadcastModalShow} onHide={closeBroadcastModal} centered>
           <Modal.Header closeButton>
-            <Modal.Title>Broadcast Message</Modal.Title>
+            <Modal.Title>
+              Broadcast Message &nbsp;
+              <OverlayTrigger
+                placement="right"
+                delay={{ show: 250, hide: 400 }}
+                overlay={broadcastMsgToolTip}
+              >
+                <BsFillInfoCircleFill></BsFillInfoCircleFill>
+              </OverlayTrigger>
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body
             style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}
