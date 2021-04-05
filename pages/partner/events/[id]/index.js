@@ -1,9 +1,11 @@
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { Alert, Col, Container, Row } from 'react-bootstrap';
 import { format, parseISO } from 'date-fns';
 
-import { useEventDetails } from 'lib/query/events';
+import { useEvent, useEventDetails } from 'lib/query/events';
+import { getSellerApplicationsFromBpId } from 'lib/query/sellerApplicationApi';
 
 import { BreadcrumbOne } from 'components/Breadcrumb';
 import PartnerWrapper from 'components/wrapper/PartnerWrapper';
@@ -12,6 +14,11 @@ import AddToCalendar from 'components/custom/AddToCalendar';
 import ShareButton from 'components/custom/ShareButton';
 import CenterSpinner from 'components/custom/CenterSpinner';
 
+import RegisterModal from 'components/events/registration/RegisterModal';
+import WithdrawModal from 'components/events/registration/WithdrawModal';
+import { getBoothTotalFromEvent } from 'lib/functions/boothFunctions';
+import { useToasts } from 'react-toast-notifications';
+
 export function getServerSideProps({ query }) {
   return {
     props: { ...query },
@@ -19,10 +26,60 @@ export function getServerSideProps({ query }) {
 }
 
 export default function PartnerEventPage({ id }) {
+  const { data, status } = useEvent(id);
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
+  const [showWithdrawModal, setShowWithdrawModal] = useState(false);
+  const [boothTotal, setBoothTotal] = useState(0);
+  const bpId = localStorage.getItem('userId');
+  const [applicationMade, setApplicationMade] = useState();
+
+  useEffect(() => {
+    const loadBoothTotal = async () => {
+      const total = await getBoothTotalFromEvent(id);
+      setBoothTotal(total);
+    }
+    const loadApplications = async () => {
+      let applications = await getSellerApplicationsFromBpId(bpId);
+      applications = applications.filter(function (application) {
+        return application?.event?.eid == id;
+        //added filtering done on the backend side 
+        // return application?.event?.eid == id && application.sellerApplicationStatus != 'CANCELLED';
+      });
+      if (applications.length == 1) {
+        setApplicationMade(applications[0]);
+      }
+    }
+    loadBoothTotal();
+    loadApplications();
+  }, []);
+
+  const { addToast, removeToast } = useToasts();
+
+  const createToast = (message, appearanceStyle) => {
+    const toastId = addToast(message, { appearance: appearanceStyle });
+    setTimeout(() => removeToast(toastId), 3000);
+  };
   const { data, status } = useEventDetails(id);
 
   return (
     <PartnerWrapper title={data?.name || 'Event page'}>
+      <RegisterModal
+        showRegisterModal={showRegisterModal}
+        closeRegisterModal={() => setShowRegisterModal(false)}
+        event={data}
+        boothTotal={boothTotal}
+        bpId={bpId}
+        createToast={createToast}
+        setApplicationMade={setApplicationMade}
+        applicationMade={applicationMade}
+      />
+      <WithdrawModal
+        showWithdrawModal={showWithdrawModal}
+        closeWithdrawModal={() => setShowWithdrawModal(false)}
+        createToast={createToast}
+        applicationMade={applicationMade}
+        setApplicationMade={setApplicationMade}
+      />
       {status === 'loading' ? (
         <CenterSpinner />
       ) : status === 'error' ? (
@@ -98,14 +155,43 @@ export default function PartnerEventPage({ id }) {
                   <br></br>
                   <br></br>
                   <div className="d-flex align-items-center">
-                    <button
-                      className="btn btn-fill-out mr-2"
-                      disabled={!data.availableForSale}
-                    >
-                      Register Now
-                    </button>
-                    {!data.availableForSale && (
-                      <p className="text-dark">Sale period has not started</p>
+                    {applicationMade ? (
+                      <button
+                        // className="btn btn-fill-out mr-2"
+                        className="btn btn-border-fill btn-sm mr-2"
+                        onClick={() => setShowRegisterModal(true)}
+                      // disabled
+                      // disabled={!data.availableForSale}
+                      >
+                        View Submitted Application
+                      </button>
+                    ) : (
+                      <button
+                        // className="btn btn-fill-out mr-2"
+                        className="btn btn-fill-out btn-sm mr-2"
+                        disabled={boothTotal >= data.boothCapacity}
+                        // disabled={!data.availableForSale}
+                        onClick={() => setShowRegisterModal(true)}
+                      >
+                        Register Now
+                      </button>
+                    )}
+                    {applicationMade && (
+                      <button
+                        className="btn btn-fill-out btn-sm mr-2"
+                        // className="btn btn-fill-out mr-2"
+                        // disabled={boothTotal >= data.boothCapacity}
+                        onClick={() => setShowWithdrawModal(true)}
+                      >
+                        Withdraw Application
+                      </button>
+                    )}
+
+                    {boothTotal >= data.boothCapacity && !applicationMade && (
+                      <p className="text-dark">Capacity of {data.boothCapacity} booths has been reached!</p>
+                    )}
+                    {boothTotal < data.boothCapacity && !applicationMade && (
+                      <p className="text-primary">{boothTotal} / {data.boothCapacity} booths already taken!</p>
                     )}
                   </div>
                 </div>
@@ -129,8 +215,9 @@ export default function PartnerEventPage({ id }) {
             </Row>
           </Container>
         </>
-      )}
-    </PartnerWrapper>
+      )
+      }
+    </PartnerWrapper >
   );
 }
 

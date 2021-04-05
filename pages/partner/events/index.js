@@ -10,11 +10,16 @@ import { BreadcrumbOne } from 'components/Breadcrumb';
 import PartnerWrapper from 'components/wrapper/PartnerWrapper';
 import EventCard from 'components/events/partner/EventCard';
 import ButtonWithLoading from 'components/custom/ButtonWithLoading';
+import useUser from '../../../lib/query/useUser';
 import CenterSpinner from 'components/custom/CenterSpinner';
+import EventSideBar from '../../../components/Event/partner/EventSideBar';
 
 export default function PartnerEvents() {
+  const [sortType, setSortType] = useState('');
+  const [filterValue, setFilterValue] = useState('all');
   const [sortBy, setSortBy] = useState();
   const [searchTerm, setSearchTerm] = useState('');
+  const { data: user } = useUser(localStorage.getItem('userId'));
   const queryClient = useQueryClient();
   const {
     status,
@@ -23,19 +28,36 @@ export default function PartnerEvents() {
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery(
-    ['events', sortBy?.sort, sortBy?.sortDir, searchTerm],
+    ['events', sortBy?.sort, sortBy?.sortDir, searchTerm, filterValue, user?.id],
     ({ pageParam = 0 }) =>
       getEventsWithKeywordandSort(
         pageParam,
+        filterValue,
         sortBy?.sort,
         sortBy?.sortDir,
-        searchTerm
+        searchTerm,
+        user.id
       ),
     {
       getNextPageParam: (lastPage) =>
         lastPage.last ? false : lastPage.number + 1,
     }
   );
+
+  // if (!user) {
+  //   queryClient.invalidateQueries("events");
+  // }
+
+  console.log("data: ", data)
+  console.log("user: ", user)
+  // console.log(filterValue)
+  // console.log("test", queryClient.getQueryData('events'))
+
+  // front end filtering of event
+  const getSortParams = (sortType, filterValue) => {
+    setSortType(sortType);
+    setFilterValue(filterValue);
+  }
 
   const handleChange = (e) => {
     switch (e.target.value) {
@@ -64,7 +86,7 @@ export default function PartnerEvents() {
       'events',
       sortBy?.sort,
       sortBy?.sortDir,
-      searchTerm,
+      searchTerm
     ]);
 
   return (
@@ -79,6 +101,13 @@ export default function PartnerEvents() {
           <li className="breadcrumb-item active">View All Events</li>
         </ol>
       </BreadcrumbOne>
+
+      <Col lg={3} className="order-lg-first mt-4 pt-2 mt-lg-0 pt-lg-0">
+        <EventSideBar
+          getSortParams={getSortParams}
+          filterValue={filterValue}
+        />
+      </Col>
 
       <Container className="my-4">
         <br></br>
@@ -133,7 +162,7 @@ export default function PartnerEvents() {
                     >
                       <Link href={`/partner/events/${event.eid}`}>
                         <a className="w-100">
-                          <EventCard event={event} />
+                          <EventCard event={event} user={user} />
                         </a>
                       </Link>
                     </Col>

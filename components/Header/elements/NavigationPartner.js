@@ -6,9 +6,8 @@ const NavigationPartner = ({ positionClass }) => {
   return (
     <nav className="navigation d-none d-lg-block">
       <ul
-        className={`d-flex ${
-          positionClass ? positionClass : 'justify-content-end'
-        }`}
+        className={`d-flex ${positionClass ? positionClass : 'justify-content-end'
+          }`}
       >
         <li>
           <Link href="/partner/home">
@@ -39,7 +38,7 @@ const NavigationPartner = ({ positionClass }) => {
         </li>
 
         <li>
-          <Link href="/">
+          <Link href="/partner/seller-profile">
             <a className="nav-link">
               BOOTH <IoIosArrowDown />
             </a>
@@ -47,17 +46,17 @@ const NavigationPartner = ({ positionClass }) => {
 
           <ul className="sub-menu sub-menu--one-column">
             <li>
-              <Link href="/home/fashion-one">
+              <Link href="/partner/seller-profile">
                 <a>Manage Booths</a>
               </Link>
             </li>
             <li>
-              <Link href="/home/fashion-two">
+              <Link href="/partner/products">
                 <a>Manage Products</a>
               </Link>
             </li>
             <li>
-              <Link href="/home/furniture-one">
+              <Link href="/partner/events/applications">
                 <a>Manage Applications</a>
               </Link>
             </li>

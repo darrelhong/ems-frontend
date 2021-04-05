@@ -46,7 +46,8 @@ const ImagesPane = ({
     for (i = 0; i < e.target.files.length; i++) {
       combinedFileName += e.target.files[i].name + ' , ';
     }
-    setFileName(combinedFileName);
+        setFileName(combinedFileName.slice(0,combinedFileName.length-3));
+        // setFileName(combinedFileName);
     // await submitFile();
   };
 
