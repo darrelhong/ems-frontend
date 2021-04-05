@@ -31,15 +31,15 @@ a {
 }
 
 a:hover {
-  text-decoration: none !important;
+  text-decoration: none;
 
-  color: $theme-color--default !important;
+  color: $theme-color--default;
 }
 
 a:focus {
-  text-decoration: none !important;
+  text-decoration: none;
 
-  color: inherit !important;
+  color: inherit;
 }
 
 p {
