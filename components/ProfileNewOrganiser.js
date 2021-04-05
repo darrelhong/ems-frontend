@@ -386,7 +386,7 @@ const EventOrgProfile = ({ paraId_ }) => {
           endpoint,
           { person: user },
           {
-            headers: { 'Content-type': 'applircation/json' },
+            headers: { 'Content-type': 'application/json' },
           }
         );
       })

@@ -87,7 +87,7 @@ const TicketingPane = ({
               </label>
             </Col> */}
 
-            <div>
+          
               <Col className="form-group" md={12}>
                 <label>
                   Ticket Price (SGD)
@@ -176,7 +176,6 @@ const TicketingPane = ({
                   </span>
                 )}
               </Col>
-            </div>
           </Row>
         </div>
       </Card.Body>

@@ -46,7 +46,7 @@ const Profile = ({ router: { query } }) => {
   return (
     <div>
       {role === 'Partner' && (
-        <PartnerWrapper>
+        <PartnerWrapper title="Profile">
           <ProfileNewOrganiser
             paraId_={paraId_}
             currentUserId_={user.id}
@@ -55,7 +55,7 @@ const Profile = ({ router: { query } }) => {
       )}
 
       {role === 'Attendee' && (
-        <AttendeeWrapper>
+        <AttendeeWrapper title="Profile">
           <ProfileNewOrganiser
             paraId_={paraId_}
             currentUserId_={user.id}
@@ -64,7 +64,7 @@ const Profile = ({ router: { query } }) => {
       )}
 
       {role === 'Organiser' && (
-        <OrganiserWrapper>
+        <OrganiserWrapper title="Profile">
           <ProfileNewOrganiser
             paraId_={paraId_}
             currentUserId_={user.id}
@@ -73,7 +73,7 @@ const Profile = ({ router: { query } }) => {
       )}
 
       {role === 'Guest' && (
-        <GuestWrapper>
+        <GuestWrapper title="Profile">
           <ProfileNewOrganiser
             paraId_={paraId_}
             currentUserId_={user.id}

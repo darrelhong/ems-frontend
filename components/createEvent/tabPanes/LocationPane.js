@@ -8,56 +8,56 @@ import PropTypes from 'prop-types';
 
 
 
-const LocationPane = ({ register, watch, physical, setPhysical, errors}) => {
+const LocationPane = ({ register, watch, physical, setPhysical, errors }) => {
   // const [physical,setPhysical] = useState(true);
   const [query, setQuery] = useState("");
   // const autoCompleteRef = useRef(null);
   // const [autoCompleteRef, setAutoCompleteRef] = useState();
   const [website, setWebsite] = useState("");
   const [phone, setPhone] = useState("");
-  const options ={ types: ["establishment"], componentRestrictions: { country: "SG" } };
+  const options = { types: ["establishment"], componentRestrictions: { country: "SG" } };
 
   let autoComplete;
 
-const loadScript = (url, callback) => {
-  let script = document.createElement("script");
-  script.type = "text/javascript";
+  const loadScript = (url, callback) => {
+    let script = document.createElement("script");
+    script.type = "text/javascript";
 
-  if (script.readyState) {
-    script.onreadystatechange = function() {
-      if (script.readyState === "loaded" || script.readyState === "complete") {
-        script.onreadystatechange = null;
-        callback();
-      }
-    };
-  } else {
-    script.onload = () => callback();
+    if (script.readyState) {
+      script.onreadystatechange = function () {
+        if (script.readyState === "loaded" || script.readyState === "complete") {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else {
+      script.onload = () => callback();
+    }
+
+    script.src = url;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  };
+
+  function handleScriptLoad(updateQuery) {
+    autoComplete = new window.google.maps.places.Autocomplete(
+      document.getElementById('autocomplete'), options
+
+    );
+    autoComplete.setFields(["address_components", "formatted_address", "opening_hours", "website", "formatted_phone_number", "name"]);
+    autoComplete.addListener("place_changed", () =>
+      handlePlaceSelect(updateQuery)
+    );
   }
-
-  script.src = url;
-  document.getElementsByTagName("head")[0].appendChild(script);
-};
-
-function handleScriptLoad(updateQuery) {
-  autoComplete = new window.google.maps.places.Autocomplete(
-    document.getElementById('autocomplete'),options
-    
-  );
-  autoComplete.setFields(["address_components", "formatted_address", "opening_hours", "website", "formatted_phone_number", "name"]);
-  autoComplete.addListener("place_changed", () =>
-    handlePlaceSelect(updateQuery)
-  );
-}
   async function handlePlaceSelect(updateQuery) {
-  const addressObject = autoComplete.getPlace();
-  const querytest = addressObject.name + " " + addressObject.formatted_address;
-  updateQuery(querytest);
-  console.log(addressObject);
-  // information= addressObject.website + " " +  addressObject.formatted_phone_number;
- setWebsite(addressObject.website );
- setPhone(addressObject.formatted_phone_number);
- 
-}
+    const addressObject = autoComplete.getPlace();
+    const querytest = addressObject.name + " " + addressObject.formatted_address;
+    updateQuery(querytest);
+    console.log(addressObject);
+    // information= addressObject.website + " " +  addressObject.formatted_phone_number;
+    setWebsite(addressObject.website);
+    setPhone(addressObject.formatted_phone_number);
+
+  }
   useEffect(() => {
     loadScript(
       `https://maps.googleapis.com/maps/api/js?key=AIzaSyD6lwl3tFVZ5XyGBrr8gWwWDPnrsTknuEE&libraries=places`,
@@ -119,30 +119,30 @@ function handleScriptLoad(updateQuery) {
                   * (Could be an online link or physical venue)
                 </span>
               </label>
-             {/* <input
+              {/* <input
                 // required
                 className="form-control"
                 name="address"
                 type="text"
                 ref={register({ required: true })}
               />  */}
-            <input
-           
-      className="form-control"
-       
-         onChange={event => {setQuery(event.target.value);}}
-        placeholder="Enter a Location"
-        type="text"
-        value={query}
-        name="address" 
-        ref={register({ required: true })}
-        id="autocomplete"
+              <input
 
-        // ref={(ref) => {register(ref); autoCompleteRef;}}
-        //  ref= {autoCompleteRef}
-        //  id={autoCompleteRef}
-      />
-              
+                className="form-control"
+
+                onChange={event => { setQuery(event.target.value); }}
+                placeholder="Enter a Location"
+                type="text"
+                value={query}
+                name="address"
+                ref={register({ required: true })}
+                id="autocomplete"
+
+              // ref={(ref) => {register(ref); autoCompleteRef;}}
+              //  ref= {autoCompleteRef}
+              //  id={autoCompleteRef}
+              />
+
               {errors.address && (
                 <span role="alert" style={{ color: 'red' }}>
                   This field is required
@@ -150,15 +150,15 @@ function handleScriptLoad(updateQuery) {
               )}
             </Col>
             <Col className="form-group" md={12}>
-              {physical && (            <span>Website: {website} </span>
-)}
+              {physical && (<div> <span>Website: </span> <a href={website}> {website} </a></div> 
+              )}
             </Col>
 
             <Col className="form-group" md={12}>
-            {/* <span>{website}</span> */}
-            {physical && (<span>Phone Number: {phone}</span>)}
-            
-            {/* <span>{phone}</span> */}
+              {/* <span>{website}</span> */}
+              {physical && (<span>Phone Number: {phone}</span>)}
+
+              {/* <span>{phone}</span> */}
 
             </Col>
             {/* {watch('isPhysical') ? (
