@@ -10,7 +10,7 @@ const SellerProfileCard = ({ sellerProfile, deleteCancelEvent, createToast }) =>
             booths.map((booth) => boothNumberString += (booth.boothNumber + ','));
             return boothNumberString.slice(0, -1);
         } catch (e) {
-            return '?';
+            return 'Not Allocated yet';
         }
     };
 

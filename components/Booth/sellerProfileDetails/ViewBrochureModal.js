@@ -2,7 +2,8 @@ import { Modal, Button } from 'react-bootstrap';
 const ViewBrochureModal = ({
     image,
     closeViewBrochureModal,
-    viewBrochureModalShow
+    viewBrochureModalShow,
+    brochureIndex
 }) => {
 
     const closeButton = () => {
@@ -19,7 +20,7 @@ const ViewBrochureModal = ({
         <Modal show={viewBrochureModalShow} onHide={closeViewBrochureModal}
             centered>
             <Modal.Header closeButton>
-                <Modal.Title>Brochure</Modal.Title>
+                <Modal.Title>Brochure {brochureIndex}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <img src={image} />
