@@ -370,7 +370,7 @@ const OrgBoothDashboard = () => {
         <Col md={6} xl={8}>
           <Card className="Recent-Users">
             <Card.Header>
-              <Card.Title as="h5">Recent Booth Application</Card.Title>
+              <Card.Title as="h5">Pending Booth Application</Card.Title>
             </Card.Header>
             <Card.Body className="px-0 py-2">
               <Table responsive hover>
@@ -438,6 +438,11 @@ const OrgBoothDashboard = () => {
                           </div>
                         );
                       })}
+                    {boothAppList.length == 0 && (
+                      <div>
+                        <span className="ml-4">No Pending Application</span>
+                      </div>
+                    )}
                   </div>
                 </tbody>
               </Table>
