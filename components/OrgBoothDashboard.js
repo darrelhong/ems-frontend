@@ -10,7 +10,16 @@ import {
   getBoothDashboardDailyMostPopularEventList,
   getBoothDashboardMonthlyMostPopularEventList,
   getBoothDashboardYearlyMostPopularEventList,
+  getOverallEventRating,
+  getEventRatingCountList,
+  getTotalSalesByEvent,
+  getNumberOfBusinessPartnerByEvent,
+  getVaildEventForBp,
 } from '../lib/query/analytics';
+import { getEventDetails } from '../lib/query/eventApi';
+import { getEventByOrganiserId } from '../lib/query/useEvent';
+//import { getUser } from '../lib/query/getUser';
+
 import { useState, useEffect } from 'react';
 import { parseISO } from 'date-fns';
 import PieBasicChart from '../components/PieBasicChart';
@@ -23,8 +32,31 @@ const OrgBoothDashboard = () => {
   const [dailyMostPopular, setDailyMostPopular] = useState([]);
   const [monthlyMostPopular, setMonthlyMostPopular] = useState([]);
   const [yearlyMostPopular, setYearlyMostPopular] = useState([]);
+  const [overallRating, setOverallRating] = useState();
+  const [ratingCountList, setRatingCountList] = useState([]);
+  //const [eventOrganiser, setEventOrganiser] = useState();
+  const [rating1, setRating1] = useState();
+  const [rating2, setRating2] = useState();
+  const [rating3, setRating3] = useState();
+  const [rating4, setRating4] = useState();
+  const [rating5, setRating5] = useState();
+  const [eventList, setEventlist] = useState([]);
+  const [eventTotalSale, setEventTotalSale] = useState(0);
+  const [bpNumber, setBpNumber] = useState(0);
+
+  // var rating5;
+  // var rating4;
+  // var rating3;
+  // var rating2;
+  // var rating1;
+  var rating5Per;
+  var rating4Per;
+  var rating3Per;
+  var rating2Per;
+  var rating1Per;
 
   useEffect(() => {
+    getEventData();
     getAllPendingBoothApplis();
     getBoothDailySalesData();
     getBoothMonthlySalesData();
@@ -32,7 +64,17 @@ const OrgBoothDashboard = () => {
     getDailyMostPopularEvent();
     getMonthlyMostPopularEvent();
     getYearlyMostPopularEvent();
+    getOverallEventRatingData();
+    getOverallEventRatingCountListData();
   }, []);
+
+  const getEventData = async () => {
+    await getVaildEventForBp(localStorage.getItem('userId')).then((data) => {
+      console.log(data);
+      setEventlist(data);
+    });
+  };
+
   const getAllPendingBoothApplis = async () => {
     await getAllPendingBoothApplication().then((data) => {
       setBoothAppList(data);
@@ -76,6 +118,115 @@ const OrgBoothDashboard = () => {
     await getBoothDashboardYearlyMostPopularEventList().then((data) => {
       setYearlyMostPopular(data);
     });
+  };
+  const getOverallEventRatingData = async () => {
+    await getOverallEventRating().then((data) => {
+      setOverallRating(data);
+    });
+  };
+  const getOverallEventRatingCountListData = async () => {
+    await getEventRatingCountList().then((data) => {
+      var totalReviewNum = 0;
+      console.log(data);
+      console.log(totalReviewNum);
+      setRatingCountList(data);
+
+      if (data[1] != undefined) {
+        totalReviewNum = totalReviewNum + data[1];
+      }
+      if (data[2] != undefined) {
+        totalReviewNum = totalReviewNum + data[2];
+      }
+      if (data[3] != undefined) {
+        totalReviewNum = totalReviewNum + data[3];
+      }
+      if (data[4] != undefined) {
+        console.log(data[4]);
+        totalReviewNum = totalReviewNum + data[4];
+      }
+      if (data[5] != undefined) {
+        totalReviewNum = totalReviewNum + data[5];
+      }
+
+      var rating5_ = (data[5] / totalReviewNum) * 100;
+      setRating5(rating5_);
+      // rating5Per = rating5 + '%';
+      var rating4_ = (data[4] / totalReviewNum) * 100;
+      setRating4(rating4_);
+      //   rating4Per = rating4 + '%';
+      console.log(rating4);
+      var rating3_ = (data[3] / totalReviewNum) * 100;
+      setRating3(rating3_);
+      //rating3Per = rating3 + '%';
+      var rating2_ = (data[2] / totalReviewNum) * 100;
+      setRating2(rating2_);
+      //  rating2Per = rating2 + '%';
+      var rating1_ = (data[1] / totalReviewNum) * 100;
+      setRating1(rating1_);
+      // rating1Per = rating1 + '%';
+
+      // setProBarFiveStar(rating5);
+      // setProBarFourStar(rating4);
+      // setProBarThreeStar(rating3);
+      // setProBarTwoStar(rating2);
+      // setProBarOneStar(rating1);
+      // console.log(proBarFiveStar);
+      // console.log(proBarFourStar);
+      // console.log(proBarThreeStar);
+      // console.log(proBarTwoStar);
+      // console.log(proBarOneStar);
+    });
+  };
+
+  const getEventFilter = async (id) => {
+    var check;
+    await getEventDetails(id).then((data) => {
+      if (data != undefined && data.length > 0) {
+        console.log(data.length + 'length');
+        check = true;
+      } else {
+        check = false;
+      }
+    });
+    return check;
+  };
+
+  const getSelectEvent = async (id) => {
+    getEventTotalSales(id);
+    getNumberOfBpByEvent(id);
+  };
+
+  const getEventTotalSales = async (id) => {
+    await getTotalSalesByEvent(id).then((data) => {
+      console.log(data);
+      setEventTotalSale(
+        JSON.stringify(data).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+      );
+      console.log(eventTotalSale);
+    });
+  };
+
+  const getNumberOfBpByEvent = async (id) => {
+    await getNumberOfBusinessPartnerByEvent(id).then((data) => {
+      setBpNumber(data);
+      console.log(bpNumber);
+    });
+  };
+
+  const getRefreshEvents = async () => {
+    // await getReviews(paraId_).then((data) => {
+    //   console.log('reviews' + reviews);
+    //   setReviews(data);
+    // });
+  };
+
+  const handleEventChange = (e) => {
+    if (e.target.value == 'all') {
+      getRefreshEvents();
+    } else {
+      console.log(e.target.value);
+      getSelectEvent(e.target.value);
+    }
   };
 
   const mostPopularDailyTabContent = (
@@ -442,6 +593,24 @@ const OrgBoothDashboard = () => {
         <Col md={6} xl={4}>
           <Card className="card-event">
             <Card.Body>
+              <Row className="mb-4">
+                <Col xs={12} sm={12}>
+                  <select
+                    className="custom-select"
+                    onChange={handleEventChange}
+                  >
+                    <option value="all">Filter By Events</option>
+                    {(eventList != null || eventList != undefined) &&
+                      eventList.map((event) => {
+                        if (getEventFilter(event.eid)) {
+                          return (
+                            <option value={event.eid}>{event.name}</option>
+                          );
+                        }
+                      })}
+                  </select>
+                </Col>
+              </Row>
               <div className="row align-items-center justify-content-center">
                 <div className="col">
                   <h5 className="m-0">Upcoming Event</h5>
@@ -454,7 +623,8 @@ const OrgBoothDashboard = () => {
               </div>
               <h2 className="mt-2 f-w-300">
                 <h6 className="text-muted mt-3 mb-0">IT Fair 2020 </h6>
-                45<sub className="text-muted f-14">Business Partners</sub>
+                {bpNumber}
+                <sub className="text-muted f-14">Business Partners</sub>
               </h2>
 
               <i className="fa fa-angellist text-c-purple f-50" />
@@ -467,8 +637,10 @@ const OrgBoothDashboard = () => {
                   <i className="feather icon-zap f-30 text-c-green" />
                 </div>
                 <div className="col">
-                  <h3 className="f-w-300">235</h3>
-                  <span className="d-block text-uppercase">total ideas</span>
+                  <h3 className="f-w-300">238</h3>
+                  <span className="d-block text-uppercase">
+                    Total Booths Sold
+                  </span>
                 </div>
               </div>
             </Card.Body>
@@ -478,10 +650,8 @@ const OrgBoothDashboard = () => {
                   <i className="feather icon-map-pin f-30 text-c-blue" />
                 </div>
                 <div className="col">
-                  <h3 className="f-w-300">26</h3>
-                  <span className="d-block text-uppercase">
-                    total locations
-                  </span>
+                  <h3 className="f-w-300">{eventTotalSale}</h3>
+                  <span className="d-block text-uppercase">Total Sales</span>
                 </div>
               </div>
             </Card.Body>
@@ -649,24 +819,27 @@ const OrgBoothDashboard = () => {
             <Card.Body>
               <div className="row align-items-center justify-content-center m-b-20">
                 <div className="col-6">
-                  <h2 className="f-w-300 d-flex align-items-center float-left m-0">
-                    4.7 <i className="fa fa-star f-10 m-l-10 text-c-yellow" />
-                  </h2>
+                  <h5 className="f-w-300 d-flex align-items-center float-left m-0">
+                    Overall Rating{' '}
+                    <i className="fa fa-star f-10 m-l-10 text-c-yellow" />
+                  </h5>
                 </div>
                 <div className="col-6">
-                  <h6 className="d-flex  align-items-center float-right m-0">
-                    0.4{' '}
+                  <h3 className="d-flex  align-items-center float-right m-0">
+                    {overallRating}
                     <i className="fa fa-caret-up text-c-green f-22 m-l-10" />
-                  </h6>
+                  </h3>
                 </div>
               </div>
-
-              <div className="row">
+              <div className="row" key="key">
                 <div className="col-xl-12">
                   <h6 className="align-items-center float-left">
                     <i className="fa fa-star f-10 m-r-10 text-c-yellow" />5
                   </h6>
-                  <h6 className="align-items-center float-right">384</h6>
+                  <h6 className="align-items-center float-right">
+                    {ratingCountList[5] != undefined && ratingCountList[5]}
+                    {ratingCountList[5] == undefined && 0}
+                  </h6>
                   <div
                     className="progress m-t-30 m-b-20"
                     style={{ height: '6px' }}
@@ -674,8 +847,8 @@ const OrgBoothDashboard = () => {
                     <div
                       className="progress-bar progress-c-theme"
                       role="progressbar"
-                      style={{ width: '70%' }}
-                      aria-valuenow="70"
+                      style={{ width: rating5 + '%' }}
+                      aria-valuenow={rating5}
                       aria-valuemin="0"
                       aria-valuemax="100"
                     />
@@ -686,7 +859,10 @@ const OrgBoothDashboard = () => {
                   <h6 className="align-items-center float-left">
                     <i className="fa fa-star f-10 m-r-10 text-c-yellow" />4
                   </h6>
-                  <h6 className="align-items-center float-right">145</h6>
+                  <h6 className="align-items-center float-right">
+                    {ratingCountList[4] != undefined && ratingCountList[4]}
+                    {ratingCountList[4] == undefined && 0}
+                  </h6>
                   <div
                     className="progress m-t-30  m-b-20"
                     style={{ height: '6px' }}
@@ -694,8 +870,8 @@ const OrgBoothDashboard = () => {
                     <div
                       className="progress-bar progress-c-theme"
                       role="progressbar"
-                      style={{ width: '35%' }}
-                      aria-valuenow="35"
+                      style={{ width: rating4 + '%' }}
+                      aria-valuenow={rating4}
                       aria-valuemin="0"
                       aria-valuemax="100"
                     />
@@ -706,7 +882,10 @@ const OrgBoothDashboard = () => {
                   <h6 className="align-items-center float-left">
                     <i className="fa fa-star f-10 m-r-10 text-c-yellow" />3
                   </h6>
-                  <h6 className="align-items-center float-right">24</h6>
+                  <h6 className="align-items-center float-right">
+                    {ratingCountList[3] != undefined && ratingCountList[3]}
+                    {ratingCountList[3] == undefined && 0}
+                  </h6>
                   <div
                     className="progress m-t-30  m-b-20"
                     style={{ height: '6px' }}
@@ -714,8 +893,8 @@ const OrgBoothDashboard = () => {
                     <div
                       className="progress-bar progress-c-theme"
                       role="progressbar"
-                      style={{ width: '25%' }}
-                      aria-valuenow="25"
+                      style={{ width: rating3 + '%' }}
+                      aria-valuenow={rating3}
                       aria-valuemin="0"
                       aria-valuemax="100"
                     />
@@ -726,7 +905,10 @@ const OrgBoothDashboard = () => {
                   <h6 className="align-items-center float-left">
                     <i className="fa fa-star f-10 m-r-10 text-c-yellow" />2
                   </h6>
-                  <h6 className="align-items-center float-right">1</h6>
+                  <h6 className="align-items-center float-right">
+                    {ratingCountList[2] != undefined && ratingCountList[2]}
+                    {ratingCountList[2] == undefined && 0}
+                  </h6>
                   <div
                     className="progress m-t-30  m-b-20"
                     style={{ height: '6px' }}
@@ -734,8 +916,8 @@ const OrgBoothDashboard = () => {
                     <div
                       className="progress-bar progress-c-theme"
                       role="progressbar"
-                      style={{ width: '10%' }}
-                      aria-valuenow="10"
+                      style={{ width: rating2 + '%' }}
+                      aria-valuenow={rating2}
                       aria-valuemin="0"
                       aria-valuemax="100"
                     />
@@ -745,16 +927,19 @@ const OrgBoothDashboard = () => {
                   <h6 className="align-items-center float-left">
                     <i className="fa fa-star f-10 m-r-10 text-c-yellow" />1
                   </h6>
-                  <h6 className="align-items-center float-right">0</h6>
+                  <h6 className="align-items-center float-right">
+                    {ratingCountList[1] != undefined && ratingCountList[1]}
+                    {ratingCountList[1] == undefined && 0}
+                  </h6>
                   <div
                     className="progress m-t-30  m-b-5"
                     style={{ height: '6px' }}
                   >
                     <div
-                      className="progress-bar"
+                      className="progress-bar  progress-c-theme"
                       role="progressbar"
-                      style={{ width: '0%' }}
-                      aria-valuenow="0"
+                      style={{ width: rating1 + '%' }}
+                      aria-valuenow={rating1}
                       aria-valuemin="0"
                       aria-valuemax="100"
                     />
