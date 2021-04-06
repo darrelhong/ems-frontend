@@ -6,7 +6,7 @@ import useUser from '../../lib/query/useUser';
 import { BreadcrumbOne } from '../../components/Breadcrumb';
 import OrganiserWrapper from '../../components/wrapper/OrganiserWrapper';
 import OrgBoothDashboard from '../../components/OrgBoothDashboard';
-import PieBasicChart from '../../components/PieBasicChart';
+
 import getAllPendingBoothApplication from '../../lib/query/analytics';
 export default function OrganiserDashboard() {
   const { data: user, isLoading, isSuccess } = useUser(
@@ -32,7 +32,6 @@ export default function OrganiserDashboard() {
             <br></br>
             <h4>Event Applications Dashboard</h4>
             <OrgBoothDashboard></OrgBoothDashboard>
-            <PieBasicChart></PieBasicChart>
           </>
         )}
       </Container>

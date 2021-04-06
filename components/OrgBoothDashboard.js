@@ -7,32 +7,31 @@ import {
   getBoothMonthlySales,
   getBoothYearlySales,
   getBoothDailySales,
+  getBoothDashboardDailyMostPopularEventList,
+  getBoothDashboardMonthlyMostPopularEventList,
+  getBoothDashboardYearlyMostPopularEventList,
 } from '../lib/query/analytics';
-//import { getUser } from '../../lib/query/getUser';
 import { useState, useEffect } from 'react';
 import { parseISO } from 'date-fns';
-// import avatar1 from '../assets/images/avatar-1.jpg';
-// import avatar2 from '../assets/images/avatar-2.jpg';
-// import avatar3 from '../assets/images/avatar-3.jpg';
+import PieBasicChart from '../components/PieBasicChart';
 
 const OrgBoothDashboard = () => {
-  // const [user, setUser] = useState();
   const [boothAppList, setBoothAppList] = useState([]);
   const [boothDaily, setBoothDaily] = useState();
   const [boothMonthly, setBoothMonthly] = useState();
   const [boothYearly, setBoothYearly] = useState();
+  const [dailyMostPopular, setDailyMostPopular] = useState([]);
+  const [monthlyMostPopular, setMonthlyMostPopular] = useState([]);
+  const [yearlyMostPopular, setYearlyMostPopular] = useState([]);
 
-  // const getUserData = async () => {
-  //   await getUser(localStorage.getItem('userId')).then((data) => {
-  //     setUser(data);
-  //   });
-  // };
-  // getUserData();
   useEffect(() => {
     getAllPendingBoothApplis();
     getBoothDailySalesData();
     getBoothMonthlySalesData();
     getBoothYearlySalesData();
+    getDailyMostPopularEvent();
+    getMonthlyMostPopularEvent();
+    getYearlyMostPopularEvent();
   }, []);
   const getAllPendingBoothApplis = async () => {
     await getAllPendingBoothApplication().then((data) => {
@@ -61,122 +60,210 @@ const OrgBoothDashboard = () => {
     });
   };
 
-  const mostPopularTabContent = (
+  const getDailyMostPopularEvent = async () => {
+    await getBoothDashboardDailyMostPopularEventList().then((data) => {
+      setDailyMostPopular(data);
+      console.log(data);
+    });
+  };
+
+  const getMonthlyMostPopularEvent = async () => {
+    await getBoothDashboardMonthlyMostPopularEventList().then((data) => {
+      setMonthlyMostPopular(data);
+    });
+  };
+  const getYearlyMostPopularEvent = async () => {
+    await getBoothDashboardYearlyMostPopularEventList().then((data) => {
+      setYearlyMostPopular(data);
+    });
+  };
+
+  const mostPopularDailyTabContent = (
     <Aux>
-      <div className="media friendlist-box align-items-center justify-content-center m-b-20">
-        <div className="m-r-10 photo-table">
-          <a href={DEMO.BLANK_LINK}>
-            <img
-              className="rounded-circle"
-              style={{ width: '40px' }}
-              src="../assets/images/avatar-1.jpg"
-              alt="activity-user"
-            />
-          </a>
-        </div>
-        <div className="media-body">
-          <h6 className="m-0 d-inline">Silje Larsen</h6>
-          <span className="float-right d-flex  align-items-center">
-            <i className="fa fa-caret-up f-22 m-r-10 text-c-green" />
-            3784
-          </span>
-        </div>
-      </div>
-      <div className="media friendlist-box align-items-center justify-content-center m-b-20">
-        <div className="m-r-10 photo-table">
-          <a href={DEMO.BLANK_LINK}>
-            <img
-              className="rounded-circle"
-              style={{ width: '40px' }}
-              src="../assets/images/avatar-2.jpg"
-              alt="activity-user"
-            />
-          </a>
-        </div>
-        <div className="media-body">
-          <h6 className="m-0 d-inline">Julie Vad</h6>
-          <span className="float-right d-flex  align-items-center">
-            <i className="fa fa-caret-up f-22 m-r-10 text-c-green" />
-            3544
-          </span>
-        </div>
-      </div>
-      <div className="media friendlist-box align-items-center justify-content-center m-b-20">
-        <div className="m-r-10 photo-table">
-          <a href={DEMO.BLANK_LINK}>
-            <img
-              className="rounded-circle"
-              style={{ width: '40px' }}
-              src="../assets/images/avatar-3.jpg"
-              alt="activity-user"
-            />
-          </a>
-        </div>
-        <div className="media-body">
-          <h6 className="m-0 d-inline">Storm Hanse</h6>
-          <span className="float-right d-flex  align-items-center">
-            <i className="fa fa-caret-down f-22 m-r-10 text-c-red" />
-            2739
-          </span>
-        </div>
-      </div>
-      <div className="media friendlist-box align-items-center justify-content-center m-b-20">
-        <div className="m-r-10 photo-table">
-          <a href={DEMO.BLANK_LINK}>
-            <img
-              className="rounded-circle"
-              style={{ width: '40px' }}
-              src="../assets/images/avatar-1.jpg"
-              alt="activity-user"
-            />
-          </a>
-        </div>
-        <div className="media-body">
-          <h6 className="m-0 d-inline">Frida Thomse</h6>
-          <span className="float-right d-flex  align-items-center">
-            <i className="fa fa-caret-down f-22 m-r-10 text-c-red" />
-            1032
-          </span>
-        </div>
-      </div>
-      <div className="media friendlist-box align-items-center justify-content-center m-b-20">
-        <div className="m-r-10 photo-table">
-          <a href={DEMO.BLANK_LINK}>
-            <img
-              className="rounded-circle"
-              style={{ width: '40px' }}
-              src="../assets/images/avatar-2.jpg"
-              alt="activity-user"
-            />
-          </a>
-        </div>
-        <div className="media-body">
-          <h6 className="m-0 d-inline">Silje Larsen</h6>
-          <span className="float-right d-flex  align-items-center">
-            <i className="fa fa-caret-up f-22 m-r-10 text-c-green" />
-            8750
-          </span>
-        </div>
-      </div>
-      <div className="media friendlist-box align-items-center justify-content-center">
-        <div className="m-r-10 photo-table">
-          <a href={DEMO.BLANK_LINK}>
-            <img
-              className="rounded-circle"
-              style={{ width: '40px' }}
-              src="../assets/images/avatar-3.jpg"
-              alt="activity-user"
-            />
-          </a>
-        </div>
-        <div className="media-body">
-          <h6 className="m-0 d-inline">Storm Hanse</h6>
-          <span className="float-right d-flex  align-items-center">
-            <i className="fa fa-caret-down f-22 m-r-10 text-c-red" />
-            8750
-          </span>
-        </div>
-      </div>
+      <Card>
+        <Card.Body
+          style={{
+            height: '405px',
+            overflow: 'auto',
+          }}
+        >
+          <div className="media friendlist-box align-items-center justify-content-center m-b-20">
+            <div className="m-r-10 photo-table">
+              {/* <a href={DEMO.BLANK_LINK}>
+                    <img
+                      className="rounded-circle"
+                      style={{ width: '40px' }}
+                      src="../assets/images/avatar-1.jpg"
+                      alt="activity-user"
+                    />
+                  </a> */}
+            </div>
+            <div className="media-body">
+              <span className="m-0 d-inline">Event Name</span>
+              <span className="float-right d-flex  align-items-center">
+                <i className="fa fa-caret-up f-22 m-r-10 text-c-green" />
+                No. of Business Partner
+              </span>
+            </div>
+          </div>
+          {dailyMostPopular.length > 0 &&
+            dailyMostPopular
+              .sort((a, b) =>
+                a.applicationCount < b.applicationCount ? 1 : -1
+              )
+              .map((event, key) => {
+                return (
+                  <div key="key">
+                    <div className="media friendlist-box align-items-center justify-content-center m-b-20">
+                      <div className="m-r-10 photo-table">
+                        {/* <a href={DEMO.BLANK_LINK}>
+                    <img
+                      className="rounded-circle"
+                      style={{ width: '40px' }}
+                      src="../assets/images/avatar-1.jpg"
+                      alt="activity-user"
+                    />
+                  </a> */}
+                      </div>
+                      <div className="media-body">
+                        <h6 className="m-0 d-inline">{event.name}</h6>
+                        <span className="float-right d-flex  align-items-center">
+                          <i className="fa fa-caret-up f-22 m-r-10 text-c-green" />
+                          {event.applicationCount}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+        </Card.Body>
+      </Card>
+    </Aux>
+  );
+
+  const mostPopularMonthlyTabContent = (
+    <Aux>
+      <Card>
+        <Card.Body
+          style={{
+            height: '405px',
+            overflow: 'auto',
+          }}
+        >
+          <div className="media friendlist-box align-items-center justify-content-center m-b-20 ">
+            <div className="m-r-10 photo-table">
+              {/* <a href={DEMO.BLANK_LINK}>
+                    <img
+                      className="rounded-circle"
+                      style={{ width: '40px' }}
+                      src="../assets/images/avatar-1.jpg"
+                      alt="activity-user"
+                    />
+                  </a> */}
+            </div>
+            <div className="media-body">
+              <span className="m-0 d-inline">Event Name</span>
+              <span className="float-right d-flex  align-items-center">
+                <i className="fa fa-caret-up f-22 m-r-10 text-c-green" />
+                No. of Business Partner
+              </span>
+            </div>
+          </div>
+          {monthlyMostPopular.length > 0 &&
+            monthlyMostPopular
+              .sort((a, b) =>
+                a.applicationCount < b.applicationCount ? 1 : -1
+              )
+              .map((event, key) => {
+                return (
+                  <div key="key">
+                    <div className="media friendlist-box align-items-center justify-content-center m-b-20">
+                      <div className="m-r-10 photo-table">
+                        {/* <a href={DEMO.BLANK_LINK}>
+                    <img
+                      className="rounded-circle"
+                      style={{ width: '40px' }}
+                      src="../assets/images/avatar-1.jpg"
+                      alt="activity-user"
+                    />
+                  </a> */}
+                      </div>
+                      <div className="media-body">
+                        <h6 className="m-0 d-inline">{event.name}</h6>
+                        <span className="float-right d-flex  align-items-center">
+                          <i className="fa fa-caret-up f-22 m-r-10 text-c-green" />
+                          {event.applicationCount}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+        </Card.Body>
+      </Card>
+    </Aux>
+  );
+
+  const mostPopularYearlyTabContent = (
+    <Aux>
+      <Card>
+        <Card.Body
+          style={{
+            height: '405px',
+            overflow: 'auto',
+          }}
+        >
+          <div className="media friendlist-box align-items-center justify-content-center m-b-20">
+            <div className="m-r-10 photo-table">
+              {/* <a href={DEMO.BLANK_LINK}>
+                    <img
+                      className="rounded-circle"
+                      style={{ width: '40px' }}
+                      src="../assets/images/avatar-1.jpg"
+                      alt="activity-user"
+                    />
+                  </a> */}
+            </div>
+            <div className="media-body">
+              <span className="m-0 d-inline">Event Name</span>
+              <span className="float-right d-flex  align-items-center">
+                <i className="fa fa-caret-up f-22 m-r-10 text-c-green" />
+                No. of Business Partner
+              </span>
+            </div>
+          </div>
+          {yearlyMostPopular.length > 0 &&
+            yearlyMostPopular
+              .sort((a, b) =>
+                a.applicationCount < b.applicationCount ? 1 : -1
+              )
+              .map((event, key) => {
+                return (
+                  <div key="key">
+                    <div className="media friendlist-box align-items-center justify-content-center m-b-20">
+                      <div className="m-r-10 photo-table">
+                        {/* <a href={DEMO.BLANK_LINK}>
+                    <img
+                      className="rounded-circle"
+                      style={{ width: '40px' }}
+                      src="../assets/images/avatar-1.jpg"
+                      alt="activity-user"
+                    />
+                  </a> */}
+                      </div>
+                      <div className="media-body">
+                        <h6 className="m-0 d-inline">{event.name}</h6>
+                        <span className="float-right d-flex  align-items-center">
+                          <i className="fa fa-caret-up f-22 m-r-10 text-c-green" />
+                          {event.applicationCount}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+        </Card.Body>
+      </Card>
     </Aux>
   );
 
@@ -273,7 +360,7 @@ const OrgBoothDashboard = () => {
         <Col md={6} xl={8}>
           <Card className="Recent-Users">
             <Card.Header>
-              <Card.Title as="h5">Recent Booth Application</Card.Title>
+              <Card.Title as="h5">Pending Booth Application</Card.Title>
             </Card.Header>
             <Card.Body className="px-0 py-2">
               <Table responsive hover>
@@ -341,6 +428,11 @@ const OrgBoothDashboard = () => {
                           </div>
                         );
                       })}
+                    {boothAppList.length == 0 && (
+                      <div>
+                        <span className="ml-4">No Pending Application</span>
+                      </div>
+                    )}
                   </div>
                 </tbody>
               </Table>
@@ -403,15 +495,16 @@ const OrgBoothDashboard = () => {
                   <i className="fa fa-facebook text-primary f-36" />
                 </div>
                 <div className="col text-right">
-                  <h3>12,281</h3>
+                  <PieBasicChart></PieBasicChart>
+                  {/* <h3>12,281</h3>
                   <h5 className="text-c-green mb-0">
                     +7.2% <span className="text-muted">Total Likes</span>
-                  </h5>
+                  </h5> */}
                 </div>
               </div>
             </Card.Body>
-            <Card.Body>
-              <div className="row align-items-center justify-content-center card-active">
+            {/* <Card.Body> */}
+            {/* <div className="row align-items-center justify-content-center card-active">
                 <div className="col-6">
                   <h6 className="text-center m-b-10">
                     <span className="text-muted m-r-5">Target:</span>35,098
@@ -442,8 +535,8 @@ const OrgBoothDashboard = () => {
                     />
                   </div>
                 </div>
-              </div>
-            </Card.Body>
+              </div> */}
+            {/* </Card.Body> */}
           </Card>
         </Col>
         <Col md={6} xl={4}>
@@ -672,15 +765,15 @@ const OrgBoothDashboard = () => {
           </Card>
         </Col>
         <Col md={6} xl={8} className="m-b-30">
-          <Tabs defaultActiveKey="today" id="uncontrolled-tab-example">
-            <Tab eventKey="today" title="Most Popular Event">
-              {mostPopularTabContent}
+          <Tabs defaultActiveKey="daily" id="uncontrolled-tab-example">
+            <Tab eventKey="daily" title="Daily Popular Event">
+              {mostPopularDailyTabContent}
             </Tab>
-            <Tab eventKey="week" title="This Week">
-              {mostPopularTabContent}
+            <Tab eventKey="monthly" title="Monthly Popular Event">
+              {mostPopularMonthlyTabContent}
             </Tab>
-            <Tab eventKey="all" title="All">
-              {mostPopularTabContent}
+            <Tab eventKey="yearly" title="Yearly Popular Event">
+              {mostPopularYearlyTabContent}
             </Tab>
           </Tabs>
         </Col>
