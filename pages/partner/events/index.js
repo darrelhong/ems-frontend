@@ -28,7 +28,7 @@ export default function PartnerEvents() {
   } = useInfiniteQuery(
     ['events', sortBy?.sort, sortBy?.sortDir, searchTerm, filterValue, user?.id],
     ({ pageParam = 0 }) =>
-      getEventsWithKeywordandSort(
+      getEventsWithKeywordandSortFilter(
         pageParam,
         filterValue,
         sortBy?.sort,
@@ -47,7 +47,7 @@ export default function PartnerEvents() {
   // }
 
   console.log("data: ", data)
-  console.log("user: ", user)
+  // console.log("user: ", user)
   // console.log(filterValue)
   // console.log("test", queryClient.getQueryData('events'))
 
