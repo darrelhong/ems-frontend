@@ -15,6 +15,12 @@ import {
   getTotalSalesByEvent,
   getNumberOfBusinessPartnerByEvent,
   getVaildEventForBp,
+  getNumberOfAllBoothApplications,
+  getNumberOfBoothSoldByEvent,
+  getNumberOfBoothCapacityByEvent,
+  getNumberOfBoothSoldByAllEvent,
+  getNumberofAllBoothCapacity,
+  getAllEventSalesEarned,
 } from '../lib/query/analytics';
 import { getEventDetails } from '../lib/query/eventApi';
 import { getEventByOrganiserId } from '../lib/query/useEvent';
@@ -43,17 +49,8 @@ const OrgBoothDashboard = () => {
   const [eventList, setEventlist] = useState([]);
   const [eventTotalSale, setEventTotalSale] = useState(0);
   const [bpNumber, setBpNumber] = useState(0);
-
-  // var rating5;
-  // var rating4;
-  // var rating3;
-  // var rating2;
-  // var rating1;
-  var rating5Per;
-  var rating4Per;
-  var rating3Per;
-  var rating2Per;
-  var rating1Per;
+  const [boothSold, setBoothSold] = useState(0);
+  const [boothCapacity, setBoothCapacity] = useState(0);
 
   useEffect(() => {
     getEventData();
@@ -66,7 +63,8 @@ const OrgBoothDashboard = () => {
     getYearlyMostPopularEvent();
     getOverallEventRatingData();
     getOverallEventRatingCountListData();
-  }, []);
+    getRefreshEvents();
+  });
 
   const getEventData = async () => {
     await getVaildEventForBp(localStorage.getItem('userId')).then((data) => {
@@ -150,31 +148,51 @@ const OrgBoothDashboard = () => {
 
       var rating5_ = (data[5] / totalReviewNum) * 100;
       setRating5(rating5_);
-      // rating5Per = rating5 + '%';
       var rating4_ = (data[4] / totalReviewNum) * 100;
       setRating4(rating4_);
-      //   rating4Per = rating4 + '%';
       console.log(rating4);
       var rating3_ = (data[3] / totalReviewNum) * 100;
       setRating3(rating3_);
-      //rating3Per = rating3 + '%';
       var rating2_ = (data[2] / totalReviewNum) * 100;
       setRating2(rating2_);
-      //  rating2Per = rating2 + '%';
       var rating1_ = (data[1] / totalReviewNum) * 100;
       setRating1(rating1_);
-      // rating1Per = rating1 + '%';
+    });
+  };
 
-      // setProBarFiveStar(rating5);
-      // setProBarFourStar(rating4);
-      // setProBarThreeStar(rating3);
-      // setProBarTwoStar(rating2);
-      // setProBarOneStar(rating1);
-      // console.log(proBarFiveStar);
-      // console.log(proBarFourStar);
-      // console.log(proBarThreeStar);
-      // console.log(proBarTwoStar);
-      // console.log(proBarOneStar);
+  const getNumberOfAllBoothApplicationsData = async () => {
+    await getNumberOfAllBoothApplications().then((data) => {
+      setBpNumber(data);
+    });
+  };
+  const getNumberOfBoothSoldByEventData = async (id) => {
+    await getNumberOfBoothSoldByEvent(id).then((data) => {
+      setBoothSold(data);
+    });
+  };
+
+  const getNumberOfBoothCapacityByEventData = async (id) => {
+    await getNumberOfBoothCapacityByEvent(id).then((data) => {
+      setBoothCapacity(data);
+    });
+  };
+  const getNumberOfBoothSoldByAllEventData = async () => {
+    await getNumberOfBoothSoldByAllEvent().then((data) => {
+      setBoothSold(data);
+    });
+  };
+
+  const getNumberofAllBoothCapacityData = async () => {
+    await getNumberofAllBoothCapacity().then((data) => {
+      setBoothCapacity(data);
+    });
+  };
+
+  const getAllEventSalesEarnedData = async () => {
+    await getAllEventSalesEarned().then((data) => {
+      setEventTotalSale(
+        JSON.stringify(data).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+      );
     });
   };
 
@@ -194,6 +212,9 @@ const OrgBoothDashboard = () => {
   const getSelectEvent = async (id) => {
     getEventTotalSales(id);
     getNumberOfBpByEvent(id);
+    getNumberOfBoothSoldByEventData(id);
+    getNumberOfBoothCapacityByEventData(id);
+    getNumberOfBoothSoldByEventData(id);
   };
 
   const getEventTotalSales = async (id) => {
@@ -214,10 +235,10 @@ const OrgBoothDashboard = () => {
   };
 
   const getRefreshEvents = async () => {
-    // await getReviews(paraId_).then((data) => {
-    //   console.log('reviews' + reviews);
-    //   setReviews(data);
-    // });
+    getNumberOfAllBoothApplicationsData();
+    getNumberOfBoothSoldByAllEventData();
+    getNumberofAllBoothCapacityData();
+    getAllEventSalesEarnedData();
   };
 
   const handleEventChange = (e) => {
@@ -528,12 +549,31 @@ const OrgBoothDashboard = () => {
                           <div key="key">
                             <tr className="unread">
                               <td>
-                                <img
-                                  className="rounded-circle"
-                                  style={{ width: '40px' }}
-                                  src="../assets/images/avatar-1.jpg"
-                                  alt="activity-user"
-                                />
+                                {boothApplication.businessPartner.profilePic ==
+                                  null && (
+                                  <img
+                                    className="rounded-circle"
+                                    style={{ width: '40px' }}
+                                    src="
+                                    https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png
+                                    "
+                                    // src="../assets/images/avatar-3.jpg"
+                                    alt="profile-pic"
+                                  />
+                                )}
+                                {boothApplication.businessPartner.profilePic !=
+                                  null && (
+                                  <img
+                                    className="rounded-circle"
+                                    style={{ width: '40px' }}
+                                    src={
+                                      boothApplication.businessPartner
+                                        .profilePic
+                                    }
+                                    // src="../assets/images/avatar-3.jpg"
+                                    alt="profile-pic"
+                                  />
+                                )}
                               </td>
 
                               <td>
@@ -556,13 +596,13 @@ const OrgBoothDashboard = () => {
                                 </h6>
                               </td>
                               <td>
-                                {/* <a
+                                <a
                                   href={DEMO.BLANK_LINK}
                                   className="label theme-bg3 text-white f-12"
                                 >
                                   VIEW
-                                </a> */}
-                                <a
+                                </a>
+                                {/* <a
                                   href={DEMO.BLANK_LINK}
                                   className="label theme-bg text-white f-12"
                                 >
@@ -573,7 +613,7 @@ const OrgBoothDashboard = () => {
                                   className="label theme-bg2 text-white f-12"
                                 >
                                   Reject
-                                </a>
+                                </a> */}
                               </td>
                             </tr>
                           </div>
@@ -599,7 +639,7 @@ const OrgBoothDashboard = () => {
                     className="custom-select"
                     onChange={handleEventChange}
                   >
-                    <option value="all">Filter By Events</option>
+                    <option value="all">All Events</option>
                     {(eventList != null || eventList != undefined) &&
                       eventList.map((event) => {
                         if (getEventFilter(event.eid)) {
@@ -613,18 +653,18 @@ const OrgBoothDashboard = () => {
               </Row>
               <div className="row align-items-center justify-content-center">
                 <div className="col">
-                  <h5 className="m-0">Upcoming Event</h5>
+                  <h5 className="m-0">Event Details</h5>
                 </div>
                 <div className="col-auto">
-                  <label className="label theme-bg2 text-white f-14 f-w-400 float-right">
+                  {/* <label className="label theme-bg2 text-white f-14 f-w-400 float-right">
                     34%
-                  </label>
+                  </label> */}
                 </div>
               </div>
               <h2 className="mt-2 f-w-300">
-                <h6 className="text-muted mt-3 mb-0">IT Fair 2020 </h6>
+                {/* <h6 className="text-muted mt-3 mb-0">IT Fair 2020 </h6> */}
                 {bpNumber}
-                <sub className="text-muted f-14">Business Partners</sub>
+                <sub className="text-muted f-14">Paid Booth Applications</sub>
               </h2>
 
               <i className="fa fa-angellist text-c-purple f-50" />
@@ -637,7 +677,9 @@ const OrgBoothDashboard = () => {
                   <i className="feather icon-zap f-30 text-c-green" />
                 </div>
                 <div className="col">
-                  <h3 className="f-w-300">238</h3>
+                  <h3 className="f-w-300">
+                    {boothSold}/{boothCapacity}
+                  </h3>
                   <span className="d-block text-uppercase">
                     Total Booths Sold
                   </span>
@@ -650,7 +692,7 @@ const OrgBoothDashboard = () => {
                   <i className="feather icon-map-pin f-30 text-c-blue" />
                 </div>
                 <div className="col">
-                  <h3 className="f-w-300">{eventTotalSale}</h3>
+                  <h3 className="f-w-300">${eventTotalSale}</h3>
                   <span className="d-block text-uppercase">Total Sales</span>
                 </div>
               </div>
