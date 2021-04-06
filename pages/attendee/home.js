@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { Alert, Col, Container, Row, Tab, Nav } from 'react-bootstrap';
-import { useInfiniteQuery, useQueryClient } from 'react-query';
 
 import useUser from '../../lib/query/useUser';
 import AttendeeWrapper from '../../components/wrapper/AttendeeWrapper';
@@ -18,6 +17,7 @@ import {
 } from '../../lib/query/getEvents';
 import ButtonWithLoading from '../../components/custom/ButtonWithLoading';
 import HeroSliderPopularEvents from '../../components/HeroSlider/HeroSliderPopularEvents';
+import HomeEventTab from '../../components/events/HomeEventTab';
 
 export default function AttendeeHome() {
   const { data: user, status } = useUser(localStorage.getItem('userId'));
@@ -208,22 +208,7 @@ export default function AttendeeHome() {
                         <div className="mt-3">
                           <h3 className="mb-4">Events by event organisers and business partners you're following</h3>
                         </div>
-                        <Row>
-                          {eventsFollowing.map((event) => (
-                            <Col
-                              key={event.eid}
-                              sm={6}
-                              lg={4}
-                              className="mb-5 d-flex align-items-stretch"
-                            >
-                              {/* <Link href={`/partner/events/${event.eid}`}> */}
-                              <a className="w-100">
-                                <HomeEventCard event={event} />
-                              </a>
-                              {/* </Link> */}
-                            </Col>
-                          ))}
-                        </Row>
+                        <HomeEventTab events={eventsFollowing} />
                         <Row>
                           <Col className="d-flex align-items-center">
                             <ButtonWithLoading
@@ -240,22 +225,7 @@ export default function AttendeeHome() {
                         <div className="mt-3">
                           <h3 className="mb-4">Recommended events</h3>
                         </div>
-                        <Row>
-                          {eventsForYou.map((event) => (
-                            <Col
-                              key={event.eid}
-                              sm={6}
-                              lg={4}
-                              className="mb-5 d-flex align-items-stretch"
-                            >
-                              {/* <Link href={`/partner/events/${event.eid}`}> */}
-                              <a className="w-100">
-                                <HomeEventCard event={event} />
-                              </a>
-                              {/* </Link> */}
-                            </Col>
-                          ))}
-                        </Row>
+                        <HomeEventTab events={eventsForYou} />
                         <Row>
                           <Col className="d-flex align-items-center">
                             <ButtonWithLoading
@@ -272,22 +242,7 @@ export default function AttendeeHome() {
                         <div className="mt-3">
                           <h3 className="mb-4">Events this weekend</h3>
                         </div>
-                        <Row>
-                          {eventsThisWeekend.map((event) => (
-                            <Col
-                              key={event.eid}
-                              sm={6}
-                              lg={4}
-                              className="mb-5 d-flex align-items-stretch"
-                            >
-                              {/* <Link href={`/partner/events/${event.eid}`}> */}
-                              <a className="w-100">
-                                <HomeEventCard event={event} />
-                              </a>
-                              {/* </Link> */}
-                            </Col>
-                          ))}
-                        </Row>
+                        <HomeEventTab events={eventsThisWeekend} />
                         <Row>
                           <Col className="d-flex align-items-center">
                             <ButtonWithLoading
@@ -304,22 +259,7 @@ export default function AttendeeHome() {
                         <div className="mt-3">
                           <h3 className="mb-4">Events next week</h3>
                         </div>
-                        <Row>
-                          {eventsNextWeek.map((event) => (
-                            <Col
-                              key={event.eid}
-                              sm={6}
-                              lg={4}
-                              className="mb-5 d-flex align-items-stretch"
-                            >
-                              {/* <Link href={`/partner/events/${event.eid}`}> */}
-                              <a className="w-100">
-                                <HomeEventCard event={event} />
-                              </a>
-                              {/* </Link> */}
-                            </Col>
-                          ))}
-                        </Row>
+                        <HomeEventTab events={eventsNextWeek} />
                         <Row>
                           <Col className="d-flex align-items-center">
                             <ButtonWithLoading
