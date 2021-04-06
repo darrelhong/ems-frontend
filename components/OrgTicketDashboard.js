@@ -2,7 +2,10 @@ import React from 'react';
 import { Row, Col, Card, Table, Tabs, Tab } from 'react-bootstrap';
 import Aux from '../hoc/_Aux';
 import DEMO from '../store/constant';
-import { getAllPendingBoothApplication } from '../lib/query/analytics';
+import {
+  getDailySales, getMonthlySales, getYearlySales, getTotalSales, getTotalTicketNumberSales,
+  getTotalTicketNumberSalesByEvent, getTotalSalesByEvent, getTopSales, getEvents, getEvent, getDays,getDaysStartEvent
+} from '../lib/query/ticketDashboard';
 //import { getUser } from '../../lib/query/getUser';
 import { useState, useEffect } from 'react';
 import { parseISO } from 'date-fns';
@@ -12,22 +15,136 @@ import { parseISO } from 'date-fns';
 
 const OrgDashboard = () => {
   // const [user, setUser] = useState();
-  const [boothAppList, setBoothAppList] = useState([]);
 
-  // const getUserData = async () => {
-  //   await getUser(localStorage.getItem('userId')).then((data) => {
-  //     setUser(data);
-  //   });
-  // };
-  // getUserData();
+  const [dailySales, setDailySales] = useState();
+  const [monthlySales, setMonthlySales] = useState();
+  const [yearlySales, setYearlySales] = useState();
+  const [totalSales, setTotalSales] = useState();
+  const [totalTicketSales, setTotalTicketSales] = useState();
+  const [events, setEvents] = useState([]);
+  const [eventTitle, setEventTitle] = useState("Upcoming Event");
+  const [eventName, setEventName] = useState("IT Fair 2020");
+  const [days, setDays] = useState(5);
+  const [daysTitle, setDaysTitle] = useState("Days Till End of Ticket Sales");
+  const [ticketCapacity, setTicketCapacity] = useState(50);
+  const [percentage, setPercentage] = useState(20);
+  // localStorage.getItem('userId')
+
   useEffect(() => {
-    getAllPendingBoothApplis();
-  });
-  const getAllPendingBoothApplis = async () => {
-    await getAllPendingBoothApplication().then((data) => {
-      setBoothAppList(data);
+    getDailyTicketSales();
+    getMonthlyTicketSales();
+    getYearlyTicketSales();
+    getTotalTicketSales();
+    getTotalTicketNumberOfSales();
+    getValidEvents();
+
+  }, []);
+
+  const getDailyTicketSales = async () => {
+    await getDailySales().then((data) => {
+      setDailySales(JSON.stringify(data).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
     });
   };
+
+  const getMonthlyTicketSales = async () => {
+    await getMonthlySales().then((data) => {
+      setMonthlySales(JSON.stringify(data).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+    });
+  };
+
+  const getYearlyTicketSales = async () => {
+    await getYearlySales().then((data) => {
+      setYearlySales(JSON.stringify(data).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+    });
+  };
+
+  const getTotalTicketSales = async () => {
+    await getTotalSales().then((data) => {
+      setTotalSales(JSON.stringify(data).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+    });
+  };
+
+  const getTotalTicketNumberOfSales = async () => {
+    await getTotalTicketNumberSales().then((data) => {
+      setTotalTicketSales(data);
+    });
+  };
+
+  const getValidEvents = async () => {
+    await getEvents(localStorage.getItem('userId')).then((data) => {
+      setEvents(data);
+    });
+  };
+
+  
+
+  const handleChange = (e) => {
+    if (e.target.value == 'all') {
+      getRefreshAll();
+    } else {
+      getFilterEvent(e.target.value);
+    }
+  };
+
+  const getRefreshAll = async (eventId) => {
+    setEventTitle("Upcoming Event");
+    setEventName("IT Fair 2020");
+    setDays(5);
+    setTicketCapacity(50);
+    const getTotalTicketSales = async () => {
+      await getTotalSales().then((data) => {
+        setTotalSales(JSON.stringify(data).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+      });
+    };
+
+    const getTotalTicketNumberOfSales = async () => {
+      await getTotalTicketNumberSales().then((data) => {
+        setTotalTicketSales(data);
+      });
+    };
+  }
+
+  const getPastEventDay = async(eventId)=> {
+   
+    await getDaysStartEvent(eventId).then((dataNext) => {
+      
+      if(dataNext < 0){
+      setDays("");
+      setDaysTitle("Event is over.")
+    }else{
+      setDays(parseInt(dataNext));
+      setDaysTitle("Days Till Start of Event")
+    }
+    });
+    
+  }
+
+  const getFilterEvent = async (eventId) => {
+    setEventTitle("Filtered Event");
+    await getTotalTicketNumberSalesByEvent(eventId).then((data) => {
+      setTotalTicketSales(data);
+    });
+    await getTotalSalesByEvent(eventId).then((data) => {
+      setTotalSales(JSON.stringify(data).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+    });
+    await getEvent(eventId).then((data) => {
+      setEventName(data?.name);
+      setTicketCapacity(data?.ticketCapacity);
+      setPercentage(Math.round(totalTicketSales/data?.ticketCapacity*100));
+    });
+ 
+    await getDays(eventId).then((data) => {
+      
+      if(data < 0) {
+        getPastEventDay(eventId);
+      }else{
+        setDays(parseInt(data));
+      setDaysTitle("Days Till End of Ticket Sales");
+      }
+    });
+
+  }
+
 
   const tabContent = (
     <Aux>
@@ -158,16 +275,16 @@ const OrgDashboard = () => {
               <div className="row d-flex align-items-center">
                 <div className="col-9">
                   <h3 className="f-w-300 d-flex align-items-center m-b-0">
-                    <i className="feather icon-arrow-up text-c-green f-30 m-r-5" />{' '}
-                    $249.95
+                    {/* <i className="feather icon-arrow-up text-c-green f-30 m-r-5" />{' '} */}
+                    ${dailySales}
                   </h3>
                 </div>
 
-                <div className="col-3 text-right">
+                {/* <div className="col-3 text-right">
                   <p className="m-b-0">50%</p>
-                </div>
+                </div> */}
               </div>
-              <div className="progress m-t-30" style={{ height: '7px' }}>
+              {/* <div className="progress m-t-30" style={{ height: '7px' }}>
                 <div
                   className="progress-bar progress-c-theme"
                   role="progressbar"
@@ -176,7 +293,7 @@ const OrgDashboard = () => {
                   aria-valuemin="0"
                   aria-valuemax="100"
                 />
-              </div>
+              </div> */}
             </Card.Body>
           </Card>
         </Col>
@@ -187,16 +304,16 @@ const OrgDashboard = () => {
               <div className="row d-flex align-items-center">
                 <div className="col-9">
                   <h3 className="f-w-300 d-flex align-items-center m-b-0">
-                    <i className="feather icon-arrow-down text-c-red f-30 m-r-5" />{' '}
-                    $2.942.32
+                    {/* <i className="feather icon-arrow-down text-c-red f-30 m-r-5" />{' '} */}
+                    ${monthlySales}
                   </h3>
                 </div>
 
-                <div className="col-3 text-right">
+                {/* <div className="col-3 text-right">
                   <p className="m-b-0">36%</p>
-                </div>
+                </div> */}
               </div>
-              <div className="progress m-t-30" style={{ height: '7px' }}>
+              {/* <div className="progress m-t-30" style={{ height: '7px' }}>
                 <div
                   className="progress-bar progress-c-theme2"
                   role="progressbar"
@@ -205,7 +322,7 @@ const OrgDashboard = () => {
                   aria-valuemin="0"
                   aria-valuemax="100"
                 />
-              </div>
+              </div> */}
             </Card.Body>
           </Card>
         </Col>
@@ -216,16 +333,16 @@ const OrgDashboard = () => {
               <div className="row d-flex align-items-center">
                 <div className="col-9">
                   <h3 className="f-w-300 d-flex align-items-center m-b-0">
-                    <i className="feather icon-arrow-up text-c-green f-30 m-r-5" />{' '}
-                    $8.638.32
+                    {/* <i className="feather icon-arrow-up text-c-green f-30 m-r-5" />{' '} */}
+                    ${yearlySales}
                   </h3>
                 </div>
 
-                <div className="col-3 text-right">
+                {/* <div className="col-3 text-right">
                   <p className="m-b-0">70%</p>
-                </div>
+                </div> */}
               </div>
-              <div className="progress m-t-30" style={{ height: '7px' }}>
+              {/* <div className="progress m-t-30" style={{ height: '7px' }}>
                 <div
                   className="progress-bar progress-c-theme"
                   role="progressbar"
@@ -234,103 +351,67 @@ const OrgDashboard = () => {
                   aria-valuemin="0"
                   aria-valuemax="100"
                 />
-              </div>
+              </div> */}
             </Card.Body>
           </Card>
         </Col>
         <Col md={6} xl={8}>
-          <Card className="Recent-Users">
-            <Card.Header>
-              <Card.Title as="h5">Recent Booth Application</Card.Title>
-            </Card.Header>
-            <Card.Body className="px-0 py-2">
-              <Table responsive hover>
-                <tbody>
-                  <div
-                    style={{
-                      height: '353px',
-                      overflow: 'auto',
-                    }}
-                  >
-                    {boothAppList.length > 0 &&
-                      boothAppList.map((boothApplication, key) => {
-                        return (
-                          <div key="key">
-                            <tr className="unread">
-                              <td>
-                                <img
-                                  className="rounded-circle"
-                                  style={{ width: '40px' }}
-                                  src="../assets/images/avatar-1.jpg"
-                                  alt="activity-user"
-                                />
-                              </td>
 
-                              <td>
-                                <h6 className="mb-1">
-                                  {boothApplication.businessPartner.name}
-                                </h6>
-                                <p className="m-0">
-                                  {boothApplication.event.name}
-                                </p>
-                              </td>
-                              <td>
-                                <h6 className="text-muted">
-                                  <i className="fa fa-circle text-c-green f-10 m-r-15" />
-                                  <span>
-                                    {new Date(
-                                      boothApplication.applicationDate
-                                    ).toLocaleDateString()}
-                                  </span>
-                                  {/* {boothApplication.applicationDate} */}
-                                </h6>
-                              </td>
-                              <td>
-                                <a
-                                  href={DEMO.BLANK_LINK}
-                                  className="label theme-bg3 text-white f-12"
-                                >
-                                  VIEW
-                                </a>
-                                <a
-                                  href={DEMO.BLANK_LINK}
-                                  className="label theme-bg text-white f-12"
-                                >
-                                  Approve
-                                </a>
-                                <a
-                                  href={DEMO.BLANK_LINK}
-                                  className="label theme-bg2 text-white f-12"
-                                >
-                                  Reject
-                                </a>
-                              </td>
-                            </tr>
-                          </div>
-                        );
-                      })}
-                  </div>
-                </tbody>
-              </Table>
-            </Card.Body>
-          </Card>
+          <Tabs defaultActiveKey="today" id="uncontrolled-tab-example">
+            <Tab eventKey="today" title="Top Ticket Sales">
+              {tabContent}
+            </Tab>
+            <Tab eventKey="week" title="Current Ticket Sales">
+              {tabContent}
+            </Tab>
+            {/* <Tab eventKey="all" title="All">
+              {tabContent}
+            </Tab> */}
+          </Tabs>
+
+
         </Col>
+
+
+
         <Col md={6} xl={4}>
+        <Card className="card-event">
+          <select
+            className="custom-select"
+            onChange={handleChange}
+          >
+            <option value="all">Filter By Events</option>
+            {(events != null ||
+              events != undefined) &&
+              events.map((event) => {
+                return (
+                  <option value={event.eid}>
+                    {event.name}
+                  </option>
+                );
+
+              })}
+          </select>
+          </Card>
+          {/* <br></br> */}
           <Card className="card-event">
             <Card.Body>
               <div className="row align-items-center justify-content-center">
                 <div className="col">
-                  <h5 className="m-0">Upcoming Event</h5>
+                  <h5 className="m-0">{eventTitle}</h5>
                 </div>
                 <div className="col-auto">
-                  <label className="label theme-bg2 text-white f-14 f-w-400 float-right">
+                  {/* <label className="label theme-bg2 text-white f-14 f-w-400 float-right">
                     34%
-                  </label>
+                  </label> */}
                 </div>
               </div>
               <h2 className="mt-2 f-w-300">
-                <h6 className="text-muted mt-3 mb-0">IT Fair 2020 </h6>
-                45<sub className="text-muted f-14">Business Partners</sub>
+                <h6 className="text-muted mt-3 mb-0">{eventName} </h6>
+                {/* 25 <sub className="text-muted f-14">Attendees </sub> */}
+                <div>
+                  {days} <sub className="text-muted f-14"> {daysTitle} </sub>
+                </div>
               </h2>
 
               <i className="fa fa-angellist text-c-purple f-50" />
@@ -343,10 +424,21 @@ const OrgDashboard = () => {
                   <i className="feather icon-zap f-30 text-c-green" />
                 </div>
                 <div className="col">
-                  <h3 className="f-w-300">235</h3>
-                  <span className="d-block text-uppercase">total ideas</span>
-                </div>
+                  <h3 className="f-w-300">{totalTicketSales} / {ticketCapacity}</h3>
+                  <span className="d-block text-uppercase">Total Tickets Sold</span>
+                 
+              </div>  
               </div>
+              <div
+                  className="progress-bar progress-c-blue"
+                  role="progressbar"
+                  style={{ width: '35%' }}
+                  aria-valuenow="35"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                />
+               
+             
             </Card.Body>
             <Card.Body>
               <div className="row d-flex align-items-center">
@@ -354,16 +446,16 @@ const OrgDashboard = () => {
                   <i className="feather icon-map-pin f-30 text-c-blue" />
                 </div>
                 <div className="col">
-                  <h3 className="f-w-300">26</h3>
+                  <h3 className="f-w-300">${totalSales}</h3>
                   <span className="d-block text-uppercase">
-                    total locations
+                    Total Sales
                   </span>
                 </div>
               </div>
             </Card.Body>
           </Card>
         </Col>
-        <Col md={6} xl={4}>
+        {/* <Col md={6} xl={4}>
           <Card className="card-social">
             <Card.Body className="border-bottom">
               <div className="row align-items-center justify-content-center">
@@ -413,8 +505,8 @@ const OrgDashboard = () => {
               </div>
             </Card.Body>
           </Card>
-        </Col>
-        <Col md={6} xl={4}>
+        </Col> */}
+        {/* <Col md={6} xl={4}>
           <Card className="card-social">
             <Card.Body className="border-bottom">
               <div className="row align-items-center justify-content-center">
@@ -651,7 +743,7 @@ const OrgDashboard = () => {
               {tabContent}
             </Tab>
           </Tabs>
-        </Col>
+        </Col> */}
       </Row>
     </Aux>
   );

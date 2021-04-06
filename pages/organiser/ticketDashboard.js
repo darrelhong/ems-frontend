@@ -14,7 +14,7 @@ export default function OrganiserDashboard() {
   );
   return (
     // whats the difference between dashboard and home
-    <OrganiserWrapper title="Dashboard">
+    <OrganiserWrapper title="Ticket Dashboard">
       <BreadcrumbOne pageTitle={'Welcome ' + user?.name}>
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
@@ -31,8 +31,9 @@ export default function OrganiserDashboard() {
           <>
             <br></br>
             <h4>Event Ticket Dashboard</h4>
+            <br></br>
             <OrgTicketDashboard></OrgTicketDashboard>
-            <PieBasicChart></PieBasicChart>
+            {/* <PieBasicChart></PieBasicChart> */}
           </>
         )}
       </Container>
