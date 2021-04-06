@@ -21,6 +21,7 @@ import {
   getNumberOfBoothSoldByAllEvent,
   getNumberofAllBoothCapacity,
   getAllEventSalesEarned,
+  getCategoryRankList,
 } from '../lib/query/analytics';
 import { getEventDetails } from '../lib/query/eventApi';
 import { getEventByOrganiserId } from '../lib/query/useEvent';
@@ -40,7 +41,6 @@ const OrgBoothDashboard = () => {
   const [yearlyMostPopular, setYearlyMostPopular] = useState([]);
   const [overallRating, setOverallRating] = useState();
   const [ratingCountList, setRatingCountList] = useState([]);
-  //const [eventOrganiser, setEventOrganiser] = useState();
   const [rating1, setRating1] = useState();
   const [rating2, setRating2] = useState();
   const [rating3, setRating3] = useState();
@@ -51,6 +51,7 @@ const OrgBoothDashboard = () => {
   const [bpNumber, setBpNumber] = useState(0);
   const [boothSold, setBoothSold] = useState(0);
   const [boothCapacity, setBoothCapacity] = useState(0);
+  const [categoryRankList, setCategoryRankList] = useState(null);
 
   useEffect(() => {
     getEventData();
@@ -64,12 +65,18 @@ const OrgBoothDashboard = () => {
     getOverallEventRatingData();
     getOverallEventRatingCountListData();
     getRefreshEvents();
-  });
+    getCategoryRankListData();
+  }, []);
 
   const getEventData = async () => {
     await getVaildEventForBp(localStorage.getItem('userId')).then((data) => {
-      console.log(data);
       setEventlist(data);
+    });
+  };
+
+  const getCategoryRankListData = async () => {
+    await getCategoryRankList().then((data) => {
+      setCategoryRankList(data);
     });
   };
 
@@ -103,7 +110,6 @@ const OrgBoothDashboard = () => {
   const getDailyMostPopularEvent = async () => {
     await getBoothDashboardDailyMostPopularEventList().then((data) => {
       setDailyMostPopular(data);
-      console.log(data);
     });
   };
 
@@ -125,8 +131,7 @@ const OrgBoothDashboard = () => {
   const getOverallEventRatingCountListData = async () => {
     await getEventRatingCountList().then((data) => {
       var totalReviewNum = 0;
-      console.log(data);
-      console.log(totalReviewNum);
+
       setRatingCountList(data);
 
       if (data[1] != undefined) {
@@ -139,7 +144,6 @@ const OrgBoothDashboard = () => {
         totalReviewNum = totalReviewNum + data[3];
       }
       if (data[4] != undefined) {
-        console.log(data[4]);
         totalReviewNum = totalReviewNum + data[4];
       }
       if (data[5] != undefined) {
@@ -150,7 +154,6 @@ const OrgBoothDashboard = () => {
       setRating5(rating5_);
       var rating4_ = (data[4] / totalReviewNum) * 100;
       setRating4(rating4_);
-      console.log(rating4);
       var rating3_ = (data[3] / totalReviewNum) * 100;
       setRating3(rating3_);
       var rating2_ = (data[2] / totalReviewNum) * 100;
@@ -200,7 +203,6 @@ const OrgBoothDashboard = () => {
     var check;
     await getEventDetails(id).then((data) => {
       if (data != undefined && data.length > 0) {
-        console.log(data.length + 'length');
         check = true;
       } else {
         check = false;
@@ -219,18 +221,15 @@ const OrgBoothDashboard = () => {
 
   const getEventTotalSales = async (id) => {
     await getTotalSalesByEvent(id).then((data) => {
-      console.log(data);
       setEventTotalSale(
         JSON.stringify(data).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
       );
-      console.log(eventTotalSale);
     });
   };
 
   const getNumberOfBpByEvent = async (id) => {
     await getNumberOfBusinessPartnerByEvent(id).then((data) => {
       setBpNumber(data);
-      console.log(bpNumber);
     });
   };
 
@@ -245,7 +244,6 @@ const OrgBoothDashboard = () => {
     if (e.target.value == 'all') {
       getRefreshEvents();
     } else {
-      console.log(e.target.value);
       getSelectEvent(e.target.value);
     }
   };
@@ -630,6 +628,7 @@ const OrgBoothDashboard = () => {
             </Card.Body>
           </Card>
         </Col>
+
         <Col md={6} xl={4}>
           <Card className="card-event">
             <Card.Body>
@@ -699,161 +698,30 @@ const OrgBoothDashboard = () => {
             </Card.Body>
           </Card>
         </Col>
-        <Col md={6} xl={4}>
+        <Col md={6} xl={6}>
           <Card className="card-social">
+            <Card.Header>
+              <Card.Title as="h5">Event Category Popularity</Card.Title>
+            </Card.Header>
             <Card.Body className="border-bottom">
-              <div className="row align-items-center justify-content-center">
-                <div className="col-auto">
-                  <i className="fa fa-facebook text-primary f-36" />
-                </div>
-                <div className="col text-right">
-                  <PieBasicChart></PieBasicChart>
-                  {/* <h3>12,281</h3>
+              <div className="row align-items-center justify-content-center m-b-20">
+                {/* <h5></h5> */}
+                {/* <div className="col text-right"> */}
+                {categoryRankList != null && (
+                  <PieBasicChart
+                    categoryRankList={categoryRankList}
+                  ></PieBasicChart>
+                )}
+                {/* <h3>12,281</h3>
                   <h5 className="text-c-green mb-0">
                     +7.2% <span className="text-muted">Total Likes</span>
                   </h5> */}
-                </div>
-              </div>
-            </Card.Body>
-            {/* <Card.Body> */}
-            {/* <div className="row align-items-center justify-content-center card-active">
-                <div className="col-6">
-                  <h6 className="text-center m-b-10">
-                    <span className="text-muted m-r-5">Target:</span>35,098
-                  </h6>
-                  <div className="progress">
-                    <div
-                      className="progress-bar progress-c-theme"
-                      role="progressbar"
-                      style={{ width: '60%', height: '6px' }}
-                      aria-valuenow="60"
-                      aria-valuemin="0"
-                      aria-valuemax="100"
-                    />
-                  </div>
-                </div>
-                <div className="col-6">
-                  <h6 className="text-center  m-b-10">
-                    <span className="text-muted m-r-5">Duration:</span>350
-                  </h6>
-                  <div className="progress">
-                    <div
-                      className="progress-bar progress-c-theme2"
-                      role="progressbar"
-                      style={{ width: '45%', height: '6px' }}
-                      aria-valuenow="45"
-                      aria-valuemin="0"
-                      aria-valuemax="100"
-                    />
-                  </div>
-                </div>
-              </div> */}
-            {/* </Card.Body> */}
-          </Card>
-        </Col>
-        <Col md={6} xl={4}>
-          <Card className="card-social">
-            <Card.Body className="border-bottom">
-              <div className="row align-items-center justify-content-center">
-                <div className="col-auto">
-                  <i className="fa fa-twitter text-c-blue f-36" />
-                </div>
-                <div className="col text-right">
-                  <h3>11,200</h3>
-                  <h5 className="text-c-purple mb-0">
-                    +6.2% <span className="text-muted">Total Likes</span>
-                  </h5>
-                </div>
-              </div>
-            </Card.Body>
-            <Card.Body>
-              <div className="row align-items-center justify-content-center card-active">
-                <div className="col-6">
-                  <h6 className="text-center m-b-10">
-                    <span className="text-muted m-r-5">Target:</span>34,185
-                  </h6>
-                  <div className="progress">
-                    <div
-                      className="progress-bar progress-c-green"
-                      role="progressbar"
-                      style={{ width: '40%', height: '6px' }}
-                      aria-valuenow="40"
-                      aria-valuemin="0"
-                      aria-valuemax="100"
-                    />
-                  </div>
-                </div>
-                <div className="col-6">
-                  <h6 className="text-center  m-b-10">
-                    <span className="text-muted m-r-5">Duration:</span>800
-                  </h6>
-                  <div className="progress">
-                    <div
-                      className="progress-bar progress-c-blue"
-                      role="progressbar"
-                      style={{ width: '70%', height: '6px' }}
-                      aria-valuenow="70"
-                      aria-valuemin="0"
-                      aria-valuemax="100"
-                    />
-                  </div>
-                </div>
+                {/* </div> */}
               </div>
             </Card.Body>
           </Card>
         </Col>
-        <Col xl={4}>
-          <Card className="card-social">
-            <Card.Body className="border-bottom">
-              <div className="row align-items-center justify-content-center">
-                <div className="col-auto">
-                  <i className="fa fa-google-plus text-c-red f-36" />
-                </div>
-                <div className="col text-right">
-                  <h3>10,500</h3>
-                  <h5 className="text-c-blue mb-0">
-                    +5.9% <span className="text-muted">Total Likes</span>
-                  </h5>
-                </div>
-              </div>
-            </Card.Body>
-            <Card.Body>
-              <div className="row align-items-center justify-content-center card-active">
-                <div className="col-6">
-                  <h6 className="text-center m-b-10">
-                    <span className="text-muted m-r-5">Target:</span>25,998
-                  </h6>
-                  <div className="progress">
-                    <div
-                      className="progress-bar progress-c-theme"
-                      role="progressbar"
-                      style={{ width: '80%', height: '6px' }}
-                      aria-valuenow="80"
-                      aria-valuemin="0"
-                      aria-valuemax="100"
-                    />
-                  </div>
-                </div>
-                <div className="col-6">
-                  <h6 className="text-center  m-b-10">
-                    <span className="text-muted m-r-5">Duration:</span>900
-                  </h6>
-                  <div className="progress">
-                    <div
-                      className="progress-bar progress-c-theme2"
-                      role="progressbar"
-                      style={{ width: '50%', height: '6px' }}
-                      aria-valuenow="50"
-                      aria-valuemin="0"
-                      aria-valuemax="100"
-                    />
-                  </div>
-                </div>
-              </div>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col md={6} xl={4}>
+        <Col md={6} xl={6}>
           <Card>
             <Card.Header>
               <Card.Title as="h5">Event Rating</Card.Title>
@@ -991,7 +859,44 @@ const OrgBoothDashboard = () => {
             </Card.Body>
           </Card>
         </Col>
-        <Col md={6} xl={8} className="m-b-30">
+        {/* <Card.Body> */}
+        {/* <div className="row align-items-center justify-content-center card-active">
+                <div className="col-6">
+                  <h6 className="text-center m-b-10">
+                    <span className="text-muted m-r-5">Target:</span>35,098
+                  </h6>
+                  <div className="progress">
+                    <div
+                      className="progress-bar progress-c-theme"
+                      role="progressbar"
+                      style={{ width: '60%', height: '6px' }}
+                      aria-valuenow="60"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                    />
+                  </div>
+                </div>
+                <div className="col-6">
+                  <h6 className="text-center  m-b-10">
+                    <span className="text-muted m-r-5">Duration:</span>350
+                  </h6>
+                  <div className="progress">
+                    <div
+                      className="progress-bar progress-c-theme2"
+                      role="progressbar"
+                      style={{ width: '45%', height: '6px' }}
+                      aria-valuenow="45"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                    />
+                  </div>
+                </div>
+              </div> */}
+        {/* </Card.Body> */}
+        {/* </Card>
+        </Col> */}
+        <Col md={12} xl={12}>
+          {/* <Col md={6} xl={8} className="m-b-30"> */}
           <Tabs defaultActiveKey="daily" id="uncontrolled-tab-example">
             <Tab eventKey="daily" title="Daily Popular Event">
               {mostPopularDailyTabContent}
@@ -1003,7 +908,210 @@ const OrgBoothDashboard = () => {
               {mostPopularYearlyTabContent}
             </Tab>
           </Tabs>
+          {/* </Col> */}
+          {/* <Card className="card-social">
+            <Card.Body className="border-bottom">
+              <div className="row align-items-center justify-content-center">
+                <div className="col-auto">
+                  <i className="fa fa-twitter text-c-blue f-36" />
+                </div> */}
+          {/* <div className="col text-right">
+                  <h3>11,200</h3>
+                  <h5 className="text-c-purple mb-0">
+                    +6.2% <span className="text-muted">Total Likes</span>
+                  </h5>
+                </div> */}
+          {/* </div>
+            </Card.Body>
+            <Card.Body>
+              <div className="row align-items-center justify-content-center card-active">
+                <div className="col-6">
+                  <h6 className="text-center m-b-10">
+                    <span className="text-muted m-r-5">Target:</span>34,185
+                  </h6>
+                  <div className="progress">
+                    <div
+                      className="progress-bar progress-c-green"
+                      role="progressbar"
+                      style={{ width: '40%', height: '6px' }}
+                      aria-valuenow="40"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                    />
+                  </div>
+                </div>
+                <div className="col-6">
+                  <h6 className="text-center  m-b-10">
+                    <span className="text-muted m-r-5">Duration:</span>800
+                  </h6>
+                  <div className="progress">
+                    <div
+                      className="progress-bar progress-c-blue"
+                      role="progressbar"
+                      style={{ width: '70%', height: '6px' }}
+                      aria-valuenow="70"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                    />
+                  </div>
+                </div>
+              </div>
+            </Card.Body>
+          </Card> */}
         </Col>
+
+        {/* <Col xl={4}></Col> */}
+        {/* <Col md={6} xl={4}>
+          <Card>
+            <Card.Header>
+              <Card.Title as="h5">Event Rating</Card.Title>
+            </Card.Header>
+            <Card.Body>
+              <div className="row align-items-center justify-content-center m-b-20">
+                <div className="col-6">
+                  <h5 className="f-w-300 d-flex align-items-center float-left m-0">
+                    Overall Rating{' '}
+                    <i className="fa fa-star f-10 m-l-10 text-c-yellow" />
+                  </h5>
+                </div>
+                <div className="col-6">
+                  <h3 className="d-flex  align-items-center float-right m-0">
+                    {overallRating}
+                    <i className="fa fa-caret-up text-c-green f-22 m-l-10" />
+                  </h3>
+                </div>
+              </div>
+              <div className="row" key="key">
+                <div className="col-xl-12">
+                  <h6 className="align-items-center float-left">
+                    <i className="fa fa-star f-10 m-r-10 text-c-yellow" />5
+                  </h6>
+                  <h6 className="align-items-center float-right">
+                    {ratingCountList[5] != undefined && ratingCountList[5]}
+                    {ratingCountList[5] == undefined && 0}
+                  </h6>
+                  <div
+                    className="progress m-t-30 m-b-20"
+                    style={{ height: '6px' }}
+                  >
+                    <div
+                      className="progress-bar progress-c-theme"
+                      role="progressbar"
+                      style={{ width: rating5 + '%' }}
+                      aria-valuenow={rating5}
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                    />
+                  </div>
+                </div>
+
+                <div className="col-xl-12">
+                  <h6 className="align-items-center float-left">
+                    <i className="fa fa-star f-10 m-r-10 text-c-yellow" />4
+                  </h6>
+                  <h6 className="align-items-center float-right">
+                    {ratingCountList[4] != undefined && ratingCountList[4]}
+                    {ratingCountList[4] == undefined && 0}
+                  </h6>
+                  <div
+                    className="progress m-t-30  m-b-20"
+                    style={{ height: '6px' }}
+                  >
+                    <div
+                      className="progress-bar progress-c-theme"
+                      role="progressbar"
+                      style={{ width: rating4 + '%' }}
+                      aria-valuenow={rating4}
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                    />
+                  </div>
+                </div>
+
+                <div className="col-xl-12">
+                  <h6 className="align-items-center float-left">
+                    <i className="fa fa-star f-10 m-r-10 text-c-yellow" />3
+                  </h6>
+                  <h6 className="align-items-center float-right">
+                    {ratingCountList[3] != undefined && ratingCountList[3]}
+                    {ratingCountList[3] == undefined && 0}
+                  </h6>
+                  <div
+                    className="progress m-t-30  m-b-20"
+                    style={{ height: '6px' }}
+                  >
+                    <div
+                      className="progress-bar progress-c-theme"
+                      role="progressbar"
+                      style={{ width: rating3 + '%' }}
+                      aria-valuenow={rating3}
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                    />
+                  </div>
+                </div>
+
+                <div className="col-xl-12">
+                  <h6 className="align-items-center float-left">
+                    <i className="fa fa-star f-10 m-r-10 text-c-yellow" />2
+                  </h6>
+                  <h6 className="align-items-center float-right">
+                    {ratingCountList[2] != undefined && ratingCountList[2]}
+                    {ratingCountList[2] == undefined && 0}
+                  </h6>
+                  <div
+                    className="progress m-t-30  m-b-20"
+                    style={{ height: '6px' }}
+                  >
+                    <div
+                      className="progress-bar progress-c-theme"
+                      role="progressbar"
+                      style={{ width: rating2 + '%' }}
+                      aria-valuenow={rating2}
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                    />
+                  </div>
+                </div>
+                <div className="col-xl-12">
+                  <h6 className="align-items-center float-left">
+                    <i className="fa fa-star f-10 m-r-10 text-c-yellow" />1
+                  </h6>
+                  <h6 className="align-items-center float-right">
+                    {ratingCountList[1] != undefined && ratingCountList[1]}
+                    {ratingCountList[1] == undefined && 0}
+                  </h6>
+                  <div
+                    className="progress m-t-30  m-b-5"
+                    style={{ height: '6px' }}
+                  >
+                    <div
+                      className="progress-bar  progress-c-theme"
+                      role="progressbar"
+                      style={{ width: rating1 + '%' }}
+                      aria-valuenow={rating1}
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                    />
+                  </div>
+                </div>
+              </div>
+            </Card.Body>
+          </Card>
+        </Col> */}
+        {/* <Col md={6} xl={8} className="m-b-30">
+          <Tabs defaultActiveKey="daily" id="uncontrolled-tab-example">
+            <Tab eventKey="daily" title="Daily Popular Event">
+              {mostPopularDailyTabContent}
+            </Tab>
+            <Tab eventKey="monthly" title="Monthly Popular Event">
+              {mostPopularMonthlyTabContent}
+            </Tab>
+            <Tab eventKey="yearly" title="Yearly Popular Event">
+              {mostPopularYearlyTabContent}
+            </Tab>
+          </Tabs>
+        </Col> */}
       </Row>
     </Aux>
   );
