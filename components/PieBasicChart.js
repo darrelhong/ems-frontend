@@ -15,6 +15,12 @@ function getUniqueColor(n) {
     'E9ECF5',
     '993955',
     'C2E812',
+    '58508d',
+    'DC0073',
+    '008bf8',
+    'D9F0FF',
+    'EBB3A9',
+    'EEEBD0',
   ];
 
   return color[n];
@@ -34,7 +40,7 @@ const PieBasicChart = (categoryRankList) => {
     let categoryPair = {};
     categoryPair = {
       key: Object.keys(result[0][0])[i],
-      y: Object.values(result[0][0])[i].toFixed(0),
+      y: Object.values(result[0][0])[i],
       // color: '#' + ((Math.random() * 0xffffff) << 0).toString(16),
       color: '#' + getUniqueColor(i),
     };

@@ -61,11 +61,11 @@ const EventGridFiveEOProfile = ({ event, bottomSpace, sliderClass }) => {
             <div className="rating-wrap">
               <ProductRating ratingValue={event.rating} />
               <span className="rating-num">({event.rating})</span>
+              <span>
+                {' '}
+                {event.vip == true && <Badge variant="warning">VIP</Badge>}{' '}
+              </span>
             </div>
-            {/* <div className="rating-wrap">
-              {!event.isPhysical && (<Badge variant="info">Virtual</Badge>)}
-            
-            </div> */}
           </div>
         </div>
       </div>

@@ -69,7 +69,7 @@ const OrgBoothDashboard = () => {
   }, []);
 
   const getEventData = async () => {
-    await getVaildEventForBp(localStorage.getItem('userId')).then((data) => {
+    await getVaildEventForBp().then((data) => {
       setEventlist(data);
     });
   };
