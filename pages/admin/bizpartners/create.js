@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import Link from 'next/link';
 import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
@@ -6,14 +5,13 @@ import { useMutation } from 'react-query';
 import cx from 'classnames';
 import { Container } from 'react-bootstrap';
 
-import api from '../../../lib/ApiClient';
+import api from 'lib/ApiClient';
 
-import { BreadcrumbOne } from '../../../components/Breadcrumb';
-import AdminHeaderTop from '../../../components/Header/AdminHeaderTop';
-import withProtectRoute from '../../../components/ProtectRouteWrapper';
-import { FooterOne } from '../../../components/Footer';
+import { BreadcrumbOne } from 'components/Breadcrumb';
+import { FooterOne } from 'components/Footer';
+import AdminWrapper from 'components/wrapper/AdminWrapper';
 
-function CreateBusinessPartner() {
+export default function CreateBusinessPartner() {
   const { register, handleSubmit, errors, watch } = useForm();
   const password = useRef({});
   password.current = watch('password', '');
@@ -163,10 +161,6 @@ function CreateBusinessPartner() {
       </Container>
 
       <FooterOne />
-    </>
+    </AdminWrapper>
   );
 }
-
-export default withProtectRoute(CreateBusinessPartner, {
-  redirectTo: '/admin/login',
-});

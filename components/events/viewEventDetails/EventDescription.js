@@ -21,6 +21,8 @@ import ProductRating from '../../Product/ProductRating';
 import Link from 'next/link';
 import { Modal, Button, Form, Alert } from 'react-bootstrap';
 import HidePopover from '../../Event/HidePopover';
+import DeleteModal from '../../Event/DeleteModal';
+import { Badge } from 'react-bootstrap';
 import api from '../../../lib/ApiClient';
 
 const EventDescription = ({
@@ -34,15 +36,19 @@ const EventDescription = ({
   handleDelete,
   createToast
 }) => {
-  
+
   const [broadcastModalShow, setBroadcastModalShow] = useState(false);
   const closeBroadcastModal = () => setBroadcastModalShow(false);
   const openBroadcastModal = () => setBroadcastModalShow(true);
 
+  const testCategories = ['Computers', 'Legal & Financial', 'Automotive', 'Computers', 'Legal & Financial', 'Automotive', 'Computers', 'Legal & Financial', 'Automotive']
+  const [deleteModalShow, setDeleteModalShow] = useState(false);
+  const closeModal = () => setDeleteModalShow(false);
+  const openModal = () => setDeleteModalShow(true);
   const [confirmBroadcastModalShow, setConfirmBroadcastModalShow] = useState(false);
   const closeConfirmBroadcastModal = () => setConfirmBroadcastModalShow(false);
   const openConfirmBroadcastModal = () => setConfirmBroadcastModalShow(true);
-  
+
   const [showRecipientError, setRecipientError] = useState(false);
   const [showBroadcastError, setBroadcastError] = useState(false);
   const [showBroadcastSuccess, setBroadcastSuccess] = useState(false);
@@ -65,7 +71,8 @@ const EventDescription = ({
     } else if (event.eventStatus == 'DRAFT') {
       return (
         <button
-          onClick={() => handleDelete(event)}
+          onClick={() => openModal()}
+          // onClick={() => handleDelete(event)}
           className="btn btn-fill-out btn-addtocart space-ml--10"
           style={{ marginLeft: 'auto', marginRight: 'auto' }}
         >
@@ -79,7 +86,8 @@ const EventDescription = ({
       //in this case we can delete
       return (
         <button
-          onClick={() => handleDelete(event)}
+          onClick={() => openModal()}
+          // onClick={() => handleDelete(event)}
           className="btn btn-fill-out btn-addtocart space-ml--10"
           style={{ marginLeft: 'auto', marginRight: 'auto' }}
         >
@@ -90,7 +98,8 @@ const EventDescription = ({
       //only can cancel, cannot delete
       return (
         <button
-          onClick={() => handleCancel(event)}
+          onClick={() => openModal()}
+          // onClick={() => handleCancel(event)}
           className="btn btn-fill-out btn-addtocart space-ml--10"
           style={{ marginLeft: 'auto', marginRight: 'auto' }}
         >
@@ -157,12 +166,25 @@ const EventDescription = ({
     }
 
     api.post('/api/organiser/broadcastEmailEnquiry', data)
-    .then(() => {
-      setBroadcastSuccess(true);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+      .then(() => {
+        setBroadcastSuccess(true);
+        clearBroadcastForm();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  function clearBroadcastForm() {
+    let broadcastTitle = document.getElementById("broadcastTitle");
+    let broadcastMessage = document.getElementById("broadcastMessage");
+    let chkBusinessPartner = document.getElementById("chkBusinessPartner");
+    let chkAttendee = document.getElementById("chkAttendee")
+
+    broadcastTitle.value = "";
+    broadcastMessage.value = "";
+    chkBusinessPartner.checked = false;
+    chkAttendee.checked = false;
   }
 
   return (
@@ -193,45 +215,14 @@ const EventDescription = ({
             </Button>
           </Modal.Footer>
         </Modal>
-        
+
         <Modal.Header closeButton>
           <Modal.Title>
-            Broadcast Message<br/>
+            Broadcast Message<br />
             <h6>{event.name}</h6>
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{display: "flex", flexDirection: "column", gap: "5px"}} >
-          <input
-            required
-            className="form-control"
-            name="broadcastTitle"
-            id="broadcastTitle"
-            placeholder="Title *"
-            style={{width: "100%"}}
-          />
-          <textarea 
-            required
-            className="form-control"
-            name="broadcastMessage"
-            id="broadcastMessage"
-            placeholder="Broadcast Message *"
-            style={{width: "100%", height: "10em"}}
-          />
-          <br/>Please select at least one *
-          <div style={{display: "flex"}}>
-            <div style={{display: "flex", width: "50%"}}>
-              <Form.Check id="chkBusinessPartner" />
-              <label htmlFor="chkBusinessPartner">
-                All Business Partners
-              </label>
-            </div>
-            <div style={{display: "flex", width: "50%"}}>
-              <Form.Check id="chkAttendee" />
-              <label htmlFor="chkAttendee">
-                All Attendees
-              </label>
-            </div>
-          </div>
+        <Modal.Body style={{ display: "flex", flexDirection: "column", gap: "5px" }} >
           <Alert
             show={showRecipientError}
             variant="danger"
@@ -256,6 +247,37 @@ const EventDescription = ({
           >
             Broadcast sent!
           </Alert>
+          <input
+            required
+            className="form-control"
+            name="broadcastTitle"
+            id="broadcastTitle"
+            placeholder="Title *"
+            style={{ width: "100%" }}
+          />
+          <textarea
+            required
+            className="form-control"
+            name="broadcastMessage"
+            id="broadcastMessage"
+            placeholder="Broadcast Message *"
+            style={{ width: "100%", height: "10em" }}
+          />
+          <br />Please select at least one *
+          <div style={{ display: "flex" }}>
+            <div style={{ display: "flex", width: "50%" }}>
+              <Form.Check id="chkBusinessPartner" />
+              <label htmlFor="chkBusinessPartner">
+                All Business Partners
+              </label>
+            </div>
+            <div style={{ display: "flex", width: "50%" }}>
+              <Form.Check id="chkAttendee" />
+              <label htmlFor="chkAttendee">
+                All Attendees
+              </label>
+            </div>
+          </div>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={closeBroadcastModal}>
@@ -269,16 +291,13 @@ const EventDescription = ({
           </Button>
         </Modal.Footer>
       </Modal>
-      
+
       {/* event name originally here */}
       {/* <h2 className="product-content__title space-mb--10">{event.name}</h2> */}
       <div className="product-content__price-rating-wrapper space-mb--10">
         <h2 className="product-content__title space-mb--10">
           {event.name ? event.name : '(Add event name)'}
         </h2>
-        {/* <div className="product-content__price d-flex-align-items-center">
-          <span className="price">{prettyStartDate}</span>
-        </div> */}
 
         {/* CONDITIONAL RENDERING CHECK WHETHER EVENT IS COMPLETED THEN SHOW THIS */}
         {/* {event.rating && event.rating == 0 ? ( */}
@@ -308,11 +327,11 @@ const EventDescription = ({
               Physical Event
             </li>
           ) : (
-              <li>
-                <IoMdWifi />
+            <li>
+              <IoMdWifi />
               Online Event
-              </li>
-            )}
+            </li>
+          )}
           <li>
             <IoMdLocate />
             Event Location:{' '}
@@ -325,29 +344,40 @@ const EventDescription = ({
               : '(Add Event Start Date)'} to{' '}
             {prettyEndDate ? prettyEndDate : '(Add Event End Date)'}
           </li>
-          {/* {event.vip && (
-            <li>
-              < IoMdStar onClick={vipToggle} />VIP event
-            </li>
-          )}
-          {event.hidden ? (
-            <li>
-              <IoMdEye title="Unhide your event from attendees!" onClick={hideToggle} />Hidden from attendees
-            </li>
-          ) : (
-              <li>
-                <IoMdEyeOff title="Temporarily hide your event from attendees" onClick={hideToggle} />Open for attendees to view!
-              </li>
-            )}
-          {event.published ? (
-            <li>
-              <IoMdCloudDownload title="Temporarily unpublish your event from business partners!" onClick={publishToggle} />Open for business partners to view!
-            </li>
-          ) : (
-              <li>
-                <IoMdCloudUpload title="Publish your event for business partners to see!" onClick={publishToggle} />Event is unpublished, business partners won't find your event
-              </li>
-            )} */}
+          <div style={{
+            marginTop: '5%'
+          }}>
+            <p>Event Categories:</p>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                overflow: 'auto',
+                flexWrap: 'wrap'
+              }}>
+              {/* {testCategories.map((category) => ( */}
+              {event?.categories && event.categories.map((category) => (
+                <text
+                  style={{
+                    borderStyle: 'solid',
+                    borderColor: '#c9c9c9',
+                    backgroundColor: '#c9c9c9',
+                    color: 'blue',
+                    borderRadius: 10,
+                    marginRight: '5%',
+                    marginTop: '2%',
+                    whiteSpace: 'initial',
+                    // display:'block'
+                  }}>{category}</text>
+                // <span>
+                //       {' '}
+                //       <Badge variant="primary">
+                //         {category}
+                //       </Badge>{' '}
+                //     </span>
+              ))}
+            </div>
+          </div>
         </ul>
       </div>
       <hr />
@@ -358,16 +388,7 @@ const EventDescription = ({
             className="product-content__product-share space-mt--15"
             style={{ display: 'flex', justifyContent: 'flex-end' }}
           >
-            {/* <span>Actions:</span> */}
             <ul className="social-icons">
-              {/* <li>
-                <a href="javascript:void(0);" onClick={() => vipToggle(event)}>
-                  {event.vip ? (
-                    <IoMdStarOutline title="Unlist event from VIP" />
-                  ) :
-                    (<IoMdStar title="Make this a VIP-only event!" />)}
-                </a>
-              </li> */}
               <li>
                 <IconButton
                   aria-label="vip"
@@ -379,27 +400,9 @@ const EventDescription = ({
               </li>
               {event.eventStatus && (
                 <li>
-                  <HidePopover event={event} createToast={createToast}/>
+                  <HidePopover event={event} createToast={createToast} />
                 </li>
               )}
-              {/* <li>
-                <a href="javascript:void(0);" onClick={() => hideToggle(event)}>
-                  {event.hidden ? (
-                    <IoMdEye title="Unhide your event from attendees!" />
-                  ) : (
-                      <IoMdEyeOff title="Temporarily hide your event from attendees" />
-                    )}
-                </a>
-              </li>
-              <li>
-                <a href="javascript:void(0);" onClick={() => publishToggle(event)}>
-                  {event.published ? (
-                    <IoMdCloudDownload title="Temporarily unpublish your event from business partners!" />
-                  ) : (
-                      <IoMdCloudUpload title="Publish your event for business partners to see!" />
-                    )}
-                </a>
-              </li> */}
               <li>
                 <Link href={`/organiser/events/create?eid=${event.eid}`}>
                   <a>
@@ -413,7 +416,7 @@ const EventDescription = ({
                   aria-label="broadcast"
                   color="secondary"
                 >
-                  <svg style={{width:"20px", height:"20px"}} viewBox="0 0 24 24">
+                  <svg style={{ width: "20px", height: "20px" }} viewBox="0 0 24 24">
                     <path fill="currentColor" d="M12,8H4A2,2 0 0,0 2,10V14A2,2 0 0,0 4,16H5V20A1,1 0 0,0 6,21H8A1,1 0 0,0 9,20V16H12L17,20V4L12,8M21.5,12C21.5,13.71 20.54,15.26 19,16V8C20.53,8.75 21.5,10.3 21.5,12Z" />
                   </svg>
                 </IconButton>
@@ -421,92 +424,9 @@ const EventDescription = ({
             </ul>
             {deleteCancelButton()}
           </div>
-
-          {/* three ugly ass buttons */}
-          {/* {event.published ?
-
-            (<button
-              onClick={publishToggle}
-              className="btn btn-fill-out btn-addtocart space-ml--10"
-            >
-              <i className="icon-basket-loaded" /> Unpublish Event
-            </button>
-          ) : (
-            <button
-              onClick={publishToggle}
-              className="btn btn-fill-out btn-addtocart space-ml--10"
-            >
-              <i className="icon-basket-loaded" /> Publish Event
-            </button>
-          )}
-
-          {event.hidden ? (
-            <button
-              onClick={hideToggle}
-              title="Unhide your event from attendees!"
-              className="btn btn-fill-out btn-addtocart space-ml--10"
-            >
-              <i className="icon-basket-loaded" /> Unhide Event
-            </button>
-          ) : (
-            <button
-              onClick={hideToggle}
-              title="Hide your event from attendees from now"
-              className="btn btn-fill-out btn-addtocart space-ml--10"
-            >
-              <i className="icon-basket-loaded" /> Hide Event
-            </button>
-          )}
-
-          {event.vip ? (
-            <button
-              onClick={vipToggle}
-              className="btn btn-fill-out btn-addtocart space-ml--10"
-            >
-              <i className="icon-basket-loaded" /> Unlist from VIP
-            </button>
-          ) : (
-              <button
-                onClick={vipToggle}
-                className="btn btn-fill-out btn-addtocart space-ml--10"
-              >
-                <i className="icon-basket-loaded" /> Make VIP
-              </button>
-            )
-          } */}
         </div>
       </Fragment>
       <hr />
-      {/* <div className="product-content__product-share space-mt--15">
-        <span>Share:</span>
-        <ul className="social-icons">
-          <li>
-            <a href="#">
-              <IoLogoFacebook />
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <IoLogoTwitter />
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <IoLogoGoogleplus />
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <IoLogoYoutube />
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <IoLogoInstagram />
-            </a>
-          </li>
-        </ul>
-      </div> */}
     </div>
   );
 };

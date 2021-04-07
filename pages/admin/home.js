@@ -1,5 +1,5 @@
-import Head from 'next/head';
 import Link from 'next/link';
+
 import { Modal, Button, Form, Card, Col, Container, Row } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import {
@@ -21,9 +21,11 @@ import 'react-notifications-component/dist/theme.css'
 
 import { store } from 'react-notifications-component';
 
+import CenterSpinner from 'components/custom/CenterSpinner';
+import AdminWrapper from 'components/wrapper/AdminWrapper';
 
 
-function AdminHome() {
+export default function AdminHome() {
   const { data: user, isSuccess, isLoading } = useUser(
     localStorage.getItem('userId')
   );
@@ -184,6 +186,7 @@ function AdminHome() {
 
       <AdminHeaderTop />
 
+
       <BreadcrumbOne pageTitle="Admin Home">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
@@ -279,7 +282,7 @@ function AdminHome() {
         </Modal.Footer>
       </Modal>
       <Container className="space-pt--30 space-pb--30">
-        {isLoading && <div className="spinner-grow" role="status" />}
+        {isLoading && <CenterSpinner />}
         {isSuccess && (
           <p>
             Your are logged in as {user?.name}.
@@ -323,7 +326,7 @@ function AdminHome() {
             <Card>
               <Card.Header>Attendee</Card.Header>
               <Card.Body>
-                <Card.Text>View Attendee</Card.Text>
+                <Card.Text>View attendees</Card.Text>
                 <Link href="/admin/attendee">
                   <button className="btn btn-fill-out btn-sm">View</button>
                 </Link>
@@ -332,10 +335,6 @@ function AdminHome() {
           </Col>
         </Row>
       </Container>
-
-      <FooterOne />
-    </>
+    </AdminWrapper>
   );
 }
-
-export default withProtectRoute(AdminHome, { redirectTo: '/admin/login' });

@@ -231,3 +231,4 @@ ImagesPane.propTypes = {
 };
 
 export default ImagesPane;
+

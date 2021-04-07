@@ -1,24 +1,22 @@
-import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 import { InfoOutlined } from '@material-ui/icons';
 import { Col, Container, Row } from 'react-bootstrap';
 
-import api from '../../../lib/ApiClient';
+import api from 'lib/ApiClient';
 
-import withProtectRoute from '../../../components/ProtectRouteWrapper';
-import AdminHeaderTop from '../../../components/Header/AdminHeaderTop';
-import { BreadcrumbOne } from '../../../components/Breadcrumb';
-import MaterialTable from '../../../lib/MaterialTable';
-import { FooterOne } from '../../../components/Footer';
+import { BreadcrumbOne } from 'components/Breadcrumb';
+import MaterialTable from 'lib/MaterialTable';
+import CenterSpinner from 'components/custom/CenterSpinner';
+import AdminWrapper from 'components/wrapper/AdminWrapper';
 
 const getAttendees = async () => {
   const { data } = await api.get('/api/attendee/all');
   return data;
 };
 
-function AdminAttendees() {
+export default function AdminAttendees() {
   const router = useRouter();
 
   const { data, isLoading } = useQuery('attendees', getAttendees);
@@ -31,13 +29,7 @@ function AdminAttendees() {
   ];
 
   return (
-    <>
-      <Head>
-        <title>Attendees</title>
-      </Head>
-
-      <AdminHeaderTop />
-
+    <AdminWrapper title="Attendees">
       <BreadcrumbOne pageTitle="Attendees">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
@@ -50,11 +42,7 @@ function AdminAttendees() {
       </BreadcrumbOne>
 
       <Container className="space-pt--r70 space-pb--r70">
-        {isLoading && (
-          <div className="spinner-grow" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
-        )}
+        {isLoading && <CenterSpinner />}
 
         {data && (
           <Row>
@@ -81,12 +69,6 @@ function AdminAttendees() {
           </Row>
         )}
       </Container>
-
-      <FooterOne />
-    </>
+    </AdminWrapper>
   );
 }
-
-export default withProtectRoute(AdminAttendees, {
-  redirectTo: '/admin/login',
-});

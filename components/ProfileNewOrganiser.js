@@ -825,6 +825,72 @@ const EventOrgProfile = ({ paraId_ }) => {
               </CardBody>
             </Card>
           </Col>
+
+       {/* {Boolean(currentUserId_ != paraId_ & currentUserRole_ != "Organiser") && ( */}
+{/* //             <Col xs={12} style={{marginTop: "30px", marginBottom: "30px"}}>
+//               <Card className="card-user">
+//                 <CardHeader className="text-center">
+//                   <h4>Have some questions?</h4>
+//                 </CardHeader>
+//                 <CardBody className="d-flex justify-content-center">
+//                   <Row className="w-100 d-flex justify-content-center">
+//                     <Col xs={12} lg={6} className="d-flex flex-column" style={{gap: "10px"}}>
+//                       <Alert */}
+{/* //                         show={showEnquiryError}
+//                         variant="danger"
+//                         onClose={() => setEnquiryError(false)}
+//                         dismissible
+//                       >
+//                         Please fill in all the required fields.
+//                       </Alert>
+//                       <Alert */}
+{/* //                         show={showEnquirySuccess}
+//                         variant="success"
+//                         onClose={() => setEnquirySuccess(false)}
+//                         dismissible
+//                       >
+//                         Success! A copy of the enquiry has been sent to your email.
+//                       </Alert>
+//                       <input */}
+{/* //                         id="enquiryTitle"
+//                         className="form-control"
+//                         placeholder="Title *"
+//                       />
+//                       <select */}
+{/* //                         className="custom-select"
+//                         id="enquiryEvent"
+//                       >
+//                         <option value="none">Event</option>
+//                         {(enquiryEventList != null || */}
+{/* //                           enquiryEventList != undefined) &&
+//                           enquiryEventList.map((event) => { */}
+{/* //                             return (
+//                               <option value={event.eid}>
+//                                 {event.name}
+//                               </option>
+//                             );
+//                           })}
+//                       </select>
+//                       <textarea */}
+{/* //                         id="enquiryMessage"
+//                         className="form-control"
+//                         placeholder="Your Enquiry *"
+//                         style={{height: "10em"}}
+//                       />
+//                       <ButtonWithLoading */}
+{/* //                         className="btn btn-fill-out"
+//                         onClick={() => sendEnquiry()}
+//                         isLoading={sendEnquiryLoading && !showEnquiryError}
+//                       >
+//                         Send Enquiry
+//                       </ButtonWithLoading>
+//                     </Col>
+//                   </Row> */}
+{/* //                 </CardBody>
+//               </Card>
+//             </Col> */}
+{/* //           )}
+// >>>>>>> main */}
         </Row>
         <br></br>
         {showEnquiry && (

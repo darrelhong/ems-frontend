@@ -1,14 +1,18 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect} from 'react';
 import Link from 'next/link';
 import { Alert, Col, Container, Row, Spinner, Modal, Button } from 'react-bootstrap';
 import { useInfiniteQuery, useQueryClient } from 'react-query';
 import debounce from 'lodash/debounce';
+import { getEventsWithKeywordandSortFilter } from 'lib/query/events';
+import { BreadcrumbOne } from 'components/Breadcrumb';
+import PartnerWrapper from 'components/wrapper/PartnerWrapper';
+import EventCard from 'components/events/partner/EventCard';
+import ButtonWithLoading from 'components/custom/ButtonWithLoading';
+import useUser from '../../../lib/query/useUser';
 
-import { BreadcrumbOne } from '../../../components/Breadcrumb';
-import PartnerWrapper from '../../../components/wrapper/PartnerWrapper';
+import CenterSpinner from 'components/custom/CenterSpinner';
+import EventSideBar from '../../../components/Event/partner/EventSideBar';
 import api from '../../../lib/ApiClient';
-import EventCard from '../../../components/events/partner/EventCard';
-import ButtonWithLoading from '../../../components/custom/ButtonWithLoading';
 import Nav from 'react-bootstrap/Nav';
 import ReactNotification from 'react-notifications-component'
 import 'react-notifications-component/dist/theme.css'
@@ -21,10 +25,14 @@ const getEvents = async (page = 0, sort, sortDir, searchTerm) => {
   return data;
 };
 
-function PartnerHome() {
+
+export default function PartnerEvents() {
+  const [sortType, setSortType] = useState('');
+  const [filterValue, setFilterValue] = useState('all');
 
   const [sortBy, setSortBy] = useState();
   const [searchTerm, setSearchTerm] = useState('');
+  const { data: user } = useUser(localStorage.getItem('userId'));
   const queryClient = useQueryClient();
   const {
     status,
@@ -33,14 +41,36 @@ function PartnerHome() {
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery(
-    ['events', sortBy?.sort, sortBy?.sortDir, searchTerm],
+    ['events', sortBy?.sort, sortBy?.sortDir, searchTerm, filterValue, user?.id],
     ({ pageParam = 0 }) =>
-      getEvents(pageParam, sortBy?.sort, sortBy?.sortDir, searchTerm),
+      getEventsWithKeywordandSortFilter(
+        pageParam,
+        filterValue,
+        sortBy?.sort,
+        sortBy?.sortDir,
+        searchTerm,
+        user.id
+      ),
     {
       getNextPageParam: (lastPage) =>
         lastPage.last ? false : lastPage.number + 1,
     }
   );
+
+  // if (!user) {
+  //   queryClient.invalidateQueries("events");
+  // }
+
+  console.log("data: ", data)
+  // console.log("user: ", user)
+  // console.log(filterValue)
+  // console.log("test", queryClient.getQueryData('events'))
+
+  // front end filtering of event
+  const getSortParams = (sortType, filterValue) => {
+    setSortType(sortType);
+    setFilterValue(filterValue);
+  }
 
   const handleChange = (e) => {
     switch (e.target.value) {
@@ -49,6 +79,9 @@ function PartnerHome() {
         break;
       case 'name-desc':
         setSortBy({ sort: 'name', sortDir: 'desc' });
+        break;
+      case 'date-asc':
+        setSortBy({ sort: 'eventStartDate', sortDir: 'asc' });
         break;
       default:
         setSortBy();
@@ -66,8 +99,9 @@ function PartnerHome() {
       'events',
       sortBy?.sort,
       sortBy?.sortDir,
-      searchTerm,
+      searchTerm
     ]);
+
 
 
 
@@ -87,60 +121,69 @@ function PartnerHome() {
           </ol>
         </BreadcrumbOne>
         <ReactNotification />
-        <Container className="my-4">
 
-          <br></br>
-          <Row>
-            <Col md={8} lg={6}>
-              <div className="input-group mb-3">
-                <input
-                  type="text"
-                  className="form-control "
-                  placeholder="Search events"
-                  onChange={handleOnSearchInput}
-                />
-                <div className="input-group-append">
-                  <button
-                    className="btn btn-border-fill btn-sm"
-                    type="button"
-                    style={{ height: 38 }}
-                    onClick={handleSearchButtonClicked}
-                  >
-                    Search
+      <Col lg={3} className="order-lg-first mt-4 pt-2 mt-lg-0 pt-lg-0">
+        <EventSideBar
+          getSortParams={getSortParams}
+          filterValue={filterValue}
+        />
+      </Col>
+
+      <Container className="my-4">
+        <br></br>
+        <Row>
+          <Col md={8} lg={6}>
+            <div className="input-group mb-3">
+              <input
+                type="text"
+                className="form-control "
+                placeholder="Search events"
+                onChange={handleOnSearchInput}
+              />
+              <div className="input-group-append">
+                <button
+                  className="btn btn-outline-primary btn-sm"
+                  type="button"
+                  style={{ height: 38 }}
+                  onClick={handleSearchButtonClicked}
+                >
+                  Search
                 </button>
                 </div>
               </div>
             </Col>
           </Row>
 
-          <Row className="mb-4">
-            <Col xs={4} sm={3}>
-              <select className="custom-select" onChange={handleChange}>
-                <option value="">Sort by</option>
-                <option value="name-asc">Name - A to Z</option>
-                <option value="name-desc">Name - Z to A</option>
-              </select>
-            </Col>
-          </Row>
-          {status === 'loading' ? (
-            <Spinner animation="grow" role="status" aria-hidden="true" />
-          ) : status === 'error' ? (
-            <Alert variant="danger">An error has occured</Alert>
-          ) : (
-            <>
-              <Row>
-                {data.pages.map((page, i) => (
-                  <Fragment key={i}>
-                    {page.content.map((event) => (
-                      <Col
-                        key={event.eid}
-                        sm={6}
-                        lg={4}
-                        className="mb-5 d-flex align-items-stretch"
-                      >
-                        {/* <Link href={`/partner/events/${event.eid}`}> */}
+
+        <Row className="mb-4">
+          <Col xs={4} sm={3}>
+            <select className="custom-select" onChange={handleChange}>
+              <option value="">Sort by</option>
+              <option value="name-asc">Name - A to Z</option>
+              <option value="name-desc">Name - Z to A</option>
+              <option value="date-asc">Most recent</option>
+            </select>
+          </Col>
+        </Row>
+        {status === 'loading' ? (
+          <CenterSpinner />
+        ) : status === 'error' ? (
+          <Alert variant="danger">An error has occured</Alert>
+        ) : (
+          <>
+            <Row>
+              {data.pages.map((page, i) => (
+                <Fragment key={i}>
+                  {page.content.map((event) => (
+                    <Col
+                      key={event.eid}
+                      sm={6}
+                      lg={4}
+                      className="mb-5 d-flex align-items-stretch"
+                    >
+                    {/* <Link href={`/partner/events/${event.eid}`}> */}
                         <a className="w-100">
-                          <EventCard event={event} />
+                          <EventCard event={event} user={user} />
                         </a>
                         {/* </Link> */}
                       </Col>
@@ -168,5 +211,3 @@ function PartnerHome() {
     </>
   );
 }
-
-export default PartnerHome;

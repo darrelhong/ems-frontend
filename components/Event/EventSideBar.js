@@ -1,10 +1,10 @@
 import React from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+// import { Container, Row, Col } from 'react-bootstrap';
 
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import IconButton from '@material-ui/core/IconButton';
+// import AddCircleIcon from '@material-ui/icons/AddCircle';
+// import IconButton from '@material-ui/core/IconButton';
 import Link from "next/link";
 
 const EventSideBar = ({ getSortParams, sortValue }) => {

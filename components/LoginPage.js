@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import Head from 'next/head';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 
@@ -24,10 +23,7 @@ export default function LoginPage({
   const { register, handleSubmit } = useForm();
 
   return (
-    <GuestWrapper>
-      <Head>
-        <title>{heading}</title>
-      </Head>
+    <GuestWrapper title={heading}>
       {/* breadcrumb */}
       <BreadcrumbOne pageTitle="Login">
         <ol className="breadcrumb justify-content-md-end">
@@ -151,8 +147,8 @@ export default function LoginPage({
 
 LoginPage.propTypes = {
   info: PropTypes.string,
-  heading: PropTypes.string,
-  loginApiUrl: PropTypes.string,
-  loginSuccessUrl: PropTypes.string,
-  registerUrl: PropTypes.string,
+  heading: PropTypes.string.isRequired,
+  loginApiUrl: PropTypes.string.isRequired,
+  loginSuccessUrl: PropTypes.string.isRequired,
+  registerUrl: PropTypes.string.isRequired,
 };

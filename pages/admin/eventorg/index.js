@@ -1,8 +1,9 @@
-import Head from 'next/head';
 import Link from 'next/link';
-import { useQuery, useQueryClient } from 'react-query';
-import MaterialTable from '../../../lib/MaterialTable';
+import { useRouter } from 'next/router';
+import { useQuery } from 'react-query';
+import MaterialTable from 'lib/MaterialTable';
 import { Card, Col, Container, Row } from 'react-bootstrap';
+
 import axios from 'axios';
 
 import {
@@ -11,23 +12,22 @@ import {
   InfoOutlined,
 } from '@material-ui/icons';
 
-import api from '../../../lib/ApiClient';
 
-import { FooterOne } from '../../../components/Footer';
-import AdminHeaderTop from '../../../components/Header/AdminHeaderTop';
-import { BreadcrumbOne } from '../../../components/Breadcrumb';
-import withProtectRoute from '../../../components/ProtectRouteWrapper';
-import { useRouter } from 'next/router';
+
+import api from 'lib/ApiClient';
+
+import { BreadcrumbOne } from 'components/Breadcrumb';
+import CenterSpinner from 'components/custom/CenterSpinner';
+import AdminWrapper from 'components/wrapper/AdminWrapper';
 
 const getEventOrganisers = async () => {
   const { data } = await api.get('/api/organiser/all');
   return data;
 };
 
-function AdminEventOrg() {
+export default function AdminEventOrg() {
   const router = useRouter();
 
-  const queryClient = useQueryClient();
   const { data, isLoading } = useQuery('eventOrganisers', getEventOrganisers);
 
   const columns = [
@@ -39,13 +39,7 @@ function AdminEventOrg() {
   ];
 
   return (
-    <>
-      <Head>
-        <title>Event Organisers</title>
-      </Head>
-
-      <AdminHeaderTop />
-
+    <AdminWrapper title="Event Organisers">
       <BreadcrumbOne pageTitle="Event Organisers">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
@@ -58,11 +52,7 @@ function AdminEventOrg() {
       </BreadcrumbOne>
 
       <Container className="space-pt--30 space-pb--30">
-        {isLoading && (
-          <div className="spinner-grow" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
-        )}
+        {isLoading && <CenterSpinner />}
         {data && (
           <Row>
             <Col>
@@ -112,6 +102,7 @@ function AdminEventOrg() {
                     },
                     disabled: !rowData.approved,
                   }),
+
                   {
                     icon: InfoOutlined,
                     tooltip: 'View event organiser',
@@ -138,12 +129,6 @@ function AdminEventOrg() {
           </Col>
         </Row>
       </Container>
-
-      <FooterOne />
-    </>
+    </AdminWrapper>
   );
 }
-
-export default withProtectRoute(AdminEventOrg, {
-  redirectTo: '/admin/login',
-});
