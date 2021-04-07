@@ -992,6 +992,7 @@ const MyAccount = () => {
                                     placeholder="Enter card number"
                                     // pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                                     // title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                                    minLength="16"
                                     maxLength="16"
                                     ref={register()}
                                     onChange={handleCardNumberInputChange}

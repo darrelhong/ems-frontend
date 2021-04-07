@@ -176,6 +176,7 @@ const MyAccount = () => {
           setFileName('Choose File');
           setLoginLoading(false);
           document.getElementById('biz-upload-custom-file').value = '';
+          getUserData();
           //the message that is return
           if (response.data['fileDownloadUri'] == 'success') {
             setShowSucessBizUpload(true);
@@ -830,6 +831,7 @@ const MyAccount = () => {
                                     // pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                                     // title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
                                     maxLength="16"
+                                    minLength="16"
                                     ref={register()}
                                     onChange={handleCardNumberInputChange}
                                     onFocus={handleCardnumberInputFocus}
