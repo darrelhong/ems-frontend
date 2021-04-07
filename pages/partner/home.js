@@ -7,6 +7,7 @@ import { BreadcrumbOne } from '../../components/Breadcrumb';
 import PartnerWrapper from '../../components/wrapper/PartnerWrapper';
 import Head from 'next/head';
 
+
 function PartnerHome() {
   const { data: user, isLoading, isSuccess } = useUser(
     localStorage.getItem('userId')

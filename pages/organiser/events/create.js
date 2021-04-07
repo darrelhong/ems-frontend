@@ -51,7 +51,7 @@ const CreateEvent = () => {
   const [vip, setVip] = useState();
   const [physical, setPhysical] = useState();
   const [hideOptions, setHideOptions] = useState('');
-  const [wantsTickets, setWantsTickets] = useState(true);
+  const [sellingTicket, setsellingTicket] = useState(true);
   const [freeTickets, setFreeTickets] = useState(false);
   const [files, setFiles] = useState();
 
@@ -81,6 +81,7 @@ const CreateEvent = () => {
       salesEndDate,
       vip,
       physical,
+      sellingTicket
     } = eventData;
 
     setValue('name', name);
@@ -93,6 +94,7 @@ const CreateEvent = () => {
     // setValue("eventStartDate","10-10-2010 11:11:00");
     setValue('eventEndDate', eventEndDate);
     setValue('boothCapacity', boothCapacity);
+    setsellingTicket(sellingTicket);
     setValue('ticketPrice', ticketPrice);
     setValue('ticketCapacity', ticketCapacity);
     setValue('saleStartDate', saleStartDate);
@@ -107,60 +109,11 @@ const CreateEvent = () => {
     setTimeout(() => removeToast(toastId), 3000);
   };
 
-  const oldSubmit = async (data) => {
-    //original method, doesnt work cos im forcing empty date strings
-    // let eventStartDate = dateConverter(data?.eventStartDate);
-    // let eventEndDate = dateConverter(data?.eventEndDate);
-    // let saleStartDate = dateConverter(data?.saleStartDate);
-    // let salesEndDate = dateConverter(data?.salesEndDate);
-
-    let eventStartDate = data.eventStartDate;
-    let eventEndDate = data.eventEndDate;
-    let saleStartDate = data.saleStartDate;
-    let salesEndDate = data.salesEndDate;
-    const eventOrganiserId = user.id;
-
-    let inputData;
-    if (eid) {
-      if (data.eventStartDate)
-        eventStartDate = htmlDateToDb(data.eventStartDate);
-      if (data.eventEndDate) eventEndDate = htmlDateToDb(data.eventEndDate);
-      if (data.saleStartDate) saleStartDate = htmlDateToDb(data.saleStartDate);
-      if (data.salesEndDate) salesEndDate = htmlDateToDb(data.salesEndDate);
-
-      //doesn't work now, leaving out old data plus not saving to original
-      //need to concat and use the updateUser method instead actually
-      inputData = {
-        ...data,
-        eventOrganiserId,
-        eid,
-        eventStartDate,
-        eventEndDate,
-        saleStartDate,
-        salesEndDate,
-      };
-    } else {
-      const formattedData = formatDates(data);
-      inputData = { ...formattedData, eventOrganiserId };
-    }
-
-    try {
-      const response = await createEvent(inputData);
-      console.log('created event details:');
-      console.log(response);
-      //probably show the created details on some page
-    } catch (e) {
-      //some popup probably
-      console.log(e);
-    }
-  };
-
   const onSubmit = async (data) => {
     let updatedData;
     const eventOrganiserId = user.id;
     let eventStatus = 'CREATED';
 
-    console.log('submitting');
     if (eid) {
       //concat data first, already have EID inside and all
       //have to update to upcoming now, instead of draft
@@ -368,7 +321,7 @@ const CreateEvent = () => {
                   activeStep={activeStep}
                   setActiveStep={setActiveStep}
                   errors={errors}
-                  wantsTickets={wantsTickets}
+                  sellingTicket={sellingTicket}
                   freeTickets={freeTickets}
                 />
                 <Col lg={9} md={8}>
@@ -380,6 +333,7 @@ const CreateEvent = () => {
                         register={register}
                         watch={watch}
                         errors={errors}
+                        eventData={eventData}
                       />
                     </Tab.Pane>
                     <Tab.Pane eventKey="ticketing">
@@ -388,9 +342,9 @@ const CreateEvent = () => {
                         setFreeTickets={setFreeTickets}
                         setValue={setValue}
                         formState={formState}
-                        wantsTickets={wantsTickets}
+                        sellingTicket={sellingTicket}
                         getValues={getValues}
-                        setWantsTickets={setWantsTickets}
+                        setsellingTicket={setsellingTicket}
                         register={register}
                         errors={errors}
                         watch={watch}
@@ -436,6 +390,7 @@ const CreateEvent = () => {
                         saveDraft={saveDraft}
                         onSubmit={onSubmit}
                         eventStatus={eventData.eventStatus}
+                        images = {eventData.images}
                       />
                     </Tab.Pane>
                   </Tab.Content>

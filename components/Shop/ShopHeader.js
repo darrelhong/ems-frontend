@@ -13,9 +13,8 @@ const ShopHeader = ({
   return (
     <div className="shop-header-area">
       <Row
-        className={`align-items-center mb-4 pb-1 ${
-          layoutClass ? layoutClass : ''
-        }`}
+        className={`align-items-center mb-4 pb-1 ${layoutClass ? layoutClass : ''
+          }`}
       >
         <Col>
           <div className="shop-header">
@@ -34,24 +33,26 @@ const ShopHeader = ({
 
             <div>
               <input
+                type="text"
+                className="form-control "
                 style={{
-                  width: '20rem',
-                  background: '#F2F1F9',
-                  border: 'none',
-                  padding: '0.5rem',
+                  width: '20rem'
                 }}
+                //   background: '#F2F1F9',
+                //   border: 'none',
+                //   padding: '0.5rem',
+                // }}
                 value={searchTerm}
                 placeholder="Search Events: "
                 onChange={(e) => setSearchTerm(e.target.value)}
               ></input>
             </div>
 
-            <div className="shop-header__right">
+            {/* <div className="shop-header__right">
               <div className="products-view">
                 <button
-                  className={`sorting-icon grid ${
-                    layout === 'grid' ? 'active' : ''
-                  }`}
+                  className={`sorting-icon grid ${layout === 'grid' ? 'active' : ''
+                    }`}
                   onClick={(e) => {
                     getLayout('grid');
                     setActiveLayout(e);
@@ -60,9 +61,8 @@ const ShopHeader = ({
                   <MdApps />
                 </button>
                 <button
-                  className={`sorting-icon list  ${
-                    layout === 'list' ? 'active' : ''
-                  }`}
+                  className={`sorting-icon list  ${layout === 'list' ? 'active' : ''
+                    }`}
                   onClick={(e) => {
                     getLayout('list');
                     setActiveLayout(e);
@@ -71,7 +71,7 @@ const ShopHeader = ({
                   <MdList />
                 </button>
               </div>
-            </div>
+            </div> */}
           </div>
         </Col>
       </Row>

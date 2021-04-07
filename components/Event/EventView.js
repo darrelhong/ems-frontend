@@ -49,7 +49,7 @@ const EventView = ({ events, layout }) => {
 
         <div className="shop-products">
             <Row className={layout}>
-                {currEvents &&
+                {currEvents.length != 0 ? (
                     currEvents.map((event) => {
                         return (
                             <EventCard
@@ -60,6 +60,14 @@ const EventView = ({ events, layout }) => {
                             />
                         );
                     })
+                ) : (
+                        <div
+                            className="product-description-tab__details"
+                            style={{ textAlign: 'center' }}
+                        >
+                            No events matching your search!
+                        </div>
+                    )
                 }
             </Row>
         </div>

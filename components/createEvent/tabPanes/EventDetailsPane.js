@@ -1,8 +1,12 @@
+import { useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import PropTypes from 'prop-types';
+import { eventCategories } from '../../../lib/util/data';
+// import CheckboxGroup from 'react-checkbox-group';
 
-const EventDetailsPane = ({ register, watch, errors }) => {
+const EventDetailsPane = ({ register, watch, errors, eventData }) => {
+  const [categories, setCategories] = useState(eventCategories);
   // const renderDateError = () => {
   //   if (
   //     watch('eventStartDate') &&
@@ -35,7 +39,7 @@ const EventDetailsPane = ({ register, watch, errors }) => {
                 name="name"
                 type="text"
                 ref={register({ required: true })}
-                // ref={register({ required: true })}
+              // ref={register({ required: true })}
               />
               {errors.name && (
                 <span role="alert" style={{ color: 'red' }}>
@@ -53,7 +57,7 @@ const EventDetailsPane = ({ register, watch, errors }) => {
                 name="descriptions"
                 maxLength="200" //can consider playing with this if needed
                 ref={register({ required: true })}
-                // ref={register({ required: true })}
+              // ref={register({ required: true })}
               />
               {errors.descriptions && (
                 <span role="alert" style={{ color: 'red' }}>
@@ -100,6 +104,23 @@ const EventDetailsPane = ({ register, watch, errors }) => {
               )}
               {/* {renderDateError()} */}
             </Col>
+            {/* {eventData.categories && (
+              <Col>
+                <CheckboxGroup
+                  name="categories"
+                  value={eventData.categories}
+                  // value={categories}
+                  onChange={setCategories}>
+                  {(Checkbox) => (
+                    eventCategories.map((category) => (
+                      <label>
+                        <Checkbox value={category} /> {category}
+                      </label>
+                    ))
+                  )}
+                </CheckboxGroup>
+              </Col>
+            )} */}
           </Row>
         </div>
       </Card.Body>

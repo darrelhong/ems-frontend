@@ -9,7 +9,7 @@ import NavigationAttendee from './elements/NavigationAttendee';
 import SearchOverlay from './elements/SearchOverlay';
 import MobileMenuAttendee from './elements/MobileMenuAttendee';
 
-const HeaderOne = ({ cartItems, navPositionClass }) => {
+const AttendeeHeader = ({ navPositionClass }) => {
   const [scroll, setScroll] = useState(0);
   const [headerHeight, setHeaderHeight] = useState(0);
   const [offCanvasSearchActive, setOffCanvasSearchActive] = useState(false);
@@ -100,7 +100,7 @@ const HeaderOne = ({ cartItems, navPositionClass }) => {
   );
 };
 
-HeaderOne.propTypes = {
+AttendeeHeader.propTypes = {
   cartItems: PropTypes.array,
   navPositionClass: PropTypes.string,
 };
@@ -111,4 +111,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(HeaderOne);
+export default connect(mapStateToProps)(AttendeeHeader);

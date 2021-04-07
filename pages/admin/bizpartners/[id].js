@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import Head from 'next/head';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 import { Alert, Col, Container, Row } from 'react-bootstrap';
@@ -7,13 +6,11 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useForm } from 'react-hook-form';
 import cx from 'classnames';
 
-import api from '../../../lib/ApiClient';
+import api from 'lib/ApiClient';
 
-import { BreadcrumbOne } from '../../../components/Breadcrumb';
-import { FooterOne } from '../../../components/Footer';
-import AdminHeaderTop from '../../../components/Header/AdminHeaderTop';
-import withProtectRoute from '../../../components/ProtectRouteWrapper';
-import ButtonWithLoading from '../../../components/custom/ButtonWithLoading';
+import { BreadcrumbOne } from 'components/Breadcrumb';
+import ButtonWithLoading from 'components/custom/ButtonWithLoading';
+import AdminWrapper from 'components/wrapper/AdminWrapper';
 
 const getBusinessPartner = async (id) => {
   const { data } = await api.get(`/api/partner/${id}`);
@@ -28,7 +25,7 @@ export async function getServerSideProps({ query }) {
   };
 }
 
-function BusinessPartnerDetails({ id }) {
+export default function BusinessPartnerDetails({ id }) {
   // data fetching
   const { data: bp, isLoading } = useQuery(['partner', id], () =>
     getBusinessPartner(id)
@@ -66,6 +63,7 @@ function BusinessPartnerDetails({ id }) {
   const [showForm, setShowForm] = useState(false);
 
   return (
+
     <>
       <Head>
         <title>Business Partner details</title>
@@ -74,6 +72,7 @@ function BusinessPartnerDetails({ id }) {
       <AdminHeaderTop />
 
       <BreadcrumbOne pageTitle="Business Partner Details">
+
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/admin/home">
@@ -183,19 +182,13 @@ function BusinessPartnerDetails({ id }) {
           </>
         )}
       </Container>
-
-      <FooterOne />
-    </>
+    </AdminWrapper>
   );
 }
 
 BusinessPartnerDetails.propTypes = {
   id: PropTypes.string,
 };
-
-export default withProtectRoute(BusinessPartnerDetails, {
-  redirectTo: '/admin/login',
-});
 
 function UpdatePartnerForm({ bp }) {
   const queryClient = useQueryClient();
