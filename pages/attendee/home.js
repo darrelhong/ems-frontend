@@ -7,7 +7,7 @@ import AttendeeWrapper from '../../components/wrapper/AttendeeWrapper';
 
 import { BreadcrumbOne } from '../../components/Breadcrumb';
 
-import useUser from 'lib/query/useUser';
+// import useUser from 'lib/query/useUser';
 
 import CenterSpinner from 'components/custom/CenterSpinner';
 

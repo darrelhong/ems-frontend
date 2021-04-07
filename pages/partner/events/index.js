@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect} from 'react';
 import Link from 'next/link';
 import { Alert, Col, Container, Row, Spinner, Modal, Button } from 'react-bootstrap';
 import { useInfiniteQuery, useQueryClient } from 'react-query';
@@ -9,10 +9,10 @@ import PartnerWrapper from 'components/wrapper/PartnerWrapper';
 import EventCard from 'components/events/partner/EventCard';
 import ButtonWithLoading from 'components/custom/ButtonWithLoading';
 import useUser from '../../../lib/query/useUser';
+
 import CenterSpinner from 'components/custom/CenterSpinner';
 import EventSideBar from '../../../components/Event/partner/EventSideBar';
 import api from '../../../lib/ApiClient';
-
 import Nav from 'react-bootstrap/Nav';
 import ReactNotification from 'react-notifications-component'
 import 'react-notifications-component/dist/theme.css'
@@ -181,7 +181,7 @@ export default function PartnerEvents() {
                       lg={4}
                       className="mb-5 d-flex align-items-stretch"
                     >
-//                       <Link href={`/partner/events/${event.eid}`}>
+                    {/* <Link href={`/partner/events/${event.eid}`}> */}
                         <a className="w-100">
                           <EventCard event={event} user={user} />
                         </a>
