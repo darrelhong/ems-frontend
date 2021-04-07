@@ -679,26 +679,21 @@ const OrgBoothDashboard = () => {
         </Col>
 
         <Col md={6} xl={4}>
+          <Row className="mb-4">
+            <Col xs={12} sm={12}>
+              <select className="custom-select" onChange={handleEventChange}>
+                <option value="all">All Events</option>
+                {(eventList != null || eventList != undefined) &&
+                  eventList.map((event) => {
+                    if (getEventFilter(event.eid)) {
+                      return <option value={event.eid}>{event.name}</option>;
+                    }
+                  })}
+              </select>
+            </Col>
+          </Row>
           <Card className="card-event">
             <Card.Body>
-              <Row className="mb-4">
-                <Col xs={12} sm={12}>
-                  <select
-                    className="custom-select"
-                    onChange={handleEventChange}
-                  >
-                    <option value="all">All Events</option>
-                    {(eventList != null || eventList != undefined) &&
-                      eventList.map((event) => {
-                        if (getEventFilter(event.eid)) {
-                          return (
-                            <option value={event.eid}>{event.name}</option>
-                          );
-                        }
-                      })}
-                  </select>
-                </Col>
-              </Row>
               <div className="row align-items-center justify-content-center">
                 <div className="col">
                   <h5 className="m-0">Event Details</h5>
