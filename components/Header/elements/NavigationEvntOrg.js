@@ -19,11 +19,22 @@ const NavigationEvntOrg = ({ positionClass }) => {
         </li>
 
         <li>
-          <Link href="/organiser/dashboard">
-            <a className="nav-link" style={{ color: '#292b2c' }}>
-              DASHBOARD
-            </a>
-          </Link>
+          <a className="nav-link" style={{ color: '#292b2c' }}>
+            DASHBOARD
+          </a>
+
+          <ul className="sub-menu sub-menu--one-column">
+            <li>
+              <Link href="/organiser/dashboard">
+                <a>Booth Application Dashboard</a>
+              </Link>
+            </li>
+            <li>
+              <Link href="/organiser/ticketDashboard">
+                <a>Event Ticket Dashboard</a>
+              </Link>
+            </li>
+          </ul>
         </li>
 
         <li>

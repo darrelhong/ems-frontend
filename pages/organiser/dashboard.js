@@ -30,7 +30,8 @@ export default function OrganiserDashboard() {
         {isSuccess && (
           <>
             <br></br>
-            <h4>Event Applications Dashboard</h4>
+            <h4>Booth Application Dashboard</h4>
+            <br></br>
             <OrgBoothDashboard></OrgBoothDashboard>
           </>
         )}
