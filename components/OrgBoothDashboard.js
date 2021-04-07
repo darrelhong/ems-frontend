@@ -52,6 +52,9 @@ const OrgBoothDashboard = () => {
   const [boothSold, setBoothSold] = useState(0);
   const [boothCapacity, setBoothCapacity] = useState(0);
   const [categoryRankList, setCategoryRankList] = useState(null);
+  const [month, setMonth] = useState();
+  const [year, setYear] = useState();
+  const [day, setDay] = useState();
 
   useEffect(() => {
     getEventData();
@@ -66,6 +69,26 @@ const OrgBoothDashboard = () => {
     getOverallEventRatingCountListData();
     getRefreshEvents();
     getCategoryRankListData();
+    var d = new Date();
+    var n = d.getMonth();
+    setYear(d.getFullYear());
+    var months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+    setMonth(months[n]);
+    var date = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+    setDay(date);
   }, []);
 
   const getEventData = async () => {
@@ -272,7 +295,7 @@ const OrgBoothDashboard = () => {
               <span className="m-0 d-inline">Event Name</span>
               <span className="float-right d-flex  align-items-center">
                 <i className="fa fa-caret-up f-22 m-r-10 text-c-green" />
-                No. of Business Partner
+                No. of Paid Booth Applications
               </span>
             </div>
           </div>
@@ -335,7 +358,7 @@ const OrgBoothDashboard = () => {
               <span className="m-0 d-inline">Event Name</span>
               <span className="float-right d-flex  align-items-center">
                 <i className="fa fa-caret-up f-22 m-r-10 text-c-green" />
-                No. of Business Partner
+                No. of Paid Booth Applications
               </span>
             </div>
           </div>
@@ -398,7 +421,7 @@ const OrgBoothDashboard = () => {
               <span className="m-0 d-inline">Event Name</span>
               <span className="float-right d-flex  align-items-center">
                 <i className="fa fa-caret-up f-22 m-r-10 text-c-green" />
-                No. of Business Partner
+                No. of Paid Booth Applications
               </span>
             </div>
           </div>
@@ -441,17 +464,19 @@ const OrgBoothDashboard = () => {
     <Aux>
       <Row>
         <Col md={6} xl={4}>
-          <Card>
+          <Card style={{ backgroundColor: '#c5bddb' }}>
             <Card.Body>
               <h6 className="mb-4">Daily Sales</h6>
               <div className="row d-flex align-items-center">
-                <div className="col-9">
+                <div className="col-6">
                   <h3 className="f-w-300 d-flex align-items-center m-b-0">
                     {/* <i className="feather icon-arrow-up text-c-green f-30 m-r-5" />{' '} */}
                     ${boothDaily}
                   </h3>
                 </div>
-
+                <div className="col-6 text-right">
+                  <p className="m-b-0">{day}</p>
+                </div>
                 {/* <div className="col-3 text-right">
                   <p className="m-b-0">50%</p>
                 </div> */}
@@ -470,17 +495,20 @@ const OrgBoothDashboard = () => {
           </Card>
         </Col>
         <Col md={6} xl={4}>
-          <Card>
+          <Card style={{ backgroundColor: '#c5d9e8' }}>
             <Card.Body>
               <h6 className="mb-4">Monthly Sales</h6>
               <div className="row d-flex align-items-center">
-                <div className="col-9">
+                <div className="col-6">
                   <h3 className="f-w-300 d-flex align-items-center m-b-0">
                     {/* <i className="feather icon-arrow-down text-c-red f-30 m-r-5" />{' '} */}
                     ${boothMonthly}
                   </h3>
                 </div>
 
+                <div className="col-6 text-right">
+                  <p className="m-b-0">{month}</p>
+                </div>
                 {/* <div className="col-3 text-right">
                   <p className="m-b-0">36%</p>
                 </div> */}
@@ -499,15 +527,18 @@ const OrgBoothDashboard = () => {
           </Card>
         </Col>
         <Col xl={4}>
-          <Card>
+          <Card style={{ backgroundColor: '#e0bcbf' }}>
             <Card.Body>
               <h6 className="mb-4">Yearly Sales</h6>
               <div className="row d-flex align-items-center">
-                <div className="col-9">
+                <div className="col-6">
                   <h3 className="f-w-300 d-flex align-items-center m-b-0">
                     {/* <i className="feather icon-arrow-up text-c-green f-30 m-r-5" />{' '} */}
                     ${boothYearly}
                   </h3>
+                </div>
+                <div className="col-6 text-right">
+                  <p className="m-b-0">{year}</p>
                 </div>
 
                 {/* <div className="col-3 text-right">
@@ -537,7 +568,7 @@ const OrgBoothDashboard = () => {
                 <tbody>
                   <div
                     style={{
-                      height: '353px',
+                      height: '380px',
                       overflow: 'auto',
                     }}
                   >
@@ -582,6 +613,8 @@ const OrgBoothDashboard = () => {
                                   {boothApplication.event.name}
                                 </p>
                               </td>
+                              <td></td>
+                              <td></td>
                               <td>
                                 <h6 className="text-muted">
                                   <i className="fa fa-circle text-c-green f-10 m-r-15" />
@@ -594,12 +627,13 @@ const OrgBoothDashboard = () => {
                                 </h6>
                               </td>
                               <td>
-                                <a
+                                {/* <a
                                   href={DEMO.BLANK_LINK}
                                   className="label theme-bg3 text-white f-12"
                                 >
                                   VIEW
-                                </a>
+                                </a> */}
+
                                 {/* <a
                                   href={DEMO.BLANK_LINK}
                                   className="label theme-bg text-white f-12"
@@ -613,6 +647,21 @@ const OrgBoothDashboard = () => {
                                   Reject
                                 </a> */}
                               </td>
+
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td>
+                                {' '}
+                                <a
+                                  href={DEMO.BLANK_LINK}
+                                  className="label theme-bg3 text-white f-12"
+                                >
+                                  VIEW
+                                </a>
+                              </td>
+                              <td></td>
+                              <td></td>
                             </tr>
                           </div>
                         );
@@ -660,7 +709,7 @@ const OrgBoothDashboard = () => {
                   </label> */}
                 </div>
               </div>
-              <h2 className="mt-2 f-w-300">
+              <h2 className="mt-2 f-w-300" style={{ color: '#7b9e83' }}>
                 {/* <h6 className="text-muted mt-3 mb-0">IT Fair 2020 </h6> */}
                 {bpNumber}
                 <sub className="text-muted f-14">Paid Booth Applications</sub>
@@ -676,7 +725,7 @@ const OrgBoothDashboard = () => {
                   <i className="feather icon-zap f-30 text-c-green" />
                 </div>
                 <div className="col">
-                  <h3 className="f-w-300">
+                  <h3 className="f-w-300" style={{ color: '#b07183' }}>
                     {boothSold}/{boothCapacity}
                   </h3>
                   <span className="d-block text-uppercase">
@@ -691,7 +740,9 @@ const OrgBoothDashboard = () => {
                   <i className="feather icon-map-pin f-30 text-c-blue" />
                 </div>
                 <div className="col">
-                  <h3 className="f-w-300">${eventTotalSale}</h3>
+                  <h3 className="f-w-300" style={{ color: '#7b9e83' }}>
+                    ${eventTotalSale}
+                  </h3>
                   <span className="d-block text-uppercase">Total Sales</span>
                 </div>
               </div>
@@ -735,7 +786,10 @@ const OrgBoothDashboard = () => {
                   </h5>
                 </div>
                 <div className="col-6">
-                  <h3 className="d-flex  align-items-center float-right m-0">
+                  <h3
+                    className="d-flex  align-items-center float-right m-0"
+                    style={{ color: '#7b9e83' }}
+                  >
                     {overallRating}
                     <i className="fa fa-caret-up text-c-green f-22 m-l-10" />
                   </h3>
