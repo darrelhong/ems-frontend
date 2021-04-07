@@ -10,7 +10,7 @@ import {
   uploadMultipleEventImage,
 } from '../../../lib/query/eventApi';
 import api from '../../../lib/ApiClient';
-
+import { BsFillTrashFill } from "react-icons/bs";
 const ImagesPane = ({
   register,
   handleSubmit,
@@ -23,7 +23,9 @@ const ImagesPane = ({
   const [fileName, setFileName] = useState();
   // const [fileUpload, setfileUpload] = useState(false);
   // const [file, setFile] = useState('uploadfile');
-
+  const [filesTest, setFilesTest] = useState([]);
+  const [fileNameTest, setFileNameTest] = useState([]);
+  const [fileSubmit, setFileSubmit] = useState([]);
 
   const dataSources = [
     {
@@ -70,14 +72,20 @@ const ImagesPane = ({
 
   const handleFileChange = async (e) => {
     setFiles(e.target.files);
-    // setFiles(e.target.files[0]);
-    // setfileUpload(true);
+    setFileSubmit(e.target.files);
+    console.log(e.target.files  + "setfiles");
+    let fileTest = [];
     let i;
     let combinedFileName = '';
+    let fileNameTests = [];
     for (i = 0; i < e.target.files.length; i++) {
       combinedFileName += e.target.files[i].name + ' , ';
+      fileTest.push(window.URL.createObjectURL(e.target.files[i]));
+      fileNameTests.push(e.target.files[i].name);
     }
+    setFilesTest(fileTest);
     setFileName(combinedFileName);
+    setFileNameTest(fileNameTests);
     // await submitFile();
   };
   const submitFile = async () => {
@@ -108,6 +116,33 @@ const ImagesPane = ({
         setShowFailedMsg(true);
       });
   };
+  function deleteFile(e) {
+    const s = filesTest.filter((url, key) => key !== e);
+    const a = fileNameTest.filter((url, key) => key !== e);
+    setFileNameTest(a);
+    setFilesTest(s);
+    let h;
+    let newFiles=[];
+    for(h=0;h <fileSubmit.length; h++){
+      if(h != e ){
+        newFiles.push(fileSubmit[h]);
+      }
+    }
+    console.log(newFiles + "newfiles");
+    setFiles(newFiles);
+    setFileSubmit(newFiles);
+    // var fileInput = document.getElementById("custom-file");
+    // console.log("files" + fileInput.files);
+    // console.log("files" + fileInput.files.length);
+    // setFiles(fileInput.files);
+
+    let i;
+    let combinedFileNameTest = '';
+    for (i = 0; i < a.length; i++) {
+      combinedFileNameTest += a[i] + ' , ';
+    }
+    setFileName(combinedFileNameTest);
+  }
 
 
   return (
@@ -118,14 +153,30 @@ const ImagesPane = ({
       <Card.Body>
         <div className="account-details-form">
           <Row>
-            <Col className="form-group" xs={10} md={6}>
-
+            <Col className="form-group" xs={10} md={12}>
+              <Row>
               {/* try to render the image each time they upload  */}
               {/* {files && images.map((image, index) => {
                 return (
                   <img src={image} />
                 )
               })} */}
+              {/* <div className="form-group multi-preview"> */}
+                {/* {filesTest!= undefined && filesTest.map((url,key) => (<><img src={url} style={{maxWidth:"30%", maxHeight:"15%"}}/>  <button type="button"className="btn btn-border-fill btn-sm" onClick={() => deleteFile(key)}>
+              <BsFillTrashFill />
+                </button></>))} */}
+                {filesTest!= undefined && filesTest.map((url,key) => (
+                // <div style={{position:"relative"}}>
+                
+                <Col md={3}>
+                  
+                  <img src={url} style={{position:"relative"}} /><button type="button" className="close" style={{right:"0px", position:"absolute", zIndex:"1"}} onClick={() => deleteFile(key)}>
+                    <span>&times;</span>
+                  </button>
+                 </Col>
+                // </div>
+                ))}</Row>
+              {/* </div> */}
             </Col>
           </Row>
           <Col className="form-group" md={12}>

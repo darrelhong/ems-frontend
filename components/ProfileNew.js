@@ -604,6 +604,7 @@ const PartnerProfile = ({ localuser }) => {
                     <Tab.Pane eventKey="Followers">
                       <br></br>
                       <ul className="list-unstyled team-members">
+                        {followers ==undefined || followers == null || followers.length <1 && (<div className="text-center justify-content-center"> There is no followers. </div>)}
                         {followers != undefined &&
                           followers.map((follower) => {
                             return (

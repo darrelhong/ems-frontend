@@ -247,7 +247,9 @@ const CreateEvent = () => {
     // console.log(uploadedImages.item(0));
     for (i = 0; i < length; i++) {
       let inputData = new FormData();
-      inputData.append('file', uploadedImages.item(i));
+      // inputData.append('file', uploadedImages.item(i));
+      inputData.append('file', uploadedImages[i]);
+
       inputData.append('eid', eventId); //temp event ID
       console.log('checking input data');
       console.log(inputData);

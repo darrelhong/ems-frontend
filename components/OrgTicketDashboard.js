@@ -2,9 +2,12 @@ import React from 'react';
 import { Row, Col, Card, Table, Tabs, Tab } from 'react-bootstrap';
 import Aux from '../hoc/_Aux';
 import DEMO from '../store/constant';
+import Link from 'next/link';
+
 import {
   getDailySales, getMonthlySales, getYearlySales, getTotalSales, getTotalTicketNumberSales,
-  getTotalTicketNumberSalesByEvent, getTotalSalesByEvent, getTopSales, getEvents, getEvent, getDays,getDaysStartEvent
+  getTotalTicketNumberSalesByEvent, getTotalSalesByEvent, getTopSales, getEvents, getEvent, getDays, getDaysStartEvent,
+  getTopSalesInfo, getTopNumberInfo, getCurrentTicketSales, getCurrentSalesInfo, getCurrentNumberInfo, getUpcomingEventTicket
 } from '../lib/query/ticketDashboard';
 //import { getUser } from '../../lib/query/getUser';
 import { useState, useEffect } from 'react';
@@ -23,23 +26,113 @@ const OrgDashboard = () => {
   const [totalTicketSales, setTotalTicketSales] = useState();
   const [events, setEvents] = useState([]);
   const [eventTitle, setEventTitle] = useState("Upcoming Event");
-  const [eventName, setEventName] = useState("IT Fair 2020");
-  const [days, setDays] = useState(5);
+  const [eventName, setEventName] = useState("");
+  const [days, setDays] = useState();
   const [daysTitle, setDaysTitle] = useState("Days Till End of Ticket Sales");
   const [ticketCapacity, setTicketCapacity] = useState(50);
   const [percentage, setPercentage] = useState(20);
+  const [topEvents, setTopEvents] = useState([]);
+  const [tabNum, setTabNum] = useState([]);
+  const [tabSales, setTabSales] = useState([]);
+  const [currentEvents, setCurrentEvents] = useState([]);
+  const [tabNumCurrent, setTabNumCurrent] = useState([]);
+  const [tabSalesCurrent, setTabSalesCurrent] = useState([]);
+  const [upcomingEvent, setUpcomingEvent] = useState();
+  const [month, setMonth] = useState();
+  const [year, setYear] = useState();
+  const [day, setDay] = useState();
+
   // localStorage.getItem('userId')
+  // const { data: topEvents} = getTopSales();
 
   useEffect(() => {
+
+
+    getTopSalesEvent();
     getDailyTicketSales();
     getMonthlyTicketSales();
     getYearlyTicketSales();
     getTotalTicketSales();
     getTotalTicketNumberOfSales();
     getValidEvents();
+    getCurrentEvents();
+    getUpcoming();
+    var d = new Date();
+    var n = d.getMonth();
+    setYear(d.getFullYear());
+    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    setMonth(months[n]);
+    var date = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+    setDay(date);
 
   }, []);
+  const getNumberOfDays = async (eventId) => {
+    await getDays(eventId).then((data) => {
 
+      if (data < 0) {
+        getPastEventDay(eventId);
+      } else {
+        setDays(parseInt(data));
+        setDaysTitle("Days Till End of Ticket Sales");
+      }
+    });
+  }
+  const getUpcoming = async () => {
+    await getUpcomingEventTicket().then((data) => {
+      console.log("upcoming" + data);
+      setUpcomingEvent(data?.eid);
+      setEventName(data?.name);
+      getNumberOfDays(data?.eid);
+
+    })
+  }
+  const getCurrentEvents = async () => {
+    await getCurrentTicketSales().then((data) => {
+      setCurrentEvents(data);
+      if (data.length > 0) {
+        getCurrentInfoSales();
+        getCurrentInfoNumber();
+      }
+    })
+  }
+
+  const getTopInfoSales = async () => {
+    await getTopSalesInfo().then((data) => {
+      setTabSales(data);
+    })
+  }
+  const getTopInfoNumber = async () => {
+    await getTopNumberInfo().then((data) => {
+      setTabNum(data);
+    })
+  }
+  const getCurrentInfoSales = async () => {
+    await getCurrentSalesInfo().then((data) => {
+      setTabSalesCurrent(data);
+    })
+  }
+  const getCurrentInfoNumber = async () => {
+    await getCurrentNumberInfo().then((data) => {
+      setTabNumCurrent(data);
+    })
+  }
+  const getTopSalesEvent = async () => {
+    await getTopSales().then((data) => {
+      console.log("topevents" + data[0].name);
+
+      setTopEvents(data);
+      if (data.length > 0) {
+        console.log("gettabinfo");
+        getTopInfoSales();
+        getTopInfoNumber();
+        console.log(tabSales + "tabsales");
+        console.log(tabNum + "tabnum");
+
+      }
+    });
+
+
+  }
   const getDailyTicketSales = async () => {
     await getDailySales().then((data) => {
       setDailySales(JSON.stringify(data).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
@@ -72,11 +165,11 @@ const OrgDashboard = () => {
 
   const getValidEvents = async () => {
     await getEvents(localStorage.getItem('userId')).then((data) => {
+      console.log(data);
       setEvents(data);
     });
   };
 
-  
 
   const handleChange = (e) => {
     if (e.target.value == 'all') {
@@ -88,35 +181,24 @@ const OrgDashboard = () => {
 
   const getRefreshAll = async (eventId) => {
     setEventTitle("Upcoming Event");
-    setEventName("IT Fair 2020");
-    setDays(5);
-    setTicketCapacity(50);
-    const getTotalTicketSales = async () => {
-      await getTotalSales().then((data) => {
-        setTotalSales(JSON.stringify(data).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
-      });
-    };
-
-    const getTotalTicketNumberOfSales = async () => {
-      await getTotalTicketNumberSales().then((data) => {
-        setTotalTicketSales(data);
-      });
-    };
+    getUpcoming();
+    getTotalTicketSales();
+    getTotalTicketNumberOfSales();
   }
 
-  const getPastEventDay = async(eventId)=> {
-   
+  const getPastEventDay = async (eventId) => {
+
     await getDaysStartEvent(eventId).then((dataNext) => {
-      
-      if(dataNext < 0){
-      setDays("");
-      setDaysTitle("Event is over.")
-    }else{
-      setDays(parseInt(dataNext));
-      setDaysTitle("Days Till Start of Event")
-    }
+
+      if (dataNext < 0) {
+        setDays("");
+        setDaysTitle("Event is over.")
+      } else {
+        setDays(parseInt(dataNext));
+        setDaysTitle("Days Till Start of Event")
+      }
     });
-    
+
   }
 
   const getFilterEvent = async (eventId) => {
@@ -130,138 +212,142 @@ const OrgDashboard = () => {
     await getEvent(eventId).then((data) => {
       setEventName(data?.name);
       setTicketCapacity(data?.ticketCapacity);
-      setPercentage(Math.round(totalTicketSales/data?.ticketCapacity*100));
+      setPercentage(Math.round(totalTicketSales / data?.ticketCapacity * 100));
+      setUpcomingEvent(data?.eid);
     });
- 
+
     await getDays(eventId).then((data) => {
-      
-      if(data < 0) {
+
+      if (data < 0) {
         getPastEventDay(eventId);
-      }else{
+      } else {
         setDays(parseInt(data));
-      setDaysTitle("Days Till End of Ticket Sales");
+        setDaysTitle("Days Till End of Ticket Sales");
       }
     });
 
   }
 
+  const tabContentCurrent = (
+    <Aux>
+      <Card>
+        <Card.Body
+          style={{
+            height: '405px',
+            overflow: 'auto',
+          }}
+        >
+          <div className="media friendlist-box align-items-center justify-content-center m-b-20">
+            <div className="m-r-10 photo-table">
+              {/* <a href={DEMO.BLANK_LINK}>
+                    <img
+                      className="rounded-circle"
+                      style={{ width: '40px' }}
+                      src="../assets/images/avatar-1.jpg"
+                      alt="activity-user"
+                    />
+                  </a> */}
+            </div>
+            <div className="media-body">
+              <h6 className="m-0 d-inline">Event Name</h6>
+              <h6 className="float-right d-flex  align-items-center">
+                <i className="fa fa-caret-up f-22 m-r-10 text-c-green" />
+                No. Of Ticket Sold / Total Sales
+              </h6>
+            </div>
+          </div>
+          {currentEvents != undefined && currentEvents != null && currentEvents.length > 0 &&
+            currentEvents.map((event, key) => {
+              // getTabTicketNum(event.eid);
+              // getTabTicketSales(event.eid);
 
+              return (
+                <div key="key">
+                  <div className="media friendlist-box align-items-center justify-content-center m-b-20">
+                    <div className="m-r-10 photo-table">
+                      {/* <a href={DEMO.BLANK_LINK}>
+                    <img
+                      className="rounded-circle"
+                      style={{ width: '40px' }}
+                      src="../assets/images/avatar-1.jpg"
+                      alt="activity-user"
+                    />
+                  </a> */}
+                    </div>
+                    <div className="media-body">
+                      <span className="m-0 d-inline">{event.name}</span>
+                      <span className="float-right d-flex  align-items-center">
+                        <i className="fa fa-caret-up f-22 m-r-10 text-c-green" />
+                        {tabNumCurrent[key]} / ${tabSalesCurrent[key]}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+        </Card.Body>
+      </Card>
+    </Aux>
+  );
   const tabContent = (
     <Aux>
-      <div className="media friendlist-box align-items-center justify-content-center m-b-20">
-        <div className="m-r-10 photo-table">
-          <a href={DEMO.BLANK_LINK}>
-            <img
-              className="rounded-circle"
-              style={{ width: '40px' }}
-              src="../assets/images/avatar-1.jpg"
-              alt="activity-user"
-            />
-          </a>
-        </div>
-        <div className="media-body">
-          <h6 className="m-0 d-inline">Silje Larsen</h6>
-          <span className="float-right d-flex  align-items-center">
-            <i className="fa fa-caret-up f-22 m-r-10 text-c-green" />
-            3784
-          </span>
-        </div>
-      </div>
-      <div className="media friendlist-box align-items-center justify-content-center m-b-20">
-        <div className="m-r-10 photo-table">
-          <a href={DEMO.BLANK_LINK}>
-            <img
-              className="rounded-circle"
-              style={{ width: '40px' }}
-              src="../assets/images/avatar-2.jpg"
-              alt="activity-user"
-            />
-          </a>
-        </div>
-        <div className="media-body">
-          <h6 className="m-0 d-inline">Julie Vad</h6>
-          <span className="float-right d-flex  align-items-center">
-            <i className="fa fa-caret-up f-22 m-r-10 text-c-green" />
-            3544
-          </span>
-        </div>
-      </div>
-      <div className="media friendlist-box align-items-center justify-content-center m-b-20">
-        <div className="m-r-10 photo-table">
-          <a href={DEMO.BLANK_LINK}>
-            <img
-              className="rounded-circle"
-              style={{ width: '40px' }}
-              src="../assets/images/avatar-3.jpg"
-              alt="activity-user"
-            />
-          </a>
-        </div>
-        <div className="media-body">
-          <h6 className="m-0 d-inline">Storm Hanse</h6>
-          <span className="float-right d-flex  align-items-center">
-            <i className="fa fa-caret-down f-22 m-r-10 text-c-red" />
-            2739
-          </span>
-        </div>
-      </div>
-      <div className="media friendlist-box align-items-center justify-content-center m-b-20">
-        <div className="m-r-10 photo-table">
-          <a href={DEMO.BLANK_LINK}>
-            <img
-              className="rounded-circle"
-              style={{ width: '40px' }}
-              src="../assets/images/avatar-1.jpg"
-              alt="activity-user"
-            />
-          </a>
-        </div>
-        <div className="media-body">
-          <h6 className="m-0 d-inline">Frida Thomse</h6>
-          <span className="float-right d-flex  align-items-center">
-            <i className="fa fa-caret-down f-22 m-r-10 text-c-red" />
-            1032
-          </span>
-        </div>
-      </div>
-      <div className="media friendlist-box align-items-center justify-content-center m-b-20">
-        <div className="m-r-10 photo-table">
-          <a href={DEMO.BLANK_LINK}>
-            <img
-              className="rounded-circle"
-              style={{ width: '40px' }}
-              src="../assets/images/avatar-2.jpg"
-              alt="activity-user"
-            />
-          </a>
-        </div>
-        <div className="media-body">
-          <h6 className="m-0 d-inline">Silje Larsen</h6>
-          <span className="float-right d-flex  align-items-center">
-            <i className="fa fa-caret-up f-22 m-r-10 text-c-green" />
-            8750
-          </span>
-        </div>
-      </div>
-      <div className="media friendlist-box align-items-center justify-content-center">
-        <div className="m-r-10 photo-table">
-          <a href={DEMO.BLANK_LINK}>
-            <img
-              className="rounded-circle"
-              style={{ width: '40px' }}
-              src="../assets/images/avatar-3.jpg"
-              alt="activity-user"
-            />
-          </a>
-        </div>
-        <div className="media-body">
-          <h6 className="m-0 d-inline">Storm Hanse</h6>
-          <span className="float-right d-flex  align-items-center">
-            <i className="fa fa-caret-down f-22 m-r-10 text-c-red" />
-            8750
-          </span>
-        </div>
-      </div>
+      <Card>
+        <Card.Body
+          style={{
+            height: '405px',
+            overflow: 'auto',
+          }}
+        >
+          <div className="media friendlist-box align-items-center justify-content-center m-b-20">
+            <div className="m-r-10 photo-table">
+              {/* <a href={DEMO.BLANK_LINK}>
+                    <img
+                      className="rounded-circle"
+                      style={{ width: '40px' }}
+                      src="../assets/images/avatar-1.jpg"
+                      alt="activity-user"
+                    />
+                  </a> */}
+            </div>
+            <div className="media-body">
+              <h6 className="m-0 d-inline" >Event Name</h6>
+              <h6 className="float-right d-flex  align-items-center">
+                <i className="fa fa-caret-up f-22 m-r-10 text-c-green" />
+                No. Of Ticket Sold / Total Sales
+              </h6>
+            </div>
+          </div>
+          {topEvents != undefined && topEvents != null && topEvents.length > 0 &&
+            topEvents.map((event, key) => {
+              // getTabTicketNum(event.eid);
+              // getTabTicketSales(event.eid);
+
+              return (
+                <div key="key">
+                  <div className="media friendlist-box align-items-center justify-content-center m-b-20">
+                    <div className="m-r-10 photo-table">
+                      {/* <a href={DEMO.BLANK_LINK}>
+                    <img
+                      className="rounded-circle"
+                      style={{ width: '40px' }}
+                      src="../assets/images/avatar-1.jpg"
+                      alt="activity-user"
+                    />
+                  </a> */}
+                    </div>
+                    <div className="media-body">
+                      <span className="m-0 d-inline" >{event.name}</span>
+                      <span className="float-right d-flex  align-items-center" >
+                        <i className="fa fa-caret-up f-22 m-r-10 text-c-green" />
+                        {tabNum[key]} / ${tabSales[key]}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+        </Card.Body>
+      </Card>
     </Aux>
   );
 
@@ -269,20 +355,20 @@ const OrgDashboard = () => {
     <Aux>
       <Row>
         <Col md={6} xl={4}>
-          <Card>
+          <Card style={{ backgroundColor: "#c5bddb" }}>
             <Card.Body>
               <h6 className="mb-4">Daily Sales</h6>
               <div className="row d-flex align-items-center">
-                <div className="col-9">
+                <div className="col-6">
                   <h3 className="f-w-300 d-flex align-items-center m-b-0">
                     {/* <i className="feather icon-arrow-up text-c-green f-30 m-r-5" />{' '} */}
                     ${dailySales}
                   </h3>
                 </div>
 
-                {/* <div className="col-3 text-right">
-                  <p className="m-b-0">50%</p>
-                </div> */}
+                <div className="col-6 text-right">
+                  <p className="m-b-0">{day}</p>
+                </div>
               </div>
               {/* <div className="progress m-t-30" style={{ height: '7px' }}>
                 <div
@@ -298,20 +384,20 @@ const OrgDashboard = () => {
           </Card>
         </Col>
         <Col md={6} xl={4}>
-          <Card>
+          <Card style={{ backgroundColor: "#c5d9e8" }}>
             <Card.Body>
               <h6 className="mb-4">Monthly Sales</h6>
               <div className="row d-flex align-items-center">
-                <div className="col-9">
+                <div className="col-6">
                   <h3 className="f-w-300 d-flex align-items-center m-b-0">
                     {/* <i className="feather icon-arrow-down text-c-red f-30 m-r-5" />{' '} */}
                     ${monthlySales}
                   </h3>
                 </div>
 
-                {/* <div className="col-3 text-right">
-                  <p className="m-b-0">36%</p>
-                </div> */}
+                <div className="col-6 text-right">
+                  <p className="m-b-0">{month}</p>
+                </div>
               </div>
               {/* <div className="progress m-t-30" style={{ height: '7px' }}>
                 <div
@@ -327,20 +413,20 @@ const OrgDashboard = () => {
           </Card>
         </Col>
         <Col xl={4}>
-          <Card>
+          <Card style={{ backgroundColor: "#e0bcbf" }} >
             <Card.Body>
               <h6 className="mb-4">Yearly Sales</h6>
               <div className="row d-flex align-items-center">
-                <div className="col-9">
+                <div className="col-6">
                   <h3 className="f-w-300 d-flex align-items-center m-b-0">
                     {/* <i className="feather icon-arrow-up text-c-green f-30 m-r-5" />{' '} */}
                     ${yearlySales}
                   </h3>
                 </div>
 
-                {/* <div className="col-3 text-right">
-                  <p className="m-b-0">70%</p>
-                </div> */}
+                <div className="col-6 text-right">
+                  <p className="m-b-0">{year}</p>
+                </div>
               </div>
               {/* <div className="progress m-t-30" style={{ height: '7px' }}>
                 <div
@@ -357,12 +443,12 @@ const OrgDashboard = () => {
         </Col>
         <Col md={6} xl={8}>
 
-          <Tabs defaultActiveKey="today" id="uncontrolled-tab-example">
+          <Tabs defaultActiveKey="today" id="uncontrolled-tab-example" >
             <Tab eventKey="today" title="Top Ticket Sales">
               {tabContent}
             </Tab>
             <Tab eventKey="week" title="Current Ticket Sales">
-              {tabContent}
+              {tabContentCurrent}
             </Tab>
             {/* <Tab eventKey="all" title="All">
               {tabContent}
@@ -375,23 +461,23 @@ const OrgDashboard = () => {
 
 
         <Col md={6} xl={4}>
-        <Card className="card-event">
-          <select
-            className="custom-select"
-            onChange={handleChange}
-          >
-            <option value="all">Filter By Events</option>
-            {(events != null ||
-              events != undefined) &&
-              events.map((event) => {
-                return (
-                  <option value={event.eid}>
-                    {event.name}
-                  </option>
-                );
+          <Card className="card-event">
+            <select
+              className="custom-select"
+              onChange={handleChange}
+            >
+              <option value="all">Filter By Events</option>
+              {(events != null ||
+                events != undefined) &&
+                events.map((event) => {
+                  return (
+                    <option value={event.eid}>
+                      {event.name}
+                    </option>
+                  );
 
-              })}
-          </select>
+                })}
+            </select>
           </Card>
           {/* <br></br> */}
           <Card className="card-event">
@@ -406,14 +492,29 @@ const OrgDashboard = () => {
                   </label> */}
                 </div>
               </div>
-              <h2 className="mt-2 f-w-300">
-                <h6 className="text-muted mt-3 mb-0">{eventName} </h6>
-                {/* 25 <sub className="text-muted f-14">Attendees </sub> */}
-                <div>
-                  {days} <sub className="text-muted f-14"> {daysTitle} </sub>
-                </div>
-              </h2>
+              {/* <div className="mt-2"> */}
+              <div>
+                {/* {upcomingEvent != undefined && (<Link href={`/organiser/events/${upcomingEvent}`}> <h5 className="mt-3 mb-0 " style={{ color : "#9e9ba8"}}>{eventName} </h5> </Link>)} */}
 
+                <h5 className="mt-3 mb-0 " style={{ color: "#9e9ba8" }}>{eventName} </h5>
+                <br></br>
+                <div className="row d-flex align-items-center">
+                  <div className="col-3 text-center">
+                    <h3 className="f-w-300" style={{ color: "#b07183" }}>{days} </h3>
+                  </div>
+                  <div className="col-9 text-left">
+                    <span className="d-block text-uppercase">
+                      {daysTitle}
+                    </span>
+                  </div>
+                </div>
+                {/* <h3 className="f-w-300" style={{ color : "#b07183"}}>{days} </h3>
+                  <span className="d-block text-uppercase">
+                    {daysTitle}
+                  </span> */}
+
+                {/* </h4> */}
+              </div>
               <i className="fa fa-angellist text-c-purple f-50" />
             </Card.Body>
           </Card>
@@ -423,22 +524,29 @@ const OrgDashboard = () => {
                 <div className="col-auto">
                   <i className="feather icon-zap f-30 text-c-green" />
                 </div>
-                <div className="col">
-                  <h3 className="f-w-300">{totalTicketSales} / {ticketCapacity}</h3>
+                <div className="col" >
+                  {eventTitle === "Upcoming Event" && (<h3 className="f-w-300" style={{ color: "#b07183" }}>{totalTicketSales} </h3>)}
+                  {eventTitle === "Filtered Event" && (<h3 className="f-w-300" style={{ color: "#b07183" }}>{totalTicketSales} / {ticketCapacity} </h3>)}
+
                   <span className="d-block text-uppercase">Total Tickets Sold</span>
-                 
-              </div>  
+
+                </div>
+
               </div>
+              {/* <br></br> */}
+              {/* <div className="col-3 text-right">
+                  <p className="m-b-0">{percentage}%</p>
+                </div>
               <div
-                  className="progress-bar progress-c-blue"
-                  role="progressbar"
-                  style={{ width: '35%' }}
-                  aria-valuenow="35"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                />
-               
-             
+                      className="progress-bar progress-c-theme"
+                      role="progressbar"
+                      style={{ width: percentage + '%', height: '6px' }}
+                      aria-valuenow={percentage}
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                    />  */}
+
+
             </Card.Body>
             <Card.Body>
               <div className="row d-flex align-items-center">
@@ -446,7 +554,7 @@ const OrgDashboard = () => {
                   <i className="feather icon-map-pin f-30 text-c-blue" />
                 </div>
                 <div className="col">
-                  <h3 className="f-w-300">${totalSales}</h3>
+                  <h3 className="f-w-300" style={{ color: "#b07183" }}>${totalSales}</h3>
                   <span className="d-block text-uppercase">
                     Total Sales
                   </span>

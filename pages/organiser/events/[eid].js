@@ -40,6 +40,7 @@ const OrganiserViewEventDetails = () => {
     const loadEvent = async () => {
       try {
         let eventData = await getEventDetails(eid);
+        console.log(eventData.images.length + "length");
         if (eventData.eventEndDate)
           setPrettyEndDate(
             format(parseISO(eventData.eventEndDate), 'dd MMM yy hh:mmbbb')

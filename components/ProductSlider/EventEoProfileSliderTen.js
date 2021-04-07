@@ -80,7 +80,7 @@ const EventEoProfileSliderTen = ({ events }) => {
       </Fragment>
     );
   } else {
-    return <div></div>;
+    return <div className="text-center justify-content-center">There is no events.</div>;
   }
 };
 

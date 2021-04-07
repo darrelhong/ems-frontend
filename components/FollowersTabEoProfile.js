@@ -347,6 +347,7 @@ const FollowersTabEoProfile = ({
                       }}
                     >
                       <div className="product-description-tab__additional-info">
+                        {(attendees ==null || attendees.length < 1 ) && <div className="text-center justify-content-center">There is no attendees.</div>}
                         {attendees != null &&
                           attendees.map((attendee) => {
                             return (
@@ -449,6 +450,8 @@ const FollowersTabEoProfile = ({
                     >
                       <div className="product-description-tab__additional-info">
                         <ul className="list-unstyled team-members">
+                        {(partners ==null || partners.length < 1 ) && <div className="text-center justify-content-center" >There is no partners.</div>}
+
                           {partners != null &&
                             partners.map((partner) => {
                               return (
