@@ -18,6 +18,7 @@ import AttendeeWrapper from 'components/wrapper/AttendeeWrapper';
 import ShareButton from 'components/custom/ShareButton';
 import CenterSpinner from 'components/custom/CenterSpinner';
 import EventCategoryList from 'components/custom/events/EventCategoryList';
+import Booths from 'components/custom/events/Booths';
 
 export function getServerSideProps({ query }) {
   return {
@@ -168,6 +169,9 @@ export default function AttendeeEventPage({ id }) {
               </Col>
             </Row>
 
+            <Booths sellerProfiles={data.sellerProfiles}></Booths>
+
+            <br></br>
             <Row>
               <Col>
                 <EventCategoryList categories={data.eventCategory} />
