@@ -170,7 +170,7 @@ export default function AttendeeEventPage({ id }) {
 
             <Row>
               <Col>
-                <EventCategoryList categories={data.categories} />
+                <EventCategoryList categories={data.eventCategory} />
               </Col>
             </Row>
           </Container>

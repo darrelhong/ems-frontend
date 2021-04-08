@@ -7,6 +7,7 @@ import styles from './EventCategoryList.module.css';
 export default function EventCategoryList({ categories }) {
   return (
     <div className={styles.container}>
+      <h6>Event category</h6>
       {categories.map((category) => (
         <>
           <Link href={`../events?category=${encodeURIComponent(category)}`}>
