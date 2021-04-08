@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Col } from 'react-bootstrap';
 import { checkIfRsvpSent, sendRsvp } from 'lib/query/eventApi';
 import { useToasts } from 'react-toast-notifications';
+import { rsvpNotif } from 'lib/query/notificationApi';
 
 const PartnerCard = ({ partner, eid, increaseInviteCount }) => {
 
@@ -11,17 +12,12 @@ const PartnerCard = ({ partner, eid, increaseInviteCount }) => {
 
     const handleSendRsvp = async () => {
         try {
-            console.log('sending rsvp');
-            console.log('eid is ' + eid);
-            console.log('partner id is ' + partner?.id);
             await sendRsvp(eid, partner?.id);
+            await rsvpNotif(partner.id,eid);
             createToast('Invitation Sent!', 'success');
             increaseInviteCount();
-            console.log('sent');
             setRsvpSent(true);
         } catch (e) {
-            console.log('error send rsvp');
-            console.log(e);
             createToast('Error with sending, try again later', 'error');
         }
     }

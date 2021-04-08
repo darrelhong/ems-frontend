@@ -7,6 +7,7 @@ import { LayoutOne } from '../../../layouts';
 import { BreadcrumbOne } from '../../../components/Breadcrumb';
 import EventDescription from '../../../components/events/viewEventDetails/EventDescription';
 import ImageGalleryLeftThumb from '../../../components/events/viewEventDetails/ImageGalleryLeftThumb';
+import EventImageGallery from 'components/events/partner/EventImageGallery';
 import EventDescriptionTabGroup from '../../../components/events/viewEventDetails/EventDescriptionTabGroup';
 import OrganiserWrapper from '../../../components/wrapper/OrganiserWrapper';
 // import { ProductSliderTwo } from "../../../components/ProductSlider";
@@ -164,7 +165,8 @@ const OrganiserViewEventDetails = () => {
         <Container>
           <Row>
             <Col lg={6} className="space-mb-mobile-only--40">
-              {event.images && <ImageGalleryLeftThumb event={event} />}
+              {event?.images && <EventImageGallery images={event.images} />}
+              {/* {event.images && <ImageGalleryLeftThumb event={event} />} */}
             </Col>
             <Col lg={6}>
               {/* product description */}

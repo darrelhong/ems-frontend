@@ -1,16 +1,24 @@
+import { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { cancelSellerApplication } from 'lib/query/sellerApplicationApi';
+import { withdrawApplicationNotif } from 'lib/query/notificationApi';
+import ButtonWithLoading from 'components/custom/ButtonWithLoading';
 
 const WithdrawModal = ({applicationMade, setApplicationMade, showWithdrawModal, closeWithdrawModal, createToast}) => {
+    const [loading,setLoading] = useState(false);
+    const bpid = localStorage.getItem('userId');
 
     const handleWithdraw = async () => {
+        setLoading(true);
         try {
             await cancelSellerApplication(applicationMade?.id);
+            await withdrawApplicationNotif(applicationMade?.id,bpid);
             setApplicationMade(null);
             createToast('Withdrawn Successfully', 'success');
         } catch (e)  {
         createToast('Error, please try again later', 'error');
         }
+        setLoading(false);
         closeWithdrawModal();
     }
 
@@ -27,13 +35,22 @@ const WithdrawModal = ({applicationMade, setApplicationMade, showWithdrawModal, 
                 <Button variant="secondary" onClick={closeWithdrawModal}>
                     Close
           </Button>
-                <Button
+                {/* <Button
                     variant="danger"
                     onClick={() => handleWithdraw()}
                     // onClick={() => handleDeleteCancel(currEvent)}
                 >
                     Proceed
-          </Button>
+          </Button> */}
+          <ButtonWithLoading
+                        onClick={() => handleWithdraw()}
+                        name="submit"
+                        value="submit"
+                        className="btn btn-fill-out"
+                        isLoading={loading}
+                      >
+                        Confirm
+                      </ButtonWithLoading>
             </Modal.Footer>
         </Modal>
     );

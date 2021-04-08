@@ -10,6 +10,7 @@ import { Col, Row } from 'react-bootstrap';
 import ApproveRejectModal from 'components/events/organiser/applications/ApproveRejectModal';
 import { useToasts } from 'react-toast-notifications';
 import ApplicationSideBar from 'components/events/organiser/applications/ApplicationSideBar'
+import { approveBpNotif, rejectBpNotif } from 'lib/query/notificationApi';
 
 export default function Applications() {
 
@@ -24,7 +25,8 @@ export default function Applications() {
     const [action, setAction] = useState('approve');
     const [application, setApplication] = useState(Object);
     const { addToast, removeToast } = useToasts();
-    const [filterValue, setFilterValue] = useState("PENDING")
+    const [filterValue, setFilterValue] = useState("PENDING");
+    const [loading,setLoading] = useState(false);
 
     useEffect(() => {
         if (user != null) getApplications();
@@ -47,13 +49,21 @@ export default function Applications() {
 
 
     const handleSubmit = async () => {
+        setLoading(true);
         try {
             await approveRejectApplication(application.id, action);
-            action == 'approve' ? createToast('Application successfully approved!', 'success') : createToast('Application successfully rejected', 'success');
+            if (action == 'approve') {
+                await approveBpNotif(application?.businessPartner?.id,application?.event?.eid);
+                createToast('Application successfully approved!','success');
+            } else { //reject
+                await rejectBpNotif(application?.businessPartner?.id,application?.event?.eid);
+                createToast('Application successfully rejected', 'success');
+            }
             await getApplications(); //to reload
         } catch (e) {
             createToast('Error, please try again later', 'error');
         }
+        setLoading(false);
         setShowApproveRejectModal(false);
     }
 
@@ -81,6 +91,7 @@ export default function Applications() {
                 action={action}
                 handleSubmit={handleSubmit}
                 application={application}
+                loading={loading}
             />
             <BreadcrumbOne pageTitle="View All Event Applications">
                 <ol className="breadcrumb justify-content-md-end">

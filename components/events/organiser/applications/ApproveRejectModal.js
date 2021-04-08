@@ -1,12 +1,14 @@
 import { Modal, Button, Col } from 'react-bootstrap';
 import ApplicationCard from 'components/events/organiser/applications/ApplicationCard';
+import ButtonWithLoading from 'components/custom/ButtonWithLoading';
 
 const ApproveRejectModal = ({
     showApproveRejectModal,
     closeApproveRejectModal,
     action,
     handleSubmit,
-    application
+    application,
+    loading
 }) => {
 
     const getTitle = () => {
@@ -37,11 +39,21 @@ const ApproveRejectModal = ({
                     Cancel
                     </Button>
 
+                    <ButtonWithLoading
+                        onClick={handleSubmit}
+                        name="submit"
+                        value="submit"
+                        className="btn btn-fill-out"
+                        isLoading={loading}
+                      >
+                        Confirm
+                      </ButtonWithLoading>
+{/* 
                 <Button variant="danger"
                     onClick={handleSubmit}
                     name="submit"
                     value="submit"
-                >Confirm</Button>
+                >Confirm</Button> */}
             </Modal.Footer>
         </Modal>
     )
