@@ -4,6 +4,7 @@ import { Container, Row, Button } from 'react-bootstrap';
 import { IoIosAddCircleOutline } from 'react-icons/io';
 import IconButton from '@material-ui/core/IconButton';
 import AddProductModal from './AddProductModal';
+import AddIcon from '@material-ui/icons/Add';
 
 const BoothProductComponent = ({ booth, createToast, sellerProfile, setSellerProfile, isPartner }) => {
     const [products, setProducts] = useState([]);
@@ -78,10 +79,11 @@ const BoothProductComponent = ({ booth, createToast, sellerProfile, setSellerPro
                 </IconButton> */}
                 {isPartner && (
                     <Button
-                        variant="danger"
+                    variant="danger"
+                    type="button"
                         onClick={() => setShowAddProductModal(true)}
-                    >
-                        Add another product to booth {booth?.boothNumber}
+                >
+                    <AddIcon />{' '}Add another Product
                     </Button>
                 )}
                 {
