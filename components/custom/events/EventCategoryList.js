@@ -9,7 +9,7 @@ export default function EventCategoryList({ categories }) {
     <div className={styles.container}>
       <h6>Event category</h6>
       {categories.map((category) => (
-        <>
+        <span key={category}>
           <Link href={`../events?category=${encodeURIComponent(category)}`}>
             <Badge
               key={category}
@@ -21,7 +21,7 @@ export default function EventCategoryList({ categories }) {
               {category}
             </Badge>
           </Link>{' '}
-        </>
+        </span>
       ))}
     </div>
   );
