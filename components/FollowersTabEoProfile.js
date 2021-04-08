@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Modal,
   Button,
@@ -34,8 +34,20 @@ const FollowersTabEoProfile = ({
   const [checkAttendee, setCheckAttendee] = useState(false);
   const [checkPartner, setCheckPartner] = useState(false);
   //const [emailbroadcastoption, setEmailbroadcastoption] = useState('');
+  const [showNoAttendee, setShowNoAttendee] = useState(false);
+  const [showNoPartner, setShowNoPartner] = useState(false);
 
   const [broadcastModalShow, setBroadcastModalShow] = useState(false);
+
+  useEffect(() => {
+    if (attendees != null) {
+      setShowNoAttendee(attendees.length == 0);
+    }
+    if (partners != null) {
+      setShowNoPartner(partners.length == 0);
+    }
+  })
+
   const closeBroadcastModal = () => {
     setBroadcastModalShow(false);
     setErrorMessage('null');
@@ -430,6 +442,9 @@ const FollowersTabEoProfile = ({
                             );
                           })}
                       </div>
+                      {showNoAttendee && (
+                        <div className="w-100 text-center" style={{marginTop: "100px"}}>There are no followers.</div>
+                      )}
                     </div>
                   </Col>
                 </Row>
@@ -536,6 +551,9 @@ const FollowersTabEoProfile = ({
                             })}
                         </ul>
                       </div>
+                      {showNoPartner && (
+                        <div className="w-100 text-center" style={{marginTop: "100px"}}>There are no followers.</div>
+                      )}
                     </div>
                   </Col>
                 </Row>

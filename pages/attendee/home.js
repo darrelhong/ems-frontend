@@ -13,7 +13,8 @@ import {
   getEventsByAtnCategoryPreferences, 
   getEventsThisWeekend, 
   getEventsNextWeek,
-  getTopTenEvents
+  getTopTenEvents,
+  getVipEvents
 } from '../../lib/query/getEvents';
 import ButtonWithLoading from '../../components/custom/ButtonWithLoading';
 import HeroSliderPopularEvents from '../../components/HeroSlider/HeroSliderPopularEvents';
@@ -208,7 +209,7 @@ export default function AttendeeHome() {
                         <div className="mt-3">
                           <h3 className="mb-4">Events by event organisers and business partners you're following</h3>
                         </div>
-                        <HomeEventTab events={eventsFollowing} />
+                        <HomeEventTab events={eventsFollowing} tab={"following"} />
                         <Row>
                           <Col className="d-flex align-items-center">
                             <ButtonWithLoading
@@ -225,7 +226,7 @@ export default function AttendeeHome() {
                         <div className="mt-3">
                           <h3 className="mb-4">Recommended events</h3>
                         </div>
-                        <HomeEventTab events={eventsForYou} />
+                        <HomeEventTab events={eventsForYou} tab={"for-you"} />
                         <Row>
                           <Col className="d-flex align-items-center">
                             <ButtonWithLoading
@@ -242,7 +243,7 @@ export default function AttendeeHome() {
                         <div className="mt-3">
                           <h3 className="mb-4">Events this weekend</h3>
                         </div>
-                        <HomeEventTab events={eventsThisWeekend} />
+                        <HomeEventTab events={eventsThisWeekend} tab={"this-weekend"} />
                         <Row>
                           <Col className="d-flex align-items-center">
                             <ButtonWithLoading
@@ -259,7 +260,7 @@ export default function AttendeeHome() {
                         <div className="mt-3">
                           <h3 className="mb-4">Events next week</h3>
                         </div>
-                        <HomeEventTab events={eventsNextWeek} />
+                        <HomeEventTab events={eventsNextWeek} tab={"next-week"} />
                         <Row>
                           <Col className="d-flex align-items-center">
                             <ButtonWithLoading

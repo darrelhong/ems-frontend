@@ -7,7 +7,8 @@ import {
   getEventsByBpFollowers,
   getEventsByBpBusinessCategory,
   getEventsInNext30Days,
-  getTopTenEvents
+  getTopTenEvents,
+  getVipEvents
 } from '../../lib/query/getEvents';
 
 import PartnerWrapper from '../../components/wrapper/PartnerWrapper';
@@ -25,11 +26,13 @@ function PartnerHome() {
   const [eventsFollowing, setEventsFollowing] = useState([]);
   const [eventsForYou, setEventsForYou] = useState([]);
   const [eventsInNext30Days, setEventsInNext30Days] = useState([]);
+  const [eventsVip, setEventsVip] = useState([]);
   const [mostPopularEvents, setMostPopularEvents] = useState([]);
 
   const [nextPageFollowing, setNextPageFollowing] = useState(1);
   const [nextPageForYou, setNextPageForYou] = useState(1);
   const [nextPageInNext30Days, setNextPageInNext30Days] = useState(1);
+  const [nextPageVip, setNextPageVip] = useState(1);
   
   useEffect(() => {
     if (user != null) {
@@ -37,6 +40,7 @@ function PartnerHome() {
       loadEventsFollowing();
       loadEventsForYou();
       loadEventsInNext30Days();
+      loadEventsVip();
     }
   }, [user]);
 
@@ -58,6 +62,9 @@ function PartnerHome() {
     }
     else if (tab == "next-month") {
       loadEventsInNext30Days(true);
+    }
+    else if (tab == "vip") {
+      loadEventsVip(true);
     }
   }
 
@@ -121,6 +128,26 @@ function PartnerHome() {
     setNextPageInNext30Days(nextPageInNext30Days + 1);
   }
 
+  function loadEventsVip(isFetchNextPage=false) {
+    const getEvents = async () => {
+      const data = await getVipEvents(nextPageVip);
+      if (data.length < 10) {
+        var btnSeeMore = document.getElementById("btnSeeMoreVip");
+        btnSeeMore.innerHTML = "No more events";
+        btnSeeMore.disabled = true;
+      }
+
+      if (isFetchNextPage) {
+        setEventsVip(eventsVip.concat(data));
+      }
+      else {
+        setEventsVip(data);
+      }
+    };
+    getEvents();
+    setNextPageVip(nextPageVip + 1);
+  }
+
   return (
     <>
  
@@ -164,6 +191,11 @@ function PartnerHome() {
                       <Nav.Item>
                         <Nav.Link eventKey="next-month">
                           Upcoming events
+                        </Nav.Link>
+                      </Nav.Item>
+                      <Nav.Item>
+                        <Nav.Link eventKey="vip">
+                          VIP
                         </Nav.Link>
                       </Nav.Item>
                     </Nav>
@@ -215,6 +247,23 @@ function PartnerHome() {
                               className="btn btn-fill-out btn-sm"
                               id="btnSeeMoreNextMonth"
                               onClick={() => fetchNextPage("next-month")}
+                            >
+                              See More
+                            </ButtonWithLoading>
+                          </Col>
+                        </Row>
+                      </Tab.Pane>
+                      <Tab.Pane eventKey="vip">
+                        <div className="mt-3">
+                          <h3 className="mb-4">VIP Events</h3>
+                        </div>
+                        <HomeEventTab events={eventsVip} />
+                        <Row>
+                          <Col className="d-flex align-items-center">
+                            <ButtonWithLoading
+                              className="btn btn-fill-out btn-sm"
+                              id="btnSeeMoreVip"
+                              onClick={() => fetchNextPage("vip")}
                             >
                               See More
                             </ButtonWithLoading>
