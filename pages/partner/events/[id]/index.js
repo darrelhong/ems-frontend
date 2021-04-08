@@ -26,7 +26,7 @@ export function getServerSideProps({ query }) {
 }
 
 export default function PartnerEventPage({ id }) {
-  const { data, status } = useEvent(id);
+  // const { data, status } = useEvent(id);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [boothTotal, setBoothTotal] = useState(0);

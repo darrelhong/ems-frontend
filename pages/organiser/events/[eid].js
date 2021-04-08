@@ -27,6 +27,7 @@ import { dbDateToPretty } from '../../../lib/util/functions';
 import { format, parseISO, parseJSON } from 'date-fns';
 import { useToasts } from 'react-toast-notifications';
 import { returnNewSellerApplications } from "lib/query/sellerApplicationApi"
+import { getReviewsByEvent } from 'lib/query/getReviews';
 
 const OrganiserViewEventDetails = () => {
   const [event, setEvent] = useState(Object);
@@ -36,6 +37,8 @@ const OrganiserViewEventDetails = () => {
   const [prettySalesEndDate, setPrettySalesEndDate] = useState('');
   const [newSellerApplications, setNewSellerApplications] = useState([]);
   const [sellerProfiles, setSellerProfiles] = useState([]);
+  const [eventReviews,setEventReviews] = useState([]);
+
   const router = useRouter();
   const { eid } = router.query;
   const { addToast, removeToast } = useToasts();
@@ -61,10 +64,12 @@ const OrganiserViewEventDetails = () => {
             format(parseISO(eventData.salesEndDate), 'dd MMM yy hh:mmbbb')
           );
         setEvent(eventData);
-        // let newApplications = await getNewApplicationsFromEvent(eid);
         let profiles = await getSellerProfilesFromEvent(eid);
         setSellerProfiles(profiles);
         if (eventData.sellerApplications) setNewSellerApplications(returnNewSellerApplications(eventData.sellerApplications));
+
+        const reviews = await getReviewsByEvent(eid);
+        setEventReviews(reviews);
       } catch (e) {
         router.push('/organiser/events/not-found');
       }
@@ -188,6 +193,7 @@ const OrganiserViewEventDetails = () => {
                   createToast={createToast}
                   newSellerApplications={newSellerApplications}
                   sellerProfiles={sellerProfiles}
+                  eventReviews={eventReviews}
                 />
               )}
             </Col>
