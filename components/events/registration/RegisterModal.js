@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { formatter } from 'lib/util/currency';
 import { format, parseISO } from 'date-fns';
 import { createSellerApplication } from 'lib/query/sellerApplicationApi';
+import { newApplicationNotif } from 'lib/query/notificationApi';
 
 const RegisterModal = ({
     event,
@@ -224,9 +225,9 @@ const registerButton = () => (
 
 const handleRegister = async (data) => {
     try {
-        const application = await createSellerApplication(data, event.eid, bpId);
-        // setAlreadyRegistered(true);
-        setApplicationMade(application);
+        // const application = await createSellerApplication(data, event.eid, bpId);
+        // setApplicationMade(application);
+        await newApplicationNotif(bpId,event.eid);
         closeRegisterModal();
         createToast('Registered Successfully', 'success');
     } catch (e) {
