@@ -5,20 +5,18 @@ import useUser from '../../lib/query/useUser';
 import AttendeeWrapper from '../../components/wrapper/AttendeeWrapper';
 
 import { BreadcrumbOne } from '../../components/Breadcrumb';
-import { getAllEvents } from '../../lib/query/eventApi';
-import HomeEventCard from '../../components/events/HomeEventCard';
 import { useEffect, useState } from 'react';
 import { 
   getEventsByAtnFollowers, 
   getEventsByAtnCategoryPreferences, 
   getEventsThisWeekend, 
   getEventsNextWeek,
-  getTopTenEvents,
-  getVipEvents
+  getTopTenEvents
 } from '../../lib/query/getEvents';
 import ButtonWithLoading from '../../components/custom/ButtonWithLoading';
 import HeroSliderPopularEvents from '../../components/HeroSlider/HeroSliderPopularEvents';
 import HomeEventTab from '../../components/events/HomeEventTab';
+import CenterSpinner from 'components/custom/CenterSpinner';
 
 export default function AttendeeHome() {
   const { data: user, status } = useUser(localStorage.getItem('userId'));
@@ -163,7 +161,7 @@ export default function AttendeeHome() {
 
       <Container className="my-4">
         {status == 'loading' ? (
-          <div className="spinner-grow" role="status" />
+          <CenterSpinner />
         ) : status == 'error' ? (
           <Alert variant="danger">An error has occured</Alert>
         ) : (
@@ -280,7 +278,6 @@ export default function AttendeeHome() {
             </Container>
           </>
         )}
-
       </Container>
     </AttendeeWrapper>
     

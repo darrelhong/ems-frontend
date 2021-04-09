@@ -47,6 +47,8 @@ function myEvents() {
     }
   }, [user]);
 
+  console.log(user)
+
   useEffect(() => {
     if (events != null) {
       let tempSortedEvents = filterEvents(events, sortValue);

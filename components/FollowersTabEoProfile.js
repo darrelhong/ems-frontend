@@ -34,19 +34,8 @@ const FollowersTabEoProfile = ({
   const [checkAttendee, setCheckAttendee] = useState(false);
   const [checkPartner, setCheckPartner] = useState(false);
   //const [emailbroadcastoption, setEmailbroadcastoption] = useState('');
-  const [showNoAttendee, setShowNoAttendee] = useState(false);
-  const [showNoPartner, setShowNoPartner] = useState(false);
 
   const [broadcastModalShow, setBroadcastModalShow] = useState(false);
-
-  useEffect(() => {
-    if (attendees != null) {
-      setShowNoAttendee(attendees.length == 0);
-    }
-    if (partners != null) {
-      setShowNoPartner(partners.length == 0);
-    }
-  })
 
   const closeBroadcastModal = () => {
     setBroadcastModalShow(false);
@@ -212,6 +201,18 @@ const FollowersTabEoProfile = ({
     </Tooltip>
   );
 
+  function clearBroadcastForm() {
+    let broadcastTitle = document.getElementById("broadcastTitle");
+    let broadcastMessage = document.getElementById("broadcastMessage");
+    let chkBusinessPartner = document.getElementById("chkBusinessPartner");
+    let chkAttendee = document.getElementById("chkAttendee")
+
+    broadcastTitle.value = "";
+    broadcastMessage.value = "";
+    chkBusinessPartner.checked = false;
+    chkAttendee.checked = false;
+  }
+
   if (attendees !== undefined && partners !== undefined) {
     return (
       <div className="product-tab-area space-pb--r70">
@@ -343,7 +344,6 @@ const FollowersTabEoProfile = ({
                 </button>
               )}
             </Nav>
-
             <Tab.Content>
               <Tab.Pane eventKey="attendees">
                 <Row>
@@ -442,7 +442,7 @@ const FollowersTabEoProfile = ({
                             );
                           })}
                       </div>
-                      {showNoAttendee && (
+                      {(attendees.length == 0) && (
                         <div className="w-100 text-center" style={{marginTop: "100px"}}>There are no followers.</div>
                       )}
                     </div>
@@ -551,7 +551,7 @@ const FollowersTabEoProfile = ({
                             })}
                         </ul>
                       </div>
-                      {showNoPartner && (
+                      {(partners.length == 0) && (
                         <div className="w-100 text-center" style={{marginTop: "100px"}}>There are no followers.</div>
                       )}
                     </div>

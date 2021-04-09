@@ -3,13 +3,14 @@ import Link from 'next/link';
 import { Alert, Col, Container, Row, Spinner, Modal, Button } from 'react-bootstrap';
 import { useInfiniteQuery, useQueryClient } from 'react-query';
 import debounce from 'lodash/debounce';
+import { getEventsWithKeywordandSortFilter } from 'lib/query/events';
+import { BreadcrumbOne } from 'components/Breadcrumb';
+import PartnerWrapper from 'components/wrapper/PartnerWrapper';
+import EventCard from 'components/events/partner/EventCard';
+import ButtonWithLoading from 'components/custom/ButtonWithLoading';
+import useUser from '../../../lib/query/useUser';
 
-import { BreadcrumbOne } from '../../../components/Breadcrumb';
-import PartnerWrapper from '../../../components/wrapper/PartnerWrapper';
 import api from '../../../lib/ApiClient';
-import EventCard from '../../../components/events/partner/EventCard';
-import ButtonWithLoading from '../../../components/custom/ButtonWithLoading';
-import Nav from 'react-bootstrap/Nav';
 import ReactNotification from 'react-notifications-component'
 import 'react-notifications-component/dist/theme.css'
 
@@ -21,10 +22,13 @@ const getEvents = async (page = 0, sort, sortDir, searchTerm) => {
   return data;
 };
 
-function PartnerHome() {
+export default function PartnerHome() {
 
+  const [sortType, setSortType] = useState('');
+  const [filterValue, setFilterValue] = useState('all');
   const [sortBy, setSortBy] = useState();
   const [searchTerm, setSearchTerm] = useState('');
+  const { data: user } = useUser(localStorage.getItem('userId'));
   const queryClient = useQueryClient();
   const {
     status,
@@ -33,14 +37,36 @@ function PartnerHome() {
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery(
-    ['events', sortBy?.sort, sortBy?.sortDir, searchTerm],
+    ['events', sortBy?.sort, sortBy?.sortDir, searchTerm, filterValue, user?.id],
     ({ pageParam = 0 }) =>
-      getEvents(pageParam, sortBy?.sort, sortBy?.sortDir, searchTerm),
+      getEventsWithKeywordandSortFilter(
+        pageParam,
+        filterValue,
+        sortBy?.sort,
+        sortBy?.sortDir,
+        searchTerm,
+        user.id
+      ),
     {
       getNextPageParam: (lastPage) =>
         lastPage.last ? false : lastPage.number + 1,
     }
   );
+
+  // if (!user) {
+  //   queryClient.invalidateQueries("events");
+  // }
+
+  console.log("data: ", data)
+  // console.log("user: ", user)
+  // console.log(filterValue)
+  // console.log("test", queryClient.getQueryData('events'))
+
+  // front end filtering of event
+  const getSortParams = (sortType, filterValue) => {
+    setSortType(sortType);
+    setFilterValue(filterValue);
+  }
 
   const handleChange = (e) => {
     switch (e.target.value) {
@@ -49,6 +75,9 @@ function PartnerHome() {
         break;
       case 'name-desc':
         setSortBy({ sort: 'name', sortDir: 'desc' });
+        break;
+      case 'date-asc':
+        setSortBy({ sort: 'eventStartDate', sortDir: 'asc' });
         break;
       default:
         setSortBy();
@@ -66,7 +95,7 @@ function PartnerHome() {
       'events',
       sortBy?.sort,
       sortBy?.sortDir,
-      searchTerm,
+      searchTerm
     ]);
 
 
@@ -140,7 +169,7 @@ function PartnerHome() {
                       >
                         {/* <Link href={`/partner/events/${event.eid}`}> */}
                         <a className="w-100">
-                          <EventCard event={event} />
+                          <EventCard event={event} user={user} />
                         </a>
                         {/* </Link> */}
                       </Col>
@@ -168,5 +197,3 @@ function PartnerHome() {
     </>
   );
 }
-
-export default PartnerHome;

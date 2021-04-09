@@ -370,6 +370,11 @@ const MyAccount = () => {
         setIspicupdated(true);
         setAccSuccess('Account details saved successfully! ');
         setLoginLoading(false);
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: 'smooth'
+        });
       })
       .catch((error) => {
         console.log(error);

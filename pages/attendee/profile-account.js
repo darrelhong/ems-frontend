@@ -855,8 +855,6 @@ const MyAccount = () => {
                                                 {partner.businessCategory}
                                               </Badge>{' '}
                                             </span>
-
-
                                           )}
                                       </div> */}
                                                     </Col>
@@ -992,6 +990,7 @@ const MyAccount = () => {
                                     placeholder="Enter card number"
                                     // pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                                     // title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                                    minLength="16"
                                     maxLength="16"
                                     ref={register()}
                                     onChange={handleCardNumberInputChange}
@@ -1216,6 +1215,7 @@ const MyAccount = () => {
                                     className="profile-image"
                                     src={user?.profilePic}
                                     thumbnail
+                                    style = {{width:'60%'}}
                                   />
                                 )}
 
@@ -1225,6 +1225,7 @@ const MyAccount = () => {
                                     className="profile-image"
                                     src="../../assets/images/defaultprofilepic.png"
                                     thumbnail
+                                    style = {{width:'60%'}}
                                   />
                                 )}
                               {profilepicUrl != null &&
@@ -1233,6 +1234,7 @@ const MyAccount = () => {
                                     className="profile-image"
                                     src={profilepicUrl}
                                     thumbnail
+                                    style = {{width:'60%'}}
                                   />
                                 )}
                             </Col>
@@ -1324,7 +1326,7 @@ const MyAccount = () => {
                               </Col>
                               {/* {user?.id != null && ( */}
                               <div className="col-12 d-md-flex">
-                                <div className="form-group w-100">
+                                <Col className="form-group" md={12}>
                                   <Form.Label htmlFor="categorypreference">
                                     Event Category Preferences{' '}
                                     <span className="required"></span>
@@ -1397,7 +1399,7 @@ const MyAccount = () => {
                                     name="ddlCategoryPreferences"
                                     // className="displayBlock mt10"
                                   />
-                                </div>
+                                </Col>
                               </div>
 
                               <Col className="form-group" md={12}>

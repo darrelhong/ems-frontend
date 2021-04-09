@@ -9,7 +9,9 @@ React Query - [https://react-query.tanstack.com/](https://react-query.tanstack.c
 
 React Hook Form - [https://react-hook-form.com/](https://react-hook-form.com/)
 
----
+## Stripe
+
+To specify Stripe publishable key, add `NEXT_PUBLIC_STRIPE_KEY=XXXXXXXXX` to .env.local file in root directory
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 

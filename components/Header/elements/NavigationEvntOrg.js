@@ -64,8 +64,8 @@ const NavigationEvntOrg = ({ positionClass }) => {
               </Link>
             </li>
             <li>
-              <Link href="/home/furniture-one">
-                <a>Manage Business Partner Booth Application</a>
+              <Link href="/organiser/events/applications">
+                <a>Manage Business Partner Seller Applications</a>
               </Link>
             </li>
             <li>

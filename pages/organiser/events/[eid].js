@@ -7,13 +7,15 @@ import { LayoutOne } from '../../../layouts';
 import { BreadcrumbOne } from '../../../components/Breadcrumb';
 import EventDescription from '../../../components/events/viewEventDetails/EventDescription';
 import ImageGalleryLeftThumb from '../../../components/events/viewEventDetails/ImageGalleryLeftThumb';
-import EventDescriptionTab from '../../../components/events/viewEventDetails/EventDescriptionTab';
+import EventImageGallery from 'components/events/partner/EventImageGallery';
+import EventDescriptionTabGroup from '../../../components/events/viewEventDetails/EventDescriptionTabGroup';
 import OrganiserWrapper from '../../../components/wrapper/OrganiserWrapper';
 // import { ProductSliderTwo } from "../../../components/ProductSlider";
 import {
   getEventDetails,
   updateEvent,
   deleteEvent,
+  getSellerProfilesFromEvent,
 } from '../../../lib/query/eventApi';
 import {
   publishToggle,
@@ -25,6 +27,8 @@ import {
 import { dbDateToPretty } from '../../../lib/util/functions';
 import { format, parseISO, parseJSON } from 'date-fns';
 import { useToasts } from 'react-toast-notifications';
+import { returnNewSellerApplications } from "lib/query/sellerApplicationApi"
+import { getReviewsByEvent } from 'lib/query/getReviews';
 
 const OrganiserViewEventDetails = () => {
   const [event, setEvent] = useState(Object);
@@ -32,6 +36,10 @@ const OrganiserViewEventDetails = () => {
   const [prettyEndDate, setPrettyEndDate] = useState('');
   const [prettySaleStartDate, setPrettySaleStartDate] = useState('');
   const [prettySalesEndDate, setPrettySalesEndDate] = useState('');
+  const [newSellerApplications, setNewSellerApplications] = useState([]);
+  const [sellerProfiles, setSellerProfiles] = useState([]);
+  const [eventReviews,setEventReviews] = useState([]);
+
   const router = useRouter();
   const { eid } = router.query;
   const { addToast, removeToast } = useToasts();
@@ -56,13 +64,13 @@ const OrganiserViewEventDetails = () => {
           setPrettySalesEndDate(
             format(parseISO(eventData.salesEndDate), 'dd MMM yy hh:mmbbb')
           );
-        // setPrettyEndDate(eventData.eventEndDate);
-        // setPrettyStartDate(eventData.eventStartDate);
-        // setPrettySaleStartDate(eventData.salesStartDate);
-        // setPrettySalesEndDate(eventData.salesEndDate);
         setEvent(eventData);
+        let profiles = await getSellerProfilesFromEvent(eid);
+        setSellerProfiles(profiles);
+        if (eventData.sellerApplications) setNewSellerApplications(returnNewSellerApplications(eventData.sellerApplications));
 
-        setEvent(eventData);
+        const reviews = await getReviewsByEvent(eid);
+        setEventReviews(reviews);
       } catch (e) {
         router.push('/organiser/events/not-found');
       }
@@ -111,6 +119,7 @@ const OrganiserViewEventDetails = () => {
     if (updatedEvent) {
       setEvent(updatedEvent);
       createToast('Event successfully cancelled', 'success');
+      router.push('/organiser/events');
     } else {
       createToast('Error cancelling the event', 'error');
     }
@@ -129,54 +138,6 @@ const OrganiserViewEventDetails = () => {
       );
     }
   };
-
-  // const publishToggle = async () => {
-  //   const published = !event.published;
-  //   const updatedEvent = await updateEvent({ ...event, published });
-  //   setEvent(updatedEvent);
-  //   let message = '';
-  //   published ? message = "Published Successfully" : message = "Event unpublished";
-  //   createToast(message, 'success');
-  // };
-
-  // const hideToggle = async () => {
-  //   const hidden = !event.hidden;
-  //   const updatedEvent = await updateEvent({ ...event, hidden });
-  //   setEvent(updatedEvent);
-  //   let message = '';
-  //   hidden ? message = "Event Hidden" : message = "Event now visible to business partners!";
-  //   createToast(message, 'success');
-  // };
-
-  // const vipToggle = async () => {
-  //   const vip = !event.vip;
-  //   const updatedEvent = await updateEvent({ ...event, vip });
-  //   setEvent(updatedEvent);
-  //   let message = '';
-  //   vip ? message = "Event is exclusive to VIP members!" : message = "Event open for all!";
-  //   createToast(message, 'success');
-  // };
-
-  // const handleCancel = async () => {
-  //   try {
-  //     const eventStatus = "CANCELLED";
-  //     const updatedEvent = await updateEvent({ ...event, eventStatus });
-  //     setEvent(updatedEvent);
-  //     createToast('Event successfully cancelled', 'success');
-  //   } catch (e) {
-  //     createToast('Error cancelling the event', 'error');
-  //   }
-  // }
-
-  // const handleDelete = async () => {
-  //   try {
-  //     await deleteEvent(event.eid);
-  //     createToast('Event successfully deleted', 'success');
-  //     //navigate to somewhere
-  //   } catch (e) {
-  //     createToast('Error in deleting event, please contact our help center', 'error');
-  //   }
-  // };
 
   return (
     <OrganiserWrapper title={event.name ? event.name : 'Draft'}>
@@ -204,7 +165,8 @@ const OrganiserViewEventDetails = () => {
         <Container>
           <Row>
             <Col lg={6} className="space-mb-mobile-only--40">
-              {event.images && <ImageGalleryLeftThumb event={event} />}
+              {event?.images && <EventImageGallery images={event.images} />}
+              {/* {event.images && <ImageGalleryLeftThumb event={event} />} */}
             </Col>
             <Col lg={6}>
               {/* product description */}
@@ -225,86 +187,23 @@ const OrganiserViewEventDetails = () => {
           <Row>
             <Col>
               {event && (
-                <EventDescriptionTab
+                <EventDescriptionTabGroup
                   event={event}
+                  setEvent={setEvent}
                   prettySaleStartDate={prettySaleStartDate}
                   prettySalesEndDate={prettySalesEndDate}
+                  createToast={createToast}
+                  newSellerApplications={newSellerApplications}
+                  sellerProfiles={sellerProfiles}
+                  eventReviews={eventReviews}
                 />
               )}
             </Col>
           </Row>
-          {/* related product slider */}
-          {/* <ProductSliderTwo
-            title="Related Products"
-            products={relatedProducts}
-          /> */}
         </Container>
       </div>
     </OrganiserWrapper>
   );
 };
 
-// const mapStateToProps = (state, ownProps) => {
-//   const products = state.productData;
-//   const category = ownProps.product.category[0];
-//   return {
-//     relatedProducts: getProducts(products, category, "popular", 8),
-//     cartItems: state.cartData,
-//     wishlistItems: state.wishlistData,
-//     compareItems: state.compareData
-//   };
-// };
-
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     addToCart: (
-//       item,
-//       addToast,
-//       quantityCount,
-//       selectedProductColor,
-//       selectedProductSize
-//     ) => {
-//       dispatch(
-//         addToCart(
-//           item,
-//           addToast,
-//           quantityCount,
-//           selectedProductColor,
-//           selectedProductSize
-//         )
-//       );
-//     },
-//     addToWishlist: (item, addToast) => {
-//       dispatch(addToWishlist(item, addToast));
-//     },
-//     deleteFromWishlist: (item, addToast) => {
-//       dispatch(deleteFromWishlist(item, addToast));
-//     },
-//     addToCompare: (item, addToast) => {
-//       dispatch(addToCompare(item, addToast));
-//     },
-//     deleteFromCompare: (item, addToast) => {
-//       dispatch(deleteFromCompare(item, addToast));
-//     }
-//   };
-// };
-
 export default OrganiserViewEventDetails;
-
-// export default connect(mapStateToProps, mapDispatchToProps)(ProductThumbLeft);
-
-// export async function getStaticPaths() {
-//   // get the paths we want to pre render based on products
-//   const paths = events.map((event) => ({
-//     params: { slug: event.eid }
-//   }));
-
-//   return { paths, fallback: false };
-// }
-
-// export async function getStaticProps({ params }) {
-//   // get product data based on slug
-//   const event = events.filter((single) => event.eid === params.slug)[0];
-
-//   return { props: { event } };
-// }

@@ -8,6 +8,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import StarIcon from '@material-ui/icons/Star';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import HidePopover from './HidePopover';
+import DeleteModal from './DeleteModal';
 import { vipToggle } from '../../lib/functions/eventOrganiser/eventFunctions';
 import { Unstable_TrapFocus } from '@material-ui/core';
 import api from '../../lib/ApiClient';
@@ -26,7 +27,7 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
   const [confirmBroadcastModalShow, setConfirmBroadcastModalShow] = useState(false);
   const closeConfirmBroadcastModal = () => setConfirmBroadcastModalShow(false);
   const openConfirmBroadcastModal = () => setConfirmBroadcastModalShow(true);
-  
+
   const [showRecipientError, setRecipientError] = useState(false);
   const [showBroadcastError, setBroadcastError] = useState(false);
   const [showBroadcastSuccess, setBroadcastSuccess] = useState(false);
@@ -88,7 +89,7 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
 
   function broadcastNotification(currEvent) {
     closeConfirmBroadcastModal();
-    
+
     // get user inputs
     let broadcastTitle = document.getElementById("broadcastTitle").value;
     let broadcastMessage = document.getElementById("broadcastMessage").value;
@@ -115,17 +116,30 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
     }
 
     api.post('/api/organiser/broadcastEmailEnquiry', data)
-    .then(() => {
-      setBroadcastSuccess(true);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+      .then(() => {
+        setBroadcastSuccess(true);
+        clearBroadcastForm();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  function clearBroadcastForm() {
+    let broadcastTitle = document.getElementById("broadcastTitle");
+    let broadcastMessage = document.getElementById("broadcastMessage");
+    let chkBusinessPartner = document.getElementById("chkBusinessPartner");
+    let chkAttendee = document.getElementById("chkAttendee")
+
+    broadcastTitle.value = "";
+    broadcastMessage.value = "";
+    chkBusinessPartner.checked = false;
+    chkAttendee.checked = false;
   }
 
   return (
     <Fragment>
-      <Modal show={deleteModalShow} onHide={closeModal} centered>
+      {/* <Modal show={deleteModalShow} onHide={closeModal} centered>
         <Modal.Header closeButton>
           <Modal.Title>Delete An Event</Modal.Title>
         </Modal.Header>
@@ -145,7 +159,16 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
             Proceed
           </Button>
         </Modal.Footer>
-      </Modal>
+      </Modal> */}
+      <DeleteModal
+        currEvent={currEvent}
+        deleteModalShow={deleteModalShow}
+        setDeleteModalShow={setDeleteModalShow}
+        closeModal={closeModal}
+        openModal={openModal}
+        deleteCancelEvent={deleteCancelEvent}
+      />
+      {/* </Modal> */}
 
       {/* broadcast modal */}
       <Modal show={broadcastModalShow} onHide={closeBroadcastModal} centered>
@@ -172,45 +195,14 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
             </Button>
           </Modal.Footer>
         </Modal>
-        
+
         <Modal.Header closeButton>
           <Modal.Title>
-            Broadcast Message<br/>
+            Broadcast Message<br />
             <h6>{currEvent.name}</h6>
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{display: "flex", flexDirection: "column", gap: "5px"}} >
-          <input
-            required
-            className="form-control"
-            name="broadcastTitle"
-            id="broadcastTitle"
-            placeholder="Title *"
-            style={{width: "100%"}}
-          />
-          <textarea 
-            required
-            className="form-control"
-            name="broadcastMessage"
-            id="broadcastMessage"
-            placeholder="Broadcast Message *"
-            style={{width: "100%", height: "10em"}}
-          />
-          <br/>Please select at least one *
-          <div style={{display: "flex"}}>
-            <div style={{display: "flex", width: "50%"}}>
-              <Form.Check id="chkBusinessPartner" />
-              <label htmlFor="chkBusinessPartner">
-                All Business Partners
-              </label>
-            </div>
-            <div style={{display: "flex", width: "50%"}}>
-              <Form.Check id="chkAttendee" />
-              <label htmlFor="chkAttendee">
-                All Attendees
-              </label>
-            </div>
-          </div>
+        <Modal.Body style={{ display: "flex", flexDirection: "column", gap: "5px" }} >
           <Alert
             show={showRecipientError}
             variant="danger"
@@ -235,6 +227,37 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
           >
             Broadcast sent!
           </Alert>
+          <input
+            required
+            className="form-control"
+            name="broadcastTitle"
+            id="broadcastTitle"
+            placeholder="Title *"
+            style={{ width: "100%" }}
+          />
+          <textarea
+            required
+            className="form-control"
+            name="broadcastMessage"
+            id="broadcastMessage"
+            placeholder="Broadcast Message *"
+            style={{ width: "100%", height: "10em" }}
+          />
+          <br />Please select at least one *
+          <div style={{ display: "flex" }}>
+            <div style={{ display: "flex", width: "50%" }}>
+              <Form.Check id="chkBusinessPartner" />
+              <label htmlFor="chkBusinessPartner">
+                All Business Partners
+              </label>
+            </div>
+            <div style={{ display: "flex", width: "50%" }}>
+              <Form.Check id="chkAttendee" />
+              <label htmlFor="chkAttendee">
+                All Attendees
+              </label>
+            </div>
+          </div>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={closeBroadcastModal}>
@@ -266,7 +289,7 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
                 aria-label="broadcast"
                 color="secondary"
               >
-                <svg style={{width:"24px", height:"24px"}} viewBox="0 0 24 24">
+                <svg style={{ width: "24px", height: "24px" }} viewBox="0 0 24 24">
                   <path fill="currentColor" d="M12,8H4A2,2 0 0,0 2,10V14A2,2 0 0,0 4,16H5V20A1,1 0 0,0 6,21H8A1,1 0 0,0 9,20V16H12L17,20V4L12,8M21.5,12C21.5,13.71 20.54,15.26 19,16V8C20.53,8.75 21.5,10.3 21.5,12Z" />
                 </svg>
               </IconButton>
@@ -351,7 +374,6 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
                 </li>
 
                 <ProgressBar
-                  animated
                   now={60}
                   label="60%"
                   style={{ width: '50%', float: 'right' }}

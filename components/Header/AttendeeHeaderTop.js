@@ -71,10 +71,10 @@ const AttendeeHeaderTop = () => {
                   </Link>
                 </li> */}
                 <li>
-                  <Link href="/other/wishlist">
+                  <Link href="/attendee/favourites">
                     <a>
                       <IoIosHeartEmpty />
-                      <span>Wishlist</span>
+                      <span>Favourites</span>
                     </a>
                   </Link>
                 </li>

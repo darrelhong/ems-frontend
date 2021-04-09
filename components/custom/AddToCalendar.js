@@ -9,16 +9,16 @@ export default function AddToCalendar({ event }) {
     const startDate = parseISO(event.eventStartDate);
     const start = [
       startDate.getFullYear(),
-      startDate.getMonth(),
-      startDate.getDay(),
+      startDate.getMonth() + 1,
+      startDate.getDate(),
       startDate.getHours(),
       startDate.getMinutes(),
     ];
     const endDate = parseISO(event.eventEndDate);
     const end = [
       endDate.getFullYear(),
-      endDate.getMonth(),
-      endDate.getDay(),
+      endDate.getMonth() + 1,
+      endDate.getDate(),
       endDate.getHours(),
       endDate.getMinutes(),
     ];
