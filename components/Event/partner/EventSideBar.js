@@ -71,7 +71,7 @@ const EventSideBar = ({ getSortParams, filterValue }) => {
                             Confirmed
                         </Button>
                         <Button
-                            variant={`${checkActive('PAST') ? 'contained' : 'outlined'}`}
+                            variant={`${checkActive('past') ? 'contained' : 'outlined'}`}
                             onClick={() => getSortParams('status', 'past')}
                             value="past"
                             color="secondary"

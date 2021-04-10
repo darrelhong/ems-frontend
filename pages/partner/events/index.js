@@ -41,12 +41,11 @@ export default function PartnerEvents() {
         lastPage.last ? false : lastPage.number + 1,
     }
   );
-
   // if (!user) {
   //   queryClient.invalidateQueries("events");
   // }
 
-  console.log("data: ", data)
+  // console.log("data: ", data)
   // console.log("user: ", user)
   // console.log(filterValue)
   // console.log("test", queryClient.getQueryData('events'))
@@ -100,17 +99,18 @@ export default function PartnerEvents() {
         </ol>
       </BreadcrumbOne>
 
-      <Col lg={3} className="order-lg-first mt-4 pt-2 mt-lg-0 pt-lg-0">
-        <EventSideBar
-          getSortParams={getSortParams}
-          filterValue={filterValue}
-        />
-      </Col>
-
       <Container className="my-4">
         <br></br>
         <Row>
-          <Col md={8} lg={6}>
+
+          <Col lg={3} className="order-lg-first mt-4 pt-2 mt-lg-0 pt-lg-0">
+            <EventSideBar
+              getSortParams={getSortParams}
+              filterValue={filterValue}
+            />
+          </Col>
+
+          <Col md={6} lg={9}>
             <div className="input-group mb-3">
               <input
                 type="text"

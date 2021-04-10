@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Alert, Col, Container, Row } from 'react-bootstrap';
 import { format, parseISO } from 'date-fns';
 
-import { useEvent, useEventDetails } from 'lib/query/events';
+import { useEventDetails } from 'lib/query/events';
 import { getSellerApplicationsFromBpId } from 'lib/query/sellerApplicationApi';
 
 import { BreadcrumbOne } from 'components/Breadcrumb';
@@ -26,7 +26,7 @@ export function getServerSideProps({ query }) {
 }
 
 export default function PartnerEventPage({ id }) {
-  // const { data, status } = useEvent(id);
+  const { data, status } = useEventDetails(id);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [boothTotal, setBoothTotal] = useState(0);
@@ -59,7 +59,6 @@ export default function PartnerEventPage({ id }) {
     const toastId = addToast(message, { appearance: appearanceStyle });
     setTimeout(() => removeToast(toastId), 3000);
   };
-  const { data, status } = useEventDetails(id);
 
   return (
     <PartnerWrapper title={data?.name || 'Event page'}>

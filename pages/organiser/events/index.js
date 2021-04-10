@@ -47,7 +47,7 @@ function myEvents() {
     }
   }, [user]);
 
-  console.log(user)
+  // console.log(user)
 
   useEffect(() => {
     if (events != null) {
