@@ -22,17 +22,19 @@ export default function EventCard({ event, user }) {
   const queryClient = useQueryClient();
   const [inFav, setinFav] = useState(user?.favouriteEventList.some(e => e.eid === event.eid))
   const [applied, setApplied] = useState(user?.sellerApplications.some(e => e.event.eid === event.eid))
-  const [needPay, setNeedPay] = useState(user?.sellerApplications.filter(sa => sa.paymentStatus === "PENDING").some(e => e.event.eid === event.eid))
+  const isPendingApproval = user?.sellerApplications.filter(sa => sa.sellerApplicationStatus === "PENDING").some(e => e.event.eid === event.eid)
   const isPast = user?.sellerProfiles.filter(sp => parseISO(sp.event.eventEndDate) < new Date()).some(e => e.event.eid === event.eid)
   const isConfirmed = user?.sellerApplications.filter(sa => sa.sellerApplicationStatus === "CONFIRMED").some(e => e.event.eid === event.eid)
   const isRejected = user?.sellerApplications.filter(sa => sa.sellerApplicationStatus === "REJECTED").some(e => e.event.eid === event.eid)
   const [badgeStatus, setBadgeStatus] = useState("")
   const [badgeStyle, setBadgeStyle] = useState("primary")
+  const isAllocated = user?.sellerApplications.filter(sa => (sa.paymentStatus === "PENDING" && sa.sellerApplicationStatus === "APPROVED")).some(e => e.event.eid === event.eid)
+  const [needPay, setNeedPay] = useState(isAllocated && user?.sellerApplications.filter(sa => (sa.paymentStatus === "PENDING" && sa.sellerApplicationStatus === "APPROVED" && sa.boothQuantity > 0)).some(e => e.event.eid === event.eid))
   // console.log(user?.sellerApplications.filter(sa => sa.paymentStatus === "PENDING"))
 
   // console.log("Past: ", isPast)
   useEffect(() => {
-    getVariant()
+    getBadge()
   }, [user])
 
   const toggleLike = async (e) => {
@@ -59,36 +61,73 @@ export default function EventCard({ event, user }) {
     queryClient.invalidateQueries("events")
   }
 
-  const getVariant = () => {
-    let ind = "light"
-    if (isConfirmed) ind = "success";
-    else if (needPay) ind = "warning";
-    else if (isRejected) ind = "secondary";
-    else if (applied) ind = "primary";
-    else ind = "light"
+  // const getVariant = () => {
+  //   let ind = "light"
+  //   if (isConfirmed) ind = "success";
+  //   else if (needPay) ind = "warning";
+  //   else if (isRejected) ind = "secondary";
+  //   else if (applied) ind = "primary";
+  //   else ind = "light"
 
-    if (isPast) ind = "dark"
+  //   if (isPast) ind = "dark"
 
-    switch (ind) {
-      case "success":
-        setBadgeStatus("Confirmed")
+  //   switch (ind) {
+  //     case "success":
+  //       setBadgeStatus("Confirmed")
+  //       break;
+  //     case "warning":
+  //       setBadgeStatus("To pay")
+  //       break;
+  //     case "primary":
+  //       setBadgeStatus("Applied")
+  //       break;
+  //     case "secondary":
+  //       setBadgeStatus("Rejected")
+  //       break;
+  //     case "light":
+  //       setBadgeStatus("")
+  //       break;
+  //     case "dark":
+  //       setBadgeStatus("Past")
+  //   }
+  //   setBadgeStyle(ind)
+  // };
+
+  const getBadge = () => {
+    let status = ""
+    if (applied) status = "Pending"
+    if (needPay) status = "Pending Payment"
+    else if (isAllocated) status = "Waiting For Allocation"
+    else if (isPendingApproval) status = "Pending Approval"
+
+    if (isConfirmed) status = "Confirmed"
+    if (isPast) status = "Past"
+    if (isRejected) status = "Rejected"
+
+    switch (status) {
+      case "":
+        setBadgeStyle("secondary")
         break;
-      case "warning":
-        setBadgeStatus("To pay")
+      case "Pending":
+      case "Pending Approval":
+        setBadgeStyle("primary")
         break;
-      case "primary":
-        setBadgeStatus("Applied")
+      case "Waiting For Allocation":
+        setBadgeStyle("info")
         break;
-      case "secondary":
-        setBadgeStatus("Rejected")
+      case "Pending Payment":
+        setBadgeStyle("warning")
         break;
-      case "light":
-        setBadgeStatus("")
+      case "Confirmed":
+        setBadgeStyle("success")
         break;
-      case "dark":
-        setBadgeStatus("Past")
+      case "Past":
+        setBadgeStyle("dark")
+        break;
+      case "Rejected":
+        setBadgeStyle("light")
     }
-    setBadgeStyle(ind)
+    setBadgeStatus(status)
   };
 
   // const { mutateAsync } = useMutation(toggleLike)
@@ -148,8 +187,8 @@ export default function EventCard({ event, user }) {
               </IconButton>
             </span>
             <span style={{ float: 'left' }}>
-              {badgeStatus == "Confirmed" && <Button size="sm" variant="danger" disabled="true">Apply</Button>}
               {badgeStatus == "" && <Button size="sm" variant="danger">Apply</Button>}
+              {badgeStatus == "Confirmed" && <Button size="sm" variant="danger" disabled="true">Apply</Button>}
               {badgeStatus == "To pay" && <Button size="sm" variant="danger">Pay</Button>}
               {badgeStatus == "Past" && <Button size="sm" variant="danger">Rate</Button>}
             </span>
