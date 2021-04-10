@@ -67,6 +67,7 @@ const VerticalLinearStepper = ({
         return (
           errors.name ||
           errors.descriptions ||
+          errors.eventCategory ||
           errors.eventStartDate ||
           errors.eventEndDate
         );

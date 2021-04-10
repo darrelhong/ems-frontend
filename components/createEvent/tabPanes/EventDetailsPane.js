@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import PropTypes from 'prop-types';
-import { eventCategories } from '../../../lib/util/data';
+import { eventCategoriesWithSelect, eventCategories } from '../../../lib/util/data';
 // import CheckboxGroup from 'react-checkbox-group';
 
 const EventDetailsPane = ({ register, watch, errors, eventData }) => {
@@ -62,6 +62,30 @@ const EventDetailsPane = ({ register, watch, errors, eventData }) => {
               {errors.descriptions && (
                 <span role="alert" style={{ color: 'red' }}>
                   This field is required
+                </span>
+              )}
+            </Col>
+            <Col className="form-group" md={12}>
+              <label>
+                Event Category <span className="required">*</span>
+              </label>
+              <select
+                // required
+                className="form-control"
+                name="eventCategory"
+                id="eventCategory"
+                ref={register({
+                  required: true,
+                  validate: (value) => value != 'Select'
+                })}
+              >
+                {eventCategoriesWithSelect.map((category) => (
+                  <option value={category}>{category}</option>
+                ))}
+              </select>
+              {errors.eventCategory && (
+                <span role="alert" style={{ color: 'red' }}>
+                  Please select one category for your event!
                 </span>
               )}
             </Col>
