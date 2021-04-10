@@ -3,47 +3,70 @@ import { format, parseISO } from 'date-fns';
 import { Card } from 'react-bootstrap';
 import Link from 'next/link';
 import { IconButton } from '@material-ui/core';
-import { attendeeFavouriteEvent, getAttendeeFavouriteEvents } from '../../lib/query/eventApi';
+import { attendeeFavouriteEvent, getAttendeeFavouriteEvents, getBusinessPartnerFavouriteEvents } from '../../lib/query/eventApi';
 import { BsHeart, BsHeartFill } from 'react-icons/bs';
 import { useEffect, useState } from 'react';
-export default function HomeEventCard({ event, isFavourite, tab, setFavouriteEvents }) {
-  const [showFavouriteButton, setShowFavouriteButton] = useState(true);
+import { partnerLikeEvent, partnerUnlikeEvent } from 'lib/query/events';
+export default function HomeEventCard({ user, event, isFavourite, tab, setFavouriteEvents }) {
 
   useEffect(() => {
-    if (isFavourite !== null) {
-      var heart = document.getElementById(tab + "-heart-" + event.eid)
-      var heartFilled = document.getElementById(tab + "-heart-filled-" + event.eid)
-      
-      if (isFavourite) {
-        heart.style.display = "none";
-        heartFilled.style.display = "block";
-      }
-      else {
-        heart.style.display = "block";
-        heartFilled.style.display = "none";
-      }
+    var heart = document.getElementById(tab + "-heart-" + event.eid)
+    var heartFilled = document.getElementById(tab + "-heart-filled-" + event.eid)
+    
+    if (isFavourite) {
+      heart.style.display = "none";
+      heartFilled.style.display = "block";
     }
     else {
-      setShowFavouriteButton(false);
+      heart.style.display = "block";
+      heartFilled.style.display = "none";
     }
   }, [])
 
   function favouriteEvent() {
-    attendeeFavouriteEvent(event.eid).then(async () => {
-      var hearts = document.getElementsByName("heart-" + event.eid)
-      var heartsFilled = document.getElementsByName("heart-filled-" + event.eid)
-      for (var i = 0; i < hearts.length; i++) {
-        if (hearts[i].style.display == "block") {
-          hearts[i].style.display = "none";
-          heartsFilled[i].style.display = "block";
+    if (user.roles[0].description === "Attendee") {
+      attendeeFavouriteEvent(event.eid).then(async () => {
+        var hearts = document.getElementsByName("heart-" + event.eid)
+        var heartsFilled = document.getElementsByName("heart-filled-" + event.eid)
+        for (var i = 0; i < hearts.length; i++) {
+          if (hearts[i].style.display == "block") {
+            hearts[i].style.display = "none";
+            heartsFilled[i].style.display = "block";
+          }
+          else {
+            hearts[i].style.display = "block";
+            heartsFilled[i].style.display = "none";
+          }
         }
-        else {
-          hearts[i].style.display = "block";
-          heartsFilled[i].style.display = "none";
-        }
+        await setFavouriteEvents(await getAttendeeFavouriteEvents());
+      });
+    }
+    else if (user.roles[0].description === "Business Partner") {
+      if (isFavourite) {
+        partnerUnlikeEvent(user.id, event.eid).then(async () => {
+          var hearts = document.getElementsByName("heart-" + event.eid)
+          var heartsFilled = document.getElementsByName("heart-filled-" + event.eid)
+
+          for (var i = 0; i < hearts.length; i++) {
+            hearts[i].style.display = "block";
+            heartsFilled[i].style.display = "none";
+          }
+          await setFavouriteEvents(await getBusinessPartnerFavouriteEvents());
+        });
       }
-      await setFavouriteEvents(await getAttendeeFavouriteEvents());
-    });
+      else {
+        partnerLikeEvent(user.id, event.eid).then(async () => {
+          var hearts = document.getElementsByName("heart-" + event.eid)
+          var heartsFilled = document.getElementsByName("heart-filled-" + event.eid)
+
+          for (var i = 0; i < hearts.length; i++) {
+            hearts[i].style.display = "none";
+            heartsFilled[i].style.display = "block";
+          }
+          await setFavouriteEvents(await getBusinessPartnerFavouriteEvents());
+        });
+      }
+    } 
   }
 
   return (
@@ -62,26 +85,24 @@ export default function HomeEventCard({ event, isFavourite, tab, setFavouriteEve
           <Card.Text className="text-default mt-auto">
             {format(parseISO(event.eventStartDate), 'eee, dd MMM yy hh:mmbbb')}
           </Card.Text>
-          {showFavouriteButton && (
-            <span style={{ position: "absolute", bottom: "10px", right: "10px" }}>
-              <IconButton
-                onClick={() => favouriteEvent()}
-                aria-label="favourite"
-                color="secondary"
-              >
-                <BsHeart 
-                  id={tab + "-heart-" + event.eid} 
-                  name={"heart-" + event.eid} 
-                  style={{display: "block"}} 
-                />
-                <BsHeartFill 
-                  id={tab + "-heart-filled-" + event.eid} 
-                  name={"heart-filled-" + event.eid} 
-                  style={{display: "none"}} 
-                />
-              </IconButton>
-            </span>
-          )}
+          <span style={{ position: "absolute", bottom: "10px", right: "10px" }}>
+            <IconButton
+              onClick={() => favouriteEvent()}
+              aria-label="favourite"
+              color="secondary"
+            >
+              <BsHeart 
+                id={tab + "-heart-" + event.eid} 
+                name={"heart-" + event.eid} 
+                style={{display: "block"}} 
+              />
+              <BsHeartFill 
+                id={tab + "-heart-filled-" + event.eid} 
+                name={"heart-filled-" + event.eid} 
+                style={{display: "none"}} 
+              />
+            </IconButton>
+          </span>
         </Card.Body>
       </Card>
     </>

@@ -13,6 +13,7 @@ import useUser from '../../../lib/query/useUser';
 import api from '../../../lib/ApiClient';
 import ReactNotification from 'react-notifications-component'
 import 'react-notifications-component/dist/theme.css'
+import EventSideBar from 'components/Event/partner/EventSideBar';
 
 const getEvents = async (page = 0, sort, sortDir, searchTerm) => {
   let url = `/api/event/get-events?page=${page}`;
@@ -52,12 +53,11 @@ export default function PartnerHome() {
         lastPage.last ? false : lastPage.number + 1,
     }
   );
-
   // if (!user) {
   //   queryClient.invalidateQueries("events");
   // }
 
-  console.log("data: ", data)
+  // console.log("data: ", data)
   // console.log("user: ", user)
   // console.log(filterValue)
   // console.log("test", queryClient.getQueryData('events'))
@@ -102,98 +102,102 @@ export default function PartnerHome() {
 
 
   return (
-    <>
-    
-      <PartnerWrapper title="Events">
-        <BreadcrumbOne pageTitle="View All Events">
-          <ol className="breadcrumb justify-content-md-end">
-            <li className="breadcrumb-item">
-              <Link href="/partner/home">
-                <a>Home</a>
-              </Link>
-            </li>
-            <li className="breadcrumb-item active">View All Events</li>
-          </ol>
-        </BreadcrumbOne>
-        <ReactNotification />
-        <Container className="my-4">
+    <PartnerWrapper title="Events">
+      <BreadcrumbOne pageTitle="View All Events">
+        <ol className="breadcrumb justify-content-md-end">
+          <li className="breadcrumb-item">
+            <Link href="/partner/home">
+              <a>Home</a>
+            </Link>
+          </li>
+          <li className="breadcrumb-item active">View All Events</li>
+        </ol>
+      </BreadcrumbOne>
 
-          <br></br>
-          <Row>
-            <Col md={8} lg={6}>
-              <div className="input-group mb-3">
-                <input
-                  type="text"
-                  className="form-control "
-                  placeholder="Search events"
-                  onChange={handleOnSearchInput}
-                />
-                <div className="input-group-append">
-                  <button
-                    className="btn btn-border-fill btn-sm"
-                    type="button"
-                    style={{ height: 38 }}
-                    onClick={handleSearchButtonClicked}
-                  >
-                    Search
+      <Container className="my-4">
+        <br></br>
+        <Row>
+
+          <Col lg={3} className="order-lg-first mt-4 pt-2 mt-lg-0 pt-lg-0">
+            <EventSideBar
+              getSortParams={getSortParams}
+              filterValue={filterValue}
+            />
+          </Col>
+
+          <Col md={6} lg={9}>
+            <div className="input-group mb-3">
+              <input
+                type="text"
+                className="form-control "
+                placeholder="Search events"
+                onChange={handleOnSearchInput}
+              />
+              <div className="input-group-append">
+                <button
+                  className="btn btn-outline-primary btn-sm"
+                  type="button"
+                  style={{ height: 38 }}
+                  onClick={handleSearchButtonClicked}
+                >
+                  Search
                 </button>
-                </div>
               </div>
-            </Col>
-          </Row>
+            </div>
+          </Col>
+        </Row>
 
-          <Row className="mb-4">
-            <Col xs={4} sm={3}>
-              <select className="custom-select" onChange={handleChange}>
-                <option value="">Sort by</option>
-                <option value="name-asc">Name - A to Z</option>
-                <option value="name-desc">Name - Z to A</option>
-              </select>
-            </Col>
-          </Row>
-          {status === 'loading' ? (
-            <Spinner animation="grow" role="status" aria-hidden="true" />
-          ) : status === 'error' ? (
-            <Alert variant="danger">An error has occured</Alert>
-          ) : (
-            <>
-              <Row>
-                {data.pages.map((page, i) => (
-                  <Fragment key={i}>
-                    {page.content.map((event) => (
-                      <Col
-                        key={event.eid}
-                        sm={6}
-                        lg={4}
-                        className="mb-5 d-flex align-items-stretch"
-                      >
-                        {/* <Link href={`/partner/events/${event.eid}`}> */}
-                        <a className="w-100">
-                          <EventCard event={event} user={user} />
-                        </a>
-                        {/* </Link> */}
-                      </Col>
-                    ))}
-                  </Fragment>
-                ))}
-              </Row>
+        <Row className="mb-4">
+          <Col xs={4} sm={3}>
+            <select className="custom-select" onChange={handleChange}>
+              <option value="">Sort by</option>
+              <option value="name-asc">Name - A to Z</option>
+              <option value="name-desc">Name - Z to A</option>
+            </select>
+          </Col>
+        </Row>
+        {status === 'loading' ? (
+          <Spinner animation="grow" role="status" aria-hidden="true" />
+        ) : status === 'error' ? (
+          <Alert variant="danger">An error has occured</Alert>
+        ) : (
+          <>
+            <Row>
+              {data.pages.map((page, i) => (
+                <Fragment key={i}>
+                  {page.content.map((event) => (
+                    <Col
+                      key={event.eid}
+                      sm={6}
+                      lg={4}
+                      className="mb-5 d-flex align-items-stretch"
+                    >
+                      {/* <Link href={`/partner/events/${event.eid}`}> */}
+                      <a className="w-100">
+                        <EventCard event={event} user={user} />
+                      </a>
+                      {/* </Link> */}
+                    </Col>
+                  ))}
+                </Fragment>
+              ))}
+            </Row>
 
-              <Row>
-                <Col className="d-flex align-items-center">
-                  <ButtonWithLoading
-                    className="btn btn-fill-out btn-sm"
-                    disabled={!hasNextPage || isFetchingNextPage}
-                    isLoading={isFetchingNextPage}
-                    onClick={() => fetchNextPage()}
-                  >
-                    {hasNextPage ? 'See more' : 'No more events'}
-                  </ButtonWithLoading>
-                </Col>
-              </Row>
-            </>
-          )}
-        </Container>
-      </PartnerWrapper>
-    </>
+            <Row>
+              <Col className="d-flex align-items-center">
+                <ButtonWithLoading
+                  className="btn btn-fill-out btn-sm"
+                  disabled={!hasNextPage || isFetchingNextPage}
+                  isLoading={isFetchingNextPage}
+                  onClick={() => fetchNextPage()}
+                >
+                  {hasNextPage ? 'See more' : 'No more events'}
+                </ButtonWithLoading>
+              </Col>
+            </Row>
+          </>
+        )}
+      </Container>
+    </PartnerWrapper>
   );
 }

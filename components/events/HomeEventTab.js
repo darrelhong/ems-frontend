@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
-import { getAttendeeFavouriteEvents } from '../../lib/query/eventApi';
+import { getAttendeeFavouriteEvents, getBusinessPartnerFavouriteEvents } from '../../lib/query/eventApi';
 import useUser from '../../lib/query/useUser';
 import HomeEventCard from './HomeEventCard';
 
@@ -16,8 +16,12 @@ export default function HomeEventTab({ events, tab }) {
             };
             getEvent();
         }
-        else {
-            setFavouriteEvents(null);
+        else if (user.roles[0].description === "Business Partner") {
+            const getEvent = async () => {
+                const data = await getBusinessPartnerFavouriteEvents();
+                setFavouriteEvents(data);
+            };
+            getEvent();
         }
     }, [user])
 
@@ -32,7 +36,7 @@ export default function HomeEventTab({ events, tab }) {
                 >
                 {/* <Link href={`/partner/events/${event.eid}`}> */}
                 <a className="w-100">
-                    <HomeEventCard event={event} isFavourite={favouriteEvents !== null ? favouriteEvents.some(fEvent => fEvent.eid === event.eid) : null} tab={tab} setFavouriteEvents={setFavouriteEvents} />
+                    <HomeEventCard user={user} event={event} isFavourite={favouriteEvents !== null ? favouriteEvents.some(fEvent => fEvent.eid === event.eid) : null} tab={tab} setFavouriteEvents={setFavouriteEvents} />
                 </a>
                 {/* </Link> */}
                 </Col>
