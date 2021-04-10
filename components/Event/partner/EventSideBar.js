@@ -25,13 +25,6 @@ const EventSideBar = ({ getSortParams, filterValue }) => {
                         orientation="vertical"
                     >
                         <Button
-                            variant={`${checkActive('TRENDING') ? 'contained' : 'outlined'}`}
-                            onClick={() => getSortParams('status', 'TRENDING')}
-                            color="secondary"
-                        >
-                            Trending
-                        </Button>
-                        <Button
                             variant={`${checkActive('all') ? 'contained' : 'outlined'}`}
                             onClick={() => getSortParams('status', 'all')}
                             color="secondary"
@@ -55,6 +48,13 @@ const EventSideBar = ({ getSortParams, filterValue }) => {
                             Applied
                         </Button>
                         <Button
+                            variant={`${checkActive('pending approval') ? 'contained' : 'outlined'}`}
+                            onClick={() => getSortParams('status', 'pending approval')}
+                            color="secondary"
+                        >
+                            Pending Approval
+                        </Button>
+                        <Button
                             variant={`${checkActive('pending payment') ? 'contained' : 'outlined'}`}
                             onClick={() => getSortParams('status', 'pending payment')}
                             value="pending payment"
@@ -69,6 +69,13 @@ const EventSideBar = ({ getSortParams, filterValue }) => {
                             color="secondary"
                         >
                             Confirmed
+                        </Button>
+                        <Button
+                            variant={`${checkActive('rejected') ? 'contained' : 'outlined'}`}
+                            onClick={() => getSortParams('status', 'rejected')}
+                            color="secondary"
+                        >
+                            Rejected
                         </Button>
                         <Button
                             variant={`${checkActive('past') ? 'contained' : 'outlined'}`}

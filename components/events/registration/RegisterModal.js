@@ -33,7 +33,7 @@ const RegisterModal = ({
             <form>
                 <Row className="mb-4">
                     <Col>
-                    {introComponent()}
+                        {introComponent()}
                         {/* <br/> */}
                     </Col>
                 </Row>
@@ -189,93 +189,93 @@ const RegisterModal = ({
         if (applicationMade) {
             return (
                 <p className="text-dark">
-                Thank you for your interest in this event.
-                <strong>{' '}{event?.eventOrganiser?.name}{' '}</strong>
+                    Thank you for your interest in this event.
+                    <strong>{' '}{event?.eventOrganiser?.name}{' '}</strong>
                 will get back to you shortly on whether your application is successful.
-            </p>
+                </p>
             )
         } else {
             return (
-            <p className="text-dark">
-                Thank you for your interest in this event. Kindly add some details in the application and
-                <strong>{' '}{event?.eventOrganiser?.name}{' '}</strong>
+                <p className="text-dark">
+                    Thank you for your interest in this event. Kindly add some details in the application and
+                    <strong>{' '}{event?.eventOrganiser?.name}{' '}</strong>
                 will get back to you shortly on whether your application is successful.
-            </p>
+                </p>
             )
         }
     }
 
-const closeButton = () => (
-    <Button variant="danger" onClick={() => {
-        closeRegisterModal();
-    }}>
-        Close
-    </Button>
-);
+    const closeButton = () => (
+        <Button variant="danger" onClick={() => {
+            closeRegisterModal();
+        }}>
+            Close
+        </Button>
+    );
 
 
-const registerButton = () => (
-    <Button
-        variant="danger"
-        onClick={handleSubmit(handleRegister)}
-    >
-        Register
-    </Button>
-);
+    const registerButton = () => (
+        <Button
+            variant="danger"
+            onClick={handleSubmit(handleRegister)}
+        >
+            Register
+        </Button>
+    );
 
-const handleRegister = async (data) => {
-    try {
-        // const application = await createSellerApplication(data, event.eid, bpId);
-        // setApplicationMade(application);
-        await newApplicationNotif(bpId,event.eid);
-        closeRegisterModal();
-        createToast('Registered Successfully', 'success');
-    } catch (e) {
-        closeRegisterModal();
-        createToast('Error, please try again later', 'error');
+    const handleRegister = async (data) => {
+        try {
+            const application = await createSellerApplication(data, event.eid, bpId);
+            setApplicationMade(application);
+            await newApplicationNotif(bpId, event.eid);
+            closeRegisterModal();
+            createToast('Registered Successfully', 'success');
+        } catch (e) {
+            closeRegisterModal();
+            createToast('Error, please try again later', 'error');
+        }
     }
-}
 
-const getCheckoutTotal = () => {
-    // return getValues('boothQuantity');
-    if (event?.boothPrice) {
-        return event.boothPrice * boothQuantity;
+    const getCheckoutTotal = () => {
+        // return getValues('boothQuantity');
+        if (event?.boothPrice) {
+            return event.boothPrice * boothQuantity;
+        }
+        else return 0;
+        // return event.boothPrice * getValues('boothQuantity');
     }
-    else return 0;
-    // return event.boothPrice * getValues('boothQuantity');
-}
 
-const getTitle = () => {
-    if (applicationMade) {
-        return `Applying for ${event?.name}`;
-    } else {
-        return `Registering for ${event?.name}`;
-    }
-};
+    const getTitle = () => {
+        if (applicationMade) {
+            return `Applying for ${event?.name}`;
+        } else {
+            return `Registering for ${event?.name}`;
+        }
+    };
 
-return (
-    <Modal
-        show={showRegisterModal}
-        onHide={closeRegisterModal}
-        size="xl"
-        centered>
-        <Modal.Header closeButton>
-            <Modal.Title>{getTitle()}</Modal.Title>
-        </Modal.Header>
-        {bodyComponent()}
-        <Modal.Footer>
-            {/* {closeButton()} */}
-            <Col
-                style={{
-                    textAlign: 'right'
-                }}>
-                <text>Total:{' '}</text>
-                <text style={{ color: 'red' }}>{formatter.format(getCheckoutTotal())}</text>
-            </Col>
-            { applicationMade ? closeButton(): registerButton()}
-        </Modal.Footer>
-    </Modal>
-);
+    return (
+        <Modal
+            show={showRegisterModal}
+            onHide={closeRegisterModal}
+            size="xl"
+            centered>
+            <Modal.Header closeButton>
+                <Modal.Title>{getTitle()}</Modal.Title>
+            </Modal.Header>
+            {bodyComponent()}
+            <Modal.Footer>
+                {/* {closeButton()} */}
+                <Col
+                    style={{
+                        textAlign: 'right'
+                    }}>
+                    <text>Total:{' '}</text>
+                    <text style={{ color: 'red' }}>{formatter.format(getCheckoutTotal())}</text>
+                </Col>
+                {applicationMade ? closeButton() : registerButton()}
+            </Modal.Footer>
+        </Modal>
+    );
 };
 
 export default RegisterModal;
