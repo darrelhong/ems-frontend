@@ -15,6 +15,11 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import { useMutation, useQueryClient } from 'react-query';
 import { attendeeFavouriteEvent } from 'lib/query/eventApi';
 import Box from '@material-ui/core/Box';
+import RegisterModal from 'components/events/registration/RegisterModal';
+import { useToasts } from 'react-toast-notifications';
+import { getBoothTotalFromEvent } from 'lib/functions/boothFunctions';
+import { getSellerApplicationsFromBpId } from 'lib/query/sellerApplicationApi';
+import { Fragment } from 'react';
 
 export default function EventCard({ event, user }) {
   // function inFav(event, user) {
@@ -22,50 +27,52 @@ export default function EventCard({ event, user }) {
   // }
 
   const queryClient = useQueryClient();
-  const [inFav, setinFav] = useState(
-    user?.favouriteEventList?.some((e) => e.eid === event.eid)
-  );
-  const [applied, setApplied] = useState(
-    user?.sellerApplications?.some((e) => e.event.eid === event.eid)
-  );
-  const isPendingApproval = user?.sellerApplications
-    ?.filter((sa) => sa.sellerApplicationStatus === 'PENDING')
-    ?.some((e) => e.event.eid === event.eid);
-  const isPast = user?.sellerProfiles
-    ?.filter((sp) => parseISO(sp.event.eventEndDate) < new Date())
-    ?.some((e) => e.event.eid === event.eid);
-  const isConfirmed = user?.sellerApplications
-    ?.filter((sa) => sa.sellerApplicationStatus === 'CONFIRMED')
-    .filer?.some((e) => e.event.eid === event.eid);
-  const isRejected = user?.sellerApplications
-    ?.filter((sa) => sa.sellerApplicationStatus === 'REJECTED')
-    ?.some((e) => e.event.eid === event.eid);
-  const [badgeStatus, setBadgeStatus] = useState('');
-  const [badgeStyle, setBadgeStyle] = useState('primary');
-  const isAllocated = user?.sellerApplications
-    ?.filter(
-      (sa) =>
-        sa.paymentStatus === 'PENDING' &&
-        sa.sellerApplicationStatus === 'APPROVED'
-    )
-    .some((e) => e.event.eid === event.eid);
-  const [needPay, setNeedPay] = useState(
-    isAllocated &&
-      user?.sellerApplications
-        ?.filter(
-          (sa) =>
-            sa.paymentStatus === 'PENDING' &&
-            sa.sellerApplicationStatus === 'APPROVED' &&
-            sa.boothQuantity > 0
-        )
-        .some((e) => e.event.eid === event.eid)
-  );
+  const [inFav, setinFav] = useState(user?.favouriteEventList.some(e => e.eid === event.eid))
+  const [applied, setApplied] = useState(user?.sellerApplications.some(e => e.event.eid === event.eid))
+  const isPendingApproval = user?.sellerApplications.filter(sa => sa.sellerApplicationStatus === "PENDING").some(e => e.event.eid === event.eid)
+  const isPast = user?.sellerProfiles.filter(sp => parseISO(sp.event.eventEndDate) < new Date()).some(e => e.event.eid === event.eid)
+  const isConfirmed = user?.sellerApplications.filter(sa => sa.sellerApplicationStatus === "CONFIRMED").some(e => e.event.eid === event.eid)
+  const isRejected = user?.sellerApplications.filter(sa => sa.sellerApplicationStatus === "REJECTED").some(e => e.event.eid === event.eid)
+  const [badgeStatus, setBadgeStatus] = useState("")
+  const [badgeStyle, setBadgeStyle] = useState("primary")
+  const isAllocated = user?.sellerApplications.filter(sa => (sa.paymentStatus === "PENDING" && sa.sellerApplicationStatus === "APPROVED")).some(e => e.event.eid === event.eid)
+  const [needPay, setNeedPay] = useState(isAllocated && user?.sellerApplications.filter(sa => (sa.paymentStatus === "PENDING" && sa.sellerApplicationStatus === "APPROVED" && sa.boothQuantity > 0)).some(e => e.event.eid === event.eid))
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
+  const [boothTotal, setBoothTotal] = useState(0);
+  const [applicationMade, setApplicationMade] = useState();
   // console.log(user?.sellerApplications.filter(sa => sa.paymentStatus === "PENDING"))
 
   // console.log("Past: ", isPast)
   useEffect(() => {
-    getBadge();
-  }, [user]);
+    const loadBoothTotal = async () => {
+      const total = await getBoothTotalFromEvent(event?.eid);
+      setBoothTotal(total);
+    }
+    const loadApplications = async () => {
+      if (user != null) {
+        let applications = await getSellerApplicationsFromBpId(user?.id);
+        applications = applications.filter(function (application) {
+          return application?.event?.eid == event.eid;
+          //added filtering done on the backend side 
+          // return application?.event?.eid == id && application.sellerApplicationStatus != 'CANCELLED';
+        });
+        if (applications?.length == 1) {
+          setApplicationMade(applications[0]);
+        }
+      }
+    }
+    loadBoothTotal()
+    if (user != null) {
+      loadApplications()
+    }
+    getBadge()
+  }, [user])
+
+  const applyEvent = (e) => {
+    e.preventDefault();
+    e.stopPropagation()
+    setShowRegisterModal(true);
+  }
 
   const toggleLike = async (e) => {
     e.preventDefault();
@@ -88,37 +95,10 @@ export default function EventCard({ event, user }) {
     queryClient.invalidateQueries('events');
   };
 
-  // const getVariant = () => {
-  //   let ind = "light"
-  //   if (isConfirmed) ind = "success";
-  //   else if (needPay) ind = "warning";
-  //   else if (isRejected) ind = "secondary";
-  //   else if (applied) ind = "primary";
-  //   else ind = "light"
-
-  //   if (isPast) ind = "dark"
-
-  //   switch (ind) {
-  //     case "success":
-  //       setBadgeStatus("Confirmed")
-  //       break;
-  //     case "warning":
-  //       setBadgeStatus("To pay")
-  //       break;
-  //     case "primary":
-  //       setBadgeStatus("Applied")
-  //       break;
-  //     case "secondary":
-  //       setBadgeStatus("Rejected")
-  //       break;
-  //     case "light":
-  //       setBadgeStatus("")
-  //       break;
-  //     case "dark":
-  //       setBadgeStatus("Past")
-  //   }
-  //   setBadgeStyle(ind)
-  // };
+  const createToast = (message, appearanceStyle) => {
+    const toastId = addToast(message, { appearance: appearanceStyle });
+    setTimeout(() => removeToast(toastId), 3000);
+  };
 
   const getBadge = () => {
     let status = '';
@@ -173,6 +153,7 @@ export default function EventCard({ event, user }) {
   //   };
 
   return (
+    // <div>
     <Card
       className={`h-100 ${styles.eventCard}`}
       style={{
@@ -182,6 +163,16 @@ export default function EventCard({ event, user }) {
         },
       }}
     >
+      <RegisterModal
+        showRegisterModal={showRegisterModal}
+        closeRegisterModal={() => { setShowRegisterModal(false) }}
+        event={event}
+        boothTotal={boothTotal}
+        bpId={user.id}
+        createToast={createToast}
+        setApplicationMade={setApplicationMade}
+        applicationMade={applicationMade}
+      />
       <Card.Img
         variant="top"
         src={event.images?.[0] || '/assets/images/img-placeholder.jpg'}
@@ -203,7 +194,7 @@ export default function EventCard({ event, user }) {
         <Card.Text className="line-clamp">{event?.descriptions}</Card.Text>
         <Card.Text className="text-default mt-auto">
           {format(parseISO(event.eventStartDate), 'eee, dd MMM yy hh:mmbbb')}
-          <div>
+          <Fragment>
             <span style={{ float: 'right' }}>
               <IconButton
                 aria-label="fav"
@@ -216,28 +207,14 @@ export default function EventCard({ event, user }) {
               </IconButton>
             </span>
             <span style={{ float: 'left' }}>
-              {badgeStatus == '' && (
-                <Button size="sm" variant="danger">
-                  Apply
-                </Button>
-              )}
-              {badgeStatus == 'Confirmed' && (
-                <Button size="sm" variant="danger" disabled="true">
-                  Apply
-                </Button>
-              )}
-              {badgeStatus == 'To pay' && (
-                <Button size="sm" variant="danger">
-                  Pay
-                </Button>
-              )}
-              {badgeStatus == 'Past' && (
-                <Button size="sm" variant="danger">
-                  Rate
-                </Button>
-              )}
+
+              {badgeStatus == "" && <Button size="sm" onClick={(e) => applyEvent(e)} variant="danger">Apply</Button>}
+              {badgeStatus == "Confirmed" && <Button size="sm" variant="danger" disabled="true">Apply</Button>}
+              {badgeStatus == "Pending Payment" && <Button size="sm" variant="danger">Pay</Button>}
+              {badgeStatus == "Past" && <Button size="sm" variant="danger">Rate</Button>}
             </span>
-          </div>
+          </Fragment>
+
         </Card.Text>
         {/* <div className="d-flex align-items-baseline mt-auto">
           <Card.Text className="text-default mb-0">
@@ -260,6 +237,8 @@ export default function EventCard({ event, user }) {
         </div> */}
       </Card.Body>
     </Card>
+    // </div>
+
   );
 }
 
