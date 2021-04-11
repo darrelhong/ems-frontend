@@ -1,7 +1,10 @@
 import PropTypes from 'prop-types';
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import { format, parseISO } from 'date-fns';
-import { partnerLikeEvent, partnerUnlikeEvent } from '../../../lib/query/events'
+import {
+  partnerLikeEvent,
+  partnerUnlikeEvent,
+} from '../../../lib/query/events';
 import { Card, Badge, Button } from 'react-bootstrap';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import useFavouriteEventMutation from 'lib/query/useFavouriteEventMutation';
@@ -9,33 +12,60 @@ import styles from './EventCard.module.css';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from 'react-query';
 import { attendeeFavouriteEvent } from 'lib/query/eventApi';
 import Box from '@material-ui/core/Box';
 
 export default function EventCard({ event, user }) {
-
   // function inFav(event, user) {
   //   return user.favouriteEventList.some(e => e.eid === event.eid)
   // }
 
   const queryClient = useQueryClient();
-  const [inFav, setinFav] = useState(user?.favouriteEventList.some(e => e.eid === event.eid))
-  const [applied, setApplied] = useState(user?.sellerApplications.some(e => e.event.eid === event.eid))
-  const isPendingApproval = user?.sellerApplications.filter(sa => sa.sellerApplicationStatus === "PENDING").some(e => e.event.eid === event.eid)
-  const isPast = user?.sellerProfiles.filter(sp => parseISO(sp.event.eventEndDate) < new Date()).some(e => e.event.eid === event.eid)
-  const isConfirmed = user?.sellerApplications.filter(sa => sa.sellerApplicationStatus === "CONFIRMED").some(e => e.event.eid === event.eid)
-  const isRejected = user?.sellerApplications.filter(sa => sa.sellerApplicationStatus === "REJECTED").some(e => e.event.eid === event.eid)
-  const [badgeStatus, setBadgeStatus] = useState("")
-  const [badgeStyle, setBadgeStyle] = useState("primary")
-  const isAllocated = user?.sellerApplications.filter(sa => (sa.paymentStatus === "PENDING" && sa.sellerApplicationStatus === "APPROVED")).some(e => e.event.eid === event.eid)
-  const [needPay, setNeedPay] = useState(isAllocated && user?.sellerApplications.filter(sa => (sa.paymentStatus === "PENDING" && sa.sellerApplicationStatus === "APPROVED" && sa.boothQuantity > 0)).some(e => e.event.eid === event.eid))
+  const [inFav, setinFav] = useState(
+    user?.favouriteEventList?.some((e) => e.eid === event.eid)
+  );
+  const [applied, setApplied] = useState(
+    user?.sellerApplications?.some((e) => e.event.eid === event.eid)
+  );
+  const isPendingApproval = user?.sellerApplications
+    ?.filter((sa) => sa.sellerApplicationStatus === 'PENDING')
+    ?.some((e) => e.event.eid === event.eid);
+  const isPast = user?.sellerProfiles
+    ?.filter((sp) => parseISO(sp.event.eventEndDate) < new Date())
+    ?.some((e) => e.event.eid === event.eid);
+  const isConfirmed = user?.sellerApplications
+    ?.filter((sa) => sa.sellerApplicationStatus === 'CONFIRMED')
+    .filer?.some((e) => e.event.eid === event.eid);
+  const isRejected = user?.sellerApplications
+    ?.filter((sa) => sa.sellerApplicationStatus === 'REJECTED')
+    ?.some((e) => e.event.eid === event.eid);
+  const [badgeStatus, setBadgeStatus] = useState('');
+  const [badgeStyle, setBadgeStyle] = useState('primary');
+  const isAllocated = user?.sellerApplications
+    ?.filter(
+      (sa) =>
+        sa.paymentStatus === 'PENDING' &&
+        sa.sellerApplicationStatus === 'APPROVED'
+    )
+    .some((e) => e.event.eid === event.eid);
+  const [needPay, setNeedPay] = useState(
+    isAllocated &&
+      user?.sellerApplications
+        ?.filter(
+          (sa) =>
+            sa.paymentStatus === 'PENDING' &&
+            sa.sellerApplicationStatus === 'APPROVED' &&
+            sa.boothQuantity > 0
+        )
+        .some((e) => e.event.eid === event.eid)
+  );
   // console.log(user?.sellerApplications.filter(sa => sa.paymentStatus === "PENDING"))
 
   // console.log("Past: ", isPast)
   useEffect(() => {
-    getBadge()
-  }, [user])
+    getBadge();
+  }, [user]);
 
   const toggleLike = async (e) => {
     e.preventDefault();
@@ -44,22 +74,19 @@ export default function EventCard({ event, user }) {
         // user?.favouriteEventList.push(event)
         partnerLikeEvent(user.id, event.eid);
         // console.log(user.favouriteEventList)
-      }
-      else if (user.roles[0].description === 'Attendee') {
+      } else if (user.roles[0].description === 'Attendee') {
         attendeeFavouriteEvent(event.eid);
       }
-    }
-    else {
+    } else {
       if (user.roles[0].description === 'Business Partner') {
         partnerUnlikeEvent(user.id, event.eid);
-      }
-      else if (user.roles[0].description === 'Attendee') {
+      } else if (user.roles[0].description === 'Attendee') {
         attendeeFavouriteEvent(event.eid);
       }
     }
-    setinFav(!inFav)
-    queryClient.invalidateQueries("events")
-  }
+    setinFav(!inFav);
+    queryClient.invalidateQueries('events');
+  };
 
   // const getVariant = () => {
   //   let ind = "light"
@@ -94,40 +121,40 @@ export default function EventCard({ event, user }) {
   // };
 
   const getBadge = () => {
-    let status = ""
-    if (applied) status = "Pending"
-    if (needPay) status = "Pending Payment"
-    else if (isAllocated) status = "Waiting For Allocation"
-    else if (isPendingApproval) status = "Pending Approval"
+    let status = '';
+    if (applied) status = 'Pending';
+    if (needPay) status = 'Pending Payment';
+    else if (isAllocated) status = 'Waiting For Allocation';
+    else if (isPendingApproval) status = 'Pending Approval';
 
-    if (isConfirmed) status = "Confirmed"
-    if (isPast) status = "Past"
-    if (isRejected) status = "Rejected"
+    if (isConfirmed) status = 'Confirmed';
+    if (isPast) status = 'Past';
+    if (isRejected) status = 'Rejected';
 
     switch (status) {
-      case "":
-        setBadgeStyle("secondary")
+      case '':
+        setBadgeStyle('secondary');
         break;
-      case "Pending":
-      case "Pending Approval":
-        setBadgeStyle("primary")
+      case 'Pending':
+      case 'Pending Approval':
+        setBadgeStyle('primary');
         break;
-      case "Waiting For Allocation":
-        setBadgeStyle("info")
+      case 'Waiting For Allocation':
+        setBadgeStyle('info');
         break;
-      case "Pending Payment":
-        setBadgeStyle("warning")
+      case 'Pending Payment':
+        setBadgeStyle('warning');
         break;
-      case "Confirmed":
-        setBadgeStyle("success")
+      case 'Confirmed':
+        setBadgeStyle('success');
         break;
-      case "Past":
-        setBadgeStyle("dark")
+      case 'Past':
+        setBadgeStyle('dark');
         break;
-      case "Rejected":
-        setBadgeStyle("light")
+      case 'Rejected':
+        setBadgeStyle('light');
     }
-    setBadgeStatus(status)
+    setBadgeStatus(status);
   };
 
   // const { mutateAsync } = useMutation(toggleLike)
@@ -166,7 +193,7 @@ export default function EventCard({ event, user }) {
         style={{
           position: 'absolute',
           top: 5,
-          right: 5
+          right: 5,
         }}
       >
         {badgeStatus}
@@ -178,22 +205,39 @@ export default function EventCard({ event, user }) {
           {format(parseISO(event.eventStartDate), 'eee, dd MMM yy hh:mmbbb')}
           <div>
             <span style={{ float: 'right' }}>
-              <IconButton aria-label="fav" color="secondary"
-                onClick={(e) => { toggleLike(e) }}>
-                {inFav ?
-                  (<FavoriteIcon />) :
-                  (<FavoriteBorderIcon />)
-                }
+              <IconButton
+                aria-label="fav"
+                color="secondary"
+                onClick={(e) => {
+                  toggleLike(e);
+                }}
+              >
+                {inFav ? <FavoriteIcon /> : <FavoriteBorderIcon />}
               </IconButton>
             </span>
             <span style={{ float: 'left' }}>
-              {badgeStatus == "" && <Button size="sm" variant="danger">Apply</Button>}
-              {badgeStatus == "Confirmed" && <Button size="sm" variant="danger" disabled="true">Apply</Button>}
-              {badgeStatus == "To pay" && <Button size="sm" variant="danger">Pay</Button>}
-              {badgeStatus == "Past" && <Button size="sm" variant="danger">Rate</Button>}
+              {badgeStatus == '' && (
+                <Button size="sm" variant="danger">
+                  Apply
+                </Button>
+              )}
+              {badgeStatus == 'Confirmed' && (
+                <Button size="sm" variant="danger" disabled="true">
+                  Apply
+                </Button>
+              )}
+              {badgeStatus == 'To pay' && (
+                <Button size="sm" variant="danger">
+                  Pay
+                </Button>
+              )}
+              {badgeStatus == 'Past' && (
+                <Button size="sm" variant="danger">
+                  Rate
+                </Button>
+              )}
             </span>
           </div>
-
         </Card.Text>
         {/* <div className="d-flex align-items-baseline mt-auto">
           <Card.Text className="text-default mb-0">
@@ -222,4 +266,5 @@ export default function EventCard({ event, user }) {
 EventCard.propTypes = {
   event: PropTypes.object,
   isPublic: PropTypes.bool,
+  user: PropTypes.object,
 };
