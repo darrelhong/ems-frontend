@@ -201,18 +201,6 @@ const FollowersTabEoProfile = ({
     </Tooltip>
   );
 
-  function clearBroadcastForm() {
-    let broadcastTitle = document.getElementById("broadcastTitle");
-    let broadcastMessage = document.getElementById("broadcastMessage");
-    let chkBusinessPartner = document.getElementById("chkBusinessPartner");
-    let chkAttendee = document.getElementById("chkAttendee")
-
-    broadcastTitle.value = "";
-    broadcastMessage.value = "";
-    chkBusinessPartner.checked = false;
-    chkAttendee.checked = false;
-  }
-
   if (attendees !== undefined && partners !== undefined) {
     return (
       <div className="product-tab-area space-pb--r70">
@@ -359,6 +347,7 @@ const FollowersTabEoProfile = ({
                       }}
                     >
                       <div className="product-description-tab__additional-info">
+                        {(attendees ==null || attendees.length < 1 ) && <div className="text-center justify-content-center">There is no attendees.</div>}
                         {attendees != null &&
                           attendees.map((attendee) => {
                             return (
@@ -464,6 +453,8 @@ const FollowersTabEoProfile = ({
                     >
                       <div className="product-description-tab__additional-info">
                         <ul className="list-unstyled team-members">
+                        {(partners ==null || partners.length < 1 ) && <div className="text-center justify-content-center" >There is no partners.</div>}
+
                           {partners != null &&
                             partners.map((partner) => {
                               return (

@@ -1,3 +1,61 @@
+/**======================================================================
+=========================================================================
+Template Name: Datta Able Free Admin Template
+Author: Codedthemes
+supports: https://codedthemes.support-hub.io/
+File: style.css
+=========================================================================
+=========================================================================
+  == Table of Contents==
+	- Generic classes
+		-	Margin, Padding, Font class, text align, position, floating, overflow, background class, text color, display class, boarder class
+	- Theme Elements
+		-	Accordion, Button, tabs, typography, buttons, box shadow, Lable & Badges, Alert, Pagination, Breadcumb, Cards, Collapse,
+        -   Carousel, Grid, Progress, Model, tooltip, popover, Datepicker, Gridstack, lightbox, notification, Nestable, pnotify, rating,
+        -   Rangeslider, Slider, Syntax Highlighter, Tour, Treeview, Toolbar, Session Timeout, Session idle Timeout, offline, Animation
+    - Forms
+        -   Forms Elements, Advance Form Control, Validation, Masking, Wizard, Picker, Select
+	- Pages
+		-   Chat, authentication, Maintenance, Maps, Landingpage messages, task, Todo, Notes, Charts, Icons, Gallery, Editors,
+        -   Invoice, Full Calender, File Upload,
+=================================================================================
+=================================================================================== */
+// @import '~bootstrap/dist/css/bootstrap';
+//General theme contents
+@import 'partials/variables'; //affect breadcrumb
+@import 'partials/general';
+@import 'partials/generic';
+@import 'partials/mixins/function';
+
+// important Element
+//@import 'partials/menu/menu-lite'; // affect our logo
+@import 'partials/widget/widget'; // affect the progress bar wdiget
+
+// Theme Element
+//@import 'partials/theme-elements/form';
+//@import 'partials/theme-elements/radiobox-checkbox';
+@import 'partials/theme-elements/labels-badges'; //button
+//@import 'partials/theme-elements/data-tables';
+//@import 'partials/theme-elements/authentication';
+//@import 'partials/theme-elements/button';
+//@import 'partials/theme-elements/alert';
+//@import 'partials/theme-elements/breadcrumb-pagination';
+@import 'partials/theme-elements/progress';
+// @import 'partials/theme-elements/tooltip';
+// @import 'partials/theme-elements/popover';
+// @import 'partials/theme-elements/nav';
+// @import 'partials/theme-elements/modal';
+
+//Other
+//@import 'partials/other/chat';
+//@import 'partials/other/prism';
+//@import 'partials/other/Switches';
+
+//@import 'partials/other/chart';
+//@import 'partials/other/icon-lauouts';
+
+//@import 'partials/third-party/third-party';
+
 @import './overrides.scss';
 
 /* third party styles */
@@ -46,6 +104,7 @@
 @import 'layouts/header';
 @import 'layouts/sidebar';
 
+
 @import 'pages/cart';
 @import 'pages/compare';
 @import 'pages/checkout';
@@ -62,9 +121,9 @@
 @import "./events.scss";
 @import "./scrollview.scss";
 
+@import './cards/card-plain';
+@import './cards/card-chart';
+@import './cards/card-user';
+@import './cards/card-map';
+@import './cards/card-stats';
 
-@import "./cards/card-plain";
-@import "./cards/card-chart";
-@import "./cards/card-user";
-@import "./cards/card-map";
-@import "./cards/card-stats";

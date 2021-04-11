@@ -278,6 +278,54 @@ export default function AttendeeHome() {
             </Container>
           </>
         )}
+
+        <Row>
+          <Col md={4} className="mb-3">
+            <Link href="events">
+              <a>
+                <Card
+                  bg="border-white"
+                  text="white"
+                  style={{ background: '#ff3e00', border: 'none' }}
+                >
+                  <Card.Body>
+                    <Card.Title>View events</Card.Title>
+                    <Card.Text>Discover new and exciting events ➜</Card.Text>
+                  </Card.Body>
+                </Card>
+              </a>
+            </Link>
+          </Col>
+          <Col md={4} className="mb-3">
+            <Link href="tickets">
+              <a>
+                <Card
+                  bg="border-white"
+                  text="white"
+                  style={{ background: '#40b3ff', border: 'none' }}
+                >
+                  <Card.Body>
+                    <Card.Title>View tickets</Card.Title>
+                    <Card.Text>See tickets and upcoming events ➜</Card.Text>
+                  </Card.Body>
+                </Card>
+              </a>
+            </Link>
+          </Col>
+        </Row>
+
+        {/* <Row>
+          <Col>
+            <Link href="events">
+              <button className="btn btn-fill-out">View events</button>
+            </Link>
+          </Col>
+          <Col>
+            <Link href="tickets">
+              <button className="btn btn-fill-out">View tickets</button>
+            </Link>
+          </Col>
+        </Row> */}
       </Container>
     </AttendeeWrapper>
     

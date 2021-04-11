@@ -21,7 +21,14 @@ import ButtonWithLoading from '../../../components/custom/ButtonWithLoading';
 import { getUser } from '../../../lib/query/getUser';
 import { addVip } from '../../../lib/query/useVip';
 
-const getPartners = async (page = 0, sort, sortDir, searchTerm, category,clear) => {
+const getPartners = async (
+  page = 0,
+  sort,
+  sortDir,
+  searchTerm,
+  category,
+  clear
+) => {
   console.log('call get partners');
   console.log('category ' + category);
   let url = `/api/partner/get-partners-cat?page=${page}`;
@@ -47,8 +54,6 @@ function OrganiserViewUsers() {
   const handleClose = () => setShow(false);
   const [clear, setClear] = useState('');
   const [sortByName, setSortByName] = useState('Sort by');
-
-
 
   const {
     status,
@@ -101,17 +106,17 @@ function OrganiserViewUsers() {
     switch (e.target.value) {
       case 'name-asc':
         setSortBy({ sort: 'name', sortDir: 'asc' });
-        setClear("false");
-        setSortByName("Name - A to Z");
+        setClear('false');
+        setSortByName('Name - A to Z');
         break;
       case 'name-desc':
         setSortBy({ sort: 'name', sortDir: 'desc' });
-        setClear("false");
-        setSortByName("Name - Z to A");
+        setClear('false');
+        setSortByName('Name - Z to A');
         break;
       default:
-        setSortByName("Sort by");
-        setClear("true");
+        setSortByName('Sort by');
+        setClear('true');
         setSortBy();
     }
   };
@@ -125,11 +130,11 @@ function OrganiserViewUsers() {
   const handleChangeCategory = (e) => {
     console.log(e.target.value);
     setCategory(e.target.value);
-    setClear("false");
+    setClear('false');
 
     if (e.target.value == 'all') {
       setCategory();
-      setClear("true");
+      setClear('true');
     }
   };
 
@@ -144,8 +149,7 @@ function OrganiserViewUsers() {
 
   const handleOnSearchInput = (e) => {
     debouncedSearch(e.target.value);
-    setClear("false");
-
+    setClear('false');
   };
 
   // invalidate queries to refetch data
@@ -156,7 +160,7 @@ function OrganiserViewUsers() {
       sortBy?.sortDir,
       searchTerm,
       category,
-      clear
+      clear,
     ]);
 
   return (
@@ -202,7 +206,7 @@ function OrganiserViewUsers() {
                     className="form-control "
                     placeholder="Search User"
                     onChange={handleOnSearchInput}
-                    defaultValue = {searchTerm}
+                    defaultValue={searchTerm}
                   />
                   <div className="input-group-append">
                     <button
@@ -220,7 +224,11 @@ function OrganiserViewUsers() {
 
             <Row className="mb-4">
               <Col xs={4} sm={3}>
-                <select className="custom-select" value={sortByName} onChange={handleChange}>
+                <select
+                  className="custom-select"
+                  value={sortByName}
+                  onChange={handleChange}
+                >
                   <option value="">Sort by</option>
                   <option value="name-asc">Name - A to Z</option>
                   <option value="name-desc">Name - Z to A</option>
@@ -273,7 +281,7 @@ function OrganiserViewUsers() {
                       lg={4}
                       className="mb-5 d-flex align-items-stretch"
                     >
-                      <a className="w-100">
+                      <a className="w-100" style={{ color: '#292b2c' }}>
                         <UserEOCard
                           partner={partner}
                           user={user}

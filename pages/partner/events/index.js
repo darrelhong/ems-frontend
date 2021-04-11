@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect} from 'react';
 import Link from 'next/link';
 import { Alert, Col, Container, Row, Spinner, Modal, Button } from 'react-bootstrap';
 import { useInfiniteQuery, useQueryClient } from 'react-query';
@@ -6,14 +6,16 @@ import debounce from 'lodash/debounce';
 import { getEventsWithKeywordandSortFilter } from 'lib/query/events';
 import { BreadcrumbOne } from 'components/Breadcrumb';
 import PartnerWrapper from 'components/wrapper/PartnerWrapper';
-import EventCard from 'components/events/partner/EventCard';
+import EventCard from 'components/events/partner/EventCardWithReview';
 import ButtonWithLoading from 'components/custom/ButtonWithLoading';
 import useUser from '../../../lib/query/useUser';
 
+import CenterSpinner from 'components/custom/CenterSpinner';
+import EventSideBar from '../../../components/Event/partner/EventSideBar';
 import api from '../../../lib/ApiClient';
+import Nav from 'react-bootstrap/Nav';
 import ReactNotification from 'react-notifications-component'
 import 'react-notifications-component/dist/theme.css'
-import EventSideBar from 'components/Event/partner/EventSideBar';
 
 const getEvents = async (page = 0, sort, sortDir, searchTerm) => {
   let url = `/api/event/get-events?page=${page}`;
@@ -23,10 +25,11 @@ const getEvents = async (page = 0, sort, sortDir, searchTerm) => {
   return data;
 };
 
-export default function PartnerHome() {
 
+export default function PartnerEvents() {
   const [sortType, setSortType] = useState('');
   const [filterValue, setFilterValue] = useState('all');
+
   const [sortBy, setSortBy] = useState();
   const [searchTerm, setSearchTerm] = useState('');
   const { data: user } = useUser(localStorage.getItem('userId'));
@@ -91,6 +94,7 @@ export default function PartnerHome() {
   };
   // invalidate queries to refetch data
   const handleSearchButtonClicked = () =>
+  {
     queryClient.invalidateQueries([
       'events',
       sortBy?.sort,
@@ -98,21 +102,32 @@ export default function PartnerHome() {
       searchTerm
     ]);
 
+  }
 
 
 
   return (
-    <PartnerWrapper title="Events">
-      <BreadcrumbOne pageTitle="View All Events">
-        <ol className="breadcrumb justify-content-md-end">
-          <li className="breadcrumb-item">
-            <Link href="/partner/home">
-              <a>Home</a>
-            </Link>
-          </li>
-          <li className="breadcrumb-item active">View All Events</li>
-        </ol>
-      </BreadcrumbOne>
+    <>
+    
+      <PartnerWrapper title="Events">
+        <BreadcrumbOne pageTitle="View All Events">
+          <ol className="breadcrumb justify-content-md-end">
+            <li className="breadcrumb-item">
+              <Link href="/partner/home">
+                <a>Home</a>
+              </Link>
+            </li>
+            <li className="breadcrumb-item active">View All Events</li>
+          </ol>
+        </BreadcrumbOne>
+        <ReactNotification />
+
+      <Col lg={3} className="order-lg-first mt-4 pt-2 mt-lg-0 pt-lg-0">
+        <EventSideBar
+          getSortParams={getSortParams}
+          filterValue={filterValue}
+        />
+      </Col>
 
       <Container className="my-4">
         <br></br>
@@ -172,16 +187,16 @@ export default function PartnerHome() {
                       lg={4}
                       className="mb-5 d-flex align-items-stretch"
                     >
-                      {/* <Link href={`/partner/events/${event.eid}`}> */}
-                      <a className="w-100">
-                        <EventCard event={event} user={user} />
-                      </a>
-                      {/* </Link> */}
-                    </Col>
-                  ))}
-                </Fragment>
-              ))}
-            </Row>
+                    {/* <Link href={`/partner/events/${event.eid}`}> */}
+                        <a className="w-100">
+                          <EventCard event={event} user={user} />
+                        </a>
+                        {/* </Link> */}
+                      </Col>
+                    ))}
+                  </Fragment>
+                ))}
+              </Row>
 
             <Row>
               <Col className="d-flex align-items-center">
@@ -199,5 +214,6 @@ export default function PartnerHome() {
         )}
       </Container>
     </PartnerWrapper>
+    </>
   );
 }

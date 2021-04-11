@@ -476,14 +476,16 @@ const PartnerProfile = ({ localuser }) => {
                   </a>
                   <div>
                     <h7 className="description">{partner?.email}</h7>
+                    {partner?.phonenumber != null && (<p className="description" style={{marginBottom:"-5px"}}>+65 {partner?.phonenumber}</p>)}
+                  {partner?.address != null && (<p className="description" > {partner?.address}</p>)}
                   </div>
                 </div>
                 <p className="description text-center">
                   {partner?.description}
                 </p>
-                <p className="description text-center">
+                {/* <p className="description text-center">
                   Address : {partner?.address}
-                </p>
+                </p> */}
 
                 <div className="description text-center">
                   <p>
@@ -612,6 +614,7 @@ const PartnerProfile = ({ localuser }) => {
                     <Tab.Pane eventKey="Followers">
                       <br></br>
                       <ul className="list-unstyled team-members">
+                        {followers ==undefined || followers == null || followers.length <1 && (<div className="text-center justify-content-center"> There is no followers. </div>)}
                         {followers != undefined &&
                           followers.map((follower) => {
                             return (
@@ -804,6 +807,25 @@ const PartnerProfile = ({ localuser }) => {
                       className="d-flex flex-column"
                       style={{ gap: '10px' }}
                     >
+
+                    <Col xs={12} lg={6} className="d-flex flex-column" style={{gap: "10px"}}>
+                      <Alert
+                        show={showEnquiryError}
+                        variant="danger"
+                        onClose={() => setEnquiryError(false)}
+                        dismissible
+                      >
+                        Please fill in all the required fields.
+                      </Alert>
+                      <Alert
+                        show={showEnquirySuccess}
+                        variant="success"
+                        onClose={() => setEnquirySuccess(false)}
+                        dismissible
+                      >
+                        Success! A copy of the enquiry has been sent to your email.
+                      </Alert>
+
                       <input
                         id="enquiryTitle"
                         className="form-control"

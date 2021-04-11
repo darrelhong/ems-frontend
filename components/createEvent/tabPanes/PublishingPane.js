@@ -25,7 +25,7 @@ const PublishingPane = ({
           <Row>
             <Col className="form-group" md={12}>
               <label>
-                List as VIP Event
+                List as VIP Event - Only Invited VIP Business Partners Can Apply 
                 <span className="required">*</span>
               </label>
               <div>
@@ -84,7 +84,7 @@ const PublishingPane = ({
                 </span>
               )}
             </Col>
-            <Col className="form-group" md={12}>
+            {/* <Col className="form-group" md={12}>
               <label>
                 Publishing Options:
                 <span className="required">*</span>
@@ -134,7 +134,7 @@ const PublishingPane = ({
                   This field is required
                 </span>
               )}
-            </Col>
+            </Col> */}
 
             {/* <Col>
               {eventStatus != 'CREATED' && (

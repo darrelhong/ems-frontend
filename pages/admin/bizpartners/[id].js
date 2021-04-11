@@ -63,8 +63,11 @@ export default function BusinessPartnerDetails({ id }) {
   const [showForm, setShowForm] = useState(false);
 
   return (
+
+
+  
     <AdminWrapper title="Business Partner details">
-      <BreadcrumbOne pageTitle="Event Organiser Details">
+      <BreadcrumbOne pageTitle="Business Partner Details">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/admin/home">
@@ -297,6 +300,7 @@ function UpdatePartnerForm({ bp }) {
       </div>
     </form>
   );
+
 }
 
 UpdatePartnerForm.propTypes = {

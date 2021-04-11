@@ -6,20 +6,7 @@ import { eventCategoriesWithSelect, eventCategories } from '../../../lib/util/da
 // import CheckboxGroup from 'react-checkbox-group';
 
 const EventDetailsPane = ({ register, watch, errors, eventData }) => {
-  const [categories, setCategories] = useState(eventCategories);
-  // const renderDateError = () => {
-  //   if (
-  //     watch('eventStartDate') &&
-  //     watch('eventEndDate') &&
-  //     watch('eventEndDate') < watch('eventStartDate')
-  //   ) {
-  //     return (
-  //       <span style={{ color: 'red' }}>
-  //         End date must be the same as or after start date!
-  //       </span>
-  //     );
-  //   }
-  // };
+  // const [categories, setCategories] = useState(eventCategories);
 
   return (
     <Card className="my-account-content__content">

@@ -225,16 +225,16 @@ const EventOrgProfile = ({ paraId_ }) => {
               await getEoEventsByIdRoleStatus(
                 paraId_,
                 data.roles[0].roleEnum,
-                    'current'
-                  ).then(async (currentEvents) => {
-                    await getEoEventsByIdRoleStatus(
-                      paraId_,
-                      data.roles[0].roleEnum,
-                      'upcoming'
-                    ).then((upcomingEvents) => {
-                      setEnquiryEventList(currentEvents.concat(upcomingEvents));
-                    });
-                  });
+                'current'
+              ).then(async (currentEvents) => {
+                await getEoEventsByIdRoleStatus(
+                  paraId_,
+                  data.roles[0].roleEnum,
+                  'upcoming'
+                ).then((upcomingEvents) => {
+                  setEnquiryEventList(currentEvents.concat(upcomingEvents));
+                });
+              });
               followId = data.id;
               type = 'atn';
               console.log(followId + 'followId');
@@ -268,16 +268,16 @@ const EventOrgProfile = ({ paraId_ }) => {
               await getEoEventsByIdRoleStatus(
                 paraId_,
                 data.roles[0].roleEnum,
-                    'current'
-                  ).then(async (currentEvents) => {
-                    await getEoEventsByIdRoleStatus(
-                      paraId_,
-                      data.roles[0].roleEnum,
-                      'upcoming'
-                    ).then((upcomingEvents) => {
-                      setEnquiryEventList(currentEvents.concat(upcomingEvents));
-                    });
-                  });
+                'current'
+              ).then(async (currentEvents) => {
+                await getEoEventsByIdRoleStatus(
+                  paraId_,
+                  data.roles[0].roleEnum,
+                  'upcoming'
+                ).then((upcomingEvents) => {
+                  setEnquiryEventList(currentEvents.concat(upcomingEvents));
+                });
+              });
               followId = data.id;
               setShowPublicView(true);
               setShowEoView(false);
@@ -351,7 +351,6 @@ const EventOrgProfile = ({ paraId_ }) => {
         setFollowBtn(false);
         setUnfollowBtn(false);
         setShowEnquiry(false);
-
       };
       loadGuestData();
       loadOrgAttFollowerData();
@@ -386,7 +385,7 @@ const EventOrgProfile = ({ paraId_ }) => {
           endpoint,
           { person: user },
           {
-            headers: { 'Content-type': 'applircation/json' },
+            headers: { 'Content-type': 'application/json' },
           }
         );
       })
@@ -489,38 +488,37 @@ const EventOrgProfile = ({ paraId_ }) => {
       enquiryEvent = null;
     }
     // validate
-    if (enquiryTitle == '' ||  enquiryMessage == '') {
+    if (enquiryTitle == '' || enquiryMessage == '') {
       setEnquiryError(true);
     } else {
       setEnquiryError(false);
-    // get sender and receiver info
-    if(localStorage.getItem('userId') != null){
-      getUser(localStorage.getItem('userId')).then((user) => {
-            let enquiryReceiverEmail = eventorganiser.email;
-            let enquirySenderEmail = user.email;
-            let data = {
-              subject: enquiryTitle,
-              content: enquiryMessage,
-              eventId: enquiryEvent,
-              receiverEmail: enquiryReceiverEmail,
-              senderEmail: enquirySenderEmail,
-            };
-            setSendEnquiryLoading(true);
-            api
-              .post('/api/user/enquiry', data)
-              .then(() => {
-                setEnquirySuccess(true);
-                setSendEnquiryLoading(false);
-                clearEnquiryForm();
-              })
-              .catch((error) => {
-                console.log(error);
-                setSendEnquiryLoading(false);
-                setEnquiryError(true);
-              });
-          });
-          }
-          
+      // get sender and receiver info
+      if (localStorage.getItem('userId') != null) {
+        getUser(localStorage.getItem('userId')).then((user) => {
+          let enquiryReceiverEmail = eventorganiser.email;
+          let enquirySenderEmail = user.email;
+          let data = {
+            subject: enquiryTitle,
+            content: enquiryMessage,
+            eventId: enquiryEvent,
+            receiverEmail: enquiryReceiverEmail,
+            senderEmail: enquirySenderEmail,
+          };
+          setSendEnquiryLoading(true);
+          api
+            .post('/api/user/enquiry', data)
+            .then(() => {
+              setEnquirySuccess(true);
+              setSendEnquiryLoading(false);
+              clearEnquiryForm();
+            })
+            .catch((error) => {
+              console.log(error);
+              setSendEnquiryLoading(false);
+              setEnquiryError(true);
+            });
+        });
+      }
     }
   }
 
@@ -584,9 +582,12 @@ const EventOrgProfile = ({ paraId_ }) => {
                     <h5 className="title">{eventorganiser?.name}</h5>
                   </a>
                   <p className="description">{eventorganiser?.email}</p>
+                  {eventorganiser?.phonenumber != null && (<p className="description" style={{marginBottom:"-5px"}}>+65 {eventorganiser?.phonenumber}</p>)}
+                  {eventorganiser?.address != null && (<p className="description" > {eventorganiser?.address}</p>)}
+
                 </div>
                 <p className="description text-center">
-                  {(eventorganiser?.description === null &&
+                  {((eventorganiser?.description === null || eventorganiser?.description === "")&&
                     'There is no description.') ||
                     eventorganiser?.description}
                 </p>
@@ -824,89 +825,152 @@ const EventOrgProfile = ({ paraId_ }) => {
               </CardBody>
             </Card>
           </Col>
+
+       {/* {Boolean(currentUserId_ != paraId_ & currentUserRole_ != "Organiser") && ( */}
+{/* //             <Col xs={12} style={{marginTop: "30px", marginBottom: "30px"}}>
+//               <Card className="card-user">
+//                 <CardHeader className="text-center">
+//                   <h4>Have some questions?</h4>
+//                 </CardHeader>
+//                 <CardBody className="d-flex justify-content-center">
+//                   <Row className="w-100 d-flex justify-content-center">
+//                     <Col xs={12} lg={6} className="d-flex flex-column" style={{gap: "10px"}}>
+//                       <Alert */}
+{/* //                         show={showEnquiryError}
+//                         variant="danger"
+//                         onClose={() => setEnquiryError(false)}
+//                         dismissible
+//                       >
+//                         Please fill in all the required fields.
+//                       </Alert>
+//                       <Alert */}
+{/* //                         show={showEnquirySuccess}
+//                         variant="success"
+//                         onClose={() => setEnquirySuccess(false)}
+//                         dismissible
+//                       >
+//                         Success! A copy of the enquiry has been sent to your email.
+//                       </Alert>
+//                       <input */}
+{/* //                         id="enquiryTitle"
+//                         className="form-control"
+//                         placeholder="Title *"
+//                       />
+//                       <select */}
+{/* //                         className="custom-select"
+//                         id="enquiryEvent"
+//                       >
+//                         <option value="none">Event</option>
+//                         {(enquiryEventList != null || */}
+{/* //                           enquiryEventList != undefined) &&
+//                           enquiryEventList.map((event) => { */}
+{/* //                             return (
+//                               <option value={event.eid}>
+//                                 {event.name}
+//                               </option>
+//                             );
+//                           })}
+//                       </select>
+//                       <textarea */}
+{/* //                         id="enquiryMessage"
+//                         className="form-control"
+//                         placeholder="Your Enquiry *"
+//                         style={{height: "10em"}}
+//                       />
+//                       <ButtonWithLoading */}
+{/* //                         className="btn btn-fill-out"
+//                         onClick={() => sendEnquiry()}
+//                         isLoading={sendEnquiryLoading && !showEnquiryError}
+//                       >
+//                         Send Enquiry
+//                       </ButtonWithLoading>
+//                     </Col>
+//                   </Row> */}
+{/* //                 </CardBody>
+//               </Card>
+//             </Col> */}
+{/* //           )}
+// >>>>>>> main */}
         </Row>
         <br></br>
-        {showEnquiry && (       
-           <Row xs="12" style={{ marginTop: '30px', marginBottom: '30px' }}>
-          {/* <Card className="card-user"> */}
-          {/* <CardHeader className="text-center">
+        {showEnquiry && (
+          <Row xs="12" style={{ marginTop: '30px', marginBottom: '30px' }}>
+            {/* <Card className="card-user"> */}
+            {/* <CardHeader className="text-center">
                 <h4>Have some questions?</h4>
               </CardHeader> */}
-          {/* <CardBody className="d-flex justify-content-center"> */}
+            {/* <CardBody className="d-flex justify-content-center"> */}
 
-          <Col xs="5" className=" justify-content-center">
-            <br></br>
-            <div className="d-flex justify-content-center">
-              <h2>Have some questions for us?</h2>
-            </div>
-            {/* <br></br> */}
+            <Col xs="5" className=" justify-content-center">
+              <br></br>
+              <div className="d-flex justify-content-center">
+                <h2>Have some questions for us?</h2>
+              </div>
+              {/* <br></br> */}
 
-            <div className="d-flex justify-content-center">
-              <img
-                // src="https://cdn1.iconfinder.com/data/icons/contact-us-honey-series/64/ONLINE_QUESTION-512.png"
-                src="https://icons-for-free.com/iconfiles/png/512/app+email+emailing+galaxy+mobile+open+line+icon-1320183043200419856.png"
-                className="img-responsive"
-                style={{ maxWidth: '60%' }}
-              />
-            </div>
-          </Col>
-          <Col xs="7" className="d-flex justify-content-center">
-             <br></br>
-            <br></br>
-            <div
-              className="d-flex flex-column text-center "
-              style={{ gap: '10px', width: '70%' }}
-            >
-                          <br></br>
-                          <input
-                        id="enquiryTitle"
-                        className="form-control"
-                        placeholder="Title *"
-                      />
-                      <select className="custom-select" id="enquiryEvent">
-                        <option value="none">Event</option>
-                        {(enquiryEventList != null ||
-                          enquiryEventList != undefined) &&
-                          enquiryEventList.map((event) => {
-                            return (
-                              <option value={event.eid}>{event.name}</option>
-                            );
-                          })}
-                      </select>
-                      <textarea
-                        id="enquiryMessage"
-                        className="form-control"
-                        placeholder="Your Enquiry *"
-                        style={{ height: '10em' }}
-                      />
-                      <Alert
-                        show={showEnquiryError}
-                        variant="danger"
-                        onClose={() => setEnquiryError(false)}
-                        dismissible
-                      >
-                        Please fill in all the required fields.
-                      </Alert>
-                      <Alert
-                        show={showEnquirySuccess}
-                        variant="success"
-                        onClose={() => setEnquirySuccess(false)}
-                        dismissible
-                      >
-                        Success! A copy of the enquiry has been sent to your
-                        email.
-                      </Alert>
-                      <ButtonWithLoading
-                        className="btn btn-fill-out"
-                        onClick={() => sendEnquiry()}
-                        isLoading={sendEnquiryLoading && !showEnquiryError}
-                      >
-                        Send Enquiry
-                      </ButtonWithLoading>
-
-            </div>
-          </Col>
-        </Row>)}
+              <div className="d-flex justify-content-center">
+                <img
+                  // src="https://cdn1.iconfinder.com/data/icons/contact-us-honey-series/64/ONLINE_QUESTION-512.png"
+                  src="https://icons-for-free.com/iconfiles/png/512/app+email+emailing+galaxy+mobile+open+line+icon-1320183043200419856.png"
+                  className="img-responsive"
+                  style={{ maxWidth: '60%' }}
+                />
+              </div>
+            </Col>
+            <Col xs="7" className="d-flex justify-content-center">
+              <br></br>
+              <br></br>
+              <div
+                className="d-flex flex-column text-center "
+                style={{ gap: '10px', width: '70%' }}
+              >
+                <br></br>
+                <input
+                  id="enquiryTitle"
+                  className="form-control"
+                  placeholder="Title *"
+                />
+                <select className="custom-select" id="enquiryEvent">
+                  <option value="none">Event</option>
+                  {(enquiryEventList != null ||
+                    enquiryEventList != undefined) &&
+                    enquiryEventList.map((event) => {
+                      return <option value={event.eid}>{event.name}</option>;
+                    })}
+                </select>
+                <textarea
+                  id="enquiryMessage"
+                  className="form-control"
+                  placeholder="Your Enquiry *"
+                  style={{ height: '10em' }}
+                />
+                <Alert
+                  show={showEnquiryError}
+                  variant="danger"
+                  onClose={() => setEnquiryError(false)}
+                  dismissible
+                >
+                  Please fill in all the required fields.
+                </Alert>
+                <Alert
+                  show={showEnquirySuccess}
+                  variant="success"
+                  onClose={() => setEnquirySuccess(false)}
+                  dismissible
+                >
+                  Success! A copy of the enquiry has been sent to your email.
+                </Alert>
+                <ButtonWithLoading
+                  className="btn btn-fill-out"
+                  onClick={() => sendEnquiry()}
+                  isLoading={sendEnquiryLoading && !showEnquiryError}
+                >
+                  Send Enquiry
+                </ButtonWithLoading>
+              </div>
+            </Col>
+          </Row>
+        )}
 
         <br></br>
       </div>

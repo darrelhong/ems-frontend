@@ -63,23 +63,23 @@ export default function OrganiserHome() {
             </Link>
           </Col>
 
-          <Col md={4} className="mb-3">
-            <Link href="view/partners">
-              <a className="w-100 h-100">
-                <Card
-                  className="h-100"
-                  bg="border-white"
-                  text="white"
-                  style={{ background: '#40b3ff', border: 'none' }}
-                >
-                  <Card.Body>
-                    <Card.Title>View partners</Card.Title>
-                    <Card.Text>Manage business partners ➜</Card.Text>
-                  </Card.Body>
-                </Card>
-              </a>
-            </Link>
-          </Col>
+            <Col md={4} className="mb-3">
+              <Link href="view/partners">
+                <a className="w-100 h-100">
+                  <Card
+                    className="h-100"
+                    bg="border-white"
+                    text="white"
+                    style={{ background: '#40b3ff', border: 'none' }}
+                  >
+                    <Card.Body>
+                      <Card.Title>View partners</Card.Title>
+                      <Card.Text>Manage business partners ➜</Card.Text>
+                    </Card.Body>
+                  </Card>
+                </a>
+              </Link>
+            </Col>
 
           <Col md={4} className="mb-3">
             <Link href="view/organisers">
@@ -101,6 +101,6 @@ export default function OrganiserHome() {
         </Row>
       </Container>
     </OrganiserWrapper>
-    
+
   );
 }

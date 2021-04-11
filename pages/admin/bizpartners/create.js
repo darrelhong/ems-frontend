@@ -21,7 +21,8 @@ export default function CreateBusinessPartner() {
   );
 
   return (
-    <AdminWrapper title="Event Organisers">
+  
+    <AdminWrapper title="Create Business Partner">
       <BreadcrumbOne pageTitle="Create business partner">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
@@ -156,5 +157,6 @@ export default function CreateBusinessPartner() {
 
       <FooterOne />
     </AdminWrapper>
+    
   );
 }

@@ -12,6 +12,8 @@ import {
 } from '../../lib/query/getEvents';
 
 import PartnerWrapper from '../../components/wrapper/PartnerWrapper';
+import Head from 'next/head';
+
 import { useEffect, useState } from 'react';
 import HeroSliderPopularEvents from '../../components/HeroSlider/HeroSliderPopularEvents';
 import ButtonWithLoading from '../../components/custom/ButtonWithLoading';

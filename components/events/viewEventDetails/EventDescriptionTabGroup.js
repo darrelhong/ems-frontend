@@ -33,8 +33,12 @@ const EventDescriptionTabGroup = ({
 
   useEffect(() => {
     const loadPartners = async () => {
-      const response = await getRecommendedPartners(event.eid);
-      setRecommendedPartners(response);
+      try {
+        const response = await getRecommendedPartners(event.eid);
+        setRecommendedPartners(response);
+      } catch(e) {
+        console.log("error caught");
+      }
     };
     if (event.eid) loadPartners();
   }, [event]);

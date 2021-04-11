@@ -86,10 +86,61 @@ const MyAccount = () => {
   const [number, setNumber] = useState('');
   const [expMth, setExpMth] = useState('');
   const [paymentMethod, setPaymentMethod] = useState(null);
+  const [query, setQuery] = useState("");
+  // const autoCompleteRef = useRef(null);
+  // const [autoCompleteRef, setAutoCompleteRef] = useState();
+  const [website, setWebsite] = useState("");
+  const [phone, setPhone] = useState("");
+  const options = { types: ["establishment"], componentRestrictions: { country: "SG" } };
+
+  let autoComplete;
+
+  const loadScript = (url, callback) => {
+    let script = document.createElement("script");
+    script.type = "text/javascript";
+
+    if (script.readyState) {
+      script.onreadystatechange = function () {
+        if (script.readyState === "loaded" || script.readyState === "complete") {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else {
+      script.onload = () => callback();
+    }
+
+    script.src = url;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  };
+
+  function handleScriptLoad(updateQuery) {
+    autoComplete = new window.google.maps.places.Autocomplete(
+      document.getElementById('autocomplete'), options
+
+    );
+    autoComplete.setFields(["address_components", "formatted_address", "opening_hours", "website", "formatted_phone_number", "name"]);
+    autoComplete.addListener("place_changed", () =>
+      handlePlaceSelect(updateQuery)
+    );
+  }
+  async function handlePlaceSelect(updateQuery) {
+    const addressObject = autoComplete.getPlace();
+    const querytest = addressObject.name + " " + addressObject.formatted_address;
+    updateQuery(querytest);
+    console.log(addressObject);
+    // information= addressObject.website + " " +  addressObject.formatted_phone_number;
+    setWebsite(addressObject.website);
+    setPhone(addressObject.formatted_phone_number);
+
+  }
 
   useEffect(() => {
     console.log('use effect');
-
+    loadScript(
+      `https://maps.googleapis.com/maps/api/js?key=AIzaSyD6lwl3tFVZ5XyGBrr8gWwWDPnrsTknuEE&libraries=places`,
+      () => handleScriptLoad(setQuery)
+    );
     getUserData();
     if (user?.paymentMethodId != null) {
       getUserPayment();
@@ -104,6 +155,10 @@ const MyAccount = () => {
   const getUserData = async () => {
     await getUser(localStorage.getItem('userId')).then((data) => {
       setUser(data);
+      if(data?.address !=null){
+              setQuery(data?.address);
+
+      }
     });
   };
   const getUserPayment = async () => {
@@ -176,6 +231,7 @@ const MyAccount = () => {
           setFileName('Choose File');
           setLoginLoading(false);
           document.getElementById('biz-upload-custom-file').value = '';
+          getUserData();
           //the message that is return
           if (response.data['fileDownloadUri'] == 'success') {
             setShowSucessBizUpload(true);
@@ -430,8 +486,8 @@ const MyAccount = () => {
   const mutateNotificationSetting = useMutation((data) =>
     api
       .post('/api/user/update-notifcation-setting', data)
-      .then((response) => {})
-      .catch((error) => {})
+      .then((response) => { })
+      .catch((error) => { })
   );
 
   // const onSubmit = async (data) => {
@@ -835,6 +891,7 @@ const MyAccount = () => {
                                     // pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                                     // title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
                                     maxLength="16"
+                                    minLength="16"
                                     ref={register()}
                                     onChange={handleCardNumberInputChange}
                                     onFocus={handleCardnumberInputFocus}
@@ -1068,6 +1125,7 @@ const MyAccount = () => {
                                       className="profile-image"
                                       src={user?.profilePic}
                                       thumbnail
+                                      style={{ width: '60%' }}
                                     />
                                   )}
 
@@ -1077,6 +1135,7 @@ const MyAccount = () => {
                                       className="profile-image"
                                       src="../../assets/images/defaultprofilepic.png"
                                       thumbnail
+                                      style={{ width: '60%' }}
                                     />
                                   )}
                                 {profilepicUrl != null &&
@@ -1085,6 +1144,7 @@ const MyAccount = () => {
                                       className="profile-image"
                                       src={profilepicUrl}
                                       thumbnail
+                                      style={{ width: '60%' }}
                                     />
                                   )}
                               </Col>
@@ -1187,12 +1247,28 @@ const MyAccount = () => {
                                   <Form.Label>
                                     Address <span className="required"></span>
                                   </Form.Label>
-                                  <Form.Control
+                                  {/* <Form.Control
                                     name="address"
                                     as="textarea"
                                     style={{ height: 120 }}
                                     defaultValue={user?.address}
                                     ref={register()}
+                                  /> */}
+                                  <input
+
+                                    className="form-control"
+
+                                    onChange={event => { setQuery(event.target.value); }}
+                                    // defaultValue={user?.address}
+                                    type="text"
+                                    value={query}
+                                    name="address"
+                                    ref={register()}
+                                    id="autocomplete"
+
+                                  // ref={(ref) => {register(ref); autoCompleteRef;}}
+                                  //  ref= {autoCompleteRef}
+                                  //  id={autoCompleteRef}
                                   />
                                 </Form.Group>
                               </Col>

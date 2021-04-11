@@ -34,8 +34,8 @@ const NavigationAttendee = ({ positionClass }) => {
           </li>
 
           </ul>
-      
-      </li>
+        </li>
+    
 
 
         <li>
@@ -49,9 +49,8 @@ const NavigationAttendee = ({ positionClass }) => {
             <a className="nav-link">
               TICKETS <IoIosArrowDown />
             </a>
-          </Link>
-       
-
+            </Link>
+         
           <ul className="sub-menu sub-menu--one-column">
             <li>
               <Link href="/attendee/tickets">
@@ -64,7 +63,7 @@ const NavigationAttendee = ({ positionClass }) => {
               </Link>
             </li> */}
           </ul>
-        </li>
+          </li>
       </ul>
     </nav>
   );

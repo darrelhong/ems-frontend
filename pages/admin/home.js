@@ -14,14 +14,9 @@ import 'react-notifications-component/dist/theme.css'
 
 import { store } from 'react-notifications-component';
 
-
-import { Card, Col, Container, Row } from 'react-bootstrap';
-
-import useUser from 'lib/query/useUser';
-
-import { BreadcrumbOne } from 'components/Breadcrumb';
 import CenterSpinner from 'components/custom/CenterSpinner';
 import AdminWrapper from 'components/wrapper/AdminWrapper';
+
 
 export default function AdminHome() {
   const { data: user, isSuccess, isLoading } = useUser(
