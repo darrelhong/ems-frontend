@@ -18,7 +18,7 @@ const SellerProfileCard = ({ sellerProfile, deleteCancelEvent, createToast }) =>
         <Col lg={4} sm={6} className="space-mb--50">
             <div className="product-list">
                 <div className="product-list__image">
-                    <Link href={`/partner/seller-profile/${sellerProfile.id}`}>
+                    <Link href={`/organiser/events/seller-profile/${sellerProfile.id}`}>
                         <a>
                             <img src={sellerProfile.businessPartner.profilePic ?? 'https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png'} alt="event_image" />
                         </a>
@@ -28,7 +28,7 @@ const SellerProfileCard = ({ sellerProfile, deleteCancelEvent, createToast }) =>
                 <div className="product-list__info">
 
                     <h6 className="product-title">
-                        <Link href={`/partner/seller-profile/${sellerProfile.id}`}>
+                        <Link href={`/organiser/events/seller-profile/${sellerProfile.id}`}>
                             <a>{sellerProfile?.businessPartner?.name}</a>
                         </Link>
                     </h6>

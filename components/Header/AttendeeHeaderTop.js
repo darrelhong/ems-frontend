@@ -35,7 +35,7 @@ const AttendeeHeaderTop = () => {
   //     };
 
   //     getUserData();
-  const { data: user, isLoading, isSuccess } = useUser(
+  const { data: user } = useUser(
     localStorage.getItem('userId')
   );
 
@@ -49,6 +49,9 @@ const AttendeeHeaderTop = () => {
           <Col>
             <div className="text-right">
               <ul className="header-list">
+                <li>
+                  <p style={{fontWeight: "700", marginRight: "20px"}}>HI {user?.name.toUpperCase()}</p>
+                </li>
                 <li>
                   <a>
                     {/* <notification-center  appId="WLU2yLZw9d" subscriberId= "foo1" /> */}

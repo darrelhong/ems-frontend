@@ -50,7 +50,8 @@ const ProductModal = ({
             )
         } else return (
             <Button variant="secondary" onClick={() => {
-                closeProductModal();
+                    setRemoveProduct(false);
+                    closeProductModal();
             }}>
                 Close
             </Button>
@@ -67,6 +68,7 @@ const ProductModal = ({
             closeProductModal();
             createToast('Could not be removed, please try again later!', 'error')
         }
+        setRemoveProduct(false);
     };
 
     const removeButton = () => {

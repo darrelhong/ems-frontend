@@ -10,15 +10,17 @@ const AddProductModal = ({
     closeAddProductModal,
     showAddProductModal,
     booth,
-    setBooth
+    setBooth,
+    boothProducts,
+    setBoothProducts
 }) => {
     const [bpProducts, setBpProducts] = useState([]);
-    const [boothProducts, setBoothProducts] = useState([]);
+    // const [boothProducts, setBoothProducts] = useState([]);
 
     useEffect(() => {
         if (booth) {
             loadBpProducts();
-            loadBoothProducts();
+            // loadBoothProducts();
         }
     }, [booth]);
 
@@ -27,10 +29,10 @@ const AddProductModal = ({
         setBpProducts(products);
     };
 
-    const loadBoothProducts = async () => {
-        const products = await getProductsByBoothId(booth?.id);
-        setBoothProducts(products);
-    }
+    // const loadBoothProducts = async () => {
+    //     const products = await getProductsByBoothId(booth?.id);
+    //     setBoothProducts(products);
+    // }
 
     const handleAddProduct = async (pid) => {
         try {

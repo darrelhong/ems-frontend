@@ -855,8 +855,6 @@ const MyAccount = () => {
                                                 {partner.businessCategory}
                                               </Badge>{' '}
                                             </span>
-
-
                                           )}
                                       </div> */}
                                                     </Col>

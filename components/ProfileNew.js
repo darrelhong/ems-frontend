@@ -66,6 +66,9 @@ const PartnerProfile = ({ localuser }) => {
   const [showEnquirySuccess, setEnquirySuccess] = useState(false);
   const [sendEnquiryLoading, setSendEnquiryLoading] = useState(false);
   const [showEnquiry, setShowEnquiry] = useState(false);
+  const [showNoEventMsg, setShowNoEventMsg] = useState(false);
+  const [showNoFollowerMsg, setShowNoFollowerMsg] = useState(false);
+  const [showNoFollowingMsg, setShowNoFollowingMsg] = useState(false);
   var followId;
 
   useEffect(() => {
@@ -80,12 +83,14 @@ const PartnerProfile = ({ localuser }) => {
     const getFollowingData = async () => {
       await getFollowing(localuser).then((data) => {
         setFollowing(data);
+        setShowNoFollowingMsg(data == 0);
       });
     };
     getFollowingData();
     const getFollowersData = async () => {
       await getFollowers(localuser).then((data) => {
         setFollowers(data);
+        setShowNoFollowerMsg(data == 0);
         if (followId >= 0) {
           var found = false;
           for (var i = 0; i < data.length; i++) {
@@ -175,7 +180,7 @@ const PartnerProfile = ({ localuser }) => {
               setUnfollowBtn(false);
               setEOView(false);
               setPublicView(true);
-              setShowEnquiry(true);
+              setShowEnquiry(false);
 
               await getBpEventsByIdRoleStatus(
                 localuser,
@@ -265,12 +270,17 @@ const PartnerProfile = ({ localuser }) => {
 
     console.log(currenteventlist + 'current');
     console.log(pasteventlist + 'past');
+    if (currenteventlist.length === 0 && pasteventlist.length === 0) {
+      setShowNoEventMsg(true);
+    }
   }, []);
 
   const getRefreshedFollowers = async () => {
     await getFollowers(localuser).then((data) => {
       setFollowers(data);
     });
+    console.log(followers.length)
+    setShowNoFollowerMsg(followers.length === 0);
   };
 
   const mutateFollow = useMutation((data) =>
@@ -573,7 +583,7 @@ const PartnerProfile = ({ localuser }) => {
             </Card>
           </Col>
           <Col md="8">
-            <Card className="card-user">
+            <Card className="card-user" style={{minHeight: "100%"}}>
               <CardBody>
                 <Tab.Container defaultActiveKey="Events">
                   <Nav
@@ -691,6 +701,9 @@ const PartnerProfile = ({ localuser }) => {
                             );
                           })}
                       </ul>
+                      {showNoFollowerMsg && (
+                        <div className="w-100 text-center" style={{marginTop: "150px"}}>There are currently no followers.</div>
+                      )}
                     </Tab.Pane>
 
                     <Tab.Pane eventKey="Following">
@@ -768,6 +781,9 @@ const PartnerProfile = ({ localuser }) => {
                             );
                           })}
                       </ul>
+                      {showNoFollowingMsg && (
+                        <div className="w-100 text-center" style={{marginTop: "150px"}}>You aren't following anybody right now.</div>
+                      )}
                     </Tab.Pane>
                   </Tab.Content>
                 </Tab.Container>
@@ -785,7 +801,6 @@ const PartnerProfile = ({ localuser }) => {
                 </CardHeader>
                 <CardBody className="d-flex justify-content-center">
                   <Row className="w-100 d-flex justify-content-center">
-
                     <Col
                       xs={12}
                       lg={6}
@@ -832,7 +847,6 @@ const PartnerProfile = ({ localuser }) => {
                         placeholder="Your Enquiry *"
                         style={{ height: '10em' }}
                       />
-
                       <Alert
                         show={showEnquiryError}
                         variant="danger"
@@ -850,7 +864,6 @@ const PartnerProfile = ({ localuser }) => {
                         Success! A copy of the enquiry has been sent to your
                         email.
                       </Alert>
-
                       <ButtonWithLoading
                         className="btn btn-fill-out"
                         onClick={() => sendEnquiry()}

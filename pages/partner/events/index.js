@@ -6,7 +6,7 @@ import debounce from 'lodash/debounce';
 import { getEventsWithKeywordandSortFilter } from 'lib/query/events';
 import { BreadcrumbOne } from 'components/Breadcrumb';
 import PartnerWrapper from 'components/wrapper/PartnerWrapper';
-import EventCard from 'components/events/partner/EventCard';
+import EventCard from 'components/events/partner/EventCardWithReview';
 import ButtonWithLoading from 'components/custom/ButtonWithLoading';
 import useUser from '../../../lib/query/useUser';
 
@@ -56,12 +56,11 @@ export default function PartnerEvents() {
         lastPage.last ? false : lastPage.number + 1,
     }
   );
-
   // if (!user) {
   //   queryClient.invalidateQueries("events");
   // }
 
-  console.log("data: ", data)
+  // console.log("data: ", data)
   // console.log("user: ", user)
   // console.log(filterValue)
   // console.log("test", queryClient.getQueryData('events'))
@@ -95,6 +94,7 @@ export default function PartnerEvents() {
   };
   // invalidate queries to refetch data
   const handleSearchButtonClicked = () =>
+  {
     queryClient.invalidateQueries([
       'events',
       sortBy?.sort,
@@ -102,7 +102,7 @@ export default function PartnerEvents() {
       searchTerm
     ]);
 
-
+  }
 
 
 
@@ -132,7 +132,15 @@ export default function PartnerEvents() {
       <Container className="my-4">
         <br></br>
         <Row>
-          <Col md={8} lg={6}>
+
+          <Col lg={3} className="order-lg-first mt-4 pt-2 mt-lg-0 pt-lg-0">
+            <EventSideBar
+              getSortParams={getSortParams}
+              filterValue={filterValue}
+            />
+          </Col>
+
+          <Col md={6} lg={9}>
             <div className="input-group mb-3">
               <input
                 type="text"
@@ -149,11 +157,10 @@ export default function PartnerEvents() {
                 >
                   Search
                 </button>
-                </div>
               </div>
-            </Col>
-          </Row>
-
+            </div>
+          </Col>
+        </Row>
 
         <Row className="mb-4">
           <Col xs={4} sm={3}>
@@ -161,12 +168,11 @@ export default function PartnerEvents() {
               <option value="">Sort by</option>
               <option value="name-asc">Name - A to Z</option>
               <option value="name-desc">Name - Z to A</option>
-              <option value="date-asc">Most recent</option>
             </select>
           </Col>
         </Row>
         {status === 'loading' ? (
-          <CenterSpinner />
+          <Spinner animation="grow" role="status" aria-hidden="true" />
         ) : status === 'error' ? (
           <Alert variant="danger">An error has occured</Alert>
         ) : (
@@ -192,22 +198,22 @@ export default function PartnerEvents() {
                 ))}
               </Row>
 
-              <Row>
-                <Col className="d-flex align-items-center">
-                  <ButtonWithLoading
-                    className="btn btn-fill-out btn-sm"
-                    disabled={!hasNextPage || isFetchingNextPage}
-                    isLoading={isFetchingNextPage}
-                    onClick={() => fetchNextPage()}
-                  >
-                    {hasNextPage ? 'See more' : 'No more events'}
-                  </ButtonWithLoading>
-                </Col>
-              </Row>
-            </>
-          )}
-        </Container>
-      </PartnerWrapper>
+            <Row>
+              <Col className="d-flex align-items-center">
+                <ButtonWithLoading
+                  className="btn btn-fill-out btn-sm"
+                  disabled={!hasNextPage || isFetchingNextPage}
+                  isLoading={isFetchingNextPage}
+                  onClick={() => fetchNextPage()}
+                >
+                  {hasNextPage ? 'See more' : 'No more events'}
+                </ButtonWithLoading>
+              </Col>
+            </Row>
+          </>
+        )}
+      </Container>
+    </PartnerWrapper>
     </>
   );
 }

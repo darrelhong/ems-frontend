@@ -39,7 +39,6 @@ const NavigationAttendee = ({ positionClass }) => {
 
 
         <li>
-
           <Link href="/attendee/events">
             <a className="nav-link">EVENTS</a>
           </Link>

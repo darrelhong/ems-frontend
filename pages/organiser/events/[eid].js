@@ -7,6 +7,7 @@ import { LayoutOne } from '../../../layouts';
 import { BreadcrumbOne } from '../../../components/Breadcrumb';
 import EventDescription from '../../../components/events/viewEventDetails/EventDescription';
 import ImageGalleryLeftThumb from '../../../components/events/viewEventDetails/ImageGalleryLeftThumb';
+import EventImageGallery from 'components/events/partner/EventImageGallery';
 import EventDescriptionTabGroup from '../../../components/events/viewEventDetails/EventDescriptionTabGroup';
 import OrganiserWrapper from '../../../components/wrapper/OrganiserWrapper';
 // import { ProductSliderTwo } from "../../../components/ProductSlider";
@@ -27,6 +28,7 @@ import { dbDateToPretty } from '../../../lib/util/functions';
 import { format, parseISO, parseJSON } from 'date-fns';
 import { useToasts } from 'react-toast-notifications';
 import { returnNewSellerApplications } from "lib/query/sellerApplicationApi"
+import { getReviewsByEvent } from 'lib/query/getReviews';
 
 const OrganiserViewEventDetails = () => {
   const [event, setEvent] = useState(Object);
@@ -36,6 +38,8 @@ const OrganiserViewEventDetails = () => {
   const [prettySalesEndDate, setPrettySalesEndDate] = useState('');
   const [newSellerApplications, setNewSellerApplications] = useState([]);
   const [sellerProfiles, setSellerProfiles] = useState([]);
+  const [eventReviews,setEventReviews] = useState([]);
+
   const router = useRouter();
   const { eid } = router.query;
   const { addToast, removeToast } = useToasts();
@@ -62,10 +66,12 @@ const OrganiserViewEventDetails = () => {
             format(parseISO(eventData.salesEndDate), 'dd MMM yy hh:mmbbb')
           );
         setEvent(eventData);
-        // let newApplications = await getNewApplicationsFromEvent(eid);
         let profiles = await getSellerProfilesFromEvent(eid);
         setSellerProfiles(profiles);
         if (eventData.sellerApplications) setNewSellerApplications(returnNewSellerApplications(eventData.sellerApplications));
+
+        const reviews = await getReviewsByEvent(eid);
+        setEventReviews(reviews);
       } catch (e) {
         router.push('/organiser/events/not-found');
       }
@@ -160,7 +166,8 @@ const OrganiserViewEventDetails = () => {
         <Container>
           <Row>
             <Col lg={6} className="space-mb-mobile-only--40">
-              {event.images && <ImageGalleryLeftThumb event={event} />}
+              {event?.images && <EventImageGallery images={event.images} />}
+              {/* {event.images && <ImageGalleryLeftThumb event={event} />} */}
             </Col>
             <Col lg={6}>
               {/* product description */}
@@ -189,6 +196,7 @@ const OrganiserViewEventDetails = () => {
                   createToast={createToast}
                   newSellerApplications={newSellerApplications}
                   sellerProfiles={sellerProfiles}
+                  eventReviews={eventReviews}
                 />
               )}
             </Col>

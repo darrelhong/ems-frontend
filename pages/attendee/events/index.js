@@ -15,6 +15,7 @@ import AttendeeWrapper from 'components/wrapper/AttendeeWrapper';
 import EventCard from 'components/events/partner/EventCard';
 import ButtonWithLoading from 'components/custom/ButtonWithLoading';
 import CenterSpinner from 'components/custom/CenterSpinner';
+import useUser from 'lib/query/useUser';
 
 export function getServerSideProps({ query }) {
   return {
@@ -23,6 +24,7 @@ export function getServerSideProps({ query }) {
 }
 
 export default function AttendeeEvents({ category }) {
+  const { data: user } = useUser(localStorage.getItem('userId'));
   const [sortBy, setSortBy] = useState();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(category);
@@ -180,7 +182,7 @@ export default function AttendeeEvents({ category }) {
                       >
                         <Link href={`/attendee/events/${event.eid}`}>
                           <a className="w-100">
-                            <EventCard event={event} />
+                            <EventCard event={event} user={user} />
                           </a>
                         </Link>
                       </Col>

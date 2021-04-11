@@ -64,15 +64,10 @@ export default function BusinessPartnerDetails({ id }) {
 
   return (
 
-    <>
-      <Head>
-        <title>Business Partner details</title>
-      </Head>
 
-      <AdminHeaderTop />
-
+  
+    <AdminWrapper title="Business Partner details">
       <BreadcrumbOne pageTitle="Business Partner Details">
-
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/admin/home">
@@ -305,6 +300,7 @@ function UpdatePartnerForm({ bp }) {
       </div>
     </form>
   );
+
 }
 
 UpdatePartnerForm.propTypes = {

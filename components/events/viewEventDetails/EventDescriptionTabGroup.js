@@ -12,6 +12,7 @@ import TicketingModal from '../../Event/TicketingModal';
 import TicketingTab from './DescriptionTabs/TicketingTab';
 import BusinessPartnerTab from './DescriptionTabs/BusinessPartnerTab';
 import RecommendedPartnersTab from './DescriptionTabs/RecommendedPartnersTab';
+import ReviewTab from './DescriptionTabs/ReviewTab';
 import { getRecommendedPartners } from 'lib/query/eventApi';
 
 // import { format, parseISO } from 'date-fns';
@@ -23,7 +24,8 @@ const EventDescriptionTabGroup = ({
   prettySalesEndDate,
   createToast,
   newSellerApplications,
-  sellerProfiles
+  sellerProfiles,
+  eventReviews
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [recommendedPartners, setRecommendedPartners] = useState([]);
@@ -171,12 +173,9 @@ const EventDescriptionTabGroup = ({
           </Tab.Pane>
 
           <Tab.Pane eventKey="reviews">
-            <div
-              className="product-description-tab__details"
-              style={{ textAlign: 'center' }}
-            >
-              No reviews yet!
-            </div>
+            <ReviewTab 
+            reviews={eventReviews}
+            />
           </Tab.Pane>
           <Tab.Pane eventKey="recommendedPartners">
             {event?.eid && (

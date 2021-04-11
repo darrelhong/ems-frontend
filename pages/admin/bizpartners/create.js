@@ -21,13 +21,8 @@ export default function CreateBusinessPartner() {
   );
 
   return (
-    <>
-      <Head>
-        <title>Business Partner</title>
-      </Head>
-
-      <AdminHeaderTop />
-
+  
+    <AdminWrapper title="Create Business Partner">
       <BreadcrumbOne pageTitle="Create business partner">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
@@ -162,5 +157,6 @@ export default function CreateBusinessPartner() {
 
       <FooterOne />
     </AdminWrapper>
+    
   );
 }

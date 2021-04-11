@@ -2,8 +2,25 @@ import { Container, Row, Col } from 'react-bootstrap';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
 import EventEoProfileSliderTen from './ProductSlider/EventEoProfileSliderTen';
+import { useEffect, useState } from 'react';
 
 const EventTabOne = ({ current, upcoming, past }) => {
+  const [showNoCurrentMsg, setShowNoCurrentMsg] = useState(false);
+  const [showNoUpcomingMsg, setShowNoUpcomingMsg] = useState(false);
+  const [showNoPastMsg, setShowNoPastMsg] = useState(false);
+
+  useEffect(() => {
+    if (current != null) {
+      setShowNoCurrentMsg(current.length == 0);
+    }
+    if (upcoming != null) {
+      setShowNoUpcomingMsg(upcoming.length == 0);
+    }
+    if (past != null) {
+      setShowNoPastMsg(past.length == 0);
+    }
+  })
+
   if (current !== undefined && past !== undefined) {
     return (
       <div className="product-tab-area space-pb--r70">
@@ -33,6 +50,9 @@ const EventTabOne = ({ current, upcoming, past }) => {
                     <EventEoProfileSliderTen events={current} />
                   </Col>
                 </Row>
+                {showNoCurrentMsg && (
+                  <div className="w-100 text-center" style={{marginTop: "100px"}}>There are no current events.</div>
+                )}
               </Tab.Pane>
               <Tab.Pane eventKey="upcoming">
                 <Row>
@@ -40,6 +60,9 @@ const EventTabOne = ({ current, upcoming, past }) => {
                     <EventEoProfileSliderTen events={upcoming} />
                   </Col>
                 </Row>
+                {showNoUpcomingMsg && (
+                  <div className="w-100 text-center" style={{marginTop: "100px"}}>There are no upcoming events.</div>
+                )}
               </Tab.Pane>
               <Tab.Pane eventKey="past">
                 <Row>
@@ -47,6 +70,9 @@ const EventTabOne = ({ current, upcoming, past }) => {
                     <EventEoProfileSliderTen events={past} />
                   </Col>
                 </Row>
+                {showNoPastMsg && (
+                  <div className="w-100 text-center" style={{marginTop: "100px"}}>There are no past events.</div>
+                )}
               </Tab.Pane>
             </Tab.Content>
           </Tab.Container>

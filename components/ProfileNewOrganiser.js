@@ -669,7 +669,7 @@ const EventOrgProfile = ({ paraId_ }) => {
             </Card>
           </Col>
           <Col md="8">
-            <Card className="card-user">
+            <Card className="card-user" style={{minHeight: "100%"}}>
               {/* <CardHeader>
                 <CardTitle tag="h5">Profile Details</CardTitle>
               </CardHeader> */}

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Modal,
   Button,
@@ -36,6 +36,7 @@ const FollowersTabEoProfile = ({
   //const [emailbroadcastoption, setEmailbroadcastoption] = useState('');
 
   const [broadcastModalShow, setBroadcastModalShow] = useState(false);
+
   const closeBroadcastModal = () => {
     setBroadcastModalShow(false);
     setErrorMessage('null');
@@ -331,7 +332,6 @@ const FollowersTabEoProfile = ({
                 </button>
               )}
             </Nav>
-
             <Tab.Content>
               <Tab.Pane eventKey="attendees">
                 <Row>
@@ -431,6 +431,9 @@ const FollowersTabEoProfile = ({
                             );
                           })}
                       </div>
+                      {(attendees.length == 0) && (
+                        <div className="w-100 text-center" style={{marginTop: "100px"}}>There are no followers.</div>
+                      )}
                     </div>
                   </Col>
                 </Row>
@@ -539,6 +542,9 @@ const FollowersTabEoProfile = ({
                             })}
                         </ul>
                       </div>
+                      {(partners.length == 0) && (
+                        <div className="w-100 text-center" style={{marginTop: "100px"}}>There are no followers.</div>
+                      )}
                     </div>
                   </Col>
                 </Row>

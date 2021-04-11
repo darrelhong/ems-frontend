@@ -62,6 +62,7 @@ const PartnerProfile = ({ router: { query } }) => {
 
   const localuser = JSON.parse(query.localuser);
   const { data: partner } = useUser(localuser);
+}
 
 const EventOrgProfile = () => {
   return (

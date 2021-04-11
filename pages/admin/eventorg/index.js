@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 import MaterialTable from 'lib/MaterialTable';
 import { Card, Col, Container, Row } from 'react-bootstrap';
-
 import axios from 'axios';
 
 import {
@@ -102,7 +101,6 @@ export default function AdminEventOrg() {
                     },
                     disabled: !rowData.approved,
                   }),
-
                   {
                     icon: InfoOutlined,
                     tooltip: 'View event organiser',
