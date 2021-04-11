@@ -8,9 +8,9 @@ import PropTypes from 'prop-types';
 
 
 
-const LocationPane = ({ register, watch, physical, setPhysical, errors }) => {
+const LocationPane = ({ register, watch, physical, setPhysical, errors, location }) => {
   // const [physical,setPhysical] = useState(true);
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(location);
   // const autoCompleteRef = useRef(null);
   // const [autoCompleteRef, setAutoCompleteRef] = useState();
   const [website, setWebsite] = useState("");
@@ -150,13 +150,13 @@ const LocationPane = ({ register, watch, physical, setPhysical, errors }) => {
               )}
             </Col>
             <Col className="form-group" md={12}>
-              {physical && (<div> <span>Website: </span> <a href={website}> {website} </a></div> 
+              {physical && (<div> <span>Website: </span> <a href={website}> {website ?? 'Not available'} </a></div> 
               )}
             </Col>
 
             <Col className="form-group" md={12}>
               {/* <span>{website}</span> */}
-              {physical && (<span>Phone Number: {phone}</span>)}
+              {physical && (<span>Phone Number: {phone ?? 'Not available'}</span>)}
 
               {/* <span>{phone}</span> */}
 

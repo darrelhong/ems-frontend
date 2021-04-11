@@ -22,6 +22,7 @@ import {
   getEventDetails,
   updateEvent,
   uploadEventImage,
+  uploadBoothLayout
 } from '../../../lib/query/eventApi';
 import { htmlDateToDb, formatDates } from '../../../lib/util/functions';
 import Modal from 'react-bootstrap/Modal';
@@ -53,7 +54,9 @@ const CreateEvent = () => {
   const [hideOptions, setHideOptions] = useState('');
   const [sellingTicket, setsellingTicket] = useState(true);
   const [freeTickets, setFreeTickets] = useState(false);
-  const [files, setFiles] = useState();
+  const [files, setFiles] = useState(); //REFERS TO EVENT IMAGES
+  const [boothlayoutImage,setBoothLayoutImage] = useState();
+  const [location,setLocation] = useState();
 
   const router = useRouter();
   const { eid } = router.query;
@@ -87,6 +90,7 @@ const CreateEvent = () => {
     setValue('name', name);
     setValue('descriptions', descriptions);
     setValue('address', address);
+    setLocation(address);
     console.log('printing out dates to fix setValue');
     console.log(eventStartDate);
     console.log(eventEndDate);
@@ -131,7 +135,7 @@ const CreateEvent = () => {
       const response = await updateEvent(updatedData);
       console.log('saved an existing event');
       console.log(response);
-      if (files) await saveImages(response.eid);
+      if (files) await saveEventImages(response.eid);
       createToast('Event edited successfully', 'success');
       router.push(`/organiser/events/${eid}`);
     } else {
@@ -141,7 +145,7 @@ const CreateEvent = () => {
 
       updatedData = { ...formattedData, eventOrganiserId, eventStatus };
       const response = await createEvent(updatedData);
-      if (files) await saveImages(response.eid);
+      if (files) await saveEventImages(response.eid);
       console.log('finished creating brand new event:');
       console.log(response);
       createToast('Event created successfully', 'success');
@@ -165,11 +169,11 @@ const CreateEvent = () => {
 
       //update existing event
       let updatedEvent = await updateEvent(updatedData);
-      // await saveImages(updatedEvent.eid);
+      // await saveEventImages(updatedEvent.eid);
       console.log('printing updated event:');
       console.log(updatedEvent);
       eventId = updatedEvent.eid;
-      if (files) await saveImages(eventId);
+      if (files) await saveEventImages(eventId);
     } else {
       const dateProcessedData = formatDates(data);
       const formData = processHideOptionsSave(dateProcessedData);
@@ -182,7 +186,8 @@ const CreateEvent = () => {
       const response = await createEvent(updatedData);
       eventId = response.eid;
       // const imageresponse = await saveImage(response.eid);
-      if (files) await saveImages(response.eid);
+      if (files) await saveEventImages(response.eid);
+      if (boothlayoutImage) await saveBoothLayout(response.eid);
     }
 
     // let message = '';
@@ -191,7 +196,7 @@ const CreateEvent = () => {
     router.push(`/organiser/events/${eventId}`);
   };
 
-  const saveImages = async (eventId) => {
+  const saveEventImages = async (eventId) => {
     const uploadedImages = files;
     // const uploadedImages = getValues('files');
     const length = uploadedImages?.length ?? 0;
@@ -214,6 +219,13 @@ const CreateEvent = () => {
       console.log(response);
     }
   };
+
+  const saveBoothLayout = async (eventId) => {
+    let boothLayoutData = new FormData();
+    boothLayoutData.append('file',boothlayoutImage);
+    boothLayoutData.append('eid',eventId);
+    await uploadBoothLayout(boothLayoutData);
+  }
 
   return (
     <OrganiserWrapper
@@ -354,7 +366,11 @@ const CreateEvent = () => {
                       />
                     </Tab.Pane>
                     <Tab.Pane eventKey="booths">
-                      <BoothPane register={register} errors={errors} />
+                      <BoothPane
+                      register={register}
+                      errors={errors}
+                      boothlayoutImage={boothlayoutImage}
+                      setBoothLayoutImage={setBoothLayoutImage} />
                     </Tab.Pane>
                     <Tab.Pane eventKey="location">
                       <LocationPane
@@ -363,6 +379,7 @@ const CreateEvent = () => {
                         watch={watch}
                         physical={physical}
                         setPhysical={setPhysical}
+                        location={location}
                   
                       />
                     </Tab.Pane>
