@@ -1,0 +1,26 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.droppable {
+  background: #f7f8fb;
+  border-radius: 5px;
+  padding: 8px;
+  width: 250px;
+  margin-right: 8px;
+  margin-bottom: 16px;
+  min-height: 48px;
+}
+
+.applications {
+  margin-right: 24px;
+}
+
+.item {
+  user-select: none;
+  padding: 16px;
+  margin: 0 0 8px 0;
+  background: var(--orange);
+  border-radius: 5px;
+}
