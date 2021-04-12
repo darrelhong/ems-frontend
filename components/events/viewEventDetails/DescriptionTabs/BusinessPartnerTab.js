@@ -28,13 +28,15 @@ const BusinessPartnerTab = ({
             >
                 {newSellerApplications.length != 0 ? (
                     <ul>
-                        <li
+                        <a
                             style={{
                                 color: 'red'
-                            }}>
+                            }}
+                            href={`/organiser/events/applications?eid=${event.eid}`}
+                            >
                             <IoMdTrophy />
-                            {newSellerApplications.length} {' '}new applications
-              </li>
+                            {' '}{newSellerApplications.length} {' '}new applications
+              </a>
                     </ul>
                 )
                     : (
@@ -52,7 +54,7 @@ const BusinessPartnerTab = ({
                             className="btn btn-fill-out btn-addtocart space-ml--10"
                             style={{ textAlign: 'right' }}
                         >
-                            <i className="icon-basket-loaded" /> Manage Event Booths
+                            <i className="icon-basket-loaded" /> Manage Booth Allocation (not done)
           </button>
                     </Link>
                 </ul>
@@ -77,15 +79,15 @@ const BusinessPartnerTab = ({
                     marginTop: '10%'
                 }}
             >
+                    {sellerProfiles.length != 0 && sellerProfiles ? (
                 <Row className="list">
-                    {sellerProfiles.length != 0 ? (
-                        sellerProfiles.map((sellerProfile) => {
-                            return (
+                    {/* {sellerProfiles.length != 0 && sellerProfiles ? ( */}
+                        {sellerProfiles.map((sellerProfile) => (
                                 <SellerProfileCard
                                     sellerProfile={sellerProfile}
                                 />
-                            );
-                        })
+                            ))}
+                </Row>
                     ) : (
                         <div
                             className="product-description-tab__details"
@@ -95,7 +97,7 @@ const BusinessPartnerTab = ({
                         </div>
                     )
                     }
-                </Row>
+                {/* </Row> */}
             </div>
         )
     };

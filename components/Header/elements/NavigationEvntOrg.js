@@ -62,6 +62,11 @@ const NavigationEvntOrg = ({ positionClass }) => {
           </a>
 
           <ul className="sub-menu sub-menu--one-column">
+          <li>
+              <Link href="/organiser/events/create">
+                <a>Create New Event</a>
+              </Link>
+            </li>
             <li>
               <Link href="/organiser/events">
                 <a>Manage My Events</a>

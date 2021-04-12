@@ -60,6 +60,11 @@ const MobileMenuNavEvntOrg = ({ getActiveStatus }) => {
           </Link>
 
           <ul className="mobile-sub-menu">
+          <li>
+              <Link href="/organiser/events/create">
+                <a>Create New Event</a>
+              </Link>
+            </li>
             <li>
               <Link href="/organiser/events">
                 <a>Manage My Events</a>
