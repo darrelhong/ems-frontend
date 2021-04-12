@@ -3,7 +3,7 @@ import { Accordion, Card, ListGroup } from 'react-bootstrap';
 import { LightgalleryItem, LightgalleryProvider } from 'react-lightgallery';
 
 export default function Booths({ sellerProfiles }) {
-  const booths = sellerProfiles.reduce((prev, curr) => {
+  const booths = sellerProfiles?.reduce((prev, curr) => {
     curr.booths;
     return prev.concat(curr.booths);
   }, []);
@@ -13,7 +13,7 @@ export default function Booths({ sellerProfiles }) {
       <h5>Booths and Products</h5>
 
       <Accordion>
-        {booths.map((booth) => (
+        {booths?.map((booth) => (
           <Card key={booth.id}>
             <Accordion.Toggle as={Card.Header} eventKey={booth.id}>
               Booth {booth.boothNumber} by{' '}
