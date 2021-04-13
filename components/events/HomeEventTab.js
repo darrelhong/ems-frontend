@@ -4,24 +4,26 @@ import { getAttendeeFavouriteEvents, getBusinessPartnerFavouriteEvents } from '.
 import useUser from '../../lib/query/useUser';
 import HomeEventCard from './HomeEventCard';
 
-export default function HomeEventTab({ events, tab }) {
-    const { data: user } = useUser(localStorage.getItem('userId'));
+export default function HomeEventTab({ events, tab, isGuest }) {
+    const { data: user } = isGuest == null ? useUser(localStorage.getItem('userId')) : () => {return null};
     const [favouriteEvents, setFavouriteEvents] = useState([]);
 
     useEffect(() => {
-        if (user.roles[0].description === "Attendee") {
-            const getEvent = async () => {
-                const data = await getAttendeeFavouriteEvents();
-                setFavouriteEvents(data);
-            };
-            getEvent();
-        }
-        else if (user.roles[0].description === "Business Partner") {
-            const getEvent = async () => {
-                const data = await getBusinessPartnerFavouriteEvents();
-                setFavouriteEvents(data);
-            };
-            getEvent();
+        if (user != null) {
+            if (user.roles[0].description === "Attendee") {
+                const getEvent = async () => {
+                    const data = await getAttendeeFavouriteEvents();
+                    setFavouriteEvents(data);
+                };
+                getEvent();
+            }
+            else if (user.roles[0].description === "Business Partner") {
+                const getEvent = async () => {
+                    const data = await getBusinessPartnerFavouriteEvents();
+                    setFavouriteEvents(data);
+                };
+                getEvent();
+            }
         }
     }, [user])
 

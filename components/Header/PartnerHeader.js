@@ -49,7 +49,7 @@ const PartnerHeader = ({ cartItems, navPositionClass }) => {
           <Container>
             <div className="bottom-header-container d-flex justify-content-between align-items-center position-relative">
               {/* logo */}
-              <Link href="/">
+              <Link href="/partner/home">
                 <a className="navbar-brand">
                   <img
                     className="logo-light"

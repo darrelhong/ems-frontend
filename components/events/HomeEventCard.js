@@ -8,20 +8,33 @@ import { BsHeart, BsHeartFill } from 'react-icons/bs';
 import { useEffect, useState } from 'react';
 import { partnerLikeEvent, partnerUnlikeEvent } from 'lib/query/events';
 export default function HomeEventCard({ user, event, isFavourite, tab, setFavouriteEvents }) {
+  const [userPath, setUserPath] = useState("attendee");
 
   useEffect(() => {
-    var heart = document.getElementById(tab + "-heart-" + event.eid)
-    var heartFilled = document.getElementById(tab + "-heart-filled-" + event.eid)
-    
-    if (isFavourite) {
-      heart.style.display = "none";
-      heartFilled.style.display = "block";
+    if (user != null){
+      if (user.roles[0].description === "Attendee") {
+        setUserPath("attendee");
+      }
+      else if (user.roles[0].description === "Business Partner") {
+        setUserPath("partner");
+      }
+  
+      var heart = document.getElementById(tab + "-heart-" + event.eid)
+      var heartFilled = document.getElementById(tab + "-heart-filled-" + event.eid)
+      
+      if (isFavourite) {
+        heart.style.display = "none";
+        heartFilled.style.display = "block";
+      }
+      else {
+        heart.style.display = "block";
+        heartFilled.style.display = "none";
+      }
     }
     else {
-      heart.style.display = "block";
-      heartFilled.style.display = "none";
+      setUserPath("public");
     }
-  }, [])
+  }, [user])
 
   function favouriteEvent() {
     if (user.roles[0].description === "Attendee") {
@@ -79,30 +92,32 @@ export default function HomeEventCard({ user, event, isFavourite, tab, setFavour
         />
         <Card.Body className="d-flex flex-column">
           {/* <Link href={`/attendee/events/${event.eid}`}> */}
-          <Link href={`/partner/events/${event.eid}`}>
+          <Link href={`/${userPath}/events/${event.eid}`}>
             <Card.Title>{event.name}</Card.Title>
           </Link>
           <Card.Text className="text-default mt-auto">
             {format(parseISO(event.eventStartDate), 'eee, dd MMM yy hh:mmbbb')}
           </Card.Text>
-          <span style={{ position: "absolute", bottom: "10px", right: "10px" }}>
-            <IconButton
-              onClick={() => favouriteEvent()}
-              aria-label="favourite"
-              color="secondary"
-            >
-              <BsHeart 
-                id={tab + "-heart-" + event.eid} 
-                name={"heart-" + event.eid} 
-                style={{display: "block"}} 
-              />
-              <BsHeartFill 
-                id={tab + "-heart-filled-" + event.eid} 
-                name={"heart-filled-" + event.eid} 
-                style={{display: "none"}} 
-              />
-            </IconButton>
-          </span>
+          {Boolean(user != null) && (
+            <span style={{ position: "absolute", bottom: "10px", right: "10px" }}>
+              <IconButton
+                onClick={() => favouriteEvent()}
+                aria-label="favourite"
+                color="secondary"
+              >
+                <BsHeart 
+                  id={tab + "-heart-" + event.eid} 
+                  name={"heart-" + event.eid} 
+                  style={{display: "block"}} 
+                />
+                <BsHeartFill 
+                  id={tab + "-heart-filled-" + event.eid} 
+                  name={"heart-filled-" + event.eid} 
+                  style={{display: "none"}} 
+                />
+              </IconButton>
+            </span>
+          )}
         </Card.Body>
       </Card>
     </>
