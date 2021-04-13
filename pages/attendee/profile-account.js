@@ -47,6 +47,7 @@ import { logout } from '../../lib/auth';
 // cards
 import Cards from 'react-credit-cards';
 import 'react-credit-cards/es/styles-compiled.css';
+import PaymentMethods from 'components/custom/PaymentMethods';
 
 const MyAccount = () => {
   // const [setShowFailedMsg] = useState(false);
@@ -906,6 +907,7 @@ const MyAccount = () => {
                       <Card.Header>
                         <h3>Card Payment Method</h3>
                       </Card.Header>
+                      <PaymentMethods />
                       <Card.Body>
                         {user?.paymentMethodId == null && (
                           <div className="account-details-form">
@@ -1084,10 +1086,10 @@ const MyAccount = () => {
                           paymentMethod.card.brand == 'visa' && (
                             <div className="account-details-form">
                               <Cards
-                                cvc={'***'}
+                                cvc="***"
                                 expiry={expiry}
                                 focused={focus}
-                                name={'LIN LILI'}
+                                name="LIN LILI"
                                 number={
                                   '4***********' + paymentMethod.card.last4
                                 }
@@ -1112,7 +1114,7 @@ const MyAccount = () => {
                           paymentMethod.card.brand == 'mastercard' && (
                             <div className="account-details-form">
                               <Cards
-                                cvc={'***'}
+                                cvc="***"
                                 expiry={expiry}
                                 focused={focus}
                                 name={paymentMethod.billing_details.name}
@@ -1215,7 +1217,7 @@ const MyAccount = () => {
                                     className="profile-image"
                                     src={user?.profilePic}
                                     thumbnail
-                                    style = {{width:'60%'}}
+                                    style={{ width: '60%' }}
                                   />
                                 )}
 
@@ -1225,7 +1227,7 @@ const MyAccount = () => {
                                     className="profile-image"
                                     src="../../assets/images/defaultprofilepic.png"
                                     thumbnail
-                                    style = {{width:'60%'}}
+                                    style={{ width: '60%' }}
                                   />
                                 )}
                               {profilepicUrl != null &&
@@ -1234,7 +1236,7 @@ const MyAccount = () => {
                                     className="profile-image"
                                     src={profilepicUrl}
                                     thumbnail
-                                    style = {{width:'60%'}}
+                                    style={{ width: '60%' }}
                                   />
                                 )}
                             </Col>
@@ -1720,4 +1722,3 @@ const MyAccount = () => {
   );
 };
 export default MyAccount;
-
