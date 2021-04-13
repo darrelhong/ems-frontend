@@ -2300,6 +2300,7 @@
   dependencies:
     "anymatch" "~3.1.1"
     "braces" "~3.0.2"
+    "fsevents" "~2.1.2"
     "glob-parent" "~5.1.0"
     "is-binary-path" "~2.1.0"
     "is-glob" "~4.0.1"
@@ -3714,6 +3715,7 @@
   "resolved" "https://registry.npmjs.org/framer-motion/-/framer-motion-3.3.0-beta.22.tgz"
   "version" "3.3.0-beta.22"
   dependencies:
+    "@emotion/is-prop-valid" "^0.8.2"
     "framesync" "^5.0.0"
     "hey-listen" "^1.0.8"
     "popmotion" "^9.1.0"
@@ -4619,6 +4621,10 @@
   dependencies:
     "atob" "^2.1.2"
     "btoa" "^1.2.1"
+    "canvg" "^3.0.6"
+    "core-js" "^3.6.0"
+    "dompurify" "^2.0.12"
+    "html2canvas" "^1.0.0-rc.5"
   optionalDependencies:
     "canvg" "^3.0.6"
     "core-js" "^3.6.0"
@@ -4767,6 +4773,10 @@
     "copy-anything" "^2.0.1"
     "errno" "^0.1.1"
     "graceful-fs" "^4.1.2"
+    "image-size" "~0.5.0"
+    "make-dir" "^2.1.0"
+    "mime" "^1.4.1"
+    "native-request" "^1.0.5"
     "source-map" "~0.6.0"
     "tslib" "^1.10.0"
   optionalDependencies:
@@ -5396,6 +5406,7 @@
     "resolve-url-loader" "3.1.2"
     "sass-loader" "10.0.5"
     "schema-utils" "2.7.1"
+    "sharp" "0.26.3"
     "stream-browserify" "3.0.0"
     "style-loader" "1.2.1"
     "styled-jsx" "3.3.2"
@@ -8355,6 +8366,7 @@
   "version" "2.8.29"
   dependencies:
     "source-map" "~0.5.1"
+    "uglify-to-browserify" "~1.0.0"
     "yargs" "~3.10.0"
   optionalDependencies:
     "uglify-to-browserify" "~1.0.0"
@@ -8542,8 +8554,10 @@
   "resolved" "https://registry.npmjs.org/watchpack/-/watchpack-1.7.5.tgz"
   "version" "1.7.5"
   dependencies:
+    "chokidar" "^3.4.1"
     "graceful-fs" "^4.1.2"
     "neo-async" "^2.5.0"
+    "watchpack-chokidar2" "^2.0.1"
   optionalDependencies:
     "chokidar" "^3.4.1"
     "watchpack-chokidar2" "^2.0.1"
@@ -8556,6 +8570,7 @@
     "chokidar" "^3.4.1"
     "graceful-fs" "^4.1.2"
     "neo-async" "^2.5.0"
+    "watchpack-chokidar2" "^2.0.1"
   optionalDependencies:
     "watchpack-chokidar2" "^2.0.1"
 

@@ -5,8 +5,7 @@ import {
   partnerLikeEvent,
   partnerUnlikeEvent,
 } from '../../../lib/query/events';
-import { Card, Badge, Button } from 'react-bootstrap';
-import { FaHeart, FaRegHeart } from 'react-icons/fa';
+import { Card, Badge, Button, Modal } from 'react-bootstrap';
 import useFavouriteEventMutation from 'lib/query/useFavouriteEventMutation';
 import styles from './EventCard.module.css';
 import IconButton from '@material-ui/core/IconButton';
@@ -20,6 +19,15 @@ import { useToasts } from 'react-toast-notifications';
 import { getBoothTotalFromEvent } from 'lib/functions/boothFunctions';
 import { getSellerApplicationsFromBpId } from 'lib/query/sellerApplicationApi';
 import { Fragment } from 'react';
+
+// from wj side
+import api from 'lib/ApiClient';
+import { store } from 'react-notifications-component';
+import Rating from "react-rating";
+import { FaStar, FaRegStar } from 'react-icons/fa';
+import {
+  AiOutlineNotification,
+} from 'react-icons/ai';
 
 export default function EventCard({ event, user }) {
   // function inFav(event, user) {
@@ -40,13 +48,81 @@ export default function EventCard({ event, user }) {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [boothTotal, setBoothTotal] = useState(0);
   const [applicationMade, setApplicationMade] = useState();
-  // console.log(user?.sellerApplications.filter(sa => sa.paymentStatus === "PENDING"))
+
+  // from wj side
+  const [errorMessage, setErrorMessage] = useState('')
+  const [reviewModalShow, setReviewModalShow] = useState(false);
+  const closeReviewModal = () => { setReviewModalShow(false); setRating(0); setErrorMessage("null"); setMessage(""); }
+  const openReviewModal = () => setReviewModalShow(true);
+  const role = user?.roles[0].roleEnum;
+  const [message, setMessage] = useState('');
+  const [rating, setRating] = useState(0);
+  const [confirmReviewModalShow, setConfirmReviewModalShow] = useState(false);
+  const closeConfirmReviewModal = () => { setConfirmReviewModalShow(false); setReviewModalShow(true); }
+  const openConfirmReviewModal = () => {
+    if (message === "") {
+      setErrorMessage("Please ensure that all fields are filled.");
+
+    } else {
+      setErrorMessage("null");
+      setConfirmReviewModalShow(true);
+      setReviewModalShow(false);
+    }
+  }
+  const handleMessage = (e) => {
+    setMessage(e.target.value);
+    // console.log(e.target.value + "message");
+  };
+  const mutateCreateReview = useMutation((data) =>
+    api
+      .post('/api/review/create', data)
+      .then((response) => {
+        setMessage('');
+        setRating(0);
+        console.log("success");
+        closeConfirmReviewModal();
+        closeReviewModal();
+        store.addNotification({
+          title: "Success",
+          message: "Thank you. Your reviews have been submitted!",
+          type: "success",
+          insert: "top",
+          container: "top-left",
+          dismiss: {
+            duration: 5000,
+            onScreen: true
+          }
+        });
+      })
+      .catch((error) => {
+        console.log("Is it working?")
+        console.log(error);
+      })
+  );
+  const createReview = async () => {
+    if (role == "BIZPTNR") {
+      mutateCreateReview.mutate({
+        rating: rating,
+        partnerId: user.id,
+        eventId: event.eid,
+        review: message,
+      });
+    } else if (role == "ATND") {
+      mutateCreateReview.mutate({
+        rating: rating,
+        attendeeId: user.id,
+        eventId: event.eid,
+        review: message,
+      });
+    }
+  };
 
   // console.log("Past: ", isPast)
   useEffect(() => {
     const loadBoothTotal = async () => {
-      const total = await getBoothTotalFromEvent(event?.eid);
-      setBoothTotal(total);
+      // const total = await getBoothTotalFromEvent(event?.eid);
+      // setBoothTotal(total);
+      setBoothTotal(1)
     }
     const loadApplications = async () => {
       if (user != null) {
@@ -153,70 +229,150 @@ export default function EventCard({ event, user }) {
   //   };
 
   return (
-    // <div>
-    <Card
-      className={`h-100 ${styles.eventCard}`}
-      style={{
-        transition: 'all 0.3s ease',
-        ':hover': {
-          boxShadow: '2px 1px 8px -3px rgb(0 0 0 / 30%)',
-        },
-      }}
-    >
-      <RegisterModal
-        showRegisterModal={showRegisterModal}
-        closeRegisterModal={() => { setShowRegisterModal(false) }}
-        event={event}
-        boothTotal={boothTotal}
-        bpId={user.id}
-        createToast={createToast}
-        setApplicationMade={setApplicationMade}
-        applicationMade={applicationMade}
-      />
-      <Card.Img
-        variant="top"
-        src={event.images?.[0] || '/assets/images/img-placeholder.jpg'}
-        style={{ height: 200 }}
-      />
-      <Badge
-        pill
-        variant={badgeStyle}
+    <div>
+      {/* From wj side */}
+       <Modal show={confirmReviewModalShow} onHide={closeConfirmReviewModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            Confirm Review/Rating
+      </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        <div className="product-content__rating-wrap">
+            <div className="product-content__rating">
+              <Rating
+               emptySymbol= {<FaRegStar className="yellow"/>}
+                fullSymbol= {<FaStar className="yellow" />}
+                readonly
+                initialRating={rating}
+              />
+            </div>
+          </div>
+          {message}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={closeConfirmReviewModal}>
+            No
+           
+      </Button>
+          <button
+            variant="primary"
+            className="btn btn-fill-out "
+          onClick={createReview}
+          >
+            Yes
+      </button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={reviewModalShow} onHide={closeReviewModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            Review/Rating
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body style={{ display: "flex", flexDirection: "column", gap: "5px" }} >
+          <div className="product-content__rating-wrap">
+            <div className="product-content__rating">
+              <Rating
+               emptySymbol= {<FaRegStar className="yellow"/>}
+                fullSymbol= {<FaStar className="yellow" />}
+               
+                initialRating={rating}
+                onClick={rate => setRating(rate)}
+              />
+            </div>
+          </div>
+          <textarea
+            required
+            className="form-control"
+            name="reviewMessage"
+            id="reviewMessage"
+            placeholder="Type your review here..."
+            style={{ width: "100%", height: "10em" }}
+            onChange={handleMessage}
+          />
+          <div className="error">
+              {errorMessage != "null" && <span>{errorMessage}</span>}
+            </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={closeReviewModal}>
+            Close
+          </Button>
+          <button
+            variant="primary"
+            className="btn btn-fill-out"
+            onClick={() => openConfirmReviewModal()}
+          >
+            Proceed
+          </button>
+        </Modal.Footer>
+      </Modal>
+
+      <Card
+        className={`h-100 ${styles.eventCard}`}
         style={{
-          position: 'absolute',
-          top: 5,
-          right: 5,
+          transition: 'all 0.3s ease',
+          ':hover': {
+            boxShadow: '2px 1px 8px -3px rgb(0 0 0 / 30%)',
+          },
         }}
       >
-        {badgeStatus}
-      </Badge>
-      <Card.Body className="d-flex flex-column">
-        <Card.Title>{event.name}</Card.Title>
-        <Card.Text className="line-clamp">{event?.descriptions}</Card.Text>
-        <Card.Text className="text-default mt-auto">
-          {format(parseISO(event.eventStartDate), 'eee, dd MMM yy hh:mmbbb')}
-          <Fragment>
-            <span style={{ float: 'right' }}>
-              <IconButton
-                aria-label="fav"
-                color="secondary"
-                onClick={(e) => {
-                  toggleLike(e);
-                }}
-              >
-                {inFav ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-              </IconButton>
-            </span>
-            <span style={{ float: 'left' }}>
+        <RegisterModal
+          showRegisterModal={showRegisterModal}
+          closeRegisterModal={() => { setShowRegisterModal(false) }}
+          event={event}
+          boothTotal={boothTotal}
+          bpId={user.id}
+          createToast={createToast}
+          setApplicationMade={setApplicationMade}
+          applicationMade={applicationMade}
+        />
+        <Card.Img
+          variant="top"
+          src={event.images?.[0] || '/assets/images/img-placeholder.jpg'}
+          style={{ height: 200 }}
+        />
+        <Badge
+          pill
+          variant={badgeStyle}
+          style={{
+            position: 'absolute',
+            top: 5,
+            right: 5,
+          }}
+        >
+          {badgeStatus}
+        </Badge>
+        <Card.Body className="d-flex flex-column">
+          <Card.Title>{event.name}</Card.Title>
+          <Card.Text className="line-clamp">{event?.descriptions}</Card.Text>
+          <Card.Text className="text-default mt-auto">
+            {format(parseISO(event.eventStartDate), 'eee, dd MMM yy hh:mmbbb')}
+            <Fragment>
+              <span style={{ float: 'right' }}>
+                <IconButton
+                  aria-label="fav"
+                  color="secondary"
+                  onClick={(e) => {
+                    toggleLike(e);
+                  }}
+                >
+                  {inFav ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+                </IconButton>
+              </span>
+              <span style={{ float: 'left' }}>
 
-              {badgeStatus == "" && <Button size="sm" onClick={(e) => applyEvent(e)} variant="danger">Apply</Button>}
-              {badgeStatus == "Confirmed" && <Button size="sm" variant="danger" disabled="true">Apply</Button>}
-              {badgeStatus == "Pending Payment" && <Button size="sm" variant="danger">Pay</Button>}
-              {badgeStatus == "Past" && <Button size="sm" variant="danger">Rate</Button>}
-            </span>
-          </Fragment>
+                {badgeStatus == "" && <Button size="sm" onClick={(e) => applyEvent(e)} variant="danger">Apply</Button>}
+                {badgeStatus == "Confirmed" && <Button size="sm" variant="danger" disabled="true">Apply</Button>}
+                {badgeStatus == "Pending Payment" && <Button size="sm" variant="danger">Pay</Button>}
+                {badgeStatus == "Past" && <Button size="sm" onClick={() => openReviewModal()} variant="danger">Rate</Button>}
+              </span>
+            </Fragment>
 
-        </Card.Text>
-        {/* <div className="d-flex align-items-baseline mt-auto">
+          </Card.Text>
+          {/* <div className="d-flex align-items-baseline mt-auto">
           <Card.Text className="text-default mb-0">
             {format(parseISO(event.eventStartDate), 'eee, dd MMM yy hh:mmbbb')}
           </Card.Text>
@@ -234,8 +390,9 @@ export default function EventCard({ event, user }) {
             />
           )}
         </div> */}
-      </Card.Body>
-    </Card>
+        </Card.Body>
+      </Card>
+    </div>
   );
 }
 
