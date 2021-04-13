@@ -1,33 +1,23 @@
 import { useState } from 'react';
-import { Row, Col, Form, Card } from 'react-bootstrap';
+import { Row, Col, Form, Card, Image } from 'react-bootstrap';
 // import Card from 'react-bootstrap/Card';
 import PropTypes from 'prop-types';
 
 const BoothPane = ({
   register,
   errors,
-  boothlayoutImage,
+  // boothlayoutImage,
   setBoothLayoutImage,
+  originalLayoutImage
 }) => {
   const [fileName, setFileName] = useState('');
+  const [imageToView,setImageToView] = useState();
 
   const handleFileChange = (e) => {
     setBoothLayoutImage(e.target.files[0]);
     // setFileSubmit(e.target.files);
-    console.log(e.target.files + 'setfiles');
-    // let fileTest = [];
-    // let i;
-    // let combinedFileName = '';
-    // let fileNameTests = [];
-    // for (i = 0; i < e.target.files.length; i++) {
-    // combinedFileName += e.target.files[i].name + ' , ';
-    // fileTest.push(window.URL.createObjectURL(e.target.files[i]));
-    // fileNameTests.push(e.target.files[i].name);
-    // }
-    // setFilesTest(fileTest);
+    setImageToView(URL.createObjectURL(e.target.files[0]));
     setFileName(e.target.files[0].name);
-    // setFileNameTest(fileNameTests);
-    // await submitFile();
   };
 
   return (
@@ -56,14 +46,24 @@ const BoothPane = ({
               )}
             </Col>
             <Col className="form-group" md={12}>
-            <label
-            //  style={{marginBottom:'10%'}}
-             >
+              <label
+              //  style={{marginBottom:'10%'}}
+              >
                 Booth Layout - an image showing the planned layout of all the
                 booths
                 {/* <span className="required">*</span> */}
               </label>
-              </Col>
+              <p>Please indicate booth numbers and positions for partners to refer to!</p>
+            </Col>
+            <Col className="form-group" md={12}>
+              <Image
+                className="profile-image"
+                // src={boothlayoutImage ?? "assets/images/defaultprofilepic.png"}
+                src={imageToView ?? originalLayoutImage}
+                thumbnail
+                style={{ width: '60%' }}
+              />
+            </Col>
             <Col className="form-group" md={12}>
               <Form.Group>
                 <Form.File

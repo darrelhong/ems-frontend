@@ -28,7 +28,7 @@ const PartnerCard = ({ partner, eid, increaseInviteCount }) => {
     };
 
     return (
-        <Col lg={4} sm={6} className="space-mb--50">
+        // <Col lg={4} sm={6} className="space-mb--50">
             <div className="product-list">
                 <div className="product-list__image">
                     {/* DEFO WRONG LINK, SEE WHICH PAGE TO USE */}
@@ -73,7 +73,7 @@ const PartnerCard = ({ partner, eid, increaseInviteCount }) => {
                     </button>
                 )}
             </div>
-        </Col>
+        // </Col>
     );
 };
 

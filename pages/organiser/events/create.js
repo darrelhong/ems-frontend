@@ -22,7 +22,8 @@ import {
   getEventDetails,
   updateEvent,
   uploadEventImage,
-  uploadBoothLayout
+  uploadBoothLayout,
+  removeEventPic,
 } from '../../../lib/query/eventApi';
 import { htmlDateToDb, formatDates } from '../../../lib/util/functions';
 import Modal from 'react-bootstrap/Modal';
@@ -54,9 +55,16 @@ const CreateEvent = () => {
   const [hideOptions, setHideOptions] = useState('');
   const [sellingTicket, setsellingTicket] = useState(true);
   const [freeTickets, setFreeTickets] = useState(false);
-  const [files, setFiles] = useState(); //REFERS TO EVENT IMAGES
-  const [boothlayoutImage,setBoothLayoutImage] = useState();
-  const [location,setLocation] = useState();
+  const [files, setFiles] = useState(); //REFERS TO EVENT IMAGES TO SUBMIT
+  const [filesToDisplay, setFilesToDisplay] = useState([]);
+  const [boothlayoutImage, setBoothLayoutImage] = useState();
+  const [originalLayoutImage, setOriginalLayoutImage] = useState(
+    '../../assets/images/defaultprofilepic.png'
+  );
+  const [originalEventImages, setOriginalEventImages] = useState([]);
+  const [location, setLocation] = useState();
+  const [imagesToDelete, setImagesToDelete] = useState([]);
+  const [eventImagesJson, setEventImagesJson] = useState([]);
 
   const router = useRouter();
   const { eid } = router.query;
@@ -84,16 +92,16 @@ const CreateEvent = () => {
       salesEndDate,
       vip,
       physical,
-      sellingTicket
+      sellingTicket,
+      boothLayout,
+      category,
+      images,
     } = eventData;
 
     setValue('name', name);
     setValue('descriptions', descriptions);
     setValue('address', address);
     setLocation(address);
-    console.log('printing out dates to fix setValue');
-    console.log(eventStartDate);
-    console.log(eventEndDate);
     setValue('eventStartDate', eventStartDate);
     // setValue("eventStartDate","10-10-2010 11:11:00");
     setValue('eventEndDate', eventEndDate);
@@ -105,7 +113,21 @@ const CreateEvent = () => {
     setValue('salesEndDate', salesEndDate);
     setVip(vip);
     setPhysical(physical);
-     setHideOptions(getHiddenStatus(eventData));
+    setHideOptions(getHiddenStatus(eventData));
+    setOriginalLayoutImage(boothLayout);
+    setOriginalEventImages(images);
+    setFiles(images);
+    setFilesToDisplay(images);
+    const mappedImages = images.map(function (image) {
+      return {
+        file: null,
+        imageUrl: image,
+      };
+    });
+    setEventImagesJson(mappedImages);
+    console.log('made images json');
+    console.log(images);
+    setValue('category', category);
   };
 
   const createToast = (message, appearanceStyle) => {
@@ -135,7 +157,9 @@ const CreateEvent = () => {
       const response = await updateEvent(updatedData);
       console.log('saved an existing event');
       console.log(response);
-      if (files) await saveEventImages(response.eid);
+      // if (files) await saveEventImages(response.eid); CHANGED TO NEW ONE
+      await newSaveEventImages(response.eid);
+      if (boothlayoutImage) await saveBoothLayout(response.eid);
       createToast('Event edited successfully', 'success');
       router.push(`/organiser/events/${eid}`);
     } else {
@@ -145,7 +169,8 @@ const CreateEvent = () => {
 
       updatedData = { ...formattedData, eventOrganiserId, eventStatus };
       const response = await createEvent(updatedData);
-      if (files) await saveEventImages(response.eid);
+      await newSaveEventImages(response.eid);
+      if (boothlayoutImage) await saveBoothLayout(response.eid);
       console.log('finished creating brand new event:');
       console.log(response);
       createToast('Event created successfully', 'success');
@@ -173,7 +198,8 @@ const CreateEvent = () => {
       console.log('printing updated event:');
       console.log(updatedEvent);
       eventId = updatedEvent.eid;
-      if (files) await saveEventImages(eventId);
+      await newSaveEventImages(eventId);
+      if (boothlayoutImage) await saveBoothLayout(response.eid);
     } else {
       const dateProcessedData = formatDates(data);
       const formData = processHideOptionsSave(dateProcessedData);
@@ -186,7 +212,7 @@ const CreateEvent = () => {
       const response = await createEvent(updatedData);
       eventId = response.eid;
       // const imageresponse = await saveImage(response.eid);
-      if (files) await saveEventImages(response.eid);
+      await newSaveEventImages(response.eid);
       if (boothlayoutImage) await saveBoothLayout(response.eid);
     }
 
@@ -222,10 +248,32 @@ const CreateEvent = () => {
 
   const saveBoothLayout = async (eventId) => {
     let boothLayoutData = new FormData();
-    boothLayoutData.append('file',boothlayoutImage);
-    boothLayoutData.append('eid',eventId);
+    boothLayoutData.append('file', boothlayoutImage);
+    boothLayoutData.append('eid', eventId);
     await uploadBoothLayout(boothLayoutData);
-  }
+  };
+
+  const newSaveEventImages = async (eventId) => {
+    //START W UPLOADING NEW FILES
+    for (let i = 0; i < eventImagesJson.length; i++) {
+      if (eventImagesJson[i]?.file != null) {
+        //MEANS NEED TO UPLOAD, ITS A NEW OBJECT WITH A FILE OBJECT
+        let inputData = new FormData();
+        inputData.append('file', eventImagesJson[i].file);
+        inputData.append('eid', eventId); //temp event ID
+        const response = await uploadEventImage(inputData);
+      }
+    }
+
+    //THEN I REMOVE THE OLD FILES
+    for (let i = 0; i < imagesToDelete.length; i++) {
+      try {
+        await removeEventPic(eid, imagesToDelete[i]);
+      } catch (e) {
+        console.log('failed to delete');
+      }
+    }
+  };
 
   return (
     <OrganiserWrapper
@@ -367,10 +415,12 @@ const CreateEvent = () => {
                     </Tab.Pane>
                     <Tab.Pane eventKey="booths">
                       <BoothPane
-                      register={register}
-                      errors={errors}
-                      boothlayoutImage={boothlayoutImage}
-                      setBoothLayoutImage={setBoothLayoutImage} />
+                        register={register}
+                        errors={errors}
+                        // boothlayoutImage={boothlayoutImage}
+                        setBoothLayoutImage={setBoothLayoutImage}
+                        originalLayoutImage={originalLayoutImage}
+                      />
                     </Tab.Pane>
                     <Tab.Pane eventKey="location">
                       <LocationPane
@@ -380,7 +430,6 @@ const CreateEvent = () => {
                         physical={physical}
                         setPhysical={setPhysical}
                         location={location}
-                  
                       />
                     </Tab.Pane>
                     <Tab.Pane eventKey="publishingOptions">
@@ -407,7 +456,14 @@ const CreateEvent = () => {
                         saveDraft={saveDraft}
                         onSubmit={onSubmit}
                         eventStatus={eventData.eventStatus}
-                        images = {eventData.images}
+                        // originalEventImages={originalEventImages}
+                        originalEventImages={eventData.images}
+                        filesToDisplay={filesToDisplay}
+                        setFilesToDisplay={setFilesToDisplay}
+                        eventImagesJson={eventImagesJson}
+                        setEventImagesJson={setEventImagesJson}
+                        imagesToDelete={imagesToDelete}
+                        setImagesToDelete={setImagesToDelete}
                       />
                     </Tab.Pane>
                   </Tab.Content>
