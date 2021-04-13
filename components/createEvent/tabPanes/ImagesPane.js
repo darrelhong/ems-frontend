@@ -169,7 +169,6 @@ const ImagesPane = ({
                 // <div style={{position:"relative"}}>
                 
                 <Col md={3}>
-                  
                   <img src={url} style={{position:"relative"}} /><button type="button" className="close" style={{right:"0px", position:"absolute", zIndex:"1"}} onClick={() => deleteFile(key)}>
                     <span>&times;</span>
                   </button>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Container, Button, Col, Image } from 'react-bootstrap';
+import { Container, Button, Col, Image,Row } from 'react-bootstrap';
 import AddBrochureModal from './AddBrochureModal';
 import ViewBrochureModal from './ViewBrochureModal';
 
@@ -10,67 +10,82 @@ const BrochureComponent = ({ sellerProfile, isPartner }) => {
     const [brochureIndex,setBrochureIndex] = useState(1);
 
     return (
-        <Container>
-            <AddBrochureModal
-                sellerProfileId={sellerProfile.id}
-                showModal={showModal}
-                closeModal={() => setShowModal(false)}
-                image={imageUrlToShow}
-            />
+      <Container>
+        <AddBrochureModal
+          sellerProfileId={sellerProfile.id}
+          showModal={showModal}
+          closeModal={() => setShowModal(false)}
+          image={imageUrlToShow}
+        />
 
-            <ViewBrochureModal 
-            image={imageUrlToShow}
-            closeViewBrochureModal={()=>setViewBrochureModalShow(false)}
-            viewBrochureModalShow={viewBrochureModalShow}
-            brochureIndex={brochureIndex}
-            />
-            
-            {isPartner && (
-                <Col
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row-reverse',
-                        alignContent: 'flex-end',
-                        marginBottom: '2%'
-                    }}
-                >
-                    <Button
-                        variant="danger"
-                        onClick={() => setShowModal(true)}
-                    >
-                        Add a new Brochure
-                    </Button>
-                </Col>
-            )}
+        <ViewBrochureModal
+          image={imageUrlToShow}
+          closeViewBrochureModal={() => setViewBrochureModalShow(false)}
+          viewBrochureModalShow={viewBrochureModalShow}
+          brochureIndex={brochureIndex}
+        />
+        <br></br>
+        {isPartner && (
+          <Col
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
 
-            <Col className="form-group"
-                xs={10} md={12}
-                style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}
+              marginBottom: '2%',
+            }}
+          >
+            <button
+              className="btn btn-fill-out btn-sm"
+              onClick={() => setShowModal(true)}
             >
-                {sellerProfile.brochureImages && sellerProfile.brochureImages.map((image,index) => (
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            marginRight: '5%'
-                        }}
-                    >
-                        <Image
-                            // className="close"
-                            // className="profile-image"
-                            style={{ height: "230px", width: "250px" }}
-                            thumbnail
-                            src={image}
-                            onClick={()=>{
-                             setImageUrlToShow(image);
-                             setBrochureIndex(index+1);
-                             setViewBrochureModalShow(true);
-                            }}
-                        />
-                    </div>
-                ))}
-            </Col>
-        </Container>
+              Add a new Brochure
+            </button>
+         
+          </Col>
+        )}
+
+        <Col
+          className="form-group"
+          xs={8}
+          md={8}
+          //   style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}
+        >
+          {sellerProfile.brochureImages &&
+            sellerProfile.brochureImages.map((image, index) => (
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  marginRight: '5%',
+                }}
+              >
+                {/* <Col md={3}>
+                  <img src={image} style={{ position: 'relative' }} />
+                  <button
+                    type="button"
+                    className="close"
+                    style={{ right: '0px', position: 'absolute', zIndex: '1' }}
+                    // onClick={() => deleteFile(index)}
+                  >
+                    <span>&times;</span>
+                  </button>
+                </Col> */}
+                <Image
+                  // className="close"
+                  // className="profile-image"
+                  style={{ height: 'auto', maxWidth: '700px' }}
+                  thumbnail
+                  src={image}
+                  onClick={() => {
+                    setImageUrlToShow(image);
+                    setBrochureIndex(index + 1);
+                    setViewBrochureModalShow(true);
+                  }}
+                />
+              </div>
+            ))}
+        </Col>
+      </Container>
     );
 };
 

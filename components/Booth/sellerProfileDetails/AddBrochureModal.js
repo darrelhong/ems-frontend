@@ -91,7 +91,7 @@ const AddBrochureModal = ({
                     Close
           </Button>
                 <Button
-                    variant="primary"
+                    variant="danger"
                     onClick={saveImages}
                 >
                     Upload
