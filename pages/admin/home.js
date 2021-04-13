@@ -6,6 +6,7 @@ import {
 } from 'react-icons/ai';
 import useUser from '../../lib/query/useUser';
 import axios from 'axios';
+import { BreadcrumbOne } from 'components/Breadcrumb';
 
 import {getEventOrganisers, getAttendees, getBusinessPartners} from '../../lib/query/getAllUsers';
 

@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Col, Badge } from 'react-bootstrap';
+import { Col, Badge, Row} from 'react-bootstrap';
 import { getSellerProfileIdFromApplication } from 'lib/query/sellerApplicationApi';
 import Link from 'next/link';
+import { format, parseISO } from 'date-fns';
 
 const ApplicationCard = ({
   app,
@@ -16,6 +17,8 @@ const ApplicationCard = ({
     const loadSellerProfileId = async () => {
       const id = await getSellerProfileIdFromApplication(app.id);
       setSellerProfileId(id);
+      setDate(app.applicationDate.toLocaleDateString());
+      console.log("date" + date);
     };
 
     if (app?.sellerApplicationStatus === 'CONFIRMED') {
@@ -56,18 +59,46 @@ const ApplicationCard = ({
         break;
       case 'APPROVED':
         return (
-          <div
+          <Row>
+            <Col lg={3}>
+          
+            </Col>
+            <Col lg={1}>
+              <div style={{textAlign:"right"}}>
+                   <h4>3 </h4>
+              </div>
+       
+          </Col>
+            <Col lg={5}>
+             
+            <div style={{textAlign:"left"}}>
+                 <strong className="product-description ">
+             Days Since Allocation           
+             
+            </strong> 
+            </div>
+
+            </Col>
+            <Col lg={3}>  
+            <div
             style={{
               float: 'right',
             }}
           >
             <button
-              disabled
+              // disabled
+              onClick={() => {
+                setApplication(app);
+                rejectAction();
+              }}
               className="btn btn-fill-out btn-addtocart space-ml--10"
             >
-              Approved
+              Reject
             </button>
           </div>
+            </Col>
+        
+          </Row>
         );
         break;
       case 'REJECTED':
@@ -149,7 +180,7 @@ const ApplicationCard = ({
   const getLg = () => {
     let output;
     if (renderAppRejButton) {
-      output = 4;
+      output = 12;
     } else output = null;
     return output;
   };
@@ -165,14 +196,11 @@ const ApplicationCard = ({
   return (
     <Col lg={getLg()} sm={getSm()} className="space-mb--50">
       <div className="product-list">
-        <div className="product-list__image">
-          <img
-            src={
-              app?.businessPartner?.profilePic ??
-              'https://thumbs.dreamstime.com/b/no-image-available-icon-flat-vector-no-image-available-icon-flat-vector-illustration-132482953.jpg'
-            }
-            alt="BP_image"
-          />
+        <div className="product-list__image" style={{
+          textAlign: "center"
+        }}>
+          <br></br>
+
           <Badge
             pill
             variant={getVariant()}
@@ -184,6 +212,19 @@ const ApplicationCard = ({
           >
             {app?.sellerApplicationStatus}
           </Badge>
+          <br></br>
+          <img
+            className="profile-image"
+            src={
+              app?.businessPartner?.profilePic ??
+              "../../assets/images/defaultprofilepic.png"
+            }
+            alt="BP_image"
+            style={{ width: '80%' }}
+
+            thumbnail
+          />
+
         </div>
 
         <div className="product-list__info">
@@ -193,16 +234,41 @@ const ApplicationCard = ({
               marginBottom: '5%',
             }}
           >
-            {app.businessPartner.name}
+            <Link href={{
+              pathname: '/partner/partner-profile',
+              query: {
+                paraId: JSON.stringify(app.businessPartner.id),
+              },
+            }}>
+              <a className="hover-effect">{app.businessPartner.name}</a> 
+            </Link>
           </h6>
 
           <div className="product-description">
+            <Row>
+              <Col lg={4}>
             <strong>
-              Event:
+              Event Applied:
               <Link href={`/organiser/events/${app?.event?.eid}`}>
                 <a className="hover-effect">{app?.event?.name}</a>
               </Link>
             </strong>
+            </Col>
+            <Col lg={4}>
+            <strong>
+              Application Date:            
+              <a className="hover-effect">  {format(parseISO(app?.applicationDate), 'dd MMM yyyy')}</a>
+
+            </strong>
+
+            </Col>
+            <Col lg={4}>
+            <strong>
+              Payment Status:
+              <a className="hover-effect">{app?.paymentStatus}</a>
+            </strong>
+            </Col>
+            </Row>
           </div>
 
           <br />
@@ -222,7 +288,7 @@ const ApplicationCard = ({
             </p>
             {app.comments}
           </div>
-
+            <br></br>
           {renderAppRejButton && renderAppRejButtonComponent()}
         </div>
       </div>
