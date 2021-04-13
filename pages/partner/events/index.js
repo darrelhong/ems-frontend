@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect} from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Alert, Col, Container, Row, Spinner, Modal, Button } from 'react-bootstrap';
 import { useInfiniteQuery, useQueryClient } from 'react-query';
@@ -6,7 +6,7 @@ import debounce from 'lodash/debounce';
 import { getEventsWithKeywordandSortFilter } from 'lib/query/events';
 import { BreadcrumbOne } from 'components/Breadcrumb';
 import PartnerWrapper from 'components/wrapper/PartnerWrapper';
-import EventCard from 'components/events/partner/EventCardWithReview';
+import EventCard from 'components/events/partner/EventCard';
 import ButtonWithLoading from 'components/custom/ButtonWithLoading';
 import useUser from '../../../lib/query/useUser';
 
@@ -93,8 +93,7 @@ export default function PartnerEvents() {
     debouncedSearch(e.target.value);
   };
   // invalidate queries to refetch data
-  const handleSearchButtonClicked = () =>
-  {
+  const handleSearchButtonClicked = () => {
     queryClient.invalidateQueries([
       'events',
       sortBy?.sort,
@@ -108,7 +107,7 @@ export default function PartnerEvents() {
 
   return (
     <>
-    
+
       <PartnerWrapper title="Events">
         <BreadcrumbOne pageTitle="View All Events">
           <ol className="breadcrumb justify-content-md-end">
@@ -122,72 +121,65 @@ export default function PartnerEvents() {
         </BreadcrumbOne>
         <ReactNotification />
 
-      <Col lg={3} className="order-lg-first mt-4 pt-2 mt-lg-0 pt-lg-0">
-        <EventSideBar
-          getSortParams={getSortParams}
-          filterValue={filterValue}
-        />
-      </Col>
+        <Container className="my-4">
+          <br></br>
+          <Row>
 
-      <Container className="my-4">
-        <br></br>
-        <Row>
-
-          <Col lg={3} className="order-lg-first mt-4 pt-2 mt-lg-0 pt-lg-0">
-            <EventSideBar
-              getSortParams={getSortParams}
-              filterValue={filterValue}
-            />
-          </Col>
-
-          <Col md={6} lg={9}>
-            <div className="input-group mb-3">
-              <input
-                type="text"
-                className="form-control "
-                placeholder="Search events"
-                onChange={handleOnSearchInput}
+            <Col lg={3} className="order-lg-first mt-4 pt-2 mt-lg-0 pt-lg-0">
+              <EventSideBar
+                getSortParams={getSortParams}
+                filterValue={filterValue}
               />
-              <div className="input-group-append">
-                <button
-                  className="btn btn-outline-primary btn-sm"
-                  type="button"
-                  style={{ height: 38 }}
-                  onClick={handleSearchButtonClicked}
-                >
-                  Search
-                </button>
-              </div>
-            </div>
-          </Col>
-        </Row>
+            </Col>
 
-        <Row className="mb-4">
-          <Col xs={4} sm={3}>
-            <select className="custom-select" onChange={handleChange}>
-              <option value="">Sort by</option>
-              <option value="name-asc">Name - A to Z</option>
-              <option value="name-desc">Name - Z to A</option>
-            </select>
-          </Col>
-        </Row>
-        {status === 'loading' ? (
-          <Spinner animation="grow" role="status" aria-hidden="true" />
-        ) : status === 'error' ? (
-          <Alert variant="danger">An error has occured</Alert>
-        ) : (
-          <>
-            <Row>
-              {data.pages.map((page, i) => (
-                <Fragment key={i}>
-                  {page.content.map((event) => (
-                    <Col
-                      key={event.eid}
-                      sm={6}
-                      lg={4}
-                      className="mb-5 d-flex align-items-stretch"
-                    >
-                    {/* <Link href={`/partner/events/${event.eid}`}> */}
+            <Col md={6} lg={9}>
+              <div className="input-group mb-3">
+                <input
+                  type="text"
+                  className="form-control "
+                  placeholder="Search events"
+                  onChange={handleOnSearchInput}
+                />
+                <div className="input-group-append">
+                  <button
+                    className="btn btn-outline-primary btn-sm"
+                    type="button"
+                    style={{ height: 38 }}
+                    onClick={handleSearchButtonClicked}
+                  >
+                    Search
+                </button>
+                </div>
+              </div>
+            </Col>
+          </Row>
+
+          <Row className="mb-4">
+            <Col xs={4} sm={3}>
+              <select className="custom-select" onChange={handleChange}>
+                <option value="">Sort by</option>
+                <option value="name-asc">Name - A to Z</option>
+                <option value="name-desc">Name - Z to A</option>
+              </select>
+            </Col>
+          </Row>
+          {status === 'loading' ? (
+            <Spinner animation="grow" role="status" aria-hidden="true" />
+          ) : status === 'error' ? (
+            <Alert variant="danger">An error has occured</Alert>
+          ) : (
+            <>
+              <Row>
+                {data.pages.map((page, i) => (
+                  <Fragment key={i}>
+                    {page.content.map((event) => (
+                      <Col
+                        key={event.eid}
+                        sm={6}
+                        lg={4}
+                        className="mb-5 d-flex align-items-stretch"
+                      >
+                        {/* <Link href={`/partner/events/${event.eid}`}> */}
                         <a className="w-100">
                           <EventCard event={event} user={user} />
                         </a>
@@ -198,22 +190,22 @@ export default function PartnerEvents() {
                 ))}
               </Row>
 
-            <Row>
-              <Col className="d-flex align-items-center">
-                <ButtonWithLoading
-                  className="btn btn-fill-out btn-sm"
-                  disabled={!hasNextPage || isFetchingNextPage}
-                  isLoading={isFetchingNextPage}
-                  onClick={() => fetchNextPage()}
-                >
-                  {hasNextPage ? 'See more' : 'No more events'}
-                </ButtonWithLoading>
-              </Col>
-            </Row>
-          </>
-        )}
-      </Container>
-    </PartnerWrapper>
+              <Row>
+                <Col className="d-flex align-items-center">
+                  <ButtonWithLoading
+                    className="btn btn-fill-out btn-sm"
+                    disabled={!hasNextPage || isFetchingNextPage}
+                    isLoading={isFetchingNextPage}
+                    onClick={() => fetchNextPage()}
+                  >
+                    {hasNextPage ? 'See more' : 'No more events'}
+                  </ButtonWithLoading>
+                </Col>
+              </Row>
+            </>
+          )}
+        </Container>
+      </PartnerWrapper>
     </>
   );
 }
