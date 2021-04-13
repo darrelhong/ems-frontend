@@ -168,6 +168,7 @@ function PartnerHome() {
           <>
             <HeroSliderPopularEvents
               heroSliderData={mostPopularEvents}
+              userPath="partner"
             />
             <Container>
               <Row>
@@ -206,7 +207,11 @@ function PartnerHome() {
                         <div className="mt-3">
                           <h3 className="mb-4">Events by event organisers you're following</h3>
                         </div>
-                        <HomeEventTab events={eventsFollowing} />
+                        <HomeEventTab 
+                          events={eventsFollowing}
+                          tab="following"
+                          userPath="partner"
+                        />
                         <Row>
                           <Col className="d-flex align-items-center">
                             <ButtonWithLoading
@@ -223,7 +228,11 @@ function PartnerHome() {
                         <div className="mt-3">
                           <h3 className="mb-4">Recommended events</h3>
                         </div>
-                        <HomeEventTab events={eventsForYou} />
+                        <HomeEventTab 
+                          events={eventsForYou}
+                          tab="for-you"
+                          userPath="partner"
+                        />
                         <Row>
                           <Col className="d-flex align-items-center">
                             <ButtonWithLoading
@@ -240,7 +249,11 @@ function PartnerHome() {
                         <div className="mt-3">
                           <h3 className="mb-4"> Events in the upcoming month</h3>
                         </div>
-                        <HomeEventTab events={eventsInNext30Days} />
+                        <HomeEventTab 
+                          events={eventsInNext30Days}
+                          tab="next-month"
+                          userPath="partner"
+                        />
                         <Row>
                           <Col className="d-flex align-items-center">
                             <ButtonWithLoading
@@ -257,7 +270,11 @@ function PartnerHome() {
                         <div className="mt-3">
                           <h3 className="mb-4">VIP Events</h3>
                         </div>
-                        <HomeEventTab events={eventsVip} />
+                        <HomeEventTab 
+                          events={eventsVip}
+                          tab="vip"
+                          userPath="partner"
+                        />
                         <Row>
                           <Col className="d-flex align-items-center">
                             <ButtonWithLoading

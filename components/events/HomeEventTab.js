@@ -4,7 +4,7 @@ import { getAttendeeFavouriteEvents, getBusinessPartnerFavouriteEvents } from '.
 import useUser from '../../lib/query/useUser';
 import HomeEventCard from './HomeEventCard';
 
-export default function HomeEventTab({ events, tab, isGuest }) {
+export default function HomeEventTab({ events, tab, isGuest, userPath }) {
     const { data: user } = isGuest == null ? useUser(localStorage.getItem('userId')) : () => {return null};
     const [favouriteEvents, setFavouriteEvents] = useState([]);
 
@@ -38,7 +38,7 @@ export default function HomeEventTab({ events, tab, isGuest }) {
                 >
                 {/* <Link href={`/partner/events/${event.eid}`}> */}
                 <a className="w-100">
-                    <HomeEventCard user={user} event={event} isFavourite={favouriteEvents !== null ? favouriteEvents.some(fEvent => fEvent.eid === event.eid) : null} tab={tab} setFavouriteEvents={setFavouriteEvents} />
+                    <HomeEventCard user={user} userPath={userPath} event={event} isFavourite={favouriteEvents !== null ? favouriteEvents.some(fEvent => fEvent.eid === event.eid) : null} tab={tab} setFavouriteEvents={setFavouriteEvents} />
                 </a>
                 {/* </Link> */}
                 </Col>

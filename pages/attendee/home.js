@@ -160,7 +160,7 @@ export default function AttendeeHome() {
         ) : (
           <>
             <h1 className="font-weight-bold">Popular Events</h1>
-            <HeroSliderPopularEvents heroSliderData={mostPopularEvents} />
+            <HeroSliderPopularEvents heroSliderData={mostPopularEvents} userPath="attendee" />
             <Container>
               <Row>
                 <h2 className="mt-5 mb-3 font-weight-bold">Browse Events</h2>
@@ -196,6 +196,7 @@ export default function AttendeeHome() {
                         <HomeEventTab
                           events={eventsFollowing}
                           tab="following"
+                          userPath="attendee"
                         />
                         <Row>
                           <Col className="d-flex align-items-center">
@@ -213,7 +214,11 @@ export default function AttendeeHome() {
                         <div className="mt-3">
                           <h3 className="mb-4">Recommended events</h3>
                         </div>
-                        <HomeEventTab events={eventsForYou} tab="for-you" />
+                        <HomeEventTab
+                          events={eventsForYou}
+                          tab="for-you"
+                          userPath="attendee"
+                        />
                         <Row>
                           <Col className="d-flex align-items-center">
                             <ButtonWithLoading
@@ -233,6 +238,7 @@ export default function AttendeeHome() {
                         <HomeEventTab
                           events={eventsThisWeekend}
                           tab="this-weekend"
+                          userPath="attendee"
                         />
                         <Row>
                           <Col className="d-flex align-items-center">
@@ -250,7 +256,11 @@ export default function AttendeeHome() {
                         <div className="mt-3">
                           <h3 className="mb-4">Events next week</h3>
                         </div>
-                        <HomeEventTab events={eventsNextWeek} tab="next-week" />
+                        <HomeEventTab
+                          events={eventsNextWeek}
+                          tab="next-week"
+                          userPath="attendee"
+                        />
                         <Row>
                           <Col className="d-flex align-items-center">
                             <ButtonWithLoading

@@ -7,18 +7,10 @@ import { attendeeFavouriteEvent, getAttendeeFavouriteEvents, getBusinessPartnerF
 import { BsHeart, BsHeartFill } from 'react-icons/bs';
 import { useEffect, useState } from 'react';
 import { partnerLikeEvent, partnerUnlikeEvent } from 'lib/query/events';
-export default function HomeEventCard({ user, event, isFavourite, tab, setFavouriteEvents }) {
-  const [userPath, setUserPath] = useState("attendee");
+export default function HomeEventCard({ user, event, isFavourite, tab, setFavouriteEvents, userPath }) {
 
   useEffect(() => {
     if (user != null){
-      if (user.roles[0].description === "Attendee") {
-        setUserPath("attendee");
-      }
-      else if (user.roles[0].description === "Business Partner") {
-        setUserPath("partner");
-      }
-  
       var heart = document.getElementById(tab + "-heart-" + event.eid)
       var heartFilled = document.getElementById(tab + "-heart-filled-" + event.eid)
       
@@ -30,9 +22,6 @@ export default function HomeEventCard({ user, event, isFavourite, tab, setFavour
         heart.style.display = "block";
         heartFilled.style.display = "none";
       }
-    }
-    else {
-      setUserPath("public");
     }
   }, [user])
 

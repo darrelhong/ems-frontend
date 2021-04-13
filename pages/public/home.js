@@ -103,7 +103,7 @@ export default function PublicHome() {
         ) : (
           <>
             <h1 className="font-weight-bold">Popular Events</h1>
-            <HeroSliderPopularEvents heroSliderData={mostPopularEvents} />
+            <HeroSliderPopularEvents heroSliderData={mostPopularEvents} userPath="public" />
             <Container>
               <Row>
                 <h2 className="mt-5 mb-3 font-weight-bold">Browse Events</h2>
