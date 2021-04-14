@@ -9,6 +9,7 @@ import { Card, Badge, Button, Modal } from 'react-bootstrap';
 import useFavouriteEventMutation from 'lib/query/useFavouriteEventMutation';
 import styles from './EventCard.module.css';
 import IconButton from '@material-ui/core/IconButton';
+import Link from 'next/link';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import { useMutation, useQueryClient } from 'react-query';
@@ -352,11 +353,13 @@ export default function EventCard({ event, user }) {
           setApplicationMade={setApplicationMade}
           applicationMade={applicationMade}
         />
-        <Card.Img
-          variant="top"
-          src={event.images?.[0] || '/assets/images/img-placeholder.jpg'}
-          style={{ height: 200 }}
-        />
+        <Link href={`/partner/events/${event.eid}`}>
+          <Card.Img
+            variant="top"
+            src={event.images?.[0] || '/assets/images/img-placeholder.jpg'}
+            style={{ height: 200 }}
+          />
+        </Link>
         <Badge
           pill
           variant={badgeStyle}
@@ -369,7 +372,9 @@ export default function EventCard({ event, user }) {
           {badgeStatus}
         </Badge>
         <Card.Body className="d-flex flex-column">
-          <Card.Title>{event.name}</Card.Title>
+          <Link href={`/partner/events/${event.eid}`}>
+            <Card.Title>{event.name}</Card.Title>
+          </Link>
           <Card.Text className="line-clamp">{event?.descriptions}</Card.Text>
           <Card.Text className="text-default mt-auto">
             {format(parseISO(event.eventStartDate), 'eee, dd MMM yy hh:mmbbb')}
