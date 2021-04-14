@@ -13,7 +13,8 @@ import EventImageGallery from 'components/events/partner/EventImageGallery';
 import AddToCalendar from 'components/custom/AddToCalendar';
 import ShareButton from 'components/custom/ShareButton';
 import CenterSpinner from 'components/custom/CenterSpinner';
-
+import useUser from 'lib/query/useUser';
+import BPPaymentModal from 'components/events/registration/BPPaymentModal';
 import RegisterModal from 'components/events/registration/RegisterModal';
 import WithdrawModal from 'components/events/registration/WithdrawModal';
 import { getBoothTotalFromEvent } from 'lib/functions/boothFunctions';
@@ -29,9 +30,15 @@ export default function PartnerEventPage({ id }) {
   const { data, status } = useEventDetails(id);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [boothTotal, setBoothTotal] = useState(0);
+  const { data: user } = useUser(localStorage.getItem('userId'));
   const bpId = localStorage.getItem('userId');
   const [applicationMade, setApplicationMade] = useState();
+
+  // const [needPay, setNeedPay] = useState(user?.sellerApplications.filter(sa => (sa.paymentStatus === "PENDING" && sa.sellerApplicationStatus === "APPROVED" && sa.boothQuantity > 0)).some(e => e.event.eid === data?.eid))
+  // console.log(showPaymentModal);
+  console.log(user)
 
   useEffect(() => {
     const loadBoothTotal = async () => {
@@ -51,7 +58,7 @@ export default function PartnerEventPage({ id }) {
     }
     loadBoothTotal();
     loadApplications();
-  }, []);
+  }, [user]);
 
   const { addToast, removeToast } = useToasts();
 
@@ -62,6 +69,11 @@ export default function PartnerEventPage({ id }) {
 
   return (
     <PartnerWrapper title={data?.name || 'Event page'}>
+      <BPPaymentModal
+        showPaymentModal={showPaymentModal}
+        closePaymentModal={() => setShowPaymentModal(false)}
+        event={data}
+        bpId={bpId} />
       <RegisterModal
         showRegisterModal={showRegisterModal}
         closeRegisterModal={() => setShowRegisterModal(false)}
@@ -185,6 +197,8 @@ export default function PartnerEventPage({ id }) {
                         Withdraw Application
                       </button>
                     )}
+
+                    <button className="btn btn-fill-out btn-sm mr-2" onClick={() => setShowPaymentModal(true)}>Pay</button>
 
                     {boothTotal >= data.boothCapacity && !applicationMade && (
                       <p className="text-dark">Capacity of {data.boothCapacity} booths has been reached!</p>
