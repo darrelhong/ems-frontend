@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { Figure } from 'react-bootstrap';
+import { Alert, Figure } from 'react-bootstrap';
 import cx from 'classnames';
 
 import ApplicationCard from './ApplicationCard';
 
 import styles from './Allocation.module.css';
+import ButtonWithLoading from 'components/custom/ButtonWithLoading';
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -40,6 +41,7 @@ const getItems = (count, offset = 0) =>
 
 export default function Allocation() {
   const [state, setState] = useState([getItems(5), [], [], [], []]);
+  const [{ loading, status }, setStatus] = useState({});
 
   const onDragEnd = (result) => {
     const { source, destination } = result;
@@ -64,6 +66,11 @@ export default function Allocation() {
 
       setState(newState);
     }
+  };
+
+  const onSave = () => {
+    setStatus({ loading: true });
+    setTimeout(() => setStatus({ loading: false, status: 'success' }), 900);
   };
 
   return (
@@ -143,6 +150,22 @@ export default function Allocation() {
             ))}
           </div>
         </DragDropContext>
+      </div>
+
+      <div className="d-flex justify-content-end mt-3">
+        <ButtonWithLoading
+          className="btn btn-fill-out btn-sm"
+          onClick={onSave}
+          isLoading={loading}
+        >
+          Save
+        </ButtonWithLoading>
+      </div>
+
+      <div className="mt-2">
+        {status == 'success' ? (
+          <Alert variant="success">Allocations succesfully saved</Alert>
+        ) : null}
       </div>
 
       <div className="d-flex justify-content-center mt-5">
