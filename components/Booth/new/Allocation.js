@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { Figure } from 'react-bootstrap';
 import cx from 'classnames';
 
+import ApplicationCard from './ApplicationCard';
+
 import styles from './Allocation.module.css';
-import { Figure } from 'react-bootstrap';
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -31,6 +33,9 @@ const getItems = (count, offset = 0) =>
   Array.from({ length: count }, (v, k) => k).map((k) => ({
     id: `item-${k + offset}`,
     content: `Application ${k + offset}`,
+    bpName: `Business partner ${k}`,
+    description: 'Lorem ipsum dolor sit amet',
+    status: 'PENDING',
   }));
 
 export default function Allocation() {
@@ -89,7 +94,7 @@ export default function Allocation() {
                             {...provided.dragHandleProps}
                             style={{ ...provided.draggableProps.style }}
                           >
-                            {item.content}
+                            <ApplicationCard application={item} />
                           </div>
                         )}
                       </Draggable>
@@ -119,13 +124,13 @@ export default function Allocation() {
                         >
                           {(provided) => (
                             <div
-                              className={styles.item}
+                              className={cx(styles.item, styles.itemGreen)}
                               ref={provided.innerRef}
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
                               style={{ ...provided.draggableProps.style }}
                             >
-                              {item.content}
+                              <ApplicationCard application={item} />
                             </div>
                           )}
                         </Draggable>
