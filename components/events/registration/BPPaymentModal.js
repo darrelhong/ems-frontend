@@ -5,17 +5,19 @@ import { useState, useEffect } from 'react';
 import usePaymentMethods from 'lib/query/usePaymentMethods';
 import PaymentView from 'components/custom/ticketing/PaymentView';
 import CreditCardIcon from 'components/custom/CreditCardIcon';
+import { formatter } from 'lib/util/currency';
 
 
 const promise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY);
 
-const BPPaymentModal = (
+const BPPaymentModal = ({
     event,
     bpId,
     showPaymentModal,
     closePaymentModal
-) => {
+}) => {
 
+    console.log(event)
     const [view, setView] = useState('summary');
 
     const bodyComponent = () => (
@@ -27,12 +29,28 @@ const BPPaymentModal = (
                             <>
                                 <Row>
                                     <Col>
-                                        <h3>{event.name}</h3>
+                                        <h3>{event?.name}</h3>
                                     </Col>
                                 </Row>
                                 <Row className="mb-4">
                                     <Col>
-                                        <p>by {event.eventOrganiser.name}</p>
+                                        <p>by {event?.eventOrganiser.name}</p>
+                                    </Col>
+                                </Row>
+
+                                <Row>
+                                    <Col xs={6} sm={8}>
+                                        <p className="text-dark">
+                                            <strong>Individual Booth Price: </strong>
+                                            {formatter.format(event?.boothPrice)}
+                                        </p>
+                                    </Col>
+
+                                    <Col>
+                                        <p>
+                                            <strong>Allocated Booths: </strong>
+                                            { }
+                                        </p>
                                     </Col>
                                 </Row>
                             </>
@@ -44,12 +62,16 @@ const BPPaymentModal = (
     );
 
     return (
-        <Modal show={showPaymentModal} size="l" centered>
+        <Modal show={showPaymentModal} onHide={closePaymentModal} size="lg" centered>
             <Modal.Header closeButton>
+                <Modal.Title>Booth Payment</Modal.Title>
             </Modal.Header>
             {bodyComponent()}
+            <Modal.Footer>
+                <h3>Test</h3>
+            </Modal.Footer>
         </Modal>
-    )
+    );
 
 }
 
