@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Fragment } from 'react';
 import Link from 'next/link';
 import { Col, ProgressBar, Modal, Button, Form, Alert } from 'react-bootstrap';
@@ -12,6 +12,7 @@ import DeleteModal from './DeleteModal';
 import { vipToggle } from '../../lib/functions/eventOrganiser/eventFunctions';
 import { Unstable_TrapFocus } from '@material-ui/core';
 import api from '../../lib/ApiClient';
+// import { getTotalTicketNumberSalesByEvent } from 'lib/query/ticketDashboard'
 
 const EventCard = ({ event, deleteCancelEvent, createToast }) => {
   const [currEvent, setCurrEvent] = useState(event);
@@ -32,10 +33,21 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
   const [showBroadcastError, setBroadcastError] = useState(false);
   const [showBroadcastSuccess, setBroadcastSuccess] = useState(false);
 
+  const ticketsSold = currEvent?.ticketTransactions?.length;
+  const percentageSold = Math.round(ticketsSold * 100 / currEvent?.ticketCapacity);
+
   const handleDeleteCancel = async (currEvent) => {
     await deleteCancelEvent(currEvent);
     closeModal();
   };
+
+  // useEffect(() => {
+  //   const loadTickets = async () => {
+  //     ticketsSold = await getTotalTicketNumberSalesByEvent(currEvent.eid)
+  //   }
+  //   loadTickets();
+  //   percentageSold = Math.round(ticketsSold / currEvent.ticketCapacity)
+  // }, [currEvent])
 
   const handleVipToggle = async (currEvent) => {
     let message = '';
@@ -47,6 +59,10 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
       createToast(message, 'success');
     });
   };
+
+  console.log("sold:", ticketsSold)
+  console.log("capacity:", currEvent?.ticketCapacity)
+  console.log(percentageSold)
 
   const checkCanDelete = (currEvent) => {
     if (
@@ -374,11 +390,11 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
                 </li>
 
                 <ProgressBar
-                  now={60}
-                  label="60%"
+                  now={ticketsSold}
+                  label={`${percentageSold}%`}
                   style={{ width: '50%', float: 'right' }}
                 />
-                {event.ticketCapacity}
+                {currEvent.ticketCapacity}
               </ul>
             </div>
           </div>
