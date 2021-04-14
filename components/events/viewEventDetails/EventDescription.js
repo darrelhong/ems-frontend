@@ -362,7 +362,7 @@ const EventDescription = ({
                 <span>
                   {' '}
                   <Badge variant="primary">
-                    {event?.eventCategory}
+                    {event?.category}
                   </Badge>{' '}
                 </span>
               </p>

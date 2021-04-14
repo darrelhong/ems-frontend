@@ -1,17 +1,17 @@
 import Link from 'next/link';
-import { Alert, Col, Container, Row, Tab, Nav } from 'react-bootstrap';
+import { Alert, Col, Container, Row, Tab, Nav, Card } from 'react-bootstrap';
 
 import useUser from '../../lib/query/useUser';
 import AttendeeWrapper from '../../components/wrapper/AttendeeWrapper';
 
 import { BreadcrumbOne } from '../../components/Breadcrumb';
 import { useEffect, useState } from 'react';
-import { 
-  getEventsByAtnFollowers, 
-  getEventsByAtnCategoryPreferences, 
-  getEventsThisWeekend, 
+import {
+  getEventsByAtnFollowers,
+  getEventsByAtnCategoryPreferences,
+  getEventsThisWeekend,
   getEventsNextWeek,
-  getTopTenEvents
+  getTopTenEvents,
 } from '../../lib/query/getEvents';
 import ButtonWithLoading from '../../components/custom/ButtonWithLoading';
 import HeroSliderPopularEvents from '../../components/HeroSlider/HeroSliderPopularEvents';
@@ -30,7 +30,7 @@ export default function AttendeeHome() {
   const [nextPageForYou, setNextPageForYou] = useState(1);
   const [nextPageThisWeekend, setNextPageThisWeekend] = useState(1);
   const [nextPageNextWeek, setNextPageNextWeek] = useState(1);
-  
+
   useEffect(() => {
     if (user != null) {
       loadEventsMostPopular();
@@ -50,33 +50,29 @@ export default function AttendeeHome() {
   }
 
   function fetchNextPage(tab) {
-    if (tab == "following") {
+    if (tab == 'following') {
       loadEventsFollowing(true);
-    }
-    else if (tab == "for-you") {
+    } else if (tab == 'for-you') {
       loadEventsForYou(true);
-    }
-    else if (tab == "this-weekend") {
+    } else if (tab == 'this-weekend') {
       loadEventsThisWeekend(true);
-    }
-    else if (tab == "next-week") {
+    } else if (tab == 'next-week') {
       loadEventsNextWeek(true);
     }
   }
 
-  function loadEventsFollowing(isFetchNextPage=false) {
+  function loadEventsFollowing(isFetchNextPage = false) {
     const getEvents = async () => {
       const data = await getEventsByAtnFollowers(user?.id, nextPageFollowing);
       if (data.length < 10) {
-        var btnSeeMore = document.getElementById("btnSeeMoreFollowing");
-        btnSeeMore.innerHTML = "No more events";
+        var btnSeeMore = document.getElementById('btnSeeMoreFollowing');
+        btnSeeMore.innerHTML = 'No more events';
         btnSeeMore.disabled = true;
       }
 
       if (isFetchNextPage) {
         setEventsFollowing(eventsFollowing.concat(data));
-      }
-      else {
+      } else {
         setEventsFollowing(data);
       }
     };
@@ -84,19 +80,21 @@ export default function AttendeeHome() {
     setNextPageFollowing(nextPageFollowing + 1);
   }
 
-  function loadEventsForYou(isFetchNextPage=false) {
+  function loadEventsForYou(isFetchNextPage = false) {
     const getEvents = async () => {
-      const data = await getEventsByAtnCategoryPreferences(user?.id, nextPageForYou);
+      const data = await getEventsByAtnCategoryPreferences(
+        user?.id,
+        nextPageForYou
+      );
       if (data.length < 10) {
-        var btnSeeMore = document.getElementById("btnSeeMoreForYou");
-        btnSeeMore.innerHTML = "No more events";
+        var btnSeeMore = document.getElementById('btnSeeMoreForYou');
+        btnSeeMore.innerHTML = 'No more events';
         btnSeeMore.disabled = true;
       }
 
       if (isFetchNextPage) {
         setEventsForYou(eventsForYou.concat(data));
-      }
-      else {
+      } else {
         setEventsForYou(data);
       }
     };
@@ -104,19 +102,18 @@ export default function AttendeeHome() {
     setNextPageForYou(nextPageForYou + 1);
   }
 
-  function loadEventsThisWeekend(isFetchNextPage=false) {
+  function loadEventsThisWeekend(isFetchNextPage = false) {
     const getEvents = async () => {
       const data = await getEventsThisWeekend(nextPageThisWeekend);
       if (data.length < 10) {
-        var btnSeeMore = document.getElementById("btnSeeMoreThisWeekend");
-        btnSeeMore.innerHTML = "No more events";
+        var btnSeeMore = document.getElementById('btnSeeMoreThisWeekend');
+        btnSeeMore.innerHTML = 'No more events';
         btnSeeMore.disabled = true;
       }
 
       if (isFetchNextPage) {
         setEventsThisWeekend(eventsThisWeekend.concat(data));
-      }
-      else {
+      } else {
         setEventsThisWeekend(data);
       }
     };
@@ -124,32 +121,28 @@ export default function AttendeeHome() {
     setNextPageThisWeekend(nextPageThisWeekend + 1);
   }
 
-  function loadEventsNextWeek(isFetchNextPage=false) {
+  function loadEventsNextWeek(isFetchNextPage = false) {
     const getEvents = async () => {
       const data = await getEventsNextWeek(nextPageNextWeek);
       if (data.length < 10) {
-        var btnSeeMore = document.getElementById("btnSeeMoreNextWeek");
-        btnSeeMore.innerHTML = "No more events";
+        var btnSeeMore = document.getElementById('btnSeeMoreNextWeek');
+        btnSeeMore.innerHTML = 'No more events';
         btnSeeMore.disabled = true;
       }
 
       if (isFetchNextPage) {
         setEventsNextWeek(eventsNextWeek.concat(data));
-      }
-      else {
+      } else {
         setEventsNextWeek(data);
       }
     };
     getEvents();
     setNextPageNextWeek(nextPageNextWeek + 1);
   }
-  
-  return (
-    
 
+  return (
     <AttendeeWrapper title="Home">
-      
-      <BreadcrumbOne pageTitle='Home'>
+      <BreadcrumbOne pageTitle="Home">
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/attendee/home">
@@ -167,27 +160,18 @@ export default function AttendeeHome() {
         ) : (
           <>
             <h1 className="font-weight-bold">Popular Events</h1>
-            <HeroSliderPopularEvents
-              heroSliderData={mostPopularEvents}
-            />
+            <HeroSliderPopularEvents heroSliderData={mostPopularEvents} userPath="attendee" />
             <Container>
               <Row>
                 <h2 className="mt-5 mb-3 font-weight-bold">Browse Events</h2>
                 <Tab.Container defaultActiveKey="following">
                   <div className="w-100">
-                    <Nav
-                      variant="tabs"
-                      className="w-100"
-                    >
+                    <Nav variant="tabs" className="w-100">
                       <Nav.Item>
-                        <Nav.Link eventKey="following">
-                          Following
-                        </Nav.Link>
+                        <Nav.Link eventKey="following">Following</Nav.Link>
                       </Nav.Item>
                       <Nav.Item>
-                        <Nav.Link eventKey="for-you">
-                          For you
-                        </Nav.Link>
+                        <Nav.Link eventKey="for-you">For you</Nav.Link>
                       </Nav.Item>
                       <Nav.Item>
                         <Nav.Link eventKey="this-weekend">
@@ -195,9 +179,7 @@ export default function AttendeeHome() {
                         </Nav.Link>
                       </Nav.Item>
                       <Nav.Item>
-                        <Nav.Link eventKey="next-week">
-                          Next week
-                        </Nav.Link>
+                        <Nav.Link eventKey="next-week">Next week</Nav.Link>
                       </Nav.Item>
                     </Nav>
                   </div>
@@ -205,15 +187,23 @@ export default function AttendeeHome() {
                     <Tab.Content>
                       <Tab.Pane eventKey="following">
                         <div className="mt-3">
-                          <h3 className="mb-4">Events by event organisers and business partners you're following</h3>
+                          <h3 className="mb-4">
+                            {
+                              "Events by event organisers and business partners you're following"
+                            }
+                          </h3>
                         </div>
-                        <HomeEventTab events={eventsFollowing} tab={"following"} />
+                        <HomeEventTab
+                          events={eventsFollowing}
+                          tab="following"
+                          userPath="attendee"
+                        />
                         <Row>
                           <Col className="d-flex align-items-center">
                             <ButtonWithLoading
                               className="btn btn-fill-out btn-sm"
                               id="btnSeeMoreFollowing"
-                              onClick={() => fetchNextPage("following")}
+                              onClick={() => fetchNextPage('following')}
                             >
                               See More
                             </ButtonWithLoading>
@@ -224,13 +214,17 @@ export default function AttendeeHome() {
                         <div className="mt-3">
                           <h3 className="mb-4">Recommended events</h3>
                         </div>
-                        <HomeEventTab events={eventsForYou} tab={"for-you"} />
+                        <HomeEventTab
+                          events={eventsForYou}
+                          tab="for-you"
+                          userPath="attendee"
+                        />
                         <Row>
                           <Col className="d-flex align-items-center">
                             <ButtonWithLoading
                               className="btn btn-fill-out btn-sm"
                               id="btnSeeMoreForYou"
-                              onClick={() => fetchNextPage("for-you")}
+                              onClick={() => fetchNextPage('for-you')}
                             >
                               See More
                             </ButtonWithLoading>
@@ -241,13 +235,17 @@ export default function AttendeeHome() {
                         <div className="mt-3">
                           <h3 className="mb-4">Events this weekend</h3>
                         </div>
-                        <HomeEventTab events={eventsThisWeekend} tab={"this-weekend"} />
+                        <HomeEventTab
+                          events={eventsThisWeekend}
+                          tab="this-weekend"
+                          userPath="attendee"
+                        />
                         <Row>
                           <Col className="d-flex align-items-center">
                             <ButtonWithLoading
                               className="btn btn-fill-out btn-sm"
                               id="btnSeeMoreThisWeekend"
-                              onClick={() => fetchNextPage("this-weekend")}
+                              onClick={() => fetchNextPage('this-weekend')}
                             >
                               See More
                             </ButtonWithLoading>
@@ -258,13 +256,17 @@ export default function AttendeeHome() {
                         <div className="mt-3">
                           <h3 className="mb-4">Events next week</h3>
                         </div>
-                        <HomeEventTab events={eventsNextWeek} tab={"next-week"} />
+                        <HomeEventTab
+                          events={eventsNextWeek}
+                          tab="next-week"
+                          userPath="attendee"
+                        />
                         <Row>
                           <Col className="d-flex align-items-center">
                             <ButtonWithLoading
                               className="btn btn-fill-out btn-sm"
                               id="btnSeeMoreNextWeek"
-                              onClick={() => fetchNextPage("next-week")}
+                              onClick={() => fetchNextPage('next-week')}
                             >
                               See More
                             </ButtonWithLoading>
@@ -278,56 +280,7 @@ export default function AttendeeHome() {
             </Container>
           </>
         )}
-
-        <Row>
-          <Col md={4} className="mb-3">
-            <Link href="events">
-              <a>
-                <Card
-                  bg="border-white"
-                  text="white"
-                  style={{ background: '#ff3e00', border: 'none' }}
-                >
-                  <Card.Body>
-                    <Card.Title>View events</Card.Title>
-                    <Card.Text>Discover new and exciting events ➜</Card.Text>
-                  </Card.Body>
-                </Card>
-              </a>
-            </Link>
-          </Col>
-          <Col md={4} className="mb-3">
-            <Link href="tickets">
-              <a>
-                <Card
-                  bg="border-white"
-                  text="white"
-                  style={{ background: '#40b3ff', border: 'none' }}
-                >
-                  <Card.Body>
-                    <Card.Title>View tickets</Card.Title>
-                    <Card.Text>See tickets and upcoming events ➜</Card.Text>
-                  </Card.Body>
-                </Card>
-              </a>
-            </Link>
-          </Col>
-        </Row>
-
-        {/* <Row>
-          <Col>
-            <Link href="events">
-              <button className="btn btn-fill-out">View events</button>
-            </Link>
-          </Col>
-          <Col>
-            <Link href="tickets">
-              <button className="btn btn-fill-out">View tickets</button>
-            </Link>
-          </Col>
-        </Row> */}
       </Container>
     </AttendeeWrapper>
-    
   );
 }

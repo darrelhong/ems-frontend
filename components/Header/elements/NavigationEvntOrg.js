@@ -1,8 +1,19 @@
 import Link from 'next/link';
-import { Col } from 'react-bootstrap';
+import { Col, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { IoIosArrowDown, IoIosArrowForward } from 'react-icons/io';
+import useUser from 'lib/query/useUser';
 
 const NavigationEvntOrg = ({ positionClass }) => {
+  const { data: user } = useUser();
+
+  const notApprovedTooltip = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      {user?.supportDocsUrl
+        ? 'Sorry, your appplication has not been vetted yet. We will get back to you soon!'
+        : 'Please upload your verification documents in the Settings page!'}
+    </Tooltip>
+  );
+
   return (
     <nav className="navigation d-none d-lg-block">
       <ul
@@ -62,6 +73,33 @@ const NavigationEvntOrg = ({ positionClass }) => {
           </a>
 
           <ul className="sub-menu sub-menu--one-column">
+            {user?.approved ? ( //approved then normal
+              <li>
+                <Link href="/organiser/events/create">
+                  <a>Create New Event</a>
+                </Link>
+              </li>
+            ) : (
+              //else will be disabled with a tooltip
+              <OverlayTrigger
+                placement="left"
+                delay={{ show: 250, hide: 400 }}
+                overlay={notApprovedTooltip}
+              >
+                <li>
+                  <Link href="/organiser/events/create">
+                    <a
+                      disabled
+                      style={
+                        true ? { pointerEvents: 'none', opacity: 0.6 } : null
+                      }
+                    >
+                      Create New Event
+                    </a>
+                  </Link>
+                </li>
+              </OverlayTrigger>
+            )}
             <li>
               <Link href="/organiser/events">
                 <a>Manage My Events</a>

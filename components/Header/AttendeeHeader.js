@@ -47,7 +47,7 @@ const AttendeeHeader = ({ navPositionClass }) => {
           <Container>
             <div className="bottom-header-container d-flex justify-content-between align-items-center position-relative">
               {/* logo */}
-              <Link href="/">
+              <Link href="/attendee/home">
                 <a className="navbar-brand">
                   <img src="/assets/images/event-stop-logo.png" alt="logo" />
                 </a>

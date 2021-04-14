@@ -12,7 +12,7 @@ import { isFavouriteEvent } from 'lib/functions/isFavouriteEvent';
 import useEventCategories from 'lib/query/useEventCategories';
 
 import AttendeeWrapper from 'components/wrapper/AttendeeWrapper';
-import EventCard from 'components/events/partner/EventCard';
+import EventCard from 'components/events/attendee/EventCard';
 import ButtonWithLoading from 'components/custom/ButtonWithLoading';
 import CenterSpinner from 'components/custom/CenterSpinner';
 import useUser from 'lib/query/useUser';
