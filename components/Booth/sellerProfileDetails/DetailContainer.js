@@ -81,7 +81,7 @@ const DetailContainer = ({
               </IconButton>
             )}
           </Row>
-          <Row>{sellerProfile?.description ?? 'Empty Description still'}</Row>
+          <Row>{sellerProfile?.description ?? 'There is no description'}</Row>
         </Col>
       </Row>
     </Container>
