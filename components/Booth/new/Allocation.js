@@ -82,6 +82,10 @@ export default function Allocation() {
     setTimeout(() => setStatus({ loading: false, status: 'success' }), 900);
   };
 
+  const reset = () => {
+    setState([getItems(5), [], [], [], []]);
+  };
+
   return (
     <>
       <div className={styles.container}>
@@ -162,6 +166,12 @@ export default function Allocation() {
       </div>
 
       <div className="d-flex justify-content-end mt-3">
+        <ButtonWithLoading
+          className="btn btn-border-fill btn-sm"
+          onClick={reset}
+        >
+          Reset
+        </ButtonWithLoading>
         <ButtonWithLoading
           className="btn btn-fill-out btn-sm"
           onClick={onSave}
