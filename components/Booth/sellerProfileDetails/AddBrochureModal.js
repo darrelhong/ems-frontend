@@ -89,29 +89,30 @@ const AddBrochureModal = ({
     };
 
     return (
-        <Modal
-            show={showModal}
-            onHide={closeWithReset}
-            centered
+      <Modal
+        show={showModal}
+        onHide={closeWithReset}
+        centered
         // scrollable
         // size='xl'
-        >
-            <Modal.Header closeButton>
-                <Modal.Title>Adding a brochure to your profile </Modal.Title>
-            </Modal.Header>
-            {bodyComponent()}
-            <Modal.Footer>
-                <Button variant="secondary" onClick={closeWithReset}>
-                    Close
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Adding a brochure to your profile </Modal.Title>
+        </Modal.Header>
+        {bodyComponent()}
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            className="btn-sm"
+            onClick={closeWithReset}
+          >
+            Close
           </Button>
-                <Button
-                    variant="danger"
-                    onClick={saveImages}
-                >
-                    Upload
+          <Button variant="danger" onClick={saveImages} className="btn-sm">
+            Upload
           </Button>
-            </Modal.Footer>
-        </Modal>
+        </Modal.Footer>
+      </Modal>
     );
 };
 

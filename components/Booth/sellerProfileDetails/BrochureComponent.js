@@ -52,15 +52,14 @@ const BrochureComponent = ({ sellerProfile, isPartner,setSellerProfile, createTo
 
         <Col
           className="form-group"
-          xs={8}
-          md={8}
-          //   style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}
+          xs={12}
+          md={12}
+          style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}
         >
           {sellerProfile.brochureImages &&
             sellerProfile.brochureImages.map((image, index) => (
               <div
                 style={{
-                  display: 'flex',
                   flexDirection: 'row',
                   marginRight: '5%',
                 }}
@@ -79,7 +78,7 @@ const BrochureComponent = ({ sellerProfile, isPartner,setSellerProfile, createTo
                 <Image
                   // className="close"
                   // className="profile-image"
-                  style={{ height: 'auto', maxWidth: '700px' }}
+                  style={{ height: 'auto', maxWidth: '400px' }}
                   thumbnail
                   src={image}
                   onClick={() => {
