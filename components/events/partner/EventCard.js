@@ -12,13 +12,12 @@ import IconButton from '@material-ui/core/IconButton';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import { useMutation, useQueryClient } from 'react-query';
-import { attendeeFavouriteEvent } from 'lib/query/eventApi';
+import { attendeeFavouriteEvent, retrieveLastReview } from 'lib/query/eventApi';
 import Box from '@material-ui/core/Box';
 import RegisterModal from 'components/events/registration/RegisterModal';
 import { useToasts } from 'react-toast-notifications';
 import { getBoothTotalFromEvent } from 'lib/functions/boothFunctions';
 import { getSellerApplicationsFromBpId } from 'lib/query/sellerApplicationApi';
-import { Fragment } from 'react';
 
 // from wj side
 import api from 'lib/ApiClient';
@@ -48,6 +47,7 @@ export default function EventCard({ event, user }) {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [boothTotal, setBoothTotal] = useState(0);
   const [applicationMade, setApplicationMade] = useState();
+  const { addToast, removeToast } = useToasts();
 
   // from wj side
   const [errorMessage, setErrorMessage] = useState('')
@@ -58,17 +58,19 @@ export default function EventCard({ event, user }) {
   const [message, setMessage] = useState('');
   const [rating, setRating] = useState(0);
   const [confirmReviewModalShow, setConfirmReviewModalShow] = useState(false);
-  const closeConfirmReviewModal = () => { setConfirmReviewModalShow(false); setReviewModalShow(true); }
-  const openConfirmReviewModal = () => {
-    if (message === "") {
-      setErrorMessage("Please ensure that all fields are filled.");
+  // const closeConfirmReviewModal = () => { setConfirmReviewModalShow(false); setReviewModalShow(true); }
+  // const openConfirmReviewModal = () => {
+  //   if (message === "") {
+  //     setErrorMessage("Please ensure that all fields are filled.");
 
-    } else {
-      setErrorMessage("null");
-      setConfirmReviewModalShow(true);
-      setReviewModalShow(false);
-    }
-  }
+  //   } else {
+  //     setErrorMessage("null");
+  //     setConfirmReviewModalShow(true);
+  //     setReviewModalShow(false);
+  //   }
+  // }
+  // console.log(event);
+  // console.log(user);
   const handleMessage = (e) => {
     setMessage(e.target.value);
     // console.log(e.target.value + "message");
@@ -77,11 +79,10 @@ export default function EventCard({ event, user }) {
     api
       .post('/api/review/create', data)
       .then((response) => {
-        setMessage('');
-        setRating(0);
-        console.log("success");
-        closeConfirmReviewModal();
-        closeReviewModal();
+        // setMessage('');
+        // setRating(0);
+        console.log("review submitted successfully");
+        setReviewModalShow(false);
         store.addNotification({
           title: "Success",
           message: "Thank you. Your reviews have been submitted!",
@@ -117,6 +118,11 @@ export default function EventCard({ event, user }) {
     }
   };
 
+  const clickRating = (rate) => {
+    setRating(rate)
+    openReviewModal()
+  }
+
   // console.log("Past: ", isPast)
   useEffect(() => {
     const loadBoothTotal = async () => {
@@ -137,12 +143,29 @@ export default function EventCard({ event, user }) {
         }
       }
     }
+
+    const loadLatestReview = async () => {
+      let latestReview = await retrieveLastReview(event.eid, user?.id);
+      if (latestReview.rating != null) {
+        setMessage(latestReview.reviewText)
+        setRating(latestReview.rating)
+      }
+      else {
+        setMessage("")
+        setRating(0)
+      }
+    }
+
+    loadLatestReview()
     loadBoothTotal()
     if (user != null) {
       loadApplications()
     }
     getBadge()
   }, [user])
+
+  // console.log(message)
+  // console.log(rating)
 
   const applyEvent = (e) => {
     e.preventDefault();
@@ -231,7 +254,7 @@ export default function EventCard({ event, user }) {
   return (
     <div>
       {/* From wj side */}
-       <Modal show={confirmReviewModalShow} onHide={closeConfirmReviewModal} centered>
+      {/* <Modal show={confirmReviewModalShow} onHide={closeConfirmReviewModal} centered>
         <Modal.Header closeButton>
           <Modal.Title>
             Confirm Review/Rating
@@ -263,7 +286,7 @@ export default function EventCard({ event, user }) {
             Yes
       </button>
         </Modal.Footer>
-      </Modal>
+      </Modal> */}
 
       <Modal show={reviewModalShow} onHide={closeReviewModal} centered>
         <Modal.Header closeButton>
@@ -275,9 +298,9 @@ export default function EventCard({ event, user }) {
           <div className="product-content__rating-wrap">
             <div className="product-content__rating">
               <Rating
-               emptySymbol= {<FaRegStar className="yellow"/>}
-                fullSymbol= {<FaStar className="yellow" />}
-               
+                emptySymbol={<FaRegStar className="yellow" />}
+                fullSymbol={<FaStar className="yellow" />}
+
                 initialRating={rating}
                 onClick={rate => setRating(rate)}
               />
@@ -293,8 +316,8 @@ export default function EventCard({ event, user }) {
             onChange={handleMessage}
           />
           <div className="error">
-              {errorMessage != "null" && <span>{errorMessage}</span>}
-            </div>
+            {errorMessage != "null" && <span>{errorMessage}</span>}
+          </div>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={closeReviewModal}>
@@ -303,7 +326,7 @@ export default function EventCard({ event, user }) {
           <button
             variant="primary"
             className="btn btn-fill-out"
-            onClick={() => openConfirmReviewModal()}
+            onClick={createReview}
           >
             Proceed
           </button>
@@ -350,7 +373,7 @@ export default function EventCard({ event, user }) {
           <Card.Text className="line-clamp">{event?.descriptions}</Card.Text>
           <Card.Text className="text-default mt-auto">
             {format(parseISO(event.eventStartDate), 'eee, dd MMM yy hh:mmbbb')}
-            <Fragment>
+            <div>
               <span style={{ float: 'right' }}>
                 <IconButton
                   aria-label="fav"
@@ -367,9 +390,10 @@ export default function EventCard({ event, user }) {
                 {badgeStatus == "" && <Button size="sm" onClick={(e) => applyEvent(e)} variant="danger">Apply</Button>}
                 {badgeStatus == "Confirmed" && <Button size="sm" variant="danger" disabled="true">Apply</Button>}
                 {badgeStatus == "Pending Payment" && <Button size="sm" variant="danger">Pay</Button>}
-                {badgeStatus == "Past" && <Button size="sm" onClick={() => openReviewModal()} variant="danger">Rate</Button>}
+                {/* {badgeStatus == "Past" && <Button size="sm" onClick={() => openReviewModal()} variant="danger">Rate</Button>} */}
+                {badgeStatus == "Past" && <Rating emptySymbol={<FaRegStar className="yellow" />} fullSymbol={<FaStar className="yellow" />} initialRating={rating} onClick={(rate) => clickRating(rate)} />}
               </span>
-            </Fragment>
+            </div>
 
           </Card.Text>
           {/* <div className="d-flex align-items-baseline mt-auto">
