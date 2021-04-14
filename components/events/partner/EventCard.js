@@ -59,7 +59,7 @@ export default function EventCard({ event, user }) {
   const [message, setMessage] = useState('');
   const [rating, setRating] = useState(0);
   const [confirmReviewModalShow, setConfirmReviewModalShow] = useState(false);
-  const disabledStatuses = ["Pending", "Pending Payment", "Waiting For Allocation", "Pending Approval", "Confirm", "Rejected"]
+  const disabledStatuses = ["Pending", "Pending Payment", "Waiting For Allocation", "Pending Approval", "Confirmed", "Rejected"]
   // const closeConfirmReviewModal = () => { setConfirmReviewModalShow(false); setReviewModalShow(true); }
   // const openConfirmReviewModal = () => {
   //   if (message === "") {
@@ -395,7 +395,7 @@ export default function EventCard({ event, user }) {
                 {badgeStatus == "" && <Button size="sm" onClick={(e) => applyEvent(e)} variant="danger">Apply</Button>}
                 {/* {badgeStatus == "Confirmed" && <Button size="sm" variant="danger" disabled="true">Apply</Button>}
                 {badgeStatus == "Pending Payment" && <Button size="sm" variant="danger" disabled="true">Apply</Button>} */}
-                {badgeStatus in disabledStatuses && <Button size="sm" variant="danger" disabled="true">Apply</Button>}
+                {disabledStatuses.includes(badgeStatus) && <Button size="sm" variant="danger" disabled="true">Apply</Button>}
                 {/* {badgeStatus == "Past" && <Button size="sm" onClick={() => openReviewModal()} variant="danger">Rate</Button>} */}
                 {badgeStatus == "Past" && <Rating emptySymbol={<FaRegStar className="yellow" />} fullSymbol={<FaStar className="yellow" />} initialRating={rating} onClick={(rate) => clickRating(rate)} />}
               </span>
