@@ -32,7 +32,7 @@ const ProductSlider = ({
   return (
     <Fragment>
       
-      <Row style={{display:'flex',alignItems:'center'}}>
+      <Row>
         <Col xs={8} md={8}>
           <div>
             <h4>Booth {boothNumber}</h4>
