@@ -40,7 +40,15 @@ const getItems = (count, offset = 0) =>
   }));
 
 export default function Allocation() {
-  const [state, setState] = useState([getItems(5), [], [], [], []]);
+  const [state, setState] = useState(
+    JSON.parse(localStorage.getItem('allocations')) || [
+      getItems(5),
+      [],
+      [],
+      [],
+      [],
+    ]
+  );
   const [{ loading, status }, setStatus] = useState({});
 
   const onDragEnd = (result) => {
@@ -69,6 +77,7 @@ export default function Allocation() {
   };
 
   const onSave = () => {
+    localStorage.setItem('allocations', JSON.stringify(state));
     setStatus({ loading: true });
     setTimeout(() => setStatus({ loading: false, status: 'success' }), 900);
   };
