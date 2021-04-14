@@ -65,18 +65,14 @@ const SellerProfilePage = ({ id, sellerProfile, setSellerProfile }) => {
           isPartner={userId == sellerProfile?.businessPartner?.id}
         />
       )}
-      <Container
-        style={{
-          marginTop: '5%',
-          marginBottom: '10%',
-        }}
-      >
-        <div className="product-description-tab space-pt--r100 space-pb--50">
+      <Container>
+        <br></br>
+        <div className="product-description-tab">
           {/* event.name here is dumb but to make sure we load the event before rendering the ticket modal */}
           <Tab.Container defaultActiveKey="brochures">
             <Nav
               variant="pills"
-              className="product-description-tab__navigation space-mb--50"
+              className="product-description-tab__navigation"
             >
               <Nav.Item>
                 <Nav.Link eventKey="brochures">PROFILE BROCHURES</Nav.Link>
@@ -91,7 +87,8 @@ const SellerProfilePage = ({ id, sellerProfile, setSellerProfile }) => {
                   <BrochureComponent
                     sellerProfile={sellerProfile}
                     isPartner={userId == sellerProfile?.businessPartner?.id}
-                  // isPartner={true}
+                    createToast={createToast}
+                    setSellerProfile={setSellerProfile}
                   />
                 ) : (
                   // {sellerProfile ? renderBrochureComponent() : (
