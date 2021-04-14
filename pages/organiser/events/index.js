@@ -120,7 +120,7 @@ function myEvents() {
         <div className="shop-content space-pt--r100 space-pb--r100">
           <Container>
             <Row>
-              <Col lg={9}>
+              <Col lg={10}>
                 <ShopHeader
                   getLayout={getLayout}
                   getFilterSortParams={getFilterSortParams}
@@ -147,7 +147,7 @@ function myEvents() {
                 </div>
               </Col>
 
-              <Col lg={3} className="order-lg-first mt-4 pt-2 mt-lg-0 pt-lg-0">
+              <Col lg={2} className="order-lg-first mt-4 pt-2 mt-lg-0 pt-lg-0">
                 <EventSideBar
                   getSortParams={getSortParams}
                   sortValue={sortValue}

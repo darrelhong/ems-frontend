@@ -47,6 +47,7 @@ const AddBrochureModal = ({
                 await uploadBrochure(inputData);
             }
             createToast('Brochures successfully uploaded!','success');
+            
         } catch (e) {
             createToast('There was an error, please try again later','error');
         };
