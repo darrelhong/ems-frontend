@@ -550,11 +550,13 @@ const EventOrgProfile = ({ paraId_ }) => {
         <Row>
           <Col md="4">
             <Card className="card-user">
-              <div className="image">
-                {/* <img
+              <div className="card-image" style={{maxWidth:"60%"}}>
+                <img
                     alt="..."
-                    src={require("assets/img/damir-bosnjak.jpg")}
-                  /> */}
+                    src="https://www.ppt-backgrounds.net/thumbs/simple-pictures--cave-image-presentation.jpeg
+                    "
+                    
+                  />
               </div>
               <CardBody>
                 <div className="author">
@@ -581,11 +583,13 @@ const EventOrgProfile = ({ paraId_ }) => {
                     )}
                     <h5 className="title">{eventorganiser?.name}</h5>
                   </a>
-                  <p className="description">{eventorganiser?.email}</p>
-                  {eventorganiser?.phonenumber != null && (<p className="description" style={{marginBottom:"-5px"}}>+65 {eventorganiser?.phonenumber}</p>)}
-                  {eventorganiser?.address != null && (<p className="description" > {eventorganiser?.address}</p>)}
+                  <div>                  <h6 className="product-description ">{eventorganiser?.email}</h6>
 
+                  {eventorganiser?.phonenumber != null && (<h6 className="product-description " style={{marginBottom:"-5px"}}>+65 {eventorganiser?.phonenumber}</h6>)} &nbsp;</div>
+                  {eventorganiser?.address != null && (<p className="description" > {eventorganiser?.address}</p>)}
+                     
                 </div>
+                <br></br>
                 <p className="description text-center">
                   {((eventorganiser?.description === null || eventorganiser?.description === "")&&
                     'There is no description.') ||
@@ -794,17 +798,17 @@ const EventOrgProfile = ({ paraId_ }) => {
                                         </div>
                                         <p className="customer-meta">
                                           {review.attendee != null && (
-                                            <span className="review-author">
+                                            <h6 className="product-description">
                                               {review.attendee.name}
-                                            </span>
+                                            </h6>
                                           )}
                                           {review.partner != null && (
-                                            <span className="review-author">
+                                            <h6 className="product-description">
                                               {review.partner.name}
-                                            </span>
+                                            </h6>
                                           )}
                                           <div className="rating">
-                                            <span>{review.event.name}</span>
+                                            <strong className="product-description">{review.event.name}</strong>
                                           </div>
                                         </p>
                                         <div className="description">
