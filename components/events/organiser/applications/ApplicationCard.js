@@ -64,14 +64,14 @@ const ApplicationCard = ({
           
             </Col>
             <Col lg={1}>
-              <div style={{textAlign:"right"}}>
+              <div style={{textAlign:"right", marginTop:"4%"}}>
                    <h4>3 </h4>
               </div>
        
           </Col>
             <Col lg={5}>
              
-            <div style={{textAlign:"left"}}>
+            <div style={{textAlign:"left", marginTop:"3%"}}>
                  <strong className="product-description ">
              Days Since Allocation           
              

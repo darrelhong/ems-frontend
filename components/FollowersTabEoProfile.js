@@ -347,7 +347,7 @@ const FollowersTabEoProfile = ({
                       }}
                     >
                       <div className="product-description-tab__additional-info">
-                        {(attendees ==null || attendees.length < 1 ) && <div className="text-center justify-content-center">There is no attendees.</div>}
+                        {(attendees ==null || attendees.length < 1 ) && <div className="text-center justify-content-center"></div>}
                         {attendees != null &&
                           attendees.map((attendee) => {
                             return (
@@ -432,7 +432,7 @@ const FollowersTabEoProfile = ({
                           })}
                       </div>
                       {(attendees.length == 0) && (
-                        <div className="w-100 text-center" style={{marginTop: "100px"}}>There are no followers.</div>
+                        <div className="w-100 text-center" style={{marginTop: "100px"}}>There are no attendee followers.</div>
                       )}
                     </div>
                   </Col>
@@ -453,7 +453,7 @@ const FollowersTabEoProfile = ({
                     >
                       <div className="product-description-tab__additional-info">
                         <ul className="list-unstyled team-members">
-                        {(partners ==null || partners.length < 1 ) && <div className="text-center justify-content-center" >There is no partners.</div>}
+                        {(partners ==null || partners.length < 1 ) && <div className="text-center justify-content-center" ></div>}
 
                           {partners != null &&
                             partners.map((partner) => {
@@ -543,7 +543,7 @@ const FollowersTabEoProfile = ({
                         </ul>
                       </div>
                       {(partners.length == 0) && (
-                        <div className="w-100 text-center" style={{marginTop: "100px"}}>There are no followers.</div>
+                        <div className="w-100 text-center" style={{marginTop: "100px"}}>There are no business partner followers.</div>
                       )}
                     </div>
                   </Col>
