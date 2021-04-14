@@ -59,8 +59,8 @@ const EventDetailsPane = ({ register, watch, errors, eventData }) => {
               <select
                 // required
                 className="form-control"
-                name="eventCategory"
-                id="eventCategory"
+                name="category"
+                id="category"
                 ref={register({
                   required: true,
                   validate: (value) => value != 'Select'
@@ -70,7 +70,7 @@ const EventDetailsPane = ({ register, watch, errors, eventData }) => {
                   <option value={category}>{category}</option>
                 ))}
               </select>
-              {errors.eventCategory && (
+              {errors.category && (
                 <span role="alert" style={{ color: 'red' }}>
                   Please select one category for your event!
                 </span>

@@ -11,13 +11,13 @@ const NavigationGuest = ({ positionClass }) => {
         }`}
       >
         <li>
-          <Link href="/">
+          <Link href="/public/home">
             <a className="nav-link">HOME</a>
           </Link>
         </li>
 
         <li>
-          <Link href="/">
+          <Link href="/public/events">
             <a className="nav-link">EVENTS</a>
           </Link>
         </li>

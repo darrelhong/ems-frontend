@@ -3,7 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import Swiper from 'react-id-swiper';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
-const HeroSliderPopularEvents = ({ heroSliderData }) => {
+const HeroSliderPopularEvents = ({ heroSliderData, userPath }) => {
 
   const params = {
     loop: true,
@@ -47,7 +47,7 @@ const HeroSliderPopularEvents = ({ heroSliderData }) => {
                                             {format(parseISO(single?.eventStartDate), 'eee, dd MMM yy hh:mmbbb')}
                                         </p>
                                     </div>
-                                    <a className="btn btn-fill-out w-100" href={`/partner/events/${single?.eid}`}>
+                                    <a className="btn btn-fill-out w-100" href={`/${userPath}/events/${single?.eid}`}>
                                         View Event Details
                                     </a>
                                 </div>
