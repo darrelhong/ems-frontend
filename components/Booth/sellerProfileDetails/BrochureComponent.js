@@ -3,7 +3,7 @@ import { Container, Button, Col, Image,Row } from 'react-bootstrap';
 import AddBrochureModal from './AddBrochureModal';
 import ViewBrochureModal from './ViewBrochureModal';
 
-const BrochureComponent = ({ sellerProfile, isPartner }) => {
+const BrochureComponent = ({ sellerProfile, isPartner,setSellerProfile, createToast }) => {
     const [showModal, setShowModal] = useState(false);
     const [viewBrochureModalShow, setViewBrochureModalShow] = useState(false);
     const [imageUrlToShow, setImageUrlToShow] = useState('');
@@ -16,6 +16,8 @@ const BrochureComponent = ({ sellerProfile, isPartner }) => {
           showModal={showModal}
           closeModal={() => setShowModal(false)}
           image={imageUrlToShow}
+          setSellerProfile={setSellerProfile}
+          createToast={createToast}
         />
 
         <ViewBrochureModal
@@ -23,6 +25,10 @@ const BrochureComponent = ({ sellerProfile, isPartner }) => {
           closeViewBrochureModal={() => setViewBrochureModalShow(false)}
           viewBrochureModalShow={viewBrochureModalShow}
           brochureIndex={brochureIndex}
+          isPartner={isPartner}
+          setSellerProfile={setSellerProfile}
+          sellerProfileId={sellerProfile?.id}
+          createToast={createToast}
         />
         <br></br>
         {isPartner && (

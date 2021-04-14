@@ -9,7 +9,7 @@ import { Container, Tab, Nav } from 'react-bootstrap';
 import Link from 'next/link';
 import { useToasts } from 'react-toast-notifications';
 
-const SellerProfilePage = ({ id,sellerProfile,setSellerProfile }) => {
+const SellerProfilePage = ({ id, sellerProfile, setSellerProfile }) => {
   // const [sellerProfile, setSellerProfile] = useState(Object);
   const [booths, setBooths] = useState([]);
   const [bpProducts, setBpProducts] = useState([]);
@@ -32,11 +32,10 @@ const SellerProfilePage = ({ id,sellerProfile,setSellerProfile }) => {
     const toastId = addToast(message, { appearance: appearanceStyle });
     setTimeout(() => removeToast(toastId), 3000);
   };
-  
 
   return (
     <div>
-    {/* <PartnerWrapper
+      {/* <PartnerWrapper
       title={
         sellerProfile
           ? `Profile for ${sellerProfile?.event?.name}`
@@ -88,7 +87,8 @@ const SellerProfilePage = ({ id,sellerProfile,setSellerProfile }) => {
                   <BrochureComponent
                     sellerProfile={sellerProfile}
                     isPartner={userId == sellerProfile?.businessPartner?.id}
-                    // isPartner={true}
+                    createToast={createToast}
+                    setSellerProfile={setSellerProfile}
                   />
                 ) : (
                   // {sellerProfile ? renderBrochureComponent() : (
@@ -108,7 +108,7 @@ const SellerProfilePage = ({ id,sellerProfile,setSellerProfile }) => {
                     flexWrap: 'wrap',
                   }}
                 >
-                     {/* <BoothProductComponent //for testing how a single one looks
+                  {/* <BoothProductComponent //for testing how a single one looks
                         booth={booths[1]}
                         createToast={createToast}
                         sellerProfile={sellerProfile}
@@ -116,10 +116,10 @@ const SellerProfilePage = ({ id,sellerProfile,setSellerProfile }) => {
                         isPartner={userId == sellerProfile?.businessPartner?.id}
                       /> */}
 
-                   {booths && booths.length > 0 ? (
+                  {booths && booths.length > 0 ? (
                     booths.map((booth) => (
                       <BoothProductComponent
-                      key={booth?.id}
+                        key={booth?.id}
                         booth={booth}
                         createToast={createToast}
                         sellerProfile={sellerProfile}
@@ -142,7 +142,7 @@ const SellerProfilePage = ({ id,sellerProfile,setSellerProfile }) => {
           </Tab.Container>
         </div>
       </Container>
-    {/* </PartnerWrapper> */}
+      {/* </PartnerWrapper> */}
     </div>
   );
 };
