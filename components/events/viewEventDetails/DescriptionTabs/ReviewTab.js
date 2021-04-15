@@ -51,7 +51,7 @@ const ReviewTab = ({ reviews }) => {
                         )}
 
                         <span className="comment-date">
-                          {review.event.name}
+                          {review?.event?.name}
                         </span>
                       </p>
                       <div className="description">
