@@ -39,7 +39,6 @@ export default function AttendeeEventTicketing({ id }) {
   const [clientSecret, setClientSecret] = useState('');
   const [checkoutResponse, setCheckoutResponse] = useState();
   const [paymentCompleteResp, setPaymentCompleteResp] = useState();
-  console.log(view)
   const { mutate: checkout, isError, isLoading } = useMutation(
     (data) => api.post('/api/ticketing/checkout', data),
     {
