@@ -379,7 +379,7 @@ export default function EventCard({ event, user }) {
           {/* <Card.Text className="line-clamp">{event?.descriptions}</Card.Text> */}
           <Card.Text className="text-default mt-auto">
             {format(parseISO(event.eventStartDate), 'eee, dd MMM yy hh:mmbbb')}
-            <div>
+            <div className="mb-0 mr-0">
               <span style={{ float: 'right' }}>
                 <IconButton
                   aria-label="fav"
