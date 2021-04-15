@@ -57,11 +57,11 @@ const NavigationPartner = ({ positionClass }) => {
                 <a>Manage Products</a>
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link href="/partner/events/applications">
                 <a>Manage Applications</a>
               </Link>
-            </li>
+            </li> */}
           </ul>
         </li>
       </ul>

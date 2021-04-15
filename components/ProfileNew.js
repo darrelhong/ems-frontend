@@ -51,6 +51,7 @@ const PartnerProfile = ({ localuser }) => {
   const [followBtn, setFollowBtn] = useState();
   const [partner, setPartner] = useState();
   const [user, setUser] = useState();
+  const[eventUser, setEventUser] = useState();
   const [currenteventlist, setCurrenteventlist] = useState([]);
   const [pasteventlist, setPastEventlist] = useState([]);
   // const [markVip, setMarkVip] = useState(false);
@@ -118,6 +119,7 @@ const PartnerProfile = ({ localuser }) => {
         await getUser(localStorage.getItem('userId')).then(async (data) => {
           console.log('current ' + data.id);
           setUser(data?.name);
+          
           if (data?.id !== localuser) {
             if (data.roles[0].roleEnum === 'EVNTORG') {
               await getBpEventsByIdRoleStatus(
@@ -125,8 +127,12 @@ const PartnerProfile = ({ localuser }) => {
                 data.roles[0].roleEnum,
                 'current'
               ).then((events) => {
-                setCurrenteventlist(events);
+                if(events !=null){
+setCurrenteventlist(events);
                 setEnquiryEventList(events);
+                }
+                
+                console.log("test current");
               });
               await getBpEventsByIdRoleStatus(
                 localuser,
@@ -134,8 +140,10 @@ const PartnerProfile = ({ localuser }) => {
                 'past'
               ).then((events) => {
                 setPastEventlist(events);
-              });
+                console.log("test past");
 
+              });
+              setEventUser("organiser");
               setEOView(true);
               setPublicView(false);
               setFollowBtn(false);
@@ -156,6 +164,7 @@ const PartnerProfile = ({ localuser }) => {
               setEOView(false);
               setPublicView(true);
               setShowEnquiry(true);
+              setEventUser("attendee");
 
               followId = data.id;
               getFollowersData();
@@ -181,7 +190,7 @@ const PartnerProfile = ({ localuser }) => {
               setEOView(false);
               setPublicView(true);
               setShowEnquiry(false);
-
+              setEventUser("partner");
               await getBpEventsByIdRoleStatus(
                 localuser,
                 data.roles[0].roleEnum,
@@ -199,12 +208,13 @@ const PartnerProfile = ({ localuser }) => {
               });
             }
           } else {
+            setEventUser("partner");
             setPublicView(false);
             setEOView(false);
             setFollowBtn(false);
             setUnfollowBtn(false);
             setShowEnquiry(false);
-
+            
             await getBpEventsByIdRoleStatus(
               localuser,
               data.roles[0].roleEnum,
@@ -245,6 +255,8 @@ const PartnerProfile = ({ localuser }) => {
       getCurrentUserData();
       getFollowersData();
     } else {
+      setEventUser("guest");
+
       //guest cannot follow bp
       const getEvents = async () => {
         await getBpEventsByIdRoleStatus(localuser, 'guest', 'current').then(
@@ -442,11 +454,13 @@ const PartnerProfile = ({ localuser }) => {
         <Row>
           <Col md="4">
             <Card className="card-user">
-              <div className="image">
-                {/* <img
+            <div className="card-image" style={{maxWidth:"60%"}}>
+                <img
                     alt="..."
-                    src={require("assets/img/damir-bosnjak.jpg")}
-                  /> */}
+                    src="https://www.ppt-backgrounds.net/thumbs/simple-pictures--cave-image-presentation.jpeg
+                    "
+                    
+                  />
               </div>
               <CardBody>
                 <div className="author">
@@ -474,14 +488,13 @@ const PartnerProfile = ({ localuser }) => {
                     &nbsp;
                     <h5 className="title">{partner?.name}</h5>
                   </a>
-                  <div>
-                    <h7 className="description">{partner?.email}</h7>
-                    {partner?.phonenumber != null && (<p className="description" style={{marginBottom:"-5px"}}>+65 {partner?.phonenumber}</p>)}
+                  <div>                  <h6 className="product-description ">{partner?.email}</h6>
+                    {partner?.phonenumber != null && (<h6 className="product-description " style={{marginBottom:"-5px"}}>+65 {partner?.phonenumber}</h6>)} &nbsp;</div>
                   {partner?.address != null && (<p className="description" > {partner?.address}</p>)}
                   </div>
-                </div>
+                  <br></br>
                 <p className="description text-center">
-                  {partner?.description}
+                  {((partner?.description === null || partner?.description === "") && "There is no description.") || partner?.description}
                 </p>
                 {/* <p className="description text-center">
                   Address : {partner?.address}
@@ -553,7 +566,7 @@ const PartnerProfile = ({ localuser }) => {
                           </button>
                         )}
 
-                        <br />
+                        {/* <br /> */}
                         {/* <small>Spent</small> */}
                         {localuser != undefined &&
                           checkIsBpVip != null &&
@@ -608,13 +621,14 @@ const PartnerProfile = ({ localuser }) => {
                         <EventTabOne
                           current={currenteventlist}
                           past={pasteventlist}
+                          eventUser= {eventUser}
                         />
                       </div>
                     </Tab.Pane>
                     <Tab.Pane eventKey="Followers">
                       <br></br>
                       <ul className="list-unstyled team-members">
-                        {followers ==undefined || followers == null || followers.length <1 && (<div className="text-center justify-content-center"> There is no followers. </div>)}
+                        {/* {followers ==undefined || followers == null || followers.length <1 && (<div className="text-center justify-content-center"> There is no followers. </div>)} */}
                         {followers != undefined &&
                           followers.map((follower) => {
                             return (

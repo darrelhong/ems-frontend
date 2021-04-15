@@ -61,10 +61,10 @@ const BoothPane = ({
                 // src={boothlayoutImage ?? "assets/images/defaultprofilepic.png"}
                 src={imageToView ?? originalLayoutImage}
                 thumbnail
-                style={{ width: '60%' }}
+                style={{ width: '40%' }}
               />
             </Col>
-            <Col className="form-group" md={12}>
+            <Col className="form-group" md={8}>
               <Form.Group>
                 <Form.File
                   id="custom-file"
@@ -74,7 +74,7 @@ const BoothPane = ({
                 />
                 <Form.Label
                   className="form-group custom-file-label"
-                  md={12}
+                  md={6}
                   for="custom-file"
                 >
                   {fileName}

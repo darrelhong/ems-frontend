@@ -273,7 +273,7 @@ export default function AdminHome() {
       <Container className="space-pt--30 space-pb--30">
         {isLoading && <CenterSpinner />}
         {isSuccess && <p>Your are logged in as {user?.name}.</p>}
-        <Row>
+        {/* <Row>
           <button
             className="btn btn-fill-out btn-sm"
             style={{ float: 'right' }}
@@ -281,7 +281,7 @@ export default function AdminHome() {
           >
             <AiOutlineNotification />
           </button>
-        </Row>
+        </Row> */}
         <br></br>
         <Row>
           <Col sm={6} lg={4} className="mb-4">

@@ -59,9 +59,9 @@ const EventDescriptionTabGroup = ({
       return (
         <li>
           <IoMdRestaurant />{' '}
-          {event.ticketCapacity
+       <h6>   {event.ticketCapacity
             ? `Tickets Capacity: ${event.ticketCapacity}`
-            : 'Ticket Capacity not set yet!'}
+            : 'Ticket Capacity not set yet!'} </h6>
         </li>
       );
     } else {
@@ -83,7 +83,7 @@ const EventDescriptionTabGroup = ({
                     color: 'red'
                   }}>
                   <IoMdTrophy />
-                  {newSellerApplications.length} {' '}new applications
+                 <h6> {newSellerApplications.length} {' '}new applications </h6>
                 </li>
               </ul>
             )
@@ -91,7 +91,7 @@ const EventDescriptionTabGroup = ({
                 <ul>
                   <li>
                     <IoMdTrophy />
-                  No new applications
+                 <h6>No new applications</h6> 
                 </li>
                 </ul>
               )}

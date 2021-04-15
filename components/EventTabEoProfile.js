@@ -4,7 +4,7 @@ import Nav from 'react-bootstrap/Nav';
 import EventEoProfileSliderTen from './ProductSlider/EventEoProfileSliderTen';
 import { useEffect, useState } from 'react';
 
-const EventTabOne = ({ current, upcoming, past }) => {
+const EventTabOne = ({ current, upcoming, past, eventUser }) => {
   const [showNoCurrentMsg, setShowNoCurrentMsg] = useState(false);
   const [showNoUpcomingMsg, setShowNoUpcomingMsg] = useState(false);
   const [showNoPastMsg, setShowNoPastMsg] = useState(false);
@@ -47,7 +47,7 @@ const EventTabOne = ({ current, upcoming, past }) => {
               <Tab.Pane eventKey="current">
                 <Row>
                   <Col md={12}>
-                    <EventEoProfileSliderTen events={current} />
+                    <EventEoProfileSliderTen events={current} eventUser={eventUser}/>
                   </Col>
                 </Row>
                 {showNoCurrentMsg && (
@@ -57,7 +57,7 @@ const EventTabOne = ({ current, upcoming, past }) => {
               <Tab.Pane eventKey="upcoming">
                 <Row>
                   <Col md={12}>
-                    <EventEoProfileSliderTen events={upcoming} />
+                    <EventEoProfileSliderTen events={upcoming} eventUser={eventUser}/>
                   </Col>
                 </Row>
                 {showNoUpcomingMsg && (
@@ -67,7 +67,7 @@ const EventTabOne = ({ current, upcoming, past }) => {
               <Tab.Pane eventKey="past">
                 <Row>
                   <Col md={12}>
-                    <EventEoProfileSliderTen events={past} />
+                    <EventEoProfileSliderTen events={past} eventUser={eventUser}/>
                   </Col>
                 </Row>
                 {showNoPastMsg && (

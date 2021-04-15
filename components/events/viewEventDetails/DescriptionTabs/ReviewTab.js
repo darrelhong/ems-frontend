@@ -1,8 +1,17 @@
 import { ProductRating } from 'components/Product';
+import {
+  Col, Row
 
+} from 'reactstrap';
 const ReviewTab = ({ reviews }) => {
 
   return (
+    <>
+    <Row>
+    <Col md={1}>
+      </Col>
+   
+    <Col md={10}>
     <div className="product-description-tab__review">
       <div
         style={{
@@ -12,7 +21,7 @@ const ReviewTab = ({ reviews }) => {
           position: 'relative',
         }}
       >
-        <br></br>
+        {/* <br></br> */}
         <ul className="list-none comment-list mt-8">
           <li>
             {/* {(reviews == null || reviews == undefined) && (
@@ -28,31 +37,35 @@ const ReviewTab = ({ reviews }) => {
             )}
             {/* {(reviews != null || reviews != undefined) && */}
             {reviews.length > 0 &&
-              reviews.map((review) => {
+              reviews.map((review,key) => {
                 return (
                   <>
-                    <hr></hr>
+                    {key > 0 && (<hr></hr>) }
                     <div className="comment-block">
                       <div className="rating-wrap">
                         <div className="rating">
-                          <ProductRating ratingValue={review.rating} />
+                          <ProductRating
+                            ratingValue={review.rating}
+                          />
+                        </div>
+                        <div className="description">
+                          <p>{review.reviewDateTime}</p>
                         </div>
                       </div>
                       <p className="customer-meta">
                         {review.attendee != null && (
-                          <span className="review-author">
+                          <h6 className="product-description">
                             {review.attendee.name}
-                          </span>
+                          </h6>
                         )}
                         {review.partner != null && (
-                          <span className="review-author">
+                          <h6 className="product-description">
                             {review.partner.name}
-                          </span>
+                          </h6>
                         )}
-
-                        <span className="comment-date">
-                          {review.event.name}
-                        </span>
+                        <div className="rating">
+                          <strong className="product-description">{review.event.name}</strong>
+                        </div>
                       </p>
                       <div className="description">
                         <p>{review.reviewText}</p>
@@ -65,6 +78,11 @@ const ReviewTab = ({ reviews }) => {
         </ul>
       </div>
     </div>
+    </Col>
+    <Col md={1}>
+    </Col>
+    </Row>
+    </>
   );
 };
 

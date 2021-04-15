@@ -76,7 +76,12 @@ export default function AdminEventOrg() {
 
                           axios.post(endpoint, { "message": "Your application has been approved. You may start creating events." }, {
                             headers: { 'Content-type': 'application/json' }
+                          }).then((response) => {
+                            console.log('response' + response);
+                          }).catch((error) => {
+                            console.log(error);
                           });
+                         
                         });
 
                     },
@@ -96,6 +101,10 @@ export default function AdminEventOrg() {
 
                           axios.post(endpoint, { "message": "Your application has been rejected. Please re-submit your application." }, {
                             headers: { 'Content-type': 'application/json' }
+                          }).then((response) => {
+                            console.log('response' + response);
+                          }).catch((error) => {
+                            console.log(error);
                           });
                         });
                     },

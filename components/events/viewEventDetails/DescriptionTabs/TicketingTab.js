@@ -24,28 +24,28 @@ const TicketingTab = ({
                 <div>
                     <ul>
                         <li>
-                            <IoMdCash /> Ticket Price:{' '}{event.ticketPrice ? '$' + event.ticketPrice : 'Not set yet'}
+                           <h6><IoMdCash /> Ticket Price:{' '}{event.ticketPrice ? '$' + event.ticketPrice : 'Not set yet'}</h6> 
                         </li>
                         <li>
-                            <IoMdRestaurant />
+                           <h6> <IoMdRestaurant />
                             {event.ticketCapacity
                                 ? `Tickets Sold: ${event?.ticketTransactions?.length ?? 0} / ${event.ticketCapacity}`
-                                : 'Ticket Capacity not set yet!'}
+                                : 'Ticket Capacity not set yet!'}</h6>
                         </li>
                         <li>
-                            <IoMdCalendar /> Ticket Sale Start Date:{' '} {prettySaleStartDate ? prettySaleStartDate : 'Not set yet'}
+                        <h6> <IoMdCalendar /> Ticket Sale Start Date:{' '} {prettySaleStartDate ? prettySaleStartDate : 'Not set yet'} </h6>
                             {/* <IoMdLocate />{format(parseISO(event.eventStartDate), 'eee, dd MMM yy hh:mmbbb')} */}
                         </li>
                         <li>
-                            <IoMdCalendar /> Ticket Sale End Date:{' '} {prettySalesEndDate ? prettySalesEndDate : 'Not set yet'}
+                        <h6> <IoMdCalendar /> Ticket Sale End Date:{' '} {prettySalesEndDate ? prettySalesEndDate : 'Not set yet'} </h6>
                         </li>
                     </ul>
                 </div>
             ) : (
                 <ul>
                     <li>
-                        <IoMdCash />
-    No Ticket Sales for this event!
+                       
+    <h6> <IoMdCash />No Ticket Sales for this event!</h6>
   </li>
                 </ul>
             )}
