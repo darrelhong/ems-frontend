@@ -35,13 +35,24 @@ export default function PartnerEventPage({ id }) {
   const { data: user } = useUser(localStorage.getItem('userId'));
   const bpId = localStorage.getItem('userId');
   const [applicationMade, setApplicationMade] = useState();
-  const sellerProfile = user?.sellerProfiles.filter(sp => sp.event.eid === data.eid)
+  const sellerProfile = user?.sellerProfiles.filter(sp => sp.event?.eid === data?.eid)[0]
 
   // const [needPay, setNeedPay] = useState(user?.sellerApplications.filter(sa => (sa.paymentStatus === "PENDING" && sa.sellerApplicationStatus === "APPROVED" && sa.boothQuantity > 0)).some(e => e.event.eid === data?.eid))
-  // console.log(showPaymentModal);
+  console.log("application: ", applicationMade);
   console.log("User: ", user)
   // console.log("data: ", data)
   console.log("SP: ", sellerProfile)
+
+  let paybtn;
+  // if (sellerProfile?.booths.length > 0 & applicationMade?.paymentStatus === "PENDING") {
+  if (applicationMade?.paymentStatus === "PENDING") {
+    paybtn = <button
+      className="btn btn-fill-out btn-sm mr-2"
+      onClick={() => setShowPaymentModal(true)}>Pay</button>
+  }
+  else {
+    paybtn = ""
+  }
 
   useEffect(() => {
     const loadBoothTotal = async () => {
@@ -75,8 +86,9 @@ export default function PartnerEventPage({ id }) {
       <BPPaymentModal
         showPaymentModal={showPaymentModal}
         closePaymentModal={() => setShowPaymentModal(false)}
+        sellerProfile={sellerProfile}
         event={data}
-        bpId={bpId} />
+        partner={user} />
       <RegisterModal
         showRegisterModal={showRegisterModal}
         closeRegisterModal={() => setShowRegisterModal(false)}
@@ -200,9 +212,8 @@ export default function PartnerEventPage({ id }) {
                         Withdraw Application
                       </button>
                     )}
-
-                    <button className="btn btn-fill-out btn-sm mr-2" onClick={() => setShowPaymentModal(true)}>Pay</button>
-
+                    {/* {(applicationMade.paymentStatus === "PENDING") && <button className="btn btn-fill-out btn-sm mr-2" onClick={() => setShowPaymentModal(true)}>Pay</button>} */}
+                    {paybtn}
                     {boothTotal >= data.boothCapacity && !applicationMade && (
                       <p className="text-dark">Capacity of {data.boothCapacity} booths has been reached!</p>
                     )}
