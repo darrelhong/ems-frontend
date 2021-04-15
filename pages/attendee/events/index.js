@@ -141,14 +141,14 @@ export default function AttendeeEvents({ category }) {
           </Col>
           {eventCategoriesSuccess && (
             <Col xs={6} sm={5} md={3}>
-              <select className="custom-select" onChange={handleCategoryChange}>
+              <select
+                className="custom-select"
+                onChange={handleCategoryChange}
+                value={selectedCategory}
+              >
                 <option value="">Categories</option>
                 {eventCategories.map((category, i) => (
-                  <option
-                    key={i}
-                    value={category}
-                    selected={category == selectedCategory}
-                  >
+                  <option key={i} value={category}>
                     {category}
                   </option>
                 ))}

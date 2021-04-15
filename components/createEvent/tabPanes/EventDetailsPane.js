@@ -63,7 +63,7 @@ const EventDetailsPane = ({ register, watch, errors, eventData }) => {
                 id="category"
                 ref={register({
                   required: true,
-                  validate: (value) => value != 'Select'
+                  validate: (value) => value != ''
                 })}
               >
                 {eventCategoriesWithSelect.map((category) => (

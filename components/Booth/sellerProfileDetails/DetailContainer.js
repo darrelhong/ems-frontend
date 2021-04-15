@@ -39,7 +39,7 @@ const DetailContainer = ({
           {sellerProfile?.businessPartner?.profilePic ? (
             <Image
               className="profile-image"
-              src={partner?.profilePic}
+              src={sellerProfile?.businessPartner?.profilePic}
               thumbnail
             />
           ) : (
@@ -81,7 +81,7 @@ const DetailContainer = ({
               </IconButton>
             )}
           </Row>
-          <Row>{sellerProfile?.description ?? 'Empty Description still'}</Row>
+          <Row>{sellerProfile?.description ?? 'There is no description'}</Row>
         </Col>
       </Row>
     </Container>

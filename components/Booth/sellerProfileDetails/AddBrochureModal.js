@@ -1,12 +1,14 @@
 import { Modal, Button, Row } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import { Col, Form } from 'react-bootstrap';
-import { uploadBrochure } from 'lib/query/boothApi';
+import { uploadBrochure, getSellerProfile } from 'lib/query/boothApi';
 
 const AddBrochureModal = ({
     sellerProfileId,
     showModal,
-    closeModal
+    closeModal,
+    setSellerProfile,
+    createToast
 }) => {
 
     const [files, setFiles] = useState();
@@ -27,26 +29,33 @@ const AddBrochureModal = ({
     };
 
     const saveImages = async () => {
+        await uploadBrochures();
+        await reloadData();
+        closeWithReset();
+    }
+
+    const uploadBrochures = async () => {
         const uploadedImages = files;
-        // const uploadedImages = getValues('files');
         const length = uploadedImages?.length ?? 0;
         let i;
         console.log('length found: ' + length);
-        // console.log(uploadedImages.item(0));
-        for (i = 0; i < length; i++) {
-            let inputData = new FormData();
-            inputData.append('file', uploadedImages.item(i));
-            inputData.append('id', sellerProfileId); //temp event ID
-            console.log('checking input data');
-            console.log(inputData);
-
-            // setImages(images.push(URL.createObjectURL(data[0].file)));
-            // setImages(URL.createObjectURL(data[0].file));
-            const response = await uploadBrochure(inputData);
-            console.log('response:');
-            console.log(response);
-        }
+        try {
+            for (i = 0; i < length; i++) {
+                let inputData = new FormData();
+                inputData.append('file', uploadedImages.item(i));
+                inputData.append('id', sellerProfileId); //temp event ID
+                await uploadBrochure(inputData);
+            }
+            createToast('Brochures successfully uploaded!','success');
+        } catch (e) {
+            createToast('There was an error, please try again later','error');
+        };
     };
+
+    const reloadData = async () => {
+        const updatedProfile = await getSellerProfile(sellerProfileId);
+        setSellerProfile(updatedProfile);
+    }
 
     const bodyComponent = () => (
         <Modal.Body>
@@ -74,30 +83,36 @@ const AddBrochureModal = ({
         </Modal.Body>
     );
 
+    const closeWithReset = () => {
+        setFileName('');
+        closeModal();
+    };
+
     return (
-        <Modal
-            show={showModal}
-            onHide={closeModal}
-            centered
+      <Modal
+        show={showModal}
+        onHide={closeWithReset}
+        centered
         // scrollable
         // size='xl'
-        >
-            <Modal.Header closeButton>
-                <Modal.Title>Adding a brochure to your profile </Modal.Title>
-            </Modal.Header>
-            {bodyComponent()}
-            <Modal.Footer>
-                <Button variant="secondary" onClick={closeModal}>
-                    Close
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Adding a brochure to your profile </Modal.Title>
+        </Modal.Header>
+        {bodyComponent()}
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            className="btn-sm"
+            onClick={closeWithReset}
+          >
+            Close
           </Button>
-                <Button
-                    variant="primary"
-                    onClick={saveImages}
-                >
-                    Upload
+          <Button variant="danger" onClick={saveImages} className="btn-sm">
+            Upload
           </Button>
-            </Modal.Footer>
-        </Modal>
+        </Modal.Footer>
+      </Modal>
     );
 };
 

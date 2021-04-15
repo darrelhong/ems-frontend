@@ -42,14 +42,14 @@ const ProductModal = ({
     const secondaryButton = () => {
         if (removeProduct) {
             return (
-                <Button variant="secondary" onClick={() => {
+                <Button variant="secondary" className="btn-sm" onClick={() => {
                     setRemoveProduct(false);
                 }}>
                     Cancel
                 </Button>
             )
         } else return (
-            <Button variant="secondary" onClick={() => {
+            <Button variant="secondary" className="btn-sm" onClick={() => {
                     setRemoveProduct(false);
                     closeProductModal();
             }}>
@@ -74,31 +74,32 @@ const ProductModal = ({
     const removeButton = () => {
         if (removeProduct) {
             return (
-                <Button
-                    variant="danger"
-                    onClick={() => {
-                        handleRemove();
-                    }
-                    }
-                >
-                    Yes, remove it
-                </Button>
-            )
+              <Button
+                variant="danger"
+                className="btn-sm"
+                onClick={() => {
+                  handleRemove();
+                }}
+              >
+                Yes, remove it
+              </Button>
+            );
         } else {
             return (
-                <Button
-                    variant="danger"
-                    onClick={() => {
-                        if (!removeProduct) {
-                            setRemoveProduct(true);
-                        } else {
-                            console.log('removing product!');
-                        }
-                    }}
-                >
-                    Remove
-                </Button>
-            )
+              <Button
+                variant="danger"
+                className="btn-sm"
+                onClick={() => {
+                  if (!removeProduct) {
+                    setRemoveProduct(true);
+                  } else {
+                    console.log('removing product!');
+                  }
+                }}
+              >
+                Remove
+              </Button>
+            );
         }
     }
 

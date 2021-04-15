@@ -1,7 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Fragment } from 'react';
 import Link from 'next/link';
-import { Col, ProgressBar, Modal, Button, Form, Alert } from 'react-bootstrap';
+import {
+  Col,
+  ProgressBar,
+  Modal,
+  Button,
+  Form,
+  Alert,
+  Row,
+} from 'react-bootstrap';
 import { formatDate } from '../../lib/formatDate';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -12,6 +20,7 @@ import DeleteModal from './DeleteModal';
 import { vipToggle } from '../../lib/functions/eventOrganiser/eventFunctions';
 import { Unstable_TrapFocus } from '@material-ui/core';
 import api from '../../lib/ApiClient';
+// import { getTotalTicketNumberSalesByEvent } from 'lib/query/ticketDashboard'
 
 const EventCard = ({ event, deleteCancelEvent, createToast }) => {
   const [currEvent, setCurrEvent] = useState(event);
@@ -32,10 +41,21 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
   const [showBroadcastError, setBroadcastError] = useState(false);
   const [showBroadcastSuccess, setBroadcastSuccess] = useState(false);
 
+  const ticketsSold = currEvent?.ticketTransactions?.length;
+  const percentageSold = Math.round(ticketsSold * 100 / currEvent?.ticketCapacity);
+
   const handleDeleteCancel = async (currEvent) => {
     await deleteCancelEvent(currEvent);
     closeModal();
   };
+
+  // useEffect(() => {
+  //   const loadTickets = async () => {
+  //     ticketsSold = await getTotalTicketNumberSalesByEvent(currEvent.eid)
+  //   }
+  //   loadTickets();
+  //   percentageSold = Math.round(ticketsSold / currEvent.ticketCapacity)
+  // }, [currEvent])
 
   const handleVipToggle = async (currEvent) => {
     let message = '';
@@ -47,6 +67,10 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
       createToast(message, 'success');
     });
   };
+
+  console.log("sold:", ticketsSold)
+  console.log("capacity:", currEvent?.ticketCapacity)
+  console.log(percentageSold)
 
   const checkCanDelete = (currEvent) => {
     if (
@@ -172,13 +196,14 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
 
       {/* broadcast modal */}
       <Modal show={broadcastModalShow} onHide={closeBroadcastModal} centered>
-
         {/* confirm broadcast modal */}
-        <Modal show={confirmBroadcastModalShow} onHide={closeConfirmBroadcastModal} centered>
+        <Modal
+          show={confirmBroadcastModalShow}
+          onHide={closeConfirmBroadcastModal}
+          centered
+        >
           <Modal.Header closeButton>
-            <Modal.Title>
-              Confirm Broadcast Message
-            </Modal.Title>
+            <Modal.Title>Confirm Broadcast Message</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             Are you sure you want to broadcast this message?
@@ -198,11 +223,14 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
 
         <Modal.Header closeButton>
           <Modal.Title>
-            Broadcast Message<br />
+            Broadcast Message
+            <br />
             <h6>{currEvent.name}</h6>
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ display: "flex", flexDirection: "column", gap: "5px" }} >
+        <Modal.Body
+          style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}
+        >
           <Alert
             show={showRecipientError}
             variant="danger"
@@ -233,7 +261,7 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
             name="broadcastTitle"
             id="broadcastTitle"
             placeholder="Title *"
-            style={{ width: "100%" }}
+            style={{ width: '100%' }}
           />
           <textarea
             required
@@ -241,21 +269,18 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
             name="broadcastMessage"
             id="broadcastMessage"
             placeholder="Broadcast Message *"
-            style={{ width: "100%", height: "10em" }}
+            style={{ width: '100%', height: '10em' }}
           />
-          <br />Please select at least one *
-          <div style={{ display: "flex" }}>
-            <div style={{ display: "flex", width: "50%" }}>
+          <br />
+          Please select at least one *
+          <div style={{ display: 'flex' }}>
+            <div style={{ display: 'flex', width: '50%' }}>
               <Form.Check id="chkBusinessPartner" />
-              <label htmlFor="chkBusinessPartner">
-                All Business Partners
-              </label>
+              <label htmlFor="chkBusinessPartner">All Business Partners</label>
             </div>
-            <div style={{ display: "flex", width: "50%" }}>
+            <div style={{ display: 'flex', width: '50%' }}>
               <Form.Check id="chkAttendee" />
-              <label htmlFor="chkAttendee">
-                All Attendees
-              </label>
+              <label htmlFor="chkAttendee">All Attendees</label>
             </div>
           </div>
         </Modal.Body>
@@ -263,21 +288,22 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
           <Button variant="secondary" onClick={closeBroadcastModal}>
             Close
           </Button>
-          <Button
-            variant="primary"
-            onClick={() => proceedBroadcast()}
-          >
+          <Button variant="primary" onClick={() => proceedBroadcast()}>
             Proceed
           </Button>
         </Modal.Footer>
       </Modal>
 
-      <Col lg={4} sm={6} className="space-mb--50">
+      <Col lg={4} sm={6} className="mb-4">
         <div className="product-list">
           <div className="product-list__image">
             <Link href={`/organiser/events/${currEvent.eid}`}>
               <a>
-                <img src={currEvent.images[0]} alt="event_image" />
+                <img
+                  style={{ maxWidth: '327px' }}
+                  src={currEvent.images[0]}
+                  alt="event_image"
+                />
               </a>
             </Link>
           </div>
@@ -289,8 +315,14 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
                 aria-label="broadcast"
                 color="secondary"
               >
-                <svg style={{ width: "24px", height: "24px" }} viewBox="0 0 24 24">
-                  <path fill="currentColor" d="M12,8H4A2,2 0 0,0 2,10V14A2,2 0 0,0 4,16H5V20A1,1 0 0,0 6,21H8A1,1 0 0,0 9,20V16H12L17,20V4L12,8M21.5,12C21.5,13.71 20.54,15.26 19,16V8C20.53,8.75 21.5,10.3 21.5,12Z" />
+                <svg
+                  style={{ width: '24px', height: '24px' }}
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M12,8H4A2,2 0 0,0 2,10V14A2,2 0 0,0 4,16H5V20A1,1 0 0,0 6,21H8A1,1 0 0,0 9,20V16H12L17,20V4L12,8M21.5,12C21.5,13.71 20.54,15.26 19,16V8C20.53,8.75 21.5,10.3 21.5,12Z"
+                  />
                 </svg>
               </IconButton>
               <IconButton
@@ -311,9 +343,14 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
             <div className="d-flex justify-content-between">
               <div className="product-price">
                 <span className="price">
-                  {' '}
+                  {''}
                   {formatDate(
                     currEvent.eventStartDate,
+                    'eee, dd MMM yyyy, hh:mmaa'
+                  )}{' '}
+                  {'-'}{' '}
+                  {formatDate(
+                    currEvent.eventEndDate,
                     'eee, dd MMM yyyy, hh:mmaa'
                   )}
                 </span>
@@ -321,7 +358,7 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
                 {/* <span className="rating-num"> {`Sales End Date: ${formatDate(event.salesEndDate)}`} </span> */}
               </div>
             </div>
-            <div className="product-description">{currEvent.descriptions}</div>
+            {/* <div className="product-description">{currEvent.descriptions}</div> */}
 
             <div>
               <span className="price">
@@ -331,13 +368,48 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
 
             <div className="d-flex justify-content-between">
               <span className="rating-num">
-                {' '}
-                {`Date: ${formatDate(currEvent.saleStartDate)} ~ ${formatDate(
+                {'Ticket Sales Date:'}
+                {` ${formatDate(currEvent.saleStartDate)} - ${formatDate(
                   currEvent.salesEndDate
                 )}`}{' '}
               </span>
             </div>
-
+            <div>
+              <Row>
+                <Col md={3}>Ticket Sold:</Col>
+                <Col md={9}>
+                  {' '}
+                  <ProgressBar
+                    now={ticketsSold}
+                    label={`${percentageSold}%`}
+                    style={{
+                      width: '50%',
+                      float: 'left',
+                      marginTop: '3px',
+                      marginLeft: '-40px',
+                    }}
+                  />
+                  {ticketsSold}{'/'}{event.ticketCapacity}
+                </Col>
+              </Row>
+            </div>
+            <div>
+              <Row md={4} xs={4}>
+                <Col md={2}>
+                  <HidePopover event={currEvent} createToast={createToast} />
+                </Col>
+                <Col md={2}>
+                  <IconButton
+                    aria-label="vip"
+                    color="secondary"
+                    onClick={() => handleVipToggle(currEvent)}
+                  >
+                    {currEvent.vip ? <StarIcon /> : <StarBorderIcon />}
+                  </IconButton>
+                </Col>
+              </Row>
+            </div>
+            {/* 
             <div className="product-list__actions">
               <ul>
                 {/* <li>
@@ -349,7 +421,7 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
                                     </IconButton>
                                 </li> */}
 
-                {/* <li>
+            {/* <li>
                                     <IconButton aria-label="Hide" color="default" onClick={hideToggle}>
                                         {event.hidden ?
                                             (<VisibilityIcon />) :
@@ -358,8 +430,8 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
                                     </IconButton>
                                 </li> */}
 
-                {/* Handles logic for toggling visibility of events for Business Partners and Attendees */}
-                <li>
+            {/* Handles logic for toggling visibility of events for Business Partners and Attendees */}
+            {/* <li>
                   <HidePopover event={currEvent} createToast={createToast} />
                 </li>
 
@@ -371,16 +443,16 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
                   >
                     {currEvent.vip ? <StarIcon /> : <StarBorderIcon />}
                   </IconButton>
-                </li>
-
+                </li> */}
+            {/* 
                 <ProgressBar
-                  now={60}
-                  label="60%"
+                  now={ticketsSold}
+                  label={`${percentageSold}%`}
                   style={{ width: '50%', float: 'right' }}
                 />
-                {event.ticketCapacity}
-              </ul>
-            </div>
+                {currEvent.ticketCapacity}
+              </ul> */}
+            {/* </div> */}
           </div>
         </div>
       </Col>

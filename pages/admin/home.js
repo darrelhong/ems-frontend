@@ -25,7 +25,6 @@ import 'react-notifications-component/dist/theme.css';
 
 import { store } from 'react-notifications-component';
 
-import { BreadcrumbOne } from 'components/Breadcrumb';
 import CenterSpinner from 'components/custom/CenterSpinner';
 import AdminWrapper from 'components/wrapper/AdminWrapper';
 
@@ -273,6 +272,7 @@ export default function AdminHome() {
       <Container className="space-pt--30 space-pb--30">
         {isLoading && <CenterSpinner />}
         {isSuccess && <p>Your are logged in as {user?.name}.</p>}
+
         {/* <Row>
           <button
             className="btn btn-fill-out btn-sm"
@@ -282,6 +282,7 @@ export default function AdminHome() {
             <AiOutlineNotification />
           </button>
         </Row> */}
+
         <br></br>
         <Row>
           <Col sm={6} lg={4} className="mb-4">

@@ -19,8 +19,13 @@
 
 .item {
   user-select: none;
-  padding: 16px;
+  padding: 8px 16px;
   margin: 0 0 8px 0;
   background: var(--orange);
   border-radius: 5px;
+  box-shadow: 0 1px 0 rgb(9 30 66 / 25%);
+}
+
+.itemGreen {
+  background: var(--green);
 }

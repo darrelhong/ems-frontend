@@ -63,9 +63,11 @@ const ReviewTab = ({ reviews }) => {
                             {review.partner.name}
                           </h6>
                         )}
+
                         <div className="rating">
                           <strong className="product-description">{review.event.name}</strong>
                         </div>
+
                       </p>
                       <div className="description">
                         <p>{review.reviewText}</p>

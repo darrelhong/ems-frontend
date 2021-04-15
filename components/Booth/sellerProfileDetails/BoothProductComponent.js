@@ -9,6 +9,7 @@ import ProductSlider from './newBoothSlider/ProductSlider';
 import { getProductsByBoothId } from 'lib/query/productApi';
 import ProductModal from 'components/Booth/sellerProfileDetails/ProductModal';
 
+
 const BoothProductComponent = ({
   booth,
   createToast,
@@ -27,6 +28,7 @@ const BoothProductComponent = ({
   useEffect(() => {
     setBooth(booth);
     setProducts(booth?.products);
+    console.log(booth);
   }, []);
 
   useEffect(() => {
@@ -37,6 +39,12 @@ const BoothProductComponent = ({
   const setSliderProducts = async (booth) => {
     let fetchedProducts = await getProductsByBoothId(booth?.id);
     setProducts(fetchedProducts);
+  };
+
+  const showProductModal = (status) => {
+    console.log('modal status');
+    console.log(status);
+    setShowAddProductModal(true);
   };
 
   //THIS IS FOR THE OLD PAGINATED STYLE
@@ -64,12 +72,7 @@ const BoothProductComponent = ({
 //   };
 
   return (
-    <Container
-      style={{
-        marginTop: '10%',
-        width: '47%',
-      }}
-    >
+    <Container>
       {booth && (
         <AddProductModal
           sellerProfile={sellerProfile}
@@ -105,15 +108,16 @@ const BoothProductComponent = ({
           justifyContent: 'space-between',
         }}
       >
-        <h4>Booth {booth?.boothNumber}</h4>
-        {isPartner && (
+        {/* <h4>Booth {booth?.boothNumber}</h4> */}
+        <br></br>
+        {/* {isPartner && (
           <IconButton
             color="secondary"
             onClick={() => setShowAddProductModal(true)}
           >
             <IoIosAddCircleOutline style={{ marginBottom: 10 }} />
           </IconButton>
-        )}
+        )} */}
         {/* {isPartner && (
                     <Button
                     variant="danger"
@@ -136,7 +140,14 @@ const BoothProductComponent = ({
                 } */}
       </Row>
 
-      <ProductSlider products={products} setProductToShow={setProductToShow} />
+      <ProductSlider
+        isPartner={isPartner}
+        products={products}
+        setProductToShow={setProductToShow}
+        boothNumber={booth?.boothNumber}
+        boothDesc={booth?.description}
+        showProductModal={showProductModal}
+      />
 
       {/* {!paginatedProducts[0] && (
                 <div
