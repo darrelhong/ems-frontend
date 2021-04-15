@@ -28,22 +28,24 @@ const BusinessPartnerTab = ({
             >
                 {newSellerApplications.length != 0 ? (
                     <ul>
-                        <a
+                        <li>
+                            <a
                             style={{
                                 color: 'red'
                             }}
                             href={`/organiser/events/applications?eid=${event.eid}`}
                             >
-                            <IoMdTrophy />
-                            {' '}{newSellerApplications.length} {' '}new applications
-              </a>
+                           <h6 > <IoMdTrophy />
+                            {' '}{newSellerApplications.length} {' '}new applications </h6>
+                            </a>
+              </li>
                     </ul>
                 )
                     : (
                         <ul>
-                            <li>
+                            <li> <h6>
                                 <IoMdTrophy />
-                No new applications
+                No new applications</h6>
               </li>
                         </ul>
                     )}
@@ -61,11 +63,11 @@ const BusinessPartnerTab = ({
             </div>
             <ul>
                 <li>
-                    <IoMdTrophy />
+                  <h6>  <IoMdTrophy />
                     {/* STILL WRONG */}
             Confirmed booths for your event:{' '}
                     {/* {event.sellerApplications?.length ?? 0} / {event.boothCapacity} */}
-                    {getBoothTotal() ?? 0} / {event.boothCapacity} (Set Capacity)
+                    {getBoothTotal() ?? 0} / {event.boothCapacity} (Set Capacity)</h6>
                 {/* {event.eventBoothTransactions?.length ?? 0} / {event.boothCapacity} */}
                 </li>
             </ul>
@@ -93,7 +95,7 @@ const BusinessPartnerTab = ({
                             className="product-description-tab__details"
                             style={{ textAlign: 'center' }}
                         >
-                            No Partners yet to display!
+                          <h6>No Partners yet to display!</h6>  
                         </div>
                     )
                     }

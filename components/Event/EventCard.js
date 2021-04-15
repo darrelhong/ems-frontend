@@ -253,7 +253,7 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
             onClose={() => setBroadcastSuccess(false)}
             dismissible
           >
-            Broadcast sent!
+            Broadcast sent successfully!
           </Alert>
           <input
             required

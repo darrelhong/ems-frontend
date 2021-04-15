@@ -4,7 +4,7 @@ import EventModal from './elements/EventModalEoProfile';
 import { ProductRating } from '../Product';
 import Badge from 'react-bootstrap/Badge';
 
-const EventGridFiveEOProfile = ({ event, bottomSpace, sliderClass }) => {
+const EventGridFiveEOProfile = ({ event, bottomSpace, sliderClass, eventUser }) => {
   const [modalShow, setModalShow] = useState(false);
   const [colorImage, setColorImage] = useState('');
   return (
@@ -44,7 +44,10 @@ const EventGridFiveEOProfile = ({ event, bottomSpace, sliderClass }) => {
                 // href={`/shop/product-basic/[slug]?slug=${product.slug}`}
                 // as={'/shop/product-basic/' + product.slug}
               > */}
-              <a>{event.name}</a>
+              {eventUser == "guest" && (<Link href={`/public/events/${event?.eid}`}>{event.name}</Link>)}
+              {eventUser == "organiser" && (<Link href={`/organiser/events/${event?.eid}`}>{event.name}</Link>)}
+              {eventUser == "partner" && (<Link href={`/partner/events/${event?.eid}`}>{event.name}</Link>)}
+
               {/* </Link> */}
             </h6>
             <div className="product-price">

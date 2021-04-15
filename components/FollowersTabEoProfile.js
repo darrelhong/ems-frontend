@@ -28,6 +28,7 @@ const FollowersTabEoProfile = ({
   showPublicView,
   organiser,
   showEoView,
+  createToast
 }) => {
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -103,6 +104,7 @@ const FollowersTabEoProfile = ({
   };
 
   const sendNoti = () => {
+
     var endpoint =
       'https://api.ravenhub.io/company/WLU2yLZw9d/broadcasts/ziyDknTScF';
     /* 
@@ -146,24 +148,29 @@ const FollowersTabEoProfile = ({
 
     axios.post(endpoint, postBody, {
       headers: { 'Content-type': 'application/json' },
-    });
+    })
+    .then((response) => {
+      console.log('response' + response);
+    }).catch((error) => {
+      console.log('error');
+      console.log(error);
+  });
+    
 
-    closeConfirmBroadcastModal();
-    closeBroadcastModal();
+   
 
-    store.addNotification({
-      title: 'Success',
-      message:
-        'The broadcast message has been sent out as both system notification and email successfully.',
-      type: 'success',
-      insert: 'top',
-      container: 'top-left',
-      dismiss: {
-        duration: 5000,
-        onScreen: true,
-      },
-    });
-
+    // store.addNotification({
+    //   title: 'Success',
+    //   message:
+    //     'The broadcast message has been sent out as both system notification and email successfully.',
+    //   type: 'success',
+    //   insert: 'top',
+    //   container: 'top-left',
+    //   dismiss: {
+    //     duration: 5000,
+    //     onScreen: true,
+    //   },
+    // });
     console.log('broadcastOption');
     console.log(checkAttendee);
     console.log(checkPartner);
@@ -181,7 +188,11 @@ const FollowersTabEoProfile = ({
     mutateEmailNoti.mutate({
       content: message,
       broadcastOption: emailbroadcastoption,
-    });
+    });     
+    closeConfirmBroadcastModal();
+    closeBroadcastModal();
+    createToast('Broadcast sent successfully!', 'success');
+
   };
 
   const mutateEmailNoti = useMutation((data) => {
@@ -204,6 +215,9 @@ const FollowersTabEoProfile = ({
   if (attendees !== undefined && partners !== undefined) {
     return (
       <div className="product-tab-area space-pb--r70">
+        <head>
+        <script src="https://embed.ravenhub.io/js/app.js"></script>
+        </head>
         {/* broadcast modal */}
 
         {/* confirm broadcast modal */}
@@ -216,7 +230,9 @@ const FollowersTabEoProfile = ({
             <Modal.Title>Confirm Broadcast Message</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            Are you sure you want to broadcast this message?
+            <div> Are you sure you want to broadcast this message?</div>
+           <br></br>
+           <div> {message}</div>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={closeConfirmBroadcastModal}>
@@ -260,12 +276,11 @@ const FollowersTabEoProfile = ({
               className="form-control"
               name="broadcastMessage"
               id="broadcastMessage"
-              placeholder="Type your message here..."
+              placeholder="Broadcast Message *"
               defaultValue={message}
               style={{ width: '100%', height: '10em' }}
               onChange={handleMessage}
             />
-
             <div style={{ display: 'flex' }}>
               {partners.length > 0 && (
                 <div style={{ display: 'flex', width: '50%' }}>
@@ -275,7 +290,7 @@ const FollowersTabEoProfile = ({
                   />
 
                   <label htmlFor="chkBusinessPartner">
-                    All Business Partners
+                    All Business Partners *
                   </label>
                 </div>
               )}
@@ -286,7 +301,7 @@ const FollowersTabEoProfile = ({
                     onClick={handleAttendee.bind(this)}
                   />
 
-                  <label htmlFor="chkAttendee">All Attendees</label>
+                  <label htmlFor="chkAttendee"> All Attendees *</label>
                 </div>
               )}
             </div>
@@ -492,7 +507,7 @@ const FollowersTabEoProfile = ({
                                         href={{
                                           pathname: '/partner/partner-profile',
                                           query: {
-                                            paraId: JSON.stringify(partner?.id),
+                                            localuser: JSON.stringify(partner?.id),
                                           },
                                         }}
                                       >

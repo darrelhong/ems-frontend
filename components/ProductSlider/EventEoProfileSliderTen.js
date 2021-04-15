@@ -2,7 +2,7 @@ import Swiper from 'react-id-swiper';
 import EventGridWrapperFiveEoProfile from '../ProductThumb/EventGridWrapperFiveEoProfile';
 import { useState, useEffect, Fragment } from 'react';
 import EventGridFive from '../ProductThumb/EventGridFiveEoProfile';
-const EventEoProfileSliderTen = ({ events }) => {
+const EventEoProfileSliderTen = ({ events, eventUser }) => {
   // const params = {
   //   loop: false,
   //   slidesPerView: 3,
@@ -72,7 +72,7 @@ const EventEoProfileSliderTen = ({ events }) => {
           <Swiper {...params}>
             {eventlist.map((event) => (
               <div key={event.eid}>
-                {<EventGridFive key={event.eid} event={event} />}
+                {<EventGridFive key={event.eid} event={event} eventUser={eventUser} />}
               </div>
             ))}
           </Swiper>

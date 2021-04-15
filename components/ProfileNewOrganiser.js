@@ -34,7 +34,10 @@ import { BreadcrumbOne } from './Breadcrumb';
 import { AiOutlineNotification } from 'react-icons/ai';
 import ReactNotification from 'react-notifications-component';
 import 'react-notifications-component/dist/theme.css';
+import { useToasts } from 'react-toast-notifications';
+
 const EventOrgProfile = ({ paraId_ }) => {
+  const { addToast, removeToast } = useToasts();
   const [showEoView, setShowEoView] = useState(false);
   const [showPublicView, setShowPublicView] = useState(false);
   const [userRole, setUserRole] = useState('');
@@ -50,6 +53,7 @@ const EventOrgProfile = ({ paraId_ }) => {
   const [followBtn, setFollowBtn] = useState();
   const [reviews, setReviews] = useState();
   const [user, setUser] = useState();
+  const [eventUser, setEventUser] = useState();
   const [enquiryEventList, setEnquiryEventList] = useState([]);
   const [showEnquiryError, setEnquiryError] = useState(false);
   const [showEnquirySuccess, setEnquirySuccess] = useState(false);
@@ -62,6 +66,11 @@ const EventOrgProfile = ({ paraId_ }) => {
   // EVNTORG: 'organiser',
   // BIZPTNR: 'partner',
   // ATND: 'attendee',
+  const createToast = (message, appearanceStyle) => {
+    const toastId = addToast(message, { appearance: appearanceStyle });
+    setTimeout(() => removeToast(toastId), 3000);
+  };
+
   var type;
   var followId;
   const loadOrgPartnerFollowerData = async () => {
@@ -171,7 +180,7 @@ const EventOrgProfile = ({ paraId_ }) => {
           if (data.id != null) {
             if (data.roles[0].roleEnum === 'BIZPTNR') {
               setUserRole('BIZPTNR');
-
+              setEventUser("partner");
               await getEoEventsByIdRoleStatus(
                 paraId_,
                 data.roles[0].roleEnum,
@@ -198,6 +207,8 @@ const EventOrgProfile = ({ paraId_ }) => {
                 setPastEventlist(events);
               });
             } else if (data.roles[0].roleEnum === 'ATND') {
+              setEventUser("attendee");
+
               await getEoEventsByIdRoleStatus(
                 paraId_,
                 data.roles[0].roleEnum,
@@ -249,6 +260,8 @@ const EventOrgProfile = ({ paraId_ }) => {
               data.roles[0].roleEnum === 'EVNTORG' &&
               data.id != paraId_
             ) {
+              setEventUser("organiser");
+
               await getEoEventsByIdRoleStatus(
                 paraId_,
                 data.roles[0].roleEnum,
@@ -290,6 +303,8 @@ const EventOrgProfile = ({ paraId_ }) => {
               data.roles[0].roleEnum === 'EVNTORG' &&
               data.id == paraId_
             ) {
+              setEventUser("organiser");
+
               await getEoEventsByIdRoleStatus(
                 paraId_,
                 data.roles[0].roleEnum,
@@ -329,6 +344,8 @@ const EventOrgProfile = ({ paraId_ }) => {
       };
       loadUserData();
     } else if (localStorage.getItem('userId') == null) {
+      setEventUser("guest");
+
       const loadGuestData = async () => {
         await getEoEventsByIdRoleStatus(paraId_, 'guest', 'current').then(
           (events) => {
@@ -367,16 +384,9 @@ const EventOrgProfile = ({ paraId_ }) => {
       setPartnerFollowers(followers);
     });
   };
-
-  const mutateFollowAsBP = useMutation((data) =>
-    api
-      .post('/api/partner/followEO', data)
-      .then((response) => {
-        setUnfollowBtn(true);
-        setFollowBtn(false);
-        getRefreshedFollowers();
-        console.log('user ' + user);
-        let endpoint =
+const sendNoti = (data)=>{
+  
+  let endpoint =
           'https://api.ravenhub.io/company/WLU2yLZw9d/subscribers/organiser' +
           data.id +
           '/events/SyTpyGmjrT';
@@ -387,8 +397,40 @@ const EventOrgProfile = ({ paraId_ }) => {
           {
             headers: { 'Content-type': 'application/json' },
           }
-        );
-      })
+        ).then((response) => {
+          console.log('response' + response);
+        }).catch((error) => {
+          console.log(error);
+        });
+}
+
+  const mutateFollowAsBP = useMutation((data) =>
+    api
+      .post('/api/partner/followEO', data)
+      .then((response) => {
+        setUnfollowBtn(true);
+        setFollowBtn(false);
+        getRefreshedFollowers();
+        console.log('user ' + user);
+        sendNoti(data);
+        // let endpoint =
+        //   'https://api.ravenhub.io/company/WLU2yLZw9d/subscribers/organiser' +
+        //   data.id +
+        //   '/events/SyTpyGmjrT';
+
+        // axios.post(
+        //   endpoint,
+        //   { person: user },
+        //   {
+        //     headers: { 'Content-type': 'application/json' },
+        //   }
+        // ).then((response) => {
+        //   console.log('response' + response);
+        // }).catch((error) => {
+        //   console.log(error);
+        // });
+        })
+      
       .catch((error) => {
         console.log(error);
       })
@@ -426,7 +468,11 @@ const EventOrgProfile = ({ paraId_ }) => {
           {
             headers: { 'Content-type': 'application/json' },
           }
-        );
+        ).then((response) => {
+        console.log('response' + response);
+      }).catch((error) => {
+        console.log(error);
+      });
       })
       .catch((error) => {
         console.log(error);
@@ -441,9 +487,7 @@ const EventOrgProfile = ({ paraId_ }) => {
         setFollowBtn(true);
         getRefreshedFollowers();
       })
-      .catch((error) => {
-        console.log(error);
-      })
+      
   );
 
   const handleFollow = async () => {
@@ -511,6 +555,7 @@ const EventOrgProfile = ({ paraId_ }) => {
               setEnquirySuccess(true);
               setSendEnquiryLoading(false);
               clearEnquiryForm();
+              createToast('Enquiry submitted successfully', 'success');
             })
             .catch((error) => {
               console.log(error);
@@ -702,6 +747,8 @@ const EventOrgProfile = ({ paraId_ }) => {
                           <EventTabOne
                             current={currenteventlist}
                             past={pasteventlist}
+                            eventUser={eventUser}
+
                           />
                         )}
                         {userRole !== 'BIZPTNR' && (
@@ -710,6 +757,7 @@ const EventOrgProfile = ({ paraId_ }) => {
                               current={currenteventlist}
                               upcoming={upcomingeventlist}
                               past={pasteventlist}
+                              eventUser={eventUser}
                             />
                           </div>
                         )}
@@ -734,6 +782,7 @@ const EventOrgProfile = ({ paraId_ }) => {
                             showPublicView={showPublicView}
                             organiser={eventorganiser?.name}
                             showEoView={showEoView}
+                            createToast={createToast}
                           />
                         </div>
                       </ul>
@@ -830,71 +879,6 @@ const EventOrgProfile = ({ paraId_ }) => {
             </Card>
           </Col>
 
-       {/* {Boolean(currentUserId_ != paraId_ & currentUserRole_ != "Organiser") && ( */}
-{/* //             <Col xs={12} style={{marginTop: "30px", marginBottom: "30px"}}>
-//               <Card className="card-user">
-//                 <CardHeader className="text-center">
-//                   <h4>Have some questions?</h4>
-//                 </CardHeader>
-//                 <CardBody className="d-flex justify-content-center">
-//                   <Row className="w-100 d-flex justify-content-center">
-//                     <Col xs={12} lg={6} className="d-flex flex-column" style={{gap: "10px"}}>
-//                       <Alert */}
-{/* //                         show={showEnquiryError}
-//                         variant="danger"
-//                         onClose={() => setEnquiryError(false)}
-//                         dismissible
-//                       >
-//                         Please fill in all the required fields.
-//                       </Alert>
-//                       <Alert */}
-{/* //                         show={showEnquirySuccess}
-//                         variant="success"
-//                         onClose={() => setEnquirySuccess(false)}
-//                         dismissible
-//                       >
-//                         Success! A copy of the enquiry has been sent to your email.
-//                       </Alert>
-//                       <input */}
-{/* //                         id="enquiryTitle"
-//                         className="form-control"
-//                         placeholder="Title *"
-//                       />
-//                       <select */}
-{/* //                         className="custom-select"
-//                         id="enquiryEvent"
-//                       >
-//                         <option value="none">Event</option>
-//                         {(enquiryEventList != null || */}
-{/* //                           enquiryEventList != undefined) &&
-//                           enquiryEventList.map((event) => { */}
-{/* //                             return (
-//                               <option value={event.eid}>
-//                                 {event.name}
-//                               </option>
-//                             );
-//                           })}
-//                       </select>
-//                       <textarea */}
-{/* //                         id="enquiryMessage"
-//                         className="form-control"
-//                         placeholder="Your Enquiry *"
-//                         style={{height: "10em"}}
-//                       />
-//                       <ButtonWithLoading */}
-{/* //                         className="btn btn-fill-out"
-//                         onClick={() => sendEnquiry()}
-//                         isLoading={sendEnquiryLoading && !showEnquiryError}
-//                       >
-//                         Send Enquiry
-//                       </ButtonWithLoading>
-//                     </Col>
-//                   </Row> */}
-{/* //                 </CardBody>
-//               </Card>
-//             </Col> */}
-{/* //           )}
-// >>>>>>> main */}
         </Row>
         <br></br>
         {showEnquiry && (

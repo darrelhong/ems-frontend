@@ -4,7 +4,7 @@ import Nav from 'react-bootstrap/Nav';
 import EventBpProfileSliderTen from './ProductSlider/EventBpProfileSlider';
 import { useEffect, useState } from 'react';
 
-const EventTabOne = ({ current,  past }) => {
+const EventTabOne = ({ current,  past, eventUser }) => {
   const [showNoCurrentMsg, setShowNoCurrentMsg] = useState(false);
   const [showNoPastMsg, setShowNoPastMsg] = useState(false);
 
@@ -38,7 +38,7 @@ const EventTabOne = ({ current,  past }) => {
               <Tab.Pane eventKey="current">
                 <Row>
                   <Col md={12}>
-                    <EventBpProfileSliderTen events={current} />
+                    <EventBpProfileSliderTen events={current} eventUser={eventUser} />
                   </Col>
                 </Row>
                 {showNoCurrentMsg && (
@@ -49,7 +49,7 @@ const EventTabOne = ({ current,  past }) => {
               <Tab.Pane eventKey="past">
                 <Row>
                   <Col md={12}>
-                    <EventBpProfileSliderTen events={past} />
+                    <EventBpProfileSliderTen events={past} eventUser={eventUser} />
                   </Col>
                 </Row>
                 {showNoPastMsg && (

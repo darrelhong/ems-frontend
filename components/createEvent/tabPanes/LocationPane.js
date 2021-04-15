@@ -3,6 +3,7 @@ import { Row, Col } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import PropTypes from 'prop-types';
 
+import Link from 'next/link';
 
 
 
@@ -99,7 +100,7 @@ const LocationPane = ({ register, watch, physical, setPhysical, errors, location
                     value={false}
                     checked={physical == false}
                     onChange={() => setPhysical(false)}
-                    style={{ marginRight: 5 }}
+                    style={{ marginRight: 5}}
                   />
                   No
                 </label>
@@ -149,23 +150,30 @@ const LocationPane = ({ register, watch, physical, setPhysical, errors, location
                 </span>
               )}
             </Col>
-            <Col className="form-group" md={12}>
-              {physical && (<div> <span>Website: </span> <a href={website}> {website ?? 'Not available'} </a></div> 
-              )}
-            </Col>
+            {/* <Col className="form-group" md={12}>
+              {physical && (query !== "" && query !== null && query !== undefined) && (<h6 style={{color:"#ff324d"}}>Location Information </h6>)}
 
-            <Col className="form-group" md={12}>
-              {/* <span>{website}</span> */}
-              {physical && (<span>Phone Number: {phone ?? 'Not available'}</span>)}
+            </Col> */}
+           <Col className="form-group" md={12}>
+            <Row className="form-group">
 
-              {/* <span>{phone}</span> */}
+              <Col className="form-group" md={6}>
 
-            </Col>
-            {/* {watch('isPhysical') ? (
-              <h1>{watch('isPhysical')}</h1>
-            ) : (
-                <h1>{watch('isPhysical')}</h1>
-              )} */}
+                {physical && (query !== "" && query !== null  && query !== undefined) && (<div><h6 style={{textAlign:"left"}}>
+                  Website of Location:</h6>
+                  {/* <Link href={website}> */}
+                    <a href={website} className="hover-effect">{website ?? 'Not available'}</a>
+                  {/* </Link> */}
+                </div>
+                )}
+              </Col>
+
+              <Col className="form-group" md={6}>
+                {physical && (query !== "" && query !== null  && query !== undefined) && (<div><h6>Phone Number: (+65)</h6> 
+                    <span> {phone ?? 'Not available'} </span> </div>)}
+
+              </Col>
+            </Row></Col>
           </Row>
         </div>
       </Card.Body>

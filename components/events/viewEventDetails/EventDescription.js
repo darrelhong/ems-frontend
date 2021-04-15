@@ -50,19 +50,19 @@ const EventDescription = ({
     'Computers',
     'Legal & Financial',
     'Automotive',
-  ];
+  ]; 
+  const [errorMessage, setErrorMessage] = useState('');
+
   const [deleteModalShow, setDeleteModalShow] = useState(false);
   const closeModal = () => setDeleteModalShow(false);
   const openModal = () => setDeleteModalShow(true);
   const [confirmBroadcastModalShow, setConfirmBroadcastModalShow] = useState(
     false
   );
-  const closeConfirmBroadcastModal = () => setConfirmBroadcastModalShow(false);
+  const closeConfirmBroadcastModal = () => {setConfirmBroadcastModalShow(false); setBroadcastModalShow(true);};
   const openConfirmBroadcastModal = () => setConfirmBroadcastModalShow(true);
 
-  const [showRecipientError, setRecipientError] = useState(false);
-  const [showBroadcastError, setBroadcastError] = useState(false);
-  const [showBroadcastSuccess, setBroadcastSuccess] = useState(false);
+ 
 
   const deleteCancelButton = () => {
     if (event.eventStatus == 'CANCELLED') {
@@ -102,8 +102,9 @@ const EventDescription = ({
           // onClick={() => handleDelete(event)}
           className="btn btn-fill-out btn-addtocart space-ml--10"
           style={{ marginLeft: 'auto', marginRight: 'auto' }}
+          size="sm"
         >
-          <i className="icon-basket-loaded" /> Delete Event
+          <IoIosTrash/> Delete Event
         </button>
       );
     } else {
@@ -114,8 +115,9 @@ const EventDescription = ({
           // onClick={() => handleCancel(event)}
           className="btn btn-fill-out btn-addtocart space-ml--10"
           style={{ marginLeft: 'auto', marginRight: 'auto' }}
+          size="sm"
         >
-          <i className="icon-basket-loaded" /> Cancel Event
+          <IoIosTrash/> Cancel Event
         </button>
       );
     }
@@ -127,30 +129,27 @@ const EventDescription = ({
     let chkBusinessPartner = document.getElementById('chkBusinessPartner');
     let chkAttendee = document.getElementById('chkAttendee');
 
-    if (!chkBusinessPartner.checked && !chkAttendee.checked) {
-      setRecipientError(true);
-    } else {
-      setRecipientError(false);
-    }
-    if (broadcastTitle == '' || broadcastMessage == '') {
-      setBroadcastError(true);
-    } else {
-      setBroadcastError(false);
-    }
-    if (
-      (chkBusinessPartner.checked || chkAttendee.checked) &&
-      broadcastTitle != '' &&
-      broadcastMessage != ''
-    ) {
+    // if (!chkBusinessPartner.checked && !chkAttendee.checked) {
+    //   setRecipientError(true);
+    // } else {
+    //   setRecipientError(false);
+    // }
+    if (broadcastTitle == '' || broadcastMessage == '' || (!chkBusinessPartner.checked && !chkAttendee.checked)) {
+      setErrorMessage('Please ensure that all fields are filled.');
+    }else{
+     
+      setErrorMessage('null');
       openConfirmBroadcastModal();
-      setRecipientError(false);
-      setBroadcastError(false);
+      closeBroadcastModal();
+    
     }
-  }
+    
+  
+}
 
   function broadcastNotification(currEvent) {
     closeConfirmBroadcastModal();
-
+    closeBroadcastModal();
     // get user inputs
     let broadcastTitle = document.getElementById('broadcastTitle').value;
     let broadcastMessage = document.getElementById('broadcastMessage').value;
@@ -177,7 +176,7 @@ const EventDescription = ({
     api
       .post('/api/organiser/broadcastEmailEnquiry', data)
       .then(() => {
-        setBroadcastSuccess(true);
+        // setBroadcastSuccess(true);
         clearBroadcastForm();
       })
       .catch((error) => {
@@ -200,7 +199,7 @@ const EventDescription = ({
   return (
     <div className="product-content">
       {/* broadcast modal */}
-      <Modal show={broadcastModalShow} onHide={closeBroadcastModal} centered>
+      {/* <Modal show={broadcastModalShow} onHide={closeBroadcastModal} centered> */}
         {/* confirm broadcast modal */}
         <Modal
           show={confirmBroadcastModalShow}
@@ -217,18 +216,20 @@ const EventDescription = ({
             <Button variant="secondary" onClick={closeConfirmBroadcastModal}>
               No
             </Button>
-            <Button
+            <button
               variant="primary"
+              className="btn btn-fill-out"
               onClick={() => broadcastNotification(event)}
             >
               Yes
-            </Button>
+            </button>
           </Modal.Footer>
         </Modal>
+        <Modal show={broadcastModalShow} onHide={closeBroadcastModal} centered>
 
         <Modal.Header closeButton>
           <Modal.Title>
-            Broadcast Message
+            Broadcast Message to Participants
             <br />
             <h6>{event.name}</h6>
           </Modal.Title>
@@ -236,7 +237,7 @@ const EventDescription = ({
         <Modal.Body
           style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}
         >
-          <Alert
+          {/* <Alert
             show={showRecipientError}
             variant="danger"
             onClose={() => setRecipientError(false)}
@@ -259,7 +260,7 @@ const EventDescription = ({
             dismissible
           >
             Broadcast sent!
-          </Alert>
+          </Alert> */}
           <input
             required
             className="form-control"
@@ -277,7 +278,7 @@ const EventDescription = ({
             style={{ width: '100%', height: '10em' }}
           />
           <br />
-          Please select at least one *
+          Please select at least one group of participants*
           <div style={{ display: 'flex' }}>
             <div style={{ display: 'flex', width: '50%' }}>
               <Form.Check id="chkBusinessPartner" />
@@ -288,14 +289,17 @@ const EventDescription = ({
               <label htmlFor="chkAttendee">All Attendees</label>
             </div>
           </div>
+          <div className="error">
+              {errorMessage != 'null' && <span>{errorMessage}</span>}
+            </div>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={closeBroadcastModal}>
             Close
           </Button>
-          <Button variant="primary" onClick={() => proceedBroadcast()}>
+          <button variant="primary" className="btn btn-fill-out" onClick={() => proceedBroadcast()}>
             Proceed
-          </Button>
+          </button>
         </Modal.Footer>
       </Modal>
 
