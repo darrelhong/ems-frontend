@@ -39,7 +39,7 @@ const DetailContainer = ({
           {sellerProfile?.businessPartner?.profilePic ? (
             <Image
               className="profile-image"
-              src={partner?.profilePic}
+              src={sellerProfile?.businessPartner?.profilePic}
               thumbnail
             />
           ) : (
