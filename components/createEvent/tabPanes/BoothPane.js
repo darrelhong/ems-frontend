@@ -46,6 +46,24 @@ const BoothPane = ({
               )}
             </Col>
             <Col className="form-group" md={12}>
+              <label>
+                Booth Price - How much per booth? (SGD)
+                <span className="required">*</span>
+              </label>
+              <input
+                className="form-control"
+                name="boothPrice"
+                step="0.1"
+                type="number"
+                ref={register({ required: true })}
+              />
+              {errors.boothPrice && (
+                <span role="alert" style={{ color: 'red' }}>
+                  This field is required
+                </span>
+              )}
+            </Col>
+            <Col className="form-group" md={12}>
               <label
               //  style={{marginBottom:'10%'}}
               >

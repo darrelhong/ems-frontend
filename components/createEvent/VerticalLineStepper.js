@@ -83,7 +83,7 @@ const VerticalLinearStepper = ({
             errors.salesEndDate)
         );
       case 3:
-        return errors.boothCapacity;
+        return errors.boothCapacity || errors.boothPrice;
       case 4:
         return errors.vip || errors.hideOptions;
     }
