@@ -5,7 +5,7 @@ import {
   partnerLikeEvent,
   partnerUnlikeEvent,
 } from '../../../lib/query/events';
-import { Card, Badge, Button, Modal } from 'react-bootstrap';
+import { Card, Badge, Button, Modal,Row,Col } from 'react-bootstrap';
 import useFavouriteEventMutation from 'lib/query/useFavouriteEventMutation';
 import styles from './EventCard.module.css';
 import IconButton from '@material-ui/core/IconButton';
@@ -292,19 +292,18 @@ export default function EventCard({ event, user }) {
 
       <Modal show={reviewModalShow} onHide={closeReviewModal} centered>
         <Modal.Header closeButton>
-          <Modal.Title>
-            Review/Rating
-          </Modal.Title>
+          <Modal.Title>Review/Rating</Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ display: "flex", flexDirection: "column", gap: "5px" }} >
+        <Modal.Body
+          style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}
+        >
           <div className="product-content__rating-wrap">
             <div className="product-content__rating">
               <Rating
                 emptySymbol={<FaRegStar className="yellow" />}
                 fullSymbol={<FaStar className="yellow" />}
-
                 initialRating={rating}
-                onClick={rate => setRating(rate)}
+                onClick={(rate) => setRating(rate)}
               />
             </div>
           </div>
@@ -314,11 +313,11 @@ export default function EventCard({ event, user }) {
             name="reviewMessage"
             id="reviewMessage"
             placeholder="Type your review here..."
-            style={{ width: "100%", height: "10em" }}
+            style={{ width: '100%', height: '10em' }}
             onChange={handleMessage}
           />
           <div className="error">
-            {errorMessage != "null" && <span>{errorMessage}</span>}
+            {errorMessage != 'null' && <span>{errorMessage}</span>}
           </div>
         </Modal.Body>
         <Modal.Footer>
@@ -336,17 +335,21 @@ export default function EventCard({ event, user }) {
       </Modal>
 
       <Card
-        className={`h-100 ${styles.eventCard}`}
+        className={`h-100 ${styles.eventCard} d-flex`}
         style={{
           transition: 'all 0.3s ease',
           ':hover': {
             boxShadow: '2px 1px 8px -3px rgb(0 0 0 / 30%)',
           },
+          minHeight: '405px',
+          marginBottom: '0px',
         }}
       >
         <RegisterModal
           showRegisterModal={showRegisterModal}
-          closeRegisterModal={() => { setShowRegisterModal(false) }}
+          closeRegisterModal={() => {
+            setShowRegisterModal(false);
+          }}
           event={event}
           boothTotal={boothTotal}
           bpId={user.id}
@@ -374,11 +377,14 @@ export default function EventCard({ event, user }) {
         </Badge>
         <Card.Body className="d-flex flex-column">
           <Link href={`/partner/events/${event.eid}`}>
-            <Card.Title>{event.name}</Card.Title>
+            <div>
+              <Card.Title style={{ flex: '1' }}>{event.name}</Card.Title>
+            </div>
           </Link>
           {/* <Card.Text className="line-clamp">{event?.descriptions}</Card.Text> */}
           <Card.Text className="text-default mt-auto">
             {format(parseISO(event.eventStartDate), 'eee, dd MMM yy hh:mmbbb')}
+
             <div className="mb-0 mr-0">
               <span style={{ float: 'right' }}>
                 <IconButton
@@ -391,22 +397,42 @@ export default function EventCard({ event, user }) {
                   {inFav ? <FavoriteIcon /> : <FavoriteBorderIcon />}
                 </IconButton>
               </span>
+              <br></br>
               <span style={{ float: 'left' }}>
-                {badgeStatus == "" && <Button size="sm" onClick={(e) => applyEvent(e)} variant="danger">Apply</Button>}
+                {badgeStatus == '' && (
+                  <Button
+                    style={{ padding: '5px 25px' }}
+                    size="sm"
+                    onClick={(e) => applyEvent(e)}
+                    variant="danger"
+                  >
+                    Apply
+                  </Button>
+                )}
                 {/* {badgeStatus == "Confirmed" && <Button size="sm" variant="danger" disabled="true">Apply</Button>}
                 {badgeStatus == "Pending Payment" && <Button size="sm" variant="danger" disabled="true">Apply</Button>} */}
-                {disabledStatuses.includes(badgeStatus) && <Button size="sm" variant="danger" disabled="true">Apply</Button>}
+                {disabledStatuses.includes(badgeStatus) && (
+                  <Button
+                    size="sm"
+                    variant="danger"
+                    disabled="true"
+                    Button
+                    style={{ padding: '5px 25px' }}
+                  >
+                    Apply
+                  </Button>
+                )}
                 {/* {badgeStatus == "Past" && <Button size="sm" onClick={() => openReviewModal()} variant="danger">Rate</Button>} */}
+
                 {badgeStatus == "Past" && <div className="product-content__rating">
                   <Rating style={{ marginTop: '40%' }}
                     emptySymbol={<FaRegStar size={22} className="yellow" />}
                     fullSymbol={<FaStar size={22} className="yellow" />}
                     initialRating={rating} onClick={(rate) => clickRating(rate)} />
                 </div>
-                }
+                
               </span>
             </div>
-
           </Card.Text>
           {/* <div className="d-flex align-items-baseline mt-auto">
           <Card.Text className="text-default mb-0">
