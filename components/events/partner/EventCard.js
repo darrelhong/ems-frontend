@@ -423,14 +423,14 @@ export default function EventCard({ event, user }) {
                   </Button>
                 )}
                 {/* {badgeStatus == "Past" && <Button size="sm" onClick={() => openReviewModal()} variant="danger">Rate</Button>} */}
-                {badgeStatus == 'Past' && (
-                  <Rating
-                    emptySymbol={<FaRegStar className="yellow" />}
-                    fullSymbol={<FaStar className="yellow" />}
-                    initialRating={rating}
-                    onClick={(rate) => clickRating(rate)}
-                  />
-                )}
+
+                {badgeStatus == "Past" && <div className="product-content__rating">
+                  <Rating style={{ marginTop: '40%' }}
+                    emptySymbol={<FaRegStar size={22} className="yellow" />}
+                    fullSymbol={<FaStar size={22} className="yellow" />}
+                    initialRating={rating} onClick={(rate) => clickRating(rate)} />
+                </div>
+                
               </span>
             </div>
           </Card.Text>

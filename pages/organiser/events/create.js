@@ -86,6 +86,7 @@ const CreateEvent = () => {
       eventStartDate,
       eventEndDate,
       boothCapacity,
+      boothPrice,
       ticketPrice,
       ticketCapacity,
       saleStartDate,
@@ -105,6 +106,7 @@ const CreateEvent = () => {
     setValue('eventStartDate', eventStartDate);
     // setValue("eventStartDate","10-10-2010 11:11:00");
     setValue('eventEndDate', eventEndDate);
+    setValue('boothPrice', boothPrice);
     setValue('boothCapacity', boothCapacity);
     setsellingTicket(sellingTicket);
     setValue('ticketPrice', ticketPrice);
