@@ -13,6 +13,7 @@ const ProductSlider = ({
   boothNumber,
   boothDesc,
   showProductModal,
+  isPartner,
 }) => {
   const params = {
     slidesPerView: 1,
@@ -31,19 +32,26 @@ const ProductSlider = ({
   
   return (
     <Fragment>
-      
       <Row>
         <Col xs={8} md={8}>
           <div>
             <h4>Booth {boothNumber}</h4>
             <p>{boothDesc}</p>
-            <button className="btn btn-fill-out btn-sm" onClick={()=>showProductModal(true)}>
-              Add Product
-            </button>
+            {isPartner && (
+              <button
+                className="btn btn-fill-out btn-sm"
+                onClick={() => showProductModal(true)}
+              >
+                Add Product
+              </button>
+            )}
           </div>
         </Col>
         <Col xs={4} md={4}>
-          <div className="product-slider-wrap product-slider-wrap--custom-bullet" style={{maxWidth:'300px'}}>
+          <div
+            className="product-slider-wrap product-slider-wrap--custom-bullet"
+            style={{ maxWidth: '300px' }}
+          >
             {products?.length > 0 && (
               <Swiper {...params}>
                 {products.map((product) => (

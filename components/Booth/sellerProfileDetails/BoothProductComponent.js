@@ -141,6 +141,7 @@ const BoothProductComponent = ({
       </Row>
 
       <ProductSlider
+        isPartner={isPartner}
         products={products}
         setProductToShow={setProductToShow}
         boothNumber={booth?.boothNumber}
