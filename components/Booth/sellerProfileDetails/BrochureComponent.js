@@ -44,7 +44,11 @@ const BrochureComponent = ({ sellerProfile, isPartner,setSellerProfile, createTo
           </Modal.Header>
           <Modal.Body>Are you sure you want to delete the brochure?</Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose} className="btn-sm">
+            <Button
+              variant="secondary"
+              onClick={handleClose}
+              className="btn-sm"
+            >
               No
             </Button>
             <button className="btn btn-fill-out btn-sm" onClick={handleRemove}>
@@ -99,23 +103,38 @@ const BrochureComponent = ({ sellerProfile, isPartner,setSellerProfile, createTo
         >
           {sellerProfile.brochureImages &&
             sellerProfile.brochureImages.map((image, index) => (
+           
               <div
                 style={{
                   flexDirection: 'row',
                   marginRight: '5%',
+                  marginBottom:'1%'
                 }}
               >
-                <Col md={12}>
-                  <img src={image} style={{ position: 'relative' }} />
-                  <button
-                    type="button"
-                    className="close"
-                    style={{ right: '0px', position: 'absolute', zIndex: '1' }}
-                    onClick={() => handleShow(sellerProfile?.id, image)}
-                  >
-                    <span>&times;</span>
-                  </button>
-                </Col>
+                {!isPartner && (
+                  <Col md={12}>
+                    <img src={image} style={{ position: 'relative' }} />
+                  </Col>
+                )}
+
+                {isPartner && (
+                  <Col md={12}>
+                    <img src={image} style={{ position: 'relative' }} />
+                    <button
+                      type="button"
+                      className="close"
+                      style={{
+                        right: '0px',
+                        position: 'absolute',
+                        zIndex: '1',
+                      }}
+                      onClick={() => handleShow(sellerProfile?.id, image)}
+                    >
+                      <span>&times;</span>
+                    </button>
+                  </Col>
+                )}
+
                 {/* <Image
                   // className="close"
                   // className="profile-image"
@@ -129,6 +148,7 @@ const BrochureComponent = ({ sellerProfile, isPartner,setSellerProfile, createTo
                   }}
                 /> */}
               </div>
+                
             ))}
         </Col>
       </Container>
