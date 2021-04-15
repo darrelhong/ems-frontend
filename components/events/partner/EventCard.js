@@ -341,7 +341,7 @@ export default function EventCard({ event, user }) {
           ':hover': {
             boxShadow: '2px 1px 8px -3px rgb(0 0 0 / 30%)',
           },
-          minHeight: '405px',
+          minHeight: '400px',
           marginBottom: '0px',
         }}
       >
@@ -377,62 +377,70 @@ export default function EventCard({ event, user }) {
         </Badge>
         <Card.Body className="d-flex flex-column">
           <Link href={`/partner/events/${event.eid}`}>
-            <div>
-              <Card.Title style={{ flex: '1' }}>{event.name}</Card.Title>
-            </div>
+            <Card.Title>
+              {event.name}
+            </Card.Title>
           </Link>
           {/* <Card.Text className="line-clamp">{event?.descriptions}</Card.Text> */}
           <Card.Text className="text-default mt-auto">
             {format(parseISO(event.eventStartDate), 'eee, dd MMM yy hh:mmbbb')}
 
-            <div className="mb-0 mr-0">
-              <span style={{ float: 'right' }}>
-                <IconButton
-                  aria-label="fav"
-                  color="secondary"
-                  onClick={(e) => {
-                    toggleLike(e);
-                  }}
-                >
-                  {inFav ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-                </IconButton>
-              </span>
-              <br></br>
-              <span style={{ float: 'left' }}>
-                {badgeStatus == '' && (
-                  <Button
-                    style={{ padding: '5px 25px' }}
-                    size="sm"
-                    onClick={(e) => applyEvent(e)}
-                    variant="danger"
-                  >
-                    Apply
-                  </Button>
-                )}
-                {/* {badgeStatus == "Confirmed" && <Button size="sm" variant="danger" disabled="true">Apply</Button>}
+            <div className="mb-0 mr-0 mt-2">
+              <Row>
+                <Col>
+                  <span>
+                    {badgeStatus == '' && (
+                      <Button
+                        style={{ padding: '5px 25px' }}
+                        size="sm"
+                        onClick={(e) => applyEvent(e)}
+                        variant="danger"
+                      >
+                        Apply
+                      </Button>
+                    )}
+                    {/* {badgeStatus == "Confirmed" && <Button size="sm" variant="danger" disabled="true">Apply</Button>}
                 {badgeStatus == "Pending Payment" && <Button size="sm" variant="danger" disabled="true">Apply</Button>} */}
-                {disabledStatuses.includes(badgeStatus) && (
-                  <Button
-                    size="sm"
-                    variant="danger"
-                    disabled="true"
-                    Button
-                    style={{ padding: '5px 25px' }}
-                  >
-                    Apply
-                  </Button>
-                )}
-                {/* {badgeStatus == "Past" && <Button size="sm" onClick={() => openReviewModal()} variant="danger">Rate</Button>} */}
+                    {disabledStatuses.includes(badgeStatus) && (
+                      <Button
+                        size="sm"
+                        variant="danger"
+                        disabled="true"
+                        Button
+                        style={{ padding: '5px 25px' }}
+                      >
+                        Apply
+                      </Button>
+                    )}
+                  </span>
+                </Col>
 
-                {badgeStatus == "Past" && <div className="product-content__rating">
-                  <Rating style={{ marginTop: '40%' }}
-                    emptySymbol={<FaRegStar size={22} className="yellow" />}
-                    fullSymbol={<FaStar size={22} className="yellow" />}
-                    initialRating={rating} onClick={(rate) => clickRating(rate)} />
-                </div>
-                
-              </span>
+                <Col>
+                  <span style={{ float: 'right' }}>
+                    <IconButton
+                      aria-label="fav"
+                      color="secondary"
+                      onClick={(e) => {
+                        toggleLike(e);
+                      }}
+                    >
+                      {inFav ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+                    </IconButton>
+                  </span>
+                </Col>
+              </Row>
+              {/* {badgeStatus == "Past" && <Button size="sm" onClick={() => openReviewModal()} variant="danger">Rate</Button>} */}
             </div>
+            {badgeStatus == 'Past' && (
+              <div className="product-content__rating">
+                <Rating
+                  emptySymbol={<FaRegStar size={22} className="yellow" />}
+                  fullSymbol={<FaStar size={22} className="yellow" />}
+                  initialRating={rating}
+                  onClick={(rate) => clickRating(rate)}
+                />
+              </div>
+            )}
           </Card.Text>
           {/* <div className="d-flex align-items-baseline mt-auto">
           <Card.Text className="text-default mb-0">
