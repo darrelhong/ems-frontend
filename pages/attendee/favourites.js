@@ -33,6 +33,8 @@ export default function AttendeeFavouriteEvents() {
           <CenterSpinner />
         ) : status === 'error' ? (
           <Alert variant="danger">An error has occured</Alert>
+        ) : data.length === 0 ? (
+          <h4>No favourites yet!</h4>
         ) : (
           <ListGroup variant="flush">
             {data.map(({ eid, name, descriptions }) => (

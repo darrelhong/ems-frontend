@@ -5,7 +5,7 @@ import { format, parseISO } from 'date-fns';
 
 export default function TicketCard({ ticket }) {
   return (
-    <Card bg="light" border="light" className="h-100">
+    <Card bg="light" className="h-100">
       <Card.Header>ID: {ticket.id}</Card.Header>
       <Card.Body>
         <Card.Title>

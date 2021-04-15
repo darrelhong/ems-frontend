@@ -39,7 +39,6 @@ export default function AttendeeEventTicketing({ id }) {
   const [clientSecret, setClientSecret] = useState('');
   const [checkoutResponse, setCheckoutResponse] = useState();
   const [paymentCompleteResp, setPaymentCompleteResp] = useState();
-  console.log(view)
   const { mutate: checkout, isError, isLoading } = useMutation(
     (data) => api.post('/api/ticketing/checkout', data),
     {
@@ -278,7 +277,7 @@ export default function AttendeeEventTicketing({ id }) {
                         <Row className="mt-3">
                           {paymentCompleteResp.map((ticket) => (
                             <Col md={6} key={ticket.id} className="mb-4">
-                              <Card bg="light" border="light">
+                              <Card bg="light">
                                 <Card.Header>ID: {ticket.id}</Card.Header>
                                 <Card.Body>
                                   <Card.Title>{ticket.event.name}</Card.Title>
