@@ -1,25 +1,81 @@
-import { Modal, Button, Row, Col, Container } from 'react-bootstrap';
+import { Alert, Modal, Button, Row, Col, Container } from 'react-bootstrap';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import { useState, useEffect } from 'react';
-import usePaymentMethods from 'lib/query/usePaymentMethods';
+import { useState, useEffect, Fragment } from 'react';
+import { useMutation } from 'react-query';
+import usePaymentMethods from 'lib/query/usePaymentMethodsBP';
 import PaymentView from 'components/custom/ticketing/PaymentView';
 import CreditCardIcon from 'components/custom/CreditCardIcon';
 import { formatter } from 'lib/util/currency';
+import ButtonWithLoading from 'components/custom/ButtonWithLoading';
+import api from 'lib/ApiClient';
 
 
 const promise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY);
 
 const BPPaymentModal = ({
     event,
-    bpId,
+    partner,
     showPaymentModal,
+    sellerProfile,
     closePaymentModal
 }) => {
 
+    const [clientSecret, setClientSecret] = useState('');
     const [pmId, setPmId] = useState();
     const { data: paymentMethods, status: pmStatus } = usePaymentMethods();
     const [view, setView] = useState('summary');
+    const allocatedBooths = [];
+    for (let i = 0; i < sellerProfile?.booths?.length; i++) {
+        allocatedBooths.push(sellerProfile?.booths[i].boothNumber)
+    }
+
+    // console.log(allocatedBooths)
+
+    const { mutate: checkout, isError, isLoading } = useMutation(
+        (data) => api.post('/api/sellerApplication/checkout', data),
+        {
+            onSuccess: (resp) => {
+                if (resp.data.clientSecret) {
+                    setCheckoutResponse(resp.data);
+                    setClientSecret(resp.data.clientSecret);
+                    setView('payment');
+                } else {
+                    setPaymentCompleteResp(resp.data.tickets);
+                    closePaymentModal();
+                }
+            },
+        }
+    );
+
+    const handleCardChange = (value) => {
+        setPmId(value);
+    };
+
+    const onPaymentCompleteResp = (resp) => {
+        setPaymentCompleteResp(resp.data);
+        closePaymentModal();
+    };
+
+    const boothListing = () => {
+        const booths = allocatedBooths.map(b => {
+            return (
+                <Row>
+                    <Col>
+                        <p className="text-dark">
+                            Booth {b}
+                        </p>
+                    </Col>
+                    <Col>
+                        <p className="text-dark">
+                            {formatter.format(event?.boothPrice)}
+                        </p>
+                    </Col>
+                </Row>
+            )
+        })
+        return <Fragment>{booths}</Fragment>
+    }
 
     const bodyComponent = () => (
         <Modal.Body>
@@ -50,29 +106,17 @@ const BPPaymentModal = ({
                                     <Col>
                                         <p>
                                             <strong>Allocated Booths: </strong>
-                                            { }
+                                            {allocatedBooths.toString()}
                                         </p>
                                     </Col>
                                 </Row>
-
+                                <hr></hr>
                                 <Row className="mb-5">
                                     <Col>
                                         <h4>Order Summary:</h4>
                                     </Col>
                                 </Row>
-
-                                <Row>
-                                    <Col>
-                                        <p className="text-dark">
-                                            x Number of Booths
-                                    </p>
-                                    </Col>
-                                    <Col className="col-auto">
-                                        <p className="text-dark">
-                                            {formatter.format(event?.boothPrice)}
-                                        </p>
-                                    </Col>
-                                </Row>
+                                {boothListing()}
                                 <hr></hr>
                                 <Row className="mb-4">
                                     <Col>
@@ -80,7 +124,7 @@ const BPPaymentModal = ({
                                     </Col>
                                     <Col className="col-auto">
                                         <p className="h5 text-body">
-                                            {formatter.format(event?.boothPrice)}
+                                            {formatter.format(event?.boothPrice * allocatedBooths.length)}
                                         </p>
                                     </Col>
                                 </Row>
@@ -125,7 +169,38 @@ const BPPaymentModal = ({
                                         </div>
                                     </Col>
                                 </Row>
+
+                                <Row>
+                                    <Col>
+                                        {/* {isError && (
+                                            <Alert variant="danger" role="alert">
+                                                An error has occured. Please refresh and try again.
+                                            </Alert>
+                                        )} */}
+                                        <ButtonWithLoading
+                                            className="btn btn-fill-out btn-sm"
+                                            onClick={() => checkout({
+                                                eventId: event.eid,
+                                                boothQty: allocatedBooths.length,
+                                                description: event.descriptions,
+                                                comments: event.comments,
+                                                paymentMethodId: pmId,
+                                            })}
+                                        // isLoading={isLoading}
+                                        >Checkout</ButtonWithLoading>
+                                    </Col>
+                                </Row>
                             </>
+                        ) : view == 'payment' ? (
+                            <Elements stripe={promise}>
+                                <PaymentView
+                                    clientSecret={clientSecret}
+                                    partner={partner}
+                                    checkoutResponse={checkoutResponse}
+                                    onPaymentCompleteResp={onPaymentCompleteResp}
+                                    event={event}
+                                />
+                            </Elements>
                         ) : null}
                     </Col>
                 </Row>
@@ -140,7 +215,6 @@ const BPPaymentModal = ({
             </Modal.Header>
             {bodyComponent()}
             <Modal.Footer>
-                <h3>Test</h3>
             </Modal.Footer>
         </Modal>
     );

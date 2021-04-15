@@ -35,7 +35,7 @@ export default function EventCard({ event, user }) {
   // }
 
   const queryClient = useQueryClient();
-  const [inFav, setinFav] = useState(user?.favouriteEventList.some(e => e.eid === event.eid))
+  const [inFav, setinFav] = useState(user?.favouriteEventList.some(e => e?.eid === event?.eid))
   const [applied, setApplied] = useState(user?.sellerApplications.some(e => e.event.eid === event.eid))
   const isPendingApproval = user?.sellerApplications.filter(sa => sa.sellerApplicationStatus === "PENDING").some(e => e.event.eid === event.eid)
   const isPast = user?.sellerProfiles.filter(sp => parseISO(sp.event.eventEndDate) < new Date()).some(e => e.event.eid === event.eid)
@@ -376,7 +376,7 @@ export default function EventCard({ event, user }) {
           <Link href={`/partner/events/${event.eid}`}>
             <Card.Title>{event.name}</Card.Title>
           </Link>
-          <Card.Text className="line-clamp">{event?.descriptions}</Card.Text>
+          {/* <Card.Text className="line-clamp">{event?.descriptions}</Card.Text> */}
           <Card.Text className="text-default mt-auto">
             {format(parseISO(event.eventStartDate), 'eee, dd MMM yy hh:mmbbb')}
             <div>
