@@ -2,7 +2,7 @@ import { Modal, Button, Row, Col, Container } from 'react-bootstrap';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useState, useEffect } from 'react';
-import usePaymentMethods from 'lib/query/usePaymentMethods';
+import usePaymentMethods from 'lib/query/usePaymentMethodsBP';
 import PaymentView from 'components/custom/ticketing/PaymentView';
 import CreditCardIcon from 'components/custom/CreditCardIcon';
 import { formatter } from 'lib/util/currency';
@@ -140,7 +140,6 @@ const BPPaymentModal = ({
             </Modal.Header>
             {bodyComponent()}
             <Modal.Footer>
-                <h3>Test</h3>
             </Modal.Footer>
         </Modal>
     );

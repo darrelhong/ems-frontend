@@ -35,10 +35,13 @@ export default function PartnerEventPage({ id }) {
   const { data: user } = useUser(localStorage.getItem('userId'));
   const bpId = localStorage.getItem('userId');
   const [applicationMade, setApplicationMade] = useState();
+  const sellerProfile = user?.sellerProfiles.filter(sp => sp.event.eid === data.eid)
 
   // const [needPay, setNeedPay] = useState(user?.sellerApplications.filter(sa => (sa.paymentStatus === "PENDING" && sa.sellerApplicationStatus === "APPROVED" && sa.boothQuantity > 0)).some(e => e.event.eid === data?.eid))
   // console.log(showPaymentModal);
-  console.log(user)
+  console.log("User: ", user)
+  // console.log("data: ", data)
+  console.log("SP: ", sellerProfile)
 
   useEffect(() => {
     const loadBoothTotal = async () => {

@@ -15,10 +15,11 @@ const ApplicationCard = ({
 
   useEffect(() => {
     const loadSellerProfileId = async () => {
+      // console.log("test***************************")
       const id = await getSellerProfileIdFromApplication(app.id);
       setSellerProfileId(id);
       setDate(app.applicationDate.toLocaleDateString());
-      console.log("date" + date);
+      console.log("app: ", app);
     };
 
     if (app?.sellerApplicationStatus === 'CONFIRMED') {
