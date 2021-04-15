@@ -277,7 +277,7 @@ export default function AttendeeEventTicketing({ id }) {
                         <Row className="mt-3">
                           {paymentCompleteResp.map((ticket) => (
                             <Col md={6} key={ticket.id} className="mb-4">
-                              <Card bg="light" border="light">
+                              <Card bg="light">
                                 <Card.Header>ID: {ticket.id}</Card.Header>
                                 <Card.Body>
                                   <Card.Title>{ticket.event.name}</Card.Title>
