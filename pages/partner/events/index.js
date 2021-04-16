@@ -1,6 +1,14 @@
 import { Fragment, useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Alert, Col, Container, Row, Spinner, Modal, Button } from 'react-bootstrap';
+import {
+  Alert,
+  Col,
+  Container,
+  Row,
+  Spinner,
+  Modal,
+  Button,
+} from 'react-bootstrap';
 import { useInfiniteQuery, useQueryClient } from 'react-query';
 import debounce from 'lodash/debounce';
 import { getEventsWithKeywordandSortFilter } from 'lib/query/events';
@@ -14,8 +22,8 @@ import CenterSpinner from 'components/custom/CenterSpinner';
 import EventSideBar from '../../../components/Event/partner/EventSideBar';
 import api from '../../../lib/ApiClient';
 import Nav from 'react-bootstrap/Nav';
-import ReactNotification from 'react-notifications-component'
-import 'react-notifications-component/dist/theme.css'
+import ReactNotification from 'react-notifications-component';
+import 'react-notifications-component/dist/theme.css';
 
 const getEvents = async (page = 0, sort, sortDir, searchTerm) => {
   let url = `/api/event/get-events?page=${page}`;
@@ -24,7 +32,6 @@ const getEvents = async (page = 0, sort, sortDir, searchTerm) => {
   const { data } = await api.get(url);
   return data;
 };
-
 
 export default function PartnerEvents() {
   const [sortType, setSortType] = useState('');
@@ -41,7 +48,14 @@ export default function PartnerEvents() {
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery(
-    ['events', sortBy?.sort, sortBy?.sortDir, searchTerm, filterValue, user?.id],
+    [
+      'events',
+      sortBy?.sort,
+      sortBy?.sortDir,
+      searchTerm,
+      filterValue,
+      user?.id,
+    ],
     ({ pageParam = 0 }) =>
       getEventsWithKeywordandSortFilter(
         pageParam,
@@ -69,7 +83,7 @@ export default function PartnerEvents() {
   const getSortParams = (sortType, filterValue) => {
     setSortType(sortType);
     setFilterValue(filterValue);
-  }
+  };
 
   const handleChange = (e) => {
     switch (e.target.value) {
@@ -98,16 +112,12 @@ export default function PartnerEvents() {
       'events',
       sortBy?.sort,
       sortBy?.sortDir,
-      searchTerm
+      searchTerm,
     ]);
-
-  }
-
-
+  };
 
   return (
     <>
-
       <PartnerWrapper title="Events">
         <BreadcrumbOne pageTitle="View All Events">
           <ol className="breadcrumb justify-content-md-end">
@@ -148,7 +158,7 @@ export default function PartnerEvents() {
                       onClick={handleSearchButtonClicked}
                     >
                       Search
-                </button>
+                    </button>
                   </div>
                 </div>
               </Col>
@@ -183,11 +193,15 @@ export default function PartnerEvents() {
                               </a>
                               {/* </Link> */}
                             </Col>
+          
+
                           ))}
                         </Fragment>
+                   
+                         
                       ))}
                     </Row>
-
+                    
                     <Row>
                       <Col className="d-flex align-items-center">
                         <ButtonWithLoading
@@ -203,7 +217,6 @@ export default function PartnerEvents() {
                   </>
                 )}
               </Col>
-
             </Row>
           </Container>
         </div>
