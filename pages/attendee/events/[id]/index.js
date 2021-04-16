@@ -19,6 +19,7 @@ import ShareButton from 'components/custom/ShareButton';
 import CenterSpinner from 'components/custom/CenterSpinner';
 import EventCategoryList from 'components/custom/events/EventCategoryList';
 import Booths from 'components/custom/events/Booths';
+import Brochures from 'components/custom/events/Brochures';
 
 export function getServerSideProps({ query }) {
   return {
@@ -168,6 +169,8 @@ export default function AttendeeEventPage({ id }) {
                 <p>{data.descriptions}</p>
               </Col>
             </Row>
+
+            <Brochures sellerProfiles={data.sellerProfiles} />
 
             <Booths sellerProfiles={data.sellerProfiles}></Booths>
 
