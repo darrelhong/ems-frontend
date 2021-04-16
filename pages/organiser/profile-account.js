@@ -641,11 +641,11 @@ const MyAccount = () => {
                       <IoIosRadioButtonOn /> Account Status
                     </Nav.Link>
                   </Nav.Item>
-                  <Nav.Item>
+                  {/* <Nav.Item>
                     <Nav.Link eventKey="payment">
                       <IoIosCash /> Payment
                     </Nav.Link>
-                  </Nav.Item>
+                  </Nav.Item> */}
                 </Nav>
               </Col>
               <Col lg={9} md={8}>
