@@ -112,7 +112,7 @@ export default function Applications() {
                 <ol className="breadcrumb justify-content-md-end">
                     <li className="breadcrumb-item">
                         <Link href="/organiser/home">
-                            <a>Organiser Home</a>
+                            <a> Home</a>
                         </Link>
                     </li>
                     <li className="breadcrumb-item active">Event Applications</li>

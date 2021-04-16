@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { Accordion, Card, ListGroup } from 'react-bootstrap';
 import { LightgalleryItem, LightgalleryProvider } from 'react-lightgallery';
+import Link from 'next/link';
 
 export default function Booths({ sellerProfiles }) {
   const booths = sellerProfiles?.reduce((prev, curr) => {
@@ -8,23 +9,27 @@ export default function Booths({ sellerProfiles }) {
     return prev.concat(curr.booths);
   }, []);
 
+
   return (
     <div>
-      <h5>Booths and Products</h5>
+      <h5>View Event's Booths and Products</h5>
 
       <Accordion>
-        {booths?.map((booth) => (
+        {booths?.map((booth, key) => (
           <Card key={booth.id}>
             <Accordion.Toggle as={Card.Header} eventKey={booth.id}>
-              Booth {booth.boothNumber} by{' '}
-              <span className="text-primary">
+            
+              <span>  Booth {booth.boothNumber} by{' '}
+              <Link href={`seller-profile/${booth?.sellerProfile?.id}`}>
+            
                 {booth.sellerProfile.businessPartner.name}
+                </Link>
               </span>
             </Accordion.Toggle>
             <Accordion.Collapse eventKey={booth.id}>
               <Card.Body>
                 <ListGroup variant="flush">
-                  {booth.products.map((product) => (
+                  {booth.products != null && (booth.products.map((product) => (
                     <ListGroup.Item
                       key={product.pid}
                       className="d-flex align-items-center"
@@ -48,7 +53,8 @@ export default function Booths({ sellerProfiles }) {
                         </small>
                       </div>
                     </ListGroup.Item>
-                  ))}
+                  )))}
+                  {booth.products == null && (<span>"There is no products yet."</span> )}
                 </ListGroup>
               </Card.Body>
             </Accordion.Collapse>

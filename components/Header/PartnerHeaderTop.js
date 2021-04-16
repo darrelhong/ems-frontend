@@ -10,8 +10,7 @@ import { IoIosHeartEmpty } from 'react-icons/io';
 
 import { logout } from '../../lib/auth';
 import  useUser  from '../../lib/query/useUser';
-import { useState, useEffect } from 'react';
-
+import { useState, useEffect, React } from 'react';
 const PartnerHeaderTop = () => {
   // const [user, setUser] = useState();
   // useEffect(() => {

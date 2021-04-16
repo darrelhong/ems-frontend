@@ -102,7 +102,7 @@ const PartnerProductsView = () => {
                 <ol className="breadcrumb justify-content-md-end">
                     <li className="breadcrumb-item">
                         <Link href="/partner/home">
-                            <a>Partner Home</a>
+                            <a> Home</a>
                         </Link>
                     </li>
                     <li className="breadcrumb-item active">Products</li>

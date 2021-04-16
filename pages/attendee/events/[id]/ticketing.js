@@ -76,7 +76,7 @@ export default function AttendeeEventTicketing({ id }) {
             <ol className="breadcrumb justify-content-md-end">
               <li className="breadcrumb-item">
                 <Link href="/attendee/home">
-                  <a>Attendee Home</a>
+                  <a> Home</a>
                 </Link>
               </li>
               <li className="breadcrumb-item">

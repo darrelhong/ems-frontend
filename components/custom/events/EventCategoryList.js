@@ -7,8 +7,7 @@ import styles from './EventCategoryList.module.css';
 export default function EventCategoryList({ categories }) {
   return (
     <div className={styles.container}>
-      <h6>Event category</h6>
-      {categories?.map((category) => (
+      <span>Event category:{" "}  {categories?.map((category) => (
         <span key={category}>
           <Link href={`../events?category=${encodeURIComponent(category)}`}>
             <Badge
@@ -22,7 +21,8 @@ export default function EventCategoryList({ categories }) {
             </Badge>
           </Link>{' '}
         </span>
-      ))}
+      ))}</span>
+     
     </div>
   );
 }

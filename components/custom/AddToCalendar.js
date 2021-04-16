@@ -2,6 +2,9 @@ import PropTypes from 'prop-types';
 import { parseISO } from 'date-fns';
 import { createEvent } from 'ics';
 import { useEffect, useRef } from 'react';
+import {
+  IoMdCalendar,
+} from 'react-icons/io';
 
 export default function AddToCalendar({ event }) {
   const cal = useRef();
@@ -41,13 +44,25 @@ export default function AddToCalendar({ event }) {
   }, []);
 
   return (
+    // <li
+    // style={{
+    //   color: 'red'
+    // }}
+    // >
+
     <a
-      className="text-primary font-weight-bold"
+      className="text-dark font-weight-bold"
       href={'data:text/plain;charset=utf-8,' + cal.current}
       download="calendar.ics"
+      
     >
+      <IoMdCalendar style={{
+        color: 'red'
+      }}/>
+      {' '}
       Add to calendar
     </a>
+    // </li>
   );
 }
 

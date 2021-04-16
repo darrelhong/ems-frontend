@@ -48,7 +48,7 @@ export default function AttendeeEventPage({ id }) {
             <ol className="breadcrumb justify-content-md-end">
               <li className="breadcrumb-item">
                 <Link href="/attendee/home">
-                  <a>Attendee Home</a>
+                  <a> Home</a>
                 </Link>
               </li>
               <li className="breadcrumb-item">
@@ -68,27 +68,45 @@ export default function AttendeeEventPage({ id }) {
               <Col lg={6}>
                 <div className="pt-3">
                   <h3>{data.name}</h3>
-                  <p>organised by: {data.eventOrganiser.name}</p>
+                  <span>
+                    Organised By: {" "}
+                    <Link
+                      href={{
+                        pathname: '/organiser/organiser-profile',
+                        query: {
+                          paraId: JSON.stringify(data?.eventOrganiser?.id),
+                        },
+                      }}
+                    >
+                      {data?.eventOrganiser?.name}
+                    </Link>{' '} </span>
+                    <div>
+                    <EventCategoryList categories={data.category} />
+                    <p>{data.descriptions}</p></div>
+                    <br></br>
+                  <span className="text-dark font-weight-bold d-inline">Location: {" "}</span>
+                  <span className="d-inline"> {data.address}</span>
 
-                  <h5 className="text-dark">Location: {data.address}</h5>
+                 
+                <br></br>
 
-                  <p className="text-dark font-weight-bold d-inline">
+                  <span className="text-dark font-weight-bold d-inline">
                     Starts:{' '}
-                  </p>
-                  <p className="text-default d-inline">
+                  </span>
+                  <span className="d-inline">
                     {format(
                       parseISO(data.eventStartDate),
                       'eee, dd MMM yy hh:mmbbb'
                     )}
-                  </p>
+                  </span>
                   <br></br>
-                  <p className="text-dark font-weight-bold d-inline">Ends: </p>
-                  <p className="text-default d-inline">
+                  <span className="text-dark font-weight-bold d-inline">Ends: </span>
+                  <span className="d-inline">
                     {format(
                       parseISO(data.eventEndDate),
                       'eee, dd MMM yy hh:mmbbb'
                     )}
-                  </p>
+                  </span>
 
                   <br></br>
 
@@ -113,15 +131,19 @@ export default function AttendeeEventPage({ id }) {
 
                   {data.sellingTicket && (
                     <>
-                      <p
+                      {/* <p
                         className="text-body"
-                        style={{ fontSize: 20, marginBottom: 8 }}
+                        // style={{ fontSize: 20, marginBottom: 8 }}
                       >
                         {formatter.format(data.ticketPrice)}
-                      </p>
-                      <Link href={`${id}/ticketing`}>
+                      </p> */}
+                       <span className="text-dark font-weight-bold d-inline">Ticket Price: {" "}</span>
+                  <span className="d-inline"> {formatter.format(data.ticketPrice)}</span>
+                  <br></br>
+                  <br></br>
+                  <Link href={`${id}/ticketing`}>
                         <button
-                          className="btn btn-success"
+                          className="btn btn-fill-out btn-sm mr-2"
                           disabled={
                             Date.parse(data.eventStartDate) < Date.now()
                           }
@@ -130,6 +152,7 @@ export default function AttendeeEventPage({ id }) {
                         </button>
                       </Link>
                     </>
+                      
                   )}
                 </div>
               </Col>
@@ -162,21 +185,22 @@ export default function AttendeeEventPage({ id }) {
               </Col>
             </Row>
 
-            <Row className="mt-3" style={{ minHeight: 150 }}>
+            {/* <Row className="mt-3" style={{ minHeight: 150 }}>
               <Col>
                 <h5>About this event</h5>
                 <p>{data.descriptions}</p>
               </Col>
-            </Row>
+            </Row> */}
+            <br></br>
 
-            <Booths sellerProfiles={data.sellerProfiles}></Booths>
+            <Booths sellerProfiles={data.sellerProfiles} ></Booths>
 
             <br></br>
-            <Row>
+            {/* <Row>
               <Col>
                 <EventCategoryList categories={data.category} />
               </Col>
-            </Row>
+            </Row> */}
           </Container>
         </>
       )}

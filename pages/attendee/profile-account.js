@@ -566,7 +566,7 @@ const MyAccount = () => {
 
   return (
     // <LayoutOne>
-    <AttendeeWrapper title="Attendee Home">
+    <AttendeeWrapper title="Home">
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Confirmation</Modal.Title>

@@ -232,7 +232,7 @@ const MyAccount = () => {
 
   return (
     // <LayoutOne>
-    <PartnerWrapper title="Partner Home">
+    <PartnerWrapper title= "Home">
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Confirmation</Modal.Title>

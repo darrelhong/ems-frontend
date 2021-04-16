@@ -564,7 +564,7 @@ const MyAccount = () => {
 
   return (
     // <LayoutOne>
-    <OrganiserWrapper title="Organiser Home">
+    <OrganiserWrapper title=" Home">
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Confirmation</Modal.Title>
