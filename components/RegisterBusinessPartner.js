@@ -119,7 +119,7 @@ export default function RegisterBusinessPartner({ title, registerApiUrl }) {
                         required
                         className="form-control"
                         name="name"
-                        placeholder="Your Name"
+                        placeholder="Your Company Name"
                         ref={register()}
                       />
                     </div>
