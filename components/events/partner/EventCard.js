@@ -5,7 +5,7 @@ import {
   partnerLikeEvent,
   partnerUnlikeEvent,
 } from '../../../lib/query/events';
-import { Card, Badge, Button, Modal,Row,Col } from 'react-bootstrap';
+import { Card, Badge, Button, Modal, Row, Col } from 'react-bootstrap';
 import useFavouriteEventMutation from 'lib/query/useFavouriteEventMutation';
 import styles from './EventCard.module.css';
 import IconButton from '@material-ui/core/IconButton';
@@ -343,6 +343,7 @@ export default function EventCard({ event, user }) {
           },
           minHeight: '400px',
           marginBottom: '0px',
+          maxHeight: '400px',
         }}
       >
         <RegisterModal
@@ -412,6 +413,17 @@ export default function EventCard({ event, user }) {
                         Apply
                       </Button>
                     )}
+
+                    {badgeStatus == 'Past' && (
+                      <div className="product-content__rating">
+                        <Rating
+                          emptySymbol={<FaRegStar size={20} className="yellow" />}
+                          fullSymbol={<FaStar size={20} className="yellow" />}
+                          initialRating={rating}
+                          onClick={(rate) => clickRating(rate)}
+                        />
+                      </div>
+                    )}
                   </span>
                 </Col>
 
@@ -431,16 +443,6 @@ export default function EventCard({ event, user }) {
               </Row>
               {/* {badgeStatus == "Past" && <Button size="sm" onClick={() => openReviewModal()} variant="danger">Rate</Button>} */}
             </div>
-            {badgeStatus == 'Past' && (
-              <div className="product-content__rating">
-                <Rating
-                  emptySymbol={<FaRegStar size={22} className="yellow" />}
-                  fullSymbol={<FaStar size={22} className="yellow" />}
-                  initialRating={rating}
-                  onClick={(rate) => clickRating(rate)}
-                />
-              </div>
-            )}
           </Card.Text>
           {/* <div className="d-flex align-items-baseline mt-auto">
           <Card.Text className="text-default mb-0">

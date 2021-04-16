@@ -40,8 +40,8 @@ export default function PartnerEventPage({ id }) {
   // const [needPay, setNeedPay] = useState(user?.sellerApplications.filter(sa => (sa.paymentStatus === "PENDING" && sa.sellerApplicationStatus === "APPROVED" && sa.boothQuantity > 0)).some(e => e.event.eid === data?.eid))
   console.log("application: ", applicationMade);
   console.log("User: ", user)
-  // console.log("data: ", data)
-  console.log("SP: ", sellerProfile)
+  console.log("data: ", data)
+  // console.log("SP: ", sellerProfile)
 
   let paybtn;
   // if (sellerProfile?.booths.length > 0 & applicationMade?.paymentStatus === "PENDING") {
@@ -136,7 +136,9 @@ export default function PartnerEventPage({ id }) {
               <Col lg={6}>
                 <div className="pt-3">
                   <h3>{data.name}</h3>
-                  <p>organised by: {data.eventOrganiser.name}</p>
+                  <Link href={`/organiser/organiser-profile?paraId=${data.eventOrganiser.id}`}>
+                    <p><a>organised by: {data.eventOrganiser.name}</a></p>
+                  </Link>
 
                   <h5 className="text-dark">Location: {data.address}</h5>
 
