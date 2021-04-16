@@ -54,29 +54,45 @@ export default function PublicEventPage({ id }) {
               <Col lg={6}>
                 <div className="pt-3">
                   <h3>{data.name}</h3>
-                  <p>organised by: {data.eventOrganiser.name}</p>
+                  <span>
+                    Organised By: {" "}
+                    <Link
+                      href={{
+                        pathname: '/organiser/organiser-profile',
+                        query: {
+                          paraId: JSON.stringify(data?.eventOrganiser?.id),
+                        },
+                      }}
+                    >
+                      {data?.eventOrganiser?.name}
+                    </Link>{' '} </span>
+                    <div>
+                    <EventCategoryList categories={data.category} />
+                    <span>{data.descriptions}</span></div>
+                    <br></br>
+                  <span className="text-dark font-weight-bold d-inline">Location: {" "}</span>
+                  <span className="text-default d-inline"> {data.address}</span>
 
-                  <h5 className="text-dark">Location: {data.address}</h5>
+                 
+                <br></br>
 
-                  <br></br>
-
-                  <p className="text-dark font-weight-bold d-inline">
+                  <span className="text-dark font-weight-bold d-inline">
                     Starts:{' '}
-                  </p>
-                  <p className="text-default d-inline">
+                  </span>
+                  <span className="text-default d-inline">
                     {format(
                       parseISO(data.eventStartDate),
                       'eee, dd MMM yy hh:mmbbb'
                     )}
-                  </p>
+                  </span>
                   <br></br>
-                  <p className="text-dark font-weight-bold d-inline">Ends: </p>
-                  <p className="text-default d-inline">
+                  <span className="text-dark font-weight-bold d-inline">Ends: </span>
+                  <span className="text-default d-inline">
                     {format(
                       parseISO(data.eventEndDate),
                       'eee, dd MMM yy hh:mmbbb'
                     )}
-                  </p>
+                  </span>
 
                   <br></br>
 
@@ -85,8 +101,8 @@ export default function PublicEventPage({ id }) {
                   <br></br>
                   <br></br>
 
-                  <p className="text-dark d-inline">Sales period: </p>
-                  <p className="text-default d-inline">
+                  <span className="text-dark font-weight-bold d-inline">Sales period: </span>
+                  <span className="d-inline">
                     {`${format(
                       parseISO(data.saleStartDate),
                       'dd MMM yy hh:mmbbb'
@@ -94,7 +110,7 @@ export default function PublicEventPage({ id }) {
                       parseISO(data.salesEndDate),
                       'dd MMM yy hh:mmbbb'
                     )}`}
-                  </p>
+                  </span>
 
                   <br></br>
                   <br></br>
@@ -143,7 +159,7 @@ export default function PublicEventPage({ id }) {
               </Col>
             </Row>
 
-            <Row className="mt-3" style={{ minHeight: 150 }}>
+            {/* <Row className="mt-3" style={{ minHeight: 150 }}>
               <Col>
                 <h5>About this event</h5>
                 <p>{data.descriptions}</p>
@@ -154,7 +170,7 @@ export default function PublicEventPage({ id }) {
               <Col>
                 <EventCategoryList categories={data.categories} />
               </Col>
-            </Row>
+            </Row> */}
           </Container>
         </>
       )}

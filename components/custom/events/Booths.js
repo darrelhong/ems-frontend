@@ -19,17 +19,16 @@ export default function Booths({ sellerProfiles }) {
           <Card key={booth.id}>
             <Accordion.Toggle as={Card.Header} eventKey={booth.id}>
             
-              <span>  Booth {booth.boothNumber} by{' '}
-              <Link href={`seller-profile/${booth?.sellerProfile?.id}`}>
-            
+              <span>  Booth {booth.boothNumber} by{' '}</span>
+              <Link href={`seller-profile/${booth.sellerProfile.id}`}>
                 {booth.sellerProfile.businessPartner.name}
                 </Link>
-              </span>
+              
             </Accordion.Toggle>
             <Accordion.Collapse eventKey={booth.id}>
               <Card.Body>
                 <ListGroup variant="flush">
-                  {booth.products != null && (booth.products.map((product) => (
+                  { (booth.products.map((product) => (
                     <ListGroup.Item
                       key={product.pid}
                       className="d-flex align-items-center"
@@ -54,7 +53,6 @@ export default function Booths({ sellerProfiles }) {
                       </div>
                     </ListGroup.Item>
                   )))}
-                  {booth.products == null && (<span>"There is no products yet."</span> )}
                 </ListGroup>
               </Card.Body>
             </Accordion.Collapse>

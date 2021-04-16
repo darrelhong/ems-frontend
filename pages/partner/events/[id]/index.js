@@ -155,7 +155,7 @@ export default function PartnerEventPage({ id }) {
                     <p>{data.descriptions}</p></div>
                     <br></br>
                   <span className="text-dark font-weight-bold d-inline">Location: {" "}</span>
-                  <span className="d-inline"> {data.address}</span>
+                  <span className="text-default d-inline"> {data.address}</span>
 
                  
                 <br></br>
@@ -163,7 +163,7 @@ export default function PartnerEventPage({ id }) {
                   <span className="text-dark font-weight-bold d-inline">
                     Starts:{' '}
                   </span>
-                  <span className="d-inline">
+                  <span className="text-default d-inline">
                     {format(
                       parseISO(data.eventStartDate),
                       'eee, dd MMM yy hh:mmbbb'
@@ -171,7 +171,7 @@ export default function PartnerEventPage({ id }) {
                   </span>
                   <br></br>
                   <span className="text-dark font-weight-bold d-inline">Ends: </span>
-                  <span className="d-inline">
+                  <span className="text-default d-inline">
                     {format(
                       parseISO(data.eventEndDate),
                       'eee, dd MMM yy hh:mmbbb'
