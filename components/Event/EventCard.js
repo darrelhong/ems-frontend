@@ -296,11 +296,14 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
 
       <Col lg={4} sm={6} className="mb-4">
         <div className="product-list">
-          <div className="product-list__image">
+          <div
+            className="product-list__image"
+            style={{ minWidth: '320px', maxWidth: '327px', maxHeight: '230px' }}
+          >
             <Link href={`/organiser/events/${currEvent.eid}`}>
               <a>
                 <img
-                  style={{ maxWidth: '327px' }}
+                  style={{ maxWidth: '327px', maxHeight: '280px' }}
                   src={currEvent.images[0]}
                   alt="event_image"
                 />
@@ -377,19 +380,28 @@ const EventCard = ({ event, deleteCancelEvent, createToast }) => {
             <div>
               <Row>
                 <Col md={3}>Ticket Sold:</Col>
-                <Col md={9}>
+                <Col md={6}>
                   {' '}
                   <ProgressBar
                     now={ticketsSold}
                     label={`${percentageSold}%`}
                     style={{
-                      width: '50%',
-                      float: 'left',
+                      width: '100%',
+
                       marginTop: '3px',
-                      marginLeft: '-40px',
+                      marginLeft: '-20%',
                     }}
                   />
-                  {ticketsSold}{'/'}{event.ticketCapacity}
+                </Col>
+                <Col
+                  md={3}
+                  style={{
+                    marginLeft: '-12%',
+                  }}
+                >
+                  {ticketsSold}
+                  {'/'}
+                  {event.ticketCapacity}
                 </Col>
               </Row>
             </div>

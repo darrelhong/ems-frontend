@@ -377,9 +377,7 @@ export default function EventCard({ event, user }) {
         </Badge>
         <Card.Body className="d-flex flex-column">
           <Link href={`/partner/events/${event.eid}`}>
-            <Card.Title>
-              {event.name}
-            </Card.Title>
+            <Card.Title>{event.name}</Card.Title>
           </Link>
           {/* <Card.Text className="line-clamp">{event?.descriptions}</Card.Text> */}
           <Card.Text className="text-default mt-auto">
@@ -401,16 +399,30 @@ export default function EventCard({ event, user }) {
                     )}
                     {/* {badgeStatus == "Confirmed" && <Button size="sm" variant="danger" disabled="true">Apply</Button>}
                 {badgeStatus == "Pending Payment" && <Button size="sm" variant="danger" disabled="true">Apply</Button>} */}
-                    {disabledStatuses.includes(badgeStatus) && (
-                      <Button
-                        size="sm"
-                        variant="danger"
-                        disabled="true"
-                        Button
-                        style={{ padding: '5px 25px' }}
-                      >
-                        Apply
-                      </Button>
+                    {disabledStatuses.includes(badgeStatus) &&
+                      badgeStatus != 'Past' && (
+                        <Button
+                          size="sm"
+                          variant="danger"
+                          disabled="true"
+                          Button
+                          style={{ padding: '5px 25px' }}
+                        >
+                          Apply
+                        </Button>
+                      )}
+
+                    {badgeStatus == 'Past' && (
+                      <div className="product-content__rating">
+                        <Rating
+                          emptySymbol={
+                            <FaRegStar size={20} className="yellow" />
+                          }
+                          fullSymbol={<FaStar size={20} className="yellow" />}
+                          initialRating={rating}
+                          onClick={(rate) => clickRating(rate)}
+                        />
+                      </div>
                     )}
                   </span>
                 </Col>
@@ -431,16 +443,6 @@ export default function EventCard({ event, user }) {
               </Row>
               {/* {badgeStatus == "Past" && <Button size="sm" onClick={() => openReviewModal()} variant="danger">Rate</Button>} */}
             </div>
-            {badgeStatus == 'Past' && (
-              <div className="product-content__rating">
-                <Rating
-                  emptySymbol={<FaRegStar size={22} className="yellow" />}
-                  fullSymbol={<FaStar size={22} className="yellow" />}
-                  initialRating={rating}
-                  onClick={(rate) => clickRating(rate)}
-                />
-              </div>
-            )}
           </Card.Text>
           {/* <div className="d-flex align-items-baseline mt-auto">
           <Card.Text className="text-default mb-0">
