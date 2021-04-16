@@ -25,7 +25,8 @@ const EventBoothCard = ({ sellerProfile }) => {
           </Link>
 
           <div className="product-description">
-            Seller Profile: {sellerProfile.description}
+            {/* Seller Profile: {sellerProfile.description} */}
+            Booth Profile Description: {sellerProfile.description}
           </div>
         </div>
       </div>
