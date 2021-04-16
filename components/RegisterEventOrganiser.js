@@ -18,7 +18,6 @@ import { BsFillInfoCircleFill } from 'react-icons/bs';
 import api from '../lib/ApiClient';
 import ButtonWithLoading from './custom/ButtonWithLoading';
 
-import { Col, Container, Row } from 'react-bootstrap';
 import { BreadcrumbOne } from './Breadcrumb';
 import { LayoutOne } from '../layouts';
 import Alert from 'react-bootstrap/Alert';
@@ -33,6 +32,7 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
   const password = useRef({});
   password.current = watch('password', '');
   const [loginLoading, setLoginLoading] = useState(false);
+  const [showUserAlrExistError, setShowUserAlrExistError] = useState(false);
 
   const { mutate, isLoading, isError } = useMutation((data) => {
     // for (var value of form_data.values()) {
@@ -163,22 +163,15 @@ export default function RegisterEvnOrg({ title, registerApiUrl }) {
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="name">
-                      Company Name
-                      <span className="required">*</span>
-                    </label>
-
-                    <div className="form-group">
-                      <label htmlFor="email">Email</label>
-                      <input
-                        type="email"
-                        required
-                        className="form-control"
-                        name="email"
-                        placeholder="Your Email"
-                        ref={register()}
-                      />
-                    </div>
+                    <label htmlFor="name">Company Name</label>
+                    <input
+                      type="text"
+                      required
+                      className="form-control"
+                      name="name"
+                      placeholder="Your Company Name"
+                      ref={register()}
+                    />
                   </div>
                   <div className="form-group">
                     <label htmlFor="password">
