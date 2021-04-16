@@ -40,8 +40,8 @@ export default function PartnerEventPage({ id }) {
   // const [needPay, setNeedPay] = useState(user?.sellerApplications.filter(sa => (sa.paymentStatus === "PENDING" && sa.sellerApplicationStatus === "APPROVED" && sa.boothQuantity > 0)).some(e => e.event.eid === data?.eid))
   console.log("application: ", applicationMade);
   console.log("User: ", user)
-  // console.log("data: ", data)
-  console.log("SP: ", sellerProfile)
+  console.log("data: ", data)
+  // console.log("SP: ", sellerProfile)
 
   let paybtn;
   // if (sellerProfile?.booths.length > 0 & applicationMade?.paymentStatus === "PENDING") {
