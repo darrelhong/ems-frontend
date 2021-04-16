@@ -48,6 +48,8 @@ import { logout } from '../../lib/auth';
 import Cards from 'react-credit-cards';
 import 'react-credit-cards/es/styles-compiled.css';
 import PaymentMethods from 'components/custom/PaymentMethods';
+// import {getPaymentMethods} from 'lib/query/usePaymentMethods';
+import usePaymentMethods from 'lib/query/usePaymentMethods';
 
 const MyAccount = () => {
   // const [setShowFailedMsg] = useState(false);
@@ -121,9 +123,16 @@ const MyAccount = () => {
       }
     });
   };
+
+  const getPaymentMethodsData =  usePaymentMethods();
+  
+  //  const { data, status } = usePaymentMethods();
+
+
   useEffect(() => {
     //console.log(user);
     getUserData();
+   
     // if (user != undefined && user?.paymentMethodId != null) {
     //   getUserPayment();
     // }
@@ -265,6 +274,7 @@ const MyAccount = () => {
             console.log('getUserData1');
             getUserData();
             console.log('getPay3');
+            getPaymentMethodsData();
             //getUserPayment();
 
             //document.getElementById('payment-method-form').reset();
@@ -907,165 +917,166 @@ const MyAccount = () => {
                       <Card.Header>
                         <h3>Card Payment Method</h3>
                       </Card.Header>
-                      <PaymentMethods />
                       <Card.Body>
-                        {user?.paymentMethodId == null && (
-                          <div className="account-details-form">
-                            <form
-                              id="payment-method-form"
-                              onSubmit={handleSubmit(onSubmitCardPaymentMethod)}
+                        <PaymentMethods />
+                        <hr></hr>
+                        <h4>Add a new card</h4>
+                        <hr></hr>
+                     
+                        <div className="account-details-form">
+                          <form
+                            id="payment-method-form"
+                            onSubmit={handleSubmit(onSubmitCardPaymentMethod)}
+                          >
+                            <div
+                              style={{
+                                display: cardinfoSucessMsg ? 'block' : 'none',
+                              }}
                             >
-                              <div
-                                style={{
-                                  display: cardinfoSucessMsg ? 'block' : 'none',
-                                }}
-                              >
-                                {
-                                  <Alert
-                                    show={cardinfoSucessMsg}
-                                    variant="success"
-                                    onClose={() => setCardinfoSucessMsg(false)}
-                                    dismissible
-                                  >
-                                    {' '}
-                                    Card Added Sucessfully{' '}
-                                  </Alert>
-                                }
-                              </div>
-                              <div
-                                style={{
-                                  display: showcardinfoErrorMsg
-                                    ? 'block'
-                                    : 'none',
-                                }}
-                              >
-                                {
-                                  <Alert
-                                    show={showcardinfoErrorMsg}
-                                    variant="danger"
-                                    onClose={() =>
-                                      setShowcardinfoErrorMsg(false)
-                                    }
-                                    dismissible
-                                  >
-                                    {' '}
-                                    {cardinfoErrorMsg}{' '}
-                                  </Alert>
-                                }
-                              </div>
-                              <Row>
-                                <Cards
-                                  cvc={cvc}
-                                  expiry={expiry}
-                                  focused={focus}
-                                  name={name}
-                                  number={number}
+                              {
+                                <Alert
+                                  show={cardinfoSucessMsg}
+                                  variant="success"
+                                  onClose={() => setCardinfoSucessMsg(false)}
+                                  dismissible
+                                >
+                                  {' '}
+                                  Card Added Sucessfully{' '}
+                                </Alert>
+                              }
+                            </div>
+                            <div
+                              style={{
+                                display: showcardinfoErrorMsg
+                                  ? 'block'
+                                  : 'none',
+                              }}
+                            >
+                              {
+                                <Alert
+                                  show={showcardinfoErrorMsg}
+                                  variant="danger"
+                                  onClose={() => setShowcardinfoErrorMsg(false)}
+                                  dismissible
+                                >
+                                  {' '}
+                                  {cardinfoErrorMsg}{' '}
+                                </Alert>
+                              }
+                            </div>
+                            <Row>
+                              <Cards
+                                cvc={cvc}
+                                expiry={expiry}
+                                focused={focus}
+                                name={name}
+                                number={number}
+                              />
+
+                              <Col className="form-group" md={12}>
+                                <br></br>
+                                <label>
+                                  Card Holder Name{' '}
+                                  <span className="required">*</span>
+                                </label>
+                                <input
+                                  required
+                                  className="form-control"
+                                  name="cardholdername"
+                                  type="text"
+                                  placeholder="Name"
+                                  ref={register()}
+                                  onChange={handleNameInputChange}
+                                  onFocus={handleNameInputFocus}
                                 />
+                              </Col>
+                              <Col className="form-group" md={12}>
+                                <label>
+                                  Card Number{' '}
+                                  <span className="required">*</span>
+                                </label>
+                                <input
+                                  required
+                                  className="form-control"
+                                  name="cardnumber"
+                                  type="text"
+                                  placeholder="Enter card number"
+                                  // pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                                  // title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                                  minLength="16"
+                                  maxLength="16"
+                                  ref={register()}
+                                  onChange={handleCardNumberInputChange}
+                                  onFocus={handleCardnumberInputFocus}
+                                />
+                              </Col>
+                            </Row>
 
-                                <Col className="form-group" md={12}>
-                                  <br></br>
-                                  <label>
-                                    Card Holder Name{' '}
-                                    <span className="required">*</span>
-                                  </label>
-                                  <input
-                                    required
-                                    className="form-control"
-                                    name="cardholdername"
-                                    type="text"
-                                    placeholder="Name"
-                                    ref={register()}
-                                    onChange={handleNameInputChange}
-                                    onFocus={handleNameInputFocus}
-                                  />
-                                </Col>
-                                <Col className="form-group" md={12}>
-                                  <label>
-                                    Card Number{' '}
-                                    <span className="required">*</span>
-                                  </label>
-                                  <input
-                                    required
-                                    className="form-control"
-                                    name="cardnumber"
-                                    type="text"
-                                    placeholder="Enter card number"
-                                    // pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                                    // title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
-                                    minLength="16"
-                                    maxLength="16"
-                                    ref={register()}
-                                    onChange={handleCardNumberInputChange}
-                                    onFocus={handleCardnumberInputFocus}
-                                  />
-                                </Col>
-                              </Row>
-
-                              <Row>
-                                <Col className="form-group" md={4}>
-                                  <label>
-                                    Expiry Month
-                                    <span className="required">*</span>
-                                  </label>
-                                  <input
-                                    required
-                                    className="form-control"
-                                    name="expMth"
-                                    type="text"
-                                    placeholder="Eg. 01"
-                                    maxLength="2"
-                                    ref={register()}
-                                    onChange={handleExpMthInputChange}
-                                    onFocus={handleExpMthInputFocus}
-                                  />
-                                </Col>
-                                <Col className="form-group" md={4}>
-                                  <label>
-                                    Expiry Year
-                                    <span className="required">*</span>
-                                  </label>
-                                  <input
-                                    required
-                                    className="form-control"
-                                    name="expYear"
-                                    type="text"
-                                    placeholder="Eg.23"
-                                    maxLength="2"
-                                    ref={register()}
-                                    onChange={handleExpYearInputChange}
-                                    onFocus={handleExpYearInputFocus}
-                                  />
-                                </Col>
-                                <Col className="form-group" md={4}>
-                                  <label>
-                                    CVC
-                                    <span className="required">*</span>
-                                  </label>
-                                  <input
-                                    required
-                                    className="form-control"
-                                    name="cvc"
-                                    type="text"
-                                    placeholder="CVC"
-                                    maxLength="3"
-                                    ref={register()}
-                                    onChange={handleCvcInputChange}
-                                    onFocus={handleCvcInputFocus}
-                                  />
-                                </Col>
-                              </Row>
-                              <Row>
-                                <Col>
-                                  <ButtonWithLoading
-                                    type="submit"
-                                    className="btn btn-fill-out"
-                                    name="submit"
-                                    value="Submit"
-                                    isLoading={loginLoading}
-                                  >
-                                    Submit
-                                  </ButtonWithLoading>
-                                  {/* <button
+                            <Row>
+                              <Col className="form-group" md={4}>
+                                <label>
+                                  Expiry Month
+                                  <span className="required">*</span>
+                                </label>
+                                <input
+                                  required
+                                  className="form-control"
+                                  name="expMth"
+                                  type="text"
+                                  placeholder="Eg. 01"
+                                  maxLength="2"
+                                  ref={register()}
+                                  onChange={handleExpMthInputChange}
+                                  onFocus={handleExpMthInputFocus}
+                                />
+                              </Col>
+                              <Col className="form-group" md={4}>
+                                <label>
+                                  Expiry Year
+                                  <span className="required">*</span>
+                                </label>
+                                <input
+                                  required
+                                  className="form-control"
+                                  name="expYear"
+                                  type="text"
+                                  placeholder="Eg.23"
+                                  maxLength="2"
+                                  ref={register()}
+                                  onChange={handleExpYearInputChange}
+                                  onFocus={handleExpYearInputFocus}
+                                />
+                              </Col>
+                              <Col className="form-group" md={4}>
+                                <label>
+                                  CVC
+                                  <span className="required">*</span>
+                                </label>
+                                <input
+                                  required
+                                  className="form-control"
+                                  name="cvc"
+                                  type="text"
+                                  placeholder="CVC"
+                                  maxLength="3"
+                                  ref={register()}
+                                  onChange={handleCvcInputChange}
+                                  onFocus={handleCvcInputFocus}
+                                />
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col>
+                                <ButtonWithLoading
+                                  type="submit"
+                                  className="btn btn-fill-out"
+                                  name="submit"
+                                  value="Submit"
+                                  isLoading={loginLoading}
+                                >
+                                  Submit
+                                </ButtonWithLoading>
+                                {/* <button
                                 type="submit"
                                 className="btn btn-fill-out"
                                 name="submit"
@@ -1073,12 +1084,12 @@ const MyAccount = () => {
                               >
                                 Save
                               </button> */}
-                                </Col>
-                              </Row>
-                            </form>
-                          </div>
-                        )}
+                              </Col>
+                            </Row>
+                          </form>
+                        </div>
 
+                        {/* 
                         {user?.paymentMethodId != null &&
                           paymentMethod != null &&
                           paymentMethod.card != null &&
@@ -1134,7 +1145,7 @@ const MyAccount = () => {
                                 Delete Payment Method
                               </ButtonWithLoading>
                             </div>
-                          )}
+                          )} */}
                       </Card.Body>
                     </Card>
                   </Tab.Pane>
