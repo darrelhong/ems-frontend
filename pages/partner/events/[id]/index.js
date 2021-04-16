@@ -38,14 +38,14 @@ export default function PartnerEventPage({ id }) {
   const sellerProfile = user?.sellerProfiles.filter(sp => sp.event?.eid === data?.eid)[0]
 
   // const [needPay, setNeedPay] = useState(user?.sellerApplications.filter(sa => (sa.paymentStatus === "PENDING" && sa.sellerApplicationStatus === "APPROVED" && sa.boothQuantity > 0)).some(e => e.event.eid === data?.eid))
-  console.log("application: ", applicationMade);
+  // console.log("application: ", applicationMade);
   console.log("User: ", user)
   console.log("data: ", data)
-  // console.log("SP: ", sellerProfile)
+  console.log("SP: ", sellerProfile)
 
   let paybtn;
-  // if (sellerProfile?.booths.length > 0 & applicationMade?.paymentStatus === "PENDING") {
-  if (applicationMade?.paymentStatus === "PENDING") {
+  if (sellerProfile?.booths.length > 0 & applicationMade?.paymentStatus === "PENDING") {
+    // if (applicationMade?.paymentStatus === "PENDING") {
     paybtn = <button
       className="btn btn-fill-out btn-sm mr-2"
       onClick={() => setShowPaymentModal(true)}>Pay</button>
@@ -151,14 +151,14 @@ export default function PartnerEventPage({ id }) {
                     >
                       {data?.eventOrganiser?.name}
                     </Link>{' '} </span>
-                    <div>
+                  <div>
                     <p>{data.descriptions}</p></div>
-                    <br></br>
+                  <br></br>
                   <span className="text-dark font-weight-bold d-inline">Location: {" "}</span>
                   <span className="text-default d-inline"> {data.address}</span>
 
-                 
-                <br></br>
+
+                  <br></br>
 
                   <span className="text-dark font-weight-bold d-inline">
                     Starts:{' '}
@@ -199,13 +199,13 @@ export default function PartnerEventPage({ id }) {
                   <br></br>
                   <br></br>
                   {boothTotal >= data.boothCapacity && !applicationMade && (
-                      <p className="text-default font-weight-bold">Capacity of {data.boothCapacity} booths has been reached!</p>
-                    )}
+                    <p className="text-default font-weight-bold">Capacity of {data.boothCapacity} booths has been reached!</p>
+                  )}
                   {boothTotal < data.boothCapacity && !applicationMade && (
-                      <p className="text-default  ">{boothTotal} / {data.boothCapacity} booths already taken!</p>
-                    )}
-                  <div className="d-flex align-items-center"> 
-                 
+                    <p className="text-default  ">{boothTotal} / {data.boothCapacity} booths already taken!</p>
+                  )}
+                  <div className="d-flex align-items-center">
+
                     {applicationMade ? (
                       <button
                         // className="btn btn-fill-out mr-2"
@@ -243,8 +243,8 @@ export default function PartnerEventPage({ id }) {
                   title={data.name}
                   url={`${process.env.HOSTNAME}/public/events/${id}`}
                 /> */}
-                   
-                    
+
+
                   </div>
                 </div>
               </Col>

@@ -43,6 +43,7 @@ export default function EventCard({ event, user }) {
   const isRejected = user?.sellerApplications.filter(sa => sa.sellerApplicationStatus === "REJECTED").some(e => e.event.eid === event.eid)
   const [badgeStatus, setBadgeStatus] = useState("")
   const [badgeStyle, setBadgeStyle] = useState("primary")
+  const isApproved = user?.sellerApplications.filter(sa => (sa.sellerApplicationStatus === "APPROVED"))
   const isAllocated = user?.sellerApplications.filter(sa => (sa.paymentStatus === "PENDING" && sa.sellerApplicationStatus === "APPROVED")).some(e => e.event.eid === event.eid)
   const [needPay, setNeedPay] = useState(isAllocated && user?.sellerApplications.filter(sa => (sa.paymentStatus === "PENDING" && sa.sellerApplicationStatus === "APPROVED" && sa.boothQuantity > 0)).some(e => e.event.eid === event.eid))
   const [showRegisterModal, setShowRegisterModal] = useState(false);
@@ -203,9 +204,13 @@ export default function EventCard({ event, user }) {
 
   const getBadge = () => {
     let status = '';
-    if (applied) status = 'Pending';
-    if (needPay) status = 'Pending Payment';
-    else if (isAllocated) status = 'Waiting For Allocation';
+    // if (applied) status = 'Pending';
+    // if (needPay) status = 'Pending Payment';
+    // else if (isApproved) status = "Waiting For Allocation"
+    if (isApproved == true) {
+      if (needPay == true) status = 'Pending Payment';
+      else status = 'Waiting For Allocation';
+    }
     else if (isPendingApproval) status = 'Pending Approval';
 
     if (isConfirmed) status = 'Confirmed';
@@ -419,17 +424,6 @@ export default function EventCard({ event, user }) {
                           emptySymbol={
                             <FaRegStar size={20} className="yellow" />
                           }
-                          fullSymbol={<FaStar size={20} className="yellow" />}
-                          initialRating={rating}
-                          onClick={(rate) => clickRating(rate)}
-                        />
-                      </div>
-                    )}
-
-                    {badgeStatus == 'Past' && (
-                      <div className="product-content__rating">
-                        <Rating
-                          emptySymbol={<FaRegStar size={20} className="yellow" />}
                           fullSymbol={<FaStar size={20} className="yellow" />}
                           initialRating={rating}
                           onClick={(rate) => clickRating(rate)}
