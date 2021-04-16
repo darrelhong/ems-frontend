@@ -88,7 +88,8 @@ export default function PartnerEventPage({ id }) {
         closePaymentModal={() => setShowPaymentModal(false)}
         sellerProfile={sellerProfile}
         event={data}
-        partner={user} />
+        partner={user}
+        applicationMade={applicationMade}/>
       <RegisterModal
         showRegisterModal={showRegisterModal}
         closeRegisterModal={() => setShowRegisterModal(false)}

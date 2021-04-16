@@ -18,7 +18,8 @@ const BPPaymentModal = ({
     partner,
     showPaymentModal,
     sellerProfile,
-    closePaymentModal
+    closePaymentModal,
+    applicationMade
 }) => {
 
     const [clientSecret, setClientSecret] = useState('');
@@ -26,8 +27,10 @@ const BPPaymentModal = ({
     const { data: paymentMethods, status: pmStatus } = usePaymentMethods();
     const [view, setView] = useState('summary');
     const allocatedBooths = [];
-    for (let i = 0; i < sellerProfile?.booths?.length; i++) {
-        allocatedBooths.push(sellerProfile?.booths[i].boothNumber)
+    // for (let i = 0; i < sellerProfile?.booths?.length; i++) {
+        for (let i = 0; i < applicationMade?.booths?.length; i++) {
+        allocatedBooths.push(applicationMade?.booths[i].boothNumber)
+        // allocatedBooths.push(sellerProfile?.booths[i].boothNumber)
     }
 
     // console.log(allocatedBooths)

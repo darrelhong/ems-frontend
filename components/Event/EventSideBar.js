@@ -7,7 +7,7 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 // import IconButton from '@material-ui/core/IconButton';
 import Link from 'next/link';
 
-const EventSideBar = ({ getSortParams, sortValue }) => {
+const EventSideBar = ({ getSortParams, sortValue, user}) => {
   const checkActive = (value) => {
     return value == sortValue;
   };
@@ -16,13 +16,24 @@ const EventSideBar = ({ getSortParams, sortValue }) => {
   return (
     <div className="my-account-content space-pt--r100 space-pb--r100">
       <div className="sidebar">
-        {/* <div className="widget">
+        <div className="widget">
           <h6 className="product-title">
+          {user?.approved ? ( //approved then normal
             <Link href="events/create">
-              <a>Create Event</a>
+              <a disabled>Create Event</a>
             </Link>
+          ) : (
+            <Link href="events/create">
+              <a disabled
+              style={{
+                pointerEvents: 'none',
+                opacity: 0.6
+              }}>
+                Create Event</a>
+            </Link>
+          )}
           </h6>
-        </div> */}
+        </div>
 
         <div className="widget">
           <h5 className="widget__title">Status</h5>

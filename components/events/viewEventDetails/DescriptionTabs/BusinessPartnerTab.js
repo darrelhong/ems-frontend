@@ -50,13 +50,14 @@ const BusinessPartnerTab = ({
                         </ul>
                     )}
                 <ul>
-                    <Link href={`/organiser/events/applications?eid=${event.eid}`} >
+                    {/* <Link href={`/organiser/events/applications?eid=${event.eid}`} > */}
+                    <Link href={`/organiser/allocation/new`} >
                         <button
                             // onClick={() => console.log('hello')}
                             className="btn btn-fill-out btn-addtocart space-ml--10"
                             style={{ textAlign: 'right' }}
                         >
-                            <i className="icon-basket-loaded" /> Manage Booth Allocation (not done)
+                            <i className="icon-basket-loaded" /> Manage Booth Allocation
           </button>
                     </Link>
                 </ul>
@@ -66,9 +67,7 @@ const BusinessPartnerTab = ({
                   <h6>  <IoMdTrophy />
                     {/* STILL WRONG */}
             Confirmed booths for your event:{' '}
-                    {/* {event.sellerApplications?.length ?? 0} / {event.boothCapacity} */}
                     {getBoothTotal() ?? 0} / {event.boothCapacity} (Set Capacity)</h6>
-                {/* {event.eventBoothTransactions?.length ?? 0} / {event.boothCapacity} */}
                 </li>
             </ul>
         </div>
