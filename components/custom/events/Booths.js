@@ -9,12 +9,12 @@ export default function Booths({ sellerProfiles }) {
   }, []);
 
   return (
-    <div>
+    <div className="mt-3">
       <h5>Booths and Products</h5>
 
       <Accordion>
         {booths?.map((booth) => (
-          <Card key={booth.id}>
+          <Card key={booth.id} style={{ marginBottom: 0 }}>
             <Accordion.Toggle as={Card.Header} eventKey={booth.id}>
               Booth {booth.boothNumber} by{' '}
               <span className="text-primary">

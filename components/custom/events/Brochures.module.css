@@ -1,0 +1,20 @@
+.container {
+  display: grid;
+  grid-auto-flow: column;
+}
+
+.item {
+  width: 142px;
+}
+
+.item + .item {
+  margin-left: 8px;
+}
+
+.image {
+  border-radius: 5px;
+  cursor: pointer;
+  object-fit: cover;
+  width: 142px;
+  height: 96px;
+}
