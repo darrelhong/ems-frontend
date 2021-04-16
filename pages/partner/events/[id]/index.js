@@ -116,7 +116,7 @@ export default function PartnerEventPage({ id }) {
             <ol className="breadcrumb justify-content-md-end">
               <li className="breadcrumb-item">
                 <Link href="/partner/home">
-                  <a>Partner Home</a>
+                  <a> Home</a>
                 </Link>
               </li>
               <li className="breadcrumb-item">
@@ -134,33 +134,49 @@ export default function PartnerEventPage({ id }) {
                 <EventImageGallery images={data.images} />
               </Col>
               <Col lg={6}>
-                <div className="pt-3">
+                <div className="pt-3" >
                   <h3>{data.name}</h3>
-                  <Link href={`/organiser/organiser-profile?paraId=${data.eventOrganiser.id}`}>
-                    <p><a>organised by: {data.eventOrganiser.name}</a></p>
-                  </Link>
+                  {/* <strong className="product-description d-inline" >organised by: </strong> */}
 
-                  <h5 className="text-dark">Location: {data.address}</h5>
 
-                  <br></br>
+                  <span>
+                    Organised By: {" "}
+                    <Link
+                      href={{
+                        pathname: '/organiser/organiser-profile',
+                        query: {
+                          paraId: JSON.stringify(data?.eventOrganiser?.id),
+                        },
+                      }}
+                    >
+                      {data?.eventOrganiser?.name}
+                    </Link>{' '} </span>
+                    <div>
+                    <p>{data.descriptions}</p></div>
+                    <br></br>
+                  <span className="text-dark font-weight-bold d-inline">Location: {" "}</span>
+                  <span className="text-default d-inline"> {data.address}</span>
 
-                  <p className="text-dark font-weight-bold d-inline">
+                 
+                <br></br>
+
+                  <span className="text-dark font-weight-bold d-inline">
                     Starts:{' '}
-                  </p>
-                  <p className="text-default d-inline">
+                  </span>
+                  <span className="text-default d-inline">
                     {format(
                       parseISO(data.eventStartDate),
                       'eee, dd MMM yy hh:mmbbb'
                     )}
-                  </p>
+                  </span>
                   <br></br>
-                  <p className="text-dark font-weight-bold d-inline">Ends: </p>
-                  <p className="text-default d-inline">
+                  <span className="text-dark font-weight-bold d-inline">Ends: </span>
+                  <span className="text-default d-inline">
                     {format(
                       parseISO(data.eventEndDate),
                       'eee, dd MMM yy hh:mmbbb'
                     )}
-                  </p>
+                  </span>
 
                   <br></br>
 
@@ -169,8 +185,8 @@ export default function PartnerEventPage({ id }) {
                   <br></br>
                   <br></br>
 
-                  <p className="text-dark d-inline">Sales period: </p>
-                  <p className="text-default d-inline">
+                  <span className="text-dark font-weight-bold d-inline">Sales period: </span>
+                  <span className="d-inline">
                     {`${format(
                       parseISO(data.saleStartDate),
                       'dd MMM yy hh:mmbbb'
@@ -178,11 +194,18 @@ export default function PartnerEventPage({ id }) {
                       parseISO(data.salesEndDate),
                       'dd MMM yy hh:mmbbb'
                     )}`}
-                  </p>
+                  </span>
 
                   <br></br>
                   <br></br>
-                  <div className="d-flex align-items-center">
+                  {boothTotal >= data.boothCapacity && !applicationMade && (
+                      <p className="text-default font-weight-bold">Capacity of {data.boothCapacity} booths has been reached!</p>
+                    )}
+                  {boothTotal < data.boothCapacity && !applicationMade && (
+                      <p className="text-default  ">{boothTotal} / {data.boothCapacity} booths already taken!</p>
+                    )}
+                  <div className="d-flex align-items-center"> 
+                 
                     {applicationMade ? (
                       <button
                         // className="btn btn-fill-out mr-2"
@@ -216,12 +239,12 @@ export default function PartnerEventPage({ id }) {
                     )}
                     {/* {(applicationMade.paymentStatus === "PENDING") && <button className="btn btn-fill-out btn-sm mr-2" onClick={() => setShowPaymentModal(true)}>Pay</button>} */}
                     {paybtn}
-                    {boothTotal >= data.boothCapacity && !applicationMade && (
-                      <p className="text-dark">Capacity of {data.boothCapacity} booths has been reached!</p>
-                    )}
-                    {boothTotal < data.boothCapacity && !applicationMade && (
-                      <p className="text-primary">{boothTotal} / {data.boothCapacity} booths already taken!</p>
-                    )}
+                    {/* <ShareButton
+                  title={data.name}
+                  url={`${process.env.HOSTNAME}/public/events/${id}`}
+                /> */}
+                   
+                    
                   </div>
                 </div>
               </Col>
@@ -236,12 +259,12 @@ export default function PartnerEventPage({ id }) {
               </Col>
             </Row>
 
-            <Row className="mt-3">
+            {/* <Row className="mt-3">
               <Col>
                 <h5>About this event</h5>
                 <p>{data.descriptions}</p>
               </Col>
-            </Row>
+            </Row> */}
           </Container>
         </>
       )

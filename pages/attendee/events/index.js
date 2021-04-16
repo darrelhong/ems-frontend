@@ -99,7 +99,7 @@ export default function AttendeeEvents({ category }) {
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/attendee/home">
-              <a>Attendee Home</a>
+              <a> Home</a>
             </Link>
           </li>
           <li className="breadcrumb-item active">Events</li>
