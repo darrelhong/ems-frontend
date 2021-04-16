@@ -652,13 +652,13 @@ const OrgBoothDashboard = () => {
                               <td></td>
                               <td></td>
                               <td>
-                                {' '}
+                                {/* {' '}
                                 <a
                                   href={DEMO.BLANK_LINK}
                                   className="label theme-bg3 text-white f-12"
                                 >
                                   VIEW
-                                </a>
+                                </a> */}
                               </td>
                               <td></td>
                               <td></td>
