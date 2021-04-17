@@ -9,26 +9,25 @@ export default function Booths({ sellerProfiles }) {
     return prev.concat(curr.booths);
   }, []);
 
-
   return (
     <div>
-      <h5>View Event's Booths and Products</h5>
+      <h5>{"View Event's Booths and Products"}</h5>
 
       <Accordion>
-        {booths?.map((booth, key) => (
-          <Card key={booth.id}>
+        {booths?.map((booth) => (
+          <Card key={booth.id} style={{ marginBottom: 0 }}>
             <Accordion.Toggle as={Card.Header} eventKey={booth.id}>
-            
-              <span>  Booth {booth.boothNumber} by{' '}</span>
-              <Link href={`seller-profile/${booth.sellerProfile.id}`}>
+              <span> Booth {booth.boothNumber} by </span>
+              <Link
+                href={`seller-profile/${booth.sellerProfile.businessPartner.id}`}
+              >
                 {booth.sellerProfile.businessPartner.name}
-                </Link>
-              
+              </Link>
             </Accordion.Toggle>
             <Accordion.Collapse eventKey={booth.id}>
               <Card.Body>
                 <ListGroup variant="flush">
-                  { (booth.products.map((product) => (
+                  {booth.products.map((product) => (
                     <ListGroup.Item
                       key={product.pid}
                       className="d-flex align-items-center"
@@ -52,7 +51,7 @@ export default function Booths({ sellerProfiles }) {
                         </small>
                       </div>
                     </ListGroup.Item>
-                  )))}
+                  ))}
                 </ListGroup>
               </Card.Body>
             </Accordion.Collapse>
