@@ -31,7 +31,7 @@ const NavigationEvntOrg = ({ positionClass }) => {
 
         <li>
           <a className="nav-link" style={{ color: '#292b2c' }}>
-            DASHBOARD
+            DASHBOARD <IoIosArrowDown />
           </a>
 
           <ul className="sub-menu sub-menu--one-column">
