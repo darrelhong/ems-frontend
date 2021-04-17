@@ -19,6 +19,7 @@ import RegisterModal from 'components/events/registration/RegisterModal';
 import { useToasts } from 'react-toast-notifications';
 import { getBoothTotalFromEvent } from 'lib/functions/boothFunctions';
 import { getSellerApplicationsFromBpId } from 'lib/query/sellerApplicationApi';
+import { checkIfVIP } from 'lib/query/useEvent';
 
 // from wj side
 import api from 'lib/ApiClient';
@@ -49,7 +50,7 @@ export default function EventCard({ event, user }) {
   const [boothTotal, setBoothTotal] = useState(0);
   const [applicationMade, setApplicationMade] = useState();
   const { addToast, removeToast } = useToasts();
-
+  const [vip, setVIP] = useState();
   // from wj side
   const [errorMessage, setErrorMessage] = useState('')
   const [reviewModalShow, setReviewModalShow] = useState(false);
@@ -85,17 +86,18 @@ export default function EventCard({ event, user }) {
         // setRating(0);
         console.log("review submitted successfully");
         setReviewModalShow(false);
-        store.addNotification({
-          title: "Success",
-          message: "Thank you. Your reviews have been submitted!",
-          type: "success",
-          insert: "top",
-          container: "top-left",
-          dismiss: {
-            duration: 5000,
-            onScreen: true
-          }
-        });
+        //ADD IN CONSISTENT REVIEW UI
+        // store.addNotification({
+        //   title: "Success",
+        //   message: "Thank you. Your reviews have been submitted!",
+        //   type: "success",
+        //   insert: "top",
+        //   container: "top-left",
+        //   dismiss: {
+        //     duration: 5000,
+        //     onScreen: true
+        //   }
+        // });
       })
       .catch((error) => {
         console.log("Is it working?")
@@ -157,6 +159,13 @@ export default function EventCard({ event, user }) {
         setRating(0)
       }
     }
+
+    const checkVIP = async () =>{
+      let status = await checkIfVIP(event?.eventOrganiser?.id, user?.id)
+      setVIP(status);
+      console.log ("vip status" + status);
+    }
+    checkVIP();
 
     loadLatestReview()
     loadBoothTotal()
@@ -382,17 +391,19 @@ export default function EventCard({ event, user }) {
         </Badge>
         <Card.Body className="d-flex flex-column">
           <Link href={`/partner/events/${event.eid}`}>
-            <Card.Title>{event.name}</Card.Title>
+            <Card.Title>{event.name}{" "}{event.vip == true && (<Badge variant="warning">VIP</Badge>)}</Card.Title>
           </Link>
+          
           {/* <Card.Text className="line-clamp">{event?.descriptions}</Card.Text> */}
-          <Card.Text className="text-default mt-auto">
+          <Card.Text className="text-default mt-auto"> 
+         
             {format(parseISO(event.eventStartDate), 'eee, dd MMM yy hh:mmbbb')}
-
+           
             <div className="mb-0 mr-0 mt-2">
               <Row>
                 <Col>
                   <span>
-                    {badgeStatus == '' && (
+                    {badgeStatus == '' && (event.vip && vip)&& (
                       <Button
                         style={{ padding: '5px 25px' }}
                         size="sm"
@@ -402,6 +413,29 @@ export default function EventCard({ event, user }) {
                         Apply
                       </Button>
                     )}
+                    {badgeStatus == '' && !event.vip && (
+                      <Button
+                        style={{ padding: '5px 25px' }}
+                        size="sm"
+                        onClick={(e) => applyEvent(e)}
+                        variant="danger"
+                      >
+                        Apply
+                      </Button>
+                    )}
+                         {badgeStatus == '' && (event.vip && !vip) && (
+                      <Button
+                        style={{ padding: '5px 25px' }}
+                        size="sm"
+                        // onClick={(e) => applyEvent(e)}
+                        variant="danger"
+                        disabled="true"
+                        Button
+                      >
+                        Apply
+                      </Button>
+                    )}
+                    
                     {/* {badgeStatus == "Confirmed" && <Button size="sm" variant="danger" disabled="true">Apply</Button>}
                 {badgeStatus == "Pending Payment" && <Button size="sm" variant="danger" disabled="true">Apply</Button>} */}
                     {disabledStatuses.includes(badgeStatus) &&
