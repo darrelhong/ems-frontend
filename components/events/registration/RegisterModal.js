@@ -227,7 +227,7 @@ const RegisterModal = ({
         try {
             const application = await createSellerApplication(data, event.eid, bpId);
             setApplicationMade(application);
-            await newApplicationNotif(bpId, event.eid);
+            // await newApplicationNotif(bpId, event.eid);
             closeRegisterModal();
             createToast('Registered Successfully', 'success');
         } catch (e) {
