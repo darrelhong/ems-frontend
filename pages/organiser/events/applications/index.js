@@ -68,10 +68,10 @@ export default function Applications() {
         try {
             await approveRejectApplication(application.id, action);
             if (action == 'approve') {
-                await approveBpNotif(application?.businessPartner?.id, application?.event?.eid);
+                // await approveBpNotif(application?.businessPartner?.id, application?.event?.eid);
                 createToast('Application successfully approved!', 'success');
             } else { //reject
-                await rejectBpNotif(application?.businessPartner?.id, application?.event?.eid);
+                // await rejectBpNotif(application?.businessPartner?.id, application?.event?.eid);
                 createToast('Application successfully rejected', 'success');
             }
             await getApplications(); //to reload

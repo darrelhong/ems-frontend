@@ -65,7 +65,7 @@ const TicketingPane = ({
               />
               <label htmlFor="sellingTicket">
                 {' '}
-                Are you selling tickets for your event?
+                Are you selling tickets for your event? (You can change this in the future)
               </label>
             </Col>
             {/* 

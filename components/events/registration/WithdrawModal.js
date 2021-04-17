@@ -12,7 +12,7 @@ const WithdrawModal = ({applicationMade, setApplicationMade, showWithdrawModal, 
         setLoading(true);
         try {
             await cancelSellerApplication(applicationMade?.id);
-            await withdrawApplicationNotif(applicationMade?.id,bpid,applicationMade?.event?.eid);
+            // await withdrawApplicationNotif(applicationMade?.id,bpid,applicationMade?.event?.eid);
             setApplicationMade(null);
             createToast('Withdrawn Successfully', 'success');
         } catch (e)  {

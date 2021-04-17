@@ -28,7 +28,7 @@ const BPPaymentModal = ({
     const [view, setView] = useState('summary');
     const allocatedBooths = [];
     // for (let i = 0; i < sellerProfile?.booths?.length; i++) {
-        for (let i = 0; i < applicationMade?.booths?.length; i++) {
+    for (let i = 0; i < applicationMade?.booths?.length; i++) {
         allocatedBooths.push(applicationMade?.booths[i].boothNumber)
         // allocatedBooths.push(sellerProfile?.booths[i].boothNumber)
     }
@@ -36,7 +36,7 @@ const BPPaymentModal = ({
     // console.log(allocatedBooths)
 
     const { mutate: checkout, isError, isLoading } = useMutation(
-        (data) => api.post('/api/sellerApplication/checkout', data),
+        (data) => api.post('/api/sellerProfile/checkout', data),
         {
             onSuccess: (resp) => {
                 if (resp.data.clientSecret) {
@@ -182,13 +182,18 @@ const BPPaymentModal = ({
                                         )} */}
                                         <ButtonWithLoading
                                             className="btn btn-fill-out btn-sm"
-                                            onClick={() => checkout({
-                                                eventId: event.eid,
-                                                boothQty: allocatedBooths.length,
-                                                description: event.descriptions,
-                                                comments: event.comments,
-                                                paymentMethodId: pmId,
-                                            })}
+                                            onClick={() => {
+                                                console.log(applicationMade.id);
+                                                checkout({
+                                                    eventId: event.eid,
+                                                    boothQty: allocatedBooths.length,
+                                                    id: applicationMade.id,
+                                                    description: event.descriptions,
+                                                    comments: event.comments,
+                                                    paymentMethodId: pmId,
+                                                    booths: applicationMade.booths
+                                                })
+                                            }}
                                         // isLoading={isLoading}
                                         >Checkout</ButtonWithLoading>
                                     </Col>
@@ -208,7 +213,7 @@ const BPPaymentModal = ({
                     </Col>
                 </Row>
             </Container>
-        </Modal.Body>
+        </Modal.Body >
     );
 
     return (

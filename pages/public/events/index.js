@@ -9,7 +9,7 @@ import { Alert, Col, Container, Row } from 'react-bootstrap';
 import useEventCategories from 'lib/query/useEventCategories';
 import { getEventsWithKeywordandSort } from 'lib/query/events';
 
-import EventCard from 'components/events/partner/EventCard';
+import EventCard from 'components/events/attendee/EventCard';
 import ButtonWithLoading from 'components/custom/ButtonWithLoading';
 import CenterSpinner from 'components/custom/CenterSpinner';
 import GuestWrapper from 'components/wrapper/GuestWrapper';

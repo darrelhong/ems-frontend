@@ -14,7 +14,7 @@ const PartnerCard = ({ partner, eid, increaseInviteCount }) => {
     const handleSendRsvp = async () => {
         try {
             await sendRsvp(eid, partner?.id);
-            await rsvpNotif(partner.id,eid);
+            // await rsvpNotif(partner.id,eid);
             createToast('Invitation Sent!', 'success');
             increaseInviteCount();
             setRsvpSent(true);

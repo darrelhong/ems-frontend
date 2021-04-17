@@ -18,7 +18,7 @@ const ApplicationCard = ({
       // console.log("test***************************")
       const id = await getSellerProfileIdFromApplication(app.id);
       setSellerProfileId(id);
-      setDate(app.applicationDate.toLocaleDateString());
+      // setDate(app.applicationDate.toLocaleDateString());
       console.log("app: ", app);
     };
 

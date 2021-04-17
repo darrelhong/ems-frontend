@@ -74,8 +74,8 @@ export default function PartnerEvents() {
   //   queryClient.invalidateQueries("events");
   // }
 
-  // console.log("data: ", data)
-  // console.log("user: ", user)
+  console.log("data: ", data)
+  console.log("user: ", user)
   // console.log(filterValue)
   // console.log("test", queryClient.getQueryData('events'))
 
@@ -193,15 +193,15 @@ export default function PartnerEvents() {
                               </a>
                               {/* </Link> */}
                             </Col>
-          
+
 
                           ))}
                         </Fragment>
-                   
-                         
+
+
                       ))}
                     </Row>
-                    
+
                     <Row>
                       <Col className="d-flex align-items-center">
                         <ButtonWithLoading
