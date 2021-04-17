@@ -1339,7 +1339,7 @@ const MyAccount = () => {
                               </Col>
                               {/* {user?.id != null && ( */}
                               <div className="col-12 d-md-flex">
-                                <Col className="form-group" md={12}>
+                                <Col className="form-group p-0" md={12}>
                                   <Form.Label htmlFor="categorypreference">
                                     Event Category Preferences{' '}
                                     <span className="required"></span>
