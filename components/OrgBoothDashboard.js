@@ -575,9 +575,10 @@ const OrgBoothDashboard = () => {
                     {boothAppList.length > 0 &&
                       boothAppList.map((boothApplication, key) => {
                         return (
-                          <div key="key">
-                            <tr className="unread">
-                              <td>
+                          <div key="key" >
+                            <br></br>
+                            <Row className="unread ml-2">
+                            <Col md={1}>
                                 {boothApplication.businessPartner.profilePic ==
                                   null && (
                                   <img
@@ -603,30 +604,18 @@ const OrgBoothDashboard = () => {
                                     alt="profile-pic"
                                   />
                                 )}
-                              </td>
+                                </Col>
+                           
 
-                              <td>
+                               <Col md={8}>
                                 <h6 className="mb-1">
                                   {boothApplication.businessPartner.name}
                                 </h6>
                                 <p className="m-0">
                                   {boothApplication.event.name}
                                 </p>
-                              </td>
-                              <td></td>
-                              <td></td>
-                              <td>
-                                <h6 className="text-muted">
-                                  <i className="fa fa-circle text-c-green f-10 m-r-15" />
-                                  <span>
-                                    {new Date(
-                                      boothApplication.applicationDate
-                                    ).toLocaleDateString()}
-                                  </span>
-                                  {/* {boothApplication.applicationDate} */}
-                                </h6>
-                              </td>
-                              <td>
+                              </Col>
+                             
                                 {/* <a
                                   href={DEMO.BLANK_LINK}
                                   className="label theme-bg3 text-white f-12"
@@ -646,12 +635,7 @@ const OrgBoothDashboard = () => {
                                 >
                                   Reject
                                 </a> */}
-                              </td>
-
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td>
+                            
                                 {/* {' '}
                                 <a
                                   href={DEMO.BLANK_LINK}
@@ -659,10 +643,18 @@ const OrgBoothDashboard = () => {
                                 >
                                   VIEW
                                 </a> */}
-                              </td>
-                              <td></td>
-                              <td></td>
-                            </tr>
+                             
+                             <Col md={3}>   
+                             <h6 className="text-muted">
+                                  <span>
+                                    {new Date(
+                                      boothApplication.applicationDate
+                                    ).toLocaleDateString()}
+                                  </span>
+                                  {/* {boothApplication.applicationDate} */}
+                                </h6>
+                                </Col>
+                            </Row>
                           </div>
                         );
                       })}
@@ -707,7 +699,7 @@ const OrgBoothDashboard = () => {
               <h2 className="mt-2 f-w-300" style={{ color: '#7b9e83' }}>
                 {/* <h6 className="text-muted mt-3 mb-0">IT Fair 2020 </h6> */}
                 {bpNumber}
-                <sub className="text-muted f-14">Booth Applications</sub>
+                <sub className="text-muted f-14">Paid Booth Applications</sub>
               </h2>
 
               <i className="fa fa-angellist text-c-purple f-50" />

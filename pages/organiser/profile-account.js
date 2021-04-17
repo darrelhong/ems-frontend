@@ -736,66 +736,69 @@ const MyAccount = () => {
                                 </h6>
                               )}
                             </div>
-
-                            <Form.Label className="uploadFileLabel">
-                              Business Verification Document &nbsp;
-                              <OverlayTrigger
-                                placement="right"
-                                delay={{ show: 250, hide: 400 }}
-                                overlay={renderTooltipBizDoc}
-                              >
-                                <BsFillInfoCircleFill></BsFillInfoCircleFill>
-                              </OverlayTrigger>
-                            </Form.Label>
-
-                            <Col className="form-group" md={12}>
-                              <Form.Group>
-                                <Form.File
-                                  id="biz-upload-custom-file"
-                                  type="file"
-                                  accept=".zip"
-                                  onChange={handleBizDocFileChange}
-                                  required
-                                  custom
-                                />
-                                <Form.Label
-                                  className="form-group custom-file-label"
-                                  md={12}
-                                  for="custom-file"
-                                >
-                                  {bizDocInputName}
+                            {user?.approved != true && (
+                              <div>
+                                <Form.Label className="uploadFileLabel">
+                                  Business Verification Document &nbsp;
+                                  <OverlayTrigger
+                                    placement="right"
+                                    delay={{ show: 250, hide: 400 }}
+                                    overlay={renderTooltipBizDoc}
+                                  >
+                                    <BsFillInfoCircleFill></BsFillInfoCircleFill>
+                                  </OverlayTrigger>
                                 </Form.Label>
 
-                                <div>
-                                  <br></br>
-                                  <p className="saved-message">
-                                    <b className="noteMsg">Note</b>
-                                    <br></br>
-                                    <b className="noteMsg">*</b>You need to
-                                    upload document(s) to verify your business
-                                    before you can create any events on
-                                    EventStop.
-                                    <br></br>
-                                    <b className="noteMsg">*</b> If your
-                                    previous submission is incomplete, you can
-                                    zip and re-upload all the verfication
-                                    document(s).
-                                  </p>
-                                </div>
+                                <Col className="form-group" md={12}>
+                                  <Form.Group>
+                                    <Form.File
+                                      id="biz-upload-custom-file"
+                                      type="file"
+                                      accept=".zip"
+                                      onChange={handleBizDocFileChange}
+                                      required
+                                      custom
+                                    />
+                                    <Form.Label
+                                      className="form-group custom-file-label"
+                                      md={12}
+                                      for="custom-file"
+                                    >
+                                      {bizDocInputName}
+                                    </Form.Label>
 
-                                <br></br>
-                                {user?.approved != true && (
-                                  <ButtonWithLoading
-                                    type="submit"
-                                    className="btn btn-fill-out"
-                                    name="submit"
-                                    isLoading={loginLoading}
-                                  >
-                                    Upload
-                                  </ButtonWithLoading>
-                                )}
-                              </Form.Group>
-                            </Col>
+                                    <div>
+                                      <br></br>
+                                      <p className="saved-message">
+                                        <b className="noteMsg">Note</b>
+                                        <br></br>
+                                        <b className="noteMsg">*</b>You need to
+                                        upload document(s) to verify your
+                                        business before you can create any
+                                        events on EventStop.
+                                        <br></br>
+                                        <b className="noteMsg">*</b> If your
+                                        previous submission is incomplete, you
+                                        can zip and re-upload all the
+                                        verfication document(s).
+                                      </p>
+                                    </div>
+
+                                    <br></br>
+                                    {user?.approved != true && (
+                                      <ButtonWithLoading
+                                        type="submit"
+                                        className="btn btn-fill-out"
+                                        name="submit"
+                                        isLoading={loginLoading}
+                                      >
+                                        Upload
+                                      </ButtonWithLoading>
+                                    )}
+                                  </Form.Group>
+                                </Col>
+                              </div>
+                            )}
                           </form>
                         </div>
                       </Card.Body>
@@ -1255,10 +1258,10 @@ const MyAccount = () => {
                                     ref={register()}
                                   /> */}
                                   <input
-
                                     className="form-control"
-
-                                    onChange={event => { setQuery(event.target.value); }}
+                                    onChange={(event) => {
+                                      setQuery(event.target.value);
+                                    }}
                                     // defaultValue={user?.address}
                                     type="text"
                                     value={query}
@@ -1266,9 +1269,9 @@ const MyAccount = () => {
                                     ref={register()}
                                     id="autocomplete"
 
-                                  // ref={(ref) => {register(ref); autoCompleteRef;}}
-                                  //  ref= {autoCompleteRef}
-                                  //  id={autoCompleteRef}
+                                    // ref={(ref) => {register(ref); autoCompleteRef;}}
+                                    //  ref= {autoCompleteRef}
+                                    //  id={autoCompleteRef}
                                   />
                                 </Form.Group>
                               </Col>

@@ -447,7 +447,7 @@ export default function EventCard({ event, user }) {
                           Button
                           style={{ padding: '5px 25px' }}
                         >
-                          Apply
+                          Applied
                         </Button>
                       )}
 

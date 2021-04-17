@@ -18,7 +18,7 @@ const ShopHeader = ({
       >
         <Col>
           <div className="shop-header">
-            <div className="shop-header__left">
+            {/* <div className="shop-header__left">
               <select
                 className="form-control form-control-sm"
                 onChange={(e) =>
@@ -29,9 +29,9 @@ const ShopHeader = ({
                 <option value="priceHighToLow">Price - High to Low</option>
                 <option value="priceLowToHigh">Price - Low to High</option>
               </select>
-            </div>
+            </div> */}
 
-            <div>
+            <div className="input-group mb-3">
               <input
                 type="text"
                 className="form-control "
