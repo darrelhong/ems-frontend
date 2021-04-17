@@ -42,7 +42,7 @@ const getItems = (count, offset = 0) =>
 export default function Allocation() {
   const [state, setState] = useState(
     JSON.parse(localStorage.getItem('allocations')) || [
-      getItems(5),
+      getItems(4),
       [],
       [],
       [],

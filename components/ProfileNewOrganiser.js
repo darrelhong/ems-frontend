@@ -857,7 +857,7 @@ const sendNoti = (data)=>{
                                             </h6>
                                           )}
                                           <div className="rating">
-                                            <strong className="product-description">{review.event.name}</strong>
+                                            <strong className="product-description">{review?.event?.name}</strong>
                                           </div>
                                         </p>
                                         <div className="description">

@@ -130,7 +130,7 @@ const PartnerProductsView = () => {
                 <Row className="mb-4">
                     {products && (
                         <MaterialTable
-                            title="Business Partners"
+                            title="Products"
                             columns={columns}
                             data={products}
                             hover

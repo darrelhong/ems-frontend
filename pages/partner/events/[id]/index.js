@@ -45,7 +45,7 @@ export default function PartnerEventPage({ id }) {
   // console.log("SP: ", sellerProfile)
 
   let paybtn;
-  if (applicationMade?.booths.length > 0 & applicationMade?.paymentStatus === "PENDING") {
+  if (applicationMade?.booths?.length > 0 & applicationMade?.paymentStatus === "PENDING") {
     // if (applicationMade?.paymentStatus === "PENDING") {
     paybtn = <button
     className="btn btn-fill-out btn-sm mr-2"
