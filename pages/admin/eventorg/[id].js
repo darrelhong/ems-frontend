@@ -141,14 +141,7 @@ export default function EventOrganiserDetails({ id }) {
               <dt className="col-sm-3">Support docs</dt>
               <dd className="col-sm-9">
                 {eo.supportDocsUrl ? (
-                  <form
-                    method="get"
-                    action={
-                      eo?.supportDocsUrl.includes('https')
-                        ? eo?.supportDocsUrl
-                        : `/api/downloadFile/${eo?.supportDocsUrl}`
-                    }
-                  >
+                  <form method="get" action={eo.supportDocsUrl}>
                     <button className="btn btn-purple btn-sm" type="submit">
                       Download file
                     </button>

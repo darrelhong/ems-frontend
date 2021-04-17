@@ -37,15 +37,18 @@ export default function AllSellerProfiles() {
   // console.log(sellerProfiles)
 
   return (
-    <PartnerWrapper title="Seller Profiles">
-      <BreadcrumbOne pageTitle="View All Seller Profiles">
+    <PartnerWrapper title="Booth Profiles">
+    {/* <PartnerWrapper title="Seller Profiles"> */}
+      <BreadcrumbOne pageTitle="View All Booth Profiles">
+      {/* <BreadcrumbOne pageTitle="View All Seller Profiles"> */}
         <ol className="breadcrumb justify-content-md-end">
           <li className="breadcrumb-item">
             <Link href="/partner/home">
               <a> Home</a>
             </Link>
           </li>
-          <li className="breadcrumb-item active">Seller Profiles</li>
+          {/* <li className="breadcrumb-item active">Seller Profiles</li> */}
+          <li className="breadcrumb-item active">Booth Profiles</li>
         </ol>
       </BreadcrumbOne>
       <Container className="my-4">

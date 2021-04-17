@@ -130,7 +130,8 @@ const ApplicationCard = ({
                 // variant="primary"
                 className="btn btn-fill-out btn-addtocart space-ml--10"
               >
-                View Seller Profile
+                {/* View Seller Profile */}
+                View Booth Profiles
               </button>
             </Link>
           </div>

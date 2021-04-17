@@ -148,10 +148,13 @@ function myEvents() {
               </Col>
 
               <Col lg={2} className="order-lg-first mt-4 pt-2 mt-lg-0 pt-lg-0">
-                <EventSideBar
+                {user && (
+                  <EventSideBar
                   getSortParams={getSortParams}
                   sortValue={sortValue}
+                  user={user}
                 />
+                )}
               </Col>
             </Row>
           </Container>

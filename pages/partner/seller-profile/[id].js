@@ -28,7 +28,8 @@ const SellerProfile = () => {
             : 'Booth Profile'
         }
       >
-        <BreadcrumbOne pageTitle="Seller Profile">
+        <BreadcrumbOne pageTitle="Booth Profile">
+        {/* <BreadcrumbOne pageTitle="Seller Profile"> */}
           <ol className="breadcrumb justify-content-md-end">
             <li className="breadcrumb-item">
               <Link href="/">

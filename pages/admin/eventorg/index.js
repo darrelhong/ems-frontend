@@ -3,15 +3,8 @@ import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 import MaterialTable from 'lib/MaterialTable';
 import { Card, Col, Container, Row } from 'react-bootstrap';
-import axios from 'axios';
 
-import {
-  CheckCircleOutline,
-  RemoveCircleOutline,
-  InfoOutlined,
-} from '@material-ui/icons';
-
-
+import { InfoOutlined } from '@material-ui/icons';
 
 import api from 'lib/ApiClient';
 
@@ -64,52 +57,6 @@ export default function AdminEventOrg() {
                   actionsColumnIndex: -1,
                 }}
                 actions={[
-                  (rowData) => ({
-                    icon: CheckCircleOutline,
-                    tooltip: 'Approve organiser',
-                    onClick: (event, rowData) => {
-                      api
-                        .post(`/api/organiser/approve/${rowData.id}`)
-                        .then(() => {
-                          queryClient.invalidateQueries('eventOrganisers');
-                          let endpoint = "https://api.ravenhub.io/company/WLU2yLZw9d/subscribers/organiser" + rowData.id + "/events/dBiWblzj7S"
-
-                          axios.post(endpoint, { "message": "Your application has been approved. You may start creating events." }, {
-                            headers: { 'Content-type': 'application/json' }
-                          }).then((response) => {
-                            console.log('response' + response);
-                          }).catch((error) => {
-                            console.log(error);
-                          });
-                         
-                        });
-
-                    },
-                    disabled: rowData.approved,
-                  }),
-                  (rowData) => ({
-                    icon: RemoveCircleOutline,
-                    tooltip: 'Reject organiser',
-                    onClick: (event, rowData) => {
-                      api
-                        .post(`/api/organiser/reject/${rowData.id}`, {
-                          message: 'Default message',
-                        })
-                        .then(() => {
-                          queryClient.invalidateQueries('eventOrganisers');
-                          let endpoint = "https://api.ravenhub.io/company/WLU2yLZw9d/subscribers/organiser" + rowData.id + "/events/dBiWblzj7S"
-
-                          axios.post(endpoint, { "message": "Your application has been rejected. Please re-submit your application." }, {
-                            headers: { 'Content-type': 'application/json' }
-                          }).then((response) => {
-                            console.log('response' + response);
-                          }).catch((error) => {
-                            console.log(error);
-                          });
-                        });
-                    },
-                    disabled: !rowData.approved,
-                  }),
                   {
                     icon: InfoOutlined,
                     tooltip: 'View event organiser',
