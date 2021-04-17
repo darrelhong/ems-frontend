@@ -79,10 +79,15 @@ const OrgDashboard = () => {
   }
   const getUpcoming = async () => {
     await getUpcomingEventTicket().then((data) => {
-      console.log("upcoming" + data);
-      setUpcomingEvent(data?.eid);
+      console.log("upcoming" + data?.eid);
+      if(data?.eid != 0){
+        setUpcomingEvent(data?.eid);
       setEventName(data?.name);
       getNumberOfDays(data?.eid);
+      }else{
+        setDaysTitle("No Upcoming Events or Past Events with Ticket Transactions")
+      }
+      
 
     })
   }
@@ -118,7 +123,7 @@ const OrgDashboard = () => {
   }
   const getTopSalesEvent = async () => {
     await getTopSales().then((data) => {
-      console.log("topevents" + data[0].name);
+      // console.log("topevents" + data[0].name);
 
       setTopEvents(data);
       if (data.length > 0) {

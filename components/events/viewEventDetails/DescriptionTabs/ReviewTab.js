@@ -8,9 +8,9 @@ const ReviewTab = ({ reviews }) => {
   return (
     <>
     <Row>
-    <Col md={1}>
+    {/* <Col md={1}>
       </Col>
-   
+    */}
     <Col md={10}>
     <div className="product-description-tab__review">
       <div
@@ -64,9 +64,9 @@ const ReviewTab = ({ reviews }) => {
                           </h6>
                         )}
 
-                        <div className="rating">
+                        {/* <div className="rating">
                           <strong className="product-description">{review.event.name}</strong>
-                        </div>
+                        </div> */}
 
                       </p>
                       <div className="description">
