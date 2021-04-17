@@ -24,7 +24,8 @@ import HidePopover from '../../Event/HidePopover';
 import DeleteModal from '../../Event/DeleteModal';
 import { Badge } from 'react-bootstrap';
 import api from '../../../lib/ApiClient';
-
+import { FcVip } from "react-icons/fc";
+import { RiVipLine } from "react-icons/ri";
 const EventDescription = ({
   event,
   prettyStartDate,
@@ -419,13 +420,14 @@ const EventDescription = ({
           >
             <ul className="social-icons">
               <li>
-                <IconButton
-                  aria-label="vip"
+                {/* <IconButton */}
+                  {/* aria-label="vip"
                   color="secondary"
-                  onClick={() => vipToggle(event)}
-                >
-                  {event.vip ? <StarIcon /> : <StarBorderIcon />}
-                </IconButton>
+                  // onClick={() => vipToggle(event)}
+                > */}
+                  {event.vip == true && (<RiVipLine color="#ff324d"/>)}
+
+                {/* </IconButton> */}
               </li>
               {event.eventStatus && (
                 <li>

@@ -315,7 +315,9 @@ setCurrenteventlist(events);
           {
             headers: { 'Content-type': 'application/json' },
           }
-        );
+        ) .catch((error) => {
+          console.log(error);
+        });
       })
       .catch((error) => {
         console.log(error);

@@ -10,8 +10,9 @@ export default function Booths({ sellerProfiles }) {
   }, []);
 
   return (
-    <div>
-      <h5>{"View Event's Booths and Products"}</h5>
+    <>
+    {(booths.length > 0 ) && (  <div>
+      <h5>View Event's Booths and Products</h5>
 
       <Accordion>
         {booths?.map((booth) => (
@@ -58,7 +59,8 @@ export default function Booths({ sellerProfiles }) {
           </Card>
         ))}
       </Accordion>
-    </div>
+    </div>)}
+   </>
   );
 }
 

@@ -19,6 +19,7 @@ import RegisterModal from 'components/events/registration/RegisterModal';
 import WithdrawModal from 'components/events/registration/WithdrawModal';
 import { getBoothTotalFromEvent } from 'lib/functions/boothFunctions';
 import { useToasts } from 'react-toast-notifications';
+import { RiVipLine } from "react-icons/ri";
 
 export function getServerSideProps({ query }) {
   return {
@@ -47,8 +48,8 @@ export default function PartnerEventPage({ id }) {
   if (sellerProfile?.booths.length > 0 & applicationMade?.paymentStatus === "PENDING") {
     // if (applicationMade?.paymentStatus === "PENDING") {
     paybtn = <button
-      className="btn btn-fill-out btn-sm mr-2"
-      onClick={() => setShowPaymentModal(true)}>Pay</button>
+    className="btn btn-fill-out btn-sm mr-2"
+      onClick={() => setShowPaymentModal(true)}>Pay Application</button>
   }
   else {
     paybtn = ""
@@ -136,7 +137,7 @@ export default function PartnerEventPage({ id }) {
               </Col>
               <Col lg={6}>
                 <div className="pt-3" >
-                  <h3>{data.name}</h3>
+                  <h3>{data.name} {data.isVip == true && (<RiVipLine color="#ff324d"/>)}</h3>
                   {/* <strong className="product-description d-inline" >organised by: </strong> */}
 
 

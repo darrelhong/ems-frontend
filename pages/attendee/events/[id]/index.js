@@ -20,6 +20,7 @@ import CenterSpinner from 'components/custom/CenterSpinner';
 import EventCategoryList from 'components/custom/events/EventCategoryList';
 import Booths from 'components/custom/events/Booths';
 import Brochures from 'components/custom/events/Brochures';
+import { RiVipLine } from "react-icons/ri";
 
 export function getServerSideProps({ query }) {
   return {
@@ -68,7 +69,7 @@ export default function AttendeeEventPage({ id }) {
               </Col>
               <Col lg={6}>
                 <div className="pt-3">
-                  <h3>{data.name}</h3>
+                  <h3>{data.name}  {data.isVip == true && (<RiVipLine color="#ff324d"/>)}</h3>
                   <span>
                     Organised By: {" "}
                     <Link
@@ -82,6 +83,7 @@ export default function AttendeeEventPage({ id }) {
                       {data?.eventOrganiser?.name}
                     </Link>{' '} </span>
                     <div>
+                   
                     <EventCategoryList categories={data.category} />
                     <p>{data.descriptions}</p></div>
                     <br></br>

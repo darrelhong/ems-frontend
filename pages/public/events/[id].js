@@ -14,6 +14,7 @@ import AddToCalendar from 'components/custom/AddToCalendar';
 import ShareButton from 'components/custom/ShareButton';
 import CenterSpinner from 'components/custom/CenterSpinner';
 import EventCategoryList from 'components/custom/events/EventCategoryList';
+import { RiVipLine } from "react-icons/ri";
 
 export function getServerSideProps({ query }) {
   return {
@@ -53,7 +54,7 @@ export default function PublicEventPage({ id }) {
               </Col>
               <Col lg={6}>
                 <div className="pt-3">
-                  <h3>{data.name}</h3>
+                  <h3>{data.name} {data.isVip == true && (<RiVipLine color="#ff324d"/>)}</h3>
                   <span>
                     Organised By: {" "}
                     <Link

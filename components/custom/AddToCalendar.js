@@ -51,13 +51,13 @@ export default function AddToCalendar({ event }) {
     // >
 
     <a
-      className="text-dark font-weight-bold"
+      className="text-default font-weight-bold"
       href={'data:text/plain;charset=utf-8,' + cal.current}
       download="calendar.ics"
-      
+    
     >
       <IoMdCalendar style={{
-        color: 'red'
+        color: 'black'
       }}/>
       {' '}
       Add to calendar
