@@ -31,7 +31,7 @@ import {
 
 import { useForm } from 'react-hook-form';
 import { getUser, getUserPaymentMethod } from '../../lib/query/getUser';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient, useQuery } from 'react-query';
 import api from '../../lib/ApiClient';
 import { logout } from '../../lib/auth';
 
@@ -39,7 +39,7 @@ import { logout } from '../../lib/auth';
 import Cards from 'react-credit-cards';
 import 'react-credit-cards/es/styles-compiled.css';
 import PaymentMethodsBp from 'components/custom/PaymentMethodsBP';
-import usePaymentMethods from 'lib/query/usePaymentMethodsBP';
+//import usePaymentMethods from 'lib/query/usePaymentMethodsBP';
 
 const MyAccount = () => {
   const [businessCategory, setBusinessCategory] = useState('');
@@ -101,7 +101,7 @@ const MyAccount = () => {
 
   let autoComplete;
 
-  const getPaymentMethodsData =  usePaymentMethods();
+  //const getPaymentMethodsData =  usePaymentMethods();
   const loadScript = (url, callback) => {
     let script = document.createElement("script");
     script.type = "text/javascript";
@@ -248,15 +248,23 @@ const MyAccount = () => {
     });
   };
 
+
+const getPaymentMethods = async () => {
+   const { data } = await api.get('/api/sellerApplication/payment-methods');
+   return data;
+ };
+
+
   const mutateCardPaymentMethod = useMutation((data) => {
     console.log('data');
     console.log(data);
+
     api
       .post(`/api/user/addCardPayment`, data, {
-        onSuccess: () => {
-          // queryClient.invalidateQueries(['user', user?.id.toString()]);
-          // logout({ redirectTo: '/organiser/login' });
-        },
+        // onSuccess: () => {
+        //    queryClient.invalidateQueries('paymentMethods');
+      
+        // },
       })
       .then((response) => {
         console.log(response);
@@ -285,7 +293,8 @@ const MyAccount = () => {
             setCardinfoSucessMsg(true);
             getUserPayment();
             getUserData();
-            getPaymentMethodsData();
+            //getPaymentMethodsData();
+            getPaymentMethods();
             document.getElementById('payment-method-form').reset();
           } else if (message == 'dbError') {
             setCardErrorMsg('An error has occured');

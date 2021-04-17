@@ -707,7 +707,7 @@ const OrgBoothDashboard = () => {
               <h2 className="mt-2 f-w-300" style={{ color: '#7b9e83' }}>
                 {/* <h6 className="text-muted mt-3 mb-0">IT Fair 2020 </h6> */}
                 {bpNumber}
-                <sub className="text-muted f-14">Paid Booth Applications</sub>
+                <sub className="text-muted f-14">Booth Applications</sub>
               </h2>
 
               <i className="fa fa-angellist text-c-purple f-50" />
