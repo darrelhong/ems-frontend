@@ -43,9 +43,8 @@ export default function EventCard({ event, user }) {
   const isRejected = user?.sellerApplications.filter(sa => sa.sellerApplicationStatus === "REJECTED").some(e => e.event.eid === event.eid)
   const [badgeStatus, setBadgeStatus] = useState("")
   const [badgeStyle, setBadgeStyle] = useState("primary")
-  const isApproved = user?.sellerApplications.filter(sa => (sa.sellerApplicationStatus === "APPROVED"))
-  const isAllocated = user?.sellerApplications.filter(sa => (sa.paymentStatus === "PENDING" && sa.sellerApplicationStatus === "APPROVED")).some(e => e.event.eid === event.eid)
-  const [needPay, setNeedPay] = useState(isAllocated && user?.sellerApplications.filter(sa => (sa.paymentStatus === "PENDING" && sa.sellerApplicationStatus === "APPROVED" && sa.boothQuantity > 0)).some(e => e.event.eid === event.eid))
+  const isApproved = user?.sellerApplications.filter(sa => (sa.sellerApplicationStatus === "APPROVED")).some(e => e.event.eid === event.eid)
+  const isAllocated = user?.sellerApplications.filter(sa => (sa.paymentStatus === "PENDING" && sa.sellerApplicationStatus === "APPROVED" && sa.booths.length > 0)).some(e => e.event.eid === event.eid)
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [boothTotal, setBoothTotal] = useState(0);
   const [applicationMade, setApplicationMade] = useState();
@@ -59,7 +58,7 @@ export default function EventCard({ event, user }) {
   const role = user?.roles[0].roleEnum;
   const [message, setMessage] = useState('');
   const [rating, setRating] = useState(0);
-  const [confirmReviewModalShow, setConfirmReviewModalShow] = useState(false);
+  // const [confirmReviewModalShow, setConfirmReviewModalShow] = useState(false);
   const disabledStatuses = ["Pending", "Pending Payment", "Waiting For Allocation", "Pending Approval", "Confirmed", "Rejected"]
   // const closeConfirmReviewModal = () => { setConfirmReviewModalShow(false); setReviewModalShow(true); }
   // const openConfirmReviewModal = () => {
@@ -72,8 +71,8 @@ export default function EventCard({ event, user }) {
   //     setReviewModalShow(false);
   //   }
   // }
-  // console.log(event);
-  // console.log(user);
+  // console.log("event: ", event);
+  // console.log("user: ", user);
   const handleMessage = (e) => {
     setMessage(e.target.value);
     // console.log(e.target.value + "message");
@@ -165,7 +164,7 @@ export default function EventCard({ event, user }) {
       loadApplications()
     }
     getBadge()
-  }, [user])
+  }, [user, badgeStatus])
 
   // console.log(message)
   // console.log(rating)
@@ -208,7 +207,7 @@ export default function EventCard({ event, user }) {
     // if (needPay) status = 'Pending Payment';
     // else if (isApproved) status = "Waiting For Allocation"
     if (isApproved == true) {
-      if (needPay == true) status = 'Pending Payment';
+      if (isAllocated == true) status = 'Pending Payment';
       else status = 'Waiting For Allocation';
     }
     else if (isPendingApproval) status = 'Pending Approval';
@@ -376,7 +375,7 @@ export default function EventCard({ event, user }) {
           style={{
             position: 'absolute',
             top: 5,
-            right: 5,
+            left: 5,
           }}
         >
           {badgeStatus}

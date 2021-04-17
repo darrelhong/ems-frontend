@@ -40,12 +40,12 @@ export default function PartnerEventPage({ id }) {
 
   // const [needPay, setNeedPay] = useState(user?.sellerApplications.filter(sa => (sa.paymentStatus === "PENDING" && sa.sellerApplicationStatus === "APPROVED" && sa.boothQuantity > 0)).some(e => e.event.eid === data?.eid))
   // console.log("application: ", applicationMade);
-  console.log("User: ", user)
-  console.log("data: ", data)
-  console.log("SP: ", sellerProfile)
+  // console.log("User: ", user)
+  // console.log("data: ", data)
+  // console.log("SP: ", sellerProfile)
 
   let paybtn;
-  if (sellerProfile?.booths.length > 0 & applicationMade?.paymentStatus === "PENDING") {
+  if (applicationMade?.booths.length > 0 & applicationMade?.paymentStatus === "PENDING") {
     // if (applicationMade?.paymentStatus === "PENDING") {
     paybtn = <button
     className="btn btn-fill-out btn-sm mr-2"
@@ -90,7 +90,7 @@ export default function PartnerEventPage({ id }) {
         sellerProfile={sellerProfile}
         event={data}
         partner={user}
-        applicationMade={applicationMade}/>
+        applicationMade={applicationMade} />
       <RegisterModal
         showRegisterModal={showRegisterModal}
         closeRegisterModal={() => setShowRegisterModal(false)}
