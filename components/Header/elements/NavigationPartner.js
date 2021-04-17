@@ -49,21 +49,18 @@ const NavigationPartner = ({ positionClass }) => {
           <ul className="sub-menu sub-menu--one-column">
             <li>
               <Link href="/partner/seller-profile">
-                <a>Manage Booths</a>
+                <a>Manage Booth Profiles</a>
               </Link>
             </li>
-            <li>
-              <Link href="/partner/products">
-                <a>Manage Products</a>
-              </Link>
-            </li>
-            {/* <li>
-              <Link href="/partner/events/applications">
-                <a>Manage Applications</a>
-              </Link>
-            </li> */}
           </ul>
         </li>
+
+        <li>
+          <Link href="/partner/products">
+            <a className="nav-link">PRODUCTS</a>
+          </Link>
+        </li>
+        
       </ul>
     </nav>
   );
