@@ -7,7 +7,7 @@ import { attendeeFavouriteEvent, getAttendeeFavouriteEvents, getBusinessPartnerF
 import { BsHeart, BsHeartFill } from 'react-icons/bs';
 import { useEffect, useState } from 'react';
 import { partnerLikeEvent, partnerUnlikeEvent } from 'lib/query/events';
-export default function HomeEventCard({ user, event, isFavourite, tab, setFavouriteEvents, userPath }) {
+export default function HomeEventCard({ user, event, isFavourite, tab, setFavouriteEvents, userPath, isGuest }) {
 
   useEffect(() => {
     if (user != null){
@@ -81,9 +81,13 @@ export default function HomeEventCard({ user, event, isFavourite, tab, setFavour
         />
         <Card.Body className="d-flex flex-column">
           {/* <Link href={`/attendee/events/${event.eid}`}> */}
-          <Link href={`/${userPath}/events/${event.eid}`}>
+          {isGuest && ( <Link href={`/public/events/${event.eid}`}>
             <Card.Title>{event.name}</Card.Title>
-          </Link>
+          </Link>)}
+          {!isGuest && (   <Link href={`/${userPath}/events/${event.eid}`}>
+            <Card.Title>{event.name}</Card.Title>
+          </Link>)}
+       
           <Card.Text className="text-default mt-auto">
             {format(parseISO(event.eventStartDate), 'eee, dd MMM yy hh:mmbbb')}
           </Card.Text>

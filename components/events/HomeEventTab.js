@@ -38,7 +38,7 @@ export default function HomeEventTab({ events, tab, isGuest, userPath }) {
                 >
                 {/* <Link href={`/partner/events/${event.eid}`}> */}
                 <a className="w-100">
-                    <HomeEventCard user={user} userPath={userPath} event={event} isFavourite={favouriteEvents !== null ? favouriteEvents.some(fEvent => fEvent.eid === event.eid) : null} tab={tab} setFavouriteEvents={setFavouriteEvents} />
+                    <HomeEventCard user={user} userPath={userPath} event={event} isFavourite={favouriteEvents !== null ? favouriteEvents.some(fEvent => fEvent.eid === event.eid) : null} tab={tab} setFavouriteEvents={setFavouriteEvents} isGuest={isGuest}/>
                 </a>
                 {/* </Link> */}
                 </Col>

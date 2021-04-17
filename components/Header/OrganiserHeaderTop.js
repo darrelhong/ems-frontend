@@ -27,6 +27,9 @@ const OrganiserHeaderTop = () => {
           <Col>
             <div className="text-right">
               <ul className="header-list">
+              <li>
+                  <p style={{fontWeight: "700", marginRight: "20px"}}>HI {user?.name.toUpperCase()}</p>
+                </li>
                 <li>
                   <a>
                     <notification-center
