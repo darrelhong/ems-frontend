@@ -111,7 +111,7 @@ const PartnerCard = ({ partner, eid, increaseInviteCount }) => {
                                 />
                               )}
                               {partner.profilePic != null && (
-                                <Image
+                                <img
                                   className="img-circle img-no-padding img-responsive"
                                   src={partner.profilePic}
                                 />

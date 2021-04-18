@@ -7,7 +7,7 @@ import { useMutation } from 'react-query';
 import { Alert, Card, Col, Container, Row } from 'react-bootstrap';
 import { format, parseISO } from 'date-fns';
 
-import { useEvent } from 'lib/query/events';
+import { useEventDetails } from 'lib/query/events';
 import { formatter } from 'lib/util/currency';
 import api from 'lib/ApiClient';
 import useUser from 'lib/query/useUser';
@@ -28,7 +28,7 @@ export function getServerSideProps({ query }) {
 }
 const promise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY);
 export default function PartnerEventTicketing({ id }) {
-  const { data, status } = useEvent(id);
+  const { data, status } = useEventDetails(id);
   const { data: attendee } = useUser(localStorage.getItem('userId'));
   const { data: partner } = useUser(localStorage.getItem('userId'));
 
@@ -442,7 +442,7 @@ PartnerEventTicketing.propTypes = {
 //     getSellerProfilesFromEvent,
 //     returnNewSellerApplications
 // } from 'lib/query/eventApi';
-// import { useEvent } from 'lib/query/events';
+// import { useEventDetails } from 'lib/query/events';
 // import { format, parseISO } from 'date-fns';
 // import { BreadcrumbOne } from 'components/Breadcrumb';
 // import PartnerWrapper from 'components/wrapper/PartnerWrapper';
@@ -454,7 +454,7 @@ PartnerEventTicketing.propTypes = {
 //     const router = useRouter();
 //     const { id } = router.query;
 //     const [event, setEvent] = useState(Object);
-//     const { data, status } = useEvent(id);
+//     const { data, status } = useEventDetails(id);
 //     // useEffect(() => {
 //     //     const loadData = async () => {
 //     //         let eventData = await getEventDetails(id);

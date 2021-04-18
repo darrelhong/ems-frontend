@@ -33,8 +33,8 @@ class MyApp extends App {
         <Fonts />
         <QueryClientProvider client={queryClient}>
           <Hydrate state={pageProps.dehydratedState}>
-            <ReactQueryDevtools initialIsOpen={false} />
-            <ToastProvider placement="bottom-left">
+            <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+            <ToastProvider>
               <Provider store={reduxStore}>
                 <PersistGate loading={<Preloader />} persistor={this.persistor}>
                   <Component {...pageProps} />

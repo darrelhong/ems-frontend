@@ -306,7 +306,7 @@ const OrgBoothDashboard = () => {
               )
               .map((event, key) => {
                 return (
-                  <div key="key">
+                  <div key={key}>
                     <div className="media friendlist-box align-items-center justify-content-center m-b-20">
                       <div className="m-r-10 photo-table">
                         {/* <a href={DEMO.BLANK_LINK}>
@@ -369,7 +369,7 @@ const OrgBoothDashboard = () => {
               )
               .map((event, key) => {
                 return (
-                  <div key="key">
+                  <div key={key}>
                     <div className="media friendlist-box align-items-center justify-content-center m-b-20">
                       <div className="m-r-10 photo-table">
                         {/* <a href={DEMO.BLANK_LINK}>
@@ -432,7 +432,7 @@ const OrgBoothDashboard = () => {
               )
               .map((event, key) => {
                 return (
-                  <div key="key">
+                  <div key={key}>
                     <div className="media friendlist-box align-items-center justify-content-center m-b-20">
                       <div className="m-r-10 photo-table">
                         {/* <a href={DEMO.BLANK_LINK}>
@@ -575,7 +575,7 @@ const OrgBoothDashboard = () => {
                     {boothAppList.length > 0 &&
                       boothAppList.map((boothApplication, key) => {
                         return (
-                          <div key="key" >
+                          <div key={key}>
                             <br></br>
                             <Row className="unread ml-2">
                             <Col md={1}>

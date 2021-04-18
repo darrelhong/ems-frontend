@@ -34,7 +34,7 @@ const getItems = (count, offset = 0) =>
   Array.from({ length: count }, (v, k) => k).map((k) => ({
     id: `item-${k + offset}`,
     content: `Application ${k + offset}`,
-    bpName: `Business partner ${k}`,
+    bpName: `Greenify`,
     description: 'Lorem ipsum dolor sit amet',
     status: 'PENDING',
   }));
@@ -42,7 +42,7 @@ const getItems = (count, offset = 0) =>
 export default function Allocation() {
   const [state, setState] = useState(
     JSON.parse(localStorage.getItem('allocations')) || [
-      getItems(4),
+      getItems(1),
       [],
       [],
       [],
@@ -83,7 +83,7 @@ export default function Allocation() {
   };
 
   const reset = () => {
-    setState([getItems(5), [], [], [], []]);
+    setState([getItems(1), [], [], [], []]);
   };
 
   return (
@@ -189,7 +189,7 @@ export default function Allocation() {
 
       <div className="d-flex justify-content-center mt-5">
         <Figure>
-          <Figure.Image src="https://www.ncwvhba.org/wp-content/uploads/2021-Home-Show-Packet-4.jpg" />
+          <Figure.Image src="https://i.pinimg.com/originals/92/f7/cd/92f7cd2fe0cef5af0cbd2777a27cc629.png" />
           <Figure.Caption className="text-dark">
             Floorplan layout
           </Figure.Caption>
