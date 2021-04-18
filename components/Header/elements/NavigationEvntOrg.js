@@ -106,11 +106,6 @@ const NavigationEvntOrg = ({ positionClass }) => {
               </Link>
             </li>
             <li>
-              <Link href="/home/fashion-two">
-                <a>Manage Booths</a>
-              </Link>
-            </li>
-            <li>
               <Link href="/organiser/events/applications">
                 <a>Manage Event Applications</a>
               </Link>
