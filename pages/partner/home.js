@@ -314,9 +314,10 @@ function PartnerHome() {
                             <ButtonWithLoading
                               className="btn btn-fill-out btn-sm"
                               id="btnSeeMoreVip"
+                              disabled
                               onClick={() => fetchNextPage("rsvp")}
                             >
-                              See More
+                              No More Events
                             </ButtonWithLoading>
                           </Col>
                         </Row>
