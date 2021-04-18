@@ -71,17 +71,12 @@ const MobileMenuNavEvntOrg = ({ getActiveStatus }) => {
               </Link>
             </li>
             <li>
-              <Link href="/home/fashion-two">
-                <a>Manage Booths</a>
-              </Link>
-            </li>
-            <li>
             <Link href="/organiser/events/applications">
                 <a>Manage Business Partner Seller Applications</a>
               </Link>
             </li>
             <li>
-              <Link href="/home/furniture-two">
+              <Link href="/organiser/view-all-vip-partner-new">
                 <a>View All VIP Business Partner</a>
               </Link>
             </li>
