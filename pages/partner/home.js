@@ -10,6 +10,7 @@ import {
   getTopTenEvents,
   getVipEvents
 } from '../../lib/query/getEvents';
+import { getRsvpEvents } from 'lib/query/eventApi';
 
 import PartnerWrapper from '../../components/wrapper/PartnerWrapper';
 import Head from 'next/head';
@@ -27,6 +28,7 @@ function PartnerHome() {
   const [eventsForYou, setEventsForYou] = useState([]);
   const [eventsInNext30Days, setEventsInNext30Days] = useState([]);
   const [eventsVip, setEventsVip] = useState([]);
+  const [eventsRsvp, setEventsRsvp] = useState([]);
   const [mostPopularEvents, setMostPopularEvents] = useState([]);
 
   const [nextPageFollowing, setNextPageFollowing] = useState(1);
@@ -41,8 +43,14 @@ function PartnerHome() {
       loadEventsForYou();
       loadEventsInNext30Days();
       loadEventsVip();
+      loadEventsRsvp();
     }
   }, [user]);
+
+  const loadEventsRsvp = async () => {
+    const data = await getRsvpEvents(user?.id);
+    setEventsRsvp(data);
+  }
 
   function loadEventsMostPopular() {
     const getEvent = async () => {
@@ -199,6 +207,11 @@ function PartnerHome() {
                           VIP
                         </Nav.Link>
                       </Nav.Item>
+                      <Nav.Item>
+                        <Nav.Link eventKey="rsvp">
+                          RSVP
+                        </Nav.Link>
+                      </Nav.Item>
                     </Nav>
                   </div>
                   <Col xs={12}>
@@ -281,6 +294,27 @@ function PartnerHome() {
                               className="btn btn-fill-out btn-sm"
                               id="btnSeeMoreVip"
                               onClick={() => fetchNextPage("vip")}
+                            >
+                              See More
+                            </ButtonWithLoading>
+                          </Col>
+                        </Row>
+                      </Tab.Pane>
+                      <Tab.Pane eventKey="rsvp">
+                        <div className="mt-3">
+                          <h3 className="mb-4">RSVP Events</h3>
+                        </div>
+                        <HomeEventTab 
+                          events={eventsRsvp}
+                          tab="rsvp"
+                          userPath="partner"
+                        />
+                        <Row>
+                          <Col className="d-flex align-items-center">
+                            <ButtonWithLoading
+                              className="btn btn-fill-out btn-sm"
+                              id="btnSeeMoreVip"
+                              onClick={() => fetchNextPage("rsvp")}
                             >
                               See More
                             </ButtonWithLoading>
