@@ -19,7 +19,8 @@ const BPPaymentModal = ({
     showPaymentModal,
     sellerProfile,
     closePaymentModal,
-    applicationMade
+    applicationMade,
+    setNeedPay
 }) => {
 
     const [clientSecret, setClientSecret] = useState('');
@@ -48,6 +49,7 @@ const BPPaymentModal = ({
                     setView('payment');
                 } else {
                     setPaymentCompleteResp(resp.data.tickets);
+                    setNeedPay(false);
                     closePaymentModal();
                 }
             },

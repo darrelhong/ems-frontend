@@ -37,18 +37,17 @@ export default function PartnerEventPage({ id }) {
   const bpId = localStorage.getItem('userId');
   const [applicationMade, setApplicationMade] = useState();
   const sellerProfile = user?.sellerProfiles.filter(sp => sp.event?.eid === data?.eid)[0]
+  const [needPay, setNeedPay] = useState(false)
 
-  // const [needPay, setNeedPay] = useState(user?.sellerApplications.filter(sa => (sa.paymentStatus === "PENDING" && sa.sellerApplicationStatus === "APPROVED" && sa.boothQuantity > 0)).some(e => e.event.eid === data?.eid))
-  // console.log("application: ", applicationMade);
-  // console.log("User: ", user)
-  // console.log("data: ", data)
-  // console.log("SP: ", sellerProfile)
+  console.log(needPay)
+  console.log("app ", applicationMade)
+  // console.log()
 
   let paybtn;
-  if (applicationMade?.booths?.length > 0 & applicationMade?.paymentStatus === "PENDING") {
+  if (needPay == true) {
     // if (applicationMade?.paymentStatus === "PENDING") {
     paybtn = <button
-    className="btn btn-fill-out btn-sm mr-2"
+      className="btn btn-fill-out btn-sm mr-2"
       onClick={() => setShowPaymentModal(true)}>Pay Application</button>
   }
   else {
@@ -69,6 +68,7 @@ export default function PartnerEventPage({ id }) {
       });
       if (applications.length == 1) {
         setApplicationMade(applications[0]);
+        setNeedPay((applicationMade?.booths?.length > 0) && (applicationMade?.paymentStatus === "PENDING"))
       }
     }
     loadBoothTotal();
@@ -90,7 +90,8 @@ export default function PartnerEventPage({ id }) {
         sellerProfile={sellerProfile}
         event={data}
         partner={user}
-        applicationMade={applicationMade} />
+        applicationMade={applicationMade}
+        setNeedPay={setNeedPay} />
       <RegisterModal
         showRegisterModal={showRegisterModal}
         closeRegisterModal={() => setShowRegisterModal(false)}
@@ -137,7 +138,7 @@ export default function PartnerEventPage({ id }) {
               </Col>
               <Col lg={6}>
                 <div className="pt-3" >
-                  <h3>{data.name} {data.isVip == true && (<RiVipLine color="#ff324d"/>)}</h3>
+                  <h3>{data.name} {data.isVip == true && (<RiVipLine color="#ff324d" />)}</h3>
                   {/* <strong className="product-description d-inline" >organised by: </strong> */}
 
 
