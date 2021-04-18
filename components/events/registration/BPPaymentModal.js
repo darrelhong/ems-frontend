@@ -23,6 +23,8 @@ const BPPaymentModal = ({
 }) => {
 
     const [clientSecret, setClientSecret] = useState('');
+    const [checkoutResponse, setCheckoutResponse] = useState();
+    const [paymentCompleteResp, setPaymentCompleteResp] = useState();
     const [pmId, setPmId] = useState();
     const { data: paymentMethods, status: pmStatus } = usePaymentMethods();
     const [view, setView] = useState('summary');
@@ -33,12 +35,13 @@ const BPPaymentModal = ({
         // allocatedBooths.push(sellerProfile?.booths[i].boothNumber)
     }
 
-    // console.log(allocatedBooths)
+    console.log(view)
 
     const { mutate: checkout, isError, isLoading } = useMutation(
         (data) => api.post('/api/sellerProfile/checkout', data),
         {
             onSuccess: (resp) => {
+                console.log(resp)
                 if (resp.data.clientSecret) {
                     setCheckoutResponse(resp.data);
                     setClientSecret(resp.data.clientSecret);
@@ -150,7 +153,7 @@ const BPPaymentModal = ({
                                                     htmlFor="exampleRadios1"
                                                 >
                                                     <CreditCardIcon type={pm.card.brand} />
-                              Card ending in {pm.card.last4}
+                                                    Card ending in {pm.card.last4}
                                                 </label>
                                             </div>
                                         ))}
@@ -175,15 +178,15 @@ const BPPaymentModal = ({
 
                                 <Row>
                                     <Col>
-                                        {/* {isError && (
+                                        {isError && (
                                             <Alert variant="danger" role="alert">
                                                 An error has occured. Please refresh and try again.
                                             </Alert>
-                                        )} */}
+                                        )}
                                         <ButtonWithLoading
                                             className="btn btn-fill-out btn-sm"
                                             onClick={() => {
-                                                console.log(applicationMade.id);
+                                                // console.log(applicationMade.id);
                                                 checkout({
                                                     eventId: event.eid,
                                                     boothQty: allocatedBooths.length,
@@ -194,7 +197,7 @@ const BPPaymentModal = ({
                                                     booths: applicationMade.booths
                                                 })
                                             }}
-                                        // isLoading={isLoading}
+                                            isLoading={isLoading}
                                         >Checkout</ButtonWithLoading>
                                     </Col>
                                 </Row>

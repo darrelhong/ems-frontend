@@ -160,10 +160,10 @@ export default function EventCard({ event, user }) {
       }
     }
 
-    const checkVIP = async () =>{
+    const checkVIP = async () => {
       let status = await checkIfVIP(event?.eventOrganiser?.id, user?.id)
       setVIP(status);
-      console.log ("vip status" + status);
+      console.log("vip status" + status);
     }
     checkVIP();
 
@@ -393,17 +393,17 @@ export default function EventCard({ event, user }) {
           <Link href={`/partner/events/${event.eid}`}>
             <Card.Title>{event.name}{" "}{event.vip == true && (<Badge variant="warning">VIP</Badge>)}</Card.Title>
           </Link>
-          
+
           {/* <Card.Text className="line-clamp">{event?.descriptions}</Card.Text> */}
-          <Card.Text className="text-default mt-auto"> 
-         
+          <Card.Text className="text-default mt-auto">
+
             {format(parseISO(event.eventStartDate), 'eee, dd MMM yy hh:mmbbb')}
-           
+
             <div className="mb-0 mr-0 mt-2">
               <Row>
                 <Col>
                   <span>
-                    {badgeStatus == '' && (event.vip && vip)&& (
+                    {badgeStatus == '' && (event.vip && vip) && (
                       <Button
                         style={{ padding: '5px 25px' }}
                         size="sm"
@@ -423,7 +423,7 @@ export default function EventCard({ event, user }) {
                         Apply
                       </Button>
                     )}
-                         {badgeStatus == '' && (event.vip && !vip) && (
+                    {badgeStatus == '' && (event.vip && !vip) && (
                       <Button
                         style={{ padding: '5px 25px' }}
                         size="sm"
@@ -435,7 +435,7 @@ export default function EventCard({ event, user }) {
                         Apply
                       </Button>
                     )}
-                    
+
                     {/* {badgeStatus == "Confirmed" && <Button size="sm" variant="danger" disabled="true">Apply</Button>}
                 {badgeStatus == "Pending Payment" && <Button size="sm" variant="danger" disabled="true">Apply</Button>} */}
                     {disabledStatuses.includes(badgeStatus) &&
