@@ -19,6 +19,7 @@ const BPPaymentModal = ({
     showPaymentModal,
     sellerProfile,
     closePaymentModal,
+    createToast,
     applicationMade,
     setNeedPay
 }) => {
@@ -51,6 +52,7 @@ const BPPaymentModal = ({
                     setPaymentCompleteResp(resp.data.tickets);
                     setNeedPay(false);
                     closePaymentModal();
+                    createToast("Payment Successful, Your booth profile has been created.", 'success');
                 }
             },
         }

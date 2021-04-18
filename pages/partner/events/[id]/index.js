@@ -68,11 +68,12 @@ export default function PartnerEventPage({ id }) {
       });
       if (applications.length == 1) {
         setApplicationMade(applications[0]);
-        setNeedPay((applicationMade?.booths?.length > 0) && (applicationMade?.paymentStatus === "PENDING"))
+
       }
     }
     loadBoothTotal();
     loadApplications();
+    setNeedPay((applicationMade?.booths?.length > 0) && (applicationMade?.paymentStatus === "PENDING"))
   }, [user]);
 
   const { addToast, removeToast } = useToasts();
@@ -91,6 +92,7 @@ export default function PartnerEventPage({ id }) {
         event={data}
         partner={user}
         applicationMade={applicationMade}
+        createToast={createToast}
         setNeedPay={setNeedPay} />
       <RegisterModal
         showRegisterModal={showRegisterModal}
