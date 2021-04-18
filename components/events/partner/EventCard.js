@@ -78,6 +78,8 @@ export default function EventCard({ event, user }) {
     setMessage(e.target.value);
     // console.log(e.target.value + "message");
   };
+  
+
   const mutateCreateReview = useMutation((data) =>
     api
       .post('/api/review/create', data)
@@ -85,7 +87,8 @@ export default function EventCard({ event, user }) {
         // setMessage('');
         // setRating(0);
         console.log("review submitted successfully");
-        setReviewModalShow(false);
+        setReviewModalShow(false); 
+        createToast('Review submitted successfully', 'success');
         //ADD IN CONSISTENT REVIEW UI
         // store.addNotification({
         //   title: "Success",
@@ -120,6 +123,7 @@ export default function EventCard({ event, user }) {
         review: message,
       });
     }
+   
   };
 
   const clickRating = (rate) => {
